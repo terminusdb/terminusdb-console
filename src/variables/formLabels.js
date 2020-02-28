@@ -2,7 +2,7 @@ export const createDatabaseForm = {
     id: {
         label: {
             htmlFor: "databaseID",
-            text: 'Database Id *',
+            text: 'Database Id',
             className: "form"
         },
         input: {
@@ -18,7 +18,7 @@ export const createDatabaseForm = {
     databaseName: {
         label: {
             htmlFor: "databaseName",
-            text: "Database Name *",
+            text: "Database Name",
             className: "form"
         },
         input: {

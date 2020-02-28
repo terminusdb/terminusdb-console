@@ -36,9 +36,8 @@ export const SCHEMA_TABS = [
 ]
 
 /* database home tabs */
-export const MANAGE_TAB = 'Manage'
-export const SIZE_TAB = 'Size'
-export const SHARE_TAB = 'Share'
+export const DETAILS_TAB = 'Details'
+export const COLLABORATE_TAB = 'Collaborate'
 
 /* create database tabs */
 export const CREATE_DATABASE_TAB = 'Create New Database'

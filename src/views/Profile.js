@@ -33,7 +33,7 @@ const Profile = () => {
           <Container className="flex-grow-1">
             <hr className="my-5"/>
             <div className="content">
-             <Grid fluid> 
+              <Grid fluid>
                 <Row>
                 <Col md={4} className="user-card">
                   <UserCard bgImage={'https://terminusdb.com/img/placeholders/half-background-mobile.png'}
@@ -115,4 +115,73 @@ const Profile = () => {
        </Container>
   );
  }
+
+
+/*  return (
+      <Container fluid className="h-100 pl-0 pr-0">
+          <NavBar />
+          <Container className="flex-grow-1">
+              <hr className="my-5" />
+              <Col md={4}>
+                <UserCard bgImage="https://terminusdb.com/img/cards/card-shape-3.svg"
+                          avatar={user.picture}
+                          name={user.nickname}
+                          email={user.email}
+                          description={
+                                <span>
+                                  Some description about Kitty
+                                </span>}
+                                socials={
+                                    <div>
+                                      <Button simple>
+                                        <i className="fa fa-twitter" />
+                                      </Button>
+                                      <Button simple>
+                                        <i className="fa fa-google-plus-square" />
+                                      </Button>
+                                      <Button simple>
+                                        <i className="fa fa-github" />
+                                      </Button>
+                                    </div>}/>
+              </Col>
+      </Container>
+    </Container>
+);
+};*/
+
+/*
+<Row className="profile-header mb-6 text-center text-md-left">
+  <Col md={3}>
+     <img
+      src={user.picture}
+      alt="Profile"
+      className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
+    />
+    <p className="lead">{user.name}</p>
+    <hr className="my-2" />
+    <p className="lead">
+      <Button color="primary " style={{width:'100%'}}>Edit Profile</Button>
+    </p>
+  </Col>
+  <Col md>
+    <Container fluid className="border">
+        <h4 >About terminusHub</h4>
+        <p className="lead">Structured, semantically meaningful data for rapid delivery of data driven applications. Join the data-centric revolution!.</p>
+    </Container>
+  <Jumbotron fluid>
+  <Container fluid>
+    <h4 >About terminusHub</h4>
+    <p className="lead">Structured, semantically meaningful data for rapid delivery of data driven applications. Join the data-centric revolution!</p>
+  </Container>
+</Jumbotron>
+ <Jumbotron fluid>
+  <Container fluid>
+    <h4 >About terminusHub</h4>
+    <p className="lead">Structured, semantically meaningful data for rapid delivery of data driven applications. Join the data-centric revolution!</p>
+  </Container>
+</Jumbotron>
+  </Col>
+</Row>
+*/
+
 export default Profile;

@@ -6,12 +6,12 @@ import Loading from "../../components/Loading";
 import {databaseHomeLabels} from '../../variables/content';
 import NavBar from '../../components/NavBar';
 import RenderTable from "../../components/RenderTable";
-import { MANAGE_TAB, SIZE_TAB, SHARE_TAB } from "../../labels/tabLabels"
+import { DETAILS_TAB, COLLABORATE_TAB } from "../../labels/tabLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName } from "../../utils/helperFunctions"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
-import ManageDatabase from './ManageDatabase'
+import Details from './DatabaseDetails'
 import SizeInfoDatabase from './SizeInfoDatabase'
 import AccessDatabase from './AccessDatabase'
 import { DateTimeSlider } from '../../components/Slider/DateTimeSlider'
@@ -46,17 +46,13 @@ const DatabaseHome = (props) => {
 				</span>
 				<hr className = "my-space-5"/>
 				<Tabs>
-				    <Tab label = {MANAGE_TAB}>
+				    <Tab label = {DETAILS_TAB}>
 					    <hr className = "my-space-15"/>
-						<ManageDatabase/>
+						<Details/>
 				    </Tab>
-				    <Tab label = {SIZE_TAB}>
+				    <Tab label = {COLLABORATE_TAB}>
 						<hr className = "my-space-15"/>
 						<SizeInfoDatabase/>
-					</Tab>
-					<Tab label = {SHARE_TAB}>
-						<hr className = "my-space-15"/>
-						<AccessDatabase/>
 					</Tab>
 				</Tabs>
     	    </Container>

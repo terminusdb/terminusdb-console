@@ -58,7 +58,7 @@ const CreateDB = (props) => {
             <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>
-            		{ createDatabaseForm.id.label.text }
+            		{ createDatabaseForm.id.label.text + ' *' }
                 </label>
             	<input placeholder={ createDatabaseForm.id.input.placeholder }
                     className = { createDatabaseForm.id.input.className }
@@ -71,7 +71,7 @@ const CreateDB = (props) => {
 
             	<label className = { createDatabaseForm.databaseName.label.className }
             	   htmlFor = { createDatabaseForm.databaseName.label.htmlFor }>
-            	   { createDatabaseForm.databaseName.label.text }
+            	   { createDatabaseForm.databaseName.label.text + ' *' }
                 </label>
             	<input name= { createDatabaseForm.databaseName.input.name }
             	   className = { createDatabaseForm.databaseName.input.className }

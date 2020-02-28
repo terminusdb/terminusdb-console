@@ -2,11 +2,11 @@ import React  from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HOME_ICON, USER_ASTRONAUT, DICE_THREE, MOUNTAIN,
          USER, MARKER, TRUCK_LOADING, DATABASE, PAPERPLANE,
-         USER_TAG, TASKS, CIRCLE_NOTCH, CALANDAR, HISTORY } from '../labels/iconLabels'
+         USER_TAG, TASKS, CIRCLE_NOTCH, CALANDAR, HISTORY, EDIT } from '../labels/iconLabels'
 import { faLink, faPowerOff, faUser, faHome, faUserAstronaut, faDiceThree,
          faMarker, faTruckLoading, faDatabase, faPaperPlane,
          faMountain, faUserTag, faTasks, faCircleNotch,
-         faCalendar, faHistory } from "@fortawesome/free-solid-svg-icons";
+         faCalendar, faHistory, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 export const AddIcon = (props) => {
     const icon = props.icon || '';
@@ -55,9 +55,16 @@ export const AddIcon = (props) => {
         case HISTORY:
             iconHolder = faHistory;
             break;
+        case EDIT:
+            iconHolder = faEdit;
+            break;
     }
 
-    return <FontAwesomeIcon size="2x" icon={iconHolder} size= {props.size}/>
+    return (
+        <div className = {props.className}>
+            <FontAwesomeIcon size="2x" icon={iconHolder} size= {props.size} className={props.className}/>
+        </div>
+        )
 }
 
 

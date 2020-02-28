@@ -9,6 +9,11 @@
   margin-bottom: 0;
 }
 
+label.cth{
+    margin: 10px;
+    font-size: 16px;
+}
+
 div.user-pic{
     text-align: center;
     text-transform: none;
@@ -64,6 +69,12 @@ div.hJrkQD{
     padding-left: 40px;
 }
 
+div.d-f-ctrl{
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 hr.my-space-15{
     border-top: 0px !important;
     margin-top: 15px;
@@ -72,6 +83,11 @@ hr.my-space-15{
 hr.my-space-5{
     border-top: 0px !important;
     margin-top: 15px;
+}
+
+hr.my-space-25{
+    border-top: 0px !important;
+    margin-top: 25px;
 }
 
 hr.my-space-50{
@@ -312,7 +328,7 @@ span.d-fl{
 
 svg {
      margin: -5px 20px 10px 0px ;
-     color: #00C08B
+     color:  #0055bb !important;
 }
 
 .nav-item{

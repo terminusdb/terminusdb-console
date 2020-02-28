@@ -18,7 +18,7 @@ const ServerHome = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
-  //if (loading || !user) return <Loading />;
+  if (loading || !user) return <Loading />;
 
   const [dataResponse] = QueryHook(LIST_OF_DATABASE_QUERY,
 	  							   RENDER_TYPE_TABLE);

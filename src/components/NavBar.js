@@ -58,6 +58,10 @@ const NavBar = (props) => {
                    <NavbarToggler onClick={toggle} />
                    <Collapse isOpen={isOpen} navbar >
                         <div className="d-flex">
+                            <Navs className = "mr-auto"
+                                  page = {DOWNLOAD_PAGE.page}
+                                  activeClassName = "menu__link"
+                                  label = {DOWNLOAD_PAGE.label}/>
                             <span className = "nav-al display-flex">
                                 <Navs className = "mr-auto"
                                       page = {SERVER_HOME_PAGE.page}
