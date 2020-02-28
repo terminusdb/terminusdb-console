@@ -1,0 +1,7 @@
+/node_modules
+
+package-lock.json
+auth_config.json
+console/auth_config.json
+
+/dist
