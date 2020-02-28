@@ -18,7 +18,7 @@ export const DateTimeSlider = (props) => {
     const [max, setMax] = useState(today);
 
     function formatTick(ms) {
-      return format(new Date(ms), "MMM DD");
+      return format(new Date(ms), "MM dd");
     }
 
     const halfHour = 1000 * 60 * 30;
@@ -51,7 +51,7 @@ export const DateTimeSlider = (props) => {
           <b>{header}:</b>
           <div style={{ fontSize: 12,
                         margin: '3px 0px 0px 10px'
-                       }}>{format(date, "YYYY MMM DD h:mm a")}</div>
+                       }}>{format(date, "yyyy MM dd h:mm a")}</div>
         </div>
       );
     }
