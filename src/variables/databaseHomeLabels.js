@@ -3,10 +3,10 @@ export const CLONE = {
     name: 'Clone',
     description: 'This database has been cloned from another db (not sure if we store this info)'
 }
-export const ORIGIN = {
-    label: 'Origin',
-    name: 'Origin',
-    description: 'Remote repository that a project was originally cloned from ... change descr'
+export const MASTER = {
+    label: 'Master',
+    name: 'Master',
+    description: 'This is a master database ... change descr'
 }
 export const PRIVATE = {
     label: 'Private',
@@ -34,9 +34,16 @@ export const WRITE = {
     description: 'You have permissions to view, change or update the database'
 }
 
+export const MANAGE = {
+    label: 'Manage',
+    name: 'Manage',
+    description: 'Read, Write and Admin permissions available'
+}
+
 export const MANAGE_ACTION = {
     description: 'Manage users, invite users to view database, Add roles.. fill in whatver descr'
 }
+
 
 export const AUTHOR = 'Author';
 export const CREATED = 'Created';

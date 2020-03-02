@@ -13,10 +13,6 @@ const App = (props) => {
 
   const userMETADATA= user || {};
 
-  console.log("___SONO IN APPCONSOLE__",window.location.pathname);
-
-  console.log("__HISTORY__",consoleLib.history)
-
   if(user && user['https://terminushub/afterSignUp']){
       consoleLib.history.replace('/download')
   }
@@ -45,7 +41,7 @@ const App = (props) => {
         </Switch>
         {/*<Footer />*/}
     </Router>
-     
+
   );
 };
 

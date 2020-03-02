@@ -66,7 +66,7 @@ const App = (props) => {
           <PrivateRoute path = {SCHEMA_PAGE.page} component = {Schema} />
           <PrivateRoute path = "/" component = {MainPage} />
         </Switch>
-        {/*<Footer />*/}
+        {<Footer />}
     </Router>
   );
 };

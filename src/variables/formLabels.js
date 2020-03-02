@@ -108,7 +108,6 @@ export const cloneLocalDB = {
     }
 }
 
-
 export const cloneRemoteDB = {
     cloneRemote:{
         label: {
@@ -158,5 +157,131 @@ export const cloneRemoteDB = {
         type: "submit",
         className: "btn btn-primary lead mt-4",
         text: "Clone"
+    }
+}
+
+export const database = {
+    master:{
+        name: "masterURL",
+        className: "form",
+        placeholder: "Master URL"
+    },
+    clone:{
+        name: "cloneURL",
+        className: "form",
+        placeholder: "Clone URL"
+    },
+    size: {
+        name: "size",
+        className: "form",
+        label: "Size"
+    },
+    createdBy: {
+        name: "createdBy",
+        className: "form",
+        label: "Created"
+    },
+    lastModifiedBy: {
+        name: "lastModifiedBy",
+        className: "form",
+        label: "Last Modified"
+    }
+}
+
+export const collaborate = {
+    accessHeader:{
+        name: "accessHeader",
+        className: "form",
+        label: "Your permissions"
+    },
+    readAccess:{
+        name: "readAccess",
+        className: "form",
+        label: "Read"
+    },
+    writeAccess:{
+        name: "writeAccess",
+        className: "form",
+        label: "Write"
+    }
+}
+
+
+export const createUser = {
+    id: {
+        label: {
+            htmlFor: "userID",
+            text: 'User Id',
+            className: "form"
+        },
+        input: {
+            placeholder: "No spaces or special characters allowed in IDs",
+            name: "userID",
+            className: "form"
+        },
+        error: {
+            text: "Cannot be blank. No spaces or special characters allowed in IDs",
+            className: "errors"
+        }
+    },
+    userName: {
+        label: {
+            htmlFor: "userName",
+            text: "User Name",
+            className: "form"
+        },
+        input: {
+            placeholder: "User Name",
+            name: "userName",
+            className: "form"
+        },
+        error: {
+            text: "Cannot be blank.",
+            className: "errors"
+        }
+    },
+    userEmail: {
+        label: {
+            htmlFor: "userEmail",
+            text: "Email",
+            className: "form"
+        },
+        input: {
+            placeholder: "Email address",
+            name: "userEmail",
+            className: "form"
+        }
+    },
+    userDescription: {
+        label: {
+            htmlFor: "userDescription",
+            text: "Description",
+            className: "form"
+        },
+        input: {
+            placeholder: "Descibe user",
+            name: "userDescription",
+            className: "form"
+        }
+    },
+    action: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4",
+        text: "Create"
+    }
+}
+
+
+
+export const userList = {
+    label: {
+        htmlFor: "editPermissions",
+        text: 'Edit permissions to user - whatever you have selected',
+        className: "form"
+    },
+    action: {
+        type: "submit",
+        className: "btn ",
+        text: "Save"
     }
 }

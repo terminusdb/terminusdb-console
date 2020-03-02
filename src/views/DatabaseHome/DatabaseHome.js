@@ -12,10 +12,9 @@ import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName } from "../../utils/helperFunctions"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
-import SizeInfoDatabase from './SizeInfoDatabase'
-import AccessDatabase from './AccessDatabase'
 import { DateTimeSlider } from '../../components/Slider/DateTimeSlider'
 import BranchSelector from '../../components/BranchSelector'
+import Collaborate from './Collaborate'
 
 const DatabaseHome = (props) => {
     const { loading, user } = useAuth0();
@@ -52,7 +51,7 @@ const DatabaseHome = (props) => {
 				    </Tab>
 				    <Tab label = {COLLABORATE_TAB}>
 						<hr className = "my-space-15"/>
-						<SizeInfoDatabase/>
+						<Collaborate/>
 					</Tab>
 				</Tabs>
     	    </Container>

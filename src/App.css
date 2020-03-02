@@ -75,6 +75,13 @@ div.d-f-ctrl{
     cursor: pointer;
 }
 
+div.us-ctrl{
+    float: right;
+    font-size: 14px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
 hr.my-space-15{
     border-top: 0px !important;
     margin-top: 15px;

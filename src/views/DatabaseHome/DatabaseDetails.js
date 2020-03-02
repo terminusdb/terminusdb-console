@@ -4,12 +4,10 @@ import { useForm } from 'react-hook-form';
 import { FormInputs } from "../../components/Form/FormInputs"
 import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
-import { CLONE, ORIGIN, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
-import { DATABASE_IS, DATABASE_ACTIONS, DATABASE_ACCESS } from "../../variables/databaseCategories"
-import CategoryHeading from "../../components/CategoryHeadings"
+import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
 import { useGlobalState } from "../../init/initializeGlobalState";
-import { createDatabaseForm } from "../../variables/formLabels"
+import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { EDIT } from '../../labels/iconLabels'
@@ -18,24 +16,17 @@ const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 
-	const fields = (opts) => {
-        return (
-            <FormGroup check className="mb-3 mt-3">
-              <Label check>
-                <Input type="radio" name={opts.name} />{' '}
-                    {opts.label}
-                <FormText color="muted">
-                    {opts.description}
-                </FormText>
-              </Label>
-            </FormGroup>
-        )
-    }
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
-	// junk data
+	// junk data, placeholders for now apply logic later
 	const dbStats = PRIVATE.label;
 	const clStats = CLONE.label;
+	const dbSize = '1092 triples';
+	const dbCreated = 'I AM HARD CODED';
+	const dbCreatedDate = '02 Feb 2020 19:00';
+	const dbModifiedBy = 'By Someone';
+	const dbModifiedDate = '05 Feb 2020 06:00';
+	const dbCommitMsg = 'Display commit message on db';
 
     return (
         <Card>
@@ -119,70 +110,95 @@ const Details = (props) => {
 						<span className="d-fl">
 		   				     <Col md={1} className="mb-1">
 		   		                 <input type="radio"
-		   		                    name={ ORIGIN.name }
-		   		                    checked={clStats === ORIGIN.label}/>
+		   		                    name={ MASTER.name }
+		   		                    checked={clStats === MASTER.label}/>
 		   					</Col>
 		   					<Col md={3} className="mb-3">
-		   						<label htmlFor = { ORIGIN.name }/>
-		   	   						{ ORIGIN.label }
+		   						<label htmlFor = { MASTER.name }/>
+		   	   						{ MASTER.label }
 		   					</Col>
+							<Col md={3} className="mb-3">
+								<input placeholder={ database.master.placeholder }
+									className = { database.master.className }
+									name = { database.master.name }
+									ref = { register }/>
+		   					</Col>
+	                   </span>
+
+					}
+
+					{isAuthenticated &&
+						<span className="d-fl">
 		   					<Col md={1} className="mb-1">
 		   						<input type="radio"
 		   						   checked={clStats === CLONE.label}
 		   						   name={ CLONE.name }/>
 		   					</Col>
-		   				   <Col md={4} className="mb-4">
+		   				   <Col md={3} className="mb-3">
 		   					   <label htmlFor = { CLONE.name }/>
 		   	  						{ CLONE.label }
 		   				   </Col>
+						   <Col md={3} className="mb-3">
+							   <input placeholder={ database.clone.placeholder }
+								   className = { database.clone.className }
+								   name = { database.clone.name }
+								   ref = { register }/>
+						   </Col>
 	                   </span>
 
 					}
 
-					<hr className = "my-space-15"/>
+					<hr className = "my-space-25"/>
+					<hr className = "my-2"/>
 
-	            	<button className = { createDatabaseForm.action.className }
-	        		    type =  { createDatabaseForm.action.type } >
-	        			{ createDatabaseForm.action.text }
-	            	</button>
-	            </form>
+					<span className="d-fl">
+						<Col md={2} className="mb-2">
+							<label htmlFor = { database.size.name }/>
+								{ database.size.label }
+						</Col>
+					   <Col md={3} className="mb-3">
+						   <label htmlFor/>
+								{ dbSize }
+					   </Col>
+				   </span>
 
-			    <CategoryHeading category = {DATABASE_IS}/>
-                <Col md={12}>
-    	        	<FormGroup tag="fieldset">
-    			        {fields(CLONE)}
-                        {fields(ORIGIN)}
-    		        </FormGroup>
-                    <hr/>
-    			</Col>
-				<CategoryHeading category = {DATABASE_ACCESS}/>
-                <Col md={12}>
-    	        	<FormGroup tag="fieldset">
-    			        {fields(PRIVATE)}
-                        {fields(PUBLIC)}
-    		        </FormGroup>
-                    <hr/>
-    			</Col>
-				<CategoryHeading category = {DATABASE_ACTIONS}/>
-                <Col md={12}>
-                    <hr class='my-space'/>
-                    <FormText color="muted">
-                        {ACTIONS.description}
-                    </FormText>
-                    <hr class='my-space'/>
-                    <Row>
-                        <Col md={2}>
-                            <Button color="primary" onClick={console.log('do something on push')}
-                                    style={{ marginBottom: '1rem' }}>Push</Button>
-                        </Col>
-                        <Col md={2}>
-                            <Button color="primary" onClick={console.log('do something on pull')}
-                                    style={{ marginBottom: '1rem' }}>Pull</Button>
-                        </Col>
-                    </Row>
-                </Col>
-            </div>
-        </Card>
+				   <hr className = "my-2"/>
+
+				   <span className="d-fl">
+					   <Col md={2} className="mb-2">
+						   <label htmlFor = { database.createdBy.name }/>
+							   { database.createdBy.label }
+					   </Col>
+					  <Col md={6} className="mb-6">
+						  <label htmlFor/>
+							   { dbCreated + ', ' + dbCreatedDate}
+					  </Col>
+				  </span>
+
+				  <hr className = "my-2"/>
+
+				  <span className="d-fl">
+					  <Col md={2} className="mb-2">
+						  <label htmlFor = { database.lastModifiedBy.name }/>
+							  { database.lastModifiedBy.label }
+					  </Col>
+					 <Col md={6} className="mb-6">
+						 <label htmlFor/>
+							  { dbModifiedBy + ', ' + dbModifiedDate}
+					 </Col>
+				 </span>
+
+				 <span className="d-fl">
+					 <Col md={2} className="mb-2"/>
+					<Col md={6} className="mb-6">
+						<label htmlFor/>
+							 { dbCommitMsg }
+					</Col>
+				</span>
+	          </form>
+
+           </div>
+       </Card>
     )
 }
 
