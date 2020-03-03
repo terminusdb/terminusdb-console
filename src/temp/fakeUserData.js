@@ -22,17 +22,17 @@ const columnConf = [
 {
     name: 'Read',
     selector: 'Read',
-    cell: row => <input type="radio" name="read" value="read"/>
+    cell: row => <input type="checkbox" name="read" value="read"/>
 },
 {
     name: 'Write',
     selector: 'Write',
-    cell: row => <input type="radio" name="write" value="write"/>
+    cell: row => <input type="checkbox" name="write" value="write"/>
 },
 {
     name: 'Manage',
     selector: 'Manage',
-    cell: row => <input type="radio" name="manage" value="manage"/>
+    cell: row => <input type="checkbox" name="manage" value="manage"/>
 },
 {
     selector: 'Edit',

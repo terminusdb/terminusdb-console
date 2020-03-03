@@ -11,11 +11,11 @@ import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
 const UserList = (props) => {
     const { register, handleSubmit, errors } = useForm();
-    const [edit, setEditMode] = useState(true);
+    const [edit, setEditMode] = useState(false);
     const dbStats = READ.label;
 
     const handleChange = () => {
-        setEditMode(edit);
+        setEditMode(true);
         //add logic to set permissions on row data')
     }
 
@@ -25,6 +25,7 @@ const UserList = (props) => {
               htmlFor = { userList.label.name }>
               { userList.label.text }
             </label>
+
             <DataTable  columns={fakeUserData.columnConf}
                 data={fakeUserData.columnData}
                 striped
@@ -40,7 +41,7 @@ const UserList = (props) => {
 
                <span className="d-fl">
                     <Col md={1} className="mb-1">
-                        <input type="radio"
+                        <input type="checkbox"
                            name={ READ.name }
                            checked={dbStats === READ.label}/>
                    </Col>
@@ -49,7 +50,7 @@ const UserList = (props) => {
                            { READ.label }
                    </Col>
                    <Col md={1} className="mb-1">
-                       <input type="radio"
+                       <input type="checkbox"
                           checked={dbStats === WRITE.label}
                           name={ WRITE.name }/>
                    </Col>
@@ -58,7 +59,7 @@ const UserList = (props) => {
                            { WRITE.label }
                   </Col>
                   <Col md={1} className="mb-1">
-                      <input type="radio"
+                      <input type="checkbox"
                          checked={dbStats === MANAGE.label}
                          name={ MANAGE.name }/>
                   </Col>
@@ -67,13 +68,11 @@ const UserList = (props) => {
                           { MANAGE.label }
                  </Col>
               </span>
+              <button className = { userList.action.className }
+                  type =  { userList.action.type } >
+                  { userList.action.text }
+              </button>
            </>}
-
-           <button className = { userList.label.className }
-               type =  { userList.action.type } >
-               { userList.action.text }
-           </button>
-
         </>
 
     )

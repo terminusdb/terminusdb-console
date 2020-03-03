@@ -271,8 +271,6 @@ export const createUser = {
     }
 }
 
-
-
 export const userList = {
     label: {
         htmlFor: "editPermissions",
@@ -281,7 +279,7 @@ export const userList = {
     },
     action: {
         type: "submit",
-        className: "btn ",
+        className: "btn btn-primary lead mt-4",
         text: "Save"
     }
 }
