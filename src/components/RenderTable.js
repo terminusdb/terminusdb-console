@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Container, Row, Col ,Button, Card, CardImg, CardText, CardBody, CardLink,
          CardTitle, CardSubtitle } from "reactstrap";
 import DataTable from 'react-data-table-component';
-import { SERVER_HOME_PAGE, DB_HOME_PAGE } from '../variables/pageLabels'
+import { SERVER_HOME_PAGE } from '../variables/pageLabels'
 import { useGlobalState, setCurrentDB } from "../init/initializeGlobalState";
 import { TERMINUS_CLIENT } from '../labels/globalStateLabels'
 import ExpandedComponent from './ExpandedComponent'

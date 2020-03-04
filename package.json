@@ -62,10 +62,12 @@
     "prop-types": "^15.6.0",
     "react-bootstrap": "0.32.4",
     "react-bootstrap-tabs": "^1.0.2",
+    "react-bs-notifier": "^5.0.0",
     "react-compound-slider": "^2.5.0",
     "react-data-table-component": "^6.3.1",
     "react-hook-form": "^4.9.8",
     "react-hooks-global-state": "^1.0.0",
+    "react-notifications": "^1.5.0-beta.0",
     "react-select": "^3.0.8",
     "react-sizeme": "^2.6.10",
     "react-slick": "^0.25.2",
@@ -73,6 +75,7 @@
     "react-syntax-highlighter": "^12.2.1",
     "reactstrap": "^8.2.0",
     "recharts": "^2.0.0-beta.1",
+    "simple-react-notifications": "^1.2.15",
     "stripe": "^8.23.0"
   },
   "devDependencies": {

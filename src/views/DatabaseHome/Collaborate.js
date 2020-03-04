@@ -17,6 +17,7 @@ import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/
 import { ClientHook } from '../../hooks/ClientHook'
 import CreateNewUser from './CreateUser'
 import UserList from './UserList'
+import AddUsers from './AddUsers'
 
 const Collaborate = (props) => {
     const { register, handleSubmit, errors } = useForm();
@@ -45,8 +46,9 @@ const Collaborate = (props) => {
 
                     {isAuthenticated && <span className="d-fl">
                         <Col md={1} className="mb-1">
-                            <input type="radio"
+                            <input type="checkbox"
                                name={ READ.name }
+							   ref = { register }
                                checked={dbStats === READ.name }/>
                        </Col>
                        <Col md={3} className="mb-3">
@@ -55,8 +57,9 @@ const Collaborate = (props) => {
                        </Col>
 
                        <Col md={1} className="mb-1">
-                           <input type="radio"
+                           <input type="checkbox"
                               name={ READ.name }
+							  ref = { register }
                               checked={dbStats === WRITE.name }/>
                       </Col>
                       <Col md={3} className="mb-3">
@@ -65,8 +68,9 @@ const Collaborate = (props) => {
                       </Col>
 
                       <Col md={1} className="mb-1">
-                          <input type="radio"
+                          <input type="checkbox"
                              name={ MANAGE.name }
+							 ref = { register }
                              checked={dbStats === MANAGE.name }/>
                      </Col>
                      <Col md={3} className="mb-3">
@@ -91,7 +95,7 @@ const Collaborate = (props) => {
      				    </Tab>
      				    <Tab label = {ADD_USER}>
      						<hr className = "my-space-50"/>
-     						ADD_USER
+     						<AddUsers/>
      					</Tab>
                         <Tab label = {INVITE_USER}>
      						<hr className = "my-space-50"/>

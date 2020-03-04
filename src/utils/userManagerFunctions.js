@@ -10,10 +10,10 @@ export const getAccessPermissions = (read, write, manage) => {
     return permissions;
 }
 
-export const getCapabilityID =  (read, write, manage) => {
-    let capabilityID = '';
-    capabilityID = capabilityID + READ.label // read is default
+export const getCapabilityID =  (read, write, manage, dbId) => {
+    let capabilityID = dbId;
+    if(read) capabilityID = capabilityID + '_' + READ.label // read is default
     if(write) capabilityID = capabilityID + '_' + WRITE.label
     if(manage) capabilityID = capabilityID + '_' + MANAGE.label
-    return  capabilityID + '_Capability';
+    return  capabilityID  + '_Capability';
 }

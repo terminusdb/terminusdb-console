@@ -1,5 +1,7 @@
 import React from "react";
-import {getNameFromUrl, getNameFromVariable, formatColumnNames} from './extractStrings'
+import { getNameFromUrl, getNameFromVariable, formatColumnNames,stripDocFromUrl } from './extractStrings'
+import { READ, WRITE, MANAGE } from "../variables/databaseHomeLabels"
+import { READ_ACCESS, WRITE_ACCESS, MANAGE_ACCESS } from "../labels/userAccessLabel"
 
 function parseObject(item){
     const row = {};
@@ -12,7 +14,8 @@ function parseObject(item){
           }
           else {
               if(item[itemId] == "unknown") row[itemId] = "";
-              else row[itemId] = getNameFromUrl(item[itemId])
+              else row[itemId] = stripDocFromUrl(item[itemId])
+              //else row[itemId] = getNameFromUrl(item[itemId])
           }
     }
     return row;
@@ -87,4 +90,83 @@ export const getDBIdsForSelectOptions = (list) => {
         }
     }
     return opts;
+}
+
+export const getUserSelectOpts = (data) => {
+    const opts = [];
+    for (let it of Object.keys(data)){
+        var obj = {}
+        for (var key in data[it]) {
+            var vl = data[it];
+            if(key == 'v:User') obj.value = vl['v:User'];
+            if(key == 'v:Name') obj.label = vl['v:Name']['@value'];
+        }
+        opts.push(obj)
+    }
+    return opts;
+}
+
+export const getColumnsForUserTable = (result) => {
+    const columns=[]
+    if(result  && result.length > 0){
+        const firstItem = result[0]
+        for (let itemId of Object.keys(firstItem)){
+            if(['v:UserID', 'v:Label', 'v:CapabilityID'].indexOf(itemId) != -1) {
+                columns.push({
+                    name: getNameFromVariable(itemId),
+                    selector: itemId,
+                    sortable: true
+                })
+            }
+       }
+     }
+     // push in options for read/ write and manage
+     columns.push({ name: READ.label, selector: READ.label });
+     columns.push({ name: WRITE.label, selector: WRITE.label });
+     columns.push({ name: MANAGE.label, selector: MANAGE.label });
+     //console.log('columns', columns);
+     return columns;
+}
+
+const parseUserDataObject = (item) => {
+    //console.log('d', item);
+    const row = {};
+    for (let itemId of Object.keys(item)){
+       if(['v:UserID', 'v:Label', 'v:Action', 'v:CapabilityID'].indexOf(itemId) != -1) {
+           if(typeof item[itemId] === 'object'){
+               row[itemId] = item[itemId]['@value'];
+           }
+           else {
+               if(itemId == 'v:Action') {
+                   switch(item[itemId]){
+                       case READ_ACCESS:
+                           row[READ.label] = true;
+                           break;
+                       case WRITE_ACCESS:
+                           row[WRITE.label] = true;
+                       break;
+                       case MANAGE_ACCESS:
+                           row[MANAGE.label] = true;
+                       break;
+                   }
+               }
+               else{
+                   if(item[itemId] == "unknown") row[itemId] = "";
+                   else row[itemId] = stripDocFromUrl(item[itemId])
+                   // row[itemId] = getNameFromUrl(item[itemId])
+               }
+           }
+       }
+    }
+    return row;
+}
+
+export const getBindingUserData = (result) => {
+    const bindingData = [];
+    result.forEach((item)=>{
+        const row = parseUserDataObject(item)
+        bindingData.push(row)
+    })
+   // console.log('bindingData', bindingData);
+   return bindingData;
 }

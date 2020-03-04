@@ -9,9 +9,36 @@
   margin-bottom: 0;
 }
 
+div.ePDqSK {
+    height:auto !important;
+}
+
 label.cth{
     margin: 10px;
     font-size: 16px;
+}
+
+div.ic-a-us{
+    float: right;
+    cursor: pointer;
+    margin-left: 25px;
+}
+
+div.gzmtPb svg {
+    display: none;
+}
+
+nav.rdt_Pagination {
+    display: flex;
+}
+
+div.ic-a-us svg {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+button.ic-a-us{
+    background-color: none !important;
 }
 
 div.user-pic{
@@ -869,7 +896,7 @@ a {
 }
 
 span.nav-al{
-    margin-left: 90px;
+    margin-left: 400px;
 }
 
 div.db-al{

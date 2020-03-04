@@ -273,13 +273,31 @@ export const createUser = {
 
 export const userList = {
     label: {
+        htmlFor: "userList",
+        text: 'Users with access to current db. Click on row to edit permissions',
+        className: "form"
+    },
+    edit: {
         htmlFor: "editPermissions",
-        text: 'Edit permissions to user - whatever you have selected',
+        text: 'Update permissions for user - ',
         className: "form"
     },
     action: {
         type: "submit",
         className: "btn btn-primary lead mt-4",
-        text: "Save"
+        text: "Update"
+    }
+}
+
+export const addUser = {
+    label: {
+        htmlFor: "addUser",
+        text: 'Users ',
+        className: "form"
+    },
+    action: {
+        type: "submit",
+        className: "ic-a-us",
+        text: "Add User"
     }
 }

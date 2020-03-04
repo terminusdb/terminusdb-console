@@ -1,62 +1,63 @@
 import React  from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HOME_ICON, USER_ASTRONAUT, DICE_THREE, MOUNTAIN,
-         USER, MARKER, TRUCK_LOADING, DATABASE, PAPERPLANE,
-         USER_TAG, TASKS, CIRCLE_NOTCH, CALANDAR, HISTORY, EDIT } from '../labels/iconLabels'
+import * as icons from '../labels/iconLabels'
 import { faLink, faPowerOff, faUser, faHome, faUserAstronaut, faDiceThree,
          faMarker, faTruckLoading, faDatabase, faPaperPlane,
          faMountain, faUserTag, faTasks, faCircleNotch,
-         faCalendar, faHistory, faEdit } from "@fortawesome/free-solid-svg-icons";
+         faCalendar, faHistory, faEdit , faUserPlus} from "@fortawesome/free-solid-svg-icons";
 
 export const AddIcon = (props) => {
     const icon = props.icon || '';
     var iconHolder;
 
     switch (icon){
-        case HOME_ICON:
+        case icons.HOME_ICON:
             iconHolder = faHome;
             break;
-        case USER_ASTRONAUT:
+        case icons.USER_ASTRONAUT:
             iconHolder = faUserAstronaut;
             break;
-        case DICE_THREE:
+        case icons.DICE_THREE:
             iconHolder = faDiceThree;
             break;
-        case TRUCK_LOADING:
+        case icons.TRUCK_LOADING:
             iconHolder = faTruckLoading;
             break;
-        case USER:
+        case icons.USER:
             iconHolder = faUser;
             break;
-        case MARKER:
+        case icons.MARKER:
             iconHolder = faMarker;
             break;
-        case DATABASE:
+        case icons.DATABASE:
             iconHolder = faDatabase;
             break;
-        case PAPERPLANE:
+        case icons.PAPERPLANE:
             iconHolder = faPaperPlane;
             break;
-        case MOUNTAIN:
+        case icons.MOUNTAIN:
             iconHolder = faMountain;
             break;
-        case USER_TAG:
+        case icons.USER_TAG:
             iconHolder = faUserTag;
             break;
-        case TASKS:
+        case icons.TASKS:
              iconHolder = faTasks;
              break;
-        case CIRCLE_NOTCH:
+        case icons.CIRCLE_NOTCH:
              iconHolder = faCircleNotch;
              break;
-        case CALANDAR:
+        case icons.CALANDAR:
             iconHolder = faCalendar;
             break;
-        case HISTORY:
+        case icons.HISTORY:
             iconHolder = faHistory;
             break;
-        case EDIT:
+        case icons.EDIT:
             iconHolder = faEdit;
+            break;
+        case icons.USER_PLUS:
+            iconHolder = faUserPlus;
             break;
     }
 

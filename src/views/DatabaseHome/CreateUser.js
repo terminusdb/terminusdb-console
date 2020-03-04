@@ -1,5 +1,6 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
+import { Alert } from 'reactstrap';
 import { CREATE_NEW_USER } from "../../labels/actionLabels"
 import { collaborate, createUser } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
@@ -27,6 +28,9 @@ const CreateNewUser = (props) => {
 
 
     return (
+             <>{(!loading) && <Alert color="success">
+                Successfully created new User - <b>{userInfo.id}</b>
+              </Alert>}
              <form onSubmit={ handleSubmit(onSubmit) }>
                  <label htmlFor = { createUser.id.label.htmlFor }>
             		{ createUser.id.label.text }
@@ -107,7 +111,7 @@ const CreateNewUser = (props) => {
               { createUser.action.text }
           </button>
 
-      </form>
+      </form> </>
     )
 }
 

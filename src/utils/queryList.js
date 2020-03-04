@@ -1,31 +1,42 @@
 import TerminusClient from '@terminusdb/terminus-client';
-import {LIST_OF_DATABASE_QUERY, SCHEMA_LIST_OF_CLASSES_QUERY,
-        SCHEMA_LIST_OF_PROPERTIES_QUERY} from "../labels/queryLabels";
+import * as query from "../labels/queryLabels";
 
-export const getQuery = (queryName) =>{
+export const getQuery = (queryName, params) =>{
     const WOQL = TerminusClient.WOQL;
+    const dbId = params.dbId || '';
     switch(queryName){
-        case LIST_OF_DATABASE_QUERY:
+        case query.LIST_OF_DATABASE_QUERY:
             return WOQL.and(
-                      WOQL.triple('v:Id', 'type', 'terminus:Database'),
-                      WOQL.triple('v:Id', 'label', 'v:Name'),
-                      WOQL.triple('v:Id', 'comment', 'v:Description'))
+                  WOQL.triple('v:Id', 'type', 'terminus:Database'),
+                  WOQL.triple('v:Id', 'label', 'v:Name'),
+                  WOQL.triple('v:Id', 'comment', 'v:Description'))
 
-        case SCHEMA_LIST_OF_CLASSES_QUERY:
+        case query.SCHEMA_LIST_OF_CLASSES_QUERY:
             return WOQL.limit(100).and(
-                      WOQL.quad('v:Class ID', 'type', 'Class', 'schema'),
-                      WOQL.opt().quad('v:Class ID', 'label', 'v:Name', 'schema'),
-                      WOQL.opt().quad('v:Class ID', 'comment', 'v:Description', 'schema'),
-                      WOQL.opt().quad('v:Class ID', 'subClassOf', 'v:Parent Classes', 'schema'),
-                      WOQL.opt().quad('v:Sub classes', 'subClassOf', 'v:Class ID', 'schema'),
-                      WOQL.opt().quad('v:Class ID', 'tcs:tag', 'v:Abstract', 'schema'))
+                  WOQL.quad('v:Class ID', 'type', 'Class', 'schema'),
+                  WOQL.opt().quad('v:Class ID', 'label', 'v:Name', 'schema'),
+                  WOQL.opt().quad('v:Class ID', 'comment', 'v:Description', 'schema'),
+                  WOQL.opt().quad('v:Class ID', 'subClassOf', 'v:Parent Classes', 'schema'),
+                  WOQL.opt().quad('v:Sub classes', 'subClassOf', 'v:Class ID', 'schema'),
+                  WOQL.opt().quad('v:Class ID', 'tcs:tag', 'v:Abstract', 'schema'))
 
-        case SCHEMA_LIST_OF_PROPERTIES_QUERY:
+        case query.SCHEMA_LIST_OF_PROPERTIES_QUERY:
             return WOQL.limit(100).start(0).propertyMetadata();
 
-        default:
-            console.log('queryList.js - Invalid Query name ' + queryName)
-        break;
+       case query.GET_USER_LIST:
+            return WOQL.and( WOQL.triple("v:User","type","terminus:User"),
+                WOQL.opt().triple("v:User", 'label', 'v:Name'))
+
+       case query.GET_USER_ACCESS_FOR_DB:
+            return WOQL.and(
+            	WOQL.triple("v:CapabilityID", "terminus:authority_scope", dbId),
+            	WOQL.triple("v:UserID", "terminus:authority", "v:CapabilityID"),
+                WOQL.triple("v:UserID", "label", "v:Label"),
+            	WOQL.triple("v:CapabilityID", "terminus:action", "v:Action"))
+
+       default:
+           console.log('queryList.js - Invalid Query name ' + queryName)
+       break;
     }
 
 }
