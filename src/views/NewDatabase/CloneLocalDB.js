@@ -34,6 +34,9 @@ const CloneLocalDB = (props) => {
   const [dbList] = QueryHook(LIST_OF_DATABASE_ID);
 
   const onSubmit = (data) => {
+	  if (!user){
+		  loginWithRedirect();  // authenticate
+	  }
       let doc = {id: data.databaseID}
       updateDbInfo(doc)
   };

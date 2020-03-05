@@ -119,6 +119,10 @@ export const cloneRemoteDB = {
             name: "cloneRemote",
             className: "form",
             placeholder: "Remote URL"
+        },
+        error: {
+            text: "Database URL to clone from is required",
+            className: "errors"
         }
     },
     APIKey:{

@@ -14,9 +14,9 @@ const Schema = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  if (loading || !user) {
-    return <Loading />;
-  }
+  i//f (loading || !user) {
+  //  return <Loading />;
+  //}
   const tabs = SCHEMA_TABS || [];
 
   return (

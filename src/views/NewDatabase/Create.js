@@ -37,10 +37,14 @@ const CreateDB = (props) => {
   const [dbList] = QueryHook(LIST_OF_DATABASE_ID);
 
   const onSubmit = (data) => {
+    
+	  if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
+		  loginWithRedirect();  // authenticate
+	  }
+
       let doc = {id: data.databaseID,
                  title: data.databaseName,
                  description:data.databaseDescr}
-
       updateDbInfo(doc)
   };
 

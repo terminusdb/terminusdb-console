@@ -19,9 +19,9 @@ const CreateDatabase = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  if (loading || !user) {
-    return <Loading />;
-  }
+  //if (loading || !user) {
+  //return <Loading />;
+  //}
 
   return (
   	<Container fluid className="h-100 pl-0 pr-0">

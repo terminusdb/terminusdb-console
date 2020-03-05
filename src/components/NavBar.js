@@ -52,7 +52,7 @@ const NavBar = (props) => {
 
     return (
         <div className="nav-container">
-            <Navbar expand="md" dark>
+            <Navbar expand="md" dark fixed="top">
                 <div className={containerClassName}>
                    <NavbarBrand href="https://terminusdb.com" className="logo"/>
                    <NavbarToggler onClick={toggle} />

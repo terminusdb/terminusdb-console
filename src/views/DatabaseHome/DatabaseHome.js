@@ -6,7 +6,7 @@ import Loading from "../../components/Loading";
 import {databaseHomeLabels} from '../../variables/content';
 import NavBar from '../../components/NavBar';
 import RenderTable from "../../components/RenderTable";
-import { DETAILS_TAB, COLLABORATE_TAB } from "../../labels/tabLabels"
+import { DETAILS_TAB, COLLABORATE_TAB, MANAGE_TAB } from "../../labels/tabLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName } from "../../utils/helperFunctions"
@@ -15,17 +15,19 @@ import Details from './DatabaseDetails'
 import { DateTimeSlider } from '../../components/Slider/DateTimeSlider'
 import BranchSelector from '../../components/BranchSelector'
 import Collaborate from './Collaborate'
+import ManageDatabase from './ManageDatabase'
 
 const DatabaseHome = (props) => {
-    const { loading, user } = useAuth0();
+    const { loading, user, isAuthenticated } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
 	const [dbCLient] = useGlobalState(TERMINUS_CLIENT);
 
     const toggle = () => setIsOpen(!isOpen);
 
-    if (loading || !user) {
+    /*if (loading || !user) {
         return <Loading />;
-    }
+    }*/
+	if (loading) return <Loading />;
 
     return (
     	<Container fluid className="h-100 pl-0 pr-0">
@@ -34,7 +36,7 @@ const DatabaseHome = (props) => {
 			 	<hr className = "my-space-50" />
     	  	    <legend>{getCurrentDBName(dbCLient)}</legend>
 				<hr className = "my-space-50"/>
-				<span className = "d-fl mb-12">
+				{isAuthenticated && <span className = "d-fl mb-12">
 					<Col md={8} className="mb-8">
 						<DateTimeSlider/>
 					</Col>
@@ -42,9 +44,11 @@ const DatabaseHome = (props) => {
 					<Col md={3} className="mb-3">
 						<BranchSelector/>
 					</Col>
-				</span>
+				</span>}
+
 				<hr className = "my-space-5"/>
-				<Tabs>
+
+				{isAuthenticated && <Tabs>
 				    <Tab label = {DETAILS_TAB}>
 					    <hr className = "my-space-15"/>
 						<Details/>
@@ -53,7 +57,19 @@ const DatabaseHome = (props) => {
 						<hr className = "my-space-15"/>
 						<Collaborate/>
 					</Tab>
-				</Tabs>
+					<Tab label = {MANAGE_TAB}>
+						<hr className = "my-space-15"/>
+						<ManageDatabase/>
+					</Tab>
+				</Tabs>}
+
+				{(!isAuthenticated) && <Tabs>
+				    <Tab label = {DETAILS_TAB}>
+					    <hr className = "my-space-15"/>
+						<Details/>
+				    </Tab>
+				</Tabs>}
+
     	    </Container>
     	</Container>
     )

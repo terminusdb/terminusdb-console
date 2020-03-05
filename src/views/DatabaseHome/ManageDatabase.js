@@ -12,7 +12,7 @@ import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { EDIT } from '../../labels/iconLabels'
 
-const Details = (props) => {
+const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 
@@ -200,4 +200,4 @@ const Details = (props) => {
     )
 }
 
-export default Details;
+export default ManageDatabase;

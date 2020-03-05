@@ -37,6 +37,9 @@ const CloneRemoteDB = (props) => {
   const [dbList] = QueryHook(LIST_OF_DATABASE_ID);
 
   const onSubmit = (data) => {
+	  if (!user){
+		  loginWithRedirect();  // authenticate
+	  }
       let doc = {id: data.databaseID,
                  title: data.databaseName,
                  description:data.databaseDescr}
@@ -66,6 +69,10 @@ const CloneRemoteDB = (props) => {
                        name = { cloneRemoteDB.cloneRemote.input.name }
                        onChange = { handleTerminusDBInput }
                        ref = { register({ validate: value => value.length > 0}) }/>
+
+			   { errors.cloneRemote &&
+					<p className = { cloneRemoteDB.cloneRemote.error.className }>
+					{ cloneRemoteDB.cloneRemote.error.text }</p>} 
 
                 <hr className = "my-space-50"/>
 
@@ -103,7 +110,7 @@ const CloneRemoteDB = (props) => {
 
                     { errors.databaseID &&
                         <p className = { cloneRemoteDB.id.error.className }>
-                        { cloneRemoteDB.id.error.text }</p>} 
+                        { cloneRemoteDB.id.error.text }</p>}
 
                 <hr className = "my-space-15"/>
 

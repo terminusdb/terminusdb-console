@@ -31,11 +31,14 @@ const App = (props) => {
         <Switch>
           <Route path = "/" exact component = {consoleLib.ServerHome} />
           <consoleLib.PrivateRoute path = {consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
-          <consoleLib.PrivateRoute path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
-          <consoleLib.PrivateRoute path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
+          <Route path = {consoleLib.SERVER_HOME_PAGE.page}
+              component = {consoleLib.ServerHome} />
+          <Route path = {consoleLib.NEW_DB_PAGE.page}
+              component = {consoleLib.CreateDatabase} />
           <consoleLib.PrivateRoute path = {consoleLib.NEW_TEAM_PAGE.page} component = {consoleLib.CreateTeam} />
           <consoleLib.PrivateRoute path = {consoleLib.DOWNLOAD_PAGE.page} component = {consoleLib.Download} />
-          <consoleLib.PrivateRoute path = {consoleLib.DB_HOME_PAGE.page} component = {consoleLib.DatabaseHome} />
+          <Route path = {consoleLib.DB_HOME_PAGE.page}
+              component = {consoleLib.DatabaseHome} />
           <consoleLib.PrivateRoute path = {consoleLib.SCHEMA_PAGE.page} component = {consoleLib.Schema} />
           <consoleLib.PrivateRoute path = "/" component = {consoleLib.MainPage} />
         </Switch>
