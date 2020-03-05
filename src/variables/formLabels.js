@@ -305,3 +305,27 @@ export const addUser = {
         text: "Add User"
     }
 }
+
+export const commit = {
+    act: {
+        label: {
+            htmlFor: "commit",
+            text: 'Commit',
+            className: "form"
+        },
+        input: {
+            placeholder: "Commit message",
+            name: "commit",
+            className: "form"
+        },
+        error: {
+            text: "Cannot be blank.",
+            className: "errors"
+        }
+    },
+    action: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4",
+        text: "Commit"
+    }
+}

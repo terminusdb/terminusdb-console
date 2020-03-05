@@ -8,6 +8,7 @@ import {
     FormControl
 } from "react-bootstrap";
 import { Button, Container } from "reactstrap"
+import { useForm } from 'react-hook-form';
 import Loading from "../components/Loading";
 import { useAuth0 } from "../react-auth0-spa";
 import NavBar from "../components/NavBar"
@@ -20,12 +21,25 @@ import { PaymentModal } from "../components/Modals/Payment";
 const Profile = () => {
   const { loading, user } = useAuth0();
   const [ modal, setModal ] = useState(false);
+  const { register, handleSubmit, errors } = useForm();
+  const [ edit, setEdit ] =  useState(false);
   const toggle = () => setModal(!modal);
 
   if (loading || !user) {
     return <Loading />;
   }
 
+  const clickEdit = () => {
+      setEdit(true)
+  }
+
+  const clickCancel = () =>{
+      setEdit(false)
+  }
+
+  const onSubmit = (data) => {
+      console.log('commit something')
+  };
 
   return (
       <Container fluid className="h-100 pl-0 pr-0">
@@ -48,7 +62,7 @@ const Profile = () => {
                     <Card
                       title="Profile"
                       content={
-                        <form>
+                        <form onSubmit={ handleSubmit(onSubmit) }>
                           <FormInputs
                             ncols={["col-md-5", "col-md-3", "col-md-4"]}
                             properties={[
@@ -58,20 +72,22 @@ const Profile = () => {
                                 bsClass: "form-control",
                                 placeholder: "Company",
                                 defaultValue: "datachemist",
-                                disabled: true
+                                readOnly: (!edit)
                               },
                               {
                                 label: "Username",
                                 type: "text",
                                 bsClass: "form-control",
                                 placeholder: "Username",
-                                defaultValue: "kitzkan"
+                                defaultValue: "kitzkan",
+                                readOnly: (!edit)
                               },
                               {
                                 label: "Email address",
                                 type: "email",
                                 bsClass: "form-control",
-                                placeholder: "Email"
+                                placeholder: "Email",
+                                readOnly: (!edit)
                               }
                             ]}
                           />
@@ -83,23 +99,33 @@ const Profile = () => {
                                 type: "text",
                                 bsClass: "form-control",
                                 placeholder: "First name",
-                                defaultValue: "Kitty"
+                                defaultValue: "Kitty",
+                                readOnly: (!edit)
                               },
                               {
                                 label: "Last name",
                                 type: "text",
                                 bsClass: "form-control",
                                 placeholder: "Last name",
-                                defaultValue: "Jose"
+                                defaultValue: "Jose",
+                                readOnly: (!edit)
                               }
                             ]}/>
-                          <hr className="my-space"/>
-                          <Button color="primary"> Edit </Button>
-                          <hr className="my-space"/>
+                          {(!edit) && <Button color="primary" onClick={clickEdit}>
+                              Edit </Button>}
+                          {(edit) && <><Button color="primary pr"
+                              type = "Submit">
+                              Save </Button>
+                              <Button color="primary"
+                                  onClick={clickCancel}
+                                  type = "Submit">
+                                  Cancel </Button></>}
+                          <hr className="my-space-50"/>
+                          <hr className="my-space-50"/>
+                          <hr className="my-2"/>
                           <legend className="pr-hding-sp">{'Current Plan'}</legend>
-                          <hr className="my-3"/>
                           <CardDecks/>
-                          <hr className="my-space"/>
+                          <hr className="my-space-25"/>
                           <Button color="primary" onClick={toggle}> Upgrade </Button>
                           <PaymentModal isOpen={modal} toggle={toggle}/>
                           <hr className="my-space"/>
