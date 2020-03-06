@@ -1,5 +1,6 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
+import { Alert } from 'reactstrap';
 import { ADD_USER } from "../../labels/actionLabels"
 import { addUser } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
@@ -11,6 +12,7 @@ import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { USER_PLUS } from '../../labels/iconLabels'
 import { ClientHook } from '../../hooks/ClientHook'
+import { stripDocFromUrl } from '../../utils/extractStrings'
 
 const AddUserPermissionForm = (props) => {
     const { register, handleSubmit, errors } = useForm();
@@ -30,6 +32,9 @@ const AddUserPermissionForm = (props) => {
     return (
         <>
         <hr className="my-space-50"/>
+        {(!loading) && <Alert color="success">
+           Successfully added new User - <b>{stripDocFromUrl(userInfo.id)}</b>
+         </Alert>}
         <form onSubmit={ handleSubmit(onSubmit) }>
             <label> {props.name} </label>
             <span className="d-fl">
@@ -60,10 +65,15 @@ const AddUserPermissionForm = (props) => {
                   <label htmlFor = { MANAGE.name }/>
                        { MANAGE.label }
               </Col>
-              <Col md={3} className="mb-3">
+              {/*<Col md={3} className="mb-3">
                   <button className = { addUser.action.className }
                       type =  { addUser.action.type } >
                       <AddIcon icon= {USER_PLUS} className = {'ic-a-us'}/>
+                  </button>
+              </Col>*/}
+              <Col md={3} className="mb-3">
+                  <button className = { addUser.action.className }
+                      type =  { addUser.action.type } > Add User
                   </button>
               </Col>
 

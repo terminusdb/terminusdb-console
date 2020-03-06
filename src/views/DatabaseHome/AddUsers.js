@@ -7,7 +7,7 @@ import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
-import { GET_USER_LIST } from "../../labels/queryLabels"
+import { GET_USERS_NOT_IN_DB } from "../../labels/queryLabels"
 import AddUserPermission from './AddUserPermission'
 
 const AddUsers = (props) => {
@@ -24,7 +24,7 @@ const AddUsers = (props) => {
     }
 
 
-    const dataResponse = QueryHook(GET_USER_LIST, GET_BINDINGS)
+    const dataResponse = QueryHook(GET_USERS_NOT_IN_DB, GET_BINDINGS)
     const opts = dataResponse[0].result;
 
     return (
@@ -38,7 +38,7 @@ const AddUsers = (props) => {
                value = {values.selectedOption.value}
                onChange={ handleSelect }
                options = {opts}/>
-          {(chosen.length > 0) && <AddUserPermission selected = { chosen }/>}
+          {(Array.isArray(chosen)) && (chosen.length > 0) && <AddUserPermission selected = { chosen }/>}
       </>
     )
 }

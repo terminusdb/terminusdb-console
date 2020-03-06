@@ -1,9 +1,9 @@
-export const LIST_OF_DATABASE_QUERY = 'LIST_OF_DATABASE_QUERY'
+// query for local db
 export const LIST_OF_DATABASE_ID = 'LIST_OF_DATABASE_ID'
 export const SCHEMA_LIST_OF_CLASSES_QUERY = 'SCHEMA_LIST_OF_CLASSES_QUERY'
 export const SCHEMA_LIST_OF_PROPERTIES_QUERY = 'SCHEMA_LIST_OF_PROPERTIES_QUERY'
 
 
-// query to get from createTerminusDb
-export const GET_USER_LIST = "GET_USER_LIST"
+// query for terminus db
 export const GET_USER_ACCESS_FOR_DB = "GET_USER_ACCESS_FOR_DB"
+export const GET_USERS_NOT_IN_DB = "GET_USERS_NOT_IN_DB"

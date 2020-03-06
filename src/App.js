@@ -17,7 +17,7 @@ import CreateTeam from "./views/CreateTeam"
 import ServerHome from "./views/ServerHome"
 import Download from "./views/Download"
 import DatabaseHome from "./views/DatabaseHome/DatabaseHome"
-import Schema from "./views/Schema"
+import Schema from "./views/Schema/SchemaHome"
 import { setTerminusClient } from "./init/initializeGlobalState"
 import { localSettings } from "./config/localSettings"
 import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,

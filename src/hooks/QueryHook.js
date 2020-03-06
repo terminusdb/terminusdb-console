@@ -7,7 +7,7 @@ import * as queryList from '../utils/queryList';
 import { useGlobalState } from "../init/initializeGlobalState";
 import { isObject } from "../utils/helperFunctions";
 import { localSettings } from "../config/localSettings";
-import { LIST_OF_DATABASE_QUERY, LIST_OF_DATABASE_ID, GET_USER_LIST,
+import { LIST_OF_DATABASE_QUERY, LIST_OF_DATABASE_ID, GET_USERS_NOT_IN_DB,
     GET_USER_ACCESS_FOR_DB } from "../labels/queryLabels";
 import { RENDER_TYPE_TABLE, RENDER_TYPE_MAPS, RENDER_TYPE_GRAPH, GET_BINDINGS } from "../labels/renderTypeLabels";
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels"
@@ -27,7 +27,7 @@ function QueryHook(queryName, renderType, params) {
             let columnConf = [], columnData = [];
             const woqlQuery = queryList.getQuery(queryName, {dbId: 'doc:' + orig});
             if(!woqlQuery) return;
-            if((queryName === GET_USER_LIST) || (queryName === GET_USER_ACCESS_FOR_DB))
+            if((queryName === GET_USERS_NOT_IN_DB) || (queryName === GET_USER_ACCESS_FOR_DB))
                 dbClient.db("terminus");
             woqlQuery.execute(dbClient).then((results) => {
                 let qcres = new TerminusClient.WOQLResult(results, woqlQuery);
@@ -56,7 +56,7 @@ function QueryHook(queryName, renderType, params) {
                     case GET_BINDINGS:
                         if(qcres.hasBindings()){
                             resultData = qcres.getBindings();
-                            if(queryName === GET_USER_LIST) {
+                            if(queryName === GET_USERS_NOT_IN_DB) {
                                 const data = getUserSelectOpts(resultData)
                                 setData({result: data});
                                 setLoading(false);

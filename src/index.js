@@ -15,7 +15,7 @@ export CreateTeam from "./views/CreateTeam"
 export ServerHome from "./views/ServerHome"
 export Collaborate from "./views/Collaborate"
 export DatabaseHome from "./views/DatabaseHome/DatabaseHome"
-export Schema from "./views/Schema"
+export Schema from "./views/Schema/SchemaHome"
 export { setTerminusClient } from "./init/initializeGlobalState"
 export { localSettings } from "./config/localSettings"
 export * from './variables/pageLabels'

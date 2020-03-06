@@ -301,7 +301,7 @@ export const addUser = {
     },
     action: {
         type: "submit",
-        className: "ic-a-us",
+        className: "btn btn-primary lead mt-4",
         text: "Add User"
     }
 }

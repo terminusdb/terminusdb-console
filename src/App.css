@@ -14,6 +14,10 @@ button.pr {
   margin-bottom: 0;
 }
 
+div.sch-disp{
+    margin-top: 150px;
+}
+
 div.header legend, div.row legend {
     margin-top: 0px !important
 }

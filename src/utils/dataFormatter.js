@@ -98,8 +98,8 @@ export const getUserSelectOpts = (data) => {
         var obj = {}
         for (var key in data[it]) {
             var vl = data[it];
-            if(key == 'v:User') obj.value = vl['v:User'];
-            if(key == 'v:Name') obj.label = vl['v:Name']['@value'];
+            if(key == 'v:UserID') obj.value = vl['v:UserID'];
+            if(key == 'v:Label') obj.label = vl['v:Label']['@value'];
         }
         opts.push(obj)
     }

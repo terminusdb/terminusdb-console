@@ -1,39 +1,7 @@
-import { SCHEMA_LIST_OF_CLASSES_QUERY, SCHEMA_LIST_OF_PROPERTIES_QUERY } from '../labels/queryLabels';
-import { GET_SCHEMA }  from '../labels/apiLabels'
-
-export const CLASSES_TAB = {
-    state: 'CLASSES_TAB',
-    label: 'Classes',
-    command: SCHEMA_LIST_OF_CLASSES_QUERY
-}
-export const PROPERTIES_TAB = {
-    state: 'PROPERTIES_TAB',
-    label: 'Properties',
-    command: SCHEMA_LIST_OF_PROPERTIES_QUERY
-}
-export const OWL_TAB = {
-    state: 'OWL_TAB',
-    label: 'OWL',
-    command: GET_SCHEMA
-}
-
-export const SCHEMA_TABS = [
-    {CLASSES_TAB: {
-        state: 'CLASSES_TAB',
-        label: 'Classes',
-        command: SCHEMA_LIST_OF_CLASSES_QUERY
-    }},
-    {PROPERTIES_TAB: {
-        state: 'PROPERTIES_TAB',
-        label: 'Properties',
-        command: SCHEMA_LIST_OF_PROPERTIES_QUERY
-    }},
-    {OWL_TAB: {
-        state: 'OWL_TAB',
-        label: 'OWL',
-        command: GET_SCHEMA
-    }}
-]
+/* schema tabs */
+export const CLASSES_TAB = "Classes"
+export const PROPERTIES_TAB = "Properties"
+export const OWL_TAB = "OWL"
 
 /* database home tabs */
 export const DETAILS_TAB = 'Details'

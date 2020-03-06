@@ -19,14 +19,6 @@ function ClientHook(actionName, params) {
 
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
-    let hookArr=[];
-
-    switch(actionName){
-      case CREATE_NEW_USER:
-          hookArr=[params]
-          break;
-    }
-
     useEffect(() => {
         async function actionClientCall() {
            if (isObject(dbClient)){

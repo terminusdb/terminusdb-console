@@ -23,16 +23,19 @@ export const getQuery = (queryName, params) =>{
         case query.SCHEMA_LIST_OF_PROPERTIES_QUERY:
             return WOQL.limit(100).start(0).propertyMetadata();
 
-       case query.GET_USER_LIST:
-            return WOQL.and( WOQL.triple("v:User","type","terminus:User"),
-                WOQL.opt().triple("v:User", 'label', 'v:Name'))
-
        case query.GET_USER_ACCESS_FOR_DB:
             return WOQL.and(
             	WOQL.triple("v:CapabilityID", "terminus:authority_scope", dbId),
             	WOQL.triple("v:UserID", "terminus:authority", "v:CapabilityID"),
                 WOQL.triple("v:UserID", "label", "v:Label"),
             	WOQL.triple("v:CapabilityID", "terminus:action", "v:Action"))
+
+       case query.GET_USERS_NOT_IN_DB:
+            return WOQL.and(
+			    WOQL.triple("v:CapabilityID", "terminus:authority_scope", 'v:AllDatabase'),
+  				WOQL.not().eq('v:AllDatabase', dbId),
+            	WOQL.triple("v:UserID", "terminus:authority", "v:CapabilityID"),
+                WOQL.triple("v:UserID", "label", "v:Label"))
 
        default:
            console.log('queryList.js - Invalid Query name ' + queryName)
