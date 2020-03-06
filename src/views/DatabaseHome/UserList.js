@@ -79,8 +79,7 @@ const UserList = (props) => {
                         <Col md={1} className="mb-1">
                             <input type="checkbox"
                                ref = { register }
-                               name={ READ.name }
-                               defaultChecked/>
+                               name={ READ.name }/>
                        </Col>
                        <Col md={3} className="mb-3">
                            <label htmlFor = { READ.name }/>

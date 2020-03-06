@@ -44,7 +44,7 @@ const Collaborate = (props) => {
 	            		{ collaborate.accessHeader.label }
 	                </label>
 
-                    {isAuthenticated && <span className="d-fl">
+                     <span className="d-fl">
                         <Col md={1} className="mb-1">
                             <input type="checkbox"
                                name={ READ.name }
@@ -77,13 +77,13 @@ const Collaborate = (props) => {
                          <label htmlFor = { MANAGE.name }/>
                              { MANAGE.label }
                      </Col>
-                  </span>}
+                  </span>
 
                  <hr className = "my-space-15"/>
                  <hr className = "my-2"/>
                  <hr className = "my-space-50"/>
 
-                 {isAuthenticated && managePermissions && <>
+                  {managePermissions && <>
                      <Tabs>
                          <Tab label = {CURRENT_USERS}>
                              <hr className = "my-space-50"/>

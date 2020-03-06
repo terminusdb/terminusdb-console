@@ -36,7 +36,7 @@ const DatabaseHome = (props) => {
 			 	<hr className = "my-space-50" />
     	  	    <legend>{getCurrentDBName(dbCLient)}</legend>
 				<hr className = "my-space-50"/>
-				{isAuthenticated && <span className = "d-fl mb-12">
+				<span className = "d-fl mb-12">
 					<Col md={8} className="mb-8">
 						<DateTimeSlider/>
 					</Col>
@@ -44,11 +44,11 @@ const DatabaseHome = (props) => {
 					<Col md={3} className="mb-3">
 						<BranchSelector/>
 					</Col>
-				</span>}
+				</span>
 
 				<hr className = "my-space-5"/>
 
-				{isAuthenticated && <Tabs>
+				 <Tabs>
 				    <Tab label = {DETAILS_TAB}>
 					    <hr className = "my-space-15"/>
 						<Details/>
@@ -61,14 +61,7 @@ const DatabaseHome = (props) => {
 						<hr className = "my-space-15"/>
 						<ManageDatabase/>
 					</Tab>
-				</Tabs>}
-
-				{(!isAuthenticated) && <Tabs>
-				    <Tab label = {DETAILS_TAB}>
-					    <hr className = "my-space-15"/>
-						<Details/>
-				    </Tab>
-				</Tabs>}
+				</Tabs>
 
     	    </Container>
     	</Container>
