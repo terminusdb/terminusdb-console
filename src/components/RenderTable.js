@@ -14,11 +14,25 @@ const RenderTable = (props) => {
     const [onRowClicked, setSelectedRows] = useState([]);
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     let explandableRows = false;
-
-    let data = props.dataProvider.columnData || [];
-    let columns = props.dataProvider.columnConf || [];
     if (props.fromPage == SERVER_HOME_PAGE.page)
         explandableRows = true;
+
+    let dBuf = props.dataProvider.columnData || [];
+
+    // get datatable data and column
+    let data = [];
+    if(explandableRows) { // disable row expansion when db has no description
+        data = dBuf.map(item => {
+            let disabled = false;
+            if (item['rdfs:comment'] == undefined) {
+              disabled = true;
+            }
+            return { ...item, disabled };
+        });
+    }
+    else data = props.dataProvider.columnData || [];
+
+    let columns = props.dataProvider.columnConf || [];
 
     const handleChange = useCallback(state => {
         switch(props.fromPage){
@@ -46,6 +60,7 @@ const RenderTable = (props) => {
                         pointerOnHover
                         highlightOnHover
                         expandableRows
+                        expandableRowDisabled={row => row.disabled}
                         responsive
                         expandableRowsComponent={<ExpandedComponent
                                                     fromPage={ props.fromPage }

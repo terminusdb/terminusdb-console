@@ -9,6 +9,10 @@ button.pr {
     margin-left: 10px;
 }
 
+div.jYNXPe {
+    margin-left: 50px;
+}
+
 /* Fix for use only flexbox in content area */
 .next-steps .row {
   margin-bottom: 0;
@@ -16,6 +20,10 @@ button.pr {
 
 div.sch-disp{
     margin-top: 150px;
+}
+
+button.cOJQpm:disabled svg{
+    display: none;
 }
 
 div.header legend, div.row legend {
