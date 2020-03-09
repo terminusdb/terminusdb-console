@@ -13,6 +13,15 @@ div.jYNXPe {
     margin-left: 50px;
 }
 
+/*button.fwIEmi:hover:not(:disabled){
+    background-color: red !important
+}*/
+
+button.sc-hSdWYo{
+    border-radius: 0px;
+    min-width: 0px;
+}
+
 /* Fix for use only flexbox in content area */
 .next-steps .row {
   margin-bottom: 0;
