@@ -13,8 +13,12 @@ import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({})
+	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
     const onSubmit = (data) => {
+		if (!user){
+  		  loginWithRedirect();  // authenticate
+  	  }
         console.log('commit something')
     };
 
