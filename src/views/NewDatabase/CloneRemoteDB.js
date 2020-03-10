@@ -72,7 +72,7 @@ const CloneRemoteDB = (props) => {
 
 			   { errors.cloneRemote &&
 					<p className = { cloneRemoteDB.cloneRemote.error.className }>
-					{ cloneRemoteDB.cloneRemote.error.text }</p>} 
+					{ cloneRemoteDB.cloneRemote.error.text }</p>}
 
                 <hr className = "my-space-50"/>
 
@@ -102,15 +102,11 @@ const CloneRemoteDB = (props) => {
                  <label className = { cloneRemoteDB.id.label.className }
                             htmlFor = { cloneRemoteDB.id.label.htmlFor }>
                             { cloneRemoteDB.id.label.text }
-                      </label>
-                     <input placeholder={ cloneRemoteDB.id.input.placeholder }
-                            className = { cloneRemoteDB.id.input.className }
-                            name = { cloneRemoteDB.id.input.name }
-                            ref = { register({ validate: value => value.length > 0}) }/>
-
-                    { errors.databaseID &&
-                        <p className = { cloneRemoteDB.id.error.className }>
-                        { cloneRemoteDB.id.error.text }</p>}
+                  </label>
+                 <input placeholder={ cloneRemoteDB.id.input.placeholder }
+                        className = { cloneRemoteDB.id.input.className }
+                        name = { cloneRemoteDB.id.input.name }
+                        ref = { register }/>
 
                 <hr className = "my-space-15"/>
 

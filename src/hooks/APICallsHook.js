@@ -18,18 +18,6 @@ function APICallsHook(apiName, renderType, params) {
 
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
-    let hookArr=[];
-
-    switch(apiName){
-      case GET_SCHEMA:
-          hookArr=[dbClient]
-          break;
-      case CREATE_DATABASE:
-          hookArr=[dbClient, params]
-          break;
-    }
-
-
     useEffect(() => {
         async function woqlClientCall() {
            if (isObject(dbClient)){
@@ -37,36 +25,35 @@ function APICallsHook(apiName, renderType, params) {
                    switch(apiName){
                        case GET_SCHEMA:
                             dbClient.getSchema({'terminus:encoding': 'terminus:turtle'},
-                                                      getCurrentSchema(dbClient))
-                                            .then(function(response){
-                                                setData({response: response});
-                                                setLoading(false);
-                                        	})
-                                        	.catch(function(error){
-                                        		console.log(error)
-                                        	});
+                             getCurrentSchema(dbClient))
+                            .then(function(response){
+                                setData({response: response});
+                                setLoading(false);
+                        	})
+                        	.catch(function(error){
+                        		console.log(error)
+                        	});
                             return [data, loading];
                        case CREATE_DATABASE:
                            if(isObject(params)){
                                dbClient.createDatabase(params)
-                                               .then(function(response){
-                                                   setData({response: response});
-                                                   setLoading(false);
-                                               })
-                                               .catch(function(error){
-                                                   console.log(error)
-                                               });
+                               .then(function(response){
+                                   setData({response: response});
+                                   setLoading(false);
+                               })
+                               .catch(function(error){
+                                   console.log(error)
+                               });
                                return [data, loading];
                            }
-                       default:
-                           //console.log('APICallsHook.js - Invalid QueryName')
+                       default: break;
                    }
                    return;
                }
            }
         }
         woqlClientCall();
-     }, [hookArr]);
+    }, [dbClient, params]);
 
     return [data, loading];
 }

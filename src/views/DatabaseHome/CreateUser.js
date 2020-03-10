@@ -4,7 +4,7 @@ import { Alert } from 'reactstrap';
 import { CREATE_NEW_USER } from "../../labels/actionLabels"
 import { collaborate, createUser } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
-import { ClientHook } from '../../hooks/ClientHook'
+import { UserManHook } from '../../hooks/UserManHook'
 import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
@@ -12,7 +12,7 @@ const CreateNewUser = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({})
 
-    const [dataResponse, loading] = ClientHook(CREATE_NEW_USER, userInfo);
+    const [dataResponse, loading] = UserManHook(CREATE_NEW_USER, userInfo);
 
     const onSubmit = (data) => {
         let doc = {id: data.userID,

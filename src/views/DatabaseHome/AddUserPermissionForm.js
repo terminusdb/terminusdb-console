@@ -11,14 +11,14 @@ import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { USER_PLUS } from '../../labels/iconLabels'
-import { ClientHook } from '../../hooks/ClientHook'
+import { UserManHook } from '../../hooks/UserManHook'
 import { stripDocFromUrl } from '../../utils/extractStrings'
 
 const AddUserPermissionForm = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({});
     let selectedUsers = [];
-    const [dataResponse, loading] = ClientHook(ADD_USER, userInfo);
+    const [dataResponse, loading] = UserManHook(ADD_USER, userInfo);
 
 
     const onSubmit = (data) => {

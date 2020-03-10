@@ -1,7 +1,7 @@
 import React, { useState, useCallback }from "react";
 import { useForm } from 'react-hook-form';
 import { collaborate, userList} from "../../variables/formLabels"
-import { ClientHook } from '../../hooks/ClientHook'
+import { UserManHook } from '../../hooks/UserManHook'
 import { UPDATE_USER_PERMISSIONS } from '../../labels/actionLabels'
 import { fakeUserData } from "../../temp/fakeUserData"
 import { QueryHook } from '../../hooks/QueryHook'
@@ -20,7 +20,7 @@ const UserList = (props) => {
     const [userCapabilityId, setUserCapabilityId] = useState();
 
     const dataResponse = QueryHook(GET_USER_ACCESS_FOR_DB, RENDER_TYPE_TABLE);
-    const [resp, loading] = ClientHook(UPDATE_USER_PERMISSIONS, updatedInfo)
+    const [resp, loading] = UserManHook(UPDATE_USER_PERMISSIONS, updatedInfo)
 
 
     let data = dataResponse[0].columnData || [];

@@ -48,7 +48,7 @@ const DatabaseHome = (props) => {
 
 				<hr className = "my-space-5"/>
 
-				 <Tabs>
+				 {isAuthenticated && <Tabs>
 				    <Tab label = {DETAILS_TAB}>
 					    <hr className = "my-space-15"/>
 						<Details/>
@@ -61,7 +61,14 @@ const DatabaseHome = (props) => {
 						<hr className = "my-space-15"/>
 						<ManageDatabase/>
 					</Tab>
-				</Tabs>
+				</Tabs>}
+
+				{(!isAuthenticated) && <Tabs>
+				   <Tab label = {DETAILS_TAB}>
+					   <hr className = "my-space-15"/>
+					   <Details/>
+				   </Tab>
+			   </Tabs>}
 
     	    </Container>
     	</Container>

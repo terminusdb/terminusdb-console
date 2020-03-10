@@ -11,7 +11,7 @@ import { GET_SCHEMA, CREATE_DATABASE }  from '../labels/apiLabels'
 import { getCurrentSchema } from "../utils/helperFunctions"
 import { getAccessPermissions, getCapabilityID } from "../utils/userManagerFunctions"
 
-function ClientHook(actionName, params) {
+function UserManHook(actionName, params) {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
     let resultData = [];
@@ -165,4 +165,4 @@ function ClientHook(actionName, params) {
     return [data, loading];
 }
 
-export { ClientHook };
+export { UserManHook };

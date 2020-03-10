@@ -14,7 +14,7 @@ import { fakeUserData } from "../../temp/fakeUserData"
 import { EDIT } from '../../labels/iconLabels'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/tabLabels'
-import { ClientHook } from '../../hooks/ClientHook'
+import { UserManHook } from '../../hooks/UserManHook'
 import CreateNewUser from './CreateUser'
 import UserList from './UserList'
 import AddUsers from './AddUsers'
@@ -97,10 +97,10 @@ const Collaborate = (props) => {
      						<hr className = "my-space-50"/>
      						<AddUsers/>
      					</Tab>
-                        <Tab label = {INVITE_USER}>
+                        {/*<Tab label = {INVITE_USER}>
      						<hr className = "my-space-50"/>
      						INVITE_USER
-     					</Tab>
+     					</Tab>*/}
      				</Tabs> </>
                  }
 

@@ -144,17 +144,13 @@ export const cloneRemoteDB = {
     id: {
         label: {
             htmlFor: "databaseID",
-            text: 'Database Id *',
+            text: 'Database Id',
             className: "form"
         },
         input: {
             placeholder: "New Id for Cloned database. No spaces or special characters allowed in IDs",
             name: "databaseID",
             className: "form"
-        },
-        error: {
-            text: "Cannot be blank. No spaces or special characters allowed in IDs",
-            className: "errors"
         }
     },
     action: {
