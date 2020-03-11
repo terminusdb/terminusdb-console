@@ -64,22 +64,14 @@ const Profile = () => {
                       content={
                         <form onSubmit={ handleSubmit(onSubmit) }>
                           <FormInputs
-                            ncols={["col-md-5", "col-md-3", "col-md-4"]}
+                            ncols={["col-md-5", "col-md-7"]}
                             properties={[
                               {
-                                label: "Company",
+                                label: "Account",
                                 type: "text",
                                 bsClass: "form-control",
                                 placeholder: "Company",
-                                defaultValue: "datachemist",
-                                readOnly: (!edit)
-                              },
-                              {
-                                label: "Username",
-                                type: "text",
-                                bsClass: "form-control",
-                                placeholder: "Username",
-                                defaultValue: "kitzkan",
+                                defaultValue: "AccountName",
                                 readOnly: (!edit)
                               },
                               {
@@ -91,26 +83,6 @@ const Profile = () => {
                               }
                             ]}
                           />
-                          <FormInputs
-                            ncols={["col-md-6", "col-md-6"]}
-                            properties={[
-                              {
-                                label: "First name",
-                                type: "text",
-                                bsClass: "form-control",
-                                placeholder: "First name",
-                                defaultValue: "Kitty",
-                                readOnly: (!edit)
-                              },
-                              {
-                                label: "Last name",
-                                type: "text",
-                                bsClass: "form-control",
-                                placeholder: "Last name",
-                                defaultValue: "Jose",
-                                readOnly: (!edit)
-                              }
-                            ]}/>
                           {(!edit) && <Button color="primary" onClick={clickEdit}>
                               Edit </Button>}
                           {(edit) && <><Button color="primary pr"
@@ -120,15 +92,15 @@ const Profile = () => {
                                   onClick={clickCancel}
                                   type = "Submit">
                                   Cancel </Button></>}
-                          <hr className="my-space-50"/>
-                          <hr className="my-space-50"/>
+                          <hr className="my-space-100"/>
                           <hr className="my-2"/>
-                          <legend className="pr-hding-sp">{'Current Plan'}</legend>
-                          <CardDecks/>
                           <hr className="my-space-25"/>
+                          <legend className="pr-hding-sp">{'Current Plan'}</legend>
+                          <hr className="my-space-25"/>
+                          <CardDecks/>
+                          <hr className="my-space-50"/>
                           <Button color="primary" onClick={toggle}> Upgrade </Button>
                           <PaymentModal isOpen={modal} toggle={toggle}/>
-                          <hr className="my-space"/>
                           <div className="clearfix" />
                         </form>
                       }

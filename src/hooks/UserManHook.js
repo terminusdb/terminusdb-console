@@ -32,8 +32,10 @@ function UserManHook(actionName, params) {
                                let orig = dbClient.db();
                                dbClient.db("terminus");
 
-                               const permissions = getAccessPermissions(params.Read, params.Write, params.Manage);
-                               const capabilityID = getCapabilityID(params.Read, params.Write, params.Manage, orig);
+                               const permissions = getAccessPermissions(params.Read,
+                                   params.Write, params.Manage);
+                               const capabilityID = getCapabilityID(params.Read,
+                                   params.Write, params.Manage, orig);
 
                                let uman = new TerminusClient.UserManager(dbClient);
                                // create User id

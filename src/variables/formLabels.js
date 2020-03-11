@@ -325,3 +325,11 @@ export const commit = {
         text: "Commit"
     }
 }
+
+export const editSchema = {
+    edit: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "Edit"
+    }
+}

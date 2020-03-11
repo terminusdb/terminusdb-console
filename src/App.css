@@ -17,6 +17,10 @@ div.jYNXPe {
     background-color: red !important
 }*/
 
+button.formMrg{
+    margin-bottom: 20px;
+}
+
 button.sc-hSdWYo{
     border-radius: 0px;
     min-width: 10px;
@@ -157,6 +161,11 @@ hr.my-space-25{
 hr.my-space-50{
     border-top: 0px !important;
     margin-top: 50px;
+}
+
+hr.my-space-100{
+    border-top: 0px !important;
+    margin-top: 100px;
 }
 
 hr.pr-hding-sp{

@@ -12,17 +12,17 @@ export const UserCard = (props) => {
                   <img className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
                        src={props.avatar}
                        alt="..."/>
-                  <hr className="my-space" />
+                  <hr className="my-space-15" />
+                  <hr />
+                  <hr className="my-space-15" />
                   <h4 className="title">
                       {props.name}
                       <br/>
                       <small>{props.email}</small>
                   </h4>
-                  <hr className="my-space"/>
+                  <hr className="my-space-15"/>
                </a>
            </div>
-           <p className="description text-center">{props.description}</p>
         </div>
-        <hr />
    </div>
 );}
