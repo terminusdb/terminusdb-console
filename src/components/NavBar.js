@@ -54,10 +54,10 @@ const NavBar = (props) => {
         <div className="nav-container">
             <Navbar expand="md" dark fixed="top">
                 <div className={containerClassName}>
-                   <NavbarBrand href="https://terminusdb.com" className="logo"/>
+                   {/*<NavbarBrand href="https://terminusdb.com" className="logo"/>*/}
                    <NavbarToggler onClick={toggle} />
                    <Collapse isOpen={isOpen} navbar >
-                        <div className="d-flex">
+                        <span className="m-opts d-flex"><div className="d-flex main-nav">
                             <Navs className = "mr-auto"/>
                             <span className = "nav-al display-flex">
                                 <Navs className = "mr-auto"
@@ -70,7 +70,7 @@ const NavBar = (props) => {
                                       label = {NEW_DB_PAGE.label}/>
                             </span>
                         </div>
-                        {isDBSet.dbId && !(props.resetDB) && <div className="d-flex db-al db-nav">
+                        {isDBSet.dbId && !(props.resetDB) && <div className="d-flex db-al db-nav s-nav">
                             <Navs className = "mr-auto"
                                   page = {DB_HOME_PAGE.page}
                                   activeClassName = "router-link-exact-active"
@@ -87,7 +87,7 @@ const NavBar = (props) => {
                                   page = {SCHEMA_PAGE.page}
                                   activeClassName = "router-link-exact-active"
                                   label = {SCHEMA_PAGE.label}/>
-                         </div>}
+                         </div>} </span>
                         <Nav className = "d-none d-md-block ml-auto" navbar>
                             {!isAuthenticated && (
                                 <NavItem>

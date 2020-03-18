@@ -333,3 +333,19 @@ export const editSchema = {
         text: "Edit"
     }
 }
+
+export const pull = {
+    action: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4",
+        text: "Pull"
+    }
+}
+
+export const push = {
+    action: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4",
+        text: "Push"
+    }
+}

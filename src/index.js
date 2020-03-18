@@ -22,8 +22,6 @@ export * from './variables/pageLabels'
 export initFontAwesome from "./init/initFontAwesome";
 export CreateDatabase from "./views/NewDatabase/CreateDatabase"
 
-
-
 /*import React from "react";
 import ReactDOM from "react-dom";
 

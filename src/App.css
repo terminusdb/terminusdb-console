@@ -13,6 +13,25 @@ div.jYNXPe {
     margin-left: 50px;
 }
 
+div.collapse{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+div.main-nav{
+    height: 100%;
+    position: absolute;
+    top: 0;
+}
+
+div.s-nav{
+    height: 100%;
+    width: 70%;
+    position: absolute;
+    top: 0;
+}
+
 /*button.fwIEmi:hover:not(:disabled){
     background-color: red !important
 }*/
@@ -312,7 +331,7 @@ div.css-yk16xz-control{
 }
 
 .navbar-light.bg-light .nav-link {
-  color: #041433
+  color: #041433;
 }
 
 .navBarTop{
@@ -336,9 +355,11 @@ div.css-yk16xz-control{
   box-sizing: border-box;
   margin: 0 40px 0 0;
   font-weight: 400;
+  margin-top: 10px;
 }
 
 .navbar-nav .nav-link:hover {
+
   color: hsla(0,0%,100%,.75);
 }
 
@@ -457,7 +478,8 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
 }
 
 div.db-nav {
-    background-color: #CCDDF1;
+    /*background-color: #CCDDF1;*/
+    background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
     border-radius: 3px;
 }
 
@@ -466,7 +488,8 @@ div.curr-pr{
 }
 
 div.db-nav ul.navbar-nav li.nav-item a.nav-link{
-    color: #002856;
+    /*color: #002856;*/
+    color: #fff;
 }
 
 div.db-nav ul.navbar-nav li.nav-item a.nav-link:hover{
@@ -955,8 +978,15 @@ span.nav-al{
 }
 
 div.db-al{
-    margin-left: 120px;
+    margin-left: 520px;
+    padding-right: 250px;
+    width: 70
 }
+
+ul.navbar-nav{
+    margin-left: 30px;
+}
+
 @media (min-width: 768px)
 .navbar-expand-md .navbar-nav .nav-link {
      padding-right: 0 !important

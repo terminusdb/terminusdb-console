@@ -89,10 +89,10 @@ const Collaborate = (props) => {
                              <hr className = "my-space-50"/>
                              <UserList/>
                          </Tab>
-     				    <Tab label = {CREATE_USER}>
+     				    {/*<Tab label = {CREATE_USER}>
      					    <hr className = "my-space-50"/>
      						<CreateNewUser/>
-     				    </Tab>
+     				    </Tab>*/}
      				    <Tab label = {ADD_USER}>
      						<hr className = "my-space-50"/>
      						<AddUsers/>

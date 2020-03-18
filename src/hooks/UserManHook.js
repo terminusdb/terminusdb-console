@@ -111,55 +111,59 @@ function UserManHook(actionName, params) {
                            } //ADD_USER
                            break;
 
-                           case UPDATE_USER_PERMISSIONS:
-                               if(isObject(params)){
+                       case UPDATE_USER_PERMISSIONS:
 
-                                   let orig = dbClient.db();
-                                   dbClient.db("terminus");
+                           if(isObject(params)){
+                               console.log('entering the is obj')
+                               let orig = dbClient.db();
+                               dbClient.db("terminus");
 
-                                   const permissions = getAccessPermissions(params.Read, params.Write, params.Manage);
-                                   const capabilityID = getCapabilityID(params.Read, params.Write, params.Manage, orig);
+                               const permissions = getAccessPermissions(params.Read, params.Write, params.Manage);
+                               const capabilityID = getCapabilityID(params.Read, params.Write, params.Manage, orig);
 
-                                   let uman = new TerminusClient.UserManager(dbClient);
-                                   // remove existing capability of  user
-                                   uman.removeUserCapability(params.id, params.previousCapabilityId)
-                                       .then((response) => {
-                                           // create capability id for db
-                                           uman.createCapability(capabilityID,
-                                                capabilityID,
-                                                false,
-                                                permissions,
-                                                orig)
-                                               .then((response) => {
-                                                   // attach user and capability id
-                                                   uman.addUserCapability(params.id, capabilityID).then((response) => {
-                                                       setData(true);
-                                                       setLoading(false);
-                                                       dbClient.db(orig);
-                                                       return [data, loading];
-                                                   })
-                                                   .catch(function(error){
-                                                       console.log(error)
-                                                       dbClient.db(orig)
-                                                   })
+                               let uman = new TerminusClient.UserManager(dbClient);
+                               // remove existing capability of  user
+                               uman.removeUserCapability(params.id, params.previousCapabilityId)
+                                   .then((response) => {
+                                       // create capability id for db
+                                       uman.createCapability(capabilityID,
+                                            capabilityID,
+                                            false,
+                                            permissions,
+                                            orig)
+                                           .then((response) => {
+                                               // attach user and capability id
+                                               uman.addUserCapability(params.id, capabilityID).then((response) => {
+                                                   setData(true);
+                                                   setLoading(false);
+                                                   dbClient.db(orig);
+                                                   return [data, loading];
+                                               })
+                                               .catch(function(error){
+                                                   console.log(error)
+                                                   dbClient.db(orig)
+                                               })
 
-                                                })
-                                                .catch(function(error){
-                                                    console.log(error)
-                                                    dbClient.db(orig)
-                                                })
-                                       })
-                                       .catch(function(error){
-                                           console.log(error)
-                                           dbClient.db(orig)
-                                       })
-                               } //UPDATE_USER_PERMISSIONS
-                           break;
+                                            })
+                                            .catch(function(error){
+                                                console.log(error)
+                                                dbClient.db(orig)
+                                            })
+                                   })
+                                   .catch(function(error){
+                                       console.log(error)
+                                       dbClient.db(orig)
+                                   })
+                           } //UPDATE_USER_PERMISSIONS
+                       break;
                    }
 
                    return;
+
+
                }
            }
+
         }
         actionClientCall();
     }, [params.id, params.name, params.description, params.email, params.Read, params.Write, params.Manage, params.previousCapabilityId]);

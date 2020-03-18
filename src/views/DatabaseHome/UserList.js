@@ -26,6 +26,8 @@ const UserList = (props) => {
     let data = dataResponse[0].columnData || [];
     let columns = dataResponse[0].columnConf || [];
 
+    //console.log('data', data)
+
     const handleChange = useCallback(state => {
         setEditMode(true);
         setChosenUser(state['v:Label'])

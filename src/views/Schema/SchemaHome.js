@@ -11,6 +11,7 @@ import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB } from "../../labels/tabLabels"
 import { Classes } from './Classes'
 import { Properties } from './Properties'
 import { OWL } from './OWL'
+import Commit from '../../components/Commit'
 
 const Schema = (props) => {
   const { loading, user } = useAuth0();
@@ -42,6 +43,10 @@ const Schema = (props) => {
 							<Properties/>
 						</Tab>
 						<Tab label = {OWL_TAB}>
+							<hr className = "my-space-15"/>
+							<Commit/>
+							<hr className = "my-space-100"/>
+							<hr className = "my-2"/>
 							<hr className = "my-space-15"/>
 							<OWL/>
 						</Tab>

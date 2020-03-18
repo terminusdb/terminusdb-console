@@ -10,10 +10,6 @@ export const RenderSnippet = (props) => {
        console.log('****data', data)
     }
 
-    const handleChange = (ev) => {
-        console.log(' man kind is nice ')
-    }
-
     let data = props.dataProvider || {};
     return (
         <form onSubmit={ handleSubmit(onSubmit) }>

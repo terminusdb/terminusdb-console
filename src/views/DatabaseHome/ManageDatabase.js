@@ -4,10 +4,9 @@ import { useForm } from 'react-hook-form';
 import { FormInputs } from "../../components/Form/FormInputs"
 import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
-import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
 import { useGlobalState } from "../../init/initializeGlobalState";
-import { commit } from "../../variables/formLabels"
+import { pull, push } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 
 const ManageDatabase = (props) => {
@@ -24,28 +23,18 @@ const ManageDatabase = (props) => {
 
 
     return (
-             <>{/*(!loading) && <Alert color="success">
-                Sucessfully commited
-              </Alert>*/}
+             <>
              <form onSubmit={ handleSubmit(onSubmit) }>
-                 <label htmlFor = { commit.act.label.htmlFor }>
-            		{ commit.act.label.text }
-                </label>
-            	<textarea placeholder={ commit.act.input.placeholder }
-                    className = { commit.act.input.className }
-            		name = { commit.act.input.name }
-            		ref = { register({ validate: value => value.length > 0}) }/>
+		          <button className = { push.action.className }
+		              type =  { push.action.type } >
+		              { push.action.text }
+		          </button>
 
-            		   { errors.commit &&
-            			   <p className = { commit.act.error.className }>
-            			   { commit.act.error.text }</p>}
-
-          <button className = { commit.action.className }
-              type =  { commit.action.type } >
-              { commit.action.text }
-          </button>
-
-      </form> </>
+				  <button className = { pull.action.className }
+		              type =  { pull.action.type } >
+		              { pull.action.text }
+		          </button>
+      		</form> </>
     )
 }
 
