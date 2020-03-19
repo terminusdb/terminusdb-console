@@ -341,12 +341,11 @@ div.css-yk16xz-control{
 }
 
 .navbar .router-link-exact-active {
-  color: #041433;
-  border-bottom: 0px solid #0066f9
+  border-bottom: 3px solid #00C08B !important;
 }
 
 .navbar-brand {
-  margin-right: 20px
+  margin-right: 20px;
 }
 
 .navbar-nav .nav-link {
@@ -359,7 +358,6 @@ div.css-yk16xz-control{
 }
 
 .navbar-nav .nav-link:hover {
-
   color: hsla(0,0%,100%,.75);
 }
 
@@ -470,11 +468,15 @@ ul.nav-tabs li.nav-item a.nav-link:hover {
 }
 
 span.nav-al ul.navbar-nav li.nav-item a.nav-link:hover {
-    background-color: #001833;
+    /*background-color: #001833;*/
+    border-bottom: 1px solid #00C08B;
+    color: #fff;
+
 }
 
 span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
-    border-bottom: 1px solid #001833;
+    /*border-bottom: 1px solid #001833;*/
+    border-bottom: 1px solid #00C08B;
 }
 
 div.db-nav {
@@ -493,7 +495,8 @@ div.db-nav ul.navbar-nav li.nav-item a.nav-link{
 }
 
 div.db-nav ul.navbar-nav li.nav-item a.nav-link:hover{
-    background-color: #afcae9;
+    /*background-color: #afcae9;*/
+    border-bottom: 1px solid #00C08B;
 }
 
 div.tnaXA {
