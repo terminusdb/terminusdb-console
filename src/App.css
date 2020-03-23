@@ -812,6 +812,14 @@ pre {
   margin-bottom: 3rem
 }
 
+div.react-codemirror2{
+    margin-top: 100px;
+}
+
+div.CodeMirror{
+    height: auto;
+}
+
 .profile-header .lead {
   font-size: 1.25rem
 }

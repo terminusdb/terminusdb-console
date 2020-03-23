@@ -8,9 +8,6 @@ import {
 
 export const NavItems = (props) => {
     const toPage = props.to || SERVER_HOME_PAGE
-
-    console.log('props.activeClassName', props.activeClassName)
-    console.log('toPage',toPage)
     return(
         <NavItem>
             <NavLink tag = {RouterNavLink}

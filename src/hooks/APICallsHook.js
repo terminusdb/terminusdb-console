@@ -7,7 +7,7 @@ import { isObject } from "../utils/helperFunctions";
 import { localSettings } from "../config/localSettings";
 import { LIST_OF_DATABASE_QUERY, GET_DATABASE_NAME_QUERY } from "../labels/queryLabels";
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels"
-import { GET_SCHEMA, CREATE_DATABASE }  from '../labels/apiLabels'
+import { GET_SCHEMA, CREATE_DATABASE, UPDATE_SCHEMA }  from '../labels/apiLabels'
 import { getCurrentSchema } from "../utils/helperFunctions"
 
 function APICallsHook(apiName, renderType, params) {
@@ -34,6 +34,19 @@ function APICallsHook(apiName, renderType, params) {
                         		console.log(error)
                         	});
                             return [data, loading];
+                      case UPDATE_SCHEMA:
+                        if(isObject(params)){
+                            dbClient.updateSchema(params,
+                               {'terminus:encoding': 'terminus:turtle'})
+                            .then(function(response){
+                                setData({response: response});
+                                setLoading(false);
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
+                            return [data, loading];
+                        }
                        case CREATE_DATABASE:
                            if(isObject(params)){
                                dbClient.createDatabase(params)

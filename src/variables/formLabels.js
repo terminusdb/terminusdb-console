@@ -331,6 +331,16 @@ export const editSchema = {
         type: "submit",
         className: "btn btn-primary lead mt-4 formMrg",
         text: "Edit"
+    },
+    cancel: {
+        type: "cancel",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "Cancel"
+    },
+    update: {
+        type: "update",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "Update"
     }
 }
 
