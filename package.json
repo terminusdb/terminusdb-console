@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "homepage": "./",
   "description": "console for terminusdb",
-  "main": "src/index",
+  "main": "public/electron.js",
   "module": "es6/index",
   "jsnext:main": "es6/index",
   "sideEffects": [
@@ -21,15 +21,19 @@
     "react-component",
     "terminusdb"
   ],
+  "webpackMiddleware":{
+      "noInfo": true
+  },
   "scripts": {
     "build-es6": "rimraf es6 && cross-env NODE_ENV=es6 babel ./src -d es6 --extensions '.js'",
     "build": "npm run build-es6 && webpack --mode production",
     "buildConsole": "webpack --mode production --config console/webpack.config.js",
-    "start": "webpack-dev-server --mode development --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js",
+    "start": "webpack-dev-server --mode development --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js",
     "test": "exit 0",
     "lint": "eslint src",
     "autofix": "eslint src --fix",
-    "installClient:local": "npm install --no-save ../terminus-client"
+    "installClient:local": "npm install --no-save ../terminus-client",
+    "electron-dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3005 && electron .\""
   },
   "pre-commit": [],
   "pre-push": [
@@ -50,14 +54,20 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@o2xp/react-datatable": "^1.1.39",
+    "@rescripts/cli": "0.0.14",
+    "@rescripts/rescript-env": "0.0.12",
     "@stripe/react-stripe": "^7.0.0-beta.0",
     "@stripe/react-stripe-js": "^1.0.3",
     "@stripe/stripe-js": "^1.0.2",
     "@terminusdb/terminus-client": "file:../terminus-client",
     "classnames": "^2.2.5",
     "codemirror": "^5.52.0",
+    "concurrently": "^5.1.0",
     "core-js": "^3.4.2",
     "date-fns": "^2.10.0",
+    "electron": "^8.2.0",
+    "electron-builder": "^22.4.1",
+    "electron-is-dev": "^1.1.0",
     "highlight.js": "^9.18.1",
     "moment": "^2.24.0",
     "prismjs": "^1.19.0",
@@ -80,7 +90,8 @@
     "reactstrap": "^8.2.0",
     "recharts": "^2.0.0-beta.1",
     "simple-react-notifications": "^1.2.15",
-    "stripe": "^8.23.0"
+    "stripe": "^8.23.0",
+    "wait-on": "^4.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
