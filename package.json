@@ -21,8 +21,8 @@
     "react-component",
     "terminusdb"
   ],
-  "webpackMiddleware":{
-      "noInfo": true
+  "webpackMiddleware": {
+    "noInfo": true
   },
   "scripts": {
     "build-es6": "rimraf es6 && cross-env NODE_ENV=es6 babel ./src -d es6 --extensions '.js'",
