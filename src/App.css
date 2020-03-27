@@ -400,6 +400,10 @@ div.css-yk16xz-control{
   left: auto;
 }
 
+div.navbar-collapse{
+   overflow:visible !important;
+}
+
 div.brSeltr{
     margin-top: 30px;
     padding-right: 0px;

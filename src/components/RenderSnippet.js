@@ -34,6 +34,15 @@ export const RenderSnippet = (props) => {
             lineNumbers: true})
     }
 
+    const handleCancel = (ev) => {
+        setEdit(false);
+        setContent(data.response)
+        setOptions({mode: 'turtle',
+            theme: 'base16-light',
+            readOnly: 'nocursor',
+            lineNumbers: true})
+    }
+
     const handleEdit = (ev) => {
         setEdit(true);
         setOptions({mode: 'turtle',

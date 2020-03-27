@@ -18,26 +18,9 @@ export const OWL = (props) => {
 
     return (
         <>
-            {/*<button className = { editSchema.edit.className }
-                type =  { editSchema.edit.type }
-                onClick = {handleClick}>
-                { editSchema.edit.text }
-            </button>*/}
-
-            {/*(edit && isObject(dataCallResponse.response)) && <div className = "tab-co">
-                <RenderSnippet dataProvider = {dataCallResponse}
-                    edit = {true}/>
-            </div>*/}
-
-            {/*(!edit && isObject(dataCallResponse.response)) && <div className = "tab-co">
-                <RenderSnippet dataProvider = {dataCallResponse}
-                    edit = {false}/>
-            </div>*/}
-
-            {isObject(dataCallResponse.response) && 
+            {isObject(dataCallResponse.response) &&
                 <RenderSnippet dataProvider = {dataCallResponse}
                     edit = {false}/> }
-
             {(!isObject(dataCallResponse.response)) && <div/>}
         </>
     )

@@ -50,12 +50,13 @@ const NavBar = (props) => {
 
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
+    console.log('isAuthenticated', isAuthenticated)
     return (
         <div className="nav-container">
             <Navbar expand="md" dark fixed="top">
                 <div className={containerClassName}>
                    {/*<NavbarBrand href="https://terminusdb.com" className="logo"/>*/}
-                   <NavbarToggler onClick={toggle} />
+                   {/*<NavbarToggler onClick={toggle} />*/}
                    <Collapse isOpen={isOpen} navbar >
                         <span className="m-opts d-flex"><div className="d-flex main-nav">
                             <Navs className = "mr-auto"/>
@@ -98,28 +99,29 @@ const NavBar = (props) => {
                                             Log in
                                     </Button>
                                 </NavItem>)}
-                                {isAuthenticated && (
-                                    <UncontrolledDropdown nav inNavbar>
-                                        <DropdownToggle nav caret id="profileDropDown">
-                                            <img src={user.picture}
-                                                 alt="Profile"
-                                                 className="nav-user-profile rounded-circle"
-                                                 width="50"/>
-                                         </DropdownToggle>
-                                         <DropdownMenu>
-                                         <DropdownItem header>{user.name}</DropdownItem>
-                                             <DropdownItem tag={RouterNavLink}
-                                                           to= {PROFILE_PAGE.page}
-                                                           className="dropdown-profile"
-                                                           activeClassName="router-link-exact-active">
-                                             <FontAwesomeIcon icon="user" className="mr-3" /> Profile
-                                         </DropdownItem>
-                                         <DropdownItem id="qsLogoutBtn"
-                                                       onClick={() => logoutWithRedirect()}>
-                                             <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
-                                         </DropdownItem>
-                                     </DropdownMenu>
-                                </UncontrolledDropdown>)}
+
+                            {isAuthenticated && <UncontrolledDropdown nav inNavbar>
+                                <DropdownToggle nav caret id="profileDropDown">
+                                    <img src={user.picture}
+                                         alt="Profile"
+                                         className="nav-user-profile rounded-circle"
+                                         width="50"/>
+                                 </DropdownToggle>
+                                 <DropdownMenu>
+                                 <DropdownItem header>{user.name}</DropdownItem>
+                                 <DropdownItem tag={RouterNavLink}
+                                               to= {PROFILE_PAGE.page}
+                                               className="dropdown-profile"
+                                               activeClassName="router-link-exact-active">
+                                     <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+                                 </DropdownItem>
+                                 <DropdownItem id="qsLogoutBtn"
+                                               onClick={() => logoutWithRedirect()}>
+                                     <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
+                                 </DropdownItem>
+                                 </DropdownMenu>
+                             </UncontrolledDropdown>
+                            }
                                 </Nav>
                                     {!isAuthenticated && (
                                           <Nav className="d-md-none" navbar>
