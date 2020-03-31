@@ -16,7 +16,7 @@ import { UserCard } from "../components/Card/UserCard"
 import { FormInputs } from "../components/Form/FormInputs"
 import { Card } from "../components/Card/Cards"
 import { CardDecks } from "../components/Card/CardDeck";
-import { PaymentModal } from "../components/Modals/Payment";
+//import { PaymentModal } from "../components/Modals/Payment";
 
 const Profile = () => {
   const { loading, user } = useAuth0();
@@ -100,7 +100,6 @@ const Profile = () => {
                           <CardDecks/>
                           <hr className="my-space-50"/>
                           <Button color="primary" onClick={toggle}> Upgrade </Button>
-                          <PaymentModal isOpen={modal} toggle={toggle}/>
                           <div className="clearfix" />
                         </form>
                       }

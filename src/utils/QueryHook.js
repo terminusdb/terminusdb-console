@@ -4,7 +4,6 @@ import { getColumnsForTable, getBindingData, getDBListData, getDBListColumns } f
 import * as queryList from './queryList';
 import { useGlobalState } from "../init/initializeGlobalState";
 import { isObject } from "../utils/helperFunctions";
-import { localSettings } from "../config/localSettings";
 import { LIST_OF_DATABASE_QUERY } from "../labels/queryLabels";
 import { RENDER_TYPE_TABLE, RENDER_TYPE_MAPS, RENDER_TYPE_GRAPH } from "../labels/renderTypeLabels";
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels"

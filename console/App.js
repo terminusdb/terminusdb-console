@@ -1,7 +1,7 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
-
+import { localSettings } from "./localSettings"
 import {Row,Grid} from "react-bootstrap"
 
 import * as consoleLib from '@terminusdb/terminusdb-console';
@@ -24,7 +24,7 @@ const App = (props) => {
   const fluid =  !isAuthenticated ? {} : {fluid:true}
 
   const pathName = window.location.pathname;
-  const terminusClient = consoleLib.setTerminusClient(consoleLib.localSettings);
+  const terminusClient = consoleLib.setTerminusClient(localSettings);
 
   return (
     <Router history={consoleLib.history}>
