@@ -19,7 +19,7 @@ module.exports = (env, argv) => ({
     historyApiFallback: true,
   },
   plugins: [
-    new Dotenv({path: path.resolve(__dirname, './.env'),}),
+    new Dotenv({path: path.resolve(__dirname, './.env')}),
     new HtmlWebPackPlugin({
         inject: false,
         template: path.resolve(__dirname, './index.html'),

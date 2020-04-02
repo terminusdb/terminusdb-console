@@ -13,14 +13,6 @@ const App = (props) => {
 
   const userMETADATA= user || {};
 
-  if(user && user['https://terminushub/afterSignUp']){
-      consoleLib.history.replace('/download')
-  }
-
-  if (loading) {
-    return <consoleLib.Loading />;
-  }
-
   const fluid =  !isAuthenticated ? {} : {fluid:true}
 
   const pathName = window.location.pathname;
@@ -36,7 +28,6 @@ const App = (props) => {
           <Route path = {consoleLib.NEW_DB_PAGE.page}
               component = {consoleLib.CreateDatabase} />
           <consoleLib.PrivateRoute path = {consoleLib.NEW_TEAM_PAGE.page} component = {consoleLib.CreateTeam} />
-          <consoleLib.PrivateRoute path = {consoleLib.DOWNLOAD_PAGE.page} component = {consoleLib.Download} />
           <Route path = {consoleLib.DB_HOME_PAGE.page}
               component = {consoleLib.DatabaseHome} />
           <consoleLib.PrivateRoute path = {consoleLib.SCHEMA_PAGE.page} component = {consoleLib.Schema} />
