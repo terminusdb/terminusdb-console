@@ -30,10 +30,14 @@ module.exports = (env, argv) => ({
       filename: 'index.html'
     }),*/
   ],
-  resolve: {
+  resolve: {/*
     alias: {
       "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
-    },
+  },*/
+      alias: {
+        "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
+        react: path.resolve('./node_modules/react')
+      },
     extensions: ['.js', '.jsx', '.json'],
   },
   module: {
@@ -47,7 +51,7 @@ module.exports = (env, argv) => ({
             presets: [
               ["@babel/preset-env"],
               "@babel/preset-react"
-            ], 
+            ],
           }
         },
       },
@@ -88,7 +92,7 @@ module.exports = (env, argv) => ({
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'file-loader', 
+            loader: 'file-loader',
             options: {
               outputPath: (url, resourcePath, context) => {
                 if(argv.mode === 'development') {
@@ -154,7 +158,7 @@ module.exports = (env, argv) => ({
         test: /\.css$/,
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader'],
-      }, 
+      },
       {
         // Do not transform vendor's CSS with CSS-modules
         // The point is that they remain in global scope.
@@ -188,7 +192,7 @@ module.exports = (env, argv) => ({
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'file-loader', 
+            loader: 'file-loader',
             options: {
               outputPath: (url, resourcePath, context) => {
                 //if(argv.mode === 'development') {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Jumbotron,
-		 Button,Form,FormGroup,Label,Input,FormText,Collapse }  from "reactstrap";
+import { Container, Row, Col, Jumbotron, Card, CardText, CardBody, 
+		 Button, Form, FormGroup, Label, Input, FormText, Collapse }  from "reactstrap";
 import { useAuth0 } from "../react-auth0-spa";
 import Loading from "../components/Loading";
 import { serverHomeLabels } from '../variables/content';
@@ -33,8 +33,14 @@ const ServerHome = (props) => {
 	  	  	 <hr className = "my-space-50"/>
 			 <legend>{ serverHomeLabels.title }</legend>
 			 <hr className = "my-3"/>
-			 <RenderTable dataProvider = {dataResponse}
-			 			  fromPage = { SERVER_HOME_PAGE.page }/>
+			 <div className = "container-fluid">
+	             <Card>
+	                 <CardBody>
+						 <RenderTable dataProvider = {dataResponse}
+						 			  fromPage = { SERVER_HOME_PAGE.page }/>
+					  </CardBody>
+ 	             </Card>
+ 	         </div>
 	      </Col>
 	    </Container>
   	</Container>

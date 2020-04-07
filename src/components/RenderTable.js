@@ -2,8 +2,7 @@ import React, { useState, useCallback } from "react";
 import history from '../utils/history';
 import { stripDocFromUrl } from '../utils/extractStrings'
 import styled from 'styled-components'
-import { Container, Row, Col ,Button, Card, CardImg, CardText, CardBody, CardLink,
-         CardTitle, CardSubtitle } from "reactstrap";
+import { Container, Row, Col ,Button } from "reactstrap";
 import DataTable from 'react-data-table-component';
 import { SERVER_HOME_PAGE } from '../variables/pageLabels'
 import { useGlobalState, setCurrentDB } from "../init/initializeGlobalState";
@@ -48,35 +47,31 @@ const RenderTable = (props) => {
     }, [dbClient]);
 
     return (
-        <div className = "container-fluid">
-            <Card>
-                <CardBody>
-                    { explandableRows && <DataTable
-                        columns = {columns}
-                        data = {data}
-                        onRowClicked = {handleChange}
-                        pagination
-                        striped
-                        pointerOnHover
-                        highlightOnHover
-                        expandableRows
-                        expandableRowDisabled={row => row.disabled}
-                        responsive
-                        expandableRowsComponent={<ExpandedComponent
-                                                    fromPage={ props.fromPage }
-                                                    dataProvider= { props.dataProvider }/>}/>}
-                   { !(explandableRows) && <DataTable
-                       columns = {columns}
-                       data = {data}
-                       onRowClicked = {handleChange}
-                       pagination
-                       striped
-                       pointerOnHover
-                       highlightOnHover
-                       responsive/>}
-                </CardBody>
-            </Card>
-        </div>
+              <>
+                { explandableRows && <DataTable
+                    columns = {columns}
+                    data = {data}
+                    onRowClicked = {handleChange}
+                    pagination
+                    striped
+                    pointerOnHover
+                    highlightOnHover
+                    expandableRows
+                    expandableRowDisabled={row => row.disabled}
+                    responsive
+                    expandableRowsComponent={<ExpandedComponent
+                                                fromPage={ props.fromPage }
+                                                dataProvider= { props.dataProvider }/>}/>}
+               { !(explandableRows) && <DataTable
+                   columns = {columns}
+                   data = {data}
+                   onRowClicked = {handleChange}
+                   pagination
+                   striped
+                   pointerOnHover
+                   highlightOnHover
+                   responsive/>}
+            </>
     )
 }
 

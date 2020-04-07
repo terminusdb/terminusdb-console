@@ -9,14 +9,20 @@ button.pr {
     margin-left: 10px;
 }
 
+.fullscreen-enabled .my-component {
+  background: #fff;
+}
+
 div.jYNXPe {
     margin-left: 50px;
 }
 
 div.collapse{
-    overflow: hidden;
+    /*overflow: hidden;*/
+    overflow:visible;
     position: relative;
     width: 100%;
+    /*width: 100%;*/
 }
 
 div.main-nav{
@@ -416,6 +422,102 @@ input.checkBox {
 
 span.display-flex{
     display: inline-flex;
+}
+
+button.flatButton{
+    color: none !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    min-width: 0px !important;
+}
+
+div.q-e div.react-codemirror2{
+    margin-top: 0px !important;
+}
+
+div.d3-component{
+    /*border: 1px solid darkgrey;*/
+}
+
+div.Collapsible{
+    background-color: #f5f5f5;
+    margin-top: 100px;
+    font-size: 22px;
+    padding: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+}
+
+div.qph{
+    margin: 0px 0px 10px 15px;
+    color: #383d41;
+    background-color: #e2e3e5;
+    border-color: #d6d8db;
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+span.qp-cont{
+    /*margin-top: 100px;*/
+    /*border: 1px solid blue;*/
+}
+
+button.btn-q-fmt, span.d-ddps div.dropdown button {
+    color: black;
+    border: 0;
+    background-color: #f5f5f5;
+}
+
+span.d-ddps div.dropdown div{
+    background-color: #f5f5f5;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+}
+
+button.btn-q-fmt:hover, span.d-ddps div.dropdown button:hover{
+    background-color: #d9d9d9;
+    color: black;
+    border: 0;
+}
+
+button.btn-q-fmt:active, button.btn-q-fmt:focus{
+    border: 0;
+    background-color: #d9d9d9;
+    border-bottom: 3px solid #ff8000 !important;
+    font-weight: 600;
+}
+
+div.q-e{
+    /*border: 1px solid black;*/
+}
+
+div.q-Re{
+    border: 2px solid #007bff;
+    background-color: #fff;
+}
+
+div.q-Ru{
+    border: 1px solid green;
+}
+
+span.d-ddps{
+    float:left;
+    margin: 10px 0px 10px 0px;
+    width: 100%;
+    background-color: #f5f5f5;
+}
+
+hr.my-3-clr {
+    border-top: 1px solid #00C08B !important;
+}
+
+div.CodeMirror-hscrollbar{
+    display: none !important;
+}
+
+div.cm-s-mdn-like{
+    height: 200px !important;
 }
 
 span.d-fl{
@@ -1000,6 +1102,12 @@ div.db-al{
 
 ul.navbar-nav{
     margin-left: 30px;
+}
+
+span.qr-v{
+    float: right;
+    margin-top: 20px;
+    font-size: 18px;
 }
 
 @media (min-width: 768px)

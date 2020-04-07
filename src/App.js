@@ -12,17 +12,16 @@ import Profile from "./views/Profile";
 import { useAuth0 } from "./react-auth0-spa";
 import history from "./utils/history";
 import MainPage from "./views/MainPage";
-import CreateDatabase from "./views/NewDatabase/CreateDatabase"
+import CreateDatabase from "./views/NewDatabase/CreateDatabaseView"
 import CreateTeam from "./views/CreateTeam"
 import ServerHome from "./views/ServerHome"
 import Download from "./views/Download"
 import DatabaseHome from "./views/DatabaseHome/DatabaseHome"
-import Schema from "./views/Schema/SchemaHome"
+import Schema from "./views/Schema/SchemaView"
+import Query from "./views/Query/QueryView"
 import { setTerminusClient } from "./init/initializeGlobalState"
 import { localSettings } from "./config/localSettings"
-import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,
-         NEW_TEAM_PAGE, DOWNLOAD_PAGE,
-         DB_HOME_PAGE, SCHEMA_PAGE, DOCUMENT_PAGE, QUERY_PAGE } from './variables/pageLabels'
+import * as labels from './variables/pageLabels'
 
 import "./css/main.css"
 
@@ -57,13 +56,14 @@ const App = (props) => {
     <Router history={history}>
         <Switch>
           <Route path = "/" exact component = {Home} />
-          <PrivateRoute path = {PROFILE_PAGE.page} component = {Profile} />
-          <PrivateRoute path = {SERVER_HOME_PAGE.page} component = {ServerHome} />
-          <PrivateRoute path = {NEW_DB_PAGE.page} component = {CreateDatabase} />
-          <PrivateRoute path = {NEW_TEAM_PAGE.page} component = {CreateTeam} />
-          <PrivateRoute path = {DOWNLOAD_PAGE.page} component = {Download} />
-          <PrivateRoute path = {DB_HOME_PAGE.page} component = {DatabaseHome} />
-          <PrivateRoute path = {SCHEMA_PAGE.page} component = {Schema} />
+          <PrivateRoute path = {labels.PROFILE_PAGE.page} component = {Profile} />
+          <PrivateRoute path = {labels.SERVER_HOME_PAGE.page} component = {ServerHome} />
+          <PrivateRoute path = {labels.NEW_DB_PAGE.page} component = {CreateDatabase} />
+          <PrivateRoute path = {labels.NEW_TEAM_PAGE.page} component = {CreateTeam} />
+          <PrivateRoute path = {labels.DOWNLOAD_PAGE.page} component = {Download} />
+          <PrivateRoute path = {labels.DB_HOME_PAGE.page} component = {DatabaseHome} />
+          <PrivateRoute path = {labels.SCHEMA_PAGE.page} component = {Schema} />
+          <PrivateRoute path = {labels.QUERY_PAGE.page} component = {Query} />
           <PrivateRoute path = "/" component = {MainPage} />
         </Switch>
         {<Footer />}

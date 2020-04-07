@@ -39,6 +39,18 @@ export const getQuery = (queryName, params) =>{
                 WOQL.not().eq("v:UserID", "doc:admin"),
                 WOQL.triple("v:UserID", "label", "v:Label"))
 
+       case query.SHOW_ALL_SCHEMA_ELEMENTS:
+            return WOQL.query().elementMetadata();
+
+       case query.SHOW_ALL_CLASSES:
+            return WOQL.query().classMetadata();
+
+       case query.SHOW_DOCUMENT_CLASSES:
+            return WOQL.query().concreteDocumentClasses();
+
+       case query.SHOW_ALL_PROPERTIES:
+            return WOQL.query().propertyMetadata();
+
        default:
            console.log('queryList.js - Invalid Query name ' + queryName)
        break;

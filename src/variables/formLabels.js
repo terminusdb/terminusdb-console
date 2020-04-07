@@ -1,3 +1,5 @@
+import { WOQL, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
+
 export const createDatabaseForm = {
     id: {
         label: {
@@ -341,6 +343,39 @@ export const editSchema = {
         type: "update",
         className: "btn btn-primary lead mt-4 formMrg",
         text: "Update"
+    }
+}
+
+export const queryControls = {
+    runQuery: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "Run Query"
+    },
+    woql: {
+        type: "submit",
+        className: "btn-q-fmt",
+        text: WOQL
+    },
+    jsonld: {
+        type: "submit",
+        className: "btn-q-fmt",
+        text: WOQL_JSON
+    },
+    jsonpy: {
+        type: "submit",
+        className: "btn-q-fmt",
+        text: WOQL_PY
+    },
+    newQuery:{
+        type: "submit",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "New Query"
+    },
+    updateView:{
+        type: "submit",
+        className: "btn btn-primary lead mt-4 formMrg",
+        text: "Update View"
     }
 }
 

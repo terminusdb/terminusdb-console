@@ -18,7 +18,7 @@ const entry = getFilesFromDir(PAGE_DIR, [".js"]).reduce( (obj, filePath) => {
   const entryChunkName = filePath.replace(path.extname(filePath), "").replace(PAGE_DIR, "");
   obj[entryChunkName] = `./${filePath}`;
   return obj;
-}, {}); 
+}, {});
 
 console.log(entry);
 
@@ -49,7 +49,7 @@ module.exports = (env, argv) => ({
 						presets: [
 							"@babel/preset-env",
 							"@babel/preset-react"
-						], 
+						],
 					}
 				},
       },
@@ -97,7 +97,7 @@ module.exports = (env, argv) => ({
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
           {
-            loader: 'file-loader', 
+            loader: 'file-loader',
             options: {
               outputPath: (url, resourcePath, context) => {
                 if(argv.mode === 'development') {

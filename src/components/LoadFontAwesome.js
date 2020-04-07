@@ -4,7 +4,9 @@ import * as icons from '../labels/iconLabels'
 import { faLink, faPowerOff, faUser, faHome, faUserAstronaut, faDiceThree,
          faMarker, faTruckLoading, faDatabase, faPaperPlane,
          faMountain, faUserTag, faTasks, faCircleNotch,
-         faCalendar, faHistory, faEdit , faUserPlus} from "@fortawesome/free-solid-svg-icons";
+         faCalendar, faHistory, faEdit , faUserPlus,
+         faCaretLeft, faCaretRight, faTable, faProjectDiagram,
+         faVial, faWindowClose} from "@fortawesome/free-solid-svg-icons";
 
 export const AddIcon = (props) => {
     const icon = props.icon || '';
@@ -58,6 +60,24 @@ export const AddIcon = (props) => {
             break;
         case icons.USER_PLUS:
             iconHolder = faUserPlus;
+            break;
+        case icons.CARET_RIGHT:
+            iconHolder = faCaretRight;
+            break;
+        case icons.CARET_LEFT:
+            iconHolder = faCaretLeft;
+            break;
+        case icons.TABLE:
+            iconHolder = faTable;
+            break;
+        case icons.PROJECT_DIAGRAM:
+            iconHolder = faProjectDiagram;
+            break;
+        case icons.VIAL:
+            iconHolder = faVial;
+            break;
+        case icons.CANCEL:
+            iconHolder = faWindowClose;
             break;
     }
 

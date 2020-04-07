@@ -15,12 +15,13 @@ export CreateTeam from "./views/CreateTeam"
 export ServerHome from "./views/ServerHome"
 export Collaborate from "./views/Collaborate"
 export DatabaseHome from "./views/DatabaseHome/DatabaseHome"
-export Schema from "./views/Schema/SchemaHome"
+export Schema from "./views/Schema/SchemaView"
+export Query from "./views/Query/QueryView"
 export { setTerminusClient } from "./init/initializeGlobalState"
 export { localSettings } from "./config/localSettings"
 export * from './variables/pageLabels'
 export initFontAwesome from "./init/initFontAwesome";
-export CreateDatabase from "./views/NewDatabase/CreateDatabase"
+export CreateDatabase from "./views/NewDatabase/CreateDatabaseView"
 
 /*import React from "react";
 import ReactDOM from "react-dom";

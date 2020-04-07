@@ -35,11 +35,16 @@ const App = (props) => {
               component = {consoleLib.ServerHome} />
           <Route path = {consoleLib.NEW_DB_PAGE.page}
               component = {consoleLib.CreateDatabase} />
-          <consoleLib.PrivateRoute path = {consoleLib.NEW_TEAM_PAGE.page} component = {consoleLib.CreateTeam} />
-          <consoleLib.PrivateRoute path = {consoleLib.DOWNLOAD_PAGE.page} component = {consoleLib.Download} />
+          <consoleLib.PrivateRoute path = {consoleLib.NEW_TEAM_PAGE.page}
+              component = {consoleLib.CreateTeam} />
+          <consoleLib.PrivateRoute path = {consoleLib.DOWNLOAD_PAGE.page}
+              component = {consoleLib.Download} />
           <Route path = {consoleLib.DB_HOME_PAGE.page}
               component = {consoleLib.DatabaseHome} />
-          <consoleLib.PrivateRoute path = {consoleLib.SCHEMA_PAGE.page} component = {consoleLib.Schema} />
+          <Route path = {consoleLib.SCHEMA_PAGE.page}
+              component = {consoleLib.Schema} />
+          <Route path = {consoleLib.QUERY_PAGE.page}
+              component = {consoleLib.Query} />
           <consoleLib.PrivateRoute path = "/" component = {consoleLib.MainPage} />
         </Switch>
         {/*<Footer />*/}
