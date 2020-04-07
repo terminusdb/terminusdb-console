@@ -6,7 +6,7 @@ import { getColumnsForTable, getBindingData, getDBIdsForSelectOptions,
 import * as queryList from '../utils/queryList';
 import { useGlobalState } from "../init/initializeGlobalState";
 import { isObject } from "../utils/helperFunctions";
-import { localSettings } from "../config/localSettings";
+import { localSettings } from "../../console/localSettings";
 import { RENDER_TYPE_TABLE, RENDER_TYPE_GRAPH } from "../labels/renderTypeLabels";
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels"
 
