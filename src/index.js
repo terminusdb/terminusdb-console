@@ -18,9 +18,9 @@ export DatabaseHome from "./views/DatabaseHome/DatabaseHome"
 export Schema from "./views/Schema/SchemaView"
 export Query from "./views/Query/QueryView"
 export { setTerminusClient } from "./init/initializeGlobalState"
-export { localSettings } from "./config/localSettings"
 export * from './variables/pageLabels'
 export initFontAwesome from "./init/initFontAwesome";
+<<<<<<< HEAD
 export CreateDatabase from "./views/NewDatabase/CreateDatabaseView"
 
 /*import React from "react";
@@ -56,3 +56,6 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 //// Learn more about service workers: https://bit.ly/CRA-PWA
 //serviceWorker.unregister();
+=======
+export CreateDatabase from "./views/NewDatabase/CreateDatabase"
+>>>>>>> d654bb5cacd20332f4d1ae8e5e30ca2b2e857c2f

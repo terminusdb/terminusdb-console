@@ -20,6 +20,7 @@ ReactDOM.render(
     client_id={config.clientId}
     redirect_uri={window.location.origin} //{`${window.location.origin}/download`}
     onRedirectCallback={onRedirectCallback}
+    audience={config.audience}
   >
     <App/>
   </Auth0Provider>,

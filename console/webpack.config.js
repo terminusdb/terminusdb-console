@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const Dotenv = require('dotenv-webpack');
+
+//console.log("__dirname",__dirname);
 
 module.exports = (env, argv) => ({
   entry: [
@@ -16,6 +19,7 @@ module.exports = (env, argv) => ({
     historyApiFallback: true,
   },
   plugins: [
+    new Dotenv({path: path.resolve(__dirname, './.env')}),
     new HtmlWebPackPlugin({
         inject: false,
         template: path.resolve(__dirname, './index.html'),

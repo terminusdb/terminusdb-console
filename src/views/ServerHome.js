@@ -15,15 +15,13 @@ import { AddIcon } from "../components/LoadFontAwesome";
 
 const ServerHome = (props) => {
   const { loading, user } = useAuth0();
+  const [dataResponse] = QueryHook(LIST_OF_DATABASE_QUERY,RENDER_TYPE_TABLE);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
   //if (loading || !user) return <Loading />;
   if (loading) return <Loading />;
-
-  const [dataResponse] = QueryHook(LIST_OF_DATABASE_QUERY,
-	  							   RENDER_TYPE_TABLE);
 
   return (
   	<Container fluid className = "h-100 pl-0 pr-0">

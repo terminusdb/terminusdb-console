@@ -87,10 +87,6 @@ export const ResultPane = (props) => {
                     { queryControls.updateView.text }
                  </button>
              </div>}
-
-             {(view == RENDER_TYPE_GRAPH) && (reload) &&
-                   <h1>{'HELLO - ' + count}</h1>}
-
                {(view == RENDER_TYPE_GRAPH) && (reload) &&
                  <GraphComponent config={viewer.config} dataProvider = { viewer }
                         date = {Date.now()}/>}
