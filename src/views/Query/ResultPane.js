@@ -88,8 +88,8 @@ export const ResultPane = (props) => {
                  </button>
              </div>}
 
-             {/*(view == RENDER_TYPE_GRAPH) && isObject(viewer) &&
-                   <h1>{'HELLO - ' + count}</h1>*/}
+             {(view == RENDER_TYPE_GRAPH) && (reload) &&
+                   <h1>{'HELLO - ' + count}</h1>}
 
                {(view == RENDER_TYPE_GRAPH) && (reload) &&
                  <GraphComponent config={viewer.config} dataProvider = { viewer }
