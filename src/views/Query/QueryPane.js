@@ -13,17 +13,16 @@ import { isObject } from "../../utils/helperFunctions";
 import { schemaLib, dataLib, documentLib, libs } from "../../variables/queryLibrary"
 import { getQuery } from "../../utils/queryList"
 import { formatQuery } from "./CodeFormatter"
-import { WOQL, WOQL_JSON, WOQL_PY} from '../../labels/queryFormats'
+import { WOQL_JS, WOQL_JSON, WOQL_PY} from '../../labels/queryFormats'
 import { RunQueriesHook } from '../../hooks/RunQueriesHook'
-//import { QueryResults } from "./QueryResults"
 import { RENDER_TYPE_TABLE, RENDER_TYPE_GRAPH } from "../../labels/renderTypeLabels";
 import { QueryResults } from "./QueryResults"
-//import { QueryRules } from "./QueryRules"
+import { Resizable } from "re-resizable";
 
-export const QueryEditor = (props) => {
+export const QueryPane = (props) => {
     const [query, setQuery] = useState('');
     const [woqlObj, setWOQLObj] = useState({});
-    const [mode, setMode] = useState(WOQL);
+    const [mode, setMode] = useState(WOQL_JS);
     const [isOpen, setIsOpen] = useState(true);
     const toggle = () => setIsOpen(!isOpen);
     const [qOptions, setqOptions] = useState({mode: 'javascript',
@@ -59,8 +58,8 @@ export const QueryEditor = (props) => {
     }
 
     const handleWOQL = () => {
-        setMode(WOQL);
-        let fq = formatQuery(woqlObj, WOQL)
+        setMode(WOQL_JS);
+        let fq = formatQuery(woqlObj, WOQL_JS)
         setQuery(fq);
     }
 
@@ -103,40 +102,79 @@ export const QueryEditor = (props) => {
            </ButtonGroup>
         )
     }
+    const style = {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      border: "solid 1px #ddd",
+      background: "transparent"
+    };
+    const [qpWidth, setQPWidth] = useState(800);
+    const [qpheight, setQPHeight] = useState(500);
+
+    const [rpWidth, setRPWidth] = useState(1000);
+    const [rpheight, setRPHeight] = useState(500);
+
+
     return (
-        <>
-            <span className="d-fl qp-cont">
-                <Col className="col-md-7">
-                    <span className="d-ddps d-fl">{dropDowns}</span>
-                    <hr className="my-space-50"/>
-                    <hr className='my-3-clr'/>
-                    <div className = "q-e">
-                        <QueryFormatButtonGroups/>
-                        <CodeMirror value={query}
-                              options={qOptions}
-                              onBeforeChange={(editor, data, value) => {
-                                setQuery(value);
-                              }}
-                              onChange={(editor, data, value) => {
-                                setQuery(value);
-                              }}
-                            />
-                         <button
-                            className = { queryControls.runQuery.className }
-                            type =  { queryControls.runQuery.type }
-                            onClick = { handleQuery }>
-                            { queryControls.runQuery.text }
-                        </button>
-                        <hr className='my-space-100'/>
-                        <hr className='my-3'/>
-                        <hr className='my-space-50'/>
-                    </div>
-                 </Col>
-                 <Col className="col-md-5 q-Re">
-                      <QueryResults
-                        results={getDataProvider()}/>
-                 </Col>
-             </span>
-       </>
+        <span className="d-fl qp-cont">
+            <>{/*<Resizable
+              style={style}
+              size={{ qpWidth, qpheight }}
+              enable={ {top:false, right:true, bottom:false, left:true,
+                  topRight:false, bottomRight:false, bottomLeft:false, topLeft:false} }
+              onResizeStop={(e, direction, ref, d) => {
+                setQPWidth(qpWidth + d.width);
+                setQPHeight(qpheight + d.height);
+            }}>*/}
+                  <Col className="col-md-6">
+                      <span className="d-ddps d-fl">{dropDowns}</span>
+                      <hr className="my-space-50"/>
+                      <hr className='my-3-clr'/>
+                      <div className = "q-e">
+                          <QueryFormatButtonGroups/>
+                          <CodeMirror value={query}
+                                options={qOptions}
+                                onBeforeChange={(editor, data, value) => {
+                                  setQuery(value);
+                                }}
+                                onChange={(editor, data, value) => {
+                                  setQuery(value);
+                                }}
+                              />
+                           <button
+                              className = { queryControls.runQuery.className }
+                              type =  { queryControls.runQuery.type }
+                              onClick = { handleQuery }>
+                              { queryControls.runQuery.text }
+                          </button>
+                          <hr className='my-space-100'/>
+                          <hr className='my-3'/>
+                          <hr className='my-space-50'/>
+                      </div>
+                   </Col>
+            {/*</Resizable>*/}</>
+            <>{/*<Resizable
+              style={style}
+              size={{ rpWidth, rpheight }}
+              enable={ {top:false, right:true, bottom:false, left:true,
+                  topRight:false, bottomRight:false, bottomLeft:false, topLeft:false} }
+              onResizeStop={(e, direction, ref, d) => {
+                setRPWidth(rpWidth + d.width);
+                setRPHeight(rpheight + d.height);
+            }}>*/}
+                  <Col className="col-md-6 q-Re">
+                       <QueryResults
+                         results={getDataProvider()}/>
+                  </Col>
+
+                  {/*<QueryPane qObject = {}
+                    qConfig = {}
+                    rObject = {}
+                    rConfig = {}
+                    rpConfig = {}/>*/}
+
+            {/*</Resizable>*/}</>
+         </span>
     )
 }

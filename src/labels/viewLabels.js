@@ -1,0 +1,5 @@
+export const TABLE_VIEW = 'Table View'
+export const GRAPH_VIEW = 'Graph View'
+export const CHOOSER_VIEW = 'Chooser View'
+export const STREAM_VIEW = 'Stream View'
+export const MAP_VIEW = 'Map View'

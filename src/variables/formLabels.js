@@ -1,4 +1,4 @@
-import { WOQL, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
+import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 
 export const createDatabaseForm = {
     id: {
@@ -355,7 +355,7 @@ export const queryControls = {
     woql: {
         type: "submit",
         className: "btn-q-fmt",
-        text: WOQL
+        text: WOQL_JS
     },
     jsonld: {
         type: "submit",

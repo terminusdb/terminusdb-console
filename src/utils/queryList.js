@@ -52,7 +52,7 @@ export const getQuery = (queryName, params) =>{
             return WOQL.query().propertyMetadata();
 
        default:
-           console.log('queryList.js - Invalid Query name ' + queryName)
+           return {};
        break;
     }
 

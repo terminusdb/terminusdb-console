@@ -14,7 +14,7 @@ require('codemirror/mode/javascript/javascript.js');
 import {Controlled as CodeMirror} from 'react-codemirror2';
 import { RENDER_TYPE_TABLE, RENDER_TYPE_GRAPH } from "../../labels/renderTypeLabels";
 import { parseText } from './CodeFormatter'
-import { WOQL, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
+import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 
 export const ResultPane = (props) => {
     const view = props.view || RENDER_TYPE_TABLE;
@@ -41,7 +41,7 @@ export const ResultPane = (props) => {
     }
 
     const handleView = () => {
-        const parsed = parseText(rule, WOQL);
+        const parsed = parseText(rule, WOQL_JS);
         getGraphObjectViewer(parsed);
     }
 

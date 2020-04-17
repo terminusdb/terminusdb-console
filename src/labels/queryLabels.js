@@ -9,7 +9,7 @@ export const GET_USER_ACCESS_FOR_DB = "GET_USER_ACCESS_FOR_DB"
 export const GET_USERS_NOT_IN_DB = "GET_USERS_NOT_IN_DB"
 
 // library queries
-export const SHOW_ALL_SCHEMA_ELEMENTS = 'SHOW_ALL_SCHEMA_ELEMENTS'
-export const SHOW_ALL_CLASSES = 'SHOW_ALL_CLASSES'
-export const SHOW_DOCUMENT_CLASSES = 'SHOW_DOCUMENT_CLASSES'
-export const SHOW_ALL_PROPERTIES = 'SHOW_ALL_PROPERTIES' 
+export const SHOW_ALL_SCHEMA_ELEMENTS = 'Show All Schema Elements'
+export const SHOW_ALL_CLASSES = 'Show All Classes'
+export const SHOW_DOCUMENT_CLASSES = 'Show Document Classes'
+export const SHOW_ALL_PROPERTIES = 'Show All Properties' 

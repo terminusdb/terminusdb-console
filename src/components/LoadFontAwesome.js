@@ -6,7 +6,7 @@ import { faLink, faPowerOff, faUser, faHome, faUserAstronaut, faDiceThree,
          faMountain, faUserTag, faTasks, faCircleNotch,
          faCalendar, faHistory, faEdit , faUserPlus,
          faCaretLeft, faCaretRight, faTable, faProjectDiagram,
-         faVial, faWindowClose} from "@fortawesome/free-solid-svg-icons";
+         faVial, faWindowClose, faFillDrip} from "@fortawesome/free-solid-svg-icons";
 
 export const AddIcon = (props) => {
     const icon = props.icon || '';
@@ -78,6 +78,9 @@ export const AddIcon = (props) => {
             break;
         case icons.CANCEL:
             iconHolder = faWindowClose;
+            break;
+        case icons.FILL_DRIP:
+            iconHolder = faFillDrip;
             break;
     }
 

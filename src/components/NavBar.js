@@ -31,9 +31,9 @@ const NavBar = (props) => {
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-    
+
     const toggle = () => setIsOpen(!isOpen);
-  
+
     const isDBSet = {dbId: getCurrentDBID(dbClient),
                      dbName: getCurrentDBName(dbClient)}
 
@@ -49,7 +49,6 @@ const NavBar = (props) => {
 
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
-    console.log('isAuthenticated', isAuthenticated, user)
     return (
         <div className="nav-container">
             <Navbar expand="md" dark fixed="top">

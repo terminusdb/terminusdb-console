@@ -5,6 +5,11 @@ export const isObject = (obj) => {
     return false;
 }
 
+export const isArray = (arr) => {
+    if(Array.isArray(arr) && arr.length) return true;
+    return false;
+}
+
 export const getCurrentDBID = (client) => {
     if (isObject(client)){
         return client.db();

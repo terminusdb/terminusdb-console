@@ -5,9 +5,14 @@ import Loading from "../../components/Loading";
 import NavBar from '../../components/NavBar';
 import { RenderSnippet } from "../../components/RenderSnippet";
 import { QUERY_PAGE } from "../../variables/pageLabels"
-import { QueryEditor } from "./QueryEditor"
+//import { QueryPane } from "./QueryPane"
 import { queryControls } from "../../variables/formLabels"
 import Collapsible from 'react-collapsible';
+import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
+import * as query from "../../labels/queryLabels";
+import * as view from "../../labels/viewLabels"
+
+import { QueryPane } from "../../components/QueryPane/QueryPane" // temp test
 
 const Query = (props) => {
 
@@ -22,14 +27,14 @@ const Query = (props) => {
       </Collapsible>
 
   }*/
-  const QueryPane = (props) => {
+  const QueryPanes = (props) => {
       const {caption} = props;
       const {qp, setQp} = props.pstate;
       const [open, setOpen] = useState(true);
       return (<>
           <Collapsible
             trigger={"Query Pane - " + props.qpNumber}>
-              {<QueryEditor qpNumber={props.qpNumber}/>}
+              {<QueryPane qpNumber={props.qpNumber}/>}
               <button className = { queryControls.newQuery.className }
                   type =  { queryControls.newQuery.type }
                   onClick={() => { setQp([...qp, qp.length]);}}>
@@ -41,18 +46,40 @@ const Query = (props) => {
 
   const NewQueryPane = (props) => {
      const [qp, setQp] = useState([0]);
-     return qp.map(m => <QueryPane key={m}
+     return <QueryPane qConfig = {{showQuery: true, editQuery: true}}/>
+     /*return qp.map(m => <QueryPanes key={m}
                          qpNumber={m}
                          pstate={{qp, setQp}}/>
-        );
+        );*/
 
+  }
+
+  const queryPaneOptions = {edit: true,
+      submit: true,
+      languages: [WOQL_JS, WOQL_JSON],
+      library: [query.SHOW_ALL_SCHEMA_ELEMENTS,
+                query.SHOW_ALL_CLASSES,
+                query.SHOW_ALL_PROPERTIES],
+      library_autosubmit: false,
+      submit: 'Run Query'
+  };
+
+  const resultPaneOptions = {
+      viewEditor: {
+          edit: true,
+          languages: [WOQL_JS, WOQL_JSON],
+          submit: 'Update View'
+      },
+      view: [view.TABLE_VIEW, view.GRAPH_VIEW]
   }
 
   return (
       <Container fluid className="h-100 pl-0 pr-0">
           <NavBar/>
     	  <Container className="flex-grow-1">
-            <NewQueryPane/>
+            {/*<NewQueryPane/>*/}
+            <QueryPane editor = { queryPaneOptions }
+                resultPane = {resultPaneOptions}/>
     	  </Container>
       </Container>
     )
