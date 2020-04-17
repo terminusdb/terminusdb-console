@@ -529,6 +529,10 @@ span.d-fl{
     display: flex;
 }
 
+button.preview{
+    margin-top: 200px;
+}
+
 svg {
      margin: -5px 20px 10px 0px ;
      color:  #0055bb !important;

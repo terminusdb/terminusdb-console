@@ -16,7 +16,7 @@ export const Classes = (props) => {
             return dataResponse;
     }
 
-    const getDataProvider = () => {
+    const getDataProvider = () => { // test stuff with new query pane
         const [dataResponse] = hooks(SCHEMA_LIST_OF_CLASSES_QUERY);
         return dataResponse;
     }

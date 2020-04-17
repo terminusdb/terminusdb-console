@@ -4,6 +4,7 @@ import { Library } from "./Library"
 import { LanguageFormatter } from "./LanguageFormatter"
 import { ActionButton } from "./ActionButton"
 import { ResultPane } from "./ResultPane"
+import { AutoExecute } from "./AutoExecute"
 import * as lang  from "../../labels/queryFormats";
 import * as tag from "../../labels/tags";
 import * as view from "../../labels/viewLabels"
@@ -19,7 +20,7 @@ export const QueryPane = (props) => {
     const resultPane = props.resultPane || {};
 
     // query editor state
-    const [woql, setWoql] = useState({});
+    const [woql, setWoql] = useState(query);
     const [inputQuery, setInputQuery] = useState(tag.BLANK);
     const [formattedQuery, setFormattedQuery] = useState(tag.BLANK);
     const [queryLanguage, setQueryLanguage] = useState(lang.WOQL_JS);
@@ -34,6 +35,8 @@ export const QueryPane = (props) => {
     const [ruleLangChange, setChangedRuleLang] = useState(lang.WOQL_JS);
     const [formattedRule, setFormattedRule] = useState(tag.BLANK);
 
+    let queryAvail = false;
+    if(isObject(query)) queryAvail = true;
     //query
     useEffect(() => {
         if(isObject(woql)){
@@ -56,7 +59,6 @@ export const QueryPane = (props) => {
 
     return(
         <div className="q-pane">
-
             {/*****  QUERY *****/}
             {/*****  load editor component *****/}
             {isObject(editor) && <Editor
@@ -77,12 +79,13 @@ export const QueryPane = (props) => {
                 setResultData = { setResultData }
                 library_autosubmit = { editor.library_autosubmit }/>}
              {/*****  load Submit component *****/}
-             {editor.submit && <ActionButton submit = { editor.submit }
-                woql = { woql }
-                queryLang = { queryLangChange }
-                isQuery = { true }
-                setResultData = { setResultData }
-                inputQuery = { inputQuery }/>}
+             {isObject(editor) && editor.submit &&
+                 <ActionButton submit = { editor.submit }
+                    woql = { woql }
+                    queryLang = { queryLangChange }
+                    isQuery = { true }
+                    setResultData = { setResultData }
+                    inputQuery = { inputQuery }/>}
 
              {/*****  RESULT *****/}
              {/*****  load Result Pane component *****/}
@@ -98,17 +101,21 @@ export const QueryPane = (props) => {
                 isRule = { true }
                 setInputRule = { setInputRule }/>}
             {/*****  load rule Language Formatter component *****/}
-            {isArray(resultPane.viewEditor.languages) && <LanguageFormatter
-               setRuleLanguage = { setRuleLanguage }
-               isRule = { true }
-               ruleLanguages = { resultPane.viewEditor.languages }/>}
+            {isObject(resultPane) && isArray(resultPane.viewEditor.languages) &&
+                <LanguageFormatter
+                   setRuleLanguage = { setRuleLanguage }
+                   isRule = { true }
+                   ruleLanguages = { resultPane.viewEditor.languages }/>}
             {/*****  load rule update component *****/}
-            {resultPane.viewEditor.submit && <ActionButton
+            {isObject(resultPane) && resultPane.viewEditor.submit && <ActionButton
                 submit = { resultPane.viewEditor.submit }
                 ruleLang = { ruleLanguage }
                 isRule = { true }
                 setRuleObject = { setRuleObject }
                 inputRule = { inputRule }/>}
+
+            {queryAvail && <AutoExecute query = { query }
+                setResultData = { setResultData }/>}
         </div>
     )
 }

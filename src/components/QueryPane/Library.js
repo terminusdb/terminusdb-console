@@ -16,7 +16,7 @@ export const Library = (props) => {
     const [queryObject, setQueryObject] = useState({});
     const [dataProvider, loading] = hooks(queryObject);
     if(isObject(dataProvider)) setResultData(dataProvider.results);
-
+    
     libs.map((items) => {
         libButtons.push(
           <Button onClick = { () => {

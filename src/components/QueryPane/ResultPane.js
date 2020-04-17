@@ -16,6 +16,7 @@ export const ResultPane = (props) => {
     const [tableviewer, setTableViewer] = useState(false);
     const [currentView, setCurrentView] = useState(viewLabels.GRAPH_VIEW);
 
+    console.log(' ***** resultData ***** ', resultData)
     useEffect(() => {
         if(isObject(resultData)) {
             switch (currentView){
@@ -25,7 +26,7 @@ export const ResultPane = (props) => {
                     const gView = view.graph();
                     gView.height(700).width(1200);
                     let g = gView.create(null);
-                    // update new rule 
+                    // update new rule
                     if(isObject(ruleObject)) g.config = ruleObject;
                     g.setResult(resultData);
                     setGraphViewer(g);

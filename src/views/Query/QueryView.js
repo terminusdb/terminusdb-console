@@ -11,7 +11,9 @@ import Collapsible from 'react-collapsible';
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 import * as query from "../../labels/queryLabels";
 import * as view from "../../labels/viewLabels"
+import { isObject, isArray } from "../../utils/helperFunctions";
 
+import { Preview } from "../../components/QueryPane/Preview" // temp test
 import { QueryPane } from "../../components/QueryPane/QueryPane" // temp test
 
 const Query = (props) => {
@@ -27,6 +29,9 @@ const Query = (props) => {
       </Collapsible>
 
   }*/
+
+
+
   const QueryPanes = (props) => {
       const {caption} = props;
       const {qp, setQp} = props.pstate;
@@ -54,6 +59,9 @@ const Query = (props) => {
 
   }
 
+
+
+
   const queryPaneOptions = {edit: true,
       submit: true,
       languages: [WOQL_JS, WOQL_JSON],
@@ -78,8 +86,9 @@ const Query = (props) => {
           <NavBar/>
     	  <Container className="flex-grow-1">
             {/*<NewQueryPane/>*/}
-            <QueryPane editor = { queryPaneOptions }
-                resultPane = {resultPaneOptions}/>
+            {/*<QueryPane editor = { queryPaneOptions }
+                resultPane = {resultPaneOptions}/>*/}
+            {<Preview/>}
     	  </Container>
       </Container>
     )
