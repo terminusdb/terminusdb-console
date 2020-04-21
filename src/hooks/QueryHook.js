@@ -24,7 +24,7 @@ function QueryHook(queryName, renderType, params) {
         function executeQuery(){
             let orig = dbClient.db();
             let columnConf = [], columnData = [];
-            const woqlQuery = queryList.getQuery(queryName, {dbId: 'doc:' + orig});
+            const woqlQuery = queryList.getQuery(queryName, dbClient);
             if(!woqlQuery) return;
             if((queryName === GET_USERS_NOT_IN_DB) || (queryName === GET_USER_ACCESS_FOR_DB))
                 dbClient.db("terminus");

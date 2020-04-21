@@ -46,9 +46,7 @@ const DatabaseHome = (props) => {
 	const [dataProvider] = hooks(query);
 
 	useEffect(() => {
-		const q = getQuery(GET_COMMITS, {dbId: dbClient.db(),
-					isBranch: isBranch,
-					bid: brId});
+		const q = getQuery(GET_COMMITS, dbClient);
 		setQuery(q);
     }, [brId, isBranch]);
 

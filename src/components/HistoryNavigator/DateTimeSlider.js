@@ -13,7 +13,7 @@ export const DateTimeSlider = (props) => {
     const oneWeekAgo = subDays(today, 7);
     const [queryObject, setQueryObject] =  useState(false);
 
-    //const q = getQuery(GET_COMMITS, {dbId: props.dbId});
+    //const q = GET_COMMITS, {dbId: props.dbId});
 
     const [selected, setSelected] = useState(fourDaysAgo);
     const [updated, setUpdated] = useState(fourDaysAgo);

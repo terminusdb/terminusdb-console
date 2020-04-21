@@ -19,7 +19,7 @@ function QueryHook(queryName, renderType, params) {
     useEffect(() => {
 
         function executeQuery(){
-            const woqlQuery = queryList.getQuery(queryName);
+            const woqlQuery = queryList.getQuery(queryName, terminusClient);
             if(!woqlQuery) return;
             woqlQuery.execute(terminusClient).then((results) => {
                 let qcres = new TerminusClient.WOQLResult(results, woqlQuery);

@@ -20,7 +20,7 @@ export const Library = (props) => {
     libs.map((items) => {
         libButtons.push(
           <Button onClick = { () => {
-              const woql = getQuery(items, {});
+              const woql = getQuery(items);
               if(isObject(woql)){
                   changeWoql(woql);
                   if(library_autosubmit) setQueryObject(woql);

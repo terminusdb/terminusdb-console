@@ -10,16 +10,9 @@ const { setGlobalState, useGlobalState } = createGlobalState({
 export const setTerminusClient = (params) => {
     const opts = params || {};
     const dbClient = new TerminusClient.WOQLClient();
-    const config = { server: opts.server,
-        key: opts.key,
-        db: opts.db,
-        branch: opts.branch
-    }
-    dbClient.connect(config)
-        .then(function(response){
+    return dbClient.connect(opts)
+    .then(function(response){
         setGlobalState(TERMINUS_CLIENT, dbClient);
-    }).catch((err)=>{
-        console.log(err)
     })
 };
 

@@ -36,9 +36,11 @@ const RenderTable = (props) => {
     const handleChange = useCallback(state => {
         switch(props.fromPage){
             case SERVER_HOME_PAGE.page:
-                var dbId = stripDocFromUrl(state['db']);
+                var dbId = state['db'];
+                var account = state['account'];
                 history.replace('db/' + dbId);
-                dbClient.connectionConfig.setDB(dbId);
+                dbClient.db(dbId);
+                dbClient.account(account);
                 break;
             default:
                 console.log('RenderTable.js - Invalid page label')
