@@ -25,6 +25,15 @@ div.collapse{
     /*width: 100%;*/
 }
 
+label.curr-c{
+    margin: 2px 0px 0px 20px;
+    font-size: 16px;
+}
+
+span.cc {
+    margin-bottom: 30px;
+}
+
 div.main-nav{
     height: 100%;
     position: absolute;

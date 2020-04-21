@@ -394,3 +394,13 @@ export const push = {
         text: "Push"
     }
 }
+
+export const nextCommit = {
+    type: "submit",
+    text: "Next Commit"
+}
+
+export const previousCommit = {
+    type: "submit",
+    text: "Previous Commit"
+}

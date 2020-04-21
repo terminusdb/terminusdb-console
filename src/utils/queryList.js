@@ -4,6 +4,7 @@ import * as query from "../labels/queryLabels";
 export const getQuery = (queryName, params) =>{
     const WOQL = TerminusClient.WOQL;
     const dbId = params.dbId || '';
+    const curl = "admin/" + dbId + "/local/_commits"
     switch(queryName){
         case query.LIST_OF_DATABASE_QUERY:
             return WOQL.and(
@@ -51,6 +52,23 @@ export const getQuery = (queryName, params) =>{
        case query.SHOW_ALL_PROPERTIES:
             return WOQL.query().propertyMetadata();
 
+       case query.GET_COMMITS:
+            // change account later and repo
+            const bid = params.bid || false; //bid is branch id or commit id
+            const isBranch = params.isBranch || false; // is branch determines if branch or commit id
+            if(!isBranch)
+               return WOQL.using(curl).and(WOQL.lib().getCommitDetails(bid))
+            else return WOQL.using(curl).and(
+                   WOQL.triple("v:Branch", "ref:branch_name", bid),
+                   WOQL.triple("v:Branch", "ref:ref_commit", "v:Head"),
+                   WOQL.path("v:Head", "ref:commit_parent+", "v:B", "v:Path"),
+                   WOQL.not().triple("v:B",  "ref:commit_parent", "v:C"),
+                   WOQL.triple("v:B",  "ref:commit_id", "v:CommitID"),
+                   WOQL.lib().getCommitDetails("v:CommitID")
+                )
+
+       case query.GET_BRANCH_LIST:
+           return WOQL.using(curl, WOQL.lib().getBranchNames())
        default:
            return {};
        break;

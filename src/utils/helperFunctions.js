@@ -21,7 +21,8 @@ export const getCurrentDBID = (client) => {
 export const getCurrentDBName = (client) => {
     if (isObject(client)){
         const dbRec = client.connection.getDBRecord(client.db(), client.server())
-        return dbRec['rdfs:label']['@value'];
+        if (isObject(dbRec)) return dbRec['rdfs:label']['@value'];
+        else return false;
     }
     else return false;
 }

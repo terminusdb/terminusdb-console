@@ -36,7 +36,7 @@ const RenderTable = (props) => {
     const handleChange = useCallback(state => {
         switch(props.fromPage){
             case SERVER_HOME_PAGE.page:
-                var dbId = stripDocFromUrl(state['@id']);
+                var dbId = stripDocFromUrl(state['db']);
                 history.replace('db/' + dbId);
                 dbClient.connectionConfig.setDB(dbId);
                 break;

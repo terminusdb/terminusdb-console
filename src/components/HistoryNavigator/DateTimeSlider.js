@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { SliderRail, Handle, Track, Tick } from "./SliderComponents";
+import { GET_COMMITS } from "../../labels/queryLabels"
 import { subDays, startOfToday, format } from "date-fns";
 import { scaleTime } from "d3-scale";
+import { getQuery } from "../../utils/queryList"
+import { hooks } from "../../hooks"
 
 export const DateTimeSlider = (props) => {
-    const sliderStyle = { position: "relative",
-                          width: "100%"};
-
     const today = startOfToday();
     const fourDaysAgo = subDays(today, 4);
     const oneWeekAgo = subDays(today, 7);
+    const [queryObject, setQueryObject] =  useState(false);
+
+    //const q = getQuery(GET_COMMITS, {dbId: props.dbId});
 
     const [selected, setSelected] = useState(fourDaysAgo);
     const [updated, setUpdated] = useState(fourDaysAgo);
     const [min, setMin] = useState(oneWeekAgo);
     const [max, setMax] = useState(today);
 
+    const sliderStyle = {position: "relative",
+                         width: "100%"};
+
     function formatTick(ms) {
-      return format(new Date(ms), "MM dd");
+      return format(new Date(ms), "MMM dd yyyy");
     }
 
     const halfHour = 1000 * 60 * 30;

@@ -79,7 +79,8 @@ function QueryHook(queryName, renderType, params) {
                    //console.log('dbClient in hookfetch', dbClient);
                    switch(queryName){
                        case LIST_OF_DATABASE_QUERY:
-                            const records = dbClient.connection.getServerDBRecords();
+                            //const records = dbClient.connection.getServerDBRecords();
+                            const records = dbClient.connection.getServerDBMetadata();
                             const columnConf = getDBListColumns(records);
                             const columnData = getDBListData(records);
                             setData({columnData:columnData, columnConf:columnConf});

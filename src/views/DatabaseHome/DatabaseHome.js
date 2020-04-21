@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Jumbotron,
 		Button,Form,FormGroup,Label,Input,FormText,Collapse} from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
@@ -9,41 +9,105 @@ import RenderTable from "../../components/RenderTable";
 import { DETAILS_TAB, COLLABORATE_TAB, MANAGE_TAB } from "../../labels/tabLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
-import { getCurrentDBName } from "../../utils/helperFunctions"
+import { getCurrentDBName, getCurrentDBID, isObject } from "../../utils/helperFunctions"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
-import { DateTimeSlider } from '../../components/Slider/DateTimeSlider'
-import BranchSelector from '../../components/BranchSelector'
+import { DateTimeSlider } from '../../components/HistoryNavigator/DateTimeSlider'
+import BranchSelector from './BranchSelector'
 import Collaborate from './Collaborate'
 import ManageDatabase from './ManageDatabase'
+import { GET_COMMITS } from "../../labels/queryLabels"
+import { getQuery } from "../../utils/queryList"
+import { hooks } from "../../hooks"
+import { getCommitControl } from "../../utils/stateChange"
+import { nextCommit, previousCommit } from "../../variables/formLabels"
+import * as tag from "../../labels/tags"
 
 const DatabaseHome = (props) => {
     const { loading, user, isAuthenticated } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
-	const [dbCLient] = useGlobalState(TERMINUS_CLIENT);
+	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+
+	const [query, setQuery] = useState(false);
+	const [result, setResult] = useState(false);
+	const [currentCommitMsg, setCurrentCommitMsg] = useState(false);
+	const [parent, setParent] = useState(false);
+	const [child, setChild] = useState(false);
+
+	//const cc = dbClient.connectionConfig;
+	//console.log('cc', cc)
+
+	//const rId = dbClient.ref();
+	const rId = 'jqpg9g4eewiqq1kc0innjbwvmy8ydey'
+	const is_branch = false;
+	const [brId, setBrId] = useState(rId);
+	const [isBranch, setIsBranch] = useState(is_branch);
+
+	const [dataProvider] = hooks(query);
+
+	useEffect(() => {
+		const q = getQuery(GET_COMMITS, {dbId: dbClient.db(),
+					isBranch: isBranch,
+					bid: brId});
+		setQuery(q);
+    }, [brId, isBranch]);
+
+	useEffect(() => {
+		if(isObject(dataProvider)){
+			let wr = dataProvider.results;
+			console.log('wr', wr)
+			getCommitControl(wr, brId, setParent, setChild, setCurrentCommitMsg);
+			let bhead = wr.first()['BranchName']["@value"]
+			if(bhead){
+				dbClient.ref(false)
+				dbClient.checkout(bhead)
+			}
+			else {
+				dbClient.ref(brId)
+			}
+		}
+    }, [dataProvider]);
 
     const toggle = () => setIsOpen(!isOpen);
 
-    /*if (loading || !user) {
-        return <Loading />;
-    }*/
 	if (loading) return <Loading />;
+
+	const handlePreviousCommit = () => {
+		setBrId(parent)
+		setIsBranch(false)
+	}
+
+	const handleNextCommit = () => {
+		setBrId(child)
+		setIsBranch(false)
+	}
 
     return (
     	<Container fluid className="h-100 pl-0 pr-0">
             <NavBar/>
     	    <Container className="flex-grow-1">
 			 	<hr className = "my-space-50" />
-    	  	    <legend>{getCurrentDBName(dbCLient)}</legend>
+    	  	    <legend>{getCurrentDBName(dbClient)}</legend>
 				<hr className = "my-space-50"/>
 				<span className = "d-fl mb-12">
 					<Col md={8} className="mb-8">
-						<DateTimeSlider/>
+						<DateTimeSlider dbId = {getCurrentDBID(dbClient)}/>
 					</Col>
 					<Col md={1} className="mb-1"/>
 					<Col md={3} className="mb-3">
 						<BranchSelector/>
 					</Col>
+				</span>
+				<span className = "d-fl mb-8 cc">
+					<button onClick={handleNextCommit}>
+						{ nextCommit.text }
+					</button>
+					<button onClick={handlePreviousCommit}>
+						{ previousCommit.text }
+					</button>
+					{currentCommitMsg && <label className="curr-c">
+						{ currentCommitMsg }
+				 	</label>}
 				</span>
 
 				<hr className = "my-space-5"/>
