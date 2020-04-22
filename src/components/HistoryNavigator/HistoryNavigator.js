@@ -15,7 +15,7 @@ import TerminusClient from '@terminusdb/terminus-client';
 
 
 export const HistoryNavigator = (props) => {
-    const [branch, setBranch] = useState(props.branch);
+    const [branches, setBranches] = useState(props.branches);
     const [ref, setRef] = useState(props.ref);
     const [start, setStart] = useState(props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000));
     const [end, setEnd] = useState(props.end || parseFloat(new Date().getTime()/1000));
@@ -23,10 +23,12 @@ export const HistoryNavigator = (props) => {
     const [currentCommit, setCommit] = useState({});
     const [commitCount, setCommitCount] = useState(0);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    const [branch, setBranch] = useState(props.branch || dbClient.checkout());
 
+    const always = 1
     //retrieves details of the branch, only when the branch is changed
     useEffect(() => {
-        const q = TerminusClient.WOQL.lib().getBranchLimits(dbClient)
+        const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClient)
         dbClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
             let res = wr.first()
@@ -41,6 +43,22 @@ export const HistoryNavigator = (props) => {
         })    
     }, [branch]);
 
+    //retrieves details of the available branches
+    useEffect(() => {
+        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
+        dbClient.query(q).then((results) => {
+            let wr = new TerminusClient.WOQLResult(results, q)
+            let bchoices = []
+            var res
+            while(res = wr.next()){
+               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
+            }
+            bchoices.push({value: "test", label: "test"})
+            setBranches(bchoices) 
+        })    
+    }, [always]);
+
+    //retrieves details of the commit with id ref 
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
@@ -60,24 +78,40 @@ export const HistoryNavigator = (props) => {
         }    
     }, [ref]);
 
+    //retrieves the last recent commit and sets it, when the user changes point on the timeline
     function userChangesTime(ts){
         if(ts && (Math.floor(current) != Math.floor(ts))){
             setCurrent(ts)
-            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClient, ts)
+            let tx = ts + ""
+            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClient, tx)
             dbClient.query(q3).then(( lresults) => {
-                let lwr = new TerminusClient.WOQLResult(cresults, q3)
+                let lwr = new TerminusClient.WOQLResult(lresults, q3)
                 let lres = lwr.first()
                 let commie = {}
-                commie.id = (cres['TailID']["@value"])
-                commie.time = parseFloat(cres['Time']["@value"])
-		        commie.author = rles['Author']["@value"]
+                commie.id = (lres['TailID']["@value"])
+                commie.time = parseFloat(lres['Time']["@value"])
+		        commie.author = lres['Author']["@value"]
 		        commie.message = lres['Message']["@value"]
 		        commie.parent = lres['Parent']["@value"]
-		        commie.child = lres['Child']["@value"]
+                commie.child = lres['Child']["@value"]
+                if(commie.parent) dbClient.ref(commie.id)
+                else dbClient.ref(false)
                 setCommit(commie)
             })
         }
+    }   
+
+    function userChangesCommand(ts){
+
     }
+
+    function changeBranch(bid){
+        setBranch(bid)        
+        dbClient.ref(false)
+        dbClient.checkout(bid)
+    }
+
+
 
     if(dbClient.db() != "terminus"){
         return (
@@ -88,8 +122,9 @@ export const HistoryNavigator = (props) => {
                     </Col>
                     <Col md={1} className="mb-1"/>
                     <Col md={3} className="mb-3">
-                        <BranchSelector branch={branch}/>
-                    </Col>
+                        <BranchSelector branch={branch} branches={branches} onChange={changeBranch}/>
+                    </Col>                    
+                    
                 </span>
                 <span className = "d-fl mb-8 cc">
                     {branch} - {ref} - {commitCount} - {start} - {end} - {current} - {currentCommit.author}                

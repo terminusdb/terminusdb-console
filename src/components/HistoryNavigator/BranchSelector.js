@@ -1,51 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
-import { useGlobalState } from "../../init/initializeGlobalState";
-import { isObject } from "../../utils/helperFunctions"
-import { GET_BRANCH_LIST } from "../../labels/queryLabels"
-import { hooks } from "../../hooks"
-import { getQuery } from "../../utils/queryList"
 
 const BranchSelector = (props) => {
-    /*const [query, setQuery] = useState(false);
-	const [result, setResult] = useState(false);
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-    const [curr] = useState(false);
+    const [branch, setBranch] = useState(props.branch);
+    const [branches, setBranches] = useState(props.branches);
 
-    const [dataProvider] = hooks(query);*/
-    const [values, setReactSelect] = useState({
-      selectedOption: []
-    });
-
-    /*useEffect(() => {
-		const q = getQuery(GET_BRANCH_LIST, {dbId: dbClient.db()});
-		setQuery(q);
-    }, [curr]);
-
+    //update state whenever props change
     useEffect(() => {
-        if(isObject(dataProvider)){
-			let wr = dataProvider.results;
-		}
-    }, [dataProvider]);*/
+      setBranches(props.branches) 
+      setBranch(props.branch) 
+    }, [props])
 
-    const currBranch = 'Master';
-    const opts = [   // do whatever call to get branch list of db
-        {value: currBranch, label: currBranch},
-        {value: 'dev', label: 'dev'},
-        {value: 'QA', label: 'QA'},
-        {value: 'pre live', label: 'pre live'},
-        {value: 'test', label: 'test'},
-        {value: 'br01', label: 'br01'}
-    ]
+    function changeBranch(SelValue){
+      let nub = SelValue.value
+      if(nub != branch){
+        props.onChange(nub)
+      }
+    }
 
-
-    return (
-      <Select placeholder = { "Branch: " + currBranch }
-              className = "brSeltr"
-              value = {values.selectedOption}
-              options = {opts}/>
-   );
+    if(branches && branches.length > 0) {
+      return (
+        <Select placeholder = {"Branch: " + branch}
+                className = "brSeltr"
+                value = {branch}
+                onChange = {changeBranch}
+                options = {branches}/>
+        );
+    }
+  return null;
 }
 
 export default BranchSelector;
