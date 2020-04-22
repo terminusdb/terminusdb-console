@@ -1,11 +1,10 @@
 import TerminusClient from '@terminusdb/terminus-client';
 import * as query from "../labels/queryLabels";
 
-export const getQuery = (queryName, params) =>{
+export const getQuery = (queryName, dbClient) =>{
     const WOQL = TerminusClient.WOQL;
-    const dbId = params.dbId || '';
-    const curl = "admin/" + dbId + "/local/_commits"
-    const bid = params.bid || false; //bid is branch id or commit id
+    const commit_graph = (dbClient ? `${dbClient.account()}/${dbClient.db()}/${dbClient.repo()}/_commits` : false)
+
     switch(queryName){
         case query.LIST_OF_DATABASE_QUERY:
             return WOQL.and(
@@ -23,13 +22,11 @@ export const getQuery = (queryName, params) =>{
                   WOQL.opt().quad('v:Class ID', 'tcs:tag', 'v:Abstract', 'schema'))
 
         case query.SCHEMA_LIST_OF_PROPERTIES_QUERY:
-            return WOQL.limit(100).and(
-                      WOQL.lib().propertyMetadata()
-                   )
+            return WOQL.limit(100).start(0, WOQL.lib().propertyMetadata())
 
        case query.GET_USER_ACCESS_FOR_DB:
             return WOQL.and(
-            	WOQL.triple("v:CapabilityID", "terminus:authority_scope", dbId),
+            	WOQL.triple("v:CapabilityID", "terminus:authority_scope", dbClient.db()),
             	WOQL.triple("v:UserID", "terminus:authority", "v:CapabilityID"),
                 WOQL.not().eq("v:UserID", "doc:admin"),
                 WOQL.triple("v:UserID", "label", "v:Label"),
@@ -57,11 +54,12 @@ export const getQuery = (queryName, params) =>{
 
        case query.GET_COMMITS:
             // change account later and repo
-            const isBranch = params.isBranch || false; // is branch determines if branch or commit id
-            if(!isBranch)
-               return WOQL.using(curl).and(WOQL.lib().getCommitDetails(bid))
-            else return WOQL.using(curl).and(
-                   WOQL.triple("v:Branch", "ref:branch_name", bid),
+            //const bid = params.bid || false; //bid is branch id or commit id
+            //const isBranch = params.isBranch || false; // is branch determines if branch or commit id
+            if(dbClient.ref())
+               return WOQL.using(commit_graph).and(WOQL.lib().getCommitDetails(dbClient.ref()))
+            else return WOQL.using(commit_graph).and(
+                   WOQL.triple("v:Branch", "ref:branch_name", dbClient.checkout()),
                    WOQL.triple("v:Branch", "ref:ref_commit", "v:Head"),
                    WOQL.path("v:Head", "ref:commit_parent+", "v:B", "v:Path"),
                    WOQL.not().triple("v:B",  "ref:commit_parent", "v:C"),
@@ -70,15 +68,7 @@ export const getQuery = (queryName, params) =>{
                 )
 
        case query.GET_BRANCH_LIST:
-           return WOQL.using(curl, WOQL.lib().getBranchNames())
-
-       case query.GET_COMMIT_HEAD:
-           return WOQL.using(curl).and(
-               WOQL.triple("v:Branch", "ref:branch_name", bid),
-               WOQL.triple("v:Branch", "ref:ref_commit", "v:Head"),
-               WOQL.triple("v:Head", "ref:commit_id", "v:HeadID")
-            )
-
+           return WOQL.using(commit_graph, WOQL.lib().getBranchNames())
        default:
            return {};
        break;

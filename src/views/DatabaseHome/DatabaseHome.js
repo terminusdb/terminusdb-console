@@ -38,8 +38,7 @@ const DatabaseHome = (props) => {
 	const [dataProvider] = hooks(query);
 
 	useEffect(() => {
-		const q = getQuery(GET_COMMIT_HEAD, {dbId: dbClient.db(),
-					bid: dbClient.checkout()});
+		const q = getQuery(GET_COMMITS, dbClient);
 		setQuery(q);
     }, [isHead]);
 

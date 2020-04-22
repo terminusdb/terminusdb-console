@@ -13,7 +13,7 @@ export const Preview = (props) => {
     const [qp, setQp] = useState(false);
     const [woql, setWOQL] = useState({});
     const WOQL = TerminusClient.WOQL
-    const query = WOQL.query().propertyMetadata();
+    const query = WOQL.lib().propertyMetadata();
     let dataProvider = {};
     //const [dataProvider, loading] = hooks(woql);
     /*let result = {};

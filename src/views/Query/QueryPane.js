@@ -45,7 +45,7 @@ export const QueryPane = (props) => {
         const control = props.control || [];
         const menu = [];
         const handleQuery = (action) => {
-            let q = getQuery(action, {});
+            let q = getQuery(action);
             setWOQLObj(q); // set woql object
             let fq = formatQuery(q, mode);
             setQuery(fq);

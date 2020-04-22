@@ -37,8 +37,6 @@ const App = (props) => {
 
   const userMETADATA= user || {};
 
-  //console.log("______userMETADATA________", user);
-
   if(user && user['https://terminushub/afterSignUp']){
       history.replace('/download')
   }
@@ -47,10 +45,14 @@ const App = (props) => {
     return <Loading />;
   }
 
-  const fluid =  !isAuthenticated ? {} : {fluid:true}
+  //const fluid =  !isAuthenticated ? {} : {fluid:true}
 
-  const pathName = window.location.pathname;
-  const dbClient = setTerminusClient(localSettings);
+  //const pathName = window.location.pathname;
+  setTerminusClient(localSettings).catch((error) => {
+    console.log(error)
+    alert("Need a screen for irrecoverable errors - update your config ..."  + error)
+  })
+  
 
   return (
     <Router history={history}>
@@ -70,21 +72,5 @@ const App = (props) => {
     </Router>
   );
 };
-
-/*
- <Router history={history}>
-      <div id="app" className="d-flex flex-column h-100">
-        <Container {...fluid} className="h-100">
-          <Switch>
-            {!isAuthenticated && <Route path="/" exact component={Home} /> }
-            <PrivateRoute path="/profile" component={Profile} />
-            <PrivateRoute path="/newDB" component={CreateDatabase} />
-            <PrivateRoute path="/newTeam" component={CreateTeam} />
-            <PrivateRoute path="/" component={MainPage} />
-          </Switch>
-        </Container>
-        <Footer />
-      </div>
-    </Router>*/
 
 export default App;

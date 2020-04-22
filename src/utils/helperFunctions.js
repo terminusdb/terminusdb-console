@@ -36,7 +36,7 @@ export const getCurrentSchema = (client) => {
 
 export const resetDB = (client) => {
     if(isObject(client)) {
-        return client.connectionConfig.setDB(false);
+        return client.connectionConfig.clearCursor();
     }
 }
 

@@ -49,10 +49,21 @@ function APICallsHook(apiName, renderType, params) {
                         }
                        case CREATE_DATABASE:
                            if(isObject(params)){
-                               dbClient.createDatabase(params)
-                               .then(function(response){
-                                   setData({response: response});
-                                   setLoading(false);
+                               let doc = {}
+                               doc.label = params.label || params.title
+                               doc.comment = params.comment || params.description
+                               if(!params.id || !doc.label){
+                                   return Promise.reject(new Error(this.getBadArguments("createDatabase", "ID and label are mandatory fields")))
+                               }
+                               var dbid = params.id;
+                               doc.base_uri = params.base_uri || "http://local.terminusdb.com/" + dbid + "/data"
+                               dbClient.createDatabase(dbid, doc, params.account)
+                               .then((response) => {
+                                    createStarterGraphs(dbClient, "main", "main", "main")
+                                    .then((response) => {
+                                       setData({response: response});
+                                       setLoading(false);
+                                    })
                                })
                                .catch(function(error){
                                    console.log(error)
@@ -69,6 +80,32 @@ function APICallsHook(apiName, renderType, params) {
     }, [dbClient, params]);
 
     return [data, loading];
+}
+
+function createStarterGraphs(client, instance_id, schema_id, inference_id){
+    let parts = []
+    if(instance_id){
+        parts.push(["instance", instance_id, "Instance Graph Created Automatically with Database Create"])
+    }
+    if(schema_id){
+        parts.push(["schema", schema_id, "Schema Graph Created Automatically with Database Create"])
+    }
+    if(inference_id){
+        parts.push(["inference", inference_id, "Schema Graph Created Automatically with Database Create"])
+    }
+    if(parts.length > 0)
+    return client.createGraph(parts[0][0], parts[0][1], parts[0][2])
+	.then(() => {
+		if(parts.length > 1){
+            return client.createGraph(parts[1][0], parts[1][1], parts[1][2])
+            .then(() => {
+                if(parts.length > 2){
+                    return client.createGraph(parts[2][0], parts[2][1], parts[2][2])
+                }
+            })
+		}
+		return true;
+	})
 }
 
 export { APICallsHook };
