@@ -12,8 +12,6 @@ import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName, getCurrentDBID, isObject } from "../../utils/helperFunctions"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
-import { DateTimeSlider } from '../../components/HistoryNavigator/DateTimeSlider'
-import BranchSelector from './BranchSelector'
 import Collaborate from './Collaborate'
 import ManageDatabase from './ManageDatabase'
 import { GET_COMMITS } from "../../labels/queryLabels"
@@ -21,6 +19,8 @@ import { getQuery } from "../../utils/queryList"
 import { hooks } from "../../hooks"
 import { getCommitControl } from "../../utils/stateChange"
 import { nextCommit, previousCommit } from "../../variables/formLabels"
+import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
+
 import * as tag from "../../labels/tags"
 
 const DatabaseHome = (props) => {
@@ -38,14 +38,15 @@ const DatabaseHome = (props) => {
 	//console.log('cc', cc)
 
 	//const rId = dbClient.ref();
-	const rId = 'jqpg9g4eewiqq1kc0innjbwvmy8ydey'
-	const is_branch = false;
-	const [brId, setBrId] = useState(rId);
-	const [isBranch, setIsBranch] = useState(is_branch);
+	//const rId = 'jqpg9g4eewiqq1kc0innjbwvmy8ydey'
+	//const is_branch = false;
+	//const [brId, setBrId] = useState(rId);
+	//const [isBranch, setIsBranch] = useState(is_branch);
 
-	const [dataProvider] = hooks(query);
+	//const [dataProvider] = hooks(query);
 
-	useEffect(() => {
+	
+	/*useEffect(() => {
 		const q = getQuery(GET_COMMITS, dbClient);
 		setQuery(q);
     }, [brId, isBranch]);
@@ -65,8 +66,8 @@ const DatabaseHome = (props) => {
 			}
 		}
     }, [dataProvider]);
-
-    const toggle = () => setIsOpen(!isOpen);
+	*/
+    //const toggle = () => setIsOpen(!isOpen);
 
 	if (loading) return <Loading />;
 
@@ -87,27 +88,7 @@ const DatabaseHome = (props) => {
 			 	<hr className = "my-space-50" />
     	  	    <legend>{getCurrentDBName(dbClient)}</legend>
 				<hr className = "my-space-50"/>
-				<span className = "d-fl mb-12">
-					<Col md={8} className="mb-8">
-						<DateTimeSlider dbId = {getCurrentDBID(dbClient)}/>
-					</Col>
-					<Col md={1} className="mb-1"/>
-					<Col md={3} className="mb-3">
-						<BranchSelector/>
-					</Col>
-				</span>
-				<span className = "d-fl mb-8 cc">
-					<button onClick={handleNextCommit}>
-						{ nextCommit.text }
-					</button>
-					<button onClick={handlePreviousCommit}>
-						{ previousCommit.text }
-					</button>
-					{currentCommitMsg && <label className="curr-c">
-						{ currentCommitMsg }
-				 	</label>}
-				</span>
-
+					<HistoryNavigator />				
 				<hr className = "my-space-5"/>
 
 				 {isAuthenticated && <Tabs>

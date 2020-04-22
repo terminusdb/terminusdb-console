@@ -20,8 +20,8 @@ export const getCurrentDBID = (client) => {
 
 export const getCurrentDBName = (client) => {
     if (isObject(client)){
-        const dbRec = client.connection.getDBRecord(client.db(), client.server())
-        if (isObject(dbRec)) return dbRec['rdfs:label']['@value'];
+        const dbRec = client.connection.getDBMetadata(client.db(), client.account())
+        if (isObject(dbRec)) return dbRec.title
         else return false;
     }
     else return false;

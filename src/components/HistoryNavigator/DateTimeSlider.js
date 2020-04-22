@@ -8,75 +8,74 @@ import { getQuery } from "../../utils/queryList"
 import { hooks } from "../../hooks"
 
 export const DateTimeSlider = (props) => {
-    const today = startOfToday();
-    const fourDaysAgo = subDays(today, 4);
-    const oneWeekAgo = subDays(today, 7);
-    const [queryObject, setQueryObject] =  useState(false);
-
-    //const q = GET_COMMITS, {dbId: props.dbId});
-
-    const [selected, setSelected] = useState(fourDaysAgo);
-    const [updated, setUpdated] = useState(fourDaysAgo);
-    const [min, setMin] = useState(oneWeekAgo);
-    const [max, setMax] = useState(today);
-
+    const [selectedTime, setSelected] = useState(props.current);
+    const [updatedTime, setUpdated] = useState(props.updated);
+    const [min, setMin] = useState(props.start);
+    const [max, setMax] = useState(props.end);
     const sliderStyle = {position: "relative",
                          width: "100%"};
-
     function formatTick(ms) {
       return format(new Date(ms), "MMM dd yyyy");
     }
 
+    useEffect(() => {
+        if(props.current) setSelected(props.current) 
+        if(props.updated) setUpdated(props.updated)
+        if(props.start) setMin(props.start)
+        if(props.end) setMax(props.end) 
+    }, [props])
+
+
+
     const halfHour = 1000 * 60 * 30;
 
-    const onChange = ([ms]) => {
-        if (isNaN(parseFloat(ms))) return;
-        setSelected(new Date(ms))
-    };
+    function tsToDate(ts){
+      if (isNaN(parseFloat(ts))) return "NaN";
+      return new Date(parseFloat(ts*1000))
+    }
 
     const onUpdate = ([ms]) => {
         if (isNaN(parseFloat(ms))) return;
-        setUpdated(new Date(ms))
-        setMin(oneWeekAgo);
-        setMax(today);
-     };
+        if(Math.floor(props.current) != Math.floor(ms/1000)){
+           props.onChange(ms/1000)
+        }
+    };
 
     const dateTicks = scaleTime()
-      .domain([min, max])
+      .domain([tsToDate(min), tsToDate(max)])
       .ticks(8)
       .map(d => +d);
 
-    const renderDateTime = (date, header) => {
-
-      return (
-        <div style={{ width: "100%",
-                      textAlign: "center",
-                      fontFamily: "Arial",
-                      display: "flex",
-                      margin: '5px 40px 0px 0px'}}>
-          <b>{header}:</b>
-          <div style={{ fontSize: 12,
-                        margin: '3px 0px 0px 10px'
-                       }}>{format(date, "yyyy MM dd h:mm a")}</div>
-        </div>
-      );
+    const renderDateTime = (ts, header) => {
+      if(ts){
+          let dd = tsToDate(ts)
+          return (
+              <div style={{ width: "100%",
+                  textAlign: "center",
+                  fontFamily: "Arial",
+                  display: "flex",
+                  margin: '5px 40px 0px 0px'}}>
+              <b>{header}:</b>
+              <div style={{ fontSize: 12, margin: '3px 0px 0px 10px'}}>{format(dd, "yyyy MM dd h:mm a")}</div>
+            </div>
+          )
+        }
+        return ( <span/> )
     }
-
-    //{renderDateTime(selected, "Selected")}
 
     return (
       <div>
         <span className="d-fl">
-            {renderDateTime(updated, "Version")}
+            {renderDateTime(selectedTime, "Viewing")}
+            {renderDateTime(updatedTime, "Updated")}
         </span>
         <div style={{ margin: "20px 0px 0px 0px", height: 90, width: "90%" }}>
           <Slider mode={1}
                   step={halfHour}
-                  domain={[+min, +max]}
+                  domain={[+tsToDate(min), +tsToDate(max)]}
                   rootStyle={sliderStyle}
                   onUpdate={onUpdate}
-                  onChange={onChange}
-                  values={[+selected]}>
+                  values={[+tsToDate(selectedTime)]}>
             <Rail>
               {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
             </Rail>
@@ -86,7 +85,7 @@ export const DateTimeSlider = (props) => {
                   {handles.map(handle => (
                     <Handle key={handle.id}
                             handle={handle}
-                            domain={[+min, +max]}
+                            domain={[+ tsToDate(min), +tsToDate(max)]}
                             getHandleProps={getHandleProps}/>))}
                 </div>
               )}

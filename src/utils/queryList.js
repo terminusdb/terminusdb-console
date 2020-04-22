@@ -56,15 +56,14 @@ export const getQuery = (queryName, dbClient) =>{
             // change account later and repo
             //const bid = params.bid || false; //bid is branch id or commit id
             //const isBranch = params.isBranch || false; // is branch determines if branch or commit id
-            if(dbClient.ref())
-               return WOQL.using(commit_graph).and(WOQL.lib().getCommitDetails(dbClient.ref()))
-            else return WOQL.using(commit_graph).and(
+            return WOQL.using(commit_graph).and(
                    WOQL.triple("v:Branch", "ref:branch_name", dbClient.checkout()),
                    WOQL.triple("v:Branch", "ref:ref_commit", "v:Head"),
-                   WOQL.path("v:Head", "ref:commit_parent+", "v:B", "v:Path"),
-                   WOQL.not().triple("v:B",  "ref:commit_parent", "v:C"),
-                   WOQL.triple("v:B",  "ref:commit_id", "v:CommitID"),
-                   WOQL.lib().getCommitDetails("v:CommitID")
+                   WOQL.path("v:Head", "ref:commit_parent+", "v:Tail", "v:Path"),
+                   WOQL.not().triple("v:Tail",  "ref:commit_parent", "v:Any"),
+                   WOQL.triple("v:Tail",  "ref:commit_id", "v:TailID"),
+                   WOQL.triple("v:Tail",  "ref:commit_timestamp", "v:TailID"),
+                   
                 )
 
        case query.GET_BRANCH_LIST:
