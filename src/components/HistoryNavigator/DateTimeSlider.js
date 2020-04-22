@@ -16,10 +16,10 @@ export const DateTimeSlider = (props) => {
     }
 
     useEffect(() => {
-        if(props.current) setSelected(props.current) 
-        if(props.updated) setUpdated(props.updated)
-        if(props.start) setMin(props.start)
-        if(props.end) setMax(props.end) 
+        if(props.current && props.current != selectedTime) setSelected(props.current)
+        if(props.updated && props.updated != updatedTime) setUpdated(props.updated)
+        if(props.start && props.start != min) setMin(props.start)
+        if(props.end && props.end != max) setMax(props.end) 
     }, [props])
 
 
@@ -31,11 +31,10 @@ export const DateTimeSlider = (props) => {
       return new Date(parseFloat(ts*1000))
     }
 
-    const onUpdate = ([ms]) => {
+    const onChange = ([ms]) => {
         if (isNaN(parseFloat(ms))) return;
         if(Math.floor(parseFloat(selectedTime)) != Math.floor(ms/1000)){
-            alert(selectedTime + " " + (ms/1000))
-            props.onChange(ms/1000)
+            props.onChange(Math.floor(ms/1000))
         }
     };
 
@@ -72,7 +71,7 @@ export const DateTimeSlider = (props) => {
                   step={halfHour}
                   domain={[+tsToDate(min), +tsToDate(max)]}
                   rootStyle={sliderStyle}
-                  onUpdate={onUpdate}
+                  onChange={onChange}
                   values={[+tsToDate(selectedTime)]}>
             <Rail>
               {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}

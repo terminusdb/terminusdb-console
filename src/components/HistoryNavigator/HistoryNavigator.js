@@ -3,7 +3,7 @@
  * any specific time / branch
  */
 import React, { useState, useEffect } from "react";
-import { subDays, startOfToday, format } from "date-fns";
+import { subDays, startOfToday, addHours, startOfHour, format } from "date-fns";
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { Container, Row, Col } from "reactstrap";
@@ -14,15 +14,17 @@ import TerminusClient from '@terminusdb/terminus-client';
 
 
 export const HistoryNavigator = (props) => {
+    let me = startOfHour(addHours(new Date(), 1))
     const [branches, setBranches] = useState(props.branches);
     const [ref, setRef] = useState(props.ref);
     const [start, setStart] = useState(props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000));
-    const [end, setEnd] = useState(props.end || parseFloat(new Date().getTime()/1000));
-    const [current, setCurrent] = useState(props.current || parseFloat(new Date().getTime()/1000));
+    const [end, setEnd] = useState(props.end || parseFloat(me.getTime()/1000));
+    const [current, setCurrent] = useState(props.current || parseFloat(me.getTime()/1000));
     const [currentCommit, setCommit] = useState({});
     const [commitCount, setCommitCount] = useState(0);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
+
 
     const always = 1
     //retrieves details of the branch, only when the branch is changed
@@ -42,6 +44,22 @@ export const HistoryNavigator = (props) => {
         })
     }, [branch]);
 
+    //retrieves details of the available branches
+    useEffect(() => {
+        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
+        dbClient.query(q).then((results) => {
+            let wr = new TerminusClient.WOQLResult(results, q)
+            let bchoices = []
+            var res
+            while(res = wr.next()){
+               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
+            }
+            bchoices.push({value: "test", label: "test"})
+            setBranches(bchoices) 
+        })    
+    }, [always]);
+
+    //retrieves details of the commit with id ref 
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
@@ -55,8 +73,9 @@ export const HistoryNavigator = (props) => {
 		        commie.parent = cres['Parent']["@value"]
 		        commie.child = cres['Child']["@value"]
                 setCommit(commie)
-                if(dbClient.ref()) setCurrent(commie.time)
-                else setCurrent(end)
+                if(dbClient.ref()) {
+                    setCurrent(commie.time)
+                }
             })
         }
     }, [ref]);
@@ -71,15 +90,18 @@ export const HistoryNavigator = (props) => {
                 let lwr = new TerminusClient.WOQLResult(lresults, q3)
                 let lres = lwr.first()
                 let commie = {}
-                commie.id = (lres['TailID']["@value"])
+                commie.id = (lres['CommitID']["@value"])
                 commie.time = parseFloat(lres['Time']["@value"])
 		        commie.author = lres['Author']["@value"]
 		        commie.message = lres['Message']["@value"]
 		        commie.parent = lres['Parent']["@value"]
                 commie.child = lres['Child']["@value"]
-                if(commie.parent) dbClient.ref(commie.id)
+                if(commie.child){
+                     dbClient.ref(commie.id)
+                }
                 else dbClient.ref(false)
-                setCommit(commie)
+                if(commie.id != currentCommit.id) setCommit(commie)
+                //if(ref != commie.id) setRef(commie.id)
             })
         }
     }   
@@ -97,6 +119,7 @@ export const HistoryNavigator = (props) => {
 
 
     if(dbClient.db() != "terminus"){
+        let cc = parseInt(currentCommit.time) || 0
         return (
             <Container>
                 <span className = "d-fl mb-12">
@@ -114,7 +137,10 @@ export const HistoryNavigator = (props) => {
                     
                 </span>
                 <span className = "d-fl mb-8 cc">
-                    {branch} - {ref} - {commitCount} - {start} - {end} - {current} - {currentCommit.author}
+                    {commitCount} total commits between - {format(new Date(start*1000), "yyyy-MMM-dd hh:mm:ss")} and 
+                    - {format(new Date(end*1000), "yyyy-MMM-dd hh:mm:ss")}
+                </span>
+                <span>{currentCommit.id}, author: {currentCommit.author} message: {currentCommit.message} time {format(new Date(cc*1000), "yyyy-MMM-dd hh:mm:ss")}
                 </span>
             </Container>
         )
