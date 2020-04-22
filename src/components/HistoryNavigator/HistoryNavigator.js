@@ -42,26 +42,6 @@ export const HistoryNavigator = (props) => {
         })
     }, [branch]);
 
-<<<<<<< HEAD
-    //retrieves details of the available branches
-    useEffect(() => {
-        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
-        dbClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q)
-            let bchoices = []
-            var res
-            while(res = wr.next()){
-               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
-            }
-            bchoices.push({value: "test", label: "test"})
-            setBranches(bchoices) 
-        })    
-    }, [always]);
-
-    //retrieves details of the commit with id ref 
-=======
-
->>>>>>> ac77b7598d8e1a0caedfeebe7fff07055865eb49
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)

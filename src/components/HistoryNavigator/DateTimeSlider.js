@@ -33,8 +33,9 @@ export const DateTimeSlider = (props) => {
 
     const onUpdate = ([ms]) => {
         if (isNaN(parseFloat(ms))) return;
-        if(Math.floor(props.current) != Math.floor(ms/1000)){
-           props.onChange(ms/1000)
+        if(Math.floor(parseFloat(selectedTime)) != Math.floor(ms/1000)){
+            alert(selectedTime + " " + (ms/1000))
+            props.onChange(ms/1000)
         }
     };
 
