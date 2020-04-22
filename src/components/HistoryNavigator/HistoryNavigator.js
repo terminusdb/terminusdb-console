@@ -12,7 +12,6 @@ import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
 
 import TerminusClient from '@terminusdb/terminus-client';
-import { commit } from "../../variables/formLabels";
 
 
 export const HistoryNavigator = (props) => {

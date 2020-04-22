@@ -10,11 +10,12 @@ import { DETAILS_TAB, COLLABORATE_TAB, MANAGE_TAB } from "../../labels/tabLabels
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName, getCurrentDBID, isObject } from "../../utils/helperFunctions"
+import { GET_COMMIT_HEAD } from "../../labels/queryLabels"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
 import Collaborate from './Collaborate'
 import ManageDatabase from './ManageDatabase'
-import { GET_COMMITS } from "../../labels/queryLabels"
+import { CommitButtons } from './CommitButtons'
 import { getQuery } from "../../utils/queryList"
 import { hooks } from "../../hooks"
 import { getCommitControl } from "../../utils/stateChange"
@@ -27,21 +28,14 @@ const DatabaseHome = (props) => {
     const { loading, user, isAuthenticated } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-
 	const [query, setQuery] = useState(false);
-	const [result, setResult] = useState(false);
-	const [currentCommitMsg, setCurrentCommitMsg] = useState(false);
-	const [parent, setParent] = useState(false);
-	const [child, setChild] = useState(false);
+    const isHead = false;
+	const [head, setHead] = useState(false);
 
-	//const cc = dbClient.connectionConfig;
-	//console.log('cc', cc)
+	const [updatedCommitButton, setUpdatedCommitButton] = useState(false);
 
-	//const rId = dbClient.ref();
-	//const rId = 'jqpg9g4eewiqq1kc0innjbwvmy8ydey'
-	//const is_branch = false;
-	//const [brId, setBrId] = useState(rId);
-	//const [isBranch, setIsBranch] = useState(is_branch);
+    const toggle = () => setIsOpen(!isOpen);
+
 
 	//const [dataProvider] = hooks(query);
 
@@ -49,22 +43,11 @@ const DatabaseHome = (props) => {
 	/*useEffect(() => {
 		const q = getQuery(GET_COMMITS, dbClient);
 		setQuery(q);
-    }, [brId, isBranch]);
+    }, [isHead]);
 
 	useEffect(() => {
-		if(isObject(dataProvider)){
-			let wr = dataProvider.results;
-			console.log('wr', wr)
-			getCommitControl(wr, brId, setParent, setChild, setCurrentCommitMsg);
-			let bhead = wr.first()['BranchName']["@value"]
-			if(bhead){
-				dbClient.ref(false)
-				dbClient.checkout(bhead)
-			}
-			else {
-				dbClient.ref(brId)
-			}
-		}
+		if(isObject(dataProvider))
+			setHead(dataProvider.results.bindings[0].HeadID['@value'])
     }, [dataProvider]);
 	*/
     //const toggle = () => setIsOpen(!isOpen);

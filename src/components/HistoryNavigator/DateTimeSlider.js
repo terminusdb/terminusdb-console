@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { SliderRail, Handle, Track, Tick } from "./SliderComponents";
-import { GET_COMMITS } from "../../labels/queryLabels"
-import { subDays, startOfToday, format } from "date-fns";
+import { subDays, startOfToday, format, startOfDay } from "date-fns";
 import { scaleTime } from "d3-scale";
-import { getQuery } from "../../utils/queryList"
-import { hooks } from "../../hooks"
 
 export const DateTimeSlider = (props) => {
     const [selectedTime, setSelected] = useState(props.current);
@@ -15,7 +12,7 @@ export const DateTimeSlider = (props) => {
     const sliderStyle = {position: "relative",
                          width: "100%"};
     function formatTick(ms) {
-      return format(new Date(ms), "MMM dd yyyy");
+      return format(new Date(ms), "dd MMM yyyy");
     }
 
     useEffect(() => {
@@ -114,7 +111,7 @@ export const DateTimeSlider = (props) => {
               )}
             </Ticks>
           </Slider>
-        </div>
+        </div>        
       </div>
     );
 }

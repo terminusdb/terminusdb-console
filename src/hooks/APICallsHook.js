@@ -23,8 +23,9 @@ function APICallsHook(apiName, renderType, params) {
                if(dbClient.server()){
                    switch(apiName){
                        case GET_SCHEMA:
-                            dbClient.getSchema({'terminus:encoding': 'terminus:turtle'},
-                             getCurrentSchema(dbClient))
+                            //dbClient.getSchema({'terminus:encoding': 'terminus:turtle'},
+                            // getCurrentSchema(dbClient))
+                            dbClient.getSchema()
                             .then(function(response){
                                 setData({response: response});
                                 setLoading(false);
