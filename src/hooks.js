@@ -35,6 +35,8 @@ function hooks(woql, queryName, params) {
         async function woqlClientCall() {
            if (isObject(dbClient)){
                if(dbClient.server()){
+                   console.log('running hooks')
+                   console.log('woql', woql)
                    executeQuery();
                }
            }

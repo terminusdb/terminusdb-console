@@ -16,6 +16,7 @@ export const SHOW_ALL_PROPERTIES = 'Show All Properties'
 
 // commit queries
 export const GET_COMMITS = 'GET_COMMITS'
+export const GET_COMMIT_HEAD = 'GET_COMMIT_HEAD'
 
 // branch queries
-export const GET_BRANCH_LIST = 'GET_BRANCH_LIST' 
+export const GET_BRANCH_LIST = 'GET_BRANCH_LIST'
