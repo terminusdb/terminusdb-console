@@ -1,13 +1,12 @@
 /**
- * The history navigator is a UI widget which allows a user to change their branch and time to view the database at 
+ * The history navigator is a UI widget which allows a user to change their branch and time to view the database at
  * any specific time / branch
  */
 import React, { useState, useEffect } from "react";
 import { subDays, startOfToday, format } from "date-fns";
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
-import { Container, Row, Col, Jumbotron,
-    Button,Form,FormGroup,Label,Input,FormText,Collapse} from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
 
@@ -32,17 +31,18 @@ export const HistoryNavigator = (props) => {
         dbClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
             let res = wr.first()
-            let last = res['Last']['@value'] 
+            let last = res['Last']['@value']
             let first = res['First']['@value'] || last
             let cc = ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1)
-            setStart(parseFloat(first)) 
+            setStart(parseFloat(first))
             setCommitCount(cc)
             if(!ref){
                 setRef(res['HeadID']["@value"])
-            } 
-        })    
+            }
+        })
     }, [branch]);
 
+<<<<<<< HEAD
     //retrieves details of the available branches
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
@@ -59,6 +59,9 @@ export const HistoryNavigator = (props) => {
     }, [always]);
 
     //retrieves details of the commit with id ref 
+=======
+
+>>>>>>> ac77b7598d8e1a0caedfeebe7fff07055865eb49
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
@@ -75,16 +78,16 @@ export const HistoryNavigator = (props) => {
                 if(dbClient.ref()) setCurrent(commie.time)
                 else setCurrent(end)
             })
-        }    
+        }
     }, [ref]);
 
-    //retrieves the last recent commit and sets it, when the user changes point on the timeline
+    //retrieves details of the previous commit, only when user changes time
     function userChangesTime(ts){
         if(ts && (Math.floor(current) != Math.floor(ts))){
             setCurrent(ts)
-            let tx = ts + ""
-            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClient, tx)
-            dbClient.query(q3).then(( lresults) => {
+            const fts = String(ts)
+            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClient, fts)
+            dbClient.query(q3).then((lresults) => {
                 let lwr = new TerminusClient.WOQLResult(lresults, q3)
                 let lres = lwr.first()
                 let commie = {}
@@ -118,7 +121,11 @@ export const HistoryNavigator = (props) => {
             <Container>
                 <span className = "d-fl mb-12">
                     <Col md={8} className="mb-8">
-                        <DateTimeSlider start={start} onChange={userChangesTime} end={end} current={current} updated={currentCommit.time} />
+                        <DateTimeSlider start={start}
+                            onChange={userChangesTime}
+                            end={end}
+                            current={current}
+                            updated={currentCommit.time} />
                     </Col>
                     <Col md={1} className="mb-1"/>
                     <Col md={3} className="mb-3">
@@ -127,11 +134,10 @@ export const HistoryNavigator = (props) => {
                     
                 </span>
                 <span className = "d-fl mb-8 cc">
-                    {branch} - {ref} - {commitCount} - {start} - {end} - {current} - {currentCommit.author}                
+                    {branch} - {ref} - {commitCount} - {start} - {end} - {current} - {currentCommit.author}
                 </span>
             </Container>
         )
     }
     return null
 }
-
