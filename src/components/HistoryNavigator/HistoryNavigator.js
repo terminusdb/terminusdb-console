@@ -25,8 +25,22 @@ export const HistoryNavigator = (props) => {
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
 
+    //retrieves details of the available branches
+    useEffect(() => {
+        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
+        dbClient.query(q).then((results) => {
+            let wr = new TerminusClient.WOQLResult(results, q)
+            let bchoices = []
+            var res
+            while(res = wr.next()){
+               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
+            }
+            bchoices.push({value: "test", label: "test"})
+            setBranches(bchoices) 
+        })    
+    }, []);
 
-    const always = 1
+
     //retrieves details of the branch, only when the branch is changed
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClient)
@@ -43,21 +57,6 @@ export const HistoryNavigator = (props) => {
             }
         })
     }, [branch]);
-
-    //retrieves details of the available branches
-    useEffect(() => {
-        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
-        dbClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q)
-            let bchoices = []
-            var res
-            while(res = wr.next()){
-               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
-            }
-            bchoices.push({value: "test", label: "test"})
-            setBranches(bchoices) 
-        })    
-    }, [always]);
 
     //retrieves details of the commit with id ref 
     useEffect(() => {
@@ -89,37 +88,42 @@ export const HistoryNavigator = (props) => {
             dbClient.query(q3).then((lresults) => {
                 let lwr = new TerminusClient.WOQLResult(lresults, q3)
                 let lres = lwr.first()
-                let commie = {}
-                commie.id = (lres['CommitID']["@value"])
-                commie.time = parseFloat(lres['Time']["@value"])
-		        commie.author = lres['Author']["@value"]
-		        commie.message = lres['Message']["@value"]
-		        commie.parent = lres['Parent']["@value"]
-                commie.child = lres['Child']["@value"]
-                if(commie.child){
-                     dbClient.ref(commie.id)
+                if(lres){
+                    let commie = {}
+                    commie.id = (lres['CommitID']["@value"])
+                    commie.time = parseFloat(lres['Time']["@value"])
+                    commie.author = lres['Author']["@value"]
+                    commie.message = lres['Message']["@value"]
+                    commie.parent = lres['Parent']["@value"]
+                    commie.child = lres['Child']["@value"]
+                    if(commie.child){
+                        dbClient.ref(commie.id)
+                    }
+                    else dbClient.ref(false)
+                    if(commie.id != currentCommit.id){
+                         setCommit(commie)
+                         if(props.onHeadChange) props.onHeadChange()
+                    } 
                 }
-                else dbClient.ref(false)
-                if(commie.id != currentCommit.id) setCommit(commie)
-                //if(ref != commie.id) setRef(commie.id)
             })
         }
     }   
-
-    function userChangesCommand(ts){
-
-    }
 
     function changeBranch(bid){
         setBranch(bid)        
         dbClient.ref(false)
         dbClient.checkout(bid)
+        if(props.onHeadChange) props.onHeadChange()
+    }
+ 
+
+    function userChangesCommand(ts){
+
     }
 
-
-
+   
     if(dbClient.db() != "terminus"){
-        let cc = parseInt(currentCommit.time) || 0
+        let cc = currentCommit.time || 0
         return (
             <Container>
                 <span className = "d-fl mb-12">
