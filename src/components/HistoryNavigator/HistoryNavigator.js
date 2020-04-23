@@ -132,6 +132,7 @@ export const HistoryNavigator = (props) => {
         dbClient.checkout(bid)
     }
 
+
     if(dbClient.db() != "terminus"){
         let cc = parseInt(currentCommit.time) || 0
         return (
