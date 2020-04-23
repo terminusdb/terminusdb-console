@@ -6,8 +6,10 @@ import React, { useState, useEffect } from "react";
 import { subDays, startOfToday, addHours, startOfHour, format } from "date-fns";
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
+import { isObject } from "../../utils/helperFunctions"
 import { Container, Row, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
+import { CommitView } from "./CommitView"
 import { DateTimeSlider } from './DateTimeSlider'
 
 import TerminusClient from '@terminusdb/terminus-client';
@@ -19,11 +21,15 @@ export const HistoryNavigator = (props) => {
     const [ref, setRef] = useState(props.ref);
     const [start, setStart] = useState(props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000));
     const [end, setEnd] = useState(props.end || parseFloat(me.getTime()/1000));
+    const [last, setLast] = useState(props.last) || end;
     const [current, setCurrent] = useState(props.current || parseFloat(me.getTime()/1000));
     const [currentCommit, setCommit] = useState({});
     const [commitCount, setCommitCount] = useState(0);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
+    const [parent, setParent] = useState(props.parents || false) ;
+    const [child, setChild] = useState(props.child || false);
+
 
 
     const always = 1
@@ -37,6 +43,7 @@ export const HistoryNavigator = (props) => {
             let first = res['First']['@value'] || last
             let cc = ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1)
             setStart(parseFloat(first))
+            setLast(parseFloat(last))
             setCommitCount(cc)
             if(!ref){
                 setRef(res['HeadID']["@value"])
@@ -55,11 +62,11 @@ export const HistoryNavigator = (props) => {
                bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
             }
             bchoices.push({value: "test", label: "test"})
-            setBranches(bchoices) 
-        })    
+            setBranches(bchoices)
+        })
     }, [always]);
 
-    //retrieves details of the commit with id ref 
+    //retrieves details of the commit with id ref
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
@@ -73,6 +80,8 @@ export const HistoryNavigator = (props) => {
 		        commie.parent = cres['Parent']["@value"]
 		        commie.child = cres['Child']["@value"]
                 setCommit(commie)
+                if(commie.parent) setParent(commie.parent)
+                if(commie.child) setChild(commie.child)
                 if(dbClient.ref()) {
                     setCurrent(commie.time)
                 }
@@ -96,7 +105,9 @@ export const HistoryNavigator = (props) => {
 		        commie.message = lres['Message']["@value"]
 		        commie.parent = lres['Parent']["@value"]
                 commie.child = lres['Child']["@value"]
+                if(commie.parent) setParent(commie.parent)
                 if(commie.child){
+                     setChild(commie.child)
                      dbClient.ref(commie.id)
                 }
                 else dbClient.ref(false)
@@ -104,19 +115,17 @@ export const HistoryNavigator = (props) => {
                 //if(ref != commie.id) setRef(commie.id)
             })
         }
-    }   
+    }
 
     function userChangesCommand(ts){
 
     }
 
     function changeBranch(bid){
-        setBranch(bid)        
+        setBranch(bid)
         dbClient.ref(false)
         dbClient.checkout(bid)
     }
-
-
 
     if(dbClient.db() != "terminus"){
         let cc = parseInt(currentCommit.time) || 0
@@ -133,14 +142,22 @@ export const HistoryNavigator = (props) => {
                     <Col md={1} className="mb-1"/>
                     <Col md={3} className="mb-3">
                         <BranchSelector branch={branch} branches={branches} onChange={changeBranch}/>
-                    </Col>                    
-                    
+                    </Col>
+
                 </span>
+
+                {<CommitView setRef = {setRef}
+                    parent = {parent}
+                    child = {child}/>}
+
                 <span className = "d-fl mb-8 cc">
-                    {commitCount} total commits between - {format(new Date(start*1000), "yyyy-MMM-dd hh:mm:ss")} and 
+                    {commitCount} total commits between -
+                    {format(new Date(start*1000), "yyyy-MMM-dd hh:mm:ss")} and
                     - {format(new Date(end*1000), "yyyy-MMM-dd hh:mm:ss")}
                 </span>
-                <span>{currentCommit.id}, author: {currentCommit.author} message: {currentCommit.message} time {format(new Date(cc*1000), "yyyy-MMM-dd hh:mm:ss")}
+                <span>{currentCommit.id}, author: {currentCommit.author}
+                    message: {currentCommit.message}
+                    time {format(new Date(cc*1000), "yyyy-MMM-dd hh:mm:ss")}
                 </span>
             </Container>
         )

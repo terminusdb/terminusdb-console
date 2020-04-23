@@ -19,7 +19,7 @@ export const DateTimeSlider = (props) => {
         if(props.current && props.current != selectedTime) setSelected(props.current)
         if(props.updated && props.updated != updatedTime) setUpdated(props.updated)
         if(props.start && props.start != min) setMin(props.start)
-        if(props.end && props.end != max) setMax(props.end) 
+        if(props.end && props.end != max) setMax(props.end)
     }, [props])
 
 
@@ -40,7 +40,7 @@ export const DateTimeSlider = (props) => {
 
     const dateTicks = scaleTime()
       .domain([tsToDate(min), tsToDate(max)])
-      .ticks(8)
+      .ticks()
       .map(d => +d);
 
     const renderDateTime = (ts, header) => {
@@ -68,7 +68,6 @@ export const DateTimeSlider = (props) => {
         </span>
         <div style={{ margin: "20px 0px 0px 0px", height: 90, width: "90%" }}>
           <Slider mode={1}
-                  step={halfHour}
                   domain={[+tsToDate(min), +tsToDate(max)]}
                   rootStyle={sliderStyle}
                   onChange={onChange}
@@ -111,7 +110,7 @@ export const DateTimeSlider = (props) => {
               )}
             </Ticks>
           </Slider>
-        </div>        
+        </div>
       </div>
     );
 }
