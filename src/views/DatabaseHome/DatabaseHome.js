@@ -28,41 +28,13 @@ const DatabaseHome = (props) => {
     const { loading, user, isAuthenticated } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-	const [query, setQuery] = useState(false);
-    const isHead = false;
-	const [head, setHead] = useState(false);
-
-	const [updatedCommitButton, setUpdatedCommitButton] = useState(false);
+	const [created, setCreated]  =  useState(false);
+	const [commitInfo, setCommitInfo] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
 
-
-	//const [dataProvider] = hooks(query);
-
-	
-	/*useEffect(() => {
-		const q = getQuery(GET_COMMITS, dbClient);
-		setQuery(q);
-    }, [isHead]);
-
-	useEffect(() => {
-		if(isObject(dataProvider))
-			setHead(dataProvider.results.bindings[0].HeadID['@value'])
-    }, [dataProvider]);
-	*/
-    //const toggle = () => setIsOpen(!isOpen);
-
 	if (loading) return <Loading />;
 
-	const handlePreviousCommit = () => {
-		setBrId(parent)
-		setIsBranch(false)
-	}
-
-	const handleNextCommit = () => {
-		setBrId(child)
-		setIsBranch(false)
-	}
 
     return (
     	<Container fluid className="h-100 pl-0 pr-0">
@@ -71,13 +43,15 @@ const DatabaseHome = (props) => {
 			 	<hr className = "my-space-50" />
     	  	    <legend>{getCurrentDBName(dbClient)}</legend>
 				<hr className = "my-space-50"/>
-					<HistoryNavigator />				
+					<HistoryNavigator setCreated = {setCreated}
+						setCommitInfo = {setCommitInfo}/>
 				<hr className = "my-space-5"/>
 
 				 {isAuthenticated && <Tabs>
 				    <Tab label = {DETAILS_TAB}>
 					    <hr className = "my-space-15"/>
-						<Details/>
+						<Details created = { created }
+							commitInfo = { commitInfo }/>
 				    </Tab>
 				    <Tab label = {COLLABORATE_TAB}>
 						<hr className = "my-space-15"/>
@@ -92,7 +66,8 @@ const DatabaseHome = (props) => {
 				{(!isAuthenticated) && <Tabs>
 				   <Tab label = {DETAILS_TAB}>
 					   <hr className = "my-space-15"/>
-					   <Details/>
+					   <Details created = { created }
+						   commitInfo = { commitInfo }/>
 				   </Tab>
 			   </Tabs>}
 

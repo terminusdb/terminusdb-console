@@ -29,8 +29,8 @@ export const HistoryNavigator = (props) => {
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
     const [parent, setParent] = useState(props.parents || false) ;
     const [child, setChild] = useState(props.child || false);
-
-
+    const setCreated = props.setCreated;
+    const setCommitInfo = props.setCommitInfo;
 
     const always = 1
     //retrieves details of the branch, only when the branch is changed
@@ -43,6 +43,7 @@ export const HistoryNavigator = (props) => {
             let first = res['First']['@value'] || last
             let cc = ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1)
             setStart(parseFloat(first))
+            setCreated(parseFloat(first))
             setLast(parseFloat(last))
             setCommitCount(cc)
             if(!ref){
@@ -80,6 +81,7 @@ export const HistoryNavigator = (props) => {
 		        commie.parent = cres['Parent']["@value"]
 		        commie.child = cres['Child']["@value"]
                 setCommit(commie)
+                setCommitInfo(commie)
                 if(commie.parent) setParent(commie.parent)
                 if(commie.child) setChild(commie.child)
                 if(dbClient.ref()) {
@@ -111,7 +113,10 @@ export const HistoryNavigator = (props) => {
                      dbClient.ref(commie.id)
                 }
                 else dbClient.ref(false)
-                if(commie.id != currentCommit.id) setCommit(commie)
+                if(commie.id != currentCommit.id) {
+                    setCommit(commie)
+                    setCommitInfo(commie)
+                }
                 //if(ref != commie.id) setRef(commie.id)
             })
         }
@@ -152,12 +157,12 @@ export const HistoryNavigator = (props) => {
 
                 <span className = "d-fl mb-8 cc">
                     {commitCount} total commits between -
-                    {format(new Date(start*1000), "yyyy-MMM-dd hh:mm:ss")} and
-                    - {format(new Date(end*1000), "yyyy-MMM-dd hh:mm:ss")}
+                    {format(new Date(start*1000), "yyyy-MMM-dd hh:mm:ss a")} and
+                    - {format(new Date(end*1000), "yyyy-MMM-dd hh:mm:ss a")}
                 </span>
                 <span>{currentCommit.id}, author: {currentCommit.author}
                     message: {currentCommit.message}
-                    time {format(new Date(cc*1000), "yyyy-MMM-dd hh:mm:ss")}
+                    time {format(new Date(cc*1000), "yyyy-MMM-dd hh:mm:ss a")}
                 </span>
             </Container>
         )

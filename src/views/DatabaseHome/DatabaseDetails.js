@@ -9,24 +9,24 @@ import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
-import { AddIcon } from "../../components/LoadFontAwesome"
-import { EDIT } from '../../labels/iconLabels'
+import { format } from "date-fns";
 
 const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-
+     //commitInfo
 	// junk data, placeholders for now apply logic later
 	const dbStats = PRIVATE.label;
 	const clStats = CLONE.label;
 	const dbSize = '1092 triples';
-	const dbCreated = 'I AM HARD CODED';
-	const dbCreatedDate = '02 Feb 2020 19:00';
-	const dbModifiedBy = 'By Someone';
-	const dbModifiedDate = '05 Feb 2020 06:00';
-	const dbCommitMsg = 'Display commit message on db';
+	const dbCreated = props.created || false;
+	const formattedCreateDate = format(new Date(dbCreated*1000), "yyyy-MMM-dd hh:mm:ss a")
+	const dbModifiedBy = props.commitInfo.author || false;
+	const dbModifiedDate = props.commitInfo.time || false;
+	const formattedDbModifiedDate = format(new Date(dbModifiedDate*1000), "yyyy-MMM-dd hh:mm:ss a")
+	const dbCommitMsg = props.commitInfo.message || false;
 
     return (
         <Card>
@@ -34,7 +34,6 @@ const Details = (props) => {
 				<hr className="my-space-50"/>
 				<hr className="my-space-50"/>
 				<hr className="my-space-50"/>
-				<AddIcon icon={EDIT} className="d-f-ctrl"/>
 				<form onSubmit={handleSubmit()}>
 	            	<label className = { createDatabaseForm.id.label.className }
 	                    htmlFor = { createDatabaseForm.id.label.htmlFor }>
@@ -169,7 +168,7 @@ const Details = (props) => {
 					   </Col>
 					  <Col md={6} className="mb-6">
 						  <label htmlFor/>
-							   { dbCreated + ', ' + dbCreatedDate}
+							   { formattedCreateDate }
 					  </Col>
 				  </span>
 
@@ -182,7 +181,7 @@ const Details = (props) => {
 					  </Col>
 					 <Col md={6} className="mb-6">
 						 <label htmlFor/>
-							  { dbModifiedBy + ', ' + dbModifiedDate}
+							  { dbModifiedBy + ', ' + formattedDbModifiedDate}
 					 </Col>
 				 </span>
 
