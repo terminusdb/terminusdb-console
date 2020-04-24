@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Editor } from "./Editor"
-import { Library } from "./Library"
-import { LanguageFormatter } from "./LanguageFormatter"
-import { ActionButton } from "./ActionButton"
-import { ResultPane } from "./ResultPane"
-import { AutoExecute } from "./AutoExecute"
+import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
+import { useGlobalState } from "../../init/initializeGlobalState";
+import { getCurrentDBName, isObject, isArray } from "../../utils/helperFunctions"
+import { formatQuery } from "../../utils/format"
 import * as lang  from "../../labels/queryFormats";
 import * as tag from "../../labels/tags";
-import * as view from "../../labels/viewLabels"
-import { isObject, isArray } from "../../utils/helperFunctions";
-import { formatQuery } from "../../utils/format"
+import * as viewLabels from "../../labels/viewLabels"
+import TerminusClient from '@terminusdb/terminus-client';
+import { Editor } from "./Editor"
+import { ActionButton } from "./ActionButton"
+import { Library } from "./Library"
+import { PrintLanguage } from "./PrintLanguage"
+import { ResultPane } from "./ResultPane"
+import { Viewers } from "./Viewers"
 
 export const QueryPane = (props) => {
     // props
@@ -19,103 +22,84 @@ export const QueryPane = (props) => {
     const resultReport = props.resultReport || {};
     const resultPane = props.resultPane || {};
 
-    // query editor state
+    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+
+    // editor
     const [woql, setWoql] = useState(query);
-    const [inputQuery, setInputQuery] = useState(tag.BLANK);
-    const [formattedQuery, setFormattedQuery] = useState(tag.BLANK);
-    const [queryLanguage, setQueryLanguage] = useState(lang.WOQL_JS);
-    const [queryLangChange, setChangedQueryLang] = useState(lang.WOQL_JS);
+    const [formattedQuery, setFormattedQuery] = useState(false);
+    const [qLang, setqLang] = useState(lang.WOQL_JS)
+    const [inputQuery, setInputQuery] = useState(false);
+    const [queryObject, setQueryObject] = useState({});
 
-    //result pane state
-    const [resultData, setResultData] = useState({});
-    const [viewChange, setViewChange] = useState(view.GRAPH_VIEW);
-    const [inputRule, setInputRule] = useState(tag.BLANK);
-    const [ruleObject, setRuleObject] = useState({});
-    const [ruleLanguage, setRuleLanguage] = useState(lang.WOQL_JS);
-    const [ruleLangChange, setChangedRuleLang] = useState(lang.WOQL_JS);
-    const [formattedRule, setFormattedRule] = useState(tag.BLANK);
+    // rule
+    const view = TerminusClient.View.graph();
+    const [rule, setRule] = useState(view);
+    const [formattedRule, setFormattedRule] = useState(false);
+    const [rLang, setrLang] = useState(lang.WOQL_JS)
+    const [inputRule, setInputRule] = useState(false);
 
-    let queryAvail = false;
-    if(isObject(query)) queryAvail = true;
-    //query
+    const [results, setResults] = useState(result);
+    const [viewer, setViewer] = useState(viewLabels.GRAPH_VIEW);
+
+    // editor
     useEffect(() => {
-        if(isObject(woql)){
-            setChangedQueryLang(queryLanguage);
-            const q = formatQuery(woql, queryLanguage, tag.QUERY);
-            setFormattedQuery(q);
-        }
-        else setFormattedQuery(tag.BLANK);
-    }, [woql, queryLanguage]);
+        const q = formatQuery(woql, qLang, tag.QUERY);
+        setFormattedQuery(q);
+        dbClient.query(woql).then((results) => {
+            let wr = new TerminusClient.WOQLResult(results, woql)
+            if(wr.hasBindings()) setResults(wr)
+        })
+    }, [woql, qLang]);
 
-    // rules
+    // rule
     useEffect(() => {
-        if(isObject(inputRule)){
-            setChangedRuleLang(ruleLanguage);
-            const r = formatQuery(inputRule, ruleLanguage, tag.RULE);
-            setFormattedRule(r);
-        }
-        else setFormattedRule(tag.BLANK);
-    }, [ruleLanguage]);
+        const r = formatQuery(rule, rLang, tag.RULE);
+        setFormattedRule(r);
+    }, [rule, rLang]);
 
-    return(
+    return (
         <div className="q-pane">
-            {/*****  QUERY *****/}
-            {/*****  load editor component *****/}
-            {isObject(editor) && <Editor
-                query = { formattedQuery }
-                isQuery = { true }
+            {/********** editor ***********/}
+            {isObject(editor) && <Editor text = { formattedQuery }
                 edit = { editor.edit }
-                setInputQuery = { setInputQuery }/>}
-            {/*****  load Language Formatter component *****/}
-            {isArray(editor.languages) && <LanguageFormatter
-               setQueryLanguage = { setQueryLanguage }
-               isQuery = { true }
-               queryLanguages = { editor.languages }/>}
-             {/*****  load Library component *****/}
-             {isArray(editor.library) && <Library
+                setInputQuery = { setInputQuery }
+                isQuery = { true }/>}
+            {editor.submit && <ActionButton text = { editor.submit }
+                lang = { qLang }
+                inputQuery = { inputQuery }
+                setWoql = { setWoql }
+                isQuery = { true }/>}
+            {isArray(editor.library) &&  <Library
                 libs = { editor.library }
-                changeWoql = { setWoql }
+                setWoql = { setWoql }/>}
+            {isArray(editor.languages) &&  <PrintLanguage
+                languages = { editor.languages }
                 isQuery = { true }
-                setResultData = { setResultData }
-                library_autosubmit = { editor.library_autosubmit }/>}
-             {/*****  load Submit component *****/}
-             {isObject(editor) && editor.submit &&
-                 <ActionButton submit = { editor.submit }
-                    woql = { woql }
-                    queryLang = { queryLangChange }
-                    isQuery = { true }
-                    setResultData = { setResultData }
-                    inputQuery = { inputQuery }/>}
-
-             {/*****  RESULT *****/}
-             {/*****  load Result Pane component *****/}
-             {isObject(resultPane) &&
-                <ResultPane resultData = { resultData }
-                    ruleObject = { ruleObject }
-                    resultPane = { resultPane }
-                    setViewChange = { setViewChange }/>}
-             {/*****  load rule editor component *****/}
-             {isObject(resultPane) && resultPane.viewEditor.edit && <Editor
-                rule = { formattedRule }
+                setqLang = { setqLang }/>}
+            {/********** rule ***********/}
+            {isObject(resultPane) && <Editor text = { formattedRule }
                 edit = { resultPane.viewEditor.edit }
-                isRule = { true }
-                setInputRule = { setInputRule }/>}
-            {/*****  load rule Language Formatter component *****/}
-            {isObject(resultPane) && isArray(resultPane.viewEditor.languages) &&
-                <LanguageFormatter
-                   setRuleLanguage = { setRuleLanguage }
-                   isRule = { true }
-                   ruleLanguages = { resultPane.viewEditor.languages }/>}
-            {/*****  load rule update component *****/}
-            {isObject(resultPane) && resultPane.viewEditor.submit && <ActionButton
-                submit = { resultPane.viewEditor.submit }
-                ruleLang = { ruleLanguage }
-                isRule = { true }
-                setRuleObject = { setRuleObject }
-                inputRule = { inputRule }/>}
+                setInputRule = { setInputRule }
+                isQuery = { false }/>}
+            {resultPane.viewEditor.submit && <ActionButton
+                text = { resultPane.viewEditor.submit }
+                lang = { rLang }
+                inputRule = { inputRule }
+                setRule = { setRule }
+                isQuery = { false }/>}
+            {isArray(resultPane.viewEditor.languages) &&  <PrintLanguage
+                languages = { resultPane.viewEditor.languages }
+                isQuery = { false }
+                setrLang = { setrLang }/>}
+            {/********** viewers  ***********/}
+            {isObject(resultPane.view) && <Viewers
+                views = { resultPane.view }
+                setViewer = { setViewer }/>}
+            {/********** results  ***********/}
+            {isObject(results) && <ResultPane results = { results }
+                rule = { rule }
+                viewer = { viewer }/>}
 
-            {queryAvail && <AutoExecute query = { query }
-                setResultData = { setResultData }/>}
         </div>
     )
 }

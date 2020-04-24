@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 
 export const Viewers = (props) => {
     const views = props.views || [];
-    const setCurrentView = props.setCurrentView;
+    const setViewer = props.setViewer;
 
     let viewerPanel = [];
     views.map((items) => {
-        viewerPanel.push(<button onClick={ () => { setCurrentView(items)} }>
+        viewerPanel.push(<button onClick={ () => { setViewer(items)} }>
             { items }</button>);
     })
 
