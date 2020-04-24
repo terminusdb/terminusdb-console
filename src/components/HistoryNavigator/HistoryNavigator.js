@@ -30,7 +30,9 @@ export const HistoryNavigator = (props) => {
     const [commitCount, setCommitCount] = useState(0);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
-
+    
+    // no history for terminus (master) db
+    if(dbClient.db() == "terminus") return null
     //retrieves details of the available branches
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)

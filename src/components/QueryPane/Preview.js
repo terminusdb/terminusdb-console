@@ -21,20 +21,21 @@ export const Preview = (props) => {
 
 
     const editor = {edit: true,
-        submit: true,
-        languages: [WOQL_JS, WOQL_JSON],
-        library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
+        submit: 'Run Query',
+        /*library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
                   q.SHOW_ALL_CLASSES,
-                  q.SHOW_ALL_PROPERTIES],
+                  q.SHOW_ALL_PROPERTIES],*/
+        languages: [WOQL_JS, WOQL_JSON]
+       /* ,
         library_autosubmit: false,
-        submit: 'Run Query'
+        submit: 'Run Query'*/
     };
 
     const resultPane = {
         viewEditor: {
             edit: true,
-            languages: [WOQL_JS, WOQL_JSON],
-            submit: 'Update View'
+            submit: 'Update View',
+            languages: [WOQL_JS, WOQL_JSON]
         },
         view: [view.TABLE_VIEW, view.GRAPH_VIEW]
     }

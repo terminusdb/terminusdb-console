@@ -1,8 +1,10 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 import { QUERY, RULE } from "../labels/tags"
+import { isObject } from "../utils/helperFunctions"
 const TerminusClient = require('@terminusdb/terminus-client');
 
 export const formatQuery = (q, format, mode) => {
+    if(!isObject(q)) return;
     var serial = serialise(q, format, mode);
     return serial;
 }
@@ -24,7 +26,8 @@ const serialise = (q, format, mode) => {
 }
 
 export const parseText = (text, format, mode) =>{
-	const View = TerminusClient.View;
+    const View = TerminusClient.View;
+    var view;
     const WOQL = TerminusClient.WOQL;
     switch(format){
         case WOQL_JSON:

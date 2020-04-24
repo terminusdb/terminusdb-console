@@ -3,22 +3,14 @@ import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
 import { localSettings } from "./localSettings"
 import {Row,Grid} from "react-bootstrap"
-
+import TerminusClient from '@terminusdb/terminus-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
 
-consoleLib.initFontAwesome();
+//consoleLib.initFontAwesome();
 
 const App = (props) => {
-  const { user, loading,isAuthenticated } = consoleLib.useAuth0();
-
-  const userMETADATA= user || {};
-
-  const fluid =  !isAuthenticated ? {} : {fluid:true}
-
-  const pathName = window.location.pathname;
   const terminusClient = consoleLib.setTerminusClient(localSettings);
-
-  return (
+  return (   
     <Router history={consoleLib.history}>
         <Switch>
           <Route path = "/" exact component = {consoleLib.ServerHome} />
@@ -38,7 +30,6 @@ const App = (props) => {
         </Switch>
         {/*<Footer />*/}
     </Router>
-
   );
 };
 

@@ -11,8 +11,9 @@ export const DateTimeSlider = (props) => {
     const [max, setMax] = useState(props.end);
     const sliderStyle = {position: "relative",
                          width: "100%"};
+
     function formatTick(ms) {
-      return format(new Date(ms), "dd MMM yyyy");
+      return format(new Date(ms), "dd MMM yyyy hh:mm a");
     }
 
     useEffect(() => {
