@@ -395,12 +395,25 @@ export const push = {
     }
 }
 
-export const nextCommit = {
-    type: "submit",
-    text: "Next Commit"
-}
-
-export const previousCommit = {
-    type: "submit",
-    text: "Previous Commit"
+export const CommitViewerText = {
+    next: {
+        type: "submit",
+        text: "Next Commit"
+    },
+    previous: {
+        type: "submit",
+        text: "Previous Commit"
+    },
+    time: {
+        text: "Commit Time"
+    },
+    id: {
+        text: "Commit ID"
+    },
+    author: {
+        text: "Author"
+    },
+    message: {
+        text: "Message"
+    }
 }

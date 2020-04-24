@@ -14,6 +14,7 @@ import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import TerminusClient from '@terminusdb/terminus-client';
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
+import GraphFilter  from './GraphFilter'
 
 
 const Schema = (props) => {
@@ -56,8 +57,14 @@ const Schema = (props) => {
 	  })    
   }, []);
 
+
+  function loadGraphsFromResult(wr){
+	  
+  }
+
+
   function headChanged(){
-	  alert("head chnaged")
+	  alert("head chanaged")
 	  setRebuild(rebuild+1)
   }
 
@@ -78,9 +85,11 @@ const Schema = (props) => {
         <NavBar/>
   	    <Container className="flex-grow-1">
   	        <Col>
-				<div class="sch-disp">
+				<div className="sch-disp">
 					<HistoryNavigator onHeadChange={headChanged} />
-					schema: {gs}  instance: {is}
+					<div className="gsel">
+						<GraphFilter filter={graphFilter} graphs={graphs}/>
+					</div>
 					{hasSchema && 
 					<Tabs>
 					    <Tab label = {CLASSES_TAB}>
