@@ -114,6 +114,16 @@ export const HistoryNavigator = (props) => {
         setSettingCommit(true);
         setRef(cid)
     }
+    
+    //change the commit and change the time on the timeline to the commit time
+    function userCreatesBranch(bid){
+        //if(!dbClient.ref()) dbClient.ref(ref)
+        dbClient.branch(bid)
+        .then(() => {
+            changeBranch(bid)
+        })
+    }
+
 
     function extractCommitData(res){
         let commie = {}
@@ -151,7 +161,7 @@ export const HistoryNavigator = (props) => {
             </span>
             <span className = "d-fl mb-12">
                 <Col md={12} className="mb-12">
-                    <CommitView commit={currentCommit} setRef={userChangesCommit} />
+                    <CommitView commit={currentCommit} setRef={userChangesCommit} onBranch={userCreatesBranch} />
                 </Col>
             </span>
         </Container>

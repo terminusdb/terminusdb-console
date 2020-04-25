@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { CommitViewerText } from "../../variables/formLabels"
 import { Container, Row, Col } from "reactstrap";
 import Loading from "../../components/Loading";
 import { format } from "date-fns";
 
 export const CommitView = (props) => {
+
+    const [newBranch, setNewBranch] = useState("");
 
     function handleNextCommit(){
         props.setRef(props.commit.child)
@@ -13,6 +15,12 @@ export const CommitView = (props) => {
     function handlePreviousCommit(){
         props.setRef(props.commit.parent)
     }
+
+    function handleBranch(){
+        let nuid = newBranch.value
+        props.onBranch(nuid)
+    }
+
 
     if(!props.commit) return (<Loading />)
     return (
@@ -51,15 +59,26 @@ export const CommitView = (props) => {
             </Col>
             <Col md={3} className="mb-3">
                 { props.commit.child && 
-                    <button onClick={handleNextCommit}>
+                    <button className = { CommitViewerText.next.className }
+                        onClick={handleNextCommit}>
                         { CommitViewerText.next.text }
                     </button>
                 }
                 { props.commit.parent && 
-                <button onClick={handlePreviousCommit}>
-                        { CommitViewerText.previous.text }
+                <button className = { CommitViewerText.next.className }
+                    onClick={handlePreviousCommit}>
+                    { CommitViewerText.previous.text }
                 </button>
                 }
+                <button className = { CommitViewerText.branchButton.className }
+                    onClick={handleBranch}>
+                    { CommitViewerText.branchButton.text }
+                </button>
+                <input placeholder={ CommitViewerText.branchInput.text }
+                    className = { CommitViewerText.branchInput.className }
+                    ref={bid  => (setNewBranch(bid))}
+                    name = "branch-input"/>
+
             </Col>
         </span>
     )

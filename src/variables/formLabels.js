@@ -398,11 +398,13 @@ export const push = {
 export const CommitViewerText = {
     next: {
         type: "submit",
-        text: "Next Commit"
+        text: "Next Commit",
+        className: "btn btn-primary lead mt-4",
     },
     previous: {
         type: "submit",
-        text: "Previous Commit"
+        text: "Previous Commit",
+        className: "btn btn-primary lead mt-4",
     },
     time: {
         text: "Commit Time"
@@ -415,5 +417,15 @@ export const CommitViewerText = {
     },
     message: {
         text: "Message"
+    },
+    branchButton: {
+        type: "submit",
+        text: "Create New Branch",
+        className: "btn btn-primary lead mt-4",
+    },
+    branchInput: {
+        type: "submit",
+        text: "Branch ID",
+        className: "form"
     }
 }
