@@ -15,7 +15,6 @@ import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
 import Collaborate from './Collaborate'
 import ManageDatabase from './ManageDatabase'
-import { CommitButtons } from './CommitButtons'
 import { getQuery } from "../../utils/queryList"
 import { hooks } from "../../hooks"
 import { getCommitControl } from "../../utils/stateChange"
@@ -33,8 +32,17 @@ const DatabaseHome = (props) => {
 
     const toggle = () => setIsOpen(!isOpen);
 
+    useEffect(() => {
+        if(props.db && (props.db != dbClient.db())) dbClient.db(props.db) 
+        if(props.account && (props.account != dbClient.account())) dbClient.account(props.account) 
+    }, [props.db, props.account])
+
 	if (loading) return <Loading />;
 
+    if(props.db){
+        dbClient.db(props.db)
+        if(props.account) dbClient.account(props.account)
+    }
 
     return (
     	<Container fluid className="h-100 pl-0 pr-0">

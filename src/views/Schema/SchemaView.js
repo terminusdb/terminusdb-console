@@ -64,7 +64,6 @@ const Schema = (props) => {
 
 
   function headChanged(){
-	  alert("head chanaged")
 	  setRebuild(rebuild+1)
   }
 

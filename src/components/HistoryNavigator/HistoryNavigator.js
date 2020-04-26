@@ -3,34 +3,28 @@
  * any specific time / branch
  */
 import React, { useState, useEffect } from "react";
-import { subDays, startOfToday, startOfTomorrow, addHours, startOfHour } from "date-fns";
+import { subDays, startOfToday, addHours, startOfHour } from "date-fns";
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
 import CommitView from './CommitView'
-
 import TerminusClient from '@terminusdb/terminus-client';
-
 
 export const HistoryNavigator = (props) => {
     let nowts = props.now || parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
-    let timelinemax = props.end || parseFloat(startOfTomorrow().getTime()/1000)
     let timelinemin = props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000)
     const [branches, setBranches] = useState(props.branches);
     const [ref, setRef] = useState(props.ref);
     const [settingCommit, setSettingCommit] = useState(false);
-
-    const [start, setStart] = useState(timelinemin);
     const [end, setEnd] = useState(nowts);
-    const [last, setLast] = useState(nowts);
     const [current, setCurrent] = useState(nowts);
     const [currentCommit, setCommit] = useState();
-    const [commitCount, setCommitCount] = useState(0);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
-    
+    const [branchInfo, setBranchInfo] = useState({first: timelinemin, count: 0});
+
     // no history for terminus (master) db
     if(dbClient.db() == "terminus") return null
     //retrieves details of the available branches
@@ -43,26 +37,27 @@ export const HistoryNavigator = (props) => {
             while(res = wr.next()){
                bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
             }
-            bchoices.push({value: "test", label: "test"})
             setBranches(bchoices) 
         })    
     }, []);
 
     //retrieves details of the branch, only when the branch is changed
     useEffect(() => {
+        //alert("loading branch info for " + branch)
         const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClient)
         dbClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
             let res = wr.first()
-            let last = res['Last']['@value']
-            let first = res['First']['@value'] || last
-            let cc = ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1)
-            setStart(parseFloat(first))
-            setLast(parseFloat(last))
-            setCommitCount(cc)
-            if(!ref){
-                setRef(res['HeadID']["@value"])
-            }
+            setBranchInfo({
+                id: dbClient.checkout(),
+                last: res['Last']['@value'],
+                first: res['First']['@value'] || res['Last']['@value'],
+                head: res['HeadID']["@value"], 
+                count: ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1),
+                uri_prefix: res['Base_URI']['@value']
+            })            
+            setRef(res['HeadID']["@value"])
+            if(props.setCreated) props.setCreated(res['First']['@value'] || res['Last']['@value'])
         })
     }, [branch]);
 
@@ -80,6 +75,7 @@ export const HistoryNavigator = (props) => {
                     setSettingCommit(false)
                     if(props.onHeadChange) props.onHeadChange()
                 }
+                if(props.setCommitInfo) props.setCommitInfo(commie)
                 setCommit(commie)
             })
         }
@@ -100,9 +96,10 @@ export const HistoryNavigator = (props) => {
                         dbClient.ref(commie.id)
                     }
                     else dbClient.ref(false)
-                    if(commie.id != currentCommit.id){
+                    if(!currentCommit || commie.id != currentCommit.id){
                          setCommit(commie)
                          if(props.onHeadChange) props.onHeadChange()
+                         if(props.setCommitInfo) props.setCommitInfo(commie)
                     } 
                 }
             })
@@ -118,7 +115,7 @@ export const HistoryNavigator = (props) => {
     //change the commit and change the time on the timeline to the commit time
     function userCreatesBranch(bid){
         //if(!dbClient.ref()) dbClient.ref(ref)
-        dbClient.branch(bid)
+        dbClient.branch(bid, branchInfo.uri_prefix)
         .then(() => {
             changeBranch(bid)
         })
@@ -148,7 +145,7 @@ export const HistoryNavigator = (props) => {
         <Container>
             <span className = "d-fl mb-12">
                 <Col md={8} className="mb-8">
-                    <DateTimeSlider start={start}
+                    <DateTimeSlider start={branchInfo.first}
                         onChange={userChangesTime}
                         end={end}
                         current={current}
@@ -156,12 +153,12 @@ export const HistoryNavigator = (props) => {
                 </Col>
                 <Col md={1} className="mb-1"/>
                 <Col md={3} className="mb-3">
-                    <BranchSelector count={commitCount} created={start} branch={branch} branches={branches} onChange={changeBranch}/>
+                    <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
                 </Col>             
             </span>
             <span className = "d-fl mb-12">
                 <Col md={12} className="mb-12">
-                    <CommitView commit={currentCommit} setRef={userChangesCommit} onBranch={userCreatesBranch} />
+                    <CommitView commit={currentCommit} branch={branchInfo} setRef={userChangesCommit} onBranch={userCreatesBranch} />
                 </Col>
             </span>
         </Container>

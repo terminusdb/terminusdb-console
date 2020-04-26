@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { SliderRail, Handle, Track, Tick } from "./SliderComponents";
-import { subDays, startOfToday, format, startOfDay } from "date-fns";
 import { scaleTime } from "d3-scale";
+import {printts, DATETIME_SHORT} from "../../utils/dateFormats"
+
 
 export const DateTimeSlider = (props) => {
     const [selectedTime, setSelected] = useState(props.current);
@@ -13,7 +14,7 @@ export const DateTimeSlider = (props) => {
                          width: "100%"};
 
     function formatTick(ms) {
-      return format(new Date(ms), "dd MMM yyyy hh:mm a");
+      return printts(ms/1000, DATETIME_SHORT);
     }
 
     useEffect(() => {
@@ -46,7 +47,6 @@ export const DateTimeSlider = (props) => {
 
     const renderDateTime = (ts, header) => {
       if(ts){
-          let dd = tsToDate(ts)
           return (
               <div style={{ width: "100%",
                   textAlign: "center",
@@ -54,7 +54,7 @@ export const DateTimeSlider = (props) => {
                   display: "flex",
                   margin: '5px 40px 0px 0px'}}>
               <b>{header}:</b>
-              <div style={{ fontSize: 12, margin: '3px 0px 0px 10px'}}>{format(dd, "yyyy MM dd h:mm a")}</div>
+              <div style={{ fontSize: 12, margin: '3px 0px 0px 10px'}}>{printts(ts)}</div>
             </div>
           )
         }

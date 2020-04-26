@@ -38,9 +38,11 @@ const RenderTable = (props) => {
             case SERVER_HOME_PAGE.page:
                 var dbId = state['db'];
                 var account = state['account'];
-                history.replace('db/' + dbId);
-                dbClient.db(dbId);
-                dbClient.account(account);
+                //dbClient.connectionConfig.clearCursor()
+                //dbClient.db(dbId);
+                //dbClient.account(account);
+                if(dbId == "terminus") history.replace('db/' + dbId + "/");
+                history.replace('db/' + account + "/" + dbId + "/");
                 break;
             default:
                 console.log('RenderTable.js - Invalid page label')

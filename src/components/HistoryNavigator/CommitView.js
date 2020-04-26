@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CommitViewerText } from "../../variables/formLabels"
 import { Container, Row, Col } from "reactstrap";
 import Loading from "../../components/Loading";
-import { format } from "date-fns";
+import {printts, DATETIME_FULL} from "../../utils/dateFormats"
 
 export const CommitView = (props) => {
 
@@ -41,9 +41,9 @@ export const CommitView = (props) => {
                             {CommitViewerText.message.text } 
                         </Col>               
                     </Row>
-                    <Row style={{"font-size": "0.8em", overflow: "hidden"}}>
+                    <Row style={{"fontSize": "0.8em", overflow: "hidden"}}>
                         <Col sm={2}>
-                            {format(new Date(props.commit.time * 1000),"dd-MMM-yy HH:mm:ss")}        
+                            {printts(props.commit.time, DATETIME_FULL)}        
                         </Col>
                         <Col sm={3}>
                             {props.commit.id}        

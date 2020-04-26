@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
-import { format } from "date-fns";
+import {printts} from "../../utils/dateFormats"
 
 
 const BranchSelector = (props) => {
-    const [branch, setBranch] = useState(props.branch);
+    const [branchInfo, setBranchInfo] = useState(props.branch);
     const [branches, setBranches] = useState(props.branches);
 
     //update state whenever props change
     useEffect(() => {
         setBranches(props.branches) 
-        setBranch(props.branch) 
+        setBranchInfo(props.branch) 
     }, [props])
 
     function changeBranch(SelValue){
         let nub = SelValue.value
-        if(nub != branch){
+        if(nub != branchInfo.id){
             props.onChange(nub)
         }
     }
@@ -23,13 +23,13 @@ const BranchSelector = (props) => {
     if(branches && branches.length > 0) {
         return (
           <span>
-            <Select placeholder = {"Branch: " + branch}
+            <Select placeholder = {"Branch: " + branchInfo.id}
                 className = "brSeltr"
-                value = {branch}
+                value = {branchInfo.id}
                 onChange = {changeBranch}
                 options = {branches}/>
-            {props.created &&
-                <span>Created: {format(new Date(props.created * 1000), "dd-MMM-yy HH:mm")}, {props.count} Updates </span>
+            {props.branch.first &&
+                <span>Created: {printts(props.branch.first)}, {props.branch.count} Updates </span>
             }
             </span>
         )

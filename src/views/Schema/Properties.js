@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
-import { RENDER_TYPE_TABLE } from "../../labels/renderTypeLabels";
+import React, { useState, useEffect } from 'react';
 import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/RenderTable";
-import { SCHEMA_LIST_OF_PROPERTIES_QUERY } from '../../labels/queryLabels';
-import { QueryHook } from "../../hooks/QueryHook";
+import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
+import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
+import { useGlobalState } from "../../init/initializeGlobalState";
+import TerminusClient from '@terminusdb/terminus-client';
+import Loading from "../../components/Loading";
+
 
 export const Properties = (props) => {
+    const [filter, setFilter] = useState(props.graph)
+    const [dataProvider, setDataProvider] = useState()
+    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
-    const getDataProvider = () => {
-            const [dataResponse] = QueryHook(SCHEMA_LIST_OF_PROPERTIES_QUERY,
-                                             RENDER_TYPE_TABLE);
-            return dataResponse;
-    }
+    useEffect(() => {
+        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
+        setFilter(props.graph)
+    }, [props.graph])
+
+    useEffect(() => {
+        if(filter){
+            let gstr = filter.type + "/" + filter.gid
+            let q = TerminusClient.WOQL.limit(100).start(0, TerminusClient.WOQL.lib().propertyMetadata(gstr))
+            dbClient.query(q).then((cresults) => {
+                let cwr = new TerminusClient.WOQLResult(cresults, q)
+                let resultData = cwr.getBindings();
+                const columnConf = getColumnsForTable(resultData);
+                const columnData = getBindingData(resultData);
+                setDataProvider({columnData:columnData, columnConf:columnConf});            
+            })
+        }
+    }, [props.rebuild, filter]);
 
     return (
         <div className = "tab-co">
             <Card>
                 <CardBody>
-                    <RenderTable dataProvider = {getDataProvider()}/>
+                    {dataProvider && 
+                    <RenderTable dataProvider = {dataProvider}/>
+                    }
+                    {!dataProvider &&
+                    <Loading /> 
+                    }
                  </CardBody>
             </Card>
         </div>

@@ -24,7 +24,8 @@ export const DOWNLOAD_PAGE = {
 }
 
 export const DB_HOME_PAGE = {
-    page: '/db/*'
+    page: '/db/*',
+    label: "DB Home"
 }
 
 export const SCHEMA_PAGE = {

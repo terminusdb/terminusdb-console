@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
 import { Container } from "reactstrap";
 
 import PrivateRoute from "./components/PrivateRoute";
@@ -32,6 +32,7 @@ import "./App.css";
 import initFontAwesome from "./init/initFontAwesome";
 initFontAwesome();
 
+
 const App = (props) => {
   const { user, loading,isAuthenticated } = useAuth0();
 
@@ -50,7 +51,6 @@ const App = (props) => {
   //const pathName = window.location.pathname;
   setTerminusClient(localSettings).catch((error) => {
     console.log(error)
-    alert("Need a screen for irrecoverable errors - update your config ..."  + error)
   })
   
 

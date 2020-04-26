@@ -1,3 +1,3 @@
-export const WOQL_JS = "WOQL"
-export const WOQL_JSON = "WOQL-JSON"
-export const WOQL_PY = "WOQL-PY"
+export const WOQL_JS = "WOQL.js"
+export const WOQL_JSON = "JSON-LD"
+export const WOQL_PY = "WOQL.py"

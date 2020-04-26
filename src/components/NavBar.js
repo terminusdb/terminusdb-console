@@ -39,6 +39,7 @@ const NavBar = (props) => {
 
     if(props.resetDB) resetDB(dbClient);
 
+
     const usermy= user || {};
     const userMETADATA= user && user.user_metadata ? user.user_metadata : {};
 
@@ -46,6 +47,15 @@ const NavBar = (props) => {
         logout({
             returnTo: window.location.origin
     });
+
+    function dbBase(){
+        let dbb = "/db/"
+        if(dbClient && dbClient.db()){
+            if(dbClient.db() == "terminus") dbb += "terminus"
+            dbb += dbClient.account() + "/" + dbClient.db() 
+        }
+        return dbb
+    }
 
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
@@ -71,19 +81,19 @@ const NavBar = (props) => {
                         </div>
                         {isDBSet.dbId && !(props.resetDB) && <div className="d-flex db-al db-nav s-nav">
                             <Navs className = "mr-auto"
-                                  page = {DB_HOME_PAGE.page}
+                                  page = {dbBase()}
                                   activeClassName = "router-link-exact-active"
                                   label = {isDBSet.dbName}/>
                             <Navs className = "mr-auto"
-                                  page = {DOCUMENT_PAGE.page}
+                                  page = {dbBase() + DOCUMENT_PAGE.page}
                                   activeClassName = "router-link-exact-active"
                                   label = {DOCUMENT_PAGE.label}/>
                             <Navs className = "mr-auto"
-                                  page = {QUERY_PAGE.page}
+                                  page = {dbBase() + QUERY_PAGE.page}
                                   activeClassName = "router-link-exact-active"
                                   label = {QUERY_PAGE.label}/>
                             <Navs className = "mr-auto"
-                                  page = {SCHEMA_PAGE.page}
+                                  page = {dbBase() + SCHEMA_PAGE.page}
                                   activeClassName = "router-link-exact-active"
                                   label = {SCHEMA_PAGE.label}/>
                          </div>} </span>
