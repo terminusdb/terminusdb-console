@@ -40,7 +40,8 @@ const Details = (props) => {
 	                </label>
 	            	<input placeholder={ createDatabaseForm.id.input.placeholder }
 	                    className = { createDatabaseForm.id.input.className }
-	            		name = "database-id"
+                        name = "database-id"
+                        readOnly
 						value = {getCurrentDBID(dbClient)}
 	            		ref = { register({ validate: value => value.length > 0}) }/>
                     {errors.databaseID &&
@@ -52,7 +53,8 @@ const Details = (props) => {
 	            	    { createDatabaseForm.databaseName.label.text }
 	                </label>
 	            	<input name= "database-name" value = {getCurrentDBName(dbClient)}
-	            	   className = { createDatabaseForm.databaseName.input.className }
+                       className = { createDatabaseForm.databaseName.input.className }
+                       readOnly
 	            	   placeholder = { createDatabaseForm.databaseName.input.placeholder }
 	            	   ref = { register({ validate: value => value.length > 0}) }/>
                     { errors.databaseName &&
@@ -65,7 +67,8 @@ const Details = (props) => {
 	            	</label>
 
 					<textarea name = "database-description"
-						className = { createDatabaseForm.databaseDescr.input.className }
+                        className = { createDatabaseForm.databaseDescr.input.className }
+                        readOnly
 	            	    placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
 	                    ref={register} />
 
@@ -75,7 +78,8 @@ const Details = (props) => {
 						<hr className = "my-space-25"/>
 						<span className="d-fl">
 		   				     <Col md={1} className="mb-1">
-		   		                 <input type="radio"
+                                <input type="radio"
+                                    readOnly
 		   		                    name="database-radio-private"
 		   		                    checked={dbStats === PRIVATE.label}/>
 		   					</Col>
@@ -85,7 +89,7 @@ const Details = (props) => {
 								</label>
 		   					</Col>
 		   					<Col md={1} className="mb-1">
-		   						<input type="radio" checked={dbStats === PUBLIC.label} name="database-radio-public"/>
+		   						<input type="radio" readOnly checked={dbStats === PUBLIC.label} name="database-radio-public"/>
 		   					</Col>
 		   				    <Col md={4} className="mb-4">
 		   					    <label htmlFor= "database-radio-public">
@@ -102,7 +106,7 @@ const Details = (props) => {
                     {isAuthenticated &&
                         <span className="d-fl">
                             <Col md={1} className="mb-1">
-                                <input type="radio" name="database-master" checked={clStats === MASTER.label}/>
+                                <input readOnly type="radio" name="database-master" checked={clStats === MASTER.label}/>
                             </Col>
                             <Col md={3} className="mb-3">
                                 <label htmlFor = "database-master">
@@ -110,7 +114,7 @@ const Details = (props) => {
                                 </label>
                             </Col>
                             <Col md={3} className="mb-3">
-                                <input placeholder={ database.master.placeholder } 
+                                <input readOnly placeholder={ database.master.placeholder } 
                                     name = "database-master-name"
                                     className = { database.master.className }
                                     ref = { register }/>
@@ -121,7 +125,7 @@ const Details = (props) => {
 					{isAuthenticated &&
 						<span className="d-fl">
 		   					<Col md={1} className="mb-1">
-		   						<input type="radio" checked={clStats === CLONE.label} name = "database-clone"/>
+		   						<input readOnly type="radio" checked={clStats === CLONE.label} name = "database-clone"/>
 		   					</Col>
 		   				   <Col md={3} className="mb-3">
 		   					   <label htmlFor = "database-clone">
@@ -129,7 +133,7 @@ const Details = (props) => {
 							   </label>
 		   				   </Col>
 						   <Col md={3} className="mb-3">
-							   <input placeholder={ database.clone.placeholder }
+							   <input readOnly placeholder={ database.clone.placeholder }
 								   className = { database.clone.className }
                                    name = "database-clone-name" 
                                    ref = { register }/>

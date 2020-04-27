@@ -18,11 +18,21 @@ const GraphFilter = (props) => {
         }
     }
 
-    function graphOptions(garr){
+    function graphOptions(grs){
         let opts = []
-        for(var i = 0; i< graphs.schema.length ; i++){
-
+        if(grs.schema.length > 1) opts.push({label: graphLabel("schema/*"), "value": "schema/*"})
+        for(var i = 0; i< grs.schema.length ; i++){
+            opts.push({
+                label: graphLabel({type: "schema", gid: grs.schema[i]}), value: "schema/" + grs.schema[i] 
+            })
         }
+        if(grs.inference.length > 1) opts.push({label:  graphLabel({type: "inference", gid: "*"}), "value": "inference/*"})
+        for(var i = 0; i< grs.inference.length ; i++){
+            opts.push({
+                label: graphLabel({type: "inference", gid: grs.inference[i]}), value: "inference/" + grs.inference[i] 
+            })
+        }
+        return opts
     }
 
     function hasSchema(){
@@ -32,13 +42,17 @@ const GraphFilter = (props) => {
     }
 
     function graphLabel(f){
-        
+        if(f.type == "schema" && f.gid == "*") return "All Schema Graphs"
+        else if(f.type == "inference" && f.gid == "*") return "All Inference Graphs"
+        else {
+            if(f.type == "schema") return "Schema Graph " + f.gid
+            else return "Inference Graph " + f.gid
+        }        
     }
 
     function filterString(filter){
         return filter.type + "/" + filter.gid
     }
-
 
     if(hasSchema() && filter) {
         return (
