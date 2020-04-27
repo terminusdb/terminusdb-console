@@ -14,7 +14,8 @@ const GraphFilter = (props) => {
     function changeFilter(SelValue){
         let nub = SelValue.value
         if(nub !=  filterString(filter)){
-            props.onChange(nub)
+            let bits = nub.split("/")
+            if(props.onChange) props.onChange({type: bits[0], gid: bits[1]})
         }
     }
 

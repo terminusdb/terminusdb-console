@@ -80,6 +80,10 @@ const Schema = (props) => {
 	setRebuild(rebuild+1)
   }
 
+  function graphFilterChanged(newFilter){
+    setGraphFilter(newFilter)
+  }
+
 
   const toggle = () => setIsOpen(!isOpen);
   
@@ -96,7 +100,7 @@ const Schema = (props) => {
 				<div className="sch-disp">
 					<HistoryNavigator onHeadChange={headChanged} />
 					<div className="gsel">
-						<GraphFilter filter={graphFilter} graphs={graphs}/>
+						<GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
 					</div>
 					{hasSchema && 
 					<Tabs>
