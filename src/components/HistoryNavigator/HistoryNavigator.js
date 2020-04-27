@@ -13,6 +13,8 @@ import CommitView from './CommitView'
 import TerminusClient from '@terminusdb/terminus-client';
 
 export const HistoryNavigator = (props) => {
+	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    if(dbClient.db() == "terminus") return null
     let nowts = props.now || parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
     let timelinemin = props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000)
     const [branches, setBranches] = useState(props.branches);
@@ -21,12 +23,10 @@ export const HistoryNavigator = (props) => {
     const [end, setEnd] = useState(nowts);
     const [current, setCurrent] = useState(nowts);
     const [currentCommit, setCommit] = useState();
-	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
     const [branchInfo, setBranchInfo] = useState({first: timelinemin, count: 0});
 
     // no history for terminus (master) db
-    if(dbClient.db() == "terminus") return null
     //retrieves details of the available branches
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
