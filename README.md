@@ -8,7 +8,7 @@ The dashboard requires terminus-client, terminus-react-table and terminus-react-
 
 As of to install terminusdb-console locally, follow the below steps:-
 
-* Clone terminus-client from https://github.com/terminusdb, then cd into the root dir and run: 
+* Clone terminus-client from https://github.com/terminusdb/terminus-client, then cd into the root dir and run: 
 `npm install`
 And all of the dependencies should be automatically installed
 
