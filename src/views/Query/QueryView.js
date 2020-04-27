@@ -29,11 +29,11 @@ const Query = (props) => {
   };
 
   const resultPane = {
-      viewEditor: {
+      /*viewEditor: {
           edit: true,
           submit: 'Update View',
           languages: [WOQL_JS, WOQL_JSON]
-      },
+      },*/
       view: [view.TABLE_VIEW, view.GRAPH_VIEW]
   }
 
