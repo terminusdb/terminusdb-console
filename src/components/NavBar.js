@@ -52,7 +52,7 @@ const NavBar = (props) => {
         let dbb = "/db/"
         if(dbClient && dbClient.db()){
             if(dbClient.db() == "terminus") dbb += "terminus"
-            dbb += dbClient.account() + "/" + dbClient.db() 
+            else dbb += dbClient.account() + "/" + dbClient.db() 
         }
         return dbb
     }
