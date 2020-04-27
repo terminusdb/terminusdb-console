@@ -40,10 +40,6 @@ const Commit = (props) => {
             			   <p className = { commit.act.error.className }>
             			   { commit.act.error.text }</p>}
 
-          <button className = { commit.action.className }
-              type =  { commit.action.type } >
-              { commit.action.text }
-          </button>
 
       </form> </>
     )

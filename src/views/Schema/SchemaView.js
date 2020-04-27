@@ -5,17 +5,16 @@ import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
 import NavBar from '../../components/NavBar';
 import { Tabs, Tab } from 'react-bootstrap-tabs';
-import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB } from "../../labels/tabLabels"
+import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB, GRAPHS_TAB } from "../../labels/tabLabels"
 import { Classes } from './Classes'
 import { Properties } from './Properties'
 import { OWL } from './OWL'
-import Commit from '../../components/Commit'
+import { GraphMaker } from './GraphMaker'
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import TerminusClient from '@terminusdb/terminus-client';
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
 import GraphFilter  from './GraphFilter'
-
 
 const Schema = (props) => {
   const { loading, user } = useAuth0();
@@ -27,7 +26,6 @@ const Schema = (props) => {
   const [rebuild, setRebuild] = useState(0);
   const [hasSchema, setHasSchema] = useState(false);
 
-   
   //retrieves details of the available graphs on mount
   useEffect(() => {
 	  const q = TerminusClient.WOQL.lib().loadBranchGraphNames(dbClient)
@@ -51,17 +49,13 @@ const Schema = (props) => {
 		  setGraphs({schema: gschema, instance: ginstances, inference: ginf})
 		  if(!graphFilter){
 			  if(gschema.length || ginf.length) setHasSchema(true)
-			  if(gschema.length) setGraphFilter({type: "schema", gid: "*"})
-			  else if(ginf.length) setGraphFilter({type: "inference", gid: "*"})
+			  if(gschema.length > 1) setGraphFilter({type: "schema", gid: "*"})
+			  else if(gschema.length) setGraphFilter({type: "schema", gid: gschema[0]})
+			  else if(ginf.length > 1) setGraphFilter({type: "inference", gid: "*"})
+			  else if(ginf.length) setGraphFilter({type: "inference", gid: ginf[0]})
 		  }
 	  })    
   }, []);
-
-
-  function loadGraphsFromResult(wr){
-	  
-  }
-
 
   function headChanged(){
 	  setRebuild(rebuild+1)
@@ -100,12 +94,10 @@ const Schema = (props) => {
 							<Properties graph={graphFilter} rebuild={rebuild}/>
 						</Tab>
 						<Tab label = {OWL_TAB}>
-							<hr className = "my-space-15"/>
-							<Commit graph={graphFilter} rebuild={rebuild}/>
-							<hr className = "my-space-100"/>
-							<hr className = "my-2"/>
-							<hr className = "my-space-15"/>
 							<OWL graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
+						</Tab>
+						<Tab label = {GRAPHS_TAB}>
+							<GraphMaker graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
 						</Tab>
 					</Tabs>
 					}

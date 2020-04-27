@@ -1,57 +1,81 @@
-import React, { useState } from "react";
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from "react";
 import { editSchema } from "../variables/formLabels"
-import { APICallsHook } from "../hooks/APICallsHook"
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/base16-light.css');
 require('codemirror/mode/turtle/turtle.js');
-import { UPDATE_SCHEMA }  from '../labels/apiLabels'
+import { commit } from "../variables/formLabels"
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
 export const RenderSnippet = (props) => {
-    const { register, handleSubmit, errors } = useForm();
-    let data = props.dataProvider || {};
     let action = props.edit || false;
-    const [content, setContent] = useState(data.response);
-    const [updatedSchema, setSchema] = useState('');
+    const [content, setContent] = useState(props.dataProvider);
+    const [commitMsg, setCommitMsg] = useState();
     const [edit, setEdit] = useState(action);
-    const [options, setOptions] = useState({mode: 'turtle',
+
+    const readMode = {
+        mode: 'turtle',
         theme: 'base16-light',
         readOnly: 'nocursor',
-        lineNumbers: true});
-
-    const [dataResponse, loading] = APICallsHook(UPDATE_SCHEMA,
-                                                null,
-                                                updatedSchema);
-
-    const handleUpdate = (ev) => {
-        setEdit(false);
-        setSchema(content);
-        setOptions({mode: 'turtle',
-            theme: 'base16-light',
-            readOnly: 'nocursor',
-            lineNumbers: true})
+        lineNumbers: true
     }
+
+    const writeMode = {
+        mode: 'turtle',
+        theme: 'base16-light',
+        readOnly: false,
+        lineNumbers: true
+    }
+
+    const [options, setOptions] = useState(readMode);
+
+    useEffect(() => {
+        if(props.dataProvider) setContent(props.dataProvider)
+        setEdit(props.edit)
+    }, [props])
+
 
     const handleCancel = (ev) => {
         setEdit(false);
-        setContent(data.response)
-        setOptions({mode: 'turtle',
-            theme: 'base16-light',
-            readOnly: 'nocursor',
-            lineNumbers: true})
+        setContent(props.dataProvider || {})
+        setOptions(readMode)
+    }
+
+    const handleUpdate = (ev) => {
+        if(!commitMsg.value){
+            alert("error here no commit")
+        }
+        else {
+            props.onChange(content, commitMsg.value)
+        }
     }
 
     const handleEdit = (ev) => {
         setEdit(true);
-        setOptions({mode: 'turtle',
-            theme: 'base16-light',
-            readOnly: false,
-            lineNumbers: true})
+        setOptions(writeMode)
     }
+
     return (
         <>
+            <CodeMirror
+                value={content}
+                options={options}
+                onBeforeChange={(editor, data, value) => {
+                    setContent(value);
+                }}
+                onChange={(editor, data, value) => {
+                    setContent(value);
+                }}
+            />
+            {(edit) && <>
+                <hr className = "my-space-15"/>
+                <hr className = "my-space-100"/>
+            	<textarea placeholder={ commit.act.input.placeholder }
+                    className = { commit.act.input.className }
+                    ref={cmsg  => (setCommitMsg(cmsg))}/>
+                <hr className = "my-2"/>
+                <hr className = "my-space-15"/>
+            </>}
             {(!edit) && <button className = { editSchema.edit.className }
                 type =  { editSchema.edit.type }
                 onClick = {handleEdit}>
@@ -66,19 +90,9 @@ export const RenderSnippet = (props) => {
             {(edit) && <button
                 className = { editSchema.cancel.className }
                 type =  { editSchema.cancel.type }
-                onClick = {handleUpdate}>
+                onClick = {handleCancel}>
                 { editSchema.cancel.text } </button>
             }
-            <CodeMirror
-                  value={content}
-                  options={options}
-                  onBeforeChange={(editor, data, value) => {
-                    setContent(value);
-                  }}
-                  onChange={(editor, data, value) => {
-                    setContent(value);
-                  }}
-                />
         </>
     )
 }

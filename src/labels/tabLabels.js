@@ -2,6 +2,7 @@
 export const CLASSES_TAB = "Classes"
 export const PROPERTIES_TAB = "Properties"
 export const OWL_TAB = "OWL"
+export const GRAPHS_TAB = "Graphs"
 
 /* database home tabs */
 export const DETAILS_TAB = 'Details'
