@@ -24,7 +24,7 @@
   "scripts": {
     "build-es6": "rimraf es6 && cross-env NODE_ENV=es6 babel ./src -d es6 --extensions '.js'",
     "build": "npm run build-es6 && webpack --mode production",
-    "buildConsole": "webpack --mode production --config console/webpack.config.js", 
+    "buildConsole": "webpack --mode production --config console/webpack.config.js",
     "start": "webpack-dev-server --mode development --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js --history-api-fallback",
     "test": "exit 0",
     "lint": "eslint src",

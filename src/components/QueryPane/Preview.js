@@ -1,3 +1,6 @@
+
+/*********************   dont delete this ... this is for kittys testing  ***********************************/
+
 import React, { useState, useEffect } from "react";
 import { QueryPane } from "./QueryPane";
 import TerminusClient from '@terminusdb/terminus-client';
@@ -53,7 +56,6 @@ export const Preview = (props) => {
                	</button>
             </form>
             {qp && <QueryPane editor = { editor }
-                query = { query }
                 resultPane = { resultPane }/>}
         </>
     )

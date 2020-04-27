@@ -39,7 +39,7 @@ export const QueryPane = (props) => {
     const [inputRule, setInputRule] = useState(false);
 
     const [results, setResults] = useState(result);
-    const [viewer, setViewer] = useState(viewLabels.GRAPH_VIEW);
+    const [viewer, setViewer] = useState(viewLabels.TABLE_VIEW);
 
     // editor
     useEffect(() => {
