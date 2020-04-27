@@ -24,11 +24,11 @@ If any changes are made by you locally, in order to reflect this in terminusdb-c
 
 * Clone this repo (terminusdb-console), then cd into the root dir and run: 
     Locally install the above dependencies for terminus-client, terminus-react-table and terminus-react-graph
-    * [ ] `npm install --nosave ../terminus-client`
-* [ ]     `npm install --nosave ../terminus-react-table`
-* [ ]     `npm install --nosave ../terminus-react-graph`
-* [ ]     `npm install`
-
+ 1. `npm install --nosave ../terminus-client`
+1. * [ ]     `npm install --nosave ../terminus-react-table`
+1. * [ ]     `npm install --nosave ../terminus-react-graph`
+1. * [ ]     `npm install`
+1.  
 And all of the dependencies should be automatically installed
 
 * To run this on http://localhost:3005/
