@@ -44,7 +44,7 @@ export const getQuery = (queryName, dbClient) =>{
             return WOQL.lib().elementMetadata();
 
        case query.SHOW_ALL_CLASSES:
-            return WOQL.lib().classMetadata();
+            return WOQL.lib().classList();
 
        case query.SHOW_DOCUMENT_CLASSES:
             return WOQL.lib().concreteDocumentClasses();
@@ -63,7 +63,7 @@ export const getQuery = (queryName, dbClient) =>{
                    WOQL.not().triple("v:Tail",  "ref:commit_parent", "v:Any"),
                    WOQL.triple("v:Tail",  "ref:commit_id", "v:TailID"),
                    WOQL.triple("v:Tail",  "ref:commit_timestamp", "v:TailID"),
-                   
+
                 )
 
        case query.GET_BRANCH_LIST:

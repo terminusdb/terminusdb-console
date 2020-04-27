@@ -19,9 +19,10 @@ const Query = (props) => {
 
   const editor = {edit: true,
       submit: 'Run Query',
-      /*library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
+      library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
                 q.SHOW_ALL_CLASSES,
-                q.SHOW_ALL_PROPERTIES],*/
+                q.SHOW_ALL_PROPERTIES,
+                q.SHOW_DOCUMENT_CLASSES],
       languages: [WOQL_JS, WOQL_JSON]
      /* ,
       library_autosubmit: false,*/
@@ -41,11 +42,13 @@ const Query = (props) => {
       const {qp, setQp} = props.pstate;
       const [open, setOpen] = useState(true);
       return (<div className="query-box">
+
                 <QueryPane editor = { editor }
                     resultPane = { resultPane }/>
+
                   <button className = { queryControls.newQuery.className }
                       type =  { queryControls.newQuery.type }
-                      onClick={() => { setQp([...qp, qp.length]);}}>
+                      onClick={() => { setQp([...qp, qp.length]) }}>
                       {queryControls.newQuery.text}
                   </button>
             </div>);

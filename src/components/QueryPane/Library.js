@@ -10,7 +10,7 @@ export const Library = (props) => {
 
     libs.map((items) => {
         libButtons.push(
-          <Button onClick = { () => {
+          <Button key = { items } onClick = { () => {
               const q = getQuery(items);
               setWoql(q)
           }}>{ items } </Button>

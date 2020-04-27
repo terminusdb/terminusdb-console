@@ -11,7 +11,7 @@ export const PrintLanguage = (props) => {
 
     languages.map((lang) => {
         btns.push(
-          <Button onClick = { (ev) => {
+          <Button key = { lang } onClick = { (ev) => {
              if(isQuery) setqLang(lang)
              else setrLang(lang)
            }}>{ lang }</Button>

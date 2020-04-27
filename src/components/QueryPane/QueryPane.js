@@ -29,10 +29,9 @@ export const QueryPane = (props) => {
     const [formattedQuery, setFormattedQuery] = useState(false);
     const [qLang, setqLang] = useState(lang.WOQL_JS)
     const [inputQuery, setInputQuery] = useState(false);
-    const [queryObject, setQueryObject] = useState({});
 
     // rule
-    const view = TerminusClient.View.graph();
+    const view = TerminusClient.View.table();
     const [rule, setRule] = useState(view);
     const [formattedRule, setFormattedRule] = useState(false);
     const [rLang, setrLang] = useState(lang.WOQL_JS)
@@ -43,12 +42,14 @@ export const QueryPane = (props) => {
 
     // editor
     useEffect(() => {
-        const q = formatQuery(woql, qLang, tag.QUERY);
-        setFormattedQuery(q);
-        dbClient.query(woql).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, woql)
-            if(wr.hasBindings()) setResults(wr)
-        })
+        if(isObject(woql)){
+            const q = formatQuery(woql, qLang, tag.QUERY);
+            setFormattedQuery(q);
+            dbClient.query(woql).then((results) => {
+                let wr = new TerminusClient.WOQLResult(results, woql)
+                if(wr.hasBindings()) setResults(wr)
+            })
+        }
     }, [woql, qLang]);
 
     // rule
@@ -64,7 +65,7 @@ export const QueryPane = (props) => {
                 edit = { editor.edit }
                 setInputQuery = { setInputQuery }
                 isQuery = { true }/>}
-            {editor.submit && <ActionButton text = { editor.submit }
+            {isObject(editor) && editor.submit && <ActionButton text = { editor.submit }
                 lang = { qLang }
                 inputQuery = { inputQuery }
                 setWoql = { setWoql }
@@ -77,23 +78,30 @@ export const QueryPane = (props) => {
                 isQuery = { true }
                 setqLang = { setqLang }/>}
             {/********** rule ***********/}
-            {isObject(resultPane) && <Editor text = { formattedRule }
-                edit = { resultPane.viewEditor.edit }
-                setInputRule = { setInputRule }
-                isQuery = { false }/>}
-            {resultPane.viewEditor.submit && <ActionButton
-                text = { resultPane.viewEditor.submit }
-                lang = { rLang }
-                inputRule = { inputRule }
-                setRule = { setRule }
-                isQuery = { false }/>}
-            {isArray(resultPane.viewEditor.languages) &&  <PrintLanguage
-                languages = { resultPane.viewEditor.languages }
-                isQuery = { false }
-                setrLang = { setrLang }/>}
+            {(isObject(resultPane.viewEditor)) &&
+                (resultPane.viewEditor.edit) &&
+                <Editor text = { formattedRule }
+                    edit = { resultPane.viewEditor.edit }
+                    setInputRule = { setInputRule }
+                    isQuery = { false }/>}
+            {(isObject(resultPane.viewEditor)) &&
+                (resultPane.submit != tag.BLANK) &&
+                <ActionButton
+                    text = { resultPane.viewEditor.submit }
+                    lang = { rLang }
+                    inputRule = { inputRule }
+                    setRule = { setRule }
+                    isQuery = { false }/>}
+            {(isObject(resultPane.viewEditor)) &&
+                isArray(resultPane.viewEditor.languages) &&
+                <PrintLanguage
+                    languages = { resultPane.viewEditor.languages }
+                    isQuery = { false }
+                    setrLang = { setrLang }/>}
             {/********** viewers  ***********/}
             {isObject(resultPane.view) && <Viewers
                 views = { resultPane.view }
+                setRule = { setRule }
                 setViewer = { setViewer }/>}
             {/********** results  ***********/}
             {isObject(results) && <ResultPane results = { results }
