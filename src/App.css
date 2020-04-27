@@ -1113,7 +1113,9 @@ a {
 }
 
 #qsLoginBtn{
-    margin-right: -200px;
+    /*margin-right: -200px;*/
+    margin: 10px 0px 10px 5px;
+    float: right;
 }
 
 legend {
