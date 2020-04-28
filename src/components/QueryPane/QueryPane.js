@@ -37,6 +37,7 @@ export const QueryPane = (props) => {
     const [formattedRule, setFormattedRule] = useState(false);
     const [rLang, setrLang] = useState(lang.WOQL_JS)
     const [inputRule, setInputRule] = useState(false);
+    const [showRuleClosable, setShowRuleClosable] = useState(true);
 
     const [results, setResults] = useState(result);
     const [viewer, setViewer] = useState(viewLabels.TABLE_VIEW);
@@ -101,9 +102,10 @@ export const QueryPane = (props) => {
                 <Editor text = { formattedRule }
                     editor = { resultPane.viewEditor }
                     setInputRule = { setInputRule }
+                    setShowRuleClosable = { setShowRuleClosable }
                     isQuery = { false }/>}
             {(isObject(resultPane.viewEditor)) &&
-                (resultPane.submit != tag.BLANK) &&
+                (resultPane.submit != tag.BLANK) && showRuleClosable &&
                 <ActionButton
                     text = { resultPane.viewEditor.submit }
                     lang = { rLang }
@@ -111,7 +113,7 @@ export const QueryPane = (props) => {
                     setRule = { setRule }
                     isQuery = { false }/>}
             {(isObject(resultPane.viewEditor)) &&
-                isArray(resultPane.viewEditor.languages) &&
+                isArray(resultPane.viewEditor.languages) && showRuleClosable &&
                 <PrintLanguage
                     languages = { resultPane.viewEditor.languages }
                     isQuery = { false }

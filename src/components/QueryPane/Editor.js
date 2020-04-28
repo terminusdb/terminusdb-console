@@ -11,6 +11,7 @@ export const Editor = (props) => {
     const edit = props.editor.edit || false;
     const text = props.text || tag.BLANK;
     const isQuery = props.isQuery || false;
+    const setShowRuleClosable = props.setShowRuleClosable;
 
     const [content, setContent] = useState(tag.BLANK);
     const setInputQuery = props.setInputQuery;
@@ -39,10 +40,12 @@ export const Editor = (props) => {
         setShowRule(true)
         setShowClose(false)
         setShowCodeMirror(false)
+        setShowRuleClosable(false);
     }
 
     const handleShowRule = () => {
         setShowRule(false)
+        setShowRuleClosable(true);
         setShowClose(true)
         setShowCodeMirror(true)
     }
