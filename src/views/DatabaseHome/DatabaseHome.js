@@ -24,25 +24,30 @@ import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavig
 import * as tag from "../../labels/tags"
 
 const DatabaseHome = (props) => {
-    const { loading, user, isAuthenticated } = useAuth0();
+    const { user, isAuthenticated } = useAuth0();
     const [isOpen, setIsOpen] = useState(false);
 	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 	const [created, setCreated]  =  useState(false);
 	const [commitInfo, setCommitInfo] = useState(false);
+	const [loading, setLoading] = useState(true)
 
     const toggle = () => setIsOpen(!isOpen);
 
     useEffect(() => {
-        if(props.db && (props.db != dbClient.db())) dbClient.db(props.db) 
-        if(props.account && (props.account != dbClient.account())) dbClient.account(props.account) 
-    }, [props.db, props.account])
+    	if(isObject(dbClient)){
+       		if(props.db && (props.db != dbClient.db())) dbClient.db(props.db)
+        	if(props.account && (props.account != dbClient.account())) dbClient.account(props.account)
+			if(props.db){
+		        dbClient.db(props.db)
+		        if(props.account) dbClient.account(props.account)
+		    }
+			setLoading(false)
+		}
+    }, [props.db, props.account, dbClient])
 
 	if (loading) return <Loading />;
 
-    if(props.db){
-        dbClient.db(props.db)
-        if(props.account) dbClient.account(props.account)
-    }
+
 
     return (
     	<Container fluid className="h-100 pl-0 pr-0">

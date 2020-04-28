@@ -29,6 +29,7 @@ import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = (props) => {
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
     const [isOpen, setIsOpen] = useState(false);
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
@@ -39,20 +40,20 @@ const NavBar = (props) => {
 
     if(props.resetDB) resetDB(dbClient);
 
-
-    const usermy= user || {};
-    const userMETADATA= user && user.user_metadata ? user.user_metadata : {};
+    const usermy = user || {};
+    const userMETADATA = user && user.user_metadata ? user.user_metadata : {};
 
     const logoutWithRedirect = () =>
         logout({
             returnTo: window.location.origin
     });
 
+
     function dbBase(){
         let dbb = "/db/"
         if(dbClient && dbClient.db()){
             if(dbClient.db() == "terminus") dbb += "terminus"
-            else dbb += dbClient.account() + "/" + dbClient.db() 
+            else dbb += dbClient.account() + "/" + dbClient.db()
         }
         return dbb
     }
