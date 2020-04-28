@@ -3,7 +3,7 @@ import Select from "react-select";
 import {printts} from "../../utils/dateFormats"
 
 
-const BranchSelector = (props) => {
+const BranchSelector = () => {
     const [branchInfo, setBranchInfo] = useState(props.branch);
     const [branches, setBranches] = useState(props.branches);
 
