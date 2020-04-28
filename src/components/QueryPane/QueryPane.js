@@ -57,7 +57,7 @@ export const QueryPane = (props) => {
                 if(wr.hasBindings()) setResults(wr)
             })
             .catch((err)=>{
-                 setReport({message: err, status: tag.ERROR});
+                 setReport({error: err, status: tag.ERROR});
              })
         }
     }, [woql, qLang]);
