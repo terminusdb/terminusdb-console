@@ -8,12 +8,19 @@ import * as tag from "../../labels/tags"
 
 // we use this component for both queries and rules
 export const Editor = (props) => {
-    const edit = props.edit || false;
+    const edit = props.editor.edit || false;
     const text = props.text || tag.BLANK;
     const isQuery = props.isQuery || false;
+
     const [content, setContent] = useState(tag.BLANK);
     const setInputQuery = props.setInputQuery;
     const setInputRule = props.setInputRule;
+
+    // rule close and show button
+    const closable = props.editor.closable || false;
+    const [showClose, setShowClose] = useState(closable);
+    const [showRule, setShowRule] = useState(false);
+    const [showCodeMirror, setShowCodeMirror] = useState(true);
 
     let rc = tag.EDITOR_READ_ONLY // edit is false
     if(edit) rc = false;
@@ -28,16 +35,37 @@ export const Editor = (props) => {
         setContent(text);
     }, [text]);
 
+    const handleClose = () => {
+        setShowRule(true)
+        setShowClose(false)
+        setShowCodeMirror(false)
+    }
+
+    const handleShowRule = () => {
+        setShowRule(false)
+        setShowClose(true)
+        setShowCodeMirror(true)
+    }
+
     return (
-      <CodeMirror value={ content }
-        options={ options }
-        onBeforeChange={(editor, data, value) => {
-            setContent(value);
-        }}
-        onChange={(editor, data, value) => {
-            setContent(value);
-            if(isQuery) setInputQuery(value)
-            else setInputRule(value)
-        }}/>
+       <div className = "rule-editor">
+
+          {/***************** Close and Show button for rules *******************/}
+          {(!isQuery) && showClose && closable &&
+               <button onClick = { handleClose }> {tag.CLOSE_RULE} </button>}
+          {(!isQuery) && showRule && closable &&
+               <button onClick = { handleShowRule }> {tag.SHOW_RULE} </button>}
+
+          {(showCodeMirror) && <CodeMirror value={ content }
+                options={ options }
+                onBeforeChange={(editor, data, value) => {
+                    setContent(value);
+                }}
+                onChange={(editor, data, value) => {
+                    setContent(value);
+                    if(isQuery) setInputQuery(value)
+                    else setInputRule(value)
+                }}/>}
+        </div>
     )
 }

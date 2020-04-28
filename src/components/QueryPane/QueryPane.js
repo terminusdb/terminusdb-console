@@ -13,6 +13,7 @@ import { Library } from "./Library"
 import { PrintLanguage } from "./PrintLanguage"
 import { ResultPane } from "./ResultPane"
 import { Viewers } from "./Viewers"
+import { Report } from "./Report"
 
 export const QueryPane = (props) => {
     // props
@@ -40,15 +41,24 @@ export const QueryPane = (props) => {
     const [results, setResults] = useState(result);
     const [viewer, setViewer] = useState(viewLabels.TABLE_VIEW);
 
+    // result report
+    const [report, setReport] = useState(false)
+
     // editor
     useEffect(() => {
         if(isObject(woql)){
             const q = formatQuery(woql, qLang, tag.QUERY);
             setFormattedQuery(q);
+            let start = Date.now();
             dbClient.query(woql).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
+                let delta = (Date.now() - start)/1000;
+                setReport({processingTime: delta, status: tag.SUCCESS});
                 if(wr.hasBindings()) setResults(wr)
             })
+            .catch((err)=>{
+                 setReport({message: err, status: tag.ERROR});
+             })
         }
     }, [woql, qLang]);
 
@@ -60,13 +70,15 @@ export const QueryPane = (props) => {
 
     return (
         <div className="q-pane">
+
             {/********** editor ***********/}
             {isObject(editor) && <Editor text = { formattedQuery }
-                edit = { editor.edit }
+                editor = { editor }
                 setInputQuery = { setInputQuery }
                 isQuery = { true }/>}
             {isObject(editor) && editor.submit && <ActionButton text = { editor.submit }
                 lang = { qLang }
+                setReport = { setReport }
                 inputQuery = { inputQuery }
                 setWoql = { setWoql }
                 isQuery = { true }/>}
@@ -77,11 +89,17 @@ export const QueryPane = (props) => {
                 languages = { editor.languages }
                 isQuery = { true }
                 setqLang = { setqLang }/>}
+
+            {/********** result report ***********/}
+            {isObject(resultReport) && <Report results = { results }
+                resultReport = { resultReport }
+                report = { report }/>}
+
             {/********** rule ***********/}
             {(isObject(resultPane.viewEditor)) &&
                 (resultPane.viewEditor.edit) &&
                 <Editor text = { formattedRule }
-                    edit = { resultPane.viewEditor.edit }
+                    editor = { resultPane.viewEditor }
                     setInputRule = { setInputRule }
                     isQuery = { false }/>}
             {(isObject(resultPane.viewEditor)) &&
@@ -98,11 +116,13 @@ export const QueryPane = (props) => {
                     languages = { resultPane.viewEditor.languages }
                     isQuery = { false }
                     setrLang = { setrLang }/>}
+
             {/********** viewers  ***********/}
             {isObject(resultPane.view) && <Viewers
                 views = { resultPane.view }
                 setRule = { setRule }
                 setViewer = { setViewer }/>}
+
             {/********** results  ***********/}
             {isObject(results) && <ResultPane results = { results }
                 rule = { rule }

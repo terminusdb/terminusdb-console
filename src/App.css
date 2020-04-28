@@ -10,6 +10,10 @@ div.result-pane{
     overflow-x: scroll;
 }
 
+span.result-reports{
+    margin: 20px
+}
+
 div.query-box{
     border-bottom: 1px solid #00C08B;
     min-height: 700px;
