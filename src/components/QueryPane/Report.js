@@ -39,7 +39,7 @@ export const Report = (props) => {
                            " Violations Detected" : " Violation Detected");
         vioMessage.details.map((item) => {
             printVios.push (
-                <><div className = "terminus-violation">
+                <><div key={item} className = "terminus-violation">
                     <b>{item.prop}</b> {item.mval}
                 </div></>
             )

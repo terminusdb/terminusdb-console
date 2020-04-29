@@ -429,3 +429,25 @@ export const CommitViewerText = {
         className: "form"
     }
 }
+
+
+export const commitBox = {
+    label: {
+        text: "As this query contains an update, you must provide a commit"
+                + " message, to explain the reason for the change",
+        className: "form"
+    },
+    input: {
+        placeholder: "Enter reason for update here",
+        name: "commitMessage",
+        className: "form"
+    },
+    confirm: {
+        type: "submit",
+        text: "Confirm"
+    },
+    cancel: {
+        type: "cancel",
+        text: "Cancel"
+    }
+}
