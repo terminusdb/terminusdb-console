@@ -51,7 +51,7 @@ export const QueryPane = (props) => {
             const q = formatQuery(woql, qLang, tag.QUERY);
             setFormattedQuery(q);
             let start = Date.now();
-            dbClient.query(woql).then((results) => {
+            woql.execute(dbClient).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
                 let delta = (Date.now() - start)/1000;
                 setReport({processingTime: delta, status: tag.SUCCESS});

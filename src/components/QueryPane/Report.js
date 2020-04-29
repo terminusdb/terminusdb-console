@@ -8,37 +8,42 @@ export const Report = (props) => {
     const report = props.report || {};
     const resultReport = props.resultReport || {};
     let message = false, alert = tag.SUCCESS_COLOR;
+    let vioMessage = {}, printVios = [];
 
-    // vio stuff on pending
+    /********Terminus Violation functions **********/
     function getPropertyAsDOM (prop, val){
         let mval = val["@value"] || val;
-	    //if(mval && typeof mval != "object")
-           //console.log('prop val', prop, mval)
+	    if(mval && typeof mval != "object")
+            vioMessage.details.push({prop: prop, mval:mval})
     }
 
     function TerminusViolation (vio) {
-        //console.log('vio', vio)
         if(vio['@type']){
 		    let msg = vio['vio:message'] || {"@value": ""};
 		    getPropertyAsDOM(vio["@type"], msg);
 	   }
        for(var prop in vio){
-     	 if(prop != "vio:message" && prop != "@type"){
+     	 if(prop != "vio:message" && prop != "@type")
     	    getPropertyAsDOM(prop, vio[prop]);
-    	 }
     	}
     }
 
     function TerminusViolations(vios) {
         let nvios = [], vioBuff = [];
-        for(var i = 0; i<vios.length; i++){
-		    nvios.push(vios[i]);
-	    }
-    	for(var i = 0; i<nvios.length; i++){
-    		vioBuff.push(TerminusViolation(nvios[i]));
-    	}
-        let message = vioBuff.length + (vioBuff.length > 1 ? " Violations Detected" : " Violation Detected");
-        //console.log('message', message)
+        vioMessage.details = [];
+        for(var i = 0; i<vios.length; i++)
+            nvios.push(vios[i]);
+    	for(var i = 0; i<nvios.length; i++)
+            vioBuff.push(TerminusViolation(nvios[i]));
+        let message = vioBuff.length + (vioBuff.length > 1 ?
+                           " Violations Detected" : " Violation Detected");
+        vioMessage.details.map((item) => {
+            printVios.push (
+                <><div className = "terminus-violation">
+                    <b>{item.prop}</b> {item.mval}
+                </div></>
+            )
+        })
     }
 
     if (isObject(report)){
@@ -75,10 +80,22 @@ export const Report = (props) => {
     }
 
     return (
-        <> {(isObject(report)) && <span className = "result-reports">
-            <Alert  color = { alert }>
-                <b>{ message }</b>
-            </Alert >
-        </span>}</>
+        <>
+            {/***** success and errors ****/}
+            {(isObject(report)) && (alert !== tag.VIO_COLOR) &&
+                <span className = "result-reports">
+                    <Alert  color = { alert }>
+                        <b>{ message }</b>
+                    </Alert >
+                </span>}
+
+            {/***** vios ****/}
+            {(isObject(report)) && (alert == tag.VIO_COLOR) &&
+                <span className = "result-reports">
+                    <Alert  color = { alert }>
+                        <b>{ vioMessage.numberOfViolations }</b>
+                        {printVios}
+                    </Alert >
+                </span>}</>
     )
 }
