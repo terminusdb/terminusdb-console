@@ -49,7 +49,7 @@ const DBPages = () => {
         <consoleLib.Schema db={dbid} account={account} />
     )
     else if(page == "document") return (
-        <consoleLib.Query db={dbid} account={account} />
+        <consoleLib.DocumentView db={dbid} account={account} />
     )
     else if(page == "query") return (
         <consoleLib.Query db={dbid} account={account} />

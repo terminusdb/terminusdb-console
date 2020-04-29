@@ -17,6 +17,7 @@ export Collaborate from "./views/Collaborate"
 export DatabaseHome from "./views/DatabaseHome/DatabaseHome"
 export Schema from "./views/Schema/SchemaView"
 export Query from "./views/Query/QueryView"
+export DocumentView from "./views/Document/DocumentView"
 export { setTerminusClient } from "./init/initializeGlobalState"
 export * from './variables/pageLabels'
 export initFontAwesome from "./init/initFontAwesome";

@@ -3,33 +3,33 @@ import Select from "react-select";
 import {printts} from "../../utils/dateFormats"
 
 
-const BranchSelector = () => {
-    const [branchInfo, setBranchInfo] = useState(props.branch);
-    const [branches, setBranches] = useState(props.branches);
+const BranchSelector = ({branch, branches, onChange}) => {
+    const [branchInfo, setBranchInfo] = useState(branch);
+    const [sbranches, setBranches] = useState(sbranches);
 
     //update state whenever props change
     useEffect(() => {
-        setBranches(props.branches) 
-        setBranchInfo(props.branch) 
-    }, [props])
+        setBranches(branches) 
+        setBranchInfo(branch) 
+    }, [branch, branches])
 
     function changeBranch(SelValue){
         let nub = SelValue.value
         if(nub != branchInfo.id){
-            props.onChange(nub)
+            onChange(nub)
         }
     }
 
-    if(branches && branches.length > 0) {
+    if(sbranches && sbranches.length > 0) {
         return (
           <span>
             <Select placeholder = {"Branch: " + branchInfo.id}
                 className = "brSeltr"
                 value = {branchInfo.id}
                 onChange = {changeBranch}
-                options = {branches}/>
-            {props.branch.first &&
-                <span>Created: {printts(props.branch.first)}, {props.branch.count} Updates </span>
+                options = {sbranches}/>
+            {branch.first &&
+                <span>Created: {printts(branchInfo.first)}, {branchInfo.count} Updates </span>
             }
             </span>
         )
