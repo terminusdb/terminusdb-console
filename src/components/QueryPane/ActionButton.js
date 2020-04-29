@@ -11,11 +11,17 @@ export const ActionButton = (props) => {
     const setWoql = props.setWoql;
     const inputRule = props.inputRule || false;
     const setRule = props.setRule;
+    const setReport = props.setReport;
 
     const handleClick = () => {
         if(isQuery){
             const q = parseText(inputQuery, lang, tag.QUERY);
-            setWoql(q);
+            if(!q){
+        		let message = "Query could not be extracted from input box - "
+                    + "remember that the last element in the query must be a WOQL object"
+                setReport({status: tag.ERROR, error: message})
+        	}
+            else setWoql(q);
         }
         else {
             const r = parseText(inputRule, lang, tag.RULE);

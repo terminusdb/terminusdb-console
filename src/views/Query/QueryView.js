@@ -23,17 +23,21 @@ const Query = (props) => {
                 q.SHOW_ALL_CLASSES,
                 q.SHOW_ALL_PROPERTIES,
                 q.SHOW_DOCUMENT_CLASSES],
-      languages: [WOQL_JS, WOQL_JSON]
-     /* ,
-      library_autosubmit: false,*/
+      languages: [WOQL_JS, WOQL_JSON] ,
+      library_autosubmit: false
   };
 
+  const resultReport = {
+      success: true
+  }
+
   const resultPane = {
-      /*viewEditor: {
+      viewEditor: {
           edit: true,
           submit: 'Update View',
-          languages: [WOQL_JS, WOQL_JSON]
-      },*/
+          languages: [WOQL_JS, WOQL_JSON],
+          closable: true
+      },
       view: [view.TABLE_VIEW, view.GRAPH_VIEW]
   }
 
@@ -44,6 +48,7 @@ const Query = (props) => {
       return (<div className="query-box">
 
                 <QueryPane editor = { editor }
+                    resultReport = { resultReport }
                     resultPane = { resultPane }/>
 
                   <button className = { queryControls.newQuery.className }

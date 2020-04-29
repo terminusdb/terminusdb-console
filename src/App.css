@@ -5,9 +5,17 @@
     margin-top: 40px
 }
 
+div.terminus-violation{
+   margin: 10px 0px 10px 0px;
+}
+
 div.result-pane{
     margin: 100px 0px 0px 0px;
     overflow-x: scroll;
+}
+
+span.result-reports{
+    margin: 20px
 }
 
 div.query-box{
