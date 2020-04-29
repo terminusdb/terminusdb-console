@@ -11,35 +11,35 @@ import { TableComponent } from '@terminusdb/terminus-react-table';
 
 
 const DocumentView = (props) => {
-    const [queryResults, setQueryResults] = useState();
+    const [queryResults, setQueryResults] = useState({});
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-    const [activeQuery, setActiveQuery] = useState();
+    const [activeQuery, setActiveQuery] = useState(false);
+	const [show, setshow] = useState(false)
 
     useEffect(() => {
-        const q = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata()) 
-        dbClient.query(q).then((cresults) => {
-            setQueryResults(cresults)
-        })    
+        const q = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
+		dbClient.query(q).then((cresults) => {
+			setQueryResults(cresults)
+		    setshow(true)
+        })
     }, []);
-
-
 
     function headChanged(){}
 
     return (
-        <Container fluid className="h-100 pl-0 pr-0">
-          <NavBar/>
-            <Container className="flex-grow-1">
-                <Col>
-                  <div className="sch-disp">
-                      <HistoryNavigator onHeadChange={headChanged} />
-                  </div>
-                  <TableComponent />
-              </Col>
-
-            </Container>
-        </Container>
+		<Container fluid className="h-100 pl-0 pr-0">
+		  <NavBar/>
+			<Container className="flex-grow-1">
+				<Col>
+				  {<div className="sch-disp">
+					  <HistoryNavigator onHeadChange={headChanged} />
+				  </div>}
+				  {show && <TableComponent/>}
+			  </Col>
+			</Container>
+		</Container>
     )
 }
+
 
 export default DocumentView
