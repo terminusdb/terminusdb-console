@@ -85,6 +85,10 @@ const Schema = (props) => {
   }
 
 
+/*
+* change the result after something is change in woqlclient like branch/commit 
+*/
+
   const toggle = () => setIsOpen(!isOpen);
   
   if (loading) return <Loading />;

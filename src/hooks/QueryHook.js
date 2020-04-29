@@ -4,20 +4,27 @@ import { getColumnsForTable, getBindingData, getDBIdsForSelectOptions,
         getDBListData, getDBListColumns, getUserSelectOpts,
         getColumnsForUserTable, getBindingUserData} from '../utils/dataFormatter';
 import * as queryList from '../utils/queryList';
-import { useGlobalState } from "../init/initializeGlobalState";
-import { isObject } from "../utils/helperFunctions";
+//import { useGlobalState } from "../init/initializeGlobalState";
+//import { isObject } from "../utils/helperFunctions";
 import { LIST_OF_DATABASE_QUERY, LIST_OF_DATABASE_ID, GET_USERS_NOT_IN_DB,
     GET_USER_ACCESS_FOR_DB } from "../labels/queryLabels";
 import { RENDER_TYPE_TABLE, RENDER_TYPE_MAPS, RENDER_TYPE_GRAPH, GET_BINDINGS } from "../labels/renderTypeLabels";
-import { TERMINUS_CLIENT } from "../labels/globalStateLabels"
+import { TERMINUS_CLIENT } from "../labels/globalStateLabels";
+import { WOQLClientObj } from "../init/woql-client-instance";
 
-function QueryHook(queryName, renderType, params) {
+/*
+* to be review maybe we can get from woql-client-instanse ..
+*/
+function QueryHook(queryName, renderType, params,) {
     const [data, setData, state] = useState([]);
     const [loading, setLoading] = useState(true);
     let resultData = [];
-    const opts = params || {};
+    const opts = params || {}; 
 
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    const { woqlClient} = WOQLClientObj();
+    const dbClient=woqlClient;
+    
+    //const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
     useEffect(() => {
 
@@ -74,7 +81,7 @@ function QueryHook(queryName, renderType, params) {
         }
 
         async function woqlClientCall() {
-           if (isObject(dbClient)){
+           if (dbClient){
                if(dbClient.server()){
                    //console.log('dbClient in hookfetch', dbClient);
                    switch(queryName){

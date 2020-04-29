@@ -109,7 +109,7 @@ const NavBar = (props) => {
                                     </Button>
                                 </NavItem>)}
 
-                            {isAuthenticated && <UncontrolledDropdown nav inNavbar>
+                            {isAuthenticated && user && <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret id="profileDropDown">
                                     <img src={user.picture}
                                          alt="Profile"
@@ -143,7 +143,7 @@ const NavBar = (props) => {
                                                         </Button>
                                                 </NavItem>
                                           </Nav>)}
-                                        {isAuthenticated && (
+                                        {isAuthenticated && user &&(
                                               <Nav className="d-md-none justify-content-between"
                                                    navbar
                                                    style={{ minHeight: 170 }}>
