@@ -5,7 +5,7 @@ import { useAuth0} from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
 import { createDatabaseLabels } from '../../variables/content'
 import { createDatabaseForm } from "../../variables/formLabels"
-import { useForm } from 'react-hook-form';
+//import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CREATE_DATABASE_TAB, CLONE_LOCAL_DB_TAB, CLONE_REMOTE_DB_TAB } from "../../labels/tabLabels"
@@ -14,14 +14,7 @@ import CloneLocalDB from "./CloneLocalDB"
 import CloneRemoteDB from "./CloneRemoteDB"
 
 const CreateDatabase = (props) => {
-  const { user, loading } = useAuth0();
-  const { register, handleSubmit, errors } = useForm();
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
-
-  //if (loading || !user) {
-  //return <Loading />;
-  //}
+  //const { register, handleSubmit, errors } = useForm();
 
   return (
   	<Container fluid className="h-100 pl-0 pr-0">
@@ -37,7 +30,7 @@ const CreateDatabase = (props) => {
                 <Tab label = { CLONE_LOCAL_DB_TAB }>
                     <CloneLocalDB action = { CLONE_LOCAL_DB_TAB }/>
                 </Tab>
-				<Tab label = { CLONE_REMOTE_DB_TAB }>
+				        <Tab label = { CLONE_REMOTE_DB_TAB }>
                     <CloneRemoteDB action = { CLONE_REMOTE_DB_TAB }/>
                 </Tab>
             </Tabs>
