@@ -11,40 +11,28 @@ import { Properties } from './Properties'
 import { OWL } from './OWL'
 import { GraphMaker } from './GraphMaker'
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
-import { useGlobalState } from "../../init/initializeGlobalState";
+import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
 import GraphFilter  from './GraphFilter'
 
 const Schema = (props) => {
-  const { loading, user } = useAuth0();
-  const [isOpen, setIsOpen] = useState(false);
-  const [dbClient] = useGlobalState(TERMINUS_CLIENT);
-
-  useEffect(() => {
-      if(props.db && props.db != dbClient.db() || props.account != dbClient.account()){
-          dbClient.connectionConfig.clearCursor()
-          dbClient.db(props.db)
-          if(props.account) dbClient.account(props.account)
-      }
-  }, [props]);
-
-
   const [graphs, setGraphs] = useState();
   const [graphFilter, setGraphFilter] = useState(props.graphFilter);
   const [rebuild, setRebuild] = useState(0);
   const [hasSchema, setHasSchema] = useState(false);
-
+  const { loading, user } = useAuth0();
+  const {woqlClient} = WOQLClientObj();  
   //retrieves details of the available graphs on mount
   useEffect(() => {
-      if(dbClient.db() == "terminus"){
+      if(woqlClient.db() == "terminus"){
           setGraphs({schema: ["main"], instance: ["main"], inference: ["main"]})
           setGraphFilter({type: "schema", gid: "main"})
           setHasSchema(true)
           return
       }
-	  const q = TerminusClient.WOQL.lib().loadBranchGraphNames(dbClient)
-	  dbClient.query(q).then((results) => {
+	  const q = TerminusClient.WOQL.lib().loadBranchGraphNames(woqlClient)
+	  woqlClient.query(q).then((results) => {
 		  let wr = new TerminusClient.WOQLResult(results, q)
 		  let ginstances = []
 		  let ginf = []

@@ -57,7 +57,7 @@ const DBPages = () => {
     setAccount(account)       
 
     if(page == "schema") return (
-        <consoleLib.Schema db={dbid} account={account} />
+        <consoleLib.Schema />
     )
     else if(page == "document") return (
         <consoleLib.DocumentView db={dbid} account={account} />
