@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { getCurrentDBName, isObject, isArray } from "../../utils/helperFunctions"
 import { formatQuery } from "../../utils/format"
 import * as lang  from "../../labels/queryFormats";
@@ -14,6 +12,8 @@ import { PrintLanguage } from "./PrintLanguage"
 import { ResultPane } from "./ResultPane"
 import { Viewers } from "./Viewers"
 import { Report } from "./Report"
+import { WOQLClientObj } from "../../init/woql-client-instance";
+
 
 export const QueryPane = (props) => {
     // props
@@ -22,8 +22,8 @@ export const QueryPane = (props) => {
     const result = props.result || {};
     const resultReport = props.resultReport || {};
     const resultPane = props.resultPane || {};
-
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    
+    const {woqlClient} = WOQLClientObj();
 
     // editor
     const [woql, setWoql] = useState(query);
@@ -51,7 +51,7 @@ export const QueryPane = (props) => {
             const q = formatQuery(woql, qLang, tag.QUERY);
             setFormattedQuery(q);
             let start = Date.now();
-            woql.execute(dbClient).then((results) => {
+            woql.execute(woqlClient).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
                 let delta = (Date.now() - start)/1000;
                 setReport({processingTime: delta, status: tag.SUCCESS});
