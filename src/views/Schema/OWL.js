@@ -11,9 +11,7 @@ export const OWL = (props) => {
     const [filter, setFilter] = useState(props.graph)
     const [errors, setErrors] = useState()
     const [dataProvider, setDataProvider] = useState()
-   
     const {woqlClient} = WOQLClientObj();
-
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
         setFilter(props.graph)
