@@ -11,7 +11,7 @@ import * as consoleLib from '@terminusdb/terminusdb-console';
 const App = (props) => {
   const { loadingServer, clientError, woqlClient} = consoleLib.WOQLClientObj();
 
-  if (clientError) return <div >CLIENT ERROR</div>;
+  if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
 
   console.log("__match__",window.location.pathname);
