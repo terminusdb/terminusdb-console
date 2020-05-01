@@ -22,6 +22,7 @@ const App = (props) => {
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
                 <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
+                <Route path = "/newDB" component = {consoleLib.CreateDatabase} />
                 <Route component={DBPages} path="/db/*" />
             </Switch>
         </Router>
@@ -60,15 +61,15 @@ const DBPages = () => {
         <consoleLib.Schema />
     )
     else if(page == "document") return (
-        <consoleLib.DocumentView db={dbid} account={account} />
+        <consoleLib.DocumentView />
     )
     else if(page == "query") return (
-        <consoleLib.Query db={dbid} account={account} />
+        <consoleLib.Query />
     )
     return (
         <consoleLib.DatabaseHome/>
     )
-    }
+}
 
 /*
  <Router history={consoleLib.history}>
