@@ -11,7 +11,7 @@ import * as consoleLib from '@terminusdb/terminusdb-console';
 const App = (props) => {
   const { loadingServer, clientError, woqlClient} = consoleLib.WOQLClientObj();
 
-  if (clientError) return <div >CLIENT ERROR</div>;
+  if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
 
   console.log("__match__",window.location.pathname);
@@ -21,6 +21,7 @@ const App = (props) => {
         <Router history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
+                <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
                 <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
                 <Route path = "/newDB" component = {consoleLib.CreateDatabase} />
                 <Route component={DBPages} path="/db/*" />
