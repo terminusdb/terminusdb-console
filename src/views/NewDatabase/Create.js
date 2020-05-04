@@ -16,6 +16,7 @@ import { isObject } from "../../utils/helperFunctions";
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { QueryHook } from "../../hooks/QueryHook";
 import { getDBIdsForSelectOptions } from "../../utils/dataFormatter";
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 
 const CreateDB = (props) => {
@@ -25,10 +26,12 @@ const CreateDB = (props) => {
   const [dbLocation, setDBLoction] = useState(CREATE_DB_LOCAL);
   const toggle = () => setIsOpen(!isOpen);
   const [dbInfo, updateDbInfo] = useState({});
-  const [dbClient] = useGlobalState(TERMINUS_CLIENT);
   const [values, setReactSelect] = useState({
     selectedOption: []
   });
+
+  const {woqlClient} = WOQLClientObj();  
+
 
   const [dataResponse, loading] = APICallsHook(CREATE_DATABASE,
                                               null,
@@ -43,6 +46,7 @@ const CreateDB = (props) => {
 	  }
 
       let doc = {id: data.databaseID,
+                account: woqlClient.account() || woqlClient.uid(),
                  title: data.databaseName,
                  description:data.databaseDescr}
       updateDbInfo(doc)

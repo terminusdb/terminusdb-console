@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { editSchema } from "../../variables/formLabels"
-import { RENDER_TYPE_SNIPPET } from "../../labels/renderTypeLabels";
 import { RenderSnippet } from "../../components/RenderSnippet";
-import { isObject } from "../../utils/helperFunctions";
 import Loading from "../../components/Loading";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
@@ -12,6 +9,7 @@ export const OWL = (props) => {
     const [errors, setErrors] = useState()
     const [dataProvider, setDataProvider] = useState()
     const {woqlClient} = WOQLClientObj();
+
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
         setFilter(props.graph)
@@ -24,7 +22,7 @@ export const OWL = (props) => {
                 setDataProvider(cresults);            
             })
             .catch((e) => {
-                //alert(e)
+                setErrors(e)
             })
         }
     }, [props.graph, props.rebuild]);
