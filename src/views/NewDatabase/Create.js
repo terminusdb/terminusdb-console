@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Jumbotron,
 		Button,Form,FormGroup,Label,Input,FormText,Collapse} from "reactstrap";
 import Select from "react-select";
@@ -7,47 +7,53 @@ import Loading from "../../components/Loading";
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
-import { APICallsHook } from "../../hooks/APICallsHook"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { LIST_OF_DATABASE_ID } from "../../labels/queryLabels";
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
-import { QueryHook } from "../../hooks/QueryHook";
-//import { getDBIdsForSelectOptions } from "../../utils/dataFormatter";
+import * as tag from "../../labels/tags"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-
+import { Report } from "../../components/QueryPane/Report"
 
 const CreateDB = (props) => {
   const { register, handleSubmit, errors } = useForm();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const [dbLocation, setDBLoction] = useState(CREATE_DB_LOCAL);
-
+  const [rep, setReport] = useState({});
   const [dbInfo, updateDbInfo] = useState({});
+  const [dbId, updateDbId] = useState(tag.BLANK)
   const [values, setReactSelect] = useState({
     selectedOption: []
   });
 
-  const {woqlClient} = WOQLClientObj();  
+  const {woqlClient} = WOQLClientObj();
 
-
-  const [dataResponse, loading] = APICallsHook(CREATE_DATABASE,
-                                              null,
-                                              dbInfo);
-
-  const [dbList] = QueryHook(LIST_OF_DATABASE_ID);
+  useEffect(() => {
+	  if(isObject(dbInfo)){
+		  let acc = woqlClient.account() || woqlClient.uid();
+		  woqlClient.createDatabase(dbId , dbInfo, acc)
+		  .then((cresults) => {
+			  let message = "Successfully created database " + dbId;
+			  setReport({message: message, status: tag.SUCCESS});
+		  })
+		  .catch((err) => {
+			 setReport({error: err, status: tag.ERROR});
+		  })
+	  }
+  }, [dbInfo]);
 
   const onSubmit = (data) => {
-    
+
 	  if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
 		  loginWithRedirect();  // authenticate
 	  }
 
-      let doc = {id: data.databaseID,
-                account: woqlClient.account() || woqlClient.uid(),
-                 title: data.databaseName,
-                 description:data.databaseDescr}
-      updateDbInfo(doc)
+	let doc = {label: data.databaseName,
+			   comment: data.databaseDescr,
+			   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
+
+	updateDbId(data.databaseID) ;
+    updateDbInfo(doc)
   };
 
   const setLocalDB = (ev) => {
@@ -61,6 +67,7 @@ const CreateDB = (props) => {
   return (
   		<>
             <hr className = "my-space-15"/>
+			{isObject(rep) && <Report report = { rep }/>}
             <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>

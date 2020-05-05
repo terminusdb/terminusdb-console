@@ -6,8 +6,7 @@ import * as tag from "../../labels/tags"
 export const Report = (props) => {
     const results = props.results || {};
     const report = props.report || {};
-    const resultReport = props.resultReport || {};
-    let message = false, alert = tag.SUCCESS_COLOR;
+    let message = props.report.message || tag.BLANK, alert = tag.SUCCESS_COLOR;
     let vioMessage = {}, printVios = [];
 
     /********Terminus Violation functions **********/
@@ -50,15 +49,16 @@ export const Report = (props) => {
         switch(report.status){
             case tag.SUCCESS:
                 if(isObject(results)){
-                    if(results.hasBindings()){
-                        message = "Query returned " + results.count()
-                            + " results in " + report.processingTime + " seconds";
+                    /*if(results.hasBindings()){
+                        message = customMessage;
+                        //message = "Query returned " + results.count()
+                        //    + " results in " + report.processingTime + " seconds";
                     }
                     else if(results.hasUpdates()){
                         message = results.inserts() + " triples inserted, "
                             + results.deletes() + " triples deleted in "
                             + report.processingTime + " seconds";
-                    }
+                    }*/
                     alert = tag.SUCCESS_COLOR
                 }
             break;
@@ -92,7 +92,7 @@ export const Report = (props) => {
             {/***** vios ****/}
             {(isObject(report)) && (alert == tag.VIO_COLOR) &&
                 <span className = "result-reports">
-                    <Alert  color = { alert }>
+                    <Alert color = { alert }>
                         <b>{ vioMessage.numberOfViolations }</b>
                         {printVios}
                     </Alert >

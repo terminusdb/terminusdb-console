@@ -44,7 +44,7 @@ export const QueryPane = (props) => {
     const [viewer, setViewer] = useState(viewLabels.TABLE_VIEW);
 
     // result report
-    const [report, setReport] = useState(false)
+    const [rep, setReport] = useState(false)
 
     // editor
     useEffect(() => {
@@ -55,8 +55,18 @@ export const QueryPane = (props) => {
             woql.execute(woqlClient, commit_msg).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
                 let delta = (Date.now() - start)/1000;
-                setReport({processingTime: delta, status: tag.SUCCESS});
-                if(wr.hasBindings()) setResults(wr)
+                let message = tag.BLANK;
+                if(wr.hasBindings()){
+                    message = "Query returned " + wr.count()
+                        + " results in " + delta + " seconds";
+                }
+                if(wr.hasUpdates()){
+                    message = wr.inserts() + " triples inserted, "
+                        + wr.deletes() + " triples deleted in "
+                        + delta + " seconds";
+                }
+                setResults(wr)
+                setReport({message: message, status: tag.SUCCESS});
                 setCommitMsg(false)
             })
             .catch((err)=>{
@@ -98,7 +108,7 @@ export const QueryPane = (props) => {
             {/********** result report ***********/}
             {isObject(resultReport) && <Report results = { results }
                 resultReport = { resultReport }
-                report = { report }/>}
+                report = { rep }/>}
 
             {/********** rule ***********/}
             {(isObject(resultPane.viewEditor)) &&
