@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Jumbotron,
-		Button,Form,FormGroup,Label,Input,FormText,Collapse} from "reactstrap";
-import Select from "react-select";
-import { useAuth0} from "../../react-auth0-spa";
+import { Col } from "reactstrap";
+import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
-import { LIST_OF_DATABASE_ID } from "../../labels/queryLabels";
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"
@@ -22,9 +19,6 @@ const CreateDB = (props) => {
   const [rep, setReport] = useState({});
   const [dbInfo, updateDbInfo] = useState({});
   const [dbId, updateDbId] = useState(tag.BLANK)
-  const [values, setReactSelect] = useState({
-    selectedOption: []
-  });
 
   const {woqlClient} = WOQLClientObj();
 
@@ -43,15 +37,12 @@ const CreateDB = (props) => {
   }, [dbInfo]);
 
   const onSubmit = (data) => {
-
-	  if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
-		  loginWithRedirect();  // authenticate
-	  }
-
+	if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
+		loginWithRedirect();  // authenticate
+	}
 	let doc = {label: data.databaseName,
 			   comment: data.databaseDescr,
 			   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
-
 	updateDbId(data.databaseID) ;
     updateDbInfo(doc)
   };

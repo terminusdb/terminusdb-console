@@ -7,7 +7,6 @@ import Loading from "../../components/Loading";
 import { cloneLocalDB } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
-import { APICallsHook } from "../../hooks/APICallsHook"
 import { CREATE_DATABASE } from "../../labels/apiLabels"
 import { CREATE_LOCAL_TAB, CREATE_CLONE_TAB, CREATE_HUB_TAB } from "../../labels/tabLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
@@ -26,10 +25,6 @@ const CloneLocalDB = (props) => {
 
   const [selectedDB, setSelectedDB] = useState('');
   const [isTerminusDBChosen, chooseTerminusDB] = useState(false);
-
-  const [dataResponse, loading] = APICallsHook(CREATE_DATABASE,
-                                              null,
-                                              dbInfo);
 
   const [dbList] = QueryHook(LIST_OF_DATABASE_ID);
 

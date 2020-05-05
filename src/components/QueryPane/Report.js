@@ -49,17 +49,7 @@ export const Report = (props) => {
         switch(report.status){
             case tag.SUCCESS:
                 if(isObject(results)){
-                    /*if(results.hasBindings()){
-                        message = customMessage;
-                        //message = "Query returned " + results.count()
-                        //    + " results in " + report.processingTime + " seconds";
-                    }
-                    else if(results.hasUpdates()){
-                        message = results.inserts() + " triples inserted, "
-                            + results.deletes() + " triples deleted in "
-                            + report.processingTime + " seconds";
-                    }*/
-                    alert = tag.SUCCESS_COLOR
+                   alert = tag.SUCCESS_COLOR
                 }
             break;
             case tag.ERROR:
