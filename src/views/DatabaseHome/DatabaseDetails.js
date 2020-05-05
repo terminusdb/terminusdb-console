@@ -8,7 +8,6 @@ import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databas
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import {printts, DATETIME_FULL} from "../../utils/dateFormats"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
@@ -74,7 +73,7 @@ const Details = (props) => {
 	            	    placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
 	                    ref={register} />
 
-				{/*	{isAuthenticated && <>
+				{isAuthenticated && <>
 						<hr className = "my-space-25"/>
 						<hr className = "my-2"/>
 						<hr className = "my-space-25"/>
@@ -192,7 +191,7 @@ const Details = (props) => {
 					    <Col md={6} className="mb-6">
                             { dbCommitMsg }
 					    </Col>
-				    </span>*/}
+				    </span>
 	            </form>
            </div>
        </Card>

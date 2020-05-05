@@ -7,7 +7,6 @@ import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,
          DB_HOME_PAGE, SCHEMA_PAGE, DOCUMENT_PAGE, QUERY_PAGE } from '../variables/pageLabels'
 import { getCurrentDBID, getCurrentDBName, resetDB } from "../utils/helperFunctions"
 import { useGlobalState } from "../init/initializeGlobalState";
-import { TERMINUS_CLIENT } from "../labels/globalStateLabels";
 import { WOQLClientObj } from "../init/woql-client-instance";
 
 import {
@@ -31,7 +30,7 @@ import { useAuth0 } from "../react-auth0-spa";
 const NavBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const {woqlClient} = WOQLClientObj();  
+  const {woqlClient} = WOQLClientObj();
 
   const toggle = () => setIsOpen(!isOpen);
   const isDBSet = {dbId: getCurrentDBID(woqlClient), dbName: getCurrentDBName(woqlClient)}

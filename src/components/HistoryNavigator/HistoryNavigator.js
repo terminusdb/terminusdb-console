@@ -4,7 +4,6 @@
  */
 import React, { useState, useEffect } from "react";
 import { subDays, startOfToday, addHours, startOfHour } from "date-fns";
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { useGlobalState } from "../../init/initializeGlobalState";
 import { Container, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
@@ -16,7 +15,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 export const HistoryNavigator = (props) => {
 	/*to be review*/
 
-    const {woqlClient} = WOQLClientObj();//useGlobalState(TERMINUS_CLIENT);
+    const {woqlClient} = WOQLClientObj();
     const dbClient=woqlClient;
 
     if(dbClient.db() == "terminus") return null
@@ -42,8 +41,8 @@ export const HistoryNavigator = (props) => {
             while(res = wr.next()){
                bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
             }
-            setBranches(bchoices) 
-        })    
+            setBranches(bchoices)
+        })
     }, []);
 
     //retrieves details of the branch, only when the branch is changed
@@ -57,16 +56,16 @@ export const HistoryNavigator = (props) => {
                 id: dbClient.checkout(),
                 last: res['Last']['@value'],
                 first: res['First']['@value'] || res['Last']['@value'],
-                head: res['HeadID']["@value"], 
+                head: res['HeadID']["@value"],
                 count: ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1),
                 uri_prefix: res['Base_URI']['@value']
-            })            
+            })
             setRef(res['HeadID']["@value"])
             if(props.setCreated) props.setCreated(res['First']['@value'] || res['Last']['@value'])
         })
     }, [branch]);
 
-    //retrieves details of the commit with id ref 
+    //retrieves details of the commit with id ref
     useEffect(() => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
@@ -105,7 +104,7 @@ export const HistoryNavigator = (props) => {
                          setCommit(commie)
                          if(props.onHeadChange) props.onHeadChange()
                          if(props.setCommitInfo) props.setCommitInfo(commie)
-                    } 
+                    }
                 }
             })
         }
@@ -116,7 +115,7 @@ export const HistoryNavigator = (props) => {
         setSettingCommit(true);
         setRef(cid)
     }
-    
+
     //change the commit and change the time on the timeline to the commit time
     function userCreatesBranch(bid){
         //if(!dbClient.ref()) dbClient.ref(ref)
@@ -159,7 +158,7 @@ export const HistoryNavigator = (props) => {
                 <Col md={1} className="mb-1"/>
                 <Col md={3} className="mb-3">
                     <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
-                </Col>             
+                </Col>
             </span>
             <span className = "d-fl mb-12">
                 <Col md={12} className="mb-12">

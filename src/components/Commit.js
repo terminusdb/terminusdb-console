@@ -8,7 +8,6 @@ import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../variables/databaseHo
 import { getCurrentDBID, getCurrentDBName } from "../utils/helperFunctions"
 import { useGlobalState } from "../init/initializeGlobalState";
 import { commit } from "../variables/formLabels"
-import { TERMINUS_CLIENT } from "../labels/globalStateLabels";
 
 const Commit = (props) => {
     const { register, handleSubmit, errors } = useForm();

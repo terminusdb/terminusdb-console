@@ -10,7 +10,6 @@ import { Classes } from './Classes'
 import { Properties } from './Properties'
 import { OWL } from './OWL'
 import { GraphMaker } from './GraphMaker'
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
@@ -22,7 +21,7 @@ const Schema = (props) => {
   const [rebuild, setRebuild] = useState(0);
   const [hasSchema, setHasSchema] = useState(false);
   const { loading, user } = useAuth0();
-  const {woqlClient} = WOQLClientObj();  
+  const {woqlClient} = WOQLClientObj();
   //retrieves details of the available graphs on mount
   useEffect(() => {
       if(woqlClient.db() == "terminus"){
@@ -57,7 +56,7 @@ const Schema = (props) => {
 			  else if(ginf.length > 1) setGraphFilter({type: "inference", gid: "*"})
 			  else if(ginf.length) setGraphFilter({type: "inference", gid: ginf[0]})
 		  }
-	  })    
+	  })
   }, []);
 
   function headChanged(){
@@ -74,11 +73,11 @@ const Schema = (props) => {
 
 
 /*
-* change the result after something is change in woqlclient like branch/commit 
+* change the result after something is change in woqlclient like branch/commit
 */
 
   const toggle = () => setIsOpen(!isOpen);
-  
+
   if (loading) return <Loading />;
 
   let gs = (graphs && graphs.schema && graphs.schema[0] ? graphs.schema[0] : "none")
@@ -94,7 +93,7 @@ const Schema = (props) => {
 					<div className="gsel">
 						<GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
 					</div>
-					{hasSchema && 
+					{hasSchema &&
 					<Tabs>
 					    <Tab label = {CLASSES_TAB}>
 						    <hr className = "my-space-15"/>
