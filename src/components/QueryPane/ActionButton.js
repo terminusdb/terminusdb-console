@@ -15,7 +15,7 @@ export const ActionButton = (props) => {
     const inputRule = props.inputRule || false;
     const setRule = props.setRule;
     const setReport = props.setReport;
-    const [commit, setCommit] = useState(false);
+    const setCommitMsg = props.setCommitMsg;
     const [showCommitBox, setShowCommitBox] = useState(false);
 
     const handleQuery = () => {
@@ -30,7 +30,7 @@ export const ActionButton = (props) => {
                 //show the commit message box
                 if(q.containsUpdate())
                     setShowCommitBox(true)
-                setWoql(q);
+                else setWoql(q);
             }
         }
         else {
@@ -43,14 +43,22 @@ export const ActionButton = (props) => {
         setShowCommitBox(false);
     }
 
-    const onCommit = () =>{
-
+    const onCommit = (data) =>{
+        const q = parseText(inputQuery, lang, tag.QUERY);
+        if(!q){
+    		let message = "Query could not be extracted from input box - "
+                + "remember that the last element in the query must be a WOQL object"
+            setReport({status: tag.ERROR, error: message})
+    	}
+        else{
+            setCommitMsg(data.commitMessage)
+            setWoql(q);
+        }
     }
 
-    console.log('commit', commit)
     return(
        <>
-          {commit &&
+          {showCommitBox &&
               <form onSubmit={ handleSubmit(onCommit) }>
                   <label className =  { commitBox.label.className }>
                        {commitBox.label.text}
@@ -70,7 +78,7 @@ export const ActionButton = (props) => {
                      </button>
                  </span>
               </form>}
-          <button onClick = { handleQuery }> { text } </button>
+          {!showCommitBox && <button onClick = { handleQuery }> { text } </button>}
        </>
     )
 

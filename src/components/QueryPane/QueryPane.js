@@ -24,6 +24,7 @@ export const QueryPane = (props) => {
     const resultPane = props.resultPane || {};
 
     const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    const [commit_msg, setCommitMsg] = useState(false);
 
     // editor
     const [woql, setWoql] = useState(query);
@@ -51,13 +52,15 @@ export const QueryPane = (props) => {
             const q = formatQuery(woql, qLang, tag.QUERY);
             setFormattedQuery(q);
             let start = Date.now();
-            woql.execute(dbClient).then((results) => {
+            woql.execute(dbClient, commit_msg).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
                 let delta = (Date.now() - start)/1000;
                 setReport({processingTime: delta, status: tag.SUCCESS});
                 if(wr.hasBindings()) setResults(wr)
+                setCommitMsg(false)
             })
             .catch((err)=>{
+                 setCommitMsg(false);
                  setReport({error: err, status: tag.ERROR});
              })
         }
@@ -82,6 +85,7 @@ export const QueryPane = (props) => {
                 setReport = { setReport }
                 inputQuery = { inputQuery }
                 setWoql = { setWoql }
+                setCommitMsg = { setCommitMsg }
                 isQuery = { true }/>}
             {isArray(editor.library) &&  <Library
                 libs = { editor.library }
