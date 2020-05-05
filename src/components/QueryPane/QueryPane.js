@@ -22,14 +22,9 @@ export const QueryPane = (props) => {
     const result = props.result || {};
     const resultReport = props.resultReport || {};
     const resultPane = props.resultPane || {};
-<<<<<<< HEAD
 
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     const [commit_msg, setCommitMsg] = useState(false);
-=======
-
     const {woqlClient} = WOQLClientObj();
->>>>>>> 1b116234164c6be76b26d6a35eeff4d16c12624d
 
     // editor
     const [woql, setWoql] = useState(query);

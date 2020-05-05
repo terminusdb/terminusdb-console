@@ -29,8 +29,6 @@ const Details = (props) => {
 	const formattedDbModifiedDate = printts(dbModifiedDate, DATETIME_FULL)
 	const dbCommitMsg = props.commitInfo.message || false;
     const {woqlClient} = WOQLClientObj();
-    const dbmeta = woqlClient.connection.
-
 
     return (
         <Card>
@@ -76,7 +74,7 @@ const Details = (props) => {
 	            	    placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
 	                    ref={register} />
 
-					{isAuthenticated && <>
+				{/*	{isAuthenticated && <>
 						<hr className = "my-space-25"/>
 						<hr className = "my-2"/>
 						<hr className = "my-space-25"/>
@@ -106,7 +104,7 @@ const Details = (props) => {
    					    <hr className = "my-space-25"/>
 					    </>
                     }
-					
+
                     {isAuthenticated &&
                         <span className="d-fl">
                             <Col md={1} className="mb-1">
@@ -118,7 +116,7 @@ const Details = (props) => {
                                 </label>
                             </Col>
                             <Col md={3} className="mb-3">
-                                <input readOnly placeholder={ database.master.placeholder } 
+                                <input readOnly placeholder={ database.master.placeholder }
                                     name = "database-master-name"
                                     className = { database.master.className }
                                     ref = { register }/>
@@ -139,7 +137,7 @@ const Details = (props) => {
 						   <Col md={3} className="mb-3">
 							   <input readOnly placeholder={ database.clone.placeholder }
 								   className = { database.clone.className }
-                                   name = "database-clone-name" 
+                                   name = "database-clone-name"
                                    ref = { register }/>
 						   </Col>
 	                   </span>
@@ -194,7 +192,7 @@ const Details = (props) => {
 					    <Col md={6} className="mb-6">
                             { dbCommitMsg }
 					    </Col>
-				    </span>
+				    </span>*/}
 	            </form>
            </div>
        </Card>
