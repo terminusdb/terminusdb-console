@@ -10,12 +10,13 @@ import { useGlobalState } from "../../init/initializeGlobalState";
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import {printts, DATETIME_FULL} from "../../utils/dateFormats"
+import { WOQLClientObj } from "../../init/woql-client-instance";
+
 
 const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 
-	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
      //commitInfo
 	// junk data, placeholders for now apply logic later
 	const dbStats = PRIVATE.label;
@@ -27,6 +28,9 @@ const Details = (props) => {
 	const dbModifiedDate = props.commitInfo.time || false;
 	const formattedDbModifiedDate = printts(dbModifiedDate, DATETIME_FULL)
 	const dbCommitMsg = props.commitInfo.message || false;
+    const {woqlClient} = WOQLClientObj();
+    const dbmeta = woqlClient.connection.
+
 
     return (
         <Card>
@@ -42,7 +46,7 @@ const Details = (props) => {
 	                    className = { createDatabaseForm.id.input.className }
                         name = "database-id"
                         readOnly
-						value = {getCurrentDBID(dbClient)}
+						value = {woqlClient.db()}
 	            		ref = { register({ validate: value => value.length > 0}) }/>
                     {errors.databaseID &&
                         <p className = { createDatabaseForm.id.error.className }>
@@ -52,7 +56,7 @@ const Details = (props) => {
 	            	<label className = { createDatabaseForm.databaseName.label.className } htmlFor = "database-name">
 	            	    { createDatabaseForm.databaseName.label.text }
 	                </label>
-	            	<input name= "database-name" value = {getCurrentDBName(dbClient)}
+	            	<input name= "database-name" value = {getCurrentDBName(woqlClient)}
                        className = { createDatabaseForm.databaseName.input.className }
                        readOnly
 	            	   placeholder = { createDatabaseForm.databaseName.input.placeholder }

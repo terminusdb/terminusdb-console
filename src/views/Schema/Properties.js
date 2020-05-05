@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/RenderTable";
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
-import { useGlobalState } from "../../init/initializeGlobalState";
 import TerminusClient from '@terminusdb/terminus-client';
 import Loading from "../../components/Loading";
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 
 export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
     const [dataProvider, setDataProvider] = useState()
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+    const {woqlClient} = WOQLClientObj();  
 
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
@@ -22,7 +21,7 @@ export const Properties = (props) => {
         if(filter){
             let gstr = filter.type + "/" + filter.gid
             let q = TerminusClient.WOQL.limit(100).start(0, TerminusClient.WOQL.lib().propertyMetadata(gstr))
-            dbClient.query(q).then((cresults) => {
+            woqlClient.query(q).then((cresults) => {
                 let cwr = new TerminusClient.WOQLResult(cresults, q)
                 let resultData = cwr.getBindings();
                 const columnConf = getColumnsForTable(resultData);

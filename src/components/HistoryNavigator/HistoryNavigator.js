@@ -11,9 +11,14 @@ import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
 import CommitView from './CommitView'
 import TerminusClient from '@terminusdb/terminus-client';
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const HistoryNavigator = (props) => {
-	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+	/*to be review*/
+
+    const {woqlClient} = WOQLClientObj();//useGlobalState(TERMINUS_CLIENT);
+    const dbClient=woqlClient;
+
     if(dbClient.db() == "terminus") return null
     let nowts = props.now || parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
     let timelinemin = props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000)

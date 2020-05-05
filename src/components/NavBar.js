@@ -8,6 +8,7 @@ import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,
 import { getCurrentDBID, getCurrentDBName, resetDB } from "../utils/helperFunctions"
 import { useGlobalState } from "../init/initializeGlobalState";
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels";
+import { WOQLClientObj } from "../init/woql-client-instance";
 
 import {
     Collapse,
@@ -28,39 +29,36 @@ import {
 import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = (props) => {
-    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const {woqlClient} = WOQLClientObj();  
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
+  const toggle = () => setIsOpen(!isOpen);
+  const isDBSet = {dbId: getCurrentDBID(woqlClient), dbName: getCurrentDBName(woqlClient)}
 
-    const toggle = () => setIsOpen(!isOpen);
-
-    const isDBSet = {dbId: getCurrentDBID(dbClient),
-                     dbName: getCurrentDBName(dbClient)}
-
-    if(props.resetDB) resetDB(dbClient);
-
-    const usermy = user || {};
-    const userMETADATA = user && user.user_metadata ? user.user_metadata : {};
-
-    const logoutWithRedirect = () =>
-        logout({
-            returnTo: window.location.origin
-    });
+  if(props.resetDB) resetDB(woqlClient);
+  const usermy = user || {};
+  const userMETADATA = user && user.user_metadata ? user.user_metadata : {};
 
 
-    function dbBase(){
-        let dbb = "/db/"
-        if(dbClient && dbClient.db()){
-            if(dbClient.db() == "terminus") dbb += "terminus"
-            else dbb += dbClient.account() + "/" + dbClient.db()
-        }
-        return dbb
-    }
+  const logoutWithRedirect = () =>
+      logout({
+          returnTo: window.location.origin
+  });
 
-    const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
-    return (
+  function dbBase(){
+      let dbb = "/db/"
+      if(woqlClient && woqlClient.db()){
+          if(woqlClient.db() == "terminus") dbb += "terminus"
+          else dbb += woqlClient.account() + "/" + woqlClient.db()
+      }
+      return dbb
+  }
+
+  const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
+
+  return (
         <div className="nav-container">
             <Navbar expand="md" dark fixed="top">
                 <div className={containerClassName}>
@@ -109,7 +107,7 @@ const NavBar = (props) => {
                                     </Button>
                                 </NavItem>)}
 
-                            {isAuthenticated && <UncontrolledDropdown nav inNavbar>
+                            {isAuthenticated && user && <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret id="profileDropDown">
                                     <img src={user.picture}
                                          alt="Profile"
@@ -131,50 +129,50 @@ const NavBar = (props) => {
                                  </DropdownMenu>
                              </UncontrolledDropdown>
                             }
-                                </Nav>
-                                    {!isAuthenticated && (
-                                          <Nav className="d-md-none" navbar>
-                                                <NavItem>
-                                                      <Button id="qsLoginBtn"
-                                                              color="primary"
-                                                              block
-                                                              onClick={() => loginWithRedirect({})}>
-                                                              Log in
-                                                        </Button>
-                                                </NavItem>
-                                          </Nav>)}
-                                        {isAuthenticated && (
-                                              <Nav className="d-md-none justify-content-between"
-                                                   navbar
-                                                   style={{ minHeight: 170 }}>
-                                                   <NavItem>
-                                                      <span className="user-info">
-                                                          <img src={user.picture}
-                                                               alt="Profile"
-                                                               className="nav-user-profile d-inline-block rounded-circle mr-3"
-                                                               width="50"/>
-                                                          <h6 className="d-inline-block">{user.name}</h6>
-                                                      </span>
-                                                   </NavItem>
-                                                  <NavItem>
-                                                      <FontAwesomeIcon icon="user" className="mr-3" />
-                                                      <RouterNavLink to= {PROFILE_PAGE.page}
-                                                                     activeClassName="router-link-exact-active">
-                                                                     {PROFILE_PAGE.label}
-                                                      </RouterNavLink>
-                                                  </NavItem>
-                                                  <NavItem>
-                                                      <FontAwesomeIcon icon="power-off" className="mr-3" />
-                                                      <RouterNavLink to="#"
-                                                                     id="qsLogoutBtn"
-                                                                     onClick={() => logoutWithRedirect()}>
-                                                                     Log out
-                                                      </RouterNavLink>
-                                                  </NavItem>
-                                              </Nav>)}
-                                         </Collapse>
-                                    </div>
-                              </Navbar>
+                      </Nav>
+                          {!isAuthenticated && (
+                                <Nav className="d-md-none" navbar>
+                                      <NavItem>
+                                            <Button id="qsLoginBtn"
+                                                    color="primary"
+                                                    block
+                                                    onClick={() => loginWithRedirect({})}>
+                                                    Log in
+                                              </Button>
+                                      </NavItem>
+                                </Nav>)}
+                              {isAuthenticated && user &&(
+                                    <Nav className="d-md-none justify-content-between"
+                                         navbar
+                                         style={{ minHeight: 170 }}>
+                                         <NavItem>
+                                            <span className="user-info">
+                                                <img src={user.picture}
+                                                     alt="Profile"
+                                                     className="nav-user-profile d-inline-block rounded-circle mr-3"
+                                                     width="50"/>
+                                                <h6 className="d-inline-block">{user.name}</h6>
+                                            </span>
+                                         </NavItem>
+                                        <NavItem>
+                                            <FontAwesomeIcon icon="user" className="mr-3" />
+                                            <RouterNavLink to= {PROFILE_PAGE.page}
+                                                           activeClassName="router-link-exact-active">
+                                                           {PROFILE_PAGE.label}
+                                            </RouterNavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <FontAwesomeIcon icon="power-off" className="mr-3" />
+                                            <RouterNavLink to="#"
+                                                           id="qsLogoutBtn"
+                                                           onClick={() => logoutWithRedirect()}>
+                                                           Log out
+                                            </RouterNavLink>
+                                        </NavItem>
+                                    </Nav>)}
+                               </Collapse>
+                          </div>
+                    </Navbar>
             </div>
     );
 };

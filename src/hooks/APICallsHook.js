@@ -8,24 +8,25 @@ import { LIST_OF_DATABASE_QUERY, GET_DATABASE_NAME_QUERY } from "../labels/query
 import { TERMINUS_CLIENT } from "../labels/globalStateLabels"
 import { GET_SCHEMA, CREATE_DATABASE, UPDATE_SCHEMA }  from '../labels/apiLabels'
 import { getCurrentSchema } from "../utils/helperFunctions"
+import { WOQLClientObj } from "../init/woql-client-instance";
 
 function APICallsHook(apiName, renderType, params) {
     const [data, setData, state] = useState([]);
     const [loading, setLoading] = useState(true);
     let resultData = [];
     const opts = params || {};
+    const {woqlClient} = WOQLClientObj();  
 
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
     useEffect(() => {
         async function woqlClientCall() {
-           if (isObject(dbClient)){
-               if(dbClient.server()){
+           if (isObject(woqlClient)){
+               if(woqlClient.server()){
                    switch(apiName){
                        case GET_SCHEMA:
                             //dbClient.getSchema({'terminus:encoding': 'terminus:turtle'},
                             // getCurrentSchema(dbClient))
-                            dbClient.getSchema()
+                            woqlClient.getSchema()
                             .then(function(response){
                                 setData({response: response});
                                 setLoading(false);
@@ -36,7 +37,7 @@ function APICallsHook(apiName, renderType, params) {
                             return [data, loading];
                       case UPDATE_SCHEMA:
                         if(isObject(params)){
-                            dbClient.updateSchema(params,
+                            woqlClient.updateSchema(params,
                                {'terminus:encoding': 'terminus:turtle'})
                             .then(function(response){
                                 setData({response: response});
@@ -57,9 +58,9 @@ function APICallsHook(apiName, renderType, params) {
                                }
                                var dbid = params.id;
                                doc.base_uri = params.base_uri || "http://local.terminusdb.com/" + dbid + "/data"
-                               dbClient.createDatabase(dbid, doc, params.account)
+                               woqlClient.createDatabase(dbid, doc, params.account)
                                .then((response) => {
-                                    createStarterGraphs(dbClient, "main", "main", "main")
+                                    createStarterGraphs(woqlClient, "main", "main", "main")
                                     .then((response) => {
                                        setData({response: response});
                                        setLoading(false);
@@ -77,7 +78,7 @@ function APICallsHook(apiName, renderType, params) {
            }
         }
         woqlClientCall();
-    }, [dbClient, params]);
+    }, [woqlClient, params]);
 
     return [data, loading];
 }

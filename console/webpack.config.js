@@ -81,13 +81,8 @@ module.exports = (env, argv) => ({
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: (url, resourcePath, context) => {
-                if(argv.mode === 'development') {
-                  const relativePath = path.relative(context, resourcePath);
-                  return `/${relativePath}`;
-                }
-                return `/assets/images/${path.basename(resourcePath)}`;
-              }
+              //outputPath: "images",
+              //publicPath: "images"
             }
           }
         ]
@@ -125,89 +120,3 @@ module.exports = (env, argv) => ({
     }*/
 });
 
-/*module.exports = {
-  mode: 'development',
-  context: __dirname,
-  devtool: '#inline-source-map',
-  entry: [
-    './index.js',
-  ],
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-  },
-  devServer: {
-    historyApiFallback: true,
-  },
-  plugins: [
-    new webpack.LoaderOptionsPlugin({
-      debug: true
-    })
-  ],
-  resolve: {
-    alias: {
-      "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
-    },
-    extensions: ['.js', '.jsx', '.json'],
-  },
-  module: {
-     rules : [{
-         test: /\.js$/,
-         exclude: /node_modules/,
-         loader: 'babel-loader',
-         include: [__dirname, path.join(__dirname, '..', 'src')],
-      },
-      {
-        // Transform our own .css files with PostCSS and CSS-modules
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        // Do not transform vendor's CSS with CSS-modules
-        // The point is that they remain in global scope.
-        // Since we require these CSS files in our JS or CSS files,
-        // they will be a part of our compilation either way.
-        // So, no need for ExtractTextPlugin here.
-        test: /\.css$/,
-        include: /node_modules/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.(svg|jpg|gif|png|ttf|)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: (url, resourcePath, context) => {
-               // if(argv.mode === 'development') {
-                  const relativePath = path.relative(context, resourcePath);
-                  console.log('relativePath',relativePath)
-                  return `/${relativePath}`;
-                //}
-                //return `/assets/images/${path.basename(resourcePath)}`;
-              }
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: (url, resourcePath, context) => {
-                //if(argv.mode === 'development') {
-                  const relativePath = path.relative(context, resourcePath);
-                  return `/${relativePath}`;
-                //}
-                //return `/assets/fonts/${path.basename(resourcePath)}`;
-              }
-            }
-          }
-        ]
-      }]
-  }
-};*/

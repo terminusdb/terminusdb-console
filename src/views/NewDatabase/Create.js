@@ -8,27 +8,28 @@ import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
 import { APICallsHook } from "../../hooks/APICallsHook"
-import { CREATE_DATABASE } from "../../labels/apiLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { LIST_OF_DATABASE_ID } from "../../labels/queryLabels";
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { QueryHook } from "../../hooks/QueryHook";
-import { getDBIdsForSelectOptions } from "../../utils/dataFormatter";
+//import { getDBIdsForSelectOptions } from "../../utils/dataFormatter";
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 
 const CreateDB = (props) => {
   const { register, handleSubmit, errors } = useForm();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const [isOpen, setIsOpen] = useState(false);
+
   const [dbLocation, setDBLoction] = useState(CREATE_DB_LOCAL);
-  const toggle = () => setIsOpen(!isOpen);
+
   const [dbInfo, updateDbInfo] = useState({});
-  const [dbClient] = useGlobalState(TERMINUS_CLIENT);
   const [values, setReactSelect] = useState({
     selectedOption: []
   });
+
+  const {woqlClient} = WOQLClientObj();  
+
 
   const [dataResponse, loading] = APICallsHook(CREATE_DATABASE,
                                               null,
@@ -43,6 +44,7 @@ const CreateDB = (props) => {
 	  }
 
       let doc = {id: data.databaseID,
+                account: woqlClient.account() || woqlClient.uid(),
                  title: data.databaseName,
                  description:data.databaseDescr}
       updateDbInfo(doc)

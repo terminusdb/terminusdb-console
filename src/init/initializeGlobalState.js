@@ -11,8 +11,8 @@ export const setTerminusClient = (params) => {
     const opts = params || {};
     const dbClient = new TerminusClient.WOQLClient();
     return dbClient.connect(opts)
-    .then(function(response){
-        setGlobalState(TERMINUS_CLIENT, dbClient);
+    	.then(function(response){
+        	setGlobalState(TERMINUS_CLIENT, dbClient);
     })
 };
 
