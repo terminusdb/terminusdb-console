@@ -7,10 +7,10 @@ export const CardDecks = () => {
     const freePlanText = [], proPlanText = [];
 
     for (const [index, value] of FREE_PLAN.text.entries()) {
-        freePlanText.push(<CardText>{ FREE_PLAN.text[index] }</CardText>)
+        freePlanText.push(<CardText key = {index}>{ FREE_PLAN.text[index] }</CardText>)
     }
     for (const [index, value] of PRO_PLAN.text.entries()) {
-        proPlanText.push(<CardText>{ PRO_PLAN.text[index] }</CardText>)
+        proPlanText.push(<CardText key = {index}>{ PRO_PLAN.text[index] }</CardText>)
     }
 
     //some mechanism to unserstand current plan and set classname
@@ -27,7 +27,7 @@ export const CardDecks = () => {
                   {freePlanText}
                 </CardBody>
               </Card>
-              <Card className={proPlanCurr}> 
+              <Card className={proPlanCurr}>
                 <CardImg top width="100%" src="https://terminusdb.com/img/cards/card-shape-3.svg" alt="Card image cap" />
                 <CardBody>
                   <CardTitle>{ PRO_PLAN.title }</CardTitle>

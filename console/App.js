@@ -1,8 +1,5 @@
 import React from "react";
 import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
-import { Container } from "reactstrap";
-import { localSettings } from "./localSettings"
-import {Row,Grid} from "react-bootstrap"
 import TerminusClient from '@terminusdb/terminus-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
 
