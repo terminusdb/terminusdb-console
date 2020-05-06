@@ -10,7 +10,6 @@ import { Classes } from './Classes'
 import { Properties } from './Properties'
 import { OWL } from './OWL'
 import { GraphMaker } from './GraphMaker'
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
