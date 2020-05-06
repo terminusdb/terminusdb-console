@@ -11,8 +11,9 @@ export const Classes = (props) => {
     const [filter, setFilter] = useState(props.graph)
     const [dataProvider, setDataProvider] = useState()
     const [query, setQuery] = useState(false);
-    
-    const {woqlClient} = WOQLClientObj();  
+    const [loading, setLoading] = useState(false);
+
+    const {woqlClient} = WOQLClientObj();
 
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
@@ -49,9 +50,7 @@ export const Classes = (props) => {
                     {dataProvider &&
                     <RenderTable dataProvider = {dataProvider}/>
                     }
-                    {!dataProvider &&
-                    <Loading />
-                    }
+                    {/*!dataProvider && loading && <Loading />*/}
                     {/*query && <QueryPane query = { query }/>*/}
                  </CardBody>
             </Card>

@@ -6,8 +6,6 @@ import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
-import { AddIcon } from "../../components/LoadFontAwesome"
-import { USER_PLUS } from '../../labels/iconLabels'
 import { stripDocFromUrl } from '../../utils/extractStrings'
 
 const AddUserPermissionForm = (props) => {
@@ -61,12 +59,6 @@ const AddUserPermissionForm = (props) => {
                   <label htmlFor = { MANAGE.name }/>
                        { MANAGE.label }
               </Col>
-              {/*<Col md={3} className="mb-3">
-                  <button className = { addUser.action.className }
-                      type =  { addUser.action.type } >
-                      <AddIcon icon= {USER_PLUS} className = {'ic-a-us'}/>
-                  </button>
-              </Col>*/}
               <Col md={3} className="mb-3">
                   <button className = { addUser.action.className }
                       type =  { addUser.action.type } > Add User

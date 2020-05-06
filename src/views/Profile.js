@@ -51,12 +51,12 @@ const Profile = () => {
                 <Row>
                 <Col md={4} className="user-card">
                   <UserCard bgImage={'https://terminusdb.com/img/placeholders/half-background-mobile.png'}
-                             avatar={user.picture}
-                             name={user.name}
-                             userName={user.nickname}
-                             description={<span>
-                                            Some description about me
-                                          </span>}/>
+                     avatar={user.picture}
+                     name={user.name}
+                     userName={user.nickname}
+                     description={<span>
+                                    Some description about me
+                                  </span>}/>
                 </Col>
                 <Col md={8}>
                     <Card

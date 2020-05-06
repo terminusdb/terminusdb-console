@@ -10,7 +10,8 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
     const [dataProvider, setDataProvider] = useState()
-    const {woqlClient} = WOQLClientObj();  
+    const [loading, setLoading] = useState(false);
+    const {woqlClient} = WOQLClientObj();
 
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
@@ -26,7 +27,7 @@ export const Properties = (props) => {
                 let resultData = cwr.getBindings();
                 const columnConf = getColumnsForTable(resultData);
                 const columnData = getBindingData(resultData);
-                setDataProvider({columnData:columnData, columnConf:columnConf});            
+                setDataProvider({columnData:columnData, columnConf:columnConf});
             })
         }
     }, [props.rebuild, filter]);
@@ -35,12 +36,12 @@ export const Properties = (props) => {
         <div className = "tab-co">
             <Card>
                 <CardBody>
-                    {dataProvider && 
+                    {dataProvider &&
                     <RenderTable dataProvider = {dataProvider}/>
                     }
-                    {!dataProvider &&
-                    <Loading /> 
-                    }
+                    {/*!dataProvider && loading &&
+                    <Loading />
+                    */}
                  </CardBody>
             </Card>
         </div>
