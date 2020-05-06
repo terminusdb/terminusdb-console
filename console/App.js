@@ -52,13 +52,15 @@ const DBPages = () => {
     setDatabase(dbid)
     setAccount(account)
 
-    if(page == consoleLib.SCHEMA_PAGE) return (
+    const pageLink = '/' + page;
+
+    if(pageLink  == consoleLib.SCHEMA_PAGE.page) return (
         <consoleLib.Schema />
     )
-    else if(page == consoleLib.DOCUMENT_PAGE) return (
+    else if(pageLink == consoleLib.DOCUMENT_PAGE.page) return (
         <consoleLib.DocumentView />
     )
-    else if(page == consoleLib.QUERY_PAGE) return (
+    else if(pageLink == consoleLib.QUERY_PAGE.page) return (
         <consoleLib.Query />
     )
     return (
