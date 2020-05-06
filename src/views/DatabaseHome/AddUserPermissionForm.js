@@ -4,21 +4,18 @@ import { Alert } from 'reactstrap';
 import { ADD_USER } from "../../labels/actionLabels"
 import { addUser } from "../../variables/formLabels"
 import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
-import { QueryHook } from '../../hooks/QueryHook'
 import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { USER_PLUS } from '../../labels/iconLabels'
-import { UserManHook } from '../../hooks/UserManHook'
 import { stripDocFromUrl } from '../../utils/extractStrings'
 
 const AddUserPermissionForm = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({});
     let selectedUsers = [];
-    const [dataResponse, loading] = UserManHook(ADD_USER, userInfo);
 
 
     const onSubmit = (data) => {

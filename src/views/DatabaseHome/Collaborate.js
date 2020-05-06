@@ -14,7 +14,6 @@ import { fakeUserData } from "../../temp/fakeUserData"
 import { EDIT } from '../../labels/iconLabels'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/tabLabels'
-import { UserManHook } from '../../hooks/UserManHook'
 import CreateNewUser from './CreateUser'
 import UserList from './UserList'
 import AddUsers from './AddUsers'

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Jumbotron,
-		Button,Form,FormGroup,Label,Input,FormText,Collapse } from "reactstrap";
+import { Container, Row, Col, Form, Label } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
 import NavBar from '../../components/NavBar';

@@ -20,6 +20,8 @@ const CreateDB = (props) => {
   const [dbInfo, updateDbInfo] = useState({});
   const [dbId, updateDbId] = useState(tag.BLANK)
 
+  const [loading, setLoading] = useState(false);
+
   const {woqlClient} = WOQLClientObj();
 
   useEffect(() => {
@@ -29,6 +31,7 @@ const CreateDB = (props) => {
 		  .then((cresults) => {
 			  let message = "Successfully created database " + dbId;
 			  setReport({message: message, status: tag.SUCCESS});
+              setLoading(false);
 		  })
 		  .catch((err) => {
 			 setReport({error: err, status: tag.ERROR});
@@ -41,10 +44,11 @@ const CreateDB = (props) => {
 		loginWithRedirect();  // authenticate
 	}
 	let doc = {label: data.databaseName,
-			   comment: data.databaseDescr,
-			   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
+	   comment: data.databaseDescr,
+	   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
 	updateDbId(data.databaseID) ;
     updateDbInfo(doc)
+    setLoading(true);
   };
 
   const setLocalDB = (ev) => {
@@ -59,6 +63,7 @@ const CreateDB = (props) => {
   		<>
             <hr className = "my-space-15"/>
 			{isObject(rep) && <Report report = { rep }/>}
+            { loading && <Loading /> }
             <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>

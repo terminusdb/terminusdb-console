@@ -47,6 +47,7 @@ const CloneLocalDB = (props) => {
 	return (
 			<>
 	        <hr className = "my-space-50"/>
+			{ loading && <Loading /> }
 	        <form onSubmit={handleSubmit(onSubmit) }>
 	            <span className="d-fl">
 	                <Col md={3} className="mb-3">
