@@ -6,7 +6,6 @@ import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../variables/databaseHomeLabels"
 import { getCurrentDBID, getCurrentDBName } from "../utils/helperFunctions"
-import { useGlobalState } from "../init/initializeGlobalState";
 import { commit } from "../variables/formLabels"
 
 const Commit = (props) => {

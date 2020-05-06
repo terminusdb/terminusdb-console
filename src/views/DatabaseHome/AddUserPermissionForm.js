@@ -1,9 +1,7 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
 import { Alert } from 'reactstrap';
-import { ADD_USER } from "../../labels/actionLabels"
 import { addUser } from "../../variables/formLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
@@ -16,6 +14,7 @@ const AddUserPermissionForm = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({});
     let selectedUsers = [];
+    const [loading, setLoading] = useState(false)
 
 
     const onSubmit = (data) => {

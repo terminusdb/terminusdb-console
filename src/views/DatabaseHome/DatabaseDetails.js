@@ -6,11 +6,9 @@ import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import {printts, DATETIME_FULL} from "../../utils/dateFormats"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-
 
 const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();

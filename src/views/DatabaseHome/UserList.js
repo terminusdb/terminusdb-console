@@ -1,12 +1,10 @@
 import React, { useState, useCallback }from "react";
 import { useForm } from 'react-hook-form';
 import { collaborate, userList} from "../../variables/formLabels"
-import { UPDATE_USER_PERMISSIONS } from '../../labels/actionLabels'
 import { fakeUserData } from "../../temp/fakeUserData"
 import DataTable from 'react-data-table-component';
 import { Col, Alert } from "reactstrap";
 import { RENDER_TYPE_TABLE }  from "../../labels/renderTypeLabels"
-import { GET_USER_ACCESS_FOR_DB } from "../../labels/queryLabels"
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
 const UserList = (props) => {

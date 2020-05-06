@@ -5,9 +5,7 @@ import { FormInputs } from "../../components/Form/FormInputs"
 import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { pull, push } from "../../variables/formLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();

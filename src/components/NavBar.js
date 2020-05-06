@@ -6,7 +6,6 @@ import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,
          NEW_TEAM_PAGE, DOWNLOAD_PAGE,
          DB_HOME_PAGE, SCHEMA_PAGE, DOCUMENT_PAGE, QUERY_PAGE } from '../variables/pageLabels'
 import { getCurrentDBID, getCurrentDBName, resetDB } from "../utils/helperFunctions"
-import { useGlobalState } from "../init/initializeGlobalState";
 import { WOQLClientObj } from "../init/woql-client-instance";
 
 import {

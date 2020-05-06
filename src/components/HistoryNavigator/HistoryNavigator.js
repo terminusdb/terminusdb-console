@@ -4,7 +4,6 @@
  */
 import React, { useState, useEffect } from "react";
 import { subDays, startOfToday, addHours, startOfHour } from "date-fns";
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { Container, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
