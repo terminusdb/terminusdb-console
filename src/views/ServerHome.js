@@ -11,14 +11,14 @@ import { isObject } from '../utils/helperFunctions'
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();
-	const [dataResponse, setDataResponse] = useState({});
+	const [dataProvider, setDataProvider] = useState({});
 
 	useEffect(() => {
   	  if(isObject(woqlClient)){
   		  const records = woqlClient.connection.getServerDBMetadata();
 		  const columnConf = getDBListColumns(records);
 		  const columnData = getDBListData(records);
-		  setDataResponse({columnData:columnData, columnConf:columnConf})
+		  setDataProvider({columnData:columnData, columnConf:columnConf})
   	  }
     }, [woqlClient]);
 
@@ -33,7 +33,7 @@ const ServerHome = (props) => {
 			 <div className = "container-fluid">
 	             <Card>
 	                 <CardBody>
-						 <RenderTable dataProvider = {dataResponse}
+						 <RenderTable dataProvider = {dataProvider}
 						 	 fromPage = { SERVER_HOME_PAGE.page }/>
 					  </CardBody>
 		             </Card>
