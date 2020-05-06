@@ -10,7 +10,6 @@ import Details from './DatabaseDetails'
 import Collaborate from './Collaborate'
 import ManageDatabase from './ManageDatabase'
 import { getQuery } from "../../utils/queryList"
-import { getCommitControl } from "../../utils/stateChange"
 import { nextCommit, previousCommit } from "../../variables/formLabels"
 import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
 import { WOQLClientObj } from "../../init/woql-client-instance";

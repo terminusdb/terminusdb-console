@@ -19,7 +19,7 @@ const Schema = (props) => {
   const [graphFilter, setGraphFilter] = useState(props.graphFilter);
   const [rebuild, setRebuild] = useState(0);
   const [hasSchema, setHasSchema] = useState(false);
-  const { loading, user } = useAuth0();
+  const { loading, setLoading } = useState(false);
   const {woqlClient} = WOQLClientObj();
   //retrieves details of the available graphs on mount
   useEffect(() => {
@@ -77,7 +77,7 @@ const Schema = (props) => {
 
   const toggle = () => setIsOpen(!isOpen);
 
-  if (loading) return <Loading />;
+  /*if (loading) return <Loading />;  */
 
   let gs = (graphs && graphs.schema && graphs.schema[0] ? graphs.schema[0] : "none")
   let is = (graphs && graphs.instance && graphs.instance[0] ? graphs.instance[0] : "none")

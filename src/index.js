@@ -10,10 +10,7 @@ export Loading from "./components/Loading";
 export ErrorPage from "./components/ErrorPage";
 export NavBar from "./components/NavBar";
 export Profile from "./views/Profile";
-export MainPage from "./views/MainPage";
-export CreateTeam from "./views/CreateTeam"
 export ServerHome from "./views/ServerHome"
-export Collaborate from "./views/Collaborate"
 export DatabaseHome from "./views/DatabaseHome/DatabaseHome"
 export Schema from "./views/Schema/SchemaView"
 export Query from "./views/Query/QueryView"
