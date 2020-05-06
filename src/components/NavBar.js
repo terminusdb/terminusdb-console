@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Navs } from "./Nav"
-import { SERVER_HOME_PAGE, PROFILE_PAGE, NEW_DB_PAGE,
-         NEW_TEAM_PAGE, DOWNLOAD_PAGE,
-         DB_HOME_PAGE, SCHEMA_PAGE, DOCUMENT_PAGE, QUERY_PAGE } from '../variables/pageLabels'
+import * as links from '../variables/pageLabels'
 import { getCurrentDBID, getCurrentDBName, resetDB } from "../utils/helperFunctions"
 import { WOQLClientObj } from "../init/woql-client-instance";
-
 import {
     Collapse,
     Container,
@@ -27,36 +24,34 @@ import {
 import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const {woqlClient} = WOQLClientObj();
+    const [isOpen, setIsOpen] = useState(false);
+    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+    const {woqlClient} = WOQLClientObj();
 
-  const toggle = () => setIsOpen(!isOpen);
-  const isDBSet = {dbId: getCurrentDBID(woqlClient), dbName: getCurrentDBName(woqlClient)}
+    const toggle = () => setIsOpen(!isOpen);
+    const isDBSet = {dbId: getCurrentDBID(woqlClient), dbName: getCurrentDBName(woqlClient)}
 
-  if(props.resetDB) resetDB(woqlClient);
-  const usermy = user || {};
-  const userMETADATA = user && user.user_metadata ? user.user_metadata : {};
+    if(props.resetDB) resetDB(woqlClient);
+    const usermy = user || {};
+    const userMETADATA = user && user.user_metadata ? user.user_metadata : {};
 
-
-  const logoutWithRedirect = () =>
+    const logoutWithRedirect = () =>
       logout({
           returnTo: window.location.origin
-  });
+    });
 
-
-  function dbBase(){
+    function dbBase(){
       let dbb = "/db/"
       if(woqlClient && woqlClient.db()){
           if(woqlClient.db() == "terminus") dbb += "terminus"
           else dbb += woqlClient.account() + "/" + woqlClient.db()
       }
       return dbb
-  }
+    }
 
-  const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
+    const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
-  return (
+    return (
         <div className="nav-container">
             <Navbar expand="md" dark fixed="top">
                 <div className={containerClassName}>
@@ -67,13 +62,13 @@ const NavBar = (props) => {
                             <Navs className = "mr-auto"/>
                             <span className = "nav-al display-flex">
                                 <Navs className = "mr-auto"
-                                      page = {SERVER_HOME_PAGE.page}
+                                      page = {links.SERVER_HOME_PAGE.page}
                                       activeClassName = "router-link-exact-active"
-                                      label = {SERVER_HOME_PAGE.label}/>
+                                      label = {links.SERVER_HOME_PAGE.label}/>
                                 <Navs className = "mr-auto"
-                                      page = {NEW_DB_PAGE.page}
+                                      page = {links.NEW_DB_PAGE.page}
                                       activeClassName = "router-link-exact-active"
-                                      label = {NEW_DB_PAGE.label}/>
+                                      label = {links.NEW_DB_PAGE.label}/>
                             </span>
                         </div>
                         {isDBSet.dbId && !(props.resetDB) && <div className="d-flex db-al db-nav s-nav">
@@ -82,17 +77,17 @@ const NavBar = (props) => {
                                   activeClassName = "router-link-exact-active"
                                   label = {isDBSet.dbName}/>
                             <Navs className = "mr-auto"
-                                  page = {dbBase() + DOCUMENT_PAGE.page}
+                                  page = {dbBase() + links.DOCUMENT_PAGE.page}
                                   activeClassName = "router-link-exact-active"
-                                  label = {DOCUMENT_PAGE.label}/>
+                                  label = {links.DOCUMENT_PAGE.label}/>
                             <Navs className = "mr-auto"
-                                  page = {dbBase() + QUERY_PAGE.page}
+                                  page = {dbBase() + links.QUERY_PAGE.page}
                                   activeClassName = "router-link-exact-active"
-                                  label = {QUERY_PAGE.label}/>
+                                  label = {links.QUERY_PAGE.label}/>
                             <Navs className = "mr-auto"
-                                  page = {dbBase() + SCHEMA_PAGE.page}
+                                  page = {dbBase() + links.SCHEMA_PAGE.page}
                                   activeClassName = "router-link-exact-active"
-                                  label = {SCHEMA_PAGE.label}/>
+                                  label = {links.SCHEMA_PAGE.label}/>
                          </div>} </span>
                         <Nav className = "d-none d-md-block ml-auto" navbar>
                             {!isAuthenticated && (
@@ -114,8 +109,8 @@ const NavBar = (props) => {
                                  </DropdownToggle>
                                  <DropdownMenu>
                                  <DropdownItem header>{user.name}</DropdownItem>
-                                 <DropdownItem tag={RouterNavLink}
-                                               to= {PROFILE_PAGE.page}
+                                 <DropdownItem tag = {RouterNavLink}
+                                               to= {links.PROFILE_PAGE.page}
                                                className="dropdown-profile"
                                                activeClassName="router-link-exact-active">
                                      <FontAwesomeIcon icon="user" className="mr-3" /> Profile
@@ -126,7 +121,7 @@ const NavBar = (props) => {
                                  </DropdownItem>
                                  </DropdownMenu>
                              </UncontrolledDropdown>
-                            }
+                         }
                       </Nav>
                           {!isAuthenticated && (
                                 <Nav className="d-md-none" navbar>
@@ -154,9 +149,9 @@ const NavBar = (props) => {
                                          </NavItem>
                                         <NavItem>
                                             <FontAwesomeIcon icon="user" className="mr-3" />
-                                            <RouterNavLink to= {PROFILE_PAGE.page}
+                                            <RouterNavLink to= {links.PROFILE_PAGE.page}
                                                            activeClassName="router-link-exact-active">
-                                                           {PROFILE_PAGE.label}
+                                                           {links.PROFILE_PAGE.label}
                                             </RouterNavLink>
                                         </NavItem>
                                         <NavItem>
@@ -167,7 +162,7 @@ const NavBar = (props) => {
                                                            Log out
                                             </RouterNavLink>
                                         </NavItem>
-                                    </Nav>)}
+                                    </Nav>) }
                                </Collapse>
                           </div>
                     </Navbar>
