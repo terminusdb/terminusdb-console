@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Jumbotron,
-		Button,Form,FormGroup,Label,Input,FormText,Collapse} from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import {databaseHomeLabels} from '../../variables/content';
 import NavBar from '../../components/NavBar';
-import RenderTable from "../../components/RenderTable";
 import { DETAILS_TAB, COLLABORATE_TAB, MANAGE_TAB } from "../../labels/tabLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels"
-import { getCurrentDBName, getCurrentDBID, isObject } from "../../utils/helperFunctions"
-import { GET_COMMIT_HEAD } from "../../labels/queryLabels"
+import { getCurrentDBName } from "../../utils/helperFunctions"
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import Details from './DatabaseDetails'
 import Collaborate from './Collaborate'
@@ -23,7 +19,7 @@ import * as tag from "../../labels/tags"
 const DatabaseHome = (props) => {
 	const [created, setCreated]  =  useState(false);
 	const [commitInfo, setCommitInfo] = useState(false);
-    const {user, isAuthenticated } = useAuth0();
+    const { isAuthenticated } = useAuth0();
     const {woqlClient} = WOQLClientObj();
 
     return (

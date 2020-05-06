@@ -1,1 +1,0 @@
-export const TERMINUS_CLIENT = 'TERMINUS_CLIENT'

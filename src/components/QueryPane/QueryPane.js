@@ -22,7 +22,8 @@ export const QueryPane = (props) => {
     const result = props.result || {};
     const resultReport = props.resultReport || {};
     const resultPane = props.resultPane || {};
-    
+
+    const [commit_msg, setCommitMsg] = useState(false);
     const {woqlClient} = WOQLClientObj();
 
     // editor
@@ -43,7 +44,7 @@ export const QueryPane = (props) => {
     const [viewer, setViewer] = useState(viewLabels.TABLE_VIEW);
 
     // result report
-    const [report, setReport] = useState(false)
+    const [rep, setReport] = useState(false)
 
     // editor
     useEffect(() => {
@@ -51,13 +52,25 @@ export const QueryPane = (props) => {
             const q = formatQuery(woql, qLang, tag.QUERY);
             setFormattedQuery(q);
             let start = Date.now();
-            woql.execute(woqlClient).then((results) => {
+            woql.execute(woqlClient, commit_msg).then((results) => {
                 let wr = new TerminusClient.WOQLResult(results, woql)
                 let delta = (Date.now() - start)/1000;
-                setReport({processingTime: delta, status: tag.SUCCESS});
-                if(wr.hasBindings()) setResults(wr)
+                let message = tag.BLANK;
+                if(wr.hasBindings()){
+                    message = "Query returned " + wr.count()
+                        + " results in " + delta + " seconds";
+                }
+                if(wr.hasUpdates()){
+                    message = wr.inserts() + " triples inserted, "
+                        + wr.deletes() + " triples deleted in "
+                        + delta + " seconds";
+                }
+                setResults(wr)
+                setReport({message: message, status: tag.SUCCESS});
+                setCommitMsg(false)
             })
             .catch((err)=>{
+                 setCommitMsg(false);
                  setReport({error: err, status: tag.ERROR});
              })
         }
@@ -82,6 +95,7 @@ export const QueryPane = (props) => {
                 setReport = { setReport }
                 inputQuery = { inputQuery }
                 setWoql = { setWoql }
+                setCommitMsg = { setCommitMsg }
                 isQuery = { true }/>}
             {isArray(editor.library) &&  <Library
                 libs = { editor.library }
@@ -94,7 +108,7 @@ export const QueryPane = (props) => {
             {/********** result report ***********/}
             {isObject(resultReport) && <Report results = { results }
                 resultReport = { resultReport }
-                report = { report }/>}
+                report = { rep }/>}
 
             {/********** rule ***********/}
             {(isObject(resultPane.viewEditor)) &&

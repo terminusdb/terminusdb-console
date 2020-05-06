@@ -7,7 +7,6 @@ import TerminusClient from '@terminusdb/terminus-client';
 import { useForm } from 'react-hook-form';
 import { isObject, isArray } from "../../utils/helperFunctions";
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
-import { hooks } from "../../hooks"
 import * as q from "../../labels/queryLabels";
 import * as view from "../../labels/viewLabels"
 

@@ -5,14 +5,12 @@ import styled from 'styled-components'
 import { Container, Row, Col ,Button } from "reactstrap";
 import DataTable from 'react-data-table-component';
 import { SERVER_HOME_PAGE } from '../variables/pageLabels'
-import { useGlobalState, setCurrentDB } from "../init/initializeGlobalState";
-import { TERMINUS_CLIENT } from '../labels/globalStateLabels'
 import ExpandedComponent from './ExpandedComponent'
 
 const RenderTable = (props) => {
     const [onRowClicked, setSelectedRows] = useState([]);
-    const [dbClient] = useGlobalState(TERMINUS_CLIENT);
     let explandableRows = false;
+    let always = false
     if (props.fromPage == SERVER_HOME_PAGE.page)
         explandableRows = true;
 
@@ -48,7 +46,7 @@ const RenderTable = (props) => {
                 console.log('RenderTable.js - Invalid page label')
         }
         setSelectedRows(state);
-    }, [dbClient]);
+    }, [always]);
 
     return (
               <>

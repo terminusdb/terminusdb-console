@@ -1,10 +1,7 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
 import { Alert } from 'reactstrap';
-import { CREATE_NEW_USER } from "../../labels/actionLabels"
 import { collaborate, createUser } from "../../variables/formLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
-import { UserManHook } from '../../hooks/UserManHook'
 import { Col } from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
@@ -12,8 +9,7 @@ const CreateNewUser = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({})
 
-    const [dataResponse, loading] = UserManHook(CREATE_NEW_USER, userInfo);
-
+    const [loading, setLoading] = useState(false)
     const onSubmit = (data) => {
         let doc = {id: data.userID,
                    title: data.userName,

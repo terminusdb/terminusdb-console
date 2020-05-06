@@ -5,16 +5,12 @@ import { FormInputs } from "../../components/Form/FormInputs"
 import { Container, Card,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
-import { CREATE_NEW_USER } from "../../labels/actionLabels"
-import { useGlobalState } from "../../init/initializeGlobalState";
 import { collaborate, createUser } from "../../variables/formLabels"
-import { TERMINUS_CLIENT } from "../../labels/globalStateLabels";
 import { AddIcon } from "../../components/LoadFontAwesome"
 import { fakeUserData } from "../../temp/fakeUserData"
 import { EDIT } from '../../labels/iconLabels'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/tabLabels'
-import { UserManHook } from '../../hooks/UserManHook'
 import CreateNewUser from './CreateUser'
 import UserList from './UserList'
 import AddUsers from './AddUsers'
@@ -22,8 +18,6 @@ import AddUsers from './AddUsers'
 const Collaborate = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
-
-	const [dbClient] = useGlobalState(TERMINUS_CLIENT);
 
     //junk database
     const dbStats = WRITE.label;

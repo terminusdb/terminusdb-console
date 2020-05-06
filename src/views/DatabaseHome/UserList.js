@@ -1,14 +1,10 @@
 import React, { useState, useCallback }from "react";
 import { useForm } from 'react-hook-form';
 import { collaborate, userList} from "../../variables/formLabels"
-import { UserManHook } from '../../hooks/UserManHook'
-import { UPDATE_USER_PERMISSIONS } from '../../labels/actionLabels'
 import { fakeUserData } from "../../temp/fakeUserData"
-import { QueryHook } from '../../hooks/QueryHook'
 import DataTable from 'react-data-table-component';
 import { Col, Alert } from "reactstrap";
 import { RENDER_TYPE_TABLE }  from "../../labels/renderTypeLabels"
-import { GET_USER_ACCESS_FOR_DB } from "../../labels/queryLabels"
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
 const UserList = (props) => {
@@ -19,12 +15,11 @@ const UserList = (props) => {
     const [updatedInfo, setUpdateUserInfo] = useState({});
     const [userCapabilityId, setUserCapabilityId] = useState();
 
-    const dataResponse = QueryHook(GET_USER_ACCESS_FOR_DB, RENDER_TYPE_TABLE);
-    const [resp, loading] = UserManHook(UPDATE_USER_PERMISSIONS, updatedInfo)
+    const dataResponse = {}
+    const [loading, setLoading] = useState(false);
 
-
-    let data = dataResponse[0].columnData || [];
-    let columns = dataResponse[0].columnConf || [];
+    let data =  [];
+    let columns =  [];
 
     //console.log('data', data)
 

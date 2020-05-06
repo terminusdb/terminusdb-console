@@ -19,7 +19,7 @@ export const OWL = (props) => {
         if(filter){
             woqlClient.getTriples(filter.type, filter.gid)
             .then((cresults) => {
-                setDataProvider(cresults);            
+                setDataProvider(cresults);
             })
             .catch((e) => {
                 setErrors(e)
@@ -31,7 +31,7 @@ export const OWL = (props) => {
         woqlClient.updateTriples(filter.type, filter.gid, contents, commitmsg)
         .then((cresults) => {
             setEdit(false)
-            setDataProvider(contents);            
+            setDataProvider(contents);
         })
         .catch((e) => {
             setErrors(e)
@@ -43,7 +43,7 @@ export const OWL = (props) => {
         <>
             {dataProvider &&
                 <RenderSnippet dataProvider = {dataProvider}
-                    edit = {edit} onChange = {updateSchema} errors={errors}/>         
+                    edit = {edit} onChange = {updateSchema} errors={errors}/>
             }
             {!dataProvider && <div/>}
         </>

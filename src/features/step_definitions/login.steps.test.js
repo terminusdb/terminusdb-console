@@ -1,10 +1,9 @@
 import { defineFeature, loadFeature } from 'jest-cucumber';
-import HomeNavBar from '../../components/HomeNavBar'
 import React from "react";
 
 
 /*
-* Functional testing means testing a slice of functionality in the system (may interact with dependencies) 
+* Functional testing means testing a slice of functionality in the system (may interact with dependencies)
 * to confirm that the code is doing the right things.
 * It provides light utility functions on top of react-dom and react-dom/test-utils,
 */
@@ -32,4 +31,3 @@ defineFeature(feature, test => {
     });
   });
 })
-

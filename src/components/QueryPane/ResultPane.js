@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TerminusClient from '@terminusdb/terminus-client';
-import { GraphComponent } from '@terminusdb/terminus-react-graph';
-import { TableComponent } from '@terminusdb/terminus-react-table';
+import { WoqlGraph } from '@terminusdb/terminus-react-graph';
+import { WoqlTable } from '@terminusdb/terminus-react-table';
 import { FormatColumns } from '@terminusdb/terminus-react-table';
 import { isObject } from "../../utils/helperFunctions"
 import * as viewLabels from "../../labels/viewLabels"
@@ -39,11 +39,11 @@ export const ResultPane = (props) => {
     return (
         <div className="result-pane">
             {graphResults && (viewer === viewLabels.GRAPH_VIEW) &&
-                <GraphComponent config={ graphResults.config }
+                <WoqlGraph config={ graphResults.config }
                     dataProvider = { graphResults }
                     date = { Date.now() }/>}
             {tableResults && (viewer === viewLabels.TABLE_VIEW) &&
-                <TableComponent columns = { listOfColumns }
+                <WoqlTable columns = { listOfColumns }
                     data = { tableResults } />}
         </div>
     )
