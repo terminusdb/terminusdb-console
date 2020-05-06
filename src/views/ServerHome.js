@@ -1,22 +1,29 @@
-import React, { useState } from "react";
-import { Container, Row, Col, Jumbotron, Card, CardText, CardBody, 
-		 Button, Form, FormGroup, Label, Input, FormText, Collapse }  from "reactstrap";
-import { useAuth0 } from "../react-auth0-spa";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Card, CardBody, Button, Label }  from "reactstrap";
 import Loading from "../components/Loading";
 import { serverHomeLabels } from '../variables/content';
 import NavBar from '../components/NavBar';
 import RenderTable from "../components/RenderTable";
-import { RENDER_TYPE_TABLE } from "../labels/renderTypeLabels";
-import { LIST_OF_DATABASE_QUERY } from "../labels/queryLabels";
 import { SERVER_HOME_PAGE } from "../variables/pageLabels"
-import { HOME_ICON } from '../labels/iconLabels'
-import { QueryHook } from "../hooks/QueryHook";
-import { AddIcon } from "../components/LoadFontAwesome";
+import { WOQLClientObj } from "../init/woql-client-instance";
+import { getDBListData, getDBListColumns } from '../utils/dataFormatter';
+import { isObject } from '../utils/helperFunctions'
 
 const ServerHome = (props) => {
-  const [dataResponse] = QueryHook(LIST_OF_DATABASE_QUERY,RENDER_TYPE_TABLE,null);
-  return (
-  	<Container fluid className = "h-100 pl-0 pr-0">
+	const {woqlClient} = WOQLClientObj();
+	const [dataResponse, setDataResponse] = useState({});
+
+	useEffect(() => {
+  	  if(isObject(woqlClient)){
+  		  const records = woqlClient.connection.getServerDBMetadata();
+		  const columnConf = getDBListColumns(records);
+		  const columnData = getDBListData(records);
+		  setDataResponse({columnData:columnData, columnConf:columnConf})
+  	  }
+    }, [woqlClient]);
+
+	return (
+		<Container fluid className = "h-100 pl-0 pr-0">
 	    <NavBar resetDB = {true}/>
 	  	<Container className = "flex-grow-1">
 	  	  <Col>
@@ -27,13 +34,13 @@ const ServerHome = (props) => {
 	             <Card>
 	                 <CardBody>
 						 <RenderTable dataProvider = {dataResponse}
-						 			  fromPage = { SERVER_HOME_PAGE.page }/>
+						 	 fromPage = { SERVER_HOME_PAGE.page }/>
 					  </CardBody>
- 	             </Card>
- 	         </div>
+		             </Card>
+		         </div>
 	      </Col>
 	    </Container>
-  	</Container>
-  )
+		</Container>
+	)
 }
 export default ServerHome;
