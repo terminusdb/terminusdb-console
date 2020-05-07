@@ -14,10 +14,13 @@ before_install:
       git checkout v2.0
       npm install
       cd ../
-      git clone git@github.com:terminusdb/terminus-react-graph.git
+      git clone https://github.com/terminusdb/terminus-react-graph.git
       cd terminus-react-graph && npm i
+      cd ../
+      git clone https://github.com/terminusdb/terminus-react-table.git
+      cd terminus-react-table && npm i
       cd ../terminusdb-console
-      npm run installClient:local
+      npm i
     fi
   - |
     if [[  $TRAVIS_BRANCH == 'master' && $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*  ]]; then
