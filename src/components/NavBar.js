@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {initFontLib} from "../init/initFontAwesome"
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { Navs } from "./Nav"
 import * as links from '../variables/pageLabels'
 import { getCurrentDBID, getCurrentDBName, resetDB } from "../utils/helperFunctions"
@@ -113,11 +114,11 @@ const NavBar = (props) => {
                                                to= {links.PROFILE_PAGE.page}
                                                className="dropdown-profile"
                                                activeClassName="router-link-exact-active">
-                                     <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+                                               <FontAwesomeIcon icon="user" />Profile
                                  </DropdownItem>
                                  <DropdownItem id="qsLogoutBtn"
                                                onClick={() => logoutWithRedirect()}>
-                                     <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
+                                     <FontAwesomeIcon icon="power-off" /> Log out
                                  </DropdownItem>
                                  </DropdownMenu>
                              </UncontrolledDropdown>

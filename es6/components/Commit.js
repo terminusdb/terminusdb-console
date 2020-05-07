@@ -28,11 +28,7 @@ var _databaseHomeLabels = require("../variables/databaseHomeLabels");
 
 var _helperFunctions = require("../utils/helperFunctions");
 
-var _initializeGlobalState = require("../init/initializeGlobalState");
-
 var _formLabels = require("../variables/formLabels");
-
-var _globalStateLabels = require("../labels/globalStateLabels");
 
 var Commit = function Commit(props) {
   var _useForm = (0, _reactHookForm.useForm)(),
@@ -74,10 +70,7 @@ var Commit = function Commit(props) {
     })
   }), errors.commit && /*#__PURE__*/_react["default"].createElement("p", {
     className: _formLabels.commit.act.error.className
-  }, _formLabels.commit.act.error.text), /*#__PURE__*/_react["default"].createElement("button", {
-    className: _formLabels.commit.action.className,
-    type: _formLabels.commit.action.type
-  }, _formLabels.commit.action.text)), " ");
+  }, _formLabels.commit.act.error.text)), " ");
 };
 
 var _default = Commit;

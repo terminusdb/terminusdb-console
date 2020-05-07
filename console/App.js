@@ -1,5 +1,9 @@
 import React from "react";
 import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
+/*import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faPowerOff, faCoffee  } from '@fortawesome/free-solid-svg-icons';
+*/
+
 import TerminusClient from '@terminusdb/terminus-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
 
@@ -8,6 +12,8 @@ const App = (props) => {
 
   if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
+
+  //library.add(faUser, faPowerOff, faCoffee );
 
   return (
 
