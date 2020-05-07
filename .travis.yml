@@ -15,12 +15,12 @@ before_install:
       npm install
       cd ../
       git clone https://github.com/terminusdb/terminus-react-graph.git
-      cd terminus-react-graph && npm i
+      cd terminus-react-graph && npm i && npm run build
       cd ../
       git clone https://github.com/terminusdb/terminus-react-table.git
-      cd terminus-react-table && npm i
+      cd terminus-react-table && npm i && npm run build
       cd ../terminusdb-console
-      npm i
+      npm i && npm run build
     fi
   - |
     if [[  $TRAVIS_BRANCH == 'master' && $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*  ]]; then
