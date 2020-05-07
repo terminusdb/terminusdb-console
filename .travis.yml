@@ -1,0 +1,61 @@
+language: node_js
+sudo: required
+node_js:
+  - 6
+# travis call prepare
+# create the minify version
+before_install:
+  #for installing the dev version of terminus-client
+  - |
+    if [[  $TRAVIS_BRANCH == 'dev' ]]; then
+      cd ../
+      git clone https://github.com/terminusdb/terminus-client.git
+      cd  terminus-client
+      git checkout dev
+      npm install 
+      cd ../terminusdb-console
+      npm run installClient:local
+    fi
+  - |
+    if [[  $TRAVIS_BRANCH == 'master' && $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*  ]]; then
+      echo "__INCREMENT_VERSION_NUMBER__"
+      export PACKAGE_VERSION=$(npm version patch)
+    fi
+# after_script: "npm run build:all"
+# after_success:
+
+branches:
+  only:
+    - dev
+    - master
+
+#LAST_HASH=$(git ls-remote  https://github.com/terminusdb/terminus-dashboard.git master | awk '{ print $1}')
+#https://blog.travis-ci.com/2018-04-11-how_to_publish_node_js_packages_with_travis_ci_and_packagecloud/
+deploy:
+  - provider: releases
+    keep_history: true
+    api_key: $GITHUB_TOKEN
+    skip_cleanup: true
+    overwrite: true
+    file : package-lock.json
+    on:
+      branch: master
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    keep_history: true
+    script: bash public_pages.sh
+    on:
+      tags: true
+#  - provider: npm
+#    registry: "https://registry.npmjs.org/"
+#    skip_cleanup: true
+#    access: public
+#    email: "francesca@datachemist.com"
+#    api_key: $NPM_TOKEN
+#    keep_history: true
+#    auth_method: "authToken"
+#    on:
+#      branch : master
+#      condition: $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*
+
