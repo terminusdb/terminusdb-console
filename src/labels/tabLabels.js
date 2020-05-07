@@ -3,6 +3,7 @@ export const CLASSES_TAB = "Classes"
 export const PROPERTIES_TAB = "Properties"
 export const OWL_TAB = "OWL"
 export const GRAPHS_TAB = "Graphs"
+export const PREFIXES_TAB = "URL Prefixes"
 
 /* database home tabs */
 export const DETAILS_TAB = 'Details'

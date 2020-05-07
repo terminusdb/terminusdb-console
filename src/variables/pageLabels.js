@@ -42,3 +42,12 @@ export const QUERY_PAGE = {
     page: '/query',
     label: 'Query'
 }
+
+export const LOGOUT = {
+    page: '/logout',
+    label: 'Logout'
+}
+
+export const LOGIN = {
+    label: 'Login'
+}

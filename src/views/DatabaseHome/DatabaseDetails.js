@@ -14,6 +14,7 @@ const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 
+    const commitInfo = props.commitInfo || {}
      //commitInfo
 	// junk data, placeholders for now apply logic later
 	const dbStats = PRIVATE.label;
@@ -21,10 +22,10 @@ const Details = (props) => {
 	const dbSize = '1092 triples';
 	const dbCreated = props.created || false;
 	const formattedCreateDate = printts(dbCreated, DATETIME_FULL)
-	const dbModifiedBy = props.commitInfo.author || false;
-	const dbModifiedDate = props.commitInfo.time || false;
+	const dbModifiedBy = commitInfo.author || false;
+	const dbModifiedDate = commitInfo.time || false;
 	const formattedDbModifiedDate = printts(dbModifiedDate, DATETIME_FULL)
-	const dbCommitMsg = props.commitInfo.message || false;
+	const dbCommitMsg = commitInfo.message || false;
     const {woqlClient} = WOQLClientObj();
 
     return (

@@ -1,46 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, CardBody, Button, Label }  from "reactstrap";
-import Loading from "../components/Loading";
-import { serverHomeLabels } from '../variables/content';
-import NavBar from '../components/NavBar';
+import { serverHomeLabels, createDatabaseLabels } from '../variables/content';
 import RenderTable from "../components/RenderTable";
 import { SERVER_HOME_PAGE } from "../variables/pageLabels"
 import { WOQLClientObj } from "../init/woql-client-instance";
 import { getDBListData, getDBListColumns } from '../utils/dataFormatter';
-import { isObject } from '../utils/helperFunctions'
+import { PageView } from './PageView'
+import { Tabs, Tab } from 'react-bootstrap-tabs';
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();
 	const [dataProvider, setDataProvider] = useState({});
 
 	useEffect(() => {
-  	  if(isObject(woqlClient)){
-  		  const records = woqlClient.connection.getServerDBMetadata();
-		  const columnConf = getDBListColumns(records);
-		  const columnData = getDBListData(records);
-		  setDataProvider({columnData:columnData, columnConf:columnConf})
-  	  }
-    }, [woqlClient]);
+        woqlClient.connectionConfig.clearCursor()
+        const records = woqlClient.connection.getServerDBMetadata();
+        const columnConf = getDBListColumns(records);
+        const columnData = getDBListData(records);
+        setDataProvider({columnData:columnData, columnConf:columnConf})
+    }, [])
 
-	return (
-		<Container fluid className = "h-100 pl-0 pr-0">
-	    <NavBar resetDB = {true}/>
-	  	<Container className = "flex-grow-1">
-	  	  <Col>
-	  	  	 <hr className = "my-space-50"/>
-			 <legend>{ serverHomeLabels.title }</legend>
-			 <hr className = "my-3"/>
-			 <div className = "container-fluid">
-	             <Card>
-	                 <CardBody>
-						 <RenderTable dataProvider = {dataProvider}
-						 	 fromPage = { SERVER_HOME_PAGE.page }/>
-					  </CardBody>
-		             </Card>
-		         </div>
-	      </Col>
-	    </Container>
-		</Container>
+    function canCreate() {
+        return woqlClient.connection.capabilitiesPermit("create_database")
+    }
+
+	return (  
+        < PageView page="/home">
+            <Tabs>
+                <Tab label = {serverHomeLabels.title}>
+                    <hr className = "my-space-15"/>
+                    <div className = "container-fluid">
+                        <RenderTable fromPage={SERVER_HOME_PAGE.page} dataProvider = {dataProvider} />
+	    	        </div>
+                </Tab>
+                { canCreate() && 
+                    <Tab label = {createDatabaseLabels.title}>
+                        <hr className = "my-space-15"/>
+                        <div className = "container-fluid">
+                        {createDatabaseLabels.mainDescription}
+                        </div>
+                    </Tab>
+                }
+            </Tabs>
+        </PageView>   
 	)
 }
 export default ServerHome;
