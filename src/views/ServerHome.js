@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { serverHomeLabels, createDatabaseLabels } from '../variables/content';
-import RenderTable from "../components/RenderTable";
+import RenderTable from "../components/Table/RenderTable";
 import { SERVER_HOME_PAGE } from "../variables/pageLabels"
 import { WOQLClientObj } from "../init/woql-client-instance";
 import { getDBListData, getDBListColumns } from '../utils/dataFormatter';
