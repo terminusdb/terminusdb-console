@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Label } from "reactstrap";
-import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
-import NavBar from '../../components/NavBar';
 import { Tabs, Tab } from 'react-bootstrap-tabs';
-import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB, GRAPHS_TAB } from "../../labels/tabLabels"
+import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB, GRAPHS_TAB, PREFIXES_TAB } from "../../labels/tabLabels"
 import { Classes } from './Classes'
 import { Properties } from './Properties'
 import { OWL } from './OWL'
 import { GraphMaker } from './GraphMaker'
+import { PrefixManager } from './PrefixManager'
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
-import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
 import GraphFilter  from './GraphFilter'
+import { PageView } from '../PageView'
 
 const Schema = (props) => {
   const [graphs, setGraphs] = useState();
@@ -75,46 +73,38 @@ const Schema = (props) => {
 * change the result after something is change in woqlclient like branch/commit
 */
 
-  const toggle = () => setIsOpen(!isOpen);
 
   /*if (loading) return <Loading />;  */
 
   let gs = (graphs && graphs.schema && graphs.schema[0] ? graphs.schema[0] : "none")
   let is = (graphs && graphs.instance && graphs.instance[0] ? graphs.instance[0] : "none")
 
-  return (
-  	<Container fluid className="h-100 pl-0 pr-0">
-        <NavBar/>
-  	    <Container className="flex-grow-1">
-  	        <Col>
-				<div className="sch-disp">
-					<HistoryNavigator onHeadChange={headChanged} />
-					<div className="gsel">
-						<GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
-					</div>
-					{hasSchema &&
-					<Tabs>
-					    <Tab label = {CLASSES_TAB}>
-						    <hr className = "my-space-15"/>
-							<Classes graph={graphFilter} rebuild={rebuild}/>
-					    </Tab>
-						<Tab label = {PROPERTIES_TAB}>
-							<hr className = "my-space-15"/>
-							<Properties graph={graphFilter} rebuild={rebuild}/>
-						</Tab>
-						<Tab label = {OWL_TAB}>
-							<OWL graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
-						</Tab>
-						<Tab label = {GRAPHS_TAB}>
-							<GraphMaker graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
-						</Tab>
-					</Tabs>
-					}
-				</div>
-		    </Col>
-  		</Container>
-  	</Container>
-  )
+  return (  
+    <PageView page="schema">
+        <Tabs>
+            <Tab label = {CLASSES_TAB}>
+                <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
+                <hr className = "my-space-15"/>
+                <Classes graph={graphFilter} rebuild={rebuild}/>
+            </Tab>
+            <Tab label = {PROPERTIES_TAB}>
+                <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
+                <hr className = "my-space-15"/>
+                <Properties graph={graphFilter} rebuild={rebuild}/>
+            </Tab>
+            <Tab label = {OWL_TAB}>
+                <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
+                <OWL graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
+            </Tab>       
+            <Tab label = {GRAPHS_TAB}>
+                <GraphMaker graphs={graphs} graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
+            </Tab>
+            <Tab label = {PREFIXES_TAB}>
+                <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
+            </Tab>
+        </Tabs>
+    </PageView>   
+)
 
 }
 

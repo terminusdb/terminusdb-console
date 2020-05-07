@@ -8,8 +8,8 @@ import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 import { queryControls } from "../../variables/formLabels"
 import * as q from "../../labels/queryLabels";
 import * as view from "../../labels/viewLabels"
+import { PageView } from '../PageView'
 
-import { Preview } from "../../components/QueryPane/Preview" // temp test
 
 const Query = (props) => {
 
@@ -68,14 +68,11 @@ const Query = (props) => {
   }
 
   return (
-      <Container fluid className="h-100 pl-0 pr-0">
-          <NavBar/>
-    	  <Container className="flex-grow-1">
-            {<NewQueryPane/>}
-            {/*<Preview/>*/}
-    	  </Container>
-      </Container>
-    )
+    < PageView >
+        <NewQueryPane/>
+    </PageView>   
+	)
 }
+
 
 export default Query;

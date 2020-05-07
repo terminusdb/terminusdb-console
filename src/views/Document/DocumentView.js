@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Jumbotron,
-		Button,Form,FormGroup,Label,Input,FormText,Collapse } from "reactstrap";
 import Loading from "../../components/Loading";
 import TerminusClient from '@terminusdb/terminus-client';
-import { HistoryNavigator } from '../../components/HistoryNavigator/HistoryNavigator'
-import NavBar from '../../components/NavBar';
 import { WOQLTable } from '@terminusdb/terminus-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { PageView } from '../PageView'
 
 
 const DocumentView = (props) => {
@@ -25,18 +22,9 @@ const DocumentView = (props) => {
     function headChanged(){}
 
     return (
-        <Container fluid className="h-100 pl-0 pr-0">
-          <NavBar/>
-            <Container className="flex-grow-1">
-                <Col>
-                  <div className="sch-disp">
-                      <HistoryNavigator onHeadChange={headChanged} />
-                  </div>
-                  {/*<WOQLTable columns={[]} data={[]} />*/}
-              </Col>
-
-            </Container>
-        </Container>
+        < PageView >
+            {/*<WOQLTable columns={[]} data={[]} />*/}
+        </PageView>   
     )
 }
 

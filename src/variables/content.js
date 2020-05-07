@@ -32,13 +32,13 @@ export const deleteDatabaseLabels={
 }
 
 export const createDatabaseLabels ={
-  title:"Create New Terminus Database",
-  mainDescription:"Key maps are ways to associate keys and mouse buttons with functionality. A key map is an object mapping \n Key maps are ways to associate keys and mouse buttons with functionality. A key map is an object mapping"
+  title:"Create New Database",
+  mainDescription:"Create a new database on this server"
 }
 
 export const serverHomeLabels = {
-    title: "Database List",
-    mainDescription: "Here's a list of available database ..."
+    title: "My Databases",
+    mainDescription: "A list of all databases loaded and accessible in your TerminusDB"
 }
 
 export const databaseHomeLabels = {
