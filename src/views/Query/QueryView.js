@@ -67,9 +67,9 @@ const Query = (props) => {
   }
 
   return (
-    < PageView >
+    <PageView>
         <NewQueryPane/>
-    </PageView>   
+    </PageView>
 	)
 }
 

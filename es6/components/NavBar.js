@@ -22,13 +22,11 @@ var _reactFontawesome = require("@fortawesome/react-fontawesome");
 
 var _Nav = require("./Nav");
 
-var _pageLabels = require("../variables/pageLabels");
+var links = _interopRequireWildcard(require("../variables/pageLabels"));
 
 var _helperFunctions = require("../utils/helperFunctions");
 
-var _initializeGlobalState = require("../init/initializeGlobalState");
-
-var _globalStateLabels = require("../labels/globalStateLabels");
+var _woqlClientInstance = require("../init/woql-client-instance");
 
 var _reactstrap = require("reactstrap");
 
@@ -46,19 +44,18 @@ var NavBar = function NavBar(props) {
       loginWithRedirect = _useAuth.loginWithRedirect,
       logout = _useAuth.logout;
 
+  var _WOQLClientObj = (0, _woqlClientInstance.WOQLClientObj)(),
+      woqlClient = _WOQLClientObj.woqlClient;
+
   var toggle = function toggle() {
     return setIsOpen(!isOpen);
   };
 
-  var _useGlobalState = (0, _initializeGlobalState.useGlobalState)(_globalStateLabels.TERMINUS_CLIENT),
-      _useGlobalState2 = (0, _slicedToArray2["default"])(_useGlobalState, 1),
-      dbClient = _useGlobalState2[0];
-
   var isDBSet = {
-    dbId: (0, _helperFunctions.getCurrentDBID)(dbClient),
-    dbName: (0, _helperFunctions.getCurrentDBName)(dbClient)
+    dbId: (0, _helperFunctions.getCurrentDBID)(woqlClient),
+    dbName: (0, _helperFunctions.getCurrentDBName)(woqlClient)
   };
-  if (props.resetDB) (0, _helperFunctions.resetDB)(dbClient);
+  if (props.resetDB) (0, _helperFunctions.resetDB)(woqlClient);
   var usermy = user || {};
   var userMETADATA = user && user.user_metadata ? user.user_metadata : {};
 
@@ -68,8 +65,17 @@ var NavBar = function NavBar(props) {
     });
   };
 
+  function dbBase() {
+    var dbb = "/db/";
+
+    if (woqlClient && woqlClient.db()) {
+      if (woqlClient.db() == "terminus") dbb += "terminus";else dbb += woqlClient.account() + "/" + woqlClient.db();
+    }
+
+    return dbb;
+  }
+
   var containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
-  console.log('isAuthenticated', isAuthenticated);
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "nav-container"
   }, /*#__PURE__*/_react["default"].createElement(_reactstrap.Navbar, {
@@ -91,36 +97,36 @@ var NavBar = function NavBar(props) {
     className: "nav-al display-flex"
   }, /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.SERVER_HOME_PAGE.page,
+    page: links.SERVER_HOME_PAGE.page,
     activeClassName: "router-link-exact-active",
-    label: _pageLabels.SERVER_HOME_PAGE.label
+    label: links.SERVER_HOME_PAGE.label
   }), /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.NEW_DB_PAGE.page,
+    page: links.NEW_DB_PAGE.page,
     activeClassName: "router-link-exact-active",
-    label: _pageLabels.NEW_DB_PAGE.label
+    label: links.NEW_DB_PAGE.label
   }))), isDBSet.dbId && !props.resetDB && /*#__PURE__*/_react["default"].createElement("div", {
     className: "d-flex db-al db-nav s-nav"
   }, /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.DB_HOME_PAGE.page,
+    page: dbBase(),
     activeClassName: "router-link-exact-active",
     label: isDBSet.dbName
   }), /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.DOCUMENT_PAGE.page,
+    page: dbBase() + links.DOCUMENT_PAGE.page,
     activeClassName: "router-link-exact-active",
-    label: _pageLabels.DOCUMENT_PAGE.label
+    label: links.DOCUMENT_PAGE.label
   }), /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.QUERY_PAGE.page,
+    page: dbBase() + links.QUERY_PAGE.page,
     activeClassName: "router-link-exact-active",
-    label: _pageLabels.QUERY_PAGE.label
+    label: links.QUERY_PAGE.label
   }), /*#__PURE__*/_react["default"].createElement(_Nav.Navs, {
     className: "mr-auto",
-    page: _pageLabels.SCHEMA_PAGE.page,
+    page: dbBase() + links.SCHEMA_PAGE.page,
     activeClassName: "router-link-exact-active",
-    label: _pageLabels.SCHEMA_PAGE.label
+    label: links.SCHEMA_PAGE.label
   })), " "), /*#__PURE__*/_react["default"].createElement(_reactstrap.Nav, {
     className: "d-none d-md-block ml-auto",
     navbar: true
@@ -131,7 +137,7 @@ var NavBar = function NavBar(props) {
     onClick: function onClick() {
       return loginWithRedirect({});
     }
-  }, "Log in")), isAuthenticated && /*#__PURE__*/_react["default"].createElement(_reactstrap.UncontrolledDropdown, {
+  }, "Log in")), isAuthenticated && user && /*#__PURE__*/_react["default"].createElement(_reactstrap.UncontrolledDropdown, {
     nav: true,
     inNavbar: true
   }, /*#__PURE__*/_react["default"].createElement(_reactstrap.DropdownToggle, {
@@ -147,7 +153,7 @@ var NavBar = function NavBar(props) {
     header: true
   }, user.name), /*#__PURE__*/_react["default"].createElement(_reactstrap.DropdownItem, {
     tag: _reactRouterDom.NavLink,
-    to: _pageLabels.PROFILE_PAGE.page,
+    to: links.PROFILE_PAGE.page,
     className: "dropdown-profile",
     activeClassName: "router-link-exact-active"
   }, /*#__PURE__*/_react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
@@ -171,7 +177,7 @@ var NavBar = function NavBar(props) {
     onClick: function onClick() {
       return loginWithRedirect({});
     }
-  }, "Log in"))), isAuthenticated && /*#__PURE__*/_react["default"].createElement(_reactstrap.Nav, {
+  }, "Log in"))), isAuthenticated && user && /*#__PURE__*/_react["default"].createElement(_reactstrap.Nav, {
     className: "d-md-none justify-content-between",
     navbar: true,
     style: {
@@ -190,9 +196,9 @@ var NavBar = function NavBar(props) {
     icon: "user",
     className: "mr-3"
   }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.NavLink, {
-    to: _pageLabels.PROFILE_PAGE.page,
+    to: links.PROFILE_PAGE.page,
     activeClassName: "router-link-exact-active"
-  }, _pageLabels.PROFILE_PAGE.label)), /*#__PURE__*/_react["default"].createElement(_reactstrap.NavItem, null, /*#__PURE__*/_react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
+  }, links.PROFILE_PAGE.label)), /*#__PURE__*/_react["default"].createElement(_reactstrap.NavItem, null, /*#__PURE__*/_react["default"].createElement(_reactFontawesome.FontAwesomeIcon, {
     icon: "power-off",
     className: "mr-3"
   }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.NavLink, {

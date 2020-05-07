@@ -45,15 +45,11 @@ export const Classes = (props) => {
 
     return (
         <div className = "tab-co">
-            <Card>
-                <CardBody>
-                    {dataProvider &&
-                    <RenderTable dataProvider = {dataProvider}/>
-                    }
-                    {/*!dataProvider && loading && <Loading />*/}
-                    {/*query && <QueryPane query = { query }/>*/}
-                 </CardBody>
-            </Card>
+            {dataProvider &&
+            <RenderTable dataProvider = {dataProvider}/>
+            }
+            {/*!dataProvider && loading && <Loading />*/}
+            {/*query && <QueryPane query = { query }/>*/}
         </div>
     )
 }

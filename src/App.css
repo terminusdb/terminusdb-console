@@ -647,6 +647,10 @@ div.tnaXA {
     display: unset !important;
 }
 
+div.user-card-bg img {
+    width: 100% !important
+}
+
 p.dscr{
     margin: 50px 0px 50px 0px;
     padding-left: 100px;

@@ -4,6 +4,7 @@ import { formatQuery } from "../../utils/format"
 import * as lang  from "../../labels/queryFormats";
 import * as tag from "../../labels/tags";
 import * as viewLabels from "../../labels/viewLabels"
+import * as reportAlert from "../../labels/reportLabels"
 import TerminusClient from '@terminusdb/terminus-client';
 import { Editor } from "./Editor"
 import { ActionButton } from "./ActionButton"
@@ -11,7 +12,7 @@ import { Library } from "./Library"
 import { PrintLanguage } from "./PrintLanguage"
 import { ResultPane } from "./ResultPane"
 import { Viewers } from "./Viewers"
-import { Report } from "./Report"
+import { Report } from "../Reports/Report"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 
@@ -66,12 +67,12 @@ export const QueryPane = (props) => {
                         + delta + " seconds";
                 }
                 setResults(wr)
-                setReport({message: message, status: tag.SUCCESS});
+                setReport({message: message, status: reportAlert.SUCCESS});
                 setCommitMsg(false)
             })
             .catch((err)=>{
                  setCommitMsg(false);
-                 setReport({error: err, status: tag.ERROR});
+                 setReport({error: err, status: reportAlert.ERROR});
              })
         }
     }, [woql, qLang]);

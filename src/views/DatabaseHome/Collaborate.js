@@ -7,7 +7,6 @@ import { Container, Card,Row, Col, Jumbotron,
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import { collaborate, createUser } from "../../variables/formLabels"
 import { fakeUserData } from "../../temp/fakeUserData"
-import { EDIT } from '../../labels/iconLabels'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/tabLabels'
 import CreateNewUser from './CreateUser'

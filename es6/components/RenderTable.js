@@ -42,10 +42,6 @@ var _reactDataTableComponent = _interopRequireDefault(require("react-data-table-
 
 var _pageLabels = require("../variables/pageLabels");
 
-var _initializeGlobalState = require("../init/initializeGlobalState");
-
-var _globalStateLabels = require("../labels/globalStateLabels");
-
 var _ExpandedComponent = _interopRequireDefault(require("./ExpandedComponent"));
 
 function ownKeys(object, enumerableOnly) { var keys = (0, _keys["default"])(object); if (_getOwnPropertySymbols["default"]) { var symbols = (0, _getOwnPropertySymbols["default"])(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return (0, _getOwnPropertyDescriptor["default"])(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -58,11 +54,8 @@ var RenderTable = function RenderTable(props) {
       onRowClicked = _useState2[0],
       setSelectedRows = _useState2[1];
 
-  var _useGlobalState = (0, _initializeGlobalState.useGlobalState)(_globalStateLabels.TERMINUS_CLIENT),
-      _useGlobalState2 = (0, _slicedToArray2["default"])(_useGlobalState, 1),
-      dbClient = _useGlobalState2[0];
-
   var explandableRows = false;
+  var always = false;
   if (props.fromPage == _pageLabels.SERVER_HOME_PAGE.page) explandableRows = true;
   var dBuf = props.dataProvider.columnData || []; // get datatable data and column
 
@@ -87,11 +80,12 @@ var RenderTable = function RenderTable(props) {
   var handleChange = (0, _react.useCallback)(function (state) {
     switch (props.fromPage) {
       case _pageLabels.SERVER_HOME_PAGE.page:
-        var dbId = (0, _extractStrings.stripDocFromUrl)(state['@id']);
+        var dbId = state['db'];
+        var account = state['account']; //dbClient.connectionConfig.clearCursor()
+        //dbClient.db(dbId);
+        //dbClient.account(account);
 
-        _history["default"].replace('db/' + dbId);
-
-        dbClient.connectionConfig.setDB(dbId);
+        if (dbId == "terminus") _history["default"].replace('db/' + dbId + "/");else _history["default"].replace('db/' + account + "/" + dbId + "/");
         break;
 
       default:
@@ -99,7 +93,7 @@ var RenderTable = function RenderTable(props) {
     }
 
     setSelectedRows(state);
-  }, [dbClient]);
+  }, [always]);
   return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, explandableRows && /*#__PURE__*/_react["default"].createElement(_reactDataTableComponent["default"], {
     columns: columns,
     data: data,

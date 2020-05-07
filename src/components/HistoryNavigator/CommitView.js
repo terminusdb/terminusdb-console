@@ -20,7 +20,9 @@ export const CommitView = (props) => {
         props.onBranch(nuid)
     }
 
-    if(!props.commit) return (<div/>)
+    /*if(!props.commit) return <Loading/> */
+
+    if(!props.commit) return <div/>
     return (
         <span className = "d-fl mb-12">
             <Col md={9} className="mb-9">

@@ -47,7 +47,9 @@ var CardDecks = function CardDecks() {
           index = _step$value[0],
           value = _step$value[1];
 
-      freePlanText.push( /*#__PURE__*/_react["default"].createElement(_reactstrap.CardText, null, _pricingPlan.FREE_PLAN.text[index]));
+      freePlanText.push( /*#__PURE__*/_react["default"].createElement(_reactstrap.CardText, {
+        key: index
+      }, _pricingPlan.FREE_PLAN.text[index]));
     }
   } catch (err) {
     _iterator.e(err);
@@ -64,7 +66,9 @@ var CardDecks = function CardDecks() {
           _index = _step2$value[0],
           _value = _step2$value[1];
 
-      proPlanText.push( /*#__PURE__*/_react["default"].createElement(_reactstrap.CardText, null, _pricingPlan.PRO_PLAN.text[_index]));
+      proPlanText.push( /*#__PURE__*/_react["default"].createElement(_reactstrap.CardText, {
+        key: _index
+      }, _pricingPlan.PRO_PLAN.text[_index]));
     } //some mechanism to unserstand current plan and set classname
 
   } catch (err) {

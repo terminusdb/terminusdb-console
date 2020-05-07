@@ -34,16 +34,12 @@ export const Properties = (props) => {
 
     return (
         <div className = "tab-co">
-            <Card>
-                <CardBody>
-                    {dataProvider &&
-                    <RenderTable dataProvider = {dataProvider}/>
-                    }
-                    {/*!dataProvider && loading &&
-                    <Loading />
-                    */}
-                 </CardBody>
-            </Card>
+            {dataProvider &&
+            <RenderTable dataProvider = {dataProvider}/>
+            }
+            {/*!dataProvider && loading &&
+            <Loading />
+            */}
         </div>
     )
 }
