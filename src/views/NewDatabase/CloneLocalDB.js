@@ -4,7 +4,6 @@ import Select from "react-select";
 import Loading from "../../components/Loading";
 import { cloneLocalDB } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
-import NavBar from '../../components/NavBar'
 import { isObject } from "../../utils/helperFunctions";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 

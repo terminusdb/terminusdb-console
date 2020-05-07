@@ -11,7 +11,6 @@ import { Button, Container } from "reactstrap"
 import { useForm } from 'react-hook-form';
 import Loading from "../components/Loading";
 import { useAuth0 } from "../react-auth0-spa";
-import NavBar from "../components/NavBar"
 import { UserCard } from "../components/Card/UserCard"
 import { FormInputs } from "../components/Form/FormInputs"
 import { Card } from "../components/Card/Cards"
@@ -43,7 +42,6 @@ const Profile = () => {
 
   return (
       <Container fluid className="h-100 pl-0 pr-0">
-          <NavBar resetDB = {true}/>
           <Container className="flex-grow-1">
             <hr className="my-5"/>
             <div className="content">

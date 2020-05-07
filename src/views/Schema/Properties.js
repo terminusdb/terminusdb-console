@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardText, CardBody }  from "reactstrap";
-import RenderTable from "../../components/RenderTable";
+import RenderTable from "../../components/Table/RenderTable";
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
 import TerminusClient from '@terminusdb/terminus-client';
 import Loading from "../../components/Loading";

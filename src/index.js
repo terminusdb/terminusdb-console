@@ -8,7 +8,6 @@ export history from "./utils/history";
 export PrivateRoute from "./components/PrivateRoute";
 export Loading from "./components/Loading";
 export ErrorPage from "./components/ErrorPage";
-export NavBar from "./components/NavBar";
 export Profile from "./views/Profile";
 export ServerHome from "./views/ServerHome"
 export DatabaseHome from "./views/DatabaseHome/DatabaseHome"

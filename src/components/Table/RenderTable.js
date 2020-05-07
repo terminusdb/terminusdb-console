@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
-import history from '../utils/history';
-import { stripDocFromUrl } from '../utils/extractStrings'
+import history from '../../utils/history';
+import { stripDocFromUrl } from '../../utils/extractStrings'
 import styled from 'styled-components'
 import { Container, Row, Col ,Button } from "reactstrap";
 import DataTable from 'react-data-table-component';
-import { SERVER_HOME_PAGE } from '../variables/pageLabels'
-import ExpandedComponent from './ExpandedComponent'
+import { SERVER_HOME_PAGE } from '../../variables/pageLabels'
+import ExpandedComponent from '../ExpandedComponent'
 
 const RenderTable = (props) => {
     const [onRowClicked, setSelectedRows] = useState([]);

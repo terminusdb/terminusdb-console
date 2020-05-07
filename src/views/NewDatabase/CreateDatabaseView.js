@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { createDatabaseLabels } from '../../variables/content'
-import NavBar from '../../components/NavBar'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CREATE_DATABASE_TAB, CLONE_LOCAL_DB_TAB, CLONE_REMOTE_DB_TAB } from "../../labels/tabLabels"
 import CreateDB from "./Create"
@@ -12,7 +11,6 @@ const CreateDatabase = (props) => {
 
 	return (
 		<Container fluid className="h-100 pl-0 pr-0">
-		<NavBar resetDB = {true}/>
 			<Container className="flex-grow-1">
 	        <hr className = "my-space-50"/>
 	        <legend>{ createDatabaseLabels.title }</legend>

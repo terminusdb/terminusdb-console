@@ -1,9 +1,12 @@
-import {  Nav,NavItem, NavLink, NavbarToggler, Navbar, NavbarBrand, Collapse } from "reactstrap";
+import {  Nav,NavItem, NavLink, Alert } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import * as links from '../../variables/pageLabels'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faClock, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
+library.add(faClock, faCodeBranch)
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -21,7 +24,7 @@ export const DBNavbar = (props) => {
         setDBMeta(dbmeta)
         setBranch(woqlClient.checkout())
         setRef(woqlClient.ref())
-    }, [props]);
+    }, []);
 
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()
@@ -36,6 +39,9 @@ export const DBNavbar = (props) => {
         return dbb + (type == "home" ? "/" : "/" + type)
     }
 
+    let headText = (ref ? "Commit (" + ref + ")" : "Latest")
+    let clockStatus = (ref ? "orange" : "green")
+    let branchStatus = (branch != "master" ? "orange" : "green")
     return ( 
         <div className="d-flex db-al db-nav s-nav">
             <Nav className = "mr-auto"  navbar>
@@ -45,18 +51,12 @@ export const DBNavbar = (props) => {
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            hello wor-udl{DBMeta.label}
-                    </NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink onClick = {toggleNavbar}>
-                        Branch Info
-                        <FontAwesomeIcon icon="clock" className="mr-3" /> Yoad mise
+                            {DBMeta.title}
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("documents")}
+                            to = {getNavURL("document")}
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
@@ -81,6 +81,14 @@ export const DBNavbar = (props) => {
                             {links.SCHEMA_PAGE.label}
                     </NavLink>
                 </NavItem>
+                {dbmeta.db != "terminus" && 
+                <NavItem>
+                    <NavLink onClick = {toggleNavbar}>
+                       <FontAwesomeIcon icon="clock" className="mr-3" size="2x" title={headText} color="green"/>
+                       <FontAwesomeIcon icon="code-branch" className="mr-3" size="2x" title={branch} color="green"/>
+                    </NavLink>
+                </NavItem>
+                }
         </Nav>
         </div>
     )
