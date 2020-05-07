@@ -25,7 +25,7 @@ const ServerHome = (props) => {
     }
 
 	return (
-        < PageView page="/home">
+        <PageView page="/home">
             <Tabs>
                 <Tab label = {serverHomeLabels.title}>
                     <hr className = "my-space-15"/>

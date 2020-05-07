@@ -22,7 +22,7 @@ import {
     DropdownItem
 } from "reactstrap";
 
-//import { HistoryNavbar } from "./HistoryNavigator/HistoryNavbar"
+import { HistoryNavbar } from "./HistoryNavigator/HistoryNavbar"
 
 import { useAuth0 } from "../react-auth0-spa";
 

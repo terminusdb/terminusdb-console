@@ -3,7 +3,6 @@ import { Col } from "reactstrap";
 import Loading from "../../components/Loading";
 import { cloneRemoteDB } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
-import NavBar from '../../components/NavBar'
 
 const CloneRemoteDB = (props) => {
   const { register, handleSubmit, errors } = useForm();

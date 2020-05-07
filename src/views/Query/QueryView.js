@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container , Col, Button } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
-import NavBar from '../../components/NavBar';
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 import { queryControls } from "../../variables/formLabels"
@@ -68,9 +67,9 @@ const Query = (props) => {
   }
 
   return (
-    < PageView >
+    <PageView>
         <NewQueryPane/>
-    </PageView>   
+    </PageView>
 	)
 }
 

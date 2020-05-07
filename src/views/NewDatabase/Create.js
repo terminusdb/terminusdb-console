@@ -5,7 +5,6 @@ import Loading from "../../components/Loading";
 import { Report } from "../../components/Reports/Report"
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
-import NavBar from '../../components/NavBar'
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"

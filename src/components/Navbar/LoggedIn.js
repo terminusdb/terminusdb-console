@@ -27,10 +27,10 @@ export const LoggedIn = (props) => {
                     to= {links.PROFILE_PAGE.page}
                     className="dropdown-profile"
                     activeClassName="router-link-exact-active">
-                    <FontAwesomeIcon icon="user" className="mr-3" /> links.PROFILE_PAGE.label
+                    <FontAwesomeIcon icon="user" className="mr-3" /> {links.PROFILE_PAGE.label}
                 </DropdownItem>
                 <DropdownItem id="qsLogoutBtn" onClick={() => logoutWithRedirect()}>
-                    <FontAwesomeIcon icon="power-off" className="mr-3" /> links.LOGOUT.label
+                    <FontAwesomeIcon icon="power-off" className="mr-3" /> {links.LOGOUT.label}
                 </DropdownItem>
             </DropdownMenu>
         </UncontrolledDropdown>
