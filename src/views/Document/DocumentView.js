@@ -22,9 +22,9 @@ const DocumentView = (props) => {
     function headChanged(){}
 
     return (
-        < PageView >
+        < PageView > 
             {/*<WOQLTable columns={[]} data={[]} />*/}
-        </PageView>   
+        </PageView>
     )
 }
 

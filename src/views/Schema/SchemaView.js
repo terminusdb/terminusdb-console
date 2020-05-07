@@ -79,7 +79,7 @@ const Schema = (props) => {
   let gs = (graphs && graphs.schema && graphs.schema[0] ? graphs.schema[0] : "none")
   let is = (graphs && graphs.instance && graphs.instance[0] ? graphs.instance[0] : "none")
 
-  return (  
+  return (
     <PageView page="schema">
         <Tabs>
             <Tab label = {CLASSES_TAB}>
@@ -95,7 +95,7 @@ const Schema = (props) => {
             <Tab label = {OWL_TAB}>
                 <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
                 <OWL graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
-            </Tab>       
+            </Tab>
             <Tab label = {GRAPHS_TAB}>
                 <GraphMaker graphs={graphs} graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
@@ -103,7 +103,7 @@ const Schema = (props) => {
                 <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
         </Tabs>
-    </PageView>   
+    </PageView>
 )
 
 }

@@ -2,7 +2,7 @@ import React, {useState}from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import { useForm } from 'react-hook-form';
 import { FormInputs } from "../../components/Form/FormInputs"
-import { Container, Card,Row, Col, Jumbotron,
+import { Container,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import { collaborate, createUser } from "../../variables/formLabels"
@@ -25,79 +25,77 @@ const Collaborate = (props) => {
     const managePermissions = true;
 
     return (
-        <Card>
-            <div>
-				<hr className="my-space-50"/>
-				<hr className="my-space-50"/>
-				<hr className="my-space-50"/>
+        <div>
+			<hr className="my-space-50"/>
+			<hr className="my-space-50"/>
+			<hr className="my-space-50"/>
 
-	            	<label className = { collaborate.accessHeader.className }
-	                    htmlFor = { collaborate.accessHeader.name }>
-	            		{ collaborate.accessHeader.label }
-	                </label>
+            	<label className = { collaborate.accessHeader.className }
+                    htmlFor = { collaborate.accessHeader.name }>
+            		{ collaborate.accessHeader.label }
+                </label>
 
-                     <span className="d-fl">
-                        <Col md={1} className="mb-1">
-                            <input type="checkbox"
-                               name={ READ.name }
-							   ref = { register }
-                               checked={dbStats === READ.name }/>
-                       </Col>
-                       <Col md={3} className="mb-3">
-                           <label htmlFor = { READ.name }/>
-                               { READ.label }
-                       </Col>
+                 <span className="d-fl">
+                    <Col md={1} className="mb-1">
+                        <input type="checkbox"
+                           name={ READ.name }
+						   ref = { register }
+                           checked={dbStats === READ.name }/>
+                   </Col>
+                   <Col md={3} className="mb-3">
+                       <label htmlFor = { READ.name }/>
+                           { READ.label }
+                   </Col>
 
-                       <Col md={1} className="mb-1">
-                           <input type="checkbox"
-                              name={ READ.name }
-							  ref = { register }
-                              checked={dbStats === WRITE.name }/>
-                      </Col>
-                      <Col md={3} className="mb-3">
-                          <label htmlFor = { WRITE.name }/>
-                              { WRITE.label }
-                      </Col>
+                   <Col md={1} className="mb-1">
+                       <input type="checkbox"
+                          name={ READ.name }
+						  ref = { register }
+                          checked={dbStats === WRITE.name }/>
+                  </Col>
+                  <Col md={3} className="mb-3">
+                      <label htmlFor = { WRITE.name }/>
+                          { WRITE.label }
+                  </Col>
 
-                      <Col md={1} className="mb-1">
-                          <input type="checkbox"
-                             name={ MANAGE.name }
-							 ref = { register }
-                             checked={dbStats === MANAGE.name }/>
-                     </Col>
-                     <Col md={3} className="mb-3">
-                         <label htmlFor = { MANAGE.name }/>
-                             { MANAGE.label }
-                     </Col>
-                  </span>
+                  <Col md={1} className="mb-1">
+                      <input type="checkbox"
+                         name={ MANAGE.name }
+						 ref = { register }
+                         checked={dbStats === MANAGE.name }/>
+                 </Col>
+                 <Col md={3} className="mb-3">
+                     <label htmlFor = { MANAGE.name }/>
+                         { MANAGE.label }
+                 </Col>
+              </span>
 
-                 <hr className = "my-space-15"/>
-                 <hr className = "my-2"/>
-                 <hr className = "my-space-50"/>
+             <hr className = "my-space-15"/>
+             <hr className = "my-2"/>
+             <hr className = "my-space-50"/>
 
-                  {managePermissions && <>
-                     <Tabs>
-                         <Tab label = {CURRENT_USERS}>
-                             <hr className = "my-space-50"/>
-                             <UserList/>
-                         </Tab>
-     				    {/*<Tab label = {CREATE_USER}>
-     					    <hr className = "my-space-50"/>
-     						<CreateNewUser/>
-     				    </Tab>*/}
-     				    <Tab label = {ADD_USER}>
-     						<hr className = "my-space-50"/>
-     						<AddUsers/>
-     					</Tab>
-                        {/*<Tab label = {INVITE_USER}>
-     						<hr className = "my-space-50"/>
-     						INVITE_USER
-     					</Tab>*/}
-     				</Tabs> </>
-                 }
+              {managePermissions && <>
+                 <Tabs>
+                     <Tab label = {CURRENT_USERS}>
+                         <hr className = "my-space-50"/>
+                         <UserList/>
+                     </Tab>
+ 				    {/*<Tab label = {CREATE_USER}>
+ 					    <hr className = "my-space-50"/>
+ 						<CreateNewUser/>
+ 				    </Tab>*/}
+ 				    <Tab label = {ADD_USER}>
+ 						<hr className = "my-space-50"/>
+ 						<AddUsers/>
+ 					</Tab>
+                    {/*<Tab label = {INVITE_USER}>
+ 						<hr className = "my-space-50"/>
+ 						INVITE_USER
+ 					</Tab>*/}
+ 				</Tabs> </>
+             }
 
-           </div>
-       </Card>
+       </div>
     )
 }
 
