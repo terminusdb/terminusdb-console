@@ -6,6 +6,7 @@ import { WOQLClientObj } from "../init/woql-client-instance";
 import { getDBListData, getDBListColumns } from '../utils/dataFormatter';
 import { PageView } from './PageView'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
+import CreateDatabase from './NewDatabase/CreateDatabaseView'
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();
@@ -23,7 +24,7 @@ const ServerHome = (props) => {
         return woqlClient.connection.capabilitiesPermit("create_database")
     }
 
-	return (  
+	return (
         < PageView page="/home">
             <Tabs>
                 <Tab label = {serverHomeLabels.title}>
@@ -32,16 +33,19 @@ const ServerHome = (props) => {
                         <RenderTable fromPage={SERVER_HOME_PAGE.page} dataProvider = {dataProvider} />
 	    	        </div>
                 </Tab>
-                { canCreate() && 
+                { canCreate() &&
                     <Tab label = {createDatabaseLabels.title}>
                         <hr className = "my-space-15"/>
                         <div className = "container-fluid">
+						<hr className = "my-space-15"/>
                         {createDatabaseLabels.mainDescription}
+						<hr className = "my-space-15"/>
+						<CreateDatabase/>
                         </div>
                     </Tab>
                 }
             </Tabs>
-        </PageView>   
+        </PageView>
 	)
 }
 export default ServerHome;

@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
+import { Report } from "../../components/Reports/Report"
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import NavBar from '../../components/NavBar'
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"
+import * as reportAlert from "../../labels/reportLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { Report } from "../../components/QueryPane/Report"
 
 const CreateDB = (props) => {
   const { register, handleSubmit, errors } = useForm();
@@ -30,11 +31,11 @@ const CreateDB = (props) => {
 		  woqlClient.createDatabase(dbId , dbInfo, acc)
 		  .then((cresults) => {
 			  let message = "Successfully created database " + dbId;
-			  setReport({message: message, status: tag.SUCCESS});
+			  setReport({message: message, status: reportAlert.SUCCESS});
               setLoading(false);
 		  })
 		  .catch((err) => {
-			 setReport({error: err, status: tag.ERROR});
+			 setReport({error: err, status: reportAlert.ERROR});
 		  })
 	  }
   }, [dbInfo]);

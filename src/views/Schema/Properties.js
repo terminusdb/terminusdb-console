@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/RenderTable";
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
 import TerminusClient from '@terminusdb/terminus-client';
@@ -34,16 +33,12 @@ export const Properties = (props) => {
 
     return (
         <div className = "tab-co">
-            <Card>
-                <CardBody>
-                    {dataProvider &&
-                    <RenderTable dataProvider = {dataProvider}/>
-                    }
-                    {/*!dataProvider && loading &&
-                    <Loading />
-                    */}
-                 </CardBody>
-            </Card>
+            {dataProvider &&
+            <RenderTable dataProvider = {dataProvider}/>
+            }
+            {/*!dataProvider && loading &&
+            <Loading />
+            */}
         </div>
     )
 }

@@ -13,7 +13,7 @@ export const LoggedIn = (props) => {
         returnTo: window.location.origin
     });
 
-    return ( 
+    return (
         <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret id="profileDropDown">
                 <img src={user.picture}

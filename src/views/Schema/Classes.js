@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Loading from "../../components/Loading";
-import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/RenderTable";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
@@ -45,15 +44,11 @@ export const Classes = (props) => {
 
     return (
         <div className = "tab-co">
-            <Card>
-                <CardBody>
-                    {dataProvider &&
-                    <RenderTable dataProvider = {dataProvider}/>
-                    }
-                    {/*!dataProvider && loading && <Loading />*/}
-                    {/*query && <QueryPane query = { query }/>*/}
-                 </CardBody>
-            </Card>
+            {dataProvider &&
+            <RenderTable dataProvider = {dataProvider}/>
+            }
+            {/*!dataProvider && loading && <Loading />*/}
+            {/*query && <QueryPane query = { query }/>*/}
         </div>
     )
 }

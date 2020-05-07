@@ -13,8 +13,6 @@ const App = (props) => {
   if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
 
-  //library.add(faUser, faPowerOff, faCoffee );
-
   return (
 
         <Router history={consoleLib.history}>

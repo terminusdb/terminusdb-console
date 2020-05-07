@@ -15,8 +15,8 @@ const CreateDatabase = (props) => {
 		<NavBar resetDB = {true}/>
 			<Container className="flex-grow-1">
 	        <hr className = "my-space-50"/>
-	        <legend>{ createDatabaseLabels.title }</legend>
-	        <hr className = "my-3"/>
+	        {/*<legend>{ createDatabaseLabels.title }</legend>
+	        <hr className = "my-3"/>*/}
 	        <Tabs>
 	            <Tab label = { CREATE_DATABASE_TAB }>
 	                <CreateDB action = { CREATE_DATABASE_TAB }/>
