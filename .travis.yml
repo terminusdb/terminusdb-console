@@ -12,7 +12,10 @@ before_install:
       git clone https://github.com/terminusdb/terminus-client.git
       cd  terminus-client
       git checkout dev
-      npm install 
+      npm install
+      cd ../
+      git clone git@github.com:terminusdb/terminus-react-graph.git
+      cd terminus-react-graph && npm i
       cd ../terminusdb-console
       npm run installClient:local
     fi
