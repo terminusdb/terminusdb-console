@@ -7,7 +7,7 @@ node_js:
 before_install:
   #for installing the dev version of terminus-client
   - |
-    if [[  $TRAVIS_BRANCH == 'dev' ]]; then
+    if [[  $TRAVIS_BRANCH == 'ci_stuff' ]]; then
       cd ../
       git clone https://github.com/terminusdb/terminus-client.git
       cd  terminus-client
