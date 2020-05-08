@@ -11,7 +11,7 @@ import { Login } from "./Login"
 import { LoggedIn } from "./LoggedIn"
 
 export const ConsoleNavbar = (props) => {
-    const {isAuthenticated } = useAuth0();
+    const {isAuthenticated, user } = useAuth0();
     const {woqlClient} = WOQLClientObj();
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
 
@@ -38,7 +38,7 @@ export const ConsoleNavbar = (props) => {
                         {!isAuthenticated && 
                             <Login />   
                         }
-                        {isAuthenticated && 
+                        {isAuthenticated && user &&
                             <LoggedIn />
                         }
                     </Nav>                    
