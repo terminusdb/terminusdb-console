@@ -20,7 +20,7 @@ before_install:
       git clone https://github.com/terminusdb/terminus-react-table.git
       cd terminus-react-table && npm i && npm run build
       cd ../terminusdb-console
-      npm i && npm run build
+      npm i && npm run buildConsole
     fi
   - |
     if [[  $TRAVIS_BRANCH == 'master' && $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*  ]]; then
