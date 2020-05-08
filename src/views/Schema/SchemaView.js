@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
+import { Col } from "reactstrap"
 import { CLASSES_TAB, OWL_TAB, PROPERTIES_TAB, GRAPHS_TAB, PREFIXES_TAB } from "../../labels/tabLabels"
 import { Classes } from './Classes'
 import { Properties } from './Properties'
@@ -11,6 +12,8 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
+import Mascot from '../../img/mascot/Mascot Color(1).png'
+import Dialogue from '../../img/placeholders/dialogue.jpg'
 
 const Schema = (props) => {
   const [graphs, setGraphs] = useState();
@@ -81,7 +84,7 @@ const Schema = (props) => {
 
   return (
     <PageView page="schema">
-        <Tabs>
+        {hasSchema && <Tabs>
             <Tab label = {CLASSES_TAB}>
                 <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
                 <hr className = "my-space-15"/>
@@ -102,7 +105,26 @@ const Schema = (props) => {
             <Tab label = {PREFIXES_TAB}>
                 <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
-        </Tabs>
+        </Tabs>}
+        {!hasSchema && <Tabs>
+            <Tab label = {GRAPHS_TAB}>
+                <GraphMaker graphs={graphs} graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
+            </Tab>
+            <Tab label = {PREFIXES_TAB}>
+                <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
+            </Tab>
+        </Tabs>}
+        <span class="d-fl no-avail">
+            <Col md={6} className="mb-6">
+                <img src= {Mascot}/>
+            </Col>
+            <Col md={6} className="mb-6">
+                <div class="img-c">
+                    {/*<img src= {Dialogue}/>*/}
+                    <div class="centered">No schema available to show, You can add a new Schema.</div>
+                </div>
+            </Col>
+        </span>
     </PageView>
 )
 
