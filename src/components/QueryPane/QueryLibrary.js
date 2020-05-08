@@ -3,7 +3,7 @@ import * as tag from "../../labels/tags"
 import { Button, ButtonGroup } from 'reactstrap'
 import { getQuery } from "../../utils/queryList"
 
-export const Library = (props) => {
+export const QueryLibrary = (props) => {
     const libs = props.libs || [];
     const setWoql = props.setWoql;
     const libButtons = [];

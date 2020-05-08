@@ -6,69 +6,49 @@ require('codemirror/mode/javascript/javascript.js');
 import {Controlled as CodeMirror} from 'react-codemirror2';
 import * as tag from "../../labels/tags"
 
-// we use this component for both queries and rules
-export const Editor = (props) => {
-    const edit = props.editor.edit || false;
-    const text = props.text || tag.BLANK;
-    const isQuery = props.isQuery || false;
-    const setShowRuleClosable = props.setShowRuleClosable;
 
-    const [content, setContent] = useState(tag.BLANK);
-    const setInputQuery = props.setInputQuery;
-    const setInputRule = props.setInputRule;
+export const CodeViewer = ({text, language}) => {
 
-    // rule close and show button
-    const closable = props.editor.closable || false;
-    const [showClose, setShowClose] = useState(closable);
-    const [showRule, setShowRule] = useState(false);
-    const [showCodeMirror, setShowCodeMirror] = useState(true);
+    function getThemeForViewer(lang){
+        return "mdn-like"
+    }
 
-    let rc = tag.EDITOR_READ_ONLY // edit is false
-    if(edit) rc = false;
-
-    const options = { mode: tag.EDITOR_LANGUAGE,
+    language = language || "javascript"
+    let theme = getThemeForViewer(language)
+    let cmoptions = {
+        mode: language,
         noHScroll: false,
-        theme: tag.EDITOR_THEME,
-        readOnly: rc,
-        lineNumbers: true}
-
-    useEffect(() => {
-        setContent(text);
-    }, [text]);
-
-    const handleClose = () => {
-        setShowRule(true)
-        setShowClose(false)
-        setShowCodeMirror(false)
-        setShowRuleClosable(false);
+        theme: theme,
+        readOnly: "nocursor",
+        lineNumbers: true
     }
-
-    const handleShowRule = () => {
-        setShowRule(false)
-        setShowRuleClosable(true);
-        setShowClose(true)
-        setShowCodeMirror(true)
-    }
-
-    return (
-       <div className = "rule-editor">
-
-          {/***************** Close and Show button for rules *******************/}
-          {(!isQuery) && showClose && closable &&
-               <button onClick = { handleClose }> {tag.CLOSE_RULE} </button>}
-          {(!isQuery) && showRule && closable &&
-               <button onClick = { handleShowRule }> {tag.SHOW_RULE} </button>}
-
-          {(showCodeMirror) && <CodeMirror value={ content }
-                options={ options }
-                onBeforeChange={(editor, data, value) => {
-                    setContent(value);
-                }}
-                onChange={(editor, data, value) => {
-                    setContent(value);
-                    if(isQuery) setInputQuery(value)
-                    else setInputRule(value)
-                }}/>}
-        </div>
-    )
+    return (<CodeMirror value={ text } options={ cmoptions }/>)
 }
+
+export const CodeEditor = ({text, language, onChange, onBlur}) => {
+    function getThemeForEditor(lang){
+        return "mdn-like"
+    }
+
+    language = language || "javascript"
+    let theme = getThemeForEditor(language)
+    let cmoptions = {
+        mode: language,
+        noHScroll: false,
+        theme: theme,
+        readOnly: false,
+        lineNumbers: true
+    }
+    return (
+    <CodeMirror value={ text } options={ cmoptions }
+        onChange={(editor, data, value) => {
+            if(onChange) onChange(content);
+        }}
+        onBlur={(editor, data, value) => {
+            if(onBlur) onBlur(content);
+        }}
+    />)
+
+}
+
+
