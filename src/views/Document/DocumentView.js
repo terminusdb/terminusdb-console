@@ -4,12 +4,14 @@ import TerminusClient from '@terminusdb/terminus-client';
 import WOQLTable from '@terminusdb/terminus-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
+import { DialogueBox } from "../../components/DialogueBox"
 
 
 const DocumentView = (props) => {
     const [bindings, setBindings] = useState();
     const {woqlClient} = WOQLClientObj();
     const [documentClasses, setDocumentClasses] = useState();
+    const [hasDocuments, setHasDocuments] = useState(false);
 
     const [activeQuery, setActiveQuery] = useState();
 
@@ -53,6 +55,7 @@ const DocumentView = (props) => {
         let res = new TerminusClient.WOQLResult(json, q)
         if(res.hasBindings()){
             setBindings(res.getBindings())
+            setHasDocuments(true)
         }
         alert("No query results")
     }
@@ -61,10 +64,12 @@ const DocumentView = (props) => {
 
     return (
         < PageView >
-            {bindings &&
+            {bindings && hasDocuments &&
                 <WOQLTable bindings={bindings} />
             }
-            This is the document page
+            {!hasDocuments &&
+                <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
+
         </PageView>
     )
 }
