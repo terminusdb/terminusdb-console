@@ -12,8 +12,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminus-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
-import Mascot from '../../img/mascot/Mascot Color(1).png'
-import Dialogue from '../../img/placeholders/dialogue.jpg'
+import { DialogueBox } from "../../components/DialogueBox"
 
 const Schema = (props) => {
   const [graphs, setGraphs] = useState();
@@ -114,17 +113,8 @@ const Schema = (props) => {
                 <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
         </Tabs>}
-        <span class="d-fl no-avail">
-            <Col md={6} className="mb-6">
-                <img src= {Mascot}/>
-            </Col>
-            <Col md={6} className="mb-6">
-                <div class="img-c">
-                    {/*<img src= {Dialogue}/>*/}
-                    <div class="centered">No schema available to show, You can add a new Schema.</div>
-                </div>
-            </Col>
-        </span>
+        {!hasSchema && <DialogueBox message = { 'No schema available to show, You can add a new Schema.' }/>}
+
     </PageView>
 )
 
