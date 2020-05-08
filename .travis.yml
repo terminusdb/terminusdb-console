@@ -19,7 +19,7 @@ before_install:
       cd ../
       git clone https://github.com/terminusdb/terminus-react-table.git
       cd terminus-react-table && npm i && npm run build
-      cd ../terminusdb-console
+      cd "$REPO_PATH"
       npm i && npm run buildConsole
     fi
   - |
