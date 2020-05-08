@@ -5,6 +5,8 @@ node_js:
 # travis call prepare
 # create the minify version
 before_install:
+  # TODO: CI="" needs to be removed ASAP, but just want to see if
+  # the CI process is going okay
   #for installing the dev version of terminus-client
   - |
     if [[  $TRAVIS_BRANCH == 'dev' ]]; then
@@ -20,7 +22,7 @@ before_install:
       git clone https://github.com/terminusdb/terminus-react-table.git
       cd terminus-react-table && npm i && npm run build
       cd ../terminusdb-console
-      npm i && npm run buildConsole
+      npm i && CI="" npm run buildConsole
     fi
   - |
     if [[  $TRAVIS_BRANCH == 'master' && $TRAVIS_COMMIT_MESSAGE == *"[run deploy]"*  ]]; then
