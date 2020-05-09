@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { Container } from "reactstrap";
 
-
 export const QueryPane = ({query, result, className, children}) => {
     
     const [woql, setWoql] = useState(query);
@@ -48,6 +47,10 @@ export const QueryPane = ({query, result, className, children}) => {
             duration: (end-start)*1000,
             error: e 
         }
+        /*
+        * reset binding
+        */
+        setBindings([])
         setReport(rep)
     }
 
