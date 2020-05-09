@@ -8,18 +8,6 @@ before_install:
   #for installing the dev version of terminus-client
   - |
     if [[  $TRAVIS_BRANCH == 'ci_stuff' ]]; then
-      cd ../
-      git clone https://github.com/terminusdb/terminus-client.git
-      cd  terminus-client
-      git checkout v2.0
-      npm install && npm run build
-      cd ../
-      git clone https://github.com/terminusdb/terminusdb-react-graph.git
-      cd terminusdb-react-graph && npm i && npm run build
-      cd ../
-      git clone https://github.com/terminusdb/terminusdb-react-table.git
-      cd terminusdb-react-table && npm i && npm run build
-      cd "$TRAVIS_BUILD_DIR"
       npm i && npm run buildConsole
     fi
   - |
