@@ -40,12 +40,7 @@ export const OWL = (props) => {
 
     if(!dataProvider) return null
     return (
-        <>
-            {dataProvider &&
-                <RenderSnippet dataProvider = {dataProvider}
-                    edit = {edit} onChange = {updateSchema} errors={errors}/>
-            }
-            {!dataProvider && <div/>}
-        </>
+        <RenderSnippet dataProvider = {dataProvider}
+            edit = {edit} onChange = {updateSchema} errors={errors}/>
     )
 }

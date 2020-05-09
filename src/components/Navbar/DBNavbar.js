@@ -84,8 +84,8 @@ export const DBNavbar = (props) => {
                 {dbmeta.db != "terminus" && 
                 <NavItem>
                     <NavLink onClick = {toggleNavbar}>
-                       <FontAwesomeIcon icon="clock" className="mr-3" size="2x" title={headText} color="green"/>
-                       <FontAwesomeIcon icon="code-branch" className="mr-3" size="2x" title={branch} color="green"/>
+                       <FontAwesomeIcon icon="clock" className="mr-3" title={headText} color={clockStatus}/>
+                       <FontAwesomeIcon icon="code-branch" className="mr-3" title={branch} color={branchStatus}/>
                     </NavLink>
                 </NavItem>
                 }

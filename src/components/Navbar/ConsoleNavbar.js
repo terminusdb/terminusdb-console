@@ -19,7 +19,6 @@ export const ConsoleNavbar = (props) => {
 
     const toggleNavbar = () => setCollapsed(!collapsed);
   
-
     function toggleTimeTravel(){
         toggleNavbar()
     }

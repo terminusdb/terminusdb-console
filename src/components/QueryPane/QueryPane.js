@@ -9,7 +9,6 @@ export const QueryPane = ({query, result, className, children}) => {
     const [bindings, setBindings] = useState();
     const {woqlClient} = WOQLClientObj();
     const [report, setReport] = useState();
-    const [commitMsg, setCommitMsg] = useState();
 
     const qpclass = className || "terminus-query-pane"
     if(result && !bindings) processSuccessfulResult(result, Date.now(), Date.now())

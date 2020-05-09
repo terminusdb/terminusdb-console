@@ -3,6 +3,8 @@ import { isObject } from "../../utils/helperFunctions"
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/mdn-like.css');
 require('codemirror/mode/javascript/javascript.js');
+require('codemirror/mode/python/python.js');
+require('codemirror/mode/javascript/json-ld.js');
 import {Controlled as CodeMirror} from 'react-codemirror2';
 import * as tag from "../../labels/tags"
 
@@ -30,7 +32,13 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
         return "mdn-like"
     }
 
-    language = language || "javascript"
+    function getCMLanguage(language){
+        if(language == "python") return language
+        if(language == "json") return "json-ld"
+        return "javascript"
+    }
+
+    language = getCMLanguage(language)
     let theme = getThemeForEditor(language)
     let cmoptions = {
         mode: language,
@@ -42,10 +50,10 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
     return (
     <CodeMirror value={ text } options={ cmoptions }
         onChange={(editor, data, value) => {
-            if(onChange) onChange(content);
+            if(onChange) onChange(value);
         }}
         onBlur={(editor, data, value) => {
-            if(onBlur) onBlur(content);
+            if(onBlur) onBlur();
         }}
     />)
 
