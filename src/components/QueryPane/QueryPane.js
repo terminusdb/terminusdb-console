@@ -5,7 +5,7 @@ import * as lang  from "../../labels/queryFormats";
 import * as tag from "../../labels/tags";
 import * as viewLabels from "../../labels/viewLabels"
 import * as reportAlert from "../../labels/reportLabels"
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import { Editor } from "./Editor"
 import { ActionButton } from "./ActionButton"
 import { Library } from "./Library"

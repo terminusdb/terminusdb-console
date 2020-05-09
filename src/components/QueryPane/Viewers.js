@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as viewLabels from "../../labels/viewLabels"
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 
 export const Viewers = (props) => {
     const views = props.views || [];

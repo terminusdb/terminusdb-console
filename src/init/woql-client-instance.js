@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 
 export const WOQLContext = React.createContext();
 export const WOQLClientObj = () => useContext(WOQLContext);

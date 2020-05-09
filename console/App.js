@@ -4,7 +4,7 @@ import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
 import { faUser, faPowerOff, faCoffee  } from '@fortawesome/free-solid-svg-icons';
 */
 
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
 
 const App = (props) => {

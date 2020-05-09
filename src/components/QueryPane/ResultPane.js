@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import { WoqlGraph } from '@terminusdb/terminus-react-graph';
 import { WoqlTable } from '@terminusdb/terminus-react-table';
 import { FormatColumns } from '@terminusdb/terminus-react-table';
