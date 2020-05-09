@@ -18,6 +18,7 @@ const App = (props) => {
         <Router history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
+                <Route path = "/test" exact component = {consoleLib.TestHome} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
                 <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
@@ -28,7 +29,7 @@ const App = (props) => {
 
   );
 };
-
+//<Route path = "/" exact component = {consoleLib.ServerHome} />
 //paths = /db/account/dbid/$PAGE
 const DBPages = () => {
     const {setDatabase, setAccount} = consoleLib.WOQLClientObj();

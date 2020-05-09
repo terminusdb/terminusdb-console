@@ -6,8 +6,9 @@ import { FormatColumns } from '@terminusdb/terminus-react-table';
 import { isObject } from "../../utils/helperFunctions"
 import * as viewLabels from "../../labels/viewLabels"
 
+
 export const ResultPane = ({bindings, viewer}) => {
-    /*useEffect(() => {
+   /* useEffect(() => {
         switch(viewer){
             case viewLabels.GRAPH_VIEW:
                 const gv = view.graph();
@@ -25,9 +26,9 @@ export const ResultPane = ({bindings, viewer}) => {
                 setTableResults(d);
             break;
         }
-    }, [viewer, results, rule]);
-*/
-    if(!bindings) return null
+    }, [bindings]);*/
+
+    if(!bindings) return <div/>
     return (
         <div className="result-pane">
             <WOQLTable bindings={bindings} />}
