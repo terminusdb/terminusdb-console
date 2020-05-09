@@ -72,6 +72,8 @@ const DocumentView = (props) => {
 
     return (
     <PageView page="document">
+        <QueryPane type="editor" config={{text: "WOQL.star()"} />
+        <QueryPane type="table" query={docQuery} />
         <QueryPane query={docQuery}>
             <QueryEditor autosubmit="false">
                 <QueryLibrary library="myqueries"/>

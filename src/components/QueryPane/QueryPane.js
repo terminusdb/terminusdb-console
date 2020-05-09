@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { Container } from "reactstrap";
 
-export const QueryPane = ({query, result, className, children}) => {
+export const QueryPane = ({query, result, type, className, children}) => {
     
     const [woql, setWoql] = useState(query);
     const [bindings, setBindings] = useState();
@@ -10,7 +10,10 @@ export const QueryPane = ({query, result, className, children}) => {
     const [report, setReport] = useState();
 
     const qpclass = className || "terminus-query-pane"
-    if(result && !bindings) processSuccessfulResult(result, Date.now(), Date.now())
+    if(result) processSuccessfulResult(result, Date.now(), Date.now())
+    useEffect(() => {
+        if(woql && !result) executeQuery()
+    }, []);
 
     function executeQuery(){
         let start = Date.now()
@@ -23,6 +26,11 @@ export const QueryPane = ({query, result, className, children}) => {
         })
     }
 
+    function updateQuery(nwoql, no_execute){
+        setWoql(nwoql)
+        !no_execute && executeQuery()
+    }
+
     function processSuccessfulResult(res, start, end){
         let rep = {
             start: start, 
@@ -32,8 +40,8 @@ export const QueryPane = ({query, result, className, children}) => {
             deletes: res.deletes, 
             transaction_restart_count: res.transaction_restart_count,
         }
+        setBindings(res.bindings)
         if(res && res.bindings && res.bindings.length){
-            setBindings(res.bindings)
             rep.rows = res.bindings.length
             rep.columns = res.binding[0].length
         }
@@ -50,17 +58,43 @@ export const QueryPane = ({query, result, className, children}) => {
         /*
         * reset binding
         */
-        setBindings([])
+        setBindings(false)
         setReport(rep)
     }
 
-    useEffect(() => {
-        if(!bindings) executeQuery()
-    }, [woql]);
+    if(type && (type == "table" || type == "graph" || type == "chart")){
+        return (
+            <Container className={qpclass}>
+                <ResultView type={type} query={woql} bindings={bindings} updateQuery={updateQuery} />
+            </Container>            
+        )
+    }
+    if(type && type == "editor"){
+        return (
+        <Container className={qpclass}>
+            <QueryEditor query={woql} bindings={bindings} updateQuery={updateQuery}>
+                <QueryLibrary library="editor"/>
+            </QueryEditor>
+            <ResultReport report={report} query={woql} bindings={bindings} updateQuery={updateQuery} />
+            <ResultPane query={woql} report={report} bindings={bindings} updateQuery={updateQuery} >
+                <ViewEditor />
+            </ResultPane>        
+        </Container>)
+    }
+
+    const elements = React.Children.toArray(children) ;	
+    const childrenEl = elements.map((child)=>{
+        return React.cloneElement(child, { 
+            updateQuery:updateQuery,
+            report:report,
+            query:woql, 
+            bindings:bindings
+        })
+    })
 
     return (
         <Container className={qpclass}>
-            {children}
+            {childrenEl}
         </Container>            
     )
 }
