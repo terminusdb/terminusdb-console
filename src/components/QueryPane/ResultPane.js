@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { WoqlGraph } from '@terminusdb/terminus-react-graph';
-import { WoqlTable } from '@terminusdb/terminus-react-table';
-import { FormatColumns } from '@terminusdb/terminus-react-table';
+import { WoqlGraph } from '@terminusdb/terminusdb-react-graph';
+import { WoqlTable } from '@terminusdb/terminusdb-react-table';
+import { FormatColumns } from '@terminusdb/terminusdb-react-table';
 import { isObject } from "../../utils/helperFunctions"
 import * as viewLabels from "../../labels/viewLabels"
 

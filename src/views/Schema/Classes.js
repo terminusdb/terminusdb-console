@@ -20,7 +20,7 @@ export const Classes = (props) => {
         setFilter(props.graph)
     }, [props.graph])
 
-    //use this after fixing terminus-react-table
+    //use this after fixing terminusdb-react-table
     /*useEffect(() => {
         if(filter){
             let gstr = filter.type + "/" + filter.gid
