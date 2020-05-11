@@ -15,6 +15,7 @@ module.exports = {
             // Transform our own .css files with PostCSS and CSS-modules
             test: /\.css$/,
             exclude: /node_modules/,
+            include: /node_modules/@terminusdb,
             use: ['style-loader', 'css-loader'],
           }, 
           {
