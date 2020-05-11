@@ -7,11 +7,11 @@ export const WOQLClientObj = () => useContext(WOQLContext);
 export const WOQLClientProvider = ({children,params}) => {
 
 	const [loadingServer, setLoading] = useState(true);
-  	const [woqlClient, setWoqlClient] = useState(null);
-  	const [clientError, setError] = useState(false);
+  const [woqlClient, setWoqlClient] = useState(null);
+  const [clientError, setError] = useState(false);
 
-    let database=false;
-    let account=false;
+  let database=false;
+  let account=false;
 
     /*
     * Important Warning Cannot update a component (`WOQLClientProvider`) while rendering a different component (`DBPages`). To locate the bad setState() call inside `DBPages`, follow the stack trace as described

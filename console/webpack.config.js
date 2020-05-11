@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const Dotenv = require('dotenv-webpack');
+var PACKAGE = require('../package.json');
+var version = `v${PACKAGE.version}`;
 
 //console.log("__dirname",__dirname);
 
@@ -10,8 +12,8 @@ module.exports = (env, argv) => ({
     path.join(__dirname, './index.js'),
   ],
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: "bundle.js",
+    path: path.resolve(__dirname, `public_pages/${version}/dist`),
+    filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
   devtool: argv.mode === 'production' ? false : '#inline-source-map',
@@ -23,7 +25,7 @@ module.exports = (env, argv) => ({
     new HtmlWebPackPlugin({
         inject: false,
         template: path.resolve(__dirname, './index.html'),
-        bundleFileName:"terminus-dashboard.min.js"
+        bundleFileName:"terminusdb-console.min.js"
       }),
 
 
@@ -34,13 +36,10 @@ module.exports = (env, argv) => ({
       filename: 'index.html'
     }),*/
   ],
-  resolve: {/*
-    alias: {
-      "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
-  },*/
+  resolve: {
       alias: {
         "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
-        react: path.resolve('./node_modules/react')
+         react: path.resolve('./node_modules/react'),
       },
     extensions: ['.js', '.jsx', '.json'],
   },

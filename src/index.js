@@ -17,3 +17,4 @@ export * from './variables/pageLabels'
 export {initFontLib} from "./init/initFontAwesome";
 export CreateDatabase from "./views/NewDatabase/CreateDatabaseView"
 export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance"
+export TestHome from "./views/TestHome";
