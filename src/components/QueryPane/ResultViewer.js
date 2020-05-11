@@ -2,18 +2,44 @@ import React, { useState, useEffect } from "react";
 import TerminusClient from '@terminusdb/terminus-client';
 import { WOQLGraph } from '@terminusdb/terminus-react-graph';
 import { WOQLTable } from '@terminusdb/terminus-react-table';
-import { WOQLChart } from '@terminusdb/terminus-react-chart';
+//import { WOQLChart } from '@terminusdb/terminus-react-chart';
+import { Container } from 'reactstrap'
 
-export const ResultViewer = ({bindings, type, config, query}) => {
-    if(!bindings) return (<span>"No Bindings"</span>)
-    type = type || "table"
-    switch (type) {
-        case "table" : 
-            return (<WOQLTable bindings={bindings} config={config} query={query}/>)
-        case "graph" : 
-            return (<WOQLGraph bindings={bindings} config={config} query={query}/>)
-        case "chart" : 
-            return (<WOQLChart bindings={bindings} config={config} query={query}/>)
+export const ResultViewer = ({bindings, report, type, viewConfig, query, children, updateQuery}) => {
+
+    const [binds, setBindings] = useState(bindings)
+    const [currentView, setView] = useState(viewConfig)
+    useEffect(() => setBindings(bindings), [bindings])
+
+    function updateView(newconfig, newvtype){
+        setView(newConfig)
+        if(newvtype && newvtype != type) type = newvtype
     }
-    return (<span>{type} is not supported</span>)
+
+    const elements = React.Children.toArray(children) ;	
+    const childrenEl = elements.map((child)=>{
+        return React.cloneElement(child, { 
+            updateView:updateView,
+            updateQuery:updateQuery,
+            view:currentView,
+            report:report,
+            query:query, 
+            bindings:bindings
+        })
+    })
+
+    return (
+        <Container>
+            {childrenEl}
+            {(binds && type == "table") && 
+                <WOQLTable bindings={binds} config={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
+            }
+            {(binds && type == "graph") && 
+                <WOQLGraph bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
+            }
+            {(binds && type == "chart") && 
+                <WOQLChart bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
+            }
+        </Container>                
+    )
 }

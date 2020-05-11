@@ -46,9 +46,7 @@ const Query = (props) => {
       const [open, setOpen] = useState(true);
       return (
         <div className="query-box">
-            <QueryPane editor = { editor }
-                resultReport = { resultReport }
-                resultPane = { resultPane }/>
+            <QueryPane type="editor"/>
             <button className = { queryControls.newQuery.className }
                 type =  { queryControls.newQuery.type }
                 onClick={() => { setQp([...qp, qp.length]) }}>
@@ -60,9 +58,9 @@ const Query = (props) => {
  const NewQueryPane = (props) => {
      const [qp, setQp] = useState([0]);
      return qp.map(m => <QueryPaneBox key={m}
-                         qpNumber={m}
-                         pstate={{qp, setQp}}/>
-        );
+        qpNumber={m}
+        pstate={{qp, setQp}}/>
+    );
   }
 
   return (

@@ -15,8 +15,6 @@ import { ResultReport } from "../../components/QueryPane/ResultReport"
 import { ViewEditor } from "../../components/QueryPane/ViewEditor"
 import { ResultPane } from "../../components/QueryPane/ResultPane"
 
-ResultPane
-
 const DocumentView = (props) => {
     const [bindings, setBindings] = useState();
     const {woqlClient} = WOQLClientObj();
@@ -70,28 +68,10 @@ const DocumentView = (props) => {
 
     function headChanged(){}
 
+
     return (
     <PageView page="document">
-        <QueryPane type="editor" config={{text: "WOQL.star()"} />
         <QueryPane type="table" query={docQuery} />
-        <QueryPane query={docQuery}>
-            <QueryEditor autosubmit="false">
-                <QueryLibrary library="myqueries"/>
-            </QueryEditor>
-            <ResultReport/>
-            <ResultPane>
-                <ViewEditor />
-                <ResultViewer type="table" />
-            </ResultPane>
-        </QueryPane>
-        {bindings && 
-            <ResultViewer type="table" bindings={bindings} query={docQuery}/>
-        }
-        {docQuery && 
-        <QueryPane query={docQuery}>
-            <ResultViewer type="table" />
-        </QueryPane>
-        }
     {!hasDocuments &&
         <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
     }

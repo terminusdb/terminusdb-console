@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { Container } from "reactstrap";
+import { Container, Row } from "reactstrap";
+import { ResultViewer } from "./ResultViewer"
+import { QueryEditor } from "./QueryEditor"
+import { QueryLibrary } from "./QueryLibrary"
+import { ResultReport } from "./ResultReport"
+import { ViewEditor } from "./ViewEditor"
+import { ResultPane } from "./ResultPane"
+import { ViewChooser } from "./ViewChooser"
 
 export const QueryPane = ({query, result, type, className, children}) => {
     
@@ -11,13 +18,14 @@ export const QueryPane = ({query, result, type, className, children}) => {
 
     const qpclass = className || "terminus-query-pane"
     if(result) processSuccessfulResult(result, Date.now(), Date.now())
+
     useEffect(() => {
-        if(woql && !result) executeQuery()
+        if(query && !result) executeQuery(query)
     }, []);
 
-    function executeQuery(){
+    function executeQuery(q, commitMsg){
         let start = Date.now()
-        woql.execute(woqlClient, commitMsg)
+        q.execute(woqlClient, commitMsg)
         .then((resoc) => {
             processSuccessfulResult(resoc, start, Date.now())
         })
@@ -26,9 +34,9 @@ export const QueryPane = ({query, result, type, className, children}) => {
         })
     }
 
-    function updateQuery(nwoql, no_execute){
+    function updateQuery(nwoql, commitMsg, no_execute){
+        !no_execute && executeQuery(nwoql, commitMsg)
         setWoql(nwoql)
-        !no_execute && executeQuery()
     }
 
     function processSuccessfulResult(res, start, end){
@@ -42,8 +50,8 @@ export const QueryPane = ({query, result, type, className, children}) => {
         }
         setBindings(res.bindings)
         if(res && res.bindings && res.bindings.length){
-            rep.rows = res.bindings.length
-            rep.columns = res.binding[0].length
+            rep.bindings = res.bindings.length
+            //rep.columns = Object.keys(res.binding[0]).length
         }
         setReport(rep)
     }
@@ -65,20 +73,26 @@ export const QueryPane = ({query, result, type, className, children}) => {
     if(type && (type == "table" || type == "graph" || type == "chart")){
         return (
             <Container className={qpclass}>
-                <ResultView type={type} query={woql} bindings={bindings} updateQuery={updateQuery} />
+                <ResultViewer type={type} query={woql} bindings={bindings} updateQuery={updateQuery} />
             </Container>            
         )
     }
     if(type && type == "editor"){
         return (
         <Container className={qpclass}>
-            <QueryEditor query={woql} bindings={bindings} updateQuery={updateQuery}>
-                <QueryLibrary library="editor"/>
-            </QueryEditor>
-            <ResultReport report={report} query={woql} bindings={bindings} updateQuery={updateQuery} />
-            <ResultPane query={woql} report={report} bindings={bindings} updateQuery={updateQuery} >
-                <ViewEditor />
-            </ResultPane>        
+            <Row>
+                <QueryEditor closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
+                    <QueryLibrary library="editor"/>
+                </QueryEditor>
+            </Row>
+            <Row>
+                <ResultReport report={report} query={woql} bindings={bindings} updateQuery={updateQuery} />
+                <ResultPane query={woql} report={report} bindings={bindings} updateQuery={updateQuery} >
+                    <ViewEditor display="hidden" query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
+                    <ViewChooser query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
+                    <ResultViewer type="table" query={woql} bindings={bindings} updateQuery={updateQuery} />
+                </ResultPane>
+            </Row>        
         </Container>)
     }
 

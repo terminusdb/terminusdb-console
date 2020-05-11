@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Container, Button } from 'reactstrap'
+import React, { useState, useEffect } from "react"
+import { Container, Button, Alert } from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
 import TerminusClient from '@terminusdb/terminus-client';
 import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants'
@@ -10,12 +10,12 @@ import { commitBox } from "../../variables/formLabels"
 /**
  * Controls the display of query viewer and editor
  */
-export const QueryEditor = ({query, children, className, language, languages, text, editable, closable, submit, languageChooser}) => {
+export const QueryEditor = ({query, children, className, language, languages, text, editable, closable, submit, languageChooser, display, updateQuery}) => {
     const qeclass = className || 'terminus-query-editor'
     editable = typeof editable != "undefined" ? editable : true 
-    closable = typeof closable != "undefined" ? closable : false
+    closable = ((typeof closable != "undefined") ? closable : false)
     display = display || "open"
-    submitMsg = submit || QUERY_SUBMIT
+    submit = submit || QUERY_SUBMIT
     languageChooser = languageChooser || "button"
 
     let initcontent = text || "" 
@@ -30,13 +30,50 @@ export const QueryEditor = ({query, children, className, language, languages, te
     const [error, setError] = useState(false);
     const [containsUpdate, setContainsUpdate] = useState(false);
     const [commitMsg, setCommitMsg] = useState();
+    const [hasDisplay, setDisplay] = useState(display);
 
-    //closable
-    //display icon: 
-    //readonly    
-    //error Checking 
-    //onSubmit
-    //editor prompts
+
+    function checkContent(){
+        //sets errors internally if doesn't work
+        setError(false)
+        if(content){
+            let woql = makeWOQLFromString(content, baseLanguage)
+            if(woql) {
+                setContainsUpdate(woql.containsUpdate())
+            }
+            return woql
+        }
+        return false
+    }    
+
+    function sendQuery(){
+        let woql = checkContent()
+        if(woql){
+            if(updateQuery) updateQuery(woql, commitMsg)
+        }
+    }
+
+    function hideEditor(){
+        setDisplay("hidden")
+    }
+
+    function showEditor(){
+        setDisplay("full")
+    }
+
+
+    function updateContent(cont){
+        setContent(cont)
+        setError(false)
+    }
+
+    function newLanguageVersion(lang){
+        let woql = makeWOQLFromString(content, baseLanguage)
+        setLanguage(lang)
+        setShowLanguage(false)
+        if(woql) setContent(makeWOQLIntoString(woql, lang))
+    }
+
     function showLanguageVersion(lang){
         if(lang == "original"){
             setShowLanguage(false)
@@ -48,33 +85,9 @@ export const QueryEditor = ({query, children, className, language, languages, te
                 setShowLanguage(lang)
                 setShowContent(makeWOQLIntoString(woql, lang))    
             }
-        }
+        }s
     }
 
-    function checkContent(){
-        //sets errors internally if doesn't work
-        setError(false)
-        let woql = makeWOQLFromString(content, baseLanguage)
-        if(woql) {
-            setContainsUpdate(woql.containsUpdate())
-        }
-    }    
-
-    function hideEditor(){
-        display = "hidden"
-    }
-
-    function updateContent(cont){
-        setContent(cont)
-        setError(false)
-    }
-
-    function newLanguageVersion(lang){
-        let woql = makeWOQLFromString(content, baseLanguage)
-        setLanguage(lang)
-        setShowLanguage(false)
-        setContent(makeWOQLIntoString(woql, lang))
-    }
 
     function makeWOQLFromString(str, lang){
         if(lang == "json"){
@@ -89,7 +102,7 @@ export const QueryEditor = ({query, children, className, language, languages, te
         if(lang == "js"){
             let WOQL = TerminusClient.WOQL
             try {
-                var nw = eval(text)
+                var nw = eval(str)
                 return nw
             }
             catch(e){
@@ -111,10 +124,10 @@ export const QueryEditor = ({query, children, className, language, languages, te
         else return ""
     }
 
-    if(display == "hidden") return (<span>this is hidden - icon</span>)
-    return(<Container className={qeclass} >
-            {closeable && 
-                <Button onClick = { hideEditor }> {tag.CLOSE_RULE} </Button>}
+    if(hasDisplay == "hidden") return (<Button onClick = { showEditor }>{SHOW_QUERY_EDITOR}</Button>)
+    return(<Container className={qeclass} > 
+            {(closable == true) && 
+                <Button onClick = { hideEditor }>{HIDE_QUERY_EDITOR}</Button>
             }
             {languages && 
                 <LanguageSwitcher 
@@ -128,7 +141,7 @@ export const QueryEditor = ({query, children, className, language, languages, te
                     type={languageChooser}
                 />
             }
-            {!showLanguage && editable && 
+            {(!showLanguage && editable) && 
                 <CodeEditor onChange={updateContent} onBlur={checkContent} text={content} language={baseLanguage}/>
             }
             {!editable && !showLanguage &&  
@@ -138,16 +151,18 @@ export const QueryEditor = ({query, children, className, language, languages, te
                 <CodeViewer text={showContent} language={showLanguage}/>
             }
             {children}
-            {(editable && userMsg) &&  
-                <Alert color="warning">userMsg</Alert>
+            {(editable && error) &&  
+                <Alert color="warning">Error Message</Alert>
             }
-            {editable && containsUpdate && 
+            {(editable && containsUpdate) && 
                 <textarea onChange={(editor, data, value) => { setCommitMsg(value)}} placeholder = { commitBox.input.placeholder }>
                     {commitMsg}
                 </textarea>
             }
             {editable && 
-                <Button>submitMsg</Button>
+                <Container>
+                    <Button onClick={sendQuery}>{submit}</Button>
+                </Container>
             }
         </Container>
     )

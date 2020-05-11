@@ -4,8 +4,7 @@ require('codemirror/lib/codemirror.css');
 require('codemirror/theme/mdn-like.css');
 require('codemirror/mode/javascript/javascript.js');
 require('codemirror/mode/python/python.js');
-require('codemirror/mode/javascript/json-ld.js');
-import {Controlled as CodeMirror} from 'react-codemirror2';
+import {UnControlled as CodeMirror} from 'react-codemirror2';
 import * as tag from "../../labels/tags"
 
 
@@ -15,7 +14,7 @@ export const CodeViewer = ({text, language}) => {
         return "mdn-like"
     }
 
-    language = language || "javascript"
+    language = getCMLanguage(language)
     let theme = getThemeForViewer(language)
     let cmoptions = {
         mode: language,
@@ -24,6 +23,7 @@ export const CodeViewer = ({text, language}) => {
         readOnly: "nocursor",
         lineNumbers: true
     }
+    if(language == "json") cmoptions['jsonld'] = true
     return (<CodeMirror value={ text } options={ cmoptions }/>)
 }
 
@@ -32,21 +32,18 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
         return "mdn-like"
     }
 
-    function getCMLanguage(language){
-        if(language == "python") return language
-        if(language == "json") return "json-ld"
-        return "javascript"
-    }
-
     language = getCMLanguage(language)
     let theme = getThemeForEditor(language)
     let cmoptions = {
         mode: language,
         noHScroll: false,
         theme: theme,
-        readOnly: false,
         lineNumbers: true
     }
+    if(language == "json"){
+        cmoptions['json'] = true
+        cmoptions['jsonld'] = true
+    } 
     return (
     <CodeMirror value={ text } options={ cmoptions }
         onChange={(editor, data, value) => {
@@ -55,8 +52,14 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
         onBlur={(editor, data, value) => {
             if(onBlur) onBlur();
         }}
-    />)
+    />
+    )
 
 }
 
 
+function getCMLanguage(language){
+    if(language == "python") return language
+    if(language == "json") return "javascript"
+    return "javascript"
+}

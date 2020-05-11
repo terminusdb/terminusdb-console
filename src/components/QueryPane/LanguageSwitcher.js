@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN} from './constants'
-import { Button, ButtonGroup, Dropdown, DropdownMenu, DropdownToggle, Badge} from "reactstrap";
-
+import { Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Badge, Container} from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faClock } from '@fortawesome/free-solid-svg-icons'
+library.add(faClock)
 
 export const LanguageSwitcher = ({active, language, showLanguage, languages, editable, onChange, onEdit, type}) => {
     if(!languages) return null
@@ -13,18 +16,37 @@ export const LanguageSwitcher = ({active, language, showLanguage, languages, edi
         let selected = (showLanguage && languages[i].id == showLanguage || (!showLanguage && languages[i].id == "original"))
         nlanguages.push({id: languages[i], selected:selected, badge: getLanguageBadge(languages[i])})
     }
-    const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) != -1) 
-    editLang = (showedit ? function() {onEdit(showLanguage)} : false)
+
+    const [editLanguage, setEditLanguage] = useState(language)
+    const [readShowLanguage, setShowLanguage] = useState(showLanguage)
+    const [isActive, setIsActive] = useState(active)
+
+    useEffect(() => {
+        setShowLanguage(showLanguage)
+    }, [showLanguage])
+
+    useEffect(() => {
+        setEditLanguage(language)
+    }, [language])
+
+    useEffect(() => {
+        setIsActive(active)
+    }, [active])
+
+
+    const showedit = (editable && showLanguage && ["js", "json"].indexOf(readShowLanguage) != -1) 
+    const editLang = (showedit ? function() {onEdit(readShowLanguage)} : false)
     if(type && type == "dropdown"){
-        return (<DropDownLanguageSwitcher onEdit={editLang} disabled={!active} languages={nlanguages} onChange={onChange} />)
+        return (<DropDownLanguageSwitcher onEdit={editLang} disabled={!isActive} languages={nlanguages} onChange={onChange} />)
     }
-    return (<ButtonLanguageSwitcher onEdit={editLang} disabled={!active} languages={nlanguages}  onChange={onChange}/>)
+    return (<ButtonLanguageSwitcher onEdit={editLang} disabled={!isActive} languages={nlanguages}  onChange={onChange}/>)
 }
 
 function getLanguageBadge(lang, base){
     let langname = LANGUAGE_NAMES[lang] || lang
     let color = base ? "primary" : "secondary"
-    return (<Badge color={color} pill>{langname}</Badge>)
+    let faicon = base ? "clock" : "clock"
+    return (<Badge color={color}>{langname} <FontAwesomeIcon icon={faicon} className="mr-3"/></Badge>)
 }
 
 /**
@@ -35,7 +57,7 @@ const ButtonLanguageSwitcher = ({disabled, languages, onChange, onEdit}) => {
         function processClick(){
             onChange(lang.id)
         }
-        return (<Button active={lang.selected} disabled={disabled} onClick={processClick}>{lang.badge}</Button>)         
+        return (<Button active={lang.selected} key={lang.id} disabled={disabled} onClick={processClick}>{lang.badge}</Button>)         
     })
     return(
         <ButtonToolbar>
@@ -56,10 +78,12 @@ const ButtonLanguageSwitcher = ({disabled, languages, onChange, onEdit}) => {
  */
 const DropDownLanguageSwitcher = ({disabled, languages, onChange, onEdit}) => {
     //button has disabled, active...
+
     const entries = languages.map((lang) => {
-        return (<DropdownItem active={lang.selected} disabled={disabled} onClick={onChange}>{lang.badge}</DropdownItem>) 
+        return (<DropdownItem active={lang.selected} key={lang.id} disabled={disabled} onClick={function(){onChange(lang.id)}}>{lang.badge}</DropdownItem>) 
     })
 
+    
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggle = () => setDropdownOpen(prevState => !prevState);

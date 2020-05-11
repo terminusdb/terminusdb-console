@@ -1,31 +1,31 @@
 import React, { useState } from "react"
-import { Button, ButtonGroup } from 'reactstrap'
+import { Button, Container } from 'reactstrap'
+import {SHOW_VIEW_EDITOR, HIDE_VIEW_EDITOR} from './constants'
+import { CodeEditor } from "./Editor"
 
-export const ViewEditor = (props) => {    
-    //icons for changing stuff
-    /*useEffect(() => {
-        switch(viewer){
-            case viewLabels.GRAPH_VIEW:
-                const gv = view.graph();
-                gv.height(700).width(1200);
-                let g = gv.create(null);
-                if(isObject(rule)) g.config = rule;
-                g.setResult(results);
-                setGraphResults(g);
-            break;
-            case viewLabels.TABLE_VIEW:
-                //temp
-                const columns =[{ Header:'Table View', columns:listOfColumns}]
-                const d = results.getBindings();
-                setListOfColumns(FormatColumns(results.getVariableList()));
-                setTableResults(d);
-            break;
-        }
-    }, [viewer, results, rule]);
-    */
+//lets us change the view for a single resultview
+
+export const ViewEditor = ({bindings, display, report, type, view, language, query, updateQuery}) => {
+    const [content, setContent] = useState();
+    const [hasDisplay, setDisplay] = useState(display);    
+
+    function hideEditor(){
+        setDisplay("hidden")
+    }
+    
+    function updateContent(cont){
+        setContent(cont)
+    }
+
+    function showEditor(){
+        setDisplay("full")
+    }
+
+    if(hasDisplay == "hidden") return (<Button onClick = { showEditor }>{SHOW_VIEW_EDITOR}</Button>)
     return(
-        <div className="lib-pane">
-            View Editor
-        </div>
+        <Container>
+            <Button onClick = { hideEditor } close>{HIDE_VIEW_EDITOR}</Button>
+            <CodeEditor onChange={updateContent} text={content} language={language}/>
+        </Container>
     )
 }

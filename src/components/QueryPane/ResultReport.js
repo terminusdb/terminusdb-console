@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Alert } from 'reactstrap'
 
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)
-    
+    useEffect(() => { setReport(report)}, [report])
+
     if(currentReport && currentReport.error){
         return (
             <Alert color='danger'>Returned Error</Alert>
