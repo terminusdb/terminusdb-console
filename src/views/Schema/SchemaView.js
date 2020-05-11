@@ -18,7 +18,7 @@ const Schema = (props) => {
   const [graphs, setGraphs] = useState();
   const [graphFilter, setGraphFilter] = useState(props.graphFilter);
   const [rebuild, setRebuild] = useState(0);
-  const [hasSchema, setHasSchema] = useState(false);
+  const [hasSchema, setHasSchema] = useState(2);
   const { loading, setLoading } = useState(false);
   const {woqlClient} = WOQLClientObj();
   //retrieves details of the available graphs on mount
@@ -50,6 +50,7 @@ const Schema = (props) => {
 		  setGraphs({schema: gschema, instance: ginstances, inference: ginf})
 		  if(!graphFilter){
 			  if(gschema.length || ginf.length) setHasSchema(true)
+              else setHasSchema(false)
 			  if(gschema.length > 1) setGraphFilter({type: "schema", gid: "*"})
 			  else if(gschema.length) setGraphFilter({type: "schema", gid: gschema[0]})
 			  else if(ginf.length > 1) setGraphFilter({type: "inference", gid: "*"})
@@ -113,7 +114,9 @@ const Schema = (props) => {
                 <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
         </Tabs>}
-        {!hasSchema && <DialogueBox message = { 'No schema available to show, You can add a new Schema.' }/>}
+        {!hasSchema && <>
+            <hr className = "my-space-15"/>
+            <DialogueBox message = { 'No schema available to show, You can add a new Schema.' }/></>}
 
     </PageView>
 )

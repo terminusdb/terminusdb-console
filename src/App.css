@@ -5,6 +5,22 @@
     margin-top: 40px
 }
 
+img.cancel-ic{
+    float:right;
+    width: 2%;
+    color: #6290c3
+}
+
+img.cancel-ic:hover{
+    cursor: pointer;
+}
+
+div.card-title{
+    text-align: center;
+    /*margin-top: 10%;*/
+    font-size: large;
+}
+
 div.terminus-violation{
    margin: 10px 0px 10px 0px;
 }
@@ -440,11 +456,27 @@ div.css-yk16xz-control{
 }
 
 h1.d-head1{
-    font-size: 130px;
+    /*font-size: 130px;
     font-weight: 500;
     margin: 100px -100px -80px 0px;
-    text-align: center;
+    text-align: center;*/
     color: #002855;
+    font-size: 50px;
+    font-weight: 500;
+}
+
+div.head-bg{
+    margin-bottom: -600px;
+}
+
+div.head-t{
+    margin-top: -50px
+}
+
+h1.d-head2{
+    color: #002855;
+    font-size: 30px;
+    font-weight: 500;
 }
 
 div.img-c{
@@ -630,6 +662,16 @@ a.dropdown-profile svg, button.dropdown-item svg {
 .nav-item.dropdown .dropdown-item:last-child {
   border-bottom: 0
 }
+
+img.card-img-top{
+    width: 40%;
+    /*margin-top: 10%;*/
+    margin-left: 30%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+
 
 div.div-hide {
     display: none !important;
@@ -1169,7 +1211,7 @@ legend {
 }
 
 div.card{
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 span.nav-al{

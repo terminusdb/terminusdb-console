@@ -20,7 +20,7 @@ const CloneRemoteDB = (props) => {
 
   const handleTerminusDBInput = (ev) => {
 	  var url = ev.target.value;
-	  if(url.includes('http://local.terminusdb.com'))
+	  if(url.includes('http://terminusdb.com'))
       	  setTerminusDB(true)
 	  else setTerminusDB(false)
   }

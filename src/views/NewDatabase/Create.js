@@ -21,6 +21,7 @@ const CreateDB = (props) => {
   const [dbId, updateDbId] = useState(tag.BLANK)
 
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(true);
 
   const {woqlClient} = WOQLClientObj();
 
@@ -59,12 +60,17 @@ const CreateDB = (props) => {
 	  setDBLoction(CREATE_TERMINUS_DB);
   }
 
+  const handleNext = () => {
+      setCreateOptions(true)
+      setShow(false);
+  }
+
   return (
   		<>
             <hr className = "my-space-15"/>
 			{isObject(rep) && <Report report = { rep }/>}
             { loading && <Loading /> }
-            <form onSubmit={handleSubmit(onSubmit) }>
+            {show && <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>
             		{ createDatabaseForm.id.label.text + ' *' }
@@ -103,7 +109,10 @@ const CreateDB = (props) => {
 
 				 <hr className = "my-space-15"/>
 
-				 <span className="d-fl">
+                 <button onClick={handleNext}> Next</button>
+
+
+				 {/*<span className="d-fl">
 				     <Col md={1} className="mb-1">
 		                 <input type="radio"
 		                    name={ createDatabaseForm.createLocally.label.name }
@@ -132,8 +141,8 @@ const CreateDB = (props) => {
             	<button className = { createDatabaseForm.action.className }
         		    type =  { createDatabaseForm.action.type } >
         			{ createDatabaseForm.action.text }
-            	</button>
-            </form>
+            	</button>*/}
+            </form>}
           </>)
 }
 

@@ -11,7 +11,7 @@ const DocumentView = (props) => {
     const [bindings, setBindings] = useState();
     const {woqlClient} = WOQLClientObj();
     const [documentClasses, setDocumentClasses] = useState();
-    const [hasDocuments, setHasDocuments] = useState(false);
+    const [hasDocuments, setHasDocuments] = useState(2);
 
     const [activeQuery, setActiveQuery] = useState();
 
@@ -57,7 +57,9 @@ const DocumentView = (props) => {
             setBindings(res.getBindings())
             setHasDocuments(true)
         }
-        alert("No query results")
+        else {
+            setHasDocuments(false)
+        }
     }
 
     function headChanged(){}
