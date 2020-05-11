@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TerminusClient from '@terminusdb/terminus-client';
-import { WOQLGraph } from '@terminusdb/terminus-react-graph';
+//import { WOQLGraph } from '@terminusdb/terminus-react-graph';
 import { WOQLTable } from '@terminusdb/terminus-react-table';
 //import { WOQLChart } from '@terminusdb/terminus-react-chart';
 import { Container } from 'reactstrap'
