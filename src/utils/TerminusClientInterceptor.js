@@ -1,4 +1,4 @@
-import TerminusClient from '@terminusdb/terminus-client';/*
+import TerminusClient from '@terminusdb/terminusdb-client';/*
 * we can add the Auth0 token here
 */
 TerminusClient.axiosInstance.interceptors.request.use(function (config) {

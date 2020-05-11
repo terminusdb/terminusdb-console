@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //import WOQLQueryContainer from "../components/WOQLQueryContainer";
 import * as q from "../labels/queryLabels";
 
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 //import {ResultViewer} from  "../components/QueryPane/ResultViewer"
 import {WOQLQueryContainerHook} from "../components/WOQLQueryContainerHook";
 import {QueryLibrary} from "../components/QueryPane/QueryLibrary"

@@ -9,7 +9,7 @@ import { OWL } from './OWL'
 import { GraphMaker } from './GraphMaker'
 import { PrefixManager } from './PrefixManager'
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
 import { DialogueBox } from "../../components/DialogueBox"

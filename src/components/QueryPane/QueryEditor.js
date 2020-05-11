@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Container, Button, Alert } from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { commitBox } from "../../variables/formLabels"

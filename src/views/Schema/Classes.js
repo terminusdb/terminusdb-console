@@ -4,7 +4,7 @@ import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/Table/RenderTable";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const Classes = (props) => {

@@ -29,7 +29,7 @@
     "test": "exit 0",
     "lint": "eslint src",
     "autofix": "eslint src --fix",
-    "installClient:local": "npm install --no-save ../terminus-client"
+    "installClient:local": "npm install --no-save ../terminusdb-client"
   },
   "pre-commit": [],
   "pre-push": [
@@ -51,6 +51,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@o2xp/react-datatable": "^1.1.44",
+    "@terminusdb/terminusdb-client": "file:../terminusdb-client",
+    "@terminusdb/terminusdb-react-graph": "file:../terminusdb-react-graph",
+    "@terminusdb/terminusdb-react-table": "file:../terminusdb-react-table",
     "classnames": "^2.2.5",
     "codemirror": "^5.52.0",
     "core-js": "^3.4.2",
@@ -75,9 +78,6 @@
     "react-notifications": "^1.5.0-beta.0",
     "react-select": "^3.1.0",
     "react-simple-code-editor": "^0.11.0",
-    "@terminusdb/terminus-client": "file:../terminus-client",
-    "@terminusdb/terminus-react-graph": "file:../terminus-react-graph",
-    "@terminusdb/terminus-react-table": "file:../terminus-react-table",
     "react-slick": "^0.25.2",
     "reactstrap": "^8.2.0",
     "recharts": "^2.0.0-beta.5",

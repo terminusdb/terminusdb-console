@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 //import WOQLTable from '../../components/Table/WOQLTable';
-import { WOQLTable } from '@terminusdb/terminus-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
 import { DialogueBox } from "../../components/DialogueBox"
