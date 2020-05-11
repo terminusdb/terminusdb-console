@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 //import WOQLTable from '../../components/Table/WOQLTable';
-import { WOQLTable } from '@terminusdb/terminus-react-table';
+import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
 import { DialogueBox } from "../../components/DialogueBox"
-
+import { Container, Row } from "reactstrap";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 import { QueryEditor } from "../../components/QueryPane/QueryEditor"
@@ -15,13 +15,19 @@ import { ResultReport } from "../../components/QueryPane/ResultReport"
 import { ViewEditor } from "../../components/QueryPane/ViewEditor"
 import { ResultPane } from "../../components/QueryPane/ResultPane"
 
+import {WOQLQueryContainerHook} from "../../components/WOQLQueryContainerHook";
+
+
 const DocumentView = (props) => {
     const [bindings, setBindings] = useState();
-    const {woqlClient} = WOQLClientObj();
+    //const {woqlClient} = WOQLClientObj();
     const [documentClasses, setDocumentClasses] = useState();
     const [hasDocuments, setHasDocuments] = useState(false);
 
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
+
+    //const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(docQuery);
+
 
     useEffect(() => {
         woqlClient.query(docQuery).then((cresults) => {
@@ -71,7 +77,9 @@ const DocumentView = (props) => {
 
     return (
     <PageView page="document">
-        <QueryPane type="table" query={docQuery} />
+         <Container className={qpclass}>
+            <ResultViewer type={"table"} query={woql} bindings={bindings} updateQuery={updateQuery} />
+         </Container> 
     {!hasDocuments &&
         <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
     }

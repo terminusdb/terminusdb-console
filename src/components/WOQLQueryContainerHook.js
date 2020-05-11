@@ -2,21 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Container } from "reactstrap";
 import { WOQLClientObj } from "../init/woql-client-instance";
 import {TerminusClientInterceptor} from '../utils/TerminusClientInterceptor';
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 
-function WOQLQueryContainerHook(startQuery){
+function WOQLQueryContainerHook(startQuery){	
 	const query=startQuery || false; 
 	const [woql, setWoqlQuery] = useState(query);
-    const {woqlClient} = WOQLClientObj();
     const [report, setReport] = useState();
-    const [commitMsg, setQueryCommitMsg] = useState("bla bla");
     const [bindings, setBindings] = useState();
+    const {woqlClient} = WOQLClientObj();
+
+    let commitMsg="Update";
+
+    const updateQuery = (nwoql, commitMsg, no_execute)=>{
+        //!no_execute && executeQuery(nwoql, commitMsg)
+        //setQueryCommitMsg(commitMsg);
+        commitMsg=commitMsg;
+        //executeQuery(nwoql, commitMsg)
+        setWoqlQuery(nwoql)
+    }
 
     function processSuccessfulResult(response){
         if(response && response.bindings && response.bindings.length){
             setBindings(response.bindings)
-            //rep.rows = res.bindings.length
-            //rep.columns = res.binding[0].length
             setReport(response.metadata);
         }
     }
@@ -31,6 +38,7 @@ function WOQLQueryContainerHook(startQuery){
             duration: (end-start)*1000,
             error: e 
         }*/
+        setBindings([])
         setReport("error");
     }
 
@@ -49,13 +57,8 @@ function WOQLQueryContainerHook(startQuery){
         if(woql!==false)executeQuery();
     }, [woql])
 
-    const setWoql = (prop) => {
-    	setWoqlQuery(prop)
-    }
-
-    const setCommitMsg= (prop) => setQueryCommitMsg(prop);
-
-    return [setWoql, setCommitMsg, report, bindings];
+    
+    return [updateQuery, report, bindings, woql];
     
 }
  

@@ -1,4 +1,4 @@
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import * as query from "../labels/queryLabels";
 
 export const getQuery = (queryName, dbClient) =>{

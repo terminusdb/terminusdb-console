@@ -1,7 +1,7 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 import { QUERY, RULE } from "../labels/tags"
 import { isObject } from "../utils/helperFunctions"
-const TerminusClient = require('@terminusdb/terminus-client');
+const TerminusClient = require('@terminusdb/terminusdb-client');
 
 export const formatQuery = (q, format, mode) => {
     if(!isObject(q)) return;

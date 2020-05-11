@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardText, CardBody }  from "reactstrap";
 import RenderTable from "../../components/Table/RenderTable";
 import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import Loading from "../../components/Loading";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 

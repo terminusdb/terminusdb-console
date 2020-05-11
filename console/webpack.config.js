@@ -39,6 +39,8 @@ module.exports = (env, argv) => ({
   resolve: {
       alias: {
         "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
+        "@terminusdb/terminusdb-react-table": path.resolve('./node_modules/@terminusdb/terminusdb-react-table/src/index.js'),
+        "@terminusdb/terminusdb-react-graph":path.resolve('./node_modules/@terminusdb/terminusdb-react-graph/src/index.js'),        
          react: path.resolve('./node_modules/react'),
       },
     extensions: ['.js', '.jsx', '.json'],

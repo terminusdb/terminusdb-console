@@ -4,7 +4,7 @@ import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
 import { faUser, faPowerOff, faCoffee  } from '@fortawesome/free-solid-svg-icons';
 */
 
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
 
 const App = (props) => {
@@ -13,12 +13,15 @@ const App = (props) => {
   if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
 
+  //return(<consoleLib.TestHome/>);
+
   return (
 
         <Router history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
                 <Route path = "/test" exact component = {consoleLib.TestHome} />
+                <Route path = "/test01" exact component = {consoleLib.TestHome01} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
                 <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />

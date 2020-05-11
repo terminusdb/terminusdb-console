@@ -8,7 +8,7 @@ import { Container, Col } from "reactstrap";
 import BranchSelector from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
 import CommitView from './CommitView'
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const HistoryNavigator = (props) => {
