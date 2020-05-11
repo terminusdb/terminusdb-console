@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TerminusClient from '@terminusdb/terminus-client';
 //import { WOQLGraph } from '@terminusdb/terminus-react-graph';
-import { WOQLTable } from '@terminusdb/terminus-react-table';
+//import { WOQLTable } from '@terminusdb/terminus-react-table';
 //import { WOQLChart } from '@terminusdb/terminus-react-chart';
 import { Container } from 'reactstrap'
 
@@ -16,14 +16,14 @@ export const ResultViewer = ({bindings, report, type, viewConfig, query, childre
         if(newvtype && newvtype != type) type = newvtype
     }
 
-    const elements = React.Children.toArray(children) ;	
+    const elements = React.Children.toArray(children) ;
     const childrenEl = elements.map((child)=>{
-        return React.cloneElement(child, { 
+        return React.cloneElement(child, {
             updateView:updateView,
             updateQuery:updateQuery,
             view:currentView,
             report:report,
-            query:query, 
+            query:query,
             bindings:bindings
         })
     })
@@ -31,15 +31,15 @@ export const ResultViewer = ({bindings, report, type, viewConfig, query, childre
     return (
         <Container>
             {childrenEl}
-            {(binds && type == "table") && 
+            {/*(binds && type == "table") && 
                 <WOQLTable bindings={binds} config={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            }
-            {(binds && type == "graph") && 
+            */}
+            {/*(binds && type == "graph") &&
                 <WOQLGraph bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            }
-            {(binds && type == "chart") && 
+            */}
+            {/*(binds && type == "chart") &&
                 <WOQLChart bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            }
-        </Container>                
+           */ }
+        </Container>
     )
 }

@@ -27,6 +27,15 @@ export const getCurrentDBName = (client) => {
     else return false;
 }
 
+export const getCurrentDbDescr = (client) => {
+    if (isObject(client)){
+        const dbRec = client.connection.getDBMetadata(client.db(), client.account())
+        if (isObject(dbRec)) return dbRec.description
+        else return false;
+    }
+    else return false;
+}
+
 export const getCurrentSchema = (client) => {
     if (isObject(client)){
        return client.server() + '/'+ client.db() + '/schema'

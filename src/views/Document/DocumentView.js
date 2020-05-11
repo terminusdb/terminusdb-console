@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
 import TerminusClient from '@terminusdb/terminus-client';
 //import WOQLTable from '../../components/Table/WOQLTable';
-import { WOQLTable } from '@terminusdb/terminus-react-table';
+//import { WOQLTable } from '@terminusdb/terminus-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
 import { DialogueBox } from "../../components/DialogueBox"
@@ -76,7 +76,6 @@ const DocumentView = (props) => {
         <QueryPane type="table" query={docQuery} />
     {!hasDocuments &&
         <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
-    }
     </PageView>
     )
 }

@@ -41,13 +41,13 @@ const CreateDB = (props) => {
   }, [dbInfo]);
 
   const onSubmit = (data) => {
-	if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
-		loginWithRedirect();  // authenticate
-	}
-	let doc = {label: data.databaseName,
-	   comment: data.databaseDescr,
-	   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
-	updateDbId(data.databaseID) ;
+    if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
+    	loginWithRedirect();  // authenticate
+    }
+    let doc = {label: data.databaseName,
+       comment: data.databaseDescr,
+       base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
+    updateDbId(data.databaseID) ;
     updateDbInfo(doc)
     setLoading(true);
   };

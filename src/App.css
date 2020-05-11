@@ -11,6 +11,10 @@ img.cancel-ic{
     color: #6290c3
 }
 
+div.b-del{
+    float: left !important;
+}
+
 img.cancel-ic:hover{
     cursor: pointer;
 }
