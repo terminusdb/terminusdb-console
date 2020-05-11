@@ -119,8 +119,7 @@ const Schema = (props) => {
             <DialogueBox message = { 'No schema available to show, You can add a new Schema.' }/></>}
 
     </PageView>
-)
-
+    )
 }
 
 

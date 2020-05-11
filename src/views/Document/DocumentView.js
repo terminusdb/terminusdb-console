@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
 import TerminusClient from '@terminusdb/terminus-client';
-import WOQLTable from '@terminusdb/terminus-react-table';
+//import WOQLTable from '../../components/Table/WOQLTable';
+import { WOQLTable } from '@terminusdb/terminus-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
 import { DialogueBox } from "../../components/DialogueBox"
 
+import { QueryPane } from "../../components/QueryPane/QueryPane"
+import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import { QueryEditor } from "../../components/QueryPane/QueryEditor"
+import { QueryLibrary } from "../../components/QueryPane/QueryLibrary"
+import { ResultReport } from "../../components/QueryPane/ResultReport"
+import { ViewEditor } from "../../components/QueryPane/ViewEditor"
+import { ResultPane } from "../../components/QueryPane/ResultPane"
 
 const DocumentView = (props) => {
     const [bindings, setBindings] = useState();
@@ -13,14 +21,13 @@ const DocumentView = (props) => {
     const [documentClasses, setDocumentClasses] = useState();
     const [hasDocuments, setHasDocuments] = useState(2);
 
-    const [activeQuery, setActiveQuery] = useState();
+    const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
 
     useEffect(() => {
-        const q = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-        woqlClient.query(q).then((cresults) => {
-            processQueryResult(cresults, q)
+        woqlClient.query(docQuery).then((cresults) => {
+            processQueryResult(cresults, docQuery)
         }).catch((e) => {
-            processQueryError(e, q)
+            processQueryError(e, docQuery)
         })
         const q2 = TerminusClient.WOQL.lib().concreteDocumentClasses()
         woqlClient.query(q2).then((dresults) => {
@@ -37,7 +44,6 @@ const DocumentView = (props) => {
         }
         else {
             alert("No document classes")
-            //setError()
         }
     }
 
@@ -64,15 +70,14 @@ const DocumentView = (props) => {
 
     function headChanged(){}
 
-    return (
-        < PageView >
-            {bindings && hasDocuments &&
-                <WOQLTable bindings={bindings} />
-            }
-            {!hasDocuments &&
-                <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
 
-        </PageView>
+    return (
+    <PageView page="document">
+        <QueryPane type="table" query={docQuery} />
+    {!hasDocuments &&
+        <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
+    }
+    </PageView>
     )
 }
 

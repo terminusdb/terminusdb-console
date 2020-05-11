@@ -1,51 +1,25 @@
 import React, { useState, useEffect } from "react";
-import TerminusClient from '@terminusdb/terminus-client';
-import { WoqlGraph } from '@terminusdb/terminus-react-graph';
-import { WoqlTable } from '@terminusdb/terminus-react-table';
-import { FormatColumns } from '@terminusdb/terminus-react-table';
-import { isObject } from "../../utils/helperFunctions"
-import * as viewLabels from "../../labels/viewLabels"
+import { Container } from "reactstrap";
 
-export const ResultPane = (props) => {
-    const results = props.results || {};
-    const rule = props.rule || [];
-    const viewer = props.viewer || viewLabels.GRAPH_VIEW;
-    const [graphResults, setGraphResults] = useState(false);
-    const [tableResults, setTableResults] = useState(false);
-    const [listOfColumns, setListOfColumns] = useState([])
+//allows multiple resultviews to exist together
 
-    const view = TerminusClient.View;
+export const ResultPane = ({bindings, query, report, children, updateQuery}) => {
+    
+    //const [currentViews, setViews] = useState(views)
 
-    useEffect(() => {
-        switch(viewer){
-            case viewLabels.GRAPH_VIEW:
-                const gv = view.graph();
-                gv.height(700).width(1200);
-                let g = gv.create(null);
-                if(isObject(rule)) g.config = rule;
-                g.setResult(results);
-                setGraphResults(g);
-            break;
-            case viewLabels.TABLE_VIEW:
-                //temp
-                const columns =[{ Header:'Table View', columns:listOfColumns}]
-                const d = results.getBindings();
-                setListOfColumns(FormatColumns(results.getVariableList()));
-                setTableResults(d);
-            break;
-        }
-    }, [viewer, results, rule]);
 
+    const elements = React.Children.toArray(children) ;	
+    const childrenEl = elements.map((child)=>{
+        return React.cloneElement(child, { 
+            updateQuery:updateQuery,
+            report:report,
+            query:query, 
+            bindings:bindings
+        })
+    })
     return (
-        <div className="result-pane">
-            {graphResults && (viewer === viewLabels.GRAPH_VIEW) &&
-                <WoqlGraph config={ graphResults.config }
-                    dataProvider = { graphResults }
-                    date = { Date.now() }/>}
-            {tableResults && (viewer === viewLabels.TABLE_VIEW) &&
-                <WoqlTable columns = { listOfColumns }
-                    data = { tableResults } />}
-        </div>
+        <Container>
+            {childrenEl}
+        </Container>                
     )
-
 }
