@@ -45,12 +45,13 @@ const DeleteDatabase = (props) => {
               <p> {deleteDatabaseLabels.mainDescription} </p>
               <Form>
                 <Row form className="mt-4">
-                  <Col md={8}>
+                  <Col md={12}>
                     {isObject(rep) && <Report report = { rep }/>}
                     <form onSubmit={ handleSubmit(onDelete) }>
                         <p> { deleteDatabaseLabels.confirmText } </p>
                         <input type="text" name="dbId" id="dbId"
                             ref = { register({ validate: value => value.length > 0}) }/>
+                        <hr className = "my-space-15"/>
                         <button color="secondary" onClick={toggle}> {deleteDatabaseLabels.cancelText}</button>
                         <button color="secondary">{ deleteDatabaseLabels.confirmText }</button>
                     </form>

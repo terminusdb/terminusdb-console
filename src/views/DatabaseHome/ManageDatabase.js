@@ -21,9 +21,7 @@ const ManageDatabase = (props) => {
 		if (!user){
   		  loginWithRedirect();  // authenticate
   	  }
-        console.log('commit something')
     };
-
 
 
     return (
