@@ -10,7 +10,8 @@ import DeleteDatabase from "../../components/Modals/DeleteDatabase"
 import { CommitViewerText } from "../../variables/formLabels"
 import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
 import BranchSelector from "../../components/HistoryNavigator/BranchSelector"
-import cmsImg1 from "../../img/placeholders/comingSoon-1.png"
+import mascotImg from "../../img/mascot/Mascot-Color.png"
+import cmsImg1 from "../../img/icons/comingSoon.png"
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
@@ -47,6 +48,8 @@ const ManageDatabase = (props) => {
 			 {/***** pull*****/}
 			 <Col md={12} className="mb-12">
 				 <Label><b>Pull Branch</b></Label>
+				 <img src={cmsImg1} className="cms-i"/>
+				 <img src={mascotImg} className="cms-i"/>
 				 <Button outline className="man-btn" color="secondary" type={ pull.action.type }>
 				 	  { pull.action.text }
 			     </Button>
@@ -56,6 +59,8 @@ const ManageDatabase = (props) => {
 			 {divider}
 			 <Col md={12} className="mb-12">
 				 <Label><b>Push Branch</b></Label>
+				 <img src={cmsImg1} className="cms-i"/>
+				 <img src={mascotImg} className="cms-i"/>
 				 <Button outline className="man-btn" color="secondary" type={ push.action.type }>
 				 	  { push.action.text }
 			     </Button>
@@ -65,6 +70,8 @@ const ManageDatabase = (props) => {
 			 {divider}
 			 <Col md={12} className="mb-12">
 				 <Label><b>Fork</b></Label>
+				 <img src={cmsImg1} className="cms-i"/>
+				 <img src={mascotImg} className="cms-i"/>
 				 <Button outline className="man-btn" color="secondary" type={ fork.action.type }>
 				 	  { fork.action.text }
 			     </Button>
@@ -73,13 +80,13 @@ const ManageDatabase = (props) => {
 			 {/***** branch manager *****/}
 			 {divider}
 		     <Label><b>Create New Branch</b></Label>
-			 <hr className = "my-space-15"/>
+			 <hr className = "my-space-25"/>
 			 <HistoryNavigator />
 		     {divider}
 
 			 {/***** merge branch *****/}
 		     <Label><b>Merge Branches</b></Label>
-			 <hr className = "my-space-15"/>
+			 <hr className = "my-space-25"/>
 			 <span className="d-fl">
 			 	  <Col md={6} className="mb-6">
 				  	  <Label><b>Source</b></Label>
@@ -89,8 +96,9 @@ const ManageDatabase = (props) => {
 				      <Label><b>Target</b></Label>
 				  	  <BranchSelector/>
 				  </Col>
-
 			 </span>
+			 <img src={cmsImg1} className="cms-i"/>
+			 <img src={mascotImg} className="cms-i"/>
 
 			 {/***** Delete database *****/}
 			 {divider}
