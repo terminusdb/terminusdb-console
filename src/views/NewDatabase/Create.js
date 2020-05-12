@@ -22,6 +22,7 @@ const CreateDB = (props) => {
 
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(true);
+  const [advancedSettings, setAdvancedSettings] = useState(false)
 
   const {woqlClient} = WOQLClientObj();
 
@@ -63,6 +64,14 @@ const CreateDB = (props) => {
   const handleNext = () => {
       setCreateOptions(true)
       setShow(false);
+  }
+
+  const handleAdvancedSettings = () => {
+      setAdvancedSettings(true)
+  }
+
+  const handleHideAdvancedSettings = () => {
+      setAdvancedSettings(false)
   }
 
   return (
@@ -109,8 +118,7 @@ const CreateDB = (props) => {
 
 				 <hr className = "my-space-15"/>
 
-                 <button onClick={handleNext}> Next</button>
-
+                 <button onClick={handleNext}>Create</button>
 
 				 {/*<span className="d-fl">
 				     <Col md={1} className="mb-1">
@@ -143,6 +151,11 @@ const CreateDB = (props) => {
         			{ createDatabaseForm.action.text }
             	</button>*/}
             </form>}
+            {!advancedSettings && <button onClick={handleAdvancedSettings}>Advanced Settings</button>}
+            {advancedSettings && <>
+                <button onClick={handleHideAdvancedSettings}>Hide Advanced Settings</button>
+                this is a placeholder to show Schema or instance graph ...
+            </>}
           </>)
 }
 

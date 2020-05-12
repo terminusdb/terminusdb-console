@@ -5,6 +5,28 @@
     margin-top: 40px
 }
 
+div.modal-body{
+    min-height: 200px;
+}
+
+img.center {
+    margin: auto;
+    width: 30%;
+    padding: 20px;
+    margin: 0px 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.del-mod{
+    margin-top: 40px;
+}
+
+button.man-btn{
+    margin-top: -40px;
+}
+
 img.cancel-ic{
     float:right;
     width: 2%;

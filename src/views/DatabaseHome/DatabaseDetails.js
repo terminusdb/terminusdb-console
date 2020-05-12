@@ -126,6 +126,7 @@ const Details = (props) => {
 
 				<hr className = "my-space-25"/>
 				<b>Recent Updates</b>
+				<hr className = "my-space-100"/>
                 <span className="d-fl">
 				    <Col md={2} className="mb-2">
 						<label htmlFor = "database-size">

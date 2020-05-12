@@ -7,12 +7,15 @@ import { Report } from "../../components/Reports/Report"
 import * as reportAlert from "../../labels/reportLabels"
 import history from '../../utils/history';
 import { isObject } from "../../utils/helperFunctions"
+import deleteImg from "../../img/icons/delete.png"
+import Loading from "../Loading";
 
 const DeleteDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const { woqlClient } = WOQLClientObj();
     const [dbId, setDbId] = useState(false);
     const [rep, setReport] = useState({});
+    const [loading, setLoading] = useState(false)
 
     const [modal, setModal] = useState(props.modal);
 
@@ -27,9 +30,8 @@ const DeleteDatabase = (props) => {
   		  let acc = woqlClient.account() || woqlClient.uid();
   		  woqlClient.deleteDatabase(dbId, acc)
   		  .then((cresults) => {
-  			  //let message = "Successfully deleted database " + dbId;
-  			  //setReport({message: message, status: reportAlert.SUCCESS});
-              history.replace('db/' + acc + "/" + dbId + "/");
+              setLoading(false)
+              history.replace('/home');
   		  })
   		  .catch((err) => {
   			 setReport({error: err, status: reportAlert.ERROR});
@@ -42,14 +44,16 @@ const DeleteDatabase = (props) => {
             <ModalHeader toggle={toggle}> {deleteDatabaseLabels.mainDescription} </ModalHeader>
             <ModalBody>
                   <Col md={12}>
-                    {isObject(rep) && <Report report = { rep }/>}
-                    <form onSubmit={ handleSubmit(onDelete) }>
-                        <input type="text" name="dbId" id="dbId"
-                            ref = { register({ validate: value => value.length > 0}) }/>
-                        <hr className = "my-space-15"/>
-                        <button color="secondary">{ deleteDatabaseLabels.confirmText }</button>
-                        <button color="secondary" onClick={toggle}> {deleteDatabaseLabels.cancelText}</button>
-                    </form>
+                    <div className="del-mod">
+                        <img src={deleteImg} className="center"/>
+                        {isObject(rep) && <Report report = { rep }/>}
+                        <form onSubmit={ handleSubmit(onDelete) }>
+                            <input type="text" name="dbId" id="dbId"
+                                ref = { register({ validate: value => value.length > 0}) }/>
+                            <hr className = "my-space-25"/>
+                            <Button color="danger">{ deleteDatabaseLabels.confirmText }</Button>
+                        </form>
+                    </div>
                   </Col>
            </ModalBody>
        </Modal>

@@ -7,6 +7,9 @@ import { Container, Card,Row, Col, CardTitle, CardText,
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
 import { pull, push } from "../../variables/formLabels"
 import DeleteDatabase from "../../components/Modals/DeleteDatabase"
+import { CommitViewerText } from "../../variables/formLabels"
+import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
+import BranchSelector from "../../components/HistoryNavigator/BranchSelector"
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
@@ -23,31 +26,85 @@ const ManageDatabase = (props) => {
   	  }
     };
 
+    const onCreateBranch = (data) => {
+        dbClient.branch(data.bId, branchInfo.uri_prefix)
+        .then(() => {
+            changeBranch(bid)
+        })
+    }
+
+	const divider = <>
+		<hr className = "my-space-50"/>
+		<hr className = "my-space-2"/>
+		<hr className = "my-space-50"/>
+	</>
+
 
     return (
              <>
-			 <Form>
-			    <Label><b>Delete this database</b></Label>
-				<hr className = "my-space-25"/>
-				<p> Once you delete this database there is no going back. </p>
-				<hr className = "my-space-25"/>
-				<div className = "b-del">
-					<Button color="danger" onClick={toggle}>Delete</Button>
-			    </div>
-				{modal && <DeleteDatabase modal={modal}/>}
-		     </Form>
-             <form onSubmit={ handleSubmit(onSubmit) }>
+			 <hr className = "my-space-100"/>
+			 {/***** pull*****/}
+			 <Col md={12} className="mb-12">
+				 <Label><b>Pull Branch</b></Label>
+				 <Button outline className="man-btn" color="secondary" type={ pull.action.type }>
+				 	  { pull.action.text }
+			     </Button>
+			 </Col>
 
-		          <button className = { push.action.className }
-		              type =  { push.action.type } >
-		              { push.action.text }
-		          </button>
+			 {/***** push *****/}
+			 {divider}
+			 <Col md={12} className="mb-12">
+				 <Label><b>Push Branch</b></Label>
+				 <Button outline className="man-btn" color="secondary" type={ push.action.type }>
+				 	  { push.action.text }
+			     </Button>
+		     </Col>
 
-				  <button className = { pull.action.className }
-		              type =  { pull.action.type } >
-		              { pull.action.text }
-		          </button>
-      		</form> </>
+			 {/***** fork *****/}
+			 {divider}
+			 <Col md={12} className="mb-12">
+				 <Label><b>Fork</b></Label>
+				 <Button outline className="man-btn" color="secondary" type={ fork.action.type }>
+				 	  { fork.action.text }
+			     </Button>
+		     </Col>
+
+			 {/***** branch manager *****/}
+			 {divider}
+		     <Label><b>Create New Branch</b></Label>
+			 <hr className = "my-space-15"/>
+			 <HistoryNavigator />
+		     {divider}
+
+			 {/***** merge branch *****/}
+		     <Label><b>Merge Branches</b></Label>
+			 <hr className = "my-space-15"/>
+			 <span className="d-fl">
+			 	  <Col md={6} className="mb-6">
+				  	  <Label><b>Source</b></Label>
+				  	  <HistoryNavigator />
+				  </Col>
+				  <Col md={6} className="mb-6">
+				      <Label><b>Target</b></Label>
+				  	  <BranchSelector/>
+				  </Col>
+
+			 </span>
+
+			 {/***** Delete database *****/}
+			 {divider}
+		     <Label><b>Delete this database</b></Label>
+		     <hr className = "my-space-25"/>
+		     <p> Once you delete this database there is no going back. </p>
+		     <hr className = "my-space-25"/>
+			 <div className = "b-del">
+			      <Button color="danger" onClick={toggle}>Delete</Button>
+		     </div>
+		     {modal && <DeleteDatabase modal={modal}/>}
+			 <hr className = "my-space-100"/>
+			 {divider}
+			 {divider}
+		 </>
     )
 }
 
