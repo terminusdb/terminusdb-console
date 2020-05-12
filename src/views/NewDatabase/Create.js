@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
-import { Report } from "../../components/Reports/Report"
+import { ViolationReport } from "../../components/Reports/ViolationReport"
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
@@ -62,7 +62,7 @@ const CreateDB = (props) => {
   return (
   		<>
             <hr className = "my-space-15"/>
-			{isObject(rep) && <Report report = { rep }/>}
+			{isObject(rep) && <ViolationReport report = { rep }/>}
             { loading && <Loading /> }
             <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }

@@ -32,7 +32,7 @@ export const RenderSnippet = (props) => {
     useEffect(() => {
         if(props.dataProvider) setContent(props.dataProvider)
         setEdit(props.edit)
-    }, [props])
+    }, [props.dataProvider, props.edit])
 
 
     const handleCancel = (ev) => {

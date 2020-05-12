@@ -1,5 +1,5 @@
 import React from "react";
-import { DialogueBox } from "./DialogueBox"
+import { DialogueBox } from "./Reports/DialogueBox"
 
 const ErrorPage = () => (
 	<DialogueBox message = { "TerminusDB Server can not be found" }

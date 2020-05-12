@@ -4,7 +4,7 @@ import { isObject } from "../../utils/helperFunctions"
 import * as tag from "../../labels/tags"
 import * as reportAlert from "../../labels/reportLabels"
 
-export const Report = (props) => {
+export const ViolationReport = (props) => {
     const results = props.results || {};
     const report = props.report || {};
     let message = props.report.message || tag.BLANK, alert = reportAlert.SUCCESS_COLOR;

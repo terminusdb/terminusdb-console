@@ -1,55 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import Loading from "../../components/Loading";
-import { Card, CardText, CardBody }  from "reactstrap";
-import RenderTable from "../../components/Table/RenderTable";
-import { QueryPane } from "../../components/QueryPane/QueryPane"
-import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { WOQLClientObj } from "../../init/woql-client-instance";
+import { WOQLQueryContainerHook } from "../../components/WOQLQueryContainerHook"
+import { FAILED_LOADING_SCHEMA_CLASSES } from "./constants"  
+import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
+import { EmptyResult } from "../../components/Reports/EmptyResult"
+import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 
 export const Classes = (props) => {
     const [filter, setFilter] = useState(props.graph)
-    const [dataProvider, setDataProvider] = useState()
-    const [query, setQuery] = useState(false);
-    const [loading, setLoading] = useState(false);
-
-    const {woqlClient} = WOQLClientObj();
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(getClassQuery(props.graph));
 
     useEffect(() => {
-        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
-        setFilter(props.graph)
-    }, [props.graph])
-
-    //use this after fixing terminus-react-table
-    /*useEffect(() => {
-        if(filter){
-            let gstr = filter.type + "/" + filter.gid
-            const q = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().classList(gstr))
-            setQuery(q);
+        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type )){
+            if(filter) updateQuery(getClassQuery(props.graph));
+            setFilter(props.graph)
         }
-    }, [props.rebuild, filter]); */
-
-    useEffect(() => {
-        if(filter){
-            let gstr = filter.type + "/" + filter.gid
-            const q = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().classList(gstr))
-            woqlClient.query(q).then((cresults) => {
-                let cwr = new TerminusClient.WOQLResult(cresults, q)
-                let resultData = cwr.getBindings();
-                const columnConf = getColumnsForTable(resultData);
-                const columnData = getBindingData(resultData);
-                setDataProvider({columnData:columnData, columnConf:columnConf});
-            })
-        }
-    }, [props.rebuild, filter]);
+    }, [props.graph, props.rebuild])
+    
+    function getClassQuery(gfilter){
+        let gstr = gfilter.type + "/" + gfilter.gid
+        return TerminusClient.WOQL.limit(200, TerminusClient.WOQL.lib().classList(gstr))
+    }
 
     return (
         <div className = "tab-co">
-            {dataProvider &&
-            <RenderTable dataProvider = {dataProvider}/>
+            {!report && 
+                <Loading />
             }
-            {/*!dataProvider && loading && <Loading />*/}
-            {/*query && <QueryPane query = { query }/>*/}
+            {(report && report.error) && 
+                <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />
+            }
+            {(report && report.rows > 0) &&   
+                <ResultViewer type="table" query={woql} bindings={bindings} />
+            }            
+            {(report && report.rows == 0) && 
+                <EmptyResult report={report} />
+            }
         </div>
     )
 }

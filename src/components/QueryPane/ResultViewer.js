@@ -8,22 +8,15 @@ import { Container } from 'reactstrap'
 
 export const ResultViewer = ({bindings, report, type, viewConfig, query, updateQuery}) => {
 
-    //const [binds, setBindings] = useState(bindings)
-    const [currentView, setView] = useState(viewConfig)
-    //useEffect(() => setBindings(bindings), [bindings])
-
     function updateView(newconfig, newvtype){
         setView(newConfig)
         if(newvtype && newvtype != type) type = newvtype
     }
     
-    const bindingsMy= bindings || []
-
+    if(!bindings) return null
     return (
         <Container>
-            <WOQLTable bindings={bindingsMy} />
-   
-           {JSON.stringify(bindingsMy, null, 4)}
+            <WOQLTable bindings={bindings} />           
         </Container>                
     )
 }

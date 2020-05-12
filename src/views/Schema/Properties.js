@@ -1,45 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardText, CardBody }  from "reactstrap";
-import RenderTable from "../../components/Table/RenderTable";
-import { getColumnsForTable, getBindingData } from '../../utils/dataFormatter';
-import TerminusClient from '@terminusdb/terminusdb-client';
 import Loading from "../../components/Loading";
-import { WOQLClientObj } from "../../init/woql-client-instance";
-
+import TerminusClient from '@terminusdb/terminusdb-client';
+import { WOQLQueryContainerHook } from "../../components/WOQLQueryContainerHook"
+import { FAILED_LOADING_SCHEMA_CLASSES } from "./constants"  
+import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
+import { EmptyResult } from "../../components/Reports/EmptyResult"
+import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 
 export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
-    const [dataProvider, setDataProvider] = useState()
-    const [loading, setLoading] = useState(false);
-    const {woqlClient} = WOQLClientObj();
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(getPropertiesQuery(props.graph));
 
     useEffect(() => {
-        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
-        setFilter(props.graph)
-    }, [props.graph])
-
-    useEffect(() => {
-        if(filter){
-            let gstr = filter.type + "/" + filter.gid
-            let q = TerminusClient.WOQL.limit(100).start(0, TerminusClient.WOQL.lib().propertyMetadata(gstr))
-            woqlClient.query(q).then((cresults) => {
-                let cwr = new TerminusClient.WOQLResult(cresults, q)
-                let resultData = cwr.getBindings();
-                const columnConf = getColumnsForTable(resultData);
-                const columnData = getBindingData(resultData);
-                setDataProvider({columnData:columnData, columnConf:columnConf});
-            })
+        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type )){
+            if(filter) updateQuery(getPropertiesQuery(props.graph));
+            setFilter(props.graph)
         }
-    }, [props.rebuild, filter]);
+    }, [props.graph, props.rebuild])
+    
+    function getPropertiesQuery(gfilter){
+        let gstr = gfilter.type + "/" + gfilter.gid
+        return TerminusClient.WOQL.limit(200, TerminusClient.WOQL.lib().propertyMetadata(gstr))
+    }
 
     return (
         <div className = "tab-co">
-            {dataProvider &&
-            <RenderTable dataProvider = {dataProvider}/>
+            {!report && 
+                <Loading />
             }
-            {/*!dataProvider && loading &&
-            <Loading />
-            */}
+            {(report && report.error) && 
+                <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />
+            }
+            {(report && report.rows > 0) &&   
+                <ResultViewer type="table" query={woql} bindings={bindings} />
+            }            
+            {(report && report.rows == 0) && 
+                <EmptyResult report={report} />
+            }
         </div>
     )
+
+
 }
