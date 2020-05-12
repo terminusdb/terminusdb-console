@@ -395,6 +395,14 @@ export const push = {
     }
 }
 
+export const fork = {
+    action: {
+        type: "submit",
+        className: "btn btn-primary lead mt-4",
+        text: "Fork"
+    }
+}
+
 export const CommitViewerText = {
     next: {
         type: "submit",

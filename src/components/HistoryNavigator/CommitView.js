@@ -13,7 +13,7 @@ export const CommitView = (props) => {
 
     function handlePreviousCommit(){
         props.setRef(props.commit.parent)
-    }
+    } 
 
     function handleBranch(){
         let nuid = newBranch.value

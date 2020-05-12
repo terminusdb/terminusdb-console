@@ -5,9 +5,9 @@ import { FormInputs } from "../../components/Form/FormInputs"
 import { Container,Row, Col, Jumbotron,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
-import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
+import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
-import {printts, DATETIME_FULL} from "../../utils/dateFormats"
+import { printts, DATETIME_FULL } from "../../utils/dateFormats"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 const Details = (props) => {
@@ -33,43 +33,26 @@ const Details = (props) => {
 		    <hr className="my-space-50"/>
 			<hr className="my-space-50"/>
 			<hr className="my-space-50"/>
-			<form onSubmit={handleSubmit()}>
-                <label className = { createDatabaseForm.id.label.className } htmlFor = "database-id">
-            		{ createDatabaseForm.id.label.text }
-                </label>
-            	<input placeholder={ createDatabaseForm.id.input.placeholder }
-                    className = { createDatabaseForm.id.input.className }
-                    name = "database-id"
-                    readOnly
-					value = {woqlClient.db()}
-            		ref = { register({ validate: value => value.length > 0}) }/>
-                {errors.databaseID &&
-                    <p className = { createDatabaseForm.id.error.className }>
-                        { createDatabaseForm.id.error.text }
-                    </p>
-                }
-            	<label className = { createDatabaseForm.databaseName.label.className } htmlFor = "database-name">
-            	    { createDatabaseForm.databaseName.label.text }
-                </label>
-            	<input name= "database-name" value = {getCurrentDBName(woqlClient)}
-                   className = { createDatabaseForm.databaseName.input.className }
-                   readOnly
-            	   placeholder = { createDatabaseForm.databaseName.input.placeholder }
-            	   ref = { register({ validate: value => value.length > 0}) }/>
-                { errors.databaseName &&
-                    <p className = { createDatabaseForm.databaseName.error.className }>
-                        { createDatabaseForm.databaseName.error.text }
-                    </p>
-                }
-            	<label className = { createDatabaseForm.databaseDescr.label.className } htmlFor = "database-description">
-            	   { createDatabaseForm.databaseDescr.label.text }
-            	</label>
 
-				<textarea name = "database-description"
-                    className = { createDatabaseForm.databaseDescr.input.className }
-                    readOnly
-            	    placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
-                    ref={register} />
+			<Form>
+		        <FormGroup row>
+		            <Label for="id" sm={2}><b>{createDatabaseForm.id.label.text}</b></Label>
+		            <Label for="id" sm={2}>{woqlClient.db()}</Label>
+		         </FormGroup>
+		         <FormGroup row>
+		            <Label for="name" sm={2}><b>{createDatabaseForm.databaseName.label.text}</b></Label>
+			        <Label for="name" sm={2}>{getCurrentDBName(woqlClient)}</Label>
+		      	</FormGroup>
+				<FormGroup row>
+				   <Label for="name" sm={2}><b>{createDatabaseForm.databaseDescr.label.text}</b></Label>
+				   <Label for="name" sm={2}>{getCurrentDbDescr(woqlClient)}</Label>
+			   </FormGroup>
+			</Form>
+
+			<hr className = "my-2"/>
+
+			<form onSubmit={handleSubmit()}>
+
 
 			{isAuthenticated && <>
 					<hr className = "my-space-25"/>
@@ -142,7 +125,8 @@ const Details = (props) => {
 				}
 
 				<hr className = "my-space-25"/>
-				<hr className = "my-2"/>
+				<b>Recent Updates</b>
+				<hr className = "my-space-100"/>
                 <span className="d-fl">
 				    <Col md={2} className="mb-2">
 						<label htmlFor = "database-size">
@@ -196,3 +180,45 @@ const Details = (props) => {
 }
 
 export default Details;
+
+/*
+
+<label className = { createDatabaseForm.id.label.className } htmlFor = "database-id">
+	{ createDatabaseForm.id.label.text }
+</label>
+<input placeholder={ createDatabaseForm.id.input.placeholder }
+	className = { createDatabaseForm.id.input.className }
+	name = "database-id"
+	readOnly
+	value = {woqlClient.db()}
+	ref = { register({ validate: value => value.length > 0}) }/>
+{errors.databaseID &&
+	<p className = { createDatabaseForm.id.error.className }>
+		{ createDatabaseForm.id.error.text }
+	</p>
+}
+<label className = { createDatabaseForm.databaseName.label.className } htmlFor = "database-name">
+	{ createDatabaseForm.databaseName.label.text }
+</label>
+<input name= "database-name" value = {getCurrentDBName(woqlClient)}
+   className = { createDatabaseForm.databaseName.input.className }
+   readOnly
+   placeholder = { createDatabaseForm.databaseName.input.placeholder }
+   ref = { register({ validate: value => value.length > 0}) }/>
+{ errors.databaseName &&
+	<p className = { createDatabaseForm.databaseName.error.className }>
+		{ createDatabaseForm.databaseName.error.text }
+	</p>
+}
+<label className = { createDatabaseForm.databaseDescr.label.className } htmlFor = "database-description">
+   { createDatabaseForm.databaseDescr.label.text }
+</label>
+
+<textarea name = "database-description"
+	className = { createDatabaseForm.databaseDescr.input.className }
+	readOnly
+	placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
+	ref={register} />
+
+
+*/

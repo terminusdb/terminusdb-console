@@ -26,9 +26,9 @@ export const contentData = [
 ];
 
 export const deleteDatabaseLabels={
-   title:"Do you want delete this Database",
-   mainDescription:"This action CANNOT be undone",
-   confirmText:"Please type in the name of the Database to confirm"
+   mainDescription:"Enter Database Id you wish to delete.",
+   confirmText:"Delete",
+   cancelText: "Cancel"
 }
 
 export const createDatabaseLabels ={
