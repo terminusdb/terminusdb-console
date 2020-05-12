@@ -10,6 +10,7 @@ import DeleteDatabase from "../../components/Modals/DeleteDatabase"
 import { CommitViewerText } from "../../variables/formLabels"
 import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
 import BranchSelector from "../../components/HistoryNavigator/BranchSelector"
+import cmsImg1 from "../../img/placeholders/comingSoon-1.png"
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
