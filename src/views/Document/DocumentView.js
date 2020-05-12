@@ -72,7 +72,7 @@ const DocumentView = (props) => {
     <PageView page="document">
         <QueryPane type="table" query={docQuery} />
     {!hasDocuments &&
-        <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>}
+        <DialogueBox message = { 'No Documents available to show, You can create new Documents.' }/>
     }
     </PageView>
     )
