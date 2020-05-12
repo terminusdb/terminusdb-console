@@ -85,7 +85,7 @@ export const QueryEditor = ({query, children, className, language, languages, te
                 setShowLanguage(lang)
                 setShowContent(makeWOQLIntoString(woql, lang))    
             }
-        }s
+        }
     }
 
 

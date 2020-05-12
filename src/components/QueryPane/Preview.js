@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { QueryPane } from "./QueryPane";
-import TerminusClient from '@terminusdb/terminus-client';
+import TerminusClient from '@terminusdb/terminusdb-client';
 import { useForm } from 'react-hook-form';
 import { isObject, isArray } from "../../utils/helperFunctions";
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'

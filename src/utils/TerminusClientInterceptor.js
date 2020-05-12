@@ -4,6 +4,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';/*
 TerminusClient.axiosInstance.interceptors.request.use(function (config) {
     // Do something before request is sent
     config.metadata = { startTime: new Date()}	
+    
  	
     return config;
   }, function (error) {

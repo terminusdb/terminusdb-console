@@ -18,3 +18,4 @@ export {initFontLib} from "./init/initFontAwesome";
 export CreateDatabase from "./views/NewDatabase/CreateDatabaseView"
 export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance"
 export TestHome from "./views/TestHome";
+export TestHome01 from "./views/TestHome01";

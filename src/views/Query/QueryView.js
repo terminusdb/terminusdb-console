@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Container , Col, Button } from "reactstrap";
-import { useAuth0 } from "../../react-auth0-spa";
-import Loading from "../../components/Loading";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 import { queryControls } from "../../variables/formLabels"
@@ -11,11 +9,6 @@ import { PageView } from '../PageView'
 
 
 const Query = (props) => {
-
-  const { loading, user } = useAuth0();
-
-  if (loading) return <Loading />;
-
   const editor = {edit: true,
       submit: 'Run Query',
       library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
@@ -43,7 +36,7 @@ const Query = (props) => {
  const QueryPaneBox = (props) => {
       const {caption} = props;
       const {qp, setQp} = props.pstate;
-      const [open, setOpen] = useState(true);
+      
       return (
         <div className="query-box">
             <QueryPane type="editor"/>
@@ -63,12 +56,15 @@ const Query = (props) => {
     );
   }
 
-  return (
+  return (   
     <PageView>
         <NewQueryPane/>
     </PageView>
 	)
 }
 
-
+/*
+<PageView>
+        <NewQueryPane/>
+    </PageView>*/
 export default Query;
