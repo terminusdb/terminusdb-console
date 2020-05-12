@@ -5,7 +5,7 @@ import { FormInputs } from "../../components/Form/FormInputs"
 import { Container, Card,Row, Col, CardTitle, CardText,
 		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
 import { getCurrentDBID, getCurrentDBName } from "../../utils/helperFunctions"
-import { pull, push } from "../../variables/formLabels"
+import { pull, push, fork } from "../../variables/formLabels"
 import DeleteDatabase from "../../components/Modals/DeleteDatabase"
 import { CommitViewerText } from "../../variables/formLabels"
 import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
