@@ -1,9 +1,10 @@
-import TerminusClient from '@terminusdb/terminus-client';/*
+import TerminusClient from '@terminusdb/terminusdb-client';/*
 * we can add the Auth0 token here
 */
 TerminusClient.axiosInstance.interceptors.request.use(function (config) {
     // Do something before request is sent
     config.metadata = { startTime: new Date()}	
+    
  	
     return config;
   }, function (error) {

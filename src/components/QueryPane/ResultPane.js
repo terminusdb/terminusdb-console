@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container } from "reactstrap";
 
 //allows multiple resultviews to exist together
-
+/*I don't need result panel
+*/
 export const ResultPane = ({bindings, query, report, children, updateQuery}) => {
     
     //const [currentViews, setViews] = useState(views)
