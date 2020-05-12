@@ -3,6 +3,7 @@ import { Alert } from 'reactstrap';
 import { isObject } from "../../utils/helperFunctions"
 import * as tag from "../../labels/tags"
 import * as reportAlert from "../../labels/reportLabels"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Report = (props) => {
     const results = props.results || {};

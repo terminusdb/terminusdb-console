@@ -38,29 +38,21 @@ const DeleteDatabase = (props) => {
     }, [dbId]);
 
     return (
-        <div>
           <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}></ModalHeader>
+            <ModalHeader toggle={toggle}> {deleteDatabaseLabels.mainDescription} </ModalHeader>
             <ModalBody>
-              <p> {deleteDatabaseLabels.mainDescription} </p>
-              <Form>
-                <Row form className="mt-4">
                   <Col md={12}>
                     {isObject(rep) && <Report report = { rep }/>}
                     <form onSubmit={ handleSubmit(onDelete) }>
-                        <p> { deleteDatabaseLabels.confirmText } </p>
                         <input type="text" name="dbId" id="dbId"
                             ref = { register({ validate: value => value.length > 0}) }/>
                         <hr className = "my-space-15"/>
-                        <button color="secondary" onClick={toggle}> {deleteDatabaseLabels.cancelText}</button>
                         <button color="secondary">{ deleteDatabaseLabels.confirmText }</button>
+                        <button color="secondary" onClick={toggle}> {deleteDatabaseLabels.cancelText}</button>
                     </form>
                   </Col>
-                </Row>
-              </Form>
            </ModalBody>
-          </Modal>
-        </div>
+       </Modal>
     );
 }
 
