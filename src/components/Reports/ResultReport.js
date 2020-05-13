@@ -9,7 +9,7 @@ export const ResultReport = ({report}) => {
 
     function hasViolations(err){return false}
     function getViolations(err){return []}
-   
+
     function getErrorReport(){
         let qtime = queryTimeDisplay()
         if(hasViolations(currentReport.error)){
@@ -44,13 +44,13 @@ export const ResultReport = ({report}) => {
     if(!currentReport) return null
     return (
         <Container>
-            {currentReport.busy && 
-                <Loading />            
+            {currentReport.busy &&
+                <Loading />
             }
             {currentReport.error &&
-                getErrorReport()        
+                getErrorReport()
             }
-            {!(currentReport.busy || currentReport.error) && 
+            {!(currentReport.busy || currentReport.error) &&
                 getSuccessReport()
             }
         </Container>
