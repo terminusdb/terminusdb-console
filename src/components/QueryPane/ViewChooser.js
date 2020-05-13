@@ -3,10 +3,15 @@ import * as viewLabels from "../../labels/viewLabels"
 import { Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Badge, Container} from "reactstrap";
 
 export const ViewChooser = ({view, views, updateView}) => {
-    views = views || [{id: "table", label: "Table View", config: {}}, {id: "graph", label: "Graph View", config: {}}]
+    
+    views = views || [{id: "table", label: "Table View"}, {id: "graph", label: "Graph View"}]
+
+    const currentView = view || 'table';
+    let currentLabel;
 
     const entries = views.map((v) => {
-        return (<DropdownItem active={v.id == view} key={v.id} onClick={function(){updateView(v.config, v.id)}}>{v.label}</DropdownItem>) 
+        if(v.id === currentView) currentLabel=v.label;
+        return (<DropdownItem active={v.id == currentView} key={v.id} onClick={function(){updateView(v.id)}}>{v.label}</DropdownItem>) 
     })
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -17,7 +22,7 @@ export const ViewChooser = ({view, views, updateView}) => {
     <Container>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle caret>
-                {view}
+                {currentLabel}
             </DropdownToggle>
             <DropdownMenu>
                 {entries}

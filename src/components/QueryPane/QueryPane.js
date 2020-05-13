@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useMemo } from "react";
 import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
 import { QueryEditor } from "./QueryEditor"
@@ -10,32 +10,30 @@ import { ViewChooser } from "./ViewChooser";
 import {WOQLQueryContainerHook} from "../WOQLQueryContainerHook";
 import { queryControls } from "../../variables/formLabels";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
+import {ResultQueryPane} from './ResultQueryPane';
 /*
 * this is only the queryEditor you don't need to process result; 
 */
-export const QueryPane = ({query,className}) => {
+export const QueryPane = ({query,className,resultView}) => {
 
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
     const qpclass = className || "terminus-query-pane";
-    const disabled = bindings ? {} : {disabled:true}   
-  
+    const disabled = bindings ? {} : {disabled:true};
+
+    
     return(
             <>
-                <Tabs defaultActiveKey="query" id="query_tabs">
+                <ResultReport currentReport={report} />
+                <Tabs activeKey="query" id="query_tabs">
                   <Tab eventKey="query" label="Query Panel">
                     <QueryEditor display={"hidden"} editable={true} closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
                         <QueryLibrary library="editor"/>
                     </QueryEditor>
                   </Tab>
                   <Tab eventKey="viewer" label="Result Wiewer" {...disabled}>
-                    <Container >
-                        <ViewEditor display="hidden" query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
-                        <ViewChooser/>    
-                        <ResultViewer type="table" bindings={bindings} query={woql}/>
-                    </Container>
+                    <ResultQueryPane resultView={resultView} bindings={bindings} query={woql} updateQuery={updateQuery}/>                    
                   </Tab>
-                </Tabs>
-                <ResultReport currentReport={report} />
+                </Tabs>              
             </>             
     )
 }
