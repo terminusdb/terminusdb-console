@@ -23,9 +23,9 @@ function WOQLQueryContainerHook(startQuery){
     }
 
     function processSuccessfulResult(response){
-        if(response && response.bindings && response.bindings.length){
-            setBindings(response.bindings)
-            setReport(response.metadata);
+        if(response && response.metadata){
+            setReport(response.metadata)
+            if(response.bindings && response.bindings.length) setBindings(response.bindings)
         }
     }
 
@@ -39,6 +39,7 @@ function WOQLQueryContainerHook(startQuery){
             duration: (end-start)*1000,
             error: e 
         }*/
+        alert(e.toString())
         setBindings([])
         setReport("error");
     }

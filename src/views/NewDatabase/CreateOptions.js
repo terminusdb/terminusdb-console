@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
 import createLocallyImg from "../../img/icons/create-locally.png"
 import createRemoteImg from "../../img/icons/create-remote.png"
-import { DialogueBox } from "../../Reports/DialogueBox"
+import { DialogueBox } from "../../components/Reports/DialogueBox"
 import CreateDb from "./Create"
 
 export const CreateOptions = (props) => {
