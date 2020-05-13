@@ -1,32 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import { useForm } from 'react-hook-form';
 import { FormInputs } from "../../components/Form/FormInputs"
-import { Container,Row, Col, Jumbotron,
-		Button, Form, FormGroup, Label, Input, FormText, Collapse} from "reactstrap";
+import { Container,Row, Col, Card, CardTitle, CardText, CardFooter,
+		Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
 import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import { printts, DATETIME_FULL } from "../../utils/dateFormats"
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { DetailsCard } from "../../components/Card/DetailsCard"
+import * as icons from "../../labels/iconLabels"
+import TerminusClient from '@terminusdb/terminusdb-client';
+import { isArray } from "../../utils/helperFunctions"
 
 const Details = (props) => {
     const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
+	const [commitInfo, setCommitInfo] = useState([])
+	const [dbInfo, setDbInfo] = useState([])
+	const [userInfo, setUserInfo] = useState([])
+	const [originInfo, setOriginInfo] = useState([])
+	const always = true;
 
-    const commitInfo = props.commitInfo || {}
-     //commitInfo
-	// junk data, placeholders for now apply logic later
-	const dbStats = PRIVATE.label;
-	const clStats = CLONE.label;
-	const dbSize = '1092 triples';
-	const dbCreated = props.created || false;
-	const formattedCreateDate = printts(dbCreated, DATETIME_FULL)
-	const dbModifiedBy = commitInfo.author || false;
-	const dbModifiedDate = commitInfo.time || false;
-	const formattedDbModifiedDate = printts(dbModifiedDate, DATETIME_FULL)
-	const dbCommitMsg = commitInfo.message || false;
     const {woqlClient} = WOQLClientObj();
+
+    useEffect(() => {
+        const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
+        woqlClient.query(q).then((results) => {
+            let wr = new TerminusClient.WOQLResult(results, q)
+            setCommitInfo('Total branches available - ' + wr.count())
+			setDbInfo(getCurrentDbDescr(woqlClient))
+			setUserInfo('Size of database - 1GB')
+			setOriginInfo('This database is local. Your ahead of origin by 2 commits.')
+        })
+    }, [dbInfo, commitInfo, userInfo, originInfo]);
+
+	console.log('commitInfo', commitInfo)
+	console.log('dbInfo', dbInfo)
 
     return (
         <div>
@@ -34,147 +45,38 @@ const Details = (props) => {
 			<hr className="my-space-50"/>
 			<hr className="my-space-50"/>
 
-			<Form>
-		        <FormGroup row>
-		            <Label for="id" sm={2}><b>{createDatabaseForm.id.label.text}</b></Label>
-		            <Label for="id" sm={2}>{woqlClient.db()}</Label>
-		         </FormGroup>
-		         <FormGroup row>
-		            <Label for="name" sm={2}><b>{createDatabaseForm.databaseName.label.text}</b></Label>
-			        <Label for="name" sm={2}>{getCurrentDBName(woqlClient)}</Label>
-		      	</FormGroup>
-				<FormGroup row>
-				   <Label for="name" sm={2}><b>{createDatabaseForm.databaseDescr.label.text}</b></Label>
-				   <Label for="name" sm={2}>{getCurrentDbDescr(woqlClient)}</Label>
-			   </FormGroup>
-			</Form>
+			<Row>
+				<Col md={3} className="mb-3 dd-c">
+					{dbInfo && <DetailsCard icon={icons.INFO}
+						title = "DB Name"
+						value = {getCurrentDBName(woqlClient)}
+						info = {dbInfo}/>}
+				</Col>
 
-			<hr className = "my-2"/>
+				<Col md={3} className="mb-3 dd-c">
+	               {commitInfo && <DetailsCard icon={icons.COMMIT}
+	                    title="Commits"
+	                    value="234"
+	                    info={commitInfo}/>}
+	            </Col>
 
-			<form onSubmit={handleSubmit()}>
+				<Col md={3} className="mb-3 dd-c">
+					{userInfo && <DetailsCard icon={icons.USERS}
+						title="Users"
+						value="5"
+						info={userInfo}/>}
+				</Col>
 
+				<Col md={3} className="mb-3 dd-c">
+					{originInfo && <DetailsCard icon={icons.ORIGIN}
+						title="Origin"
+						value="Local"
+						info={originInfo}/>}
+				</Col>
+			</Row>
 
-			{isAuthenticated && <>
-					<hr className = "my-space-25"/>
-					<hr className = "my-2"/>
-					<hr className = "my-space-25"/>
-					<span className="d-fl">
-	   				     <Col md={1} className="mb-1">
-                            <input type="radio"
-                                readOnly
-	   		                    name="database-radio-private"
-	   		                    checked={dbStats === PRIVATE.label}/>
-	   					</Col>
-	   					<Col md={3} className="mb-3">
-	   						<label htmlFor = "database-radio-private">
-	   	   						{ PRIVATE.label }
-							</label>
-	   					</Col>
-	   					<Col md={1} className="mb-1">
-	   						<input type="radio" readOnly checked={dbStats === PUBLIC.label} name="database-radio-public"/>
-	   					</Col>
-	   				    <Col md={4} className="mb-4">
-	   					    <label htmlFor= "database-radio-public">
-	   	  				        { PUBLIC.label }
-						   </label>
-	   				    </Col>
-                    </span>
-				    <hr className = "my-space-25"/>
-					    <hr className = "my-2"/>
-					    <hr className = "my-space-25"/>
-				    </>
-                }
+			<legend>Recent Updates</legend>
 
-                {isAuthenticated &&
-                    <span className="d-fl">
-                        <Col md={1} className="mb-1">
-                            <input readOnly type="radio" name="database-master" checked={clStats === MASTER.label}/>
-                        </Col>
-                        <Col md={3} className="mb-3">
-                            <label htmlFor = "database-master">
-                                { MASTER.label }
-                            </label>
-                        </Col>
-                        <Col md={3} className="mb-3">
-                            <input readOnly placeholder={ database.master.placeholder }
-                                name = "database-master-name"
-                                className = { database.master.className }
-                                ref = { register }/>
-                        </Col>
-                    </span>
-				}
-
-				{isAuthenticated &&
-					<span className="d-fl">
-	   					<Col md={1} className="mb-1">
-	   						<input readOnly type="radio" checked={clStats === CLONE.label} name = "database-clone"/>
-	   					</Col>
-	   				   <Col md={3} className="mb-3">
-	   					   <label htmlFor = "database-clone">
-	   	  						{ CLONE.label }
-						   </label>
-	   				   </Col>
-					   <Col md={3} className="mb-3">
-						   <input readOnly placeholder={ database.clone.placeholder }
-							   className = { database.clone.className }
-                               name = "database-clone-name"
-                               ref = { register }/>
-					   </Col>
-                   </span>
-
-				}
-
-				<hr className = "my-space-25"/>
-				<b>Recent Updates</b>
-				<hr className = "my-space-100"/>
-                <span className="d-fl">
-				    <Col md={2} className="mb-2">
-						<label htmlFor = "database-size">
-							{ database.size.label }
-						</label>
-					</Col>
-				    <Col md={3} className="mb-3">
-						<span name="database-size">
-							{ dbSize }
-						</span>
-				    </Col>
-			    </span>
-
-			    <hr className = "my-2"/>
-
-                <span className="d-fl">
-				    <Col md={2} className="mb-2">
-					    <label htmlFor = "database-created-by">
-						   { database.createdBy.label }
-						</label>
-				    </Col>
-				    <Col md={6} className="mb-6">
-					    <span name="database-created-by">
-						   { formattedCreateDate }
-				        </span>
-				    </Col>
-			    </span>
-
-                <hr className = "my-2"/>
-
-                <span className="d-fl">
-				    <Col md={2} className="mb-2">
-					    <label htmlFor = "database-modified-by">
-						    { database.lastModifiedBy.label }
-                        </label>
-                    </Col>
-				    <Col md={6} className="mb-6">
-                        { dbModifiedBy + ', ' + formattedDbModifiedDate}
-					</Col>
-			    </span>
-
-			    <span className="d-fl">
-				    <Col md={2} className="mb-2"/>
-				    <Col md={6} className="mb-6">
-                        { dbCommitMsg }
-				    </Col>
-			    </span>
-            </form>
        </div>
     )
 }

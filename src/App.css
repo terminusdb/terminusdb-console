@@ -1193,6 +1193,27 @@ a {
     transform: none !important;
 }
 
+div.dd-ico svg {
+    color: #002859 !important;
+    margin: 20px 0px 20px 10px;
+    opacity: 0.7;
+    zoom: 240%;
+}
+
+div.dd-f-txt{
+    margin-top: 15px
+}
+
+div.dd-c div.card {
+    min-height: auto;
+}
+
+div.dd-t {
+    margin: 30px 0px 10px 0px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
 .card {
     background-color: #fff !important;
     padding: 0px 20px 30px 20px !important
