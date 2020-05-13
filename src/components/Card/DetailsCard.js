@@ -17,7 +17,7 @@ export const DetailsCard = (props) => {
                 <Col xs={8}>
                   <div className="dd-t">
                     <legend className="dd-mute">{props.title}</legend>
-                    <p className="dd-p">{props.value}</p>
+                    <p className="dd-p">{props.main}</p>
                     <p className="dd-st">{props.subTitle}</p>
                   </div>
                 </Col>

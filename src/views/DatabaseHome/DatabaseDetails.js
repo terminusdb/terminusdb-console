@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
-import { useForm } from 'react-hook-form';
-import { FormInputs } from "../../components/Form/FormInputs"
-import { Container,Row, Col, Card, CardTitle, CardText, CardFooter,
-		Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
-import { CLONE, MASTER, PRIVATE, PUBLIC, ACTIONS } from "../../variables/databaseHomeLabels"
+import { Row, Col } from "reactstrap";
 import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
 import { createDatabaseForm, database, size } from "../../variables/formLabels"
 import { printts, DATETIME_FULL } from "../../utils/dateFormats"
@@ -12,10 +8,8 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DetailsCard } from "../../components/Card/DetailsCard"
 import * as icons from "../../labels/iconLabels"
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { isArray } from "../../utils/helperFunctions"
 
 const Details = (props) => {
-    const { register, handleSubmit, errors } = useForm();
 	const { isAuthenticated, user } = useAuth0();
 	const [commitInfo, setCommitInfo] = useState([])
 	const [dbInfo, setDbInfo] = useState([])
@@ -35,23 +29,16 @@ const Details = (props) => {
 		return info
 	}
 
-	function prepareDbInfo() {
-		var info = [];
-		info.push("Created on 13 May 2020")
-		return info;
-	}
 
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
-			let buf = 'Available branches - ' + wr.count()
+			let buf = wr.count() + ' Branches'
 			countBranch(buf)
 			var inf = prepareCommitInfo(wr)
             setCommitInfo(inf)
-			var inf = prepareDbInfo()
-			setDbInfo(inf)
-			setUserInfo('Size of database - 1GB')
+			setDbInfo("Created on 13 May 2020")
 			setOriginInfo('This database is local. Your ahead of origin by 2 commits.')
         })
     }, [always]);
@@ -65,33 +52,33 @@ const Details = (props) => {
 			<Row>
 				<Col md={3} className="mb-3 dd-c">
 					{dbInfo && <DetailsCard icon={icons.INFO}
-						title = "DB Name"
-						value = {getCurrentDBName(woqlClient)}
-						subTitle={getCurrentDbDescr(woqlClient)}
+						title = {getCurrentDBID(woqlClient)}
+						main = {getCurrentDBName(woqlClient)}
+						subTitle = {getCurrentDbDescr(woqlClient)}
 						info = {dbInfo}/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
 	               {commitInfo && branch && <DetailsCard icon={icons.COMMIT}
-	                    title="Commits"
-	                    value="234"
-						subTitle={branch}
-	                    info={commitInfo}/>}
+	                    title = "Commits"
+	                    main = "234"
+						subTitle = {branch}
+	                    info = {commitInfo}/>}
 	            </Col>
 
 				<Col md={3} className="mb-3 dd-c">
 					{userInfo && <DetailsCard icon={icons.USERS}
-						title="Users"
-						value="5"
-						subTitle="some info here"
+						title = "Users"
+						main = "5"
+						subTitle = "Storage space 3 GB"
 						info={userInfo}/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
 					{originInfo && <DetailsCard icon={icons.ORIGIN}
-						title="Origin"
-						value="Local"
-						subTitle="sadsad"
+						title = "Origin"
+						main="Local"
+						subTitle="something goes here"
 						info={originInfo}/>}
 				</Col>
 			</Row>
