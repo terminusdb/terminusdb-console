@@ -5,7 +5,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { PageView } from '../PageView'
-import { DialogueBox } from "../../components/DialogueBox"
+import { DialogueBox } from "../../Reports/DialogueBox"
 import { Container, Row } from "reactstrap";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"

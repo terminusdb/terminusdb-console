@@ -3,7 +3,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Row, Col, For
 import {deleteDatabaseLabels} from '../../variables/content'
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { Report } from "../../components/Reports/Report"
+import { ViolationReport } from "../../components/Reports/ViolationReport"
 import * as reportAlert from "../../labels/reportLabels"
 import history from '../../utils/history';
 import { isObject } from "../../utils/helperFunctions"
@@ -46,7 +46,7 @@ const DeleteDatabase = (props) => {
                   <Col md={12}>
                     <div className="del-mod">
                         <img src={deleteImg} className="center"/>
-                        {isObject(rep) && <Report report = { rep }/>}
+                        {isObject(rep) && <ViolationReport report = { rep }/>}
                         <form onSubmit={ handleSubmit(onDelete) }>
                             <input type="text" name="dbId" id="dbId"
                                 ref = { register({ validate: value => value.length > 0}) }/>

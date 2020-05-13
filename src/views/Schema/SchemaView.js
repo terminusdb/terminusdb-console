@@ -12,7 +12,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminusdb-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
-import { DialogueBox } from "../../components/DialogueBox"
+import { DialogueBox } from "../../Reports/DialogueBox"
 
 const Schema = (props) => {
   const [graphs, setGraphs] = useState();
