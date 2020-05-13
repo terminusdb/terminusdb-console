@@ -1197,9 +1197,25 @@ legend.dd-l{
     margin-top: 0px
 }
 
+legend.dd-mute {
+    color: #8c9caf;
+    text-transform: uppercase;
+    font-size: large;
+}
+
+p.dd-st{
+    font-size: 13px;
+}
+
+p.dd-p{
+    font-size: 30px;
+    font-weight: 500;
+}
+
+
 div.dd-ico svg {
     color: #002859 !important;
-    margin: 20px 0px 20px 10px;
+    margin: 25px 0px 20px 10px;
     opacity: 0.7;
     zoom: 240%;
 }

@@ -9,15 +9,16 @@ export const DetailsCard = (props) => {
           <div className="card card-stats">
             <div className="content">
               <Row>
-                <Col xs={5}>
+                <Col xs={4}>
                   <div className="dd-ico">
                     <FontAwesomeIcon icon={props.icon} className="mr-3" />
                   </div>
                 </Col>
-                <Col xs={7}>
+                <Col xs={8}>
                   <div className="dd-t">
-                    <legend>{props.title}</legend>
-                    {props.value}
+                    <legend className="dd-mute">{props.title}</legend>
+                    <p className="dd-p">{props.value}</p>
+                    <p className="dd-st">{props.subTitle}</p>
                   </div>
                 </Col>
               </Row>

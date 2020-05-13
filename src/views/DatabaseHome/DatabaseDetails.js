@@ -21,19 +21,17 @@ const Details = (props) => {
 	const [dbInfo, setDbInfo] = useState([])
 	const [userInfo, setUserInfo] = useState([])
 	const [originInfo, setOriginInfo] = useState([])
+
+	const [branch, countBranch] = useState(1)
 	const always = true;
 
     const {woqlClient} = WOQLClientObj();
 
 	function prepareCommitInfo(r) {
 		var info = [];
-		info.push('Total Commits - ' + '3')
-		info.push(<br/>)
 		info.push('Last Modified by - ' + 'Someone?')
 		info.push(<br/>)
 		info.push('Last Commit Message - ' + 'blah')
-		info.push(<br/>)
-		info.push('Total branches available - ' + r.count());
 		return info
 	}
 
@@ -49,6 +47,8 @@ const Details = (props) => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
+			let buf = 'Total branches available - ' + wr.count()
+			countBranch(buf)
 			var inf = prepareCommitInfo(wr)
             setCommitInfo(inf)
 			var inf = prepareDbInfo()
@@ -69,13 +69,15 @@ const Details = (props) => {
 					{dbInfo && <DetailsCard icon={icons.INFO}
 						title = "DB Name"
 						value = {getCurrentDBName(woqlClient)}
+						subTitle="asdjk"
 						info = {dbInfo}/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
-	               {commitInfo && <DetailsCard icon={icons.COMMIT}
+	               {commitInfo && branch && <DetailsCard icon={icons.COMMIT}
 	                    title="Commits"
 	                    value="234"
+						subTitle={branch}
 	                    info={commitInfo}/>}
 	            </Col>
 
@@ -83,6 +85,7 @@ const Details = (props) => {
 					{userInfo && <DetailsCard icon={icons.USERS}
 						title="Users"
 						value="5"
+						subTitle="sad"
 						info={userInfo}/>}
 				</Col>
 
@@ -90,6 +93,7 @@ const Details = (props) => {
 					{originInfo && <DetailsCard icon={icons.ORIGIN}
 						title="Origin"
 						value="Local"
+						subTitle="sadsad"
 						info={originInfo}/>}
 				</Col>
 			</Row>
