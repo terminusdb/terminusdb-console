@@ -1204,14 +1204,15 @@ legend.dd-mute {
 }
 
 p.dd-st{
-    font-size: 13px;
+    font-size: 15px;
+    margin-top: 10px;
 }
 
 p.dd-p{
     font-size: 30px;
     font-weight: 500;
+    margin-top: 5px;
 }
-
 
 div.dd-ico svg {
     color: #002859 !important;

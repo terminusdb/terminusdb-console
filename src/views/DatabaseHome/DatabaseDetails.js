@@ -37,8 +37,11 @@ const Details = (props) => {
 
 	function prepareDbInfo() {
 		var info = [];
-		info.push(getCurrentDbDescr(woqlClient))
-		info.push(<br/>)
+		let desc = getCurrentDbDescr(woqlClient);
+		if(!desc) {
+			info.push(desc)
+			info.push(<br/>)
+		}
 		info.push("Created on 13 May 2020")
 		return info;
 	}
@@ -47,7 +50,7 @@ const Details = (props) => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
-			let buf = 'Total branches available - ' + wr.count()
+			let buf = 'Available branches - ' + wr.count()
 			countBranch(buf)
 			var inf = prepareCommitInfo(wr)
             setCommitInfo(inf)
