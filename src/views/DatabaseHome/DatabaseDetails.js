@@ -25,19 +25,38 @@ const Details = (props) => {
 
     const {woqlClient} = WOQLClientObj();
 
+	function prepareCommitInfo(r) {
+		var info = [];
+		info.push('Total Commits - ' + '3')
+		info.push(<br/>)
+		info.push('Last Modified by - ' + 'Someone?')
+		info.push(<br/>)
+		info.push('Last Commit Message - ' + 'blah')
+		info.push(<br/>)
+		info.push('Total branches available - ' + r.count());
+		return info
+	}
+
+	function prepareDbInfo() {
+		var info = [];
+		info.push(getCurrentDbDescr(woqlClient))
+		info.push(<br/>)
+		info.push("Created on 13 May 2020")
+		return info;
+	}
+
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
-            setCommitInfo('Total branches available - ' + wr.count())
-			setDbInfo(getCurrentDbDescr(woqlClient))
+			var inf = prepareCommitInfo(wr)
+            setCommitInfo(inf)
+			var inf = prepareDbInfo()
+			setDbInfo(inf)
 			setUserInfo('Size of database - 1GB')
 			setOriginInfo('This database is local. Your ahead of origin by 2 commits.')
         })
-    }, [dbInfo, commitInfo, userInfo, originInfo]);
-
-	console.log('commitInfo', commitInfo)
-	console.log('dbInfo', dbInfo)
+    }, [always]);
 
     return (
         <div>
@@ -75,7 +94,7 @@ const Details = (props) => {
 				</Col>
 			</Row>
 
-			<legend>Recent Updates</legend>
+			<legend className="dd-l">Recent Updates</legend>
 
        </div>
     )

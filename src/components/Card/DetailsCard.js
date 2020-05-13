@@ -1,7 +1,6 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isArray } from "../../utils/helperFunctions"
 
 export const DetailsCard = (props) => {
 

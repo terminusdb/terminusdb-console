@@ -36,6 +36,7 @@ export const getCurrentDbDescr = (client) => {
     else return false;
 }
 
+
 export const getCurrentSchema = (client) => {
     if (isObject(client)){
        return client.server() + '/'+ client.db() + '/schema'

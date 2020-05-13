@@ -1193,6 +1193,10 @@ a {
     transform: none !important;
 }
 
+legend.dd-l{
+    margin-top: 0px
+}
+
 div.dd-ico svg {
     color: #002859 !important;
     margin: 20px 0px 20px 10px;
@@ -1205,7 +1209,7 @@ div.dd-f-txt{
 }
 
 div.dd-c div.card {
-    min-height: auto;
+    min-height: 280px;
 }
 
 div.dd-t {
