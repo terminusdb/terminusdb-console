@@ -8,32 +8,34 @@ import { ViewEditor } from "./ViewEditor"
 import { ResultPane } from "./ResultPane"
 import { ViewChooser } from "./ViewChooser";
 import {WOQLQueryContainerHook} from "../WOQLQueryContainerHook";
-import { queryControls } from "../../variables/formLabels"
+import { queryControls } from "../../variables/formLabels";
+import { Tabs, Tab } from 'react-bootstrap-tabs';
 /*
 * this is only the queryEditor you don't need to process result; 
 */
-
-export const QueryPane = ({query, result, type, className, children}) => {
+export const QueryPane = ({query,className}) => {
 
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
-    const qpclass = className || "terminus-query-pane"
+    const qpclass = className || "terminus-query-pane";
+    const disabled = bindings ? {} : {disabled:true}   
   
-    return (
-        <Container className={qpclass}>
-            <Row>
-                <QueryEditor closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
-                    <QueryLibrary library="editor"/>
-                </QueryEditor>
-            </Row>
-            <Row>
-                <ResultReport report={report} />
-                <Container >
-                    <ViewEditor display="hidden" query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
-                    <ViewChooser query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
-                    
-                    <ResultViewer type="table" bindings={bindings}/>
-                </Container>
-            </Row>     
-        </Container>           
+    return(
+            <>
+                <Tabs defaultActiveKey="query" id="query_tabs">
+                  <Tab eventKey="query" label="Query Panel">
+                    <QueryEditor display={"hidden"} editable={true} closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
+                        <QueryLibrary library="editor"/>
+                    </QueryEditor>
+                  </Tab>
+                  <Tab eventKey="viewer" label="Result Wiewer" {...disabled}>
+                    <Container >
+                        <ViewEditor display="hidden" query={woql} report={report} bindings={bindings} updateQuery={updateQuery} />
+                        <ViewChooser/>    
+                        <ResultViewer type="table" bindings={bindings} query={woql}/>
+                    </Container>
+                  </Tab>
+                </Tabs>
+                <ResultReport currentReport={report} />
+            </>             
     )
 }

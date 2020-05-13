@@ -39,8 +39,8 @@ function WOQLQueryContainerHook(startQuery){
             duration: (end-start)*1000,
             error: e 
         }*/
-        setBindings([])
-        setReport("error");
+        setBindings(undefined)
+        setReport({"error":e});
     }
 
     function executeQuery() {

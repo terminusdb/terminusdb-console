@@ -17,7 +17,7 @@ export const PageView = (props) => {
                     <ConsoleNavbar page={props.page} />
                 </Col>
             </Container>
-            <Container fluid className="flex-grow-1 console-page-content">
+            <Container fluid className="flex-grow-1  console-page-content">
                 <Col className="console-page-content">
     				<div className="sch-disp">
                         {props.children}

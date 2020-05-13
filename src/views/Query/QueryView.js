@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Container , Col, Button } from "reactstrap";
+import { Container , Col, Button, Row } from "reactstrap";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../../labels/queryFormats'
 import { queryControls } from "../../variables/formLabels"
 import * as q from "../../labels/queryLabels";
 import * as view from "../../labels/viewLabels"
 import { PageView } from '../PageView'
+import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 
 
 const Query = (props) => {
@@ -40,11 +41,13 @@ const Query = (props) => {
       return (
         <div className="query-box">
             <QueryPane type="editor"/>
-            <button className = { queryControls.newQuery.className }
-                type =  { queryControls.newQuery.type }
-                onClick={() => { setQp([...qp, qp.length]) }}>
-                {queryControls.newQuery.text}
-            </button>
+            <Row style={{justifyContent:"flex-end"}}> 
+              <button className = { queryControls.newQuery.className }
+                  type =  { queryControls.newQuery.type }
+                  onClick={() => { setQp([...qp, qp.length]) }}>
+                  {queryControls.newQuery.text}
+              </button>
+            </Row>
         </div>);
   }
 
@@ -55,11 +58,23 @@ const Query = (props) => {
         pstate={{qp, setQp}}/>
     );
   }
+  /*
+  <Row text-align="right">
+              <button className = { queryControls.newQuery.className }
+                  type =  { queryControls.newQuery.type }
+                  onClick={() => { setQp([...qp, qp.length]) }}>
+                  {queryControls.newQuery.text}
+              </button>
+            </Row>*/
 
   return (   
-    <PageView>
-        <NewQueryPane/>
-    </PageView>
+    <Container fluid className="h-100 pl-0 pr-0">
+        <ConsoleNavbar/>
+        <Container className="flex-grow-1 h-100 ">      
+          <NewQueryPane/>
+        </Container>
+    </Container>      
+    
 	)
 }
 

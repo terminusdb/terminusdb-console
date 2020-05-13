@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { Alert } from 'reactstrap'
 
-export const ResultReport = ({report}) => {
-    const [currentReport, setReport] = useState(report)
-    useEffect(() => { setReport(report)}, [report])
+export const ResultReport = ({currentReport}) => {
 
     if(currentReport && currentReport.error){
         return (
@@ -20,5 +18,5 @@ export const ResultReport = ({report}) => {
             <Alert color='success'>Success</Alert>
         )
     }
-    return (<Alert color="danger">No Report delivered</Alert>)
+    return (<Alert color="info">Please run your query</Alert>)
 }

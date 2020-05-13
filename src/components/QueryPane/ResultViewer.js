@@ -7,10 +7,9 @@ import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 import { Container } from 'reactstrap'
 
 export const ResultViewer = ({bindings, report, type, viewConfig, query, updateQuery}) => {
-
-    //const [binds, setBindings] = useState(bindings)
     const [currentView, setView] = useState(viewConfig)
-    //useEffect(() => setBindings(bindings), [bindings])
+
+    //updateView={updateView}
 
     function updateView(newconfig, newvtype){
         setView(newConfig)
@@ -20,14 +19,18 @@ export const ResultViewer = ({bindings, report, type, viewConfig, query, updateQ
     const bindingsMy= bindings || []
 
     return (
-        <Container>
-            <WOQLTable bindings={bindingsMy} />
-   
-           {JSON.stringify(bindingsMy, null, 4)}
-        </Container>                
+       
+            {(binds && type == "table") && 
+                <WOQLTable bindings={bindingsMy} config={currentView} query={query} updateQuery={updateQuery} />
+            }
+            {(binds && type == "graph") && 
+                <WOQLGraph bindings={bindingsMy} view={currentView} query={query} updateQuery={updateQuery}/>
+            }                        
     )
 }
-
+//{JSON.stringify(bindingsMy, null, 4)} 
+//{JSON.stringify(bindingsMy, null, 4)}
+//<WOQLTable bindings={bindingsMy}  query={query}/>
  /*{(binds && type == "table") && 
                 <WOQLTable bindings={binds} config={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
             }
