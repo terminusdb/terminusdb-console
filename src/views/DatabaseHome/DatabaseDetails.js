@@ -37,11 +37,6 @@ const Details = (props) => {
 
 	function prepareDbInfo() {
 		var info = [];
-		let desc = getCurrentDbDescr(woqlClient);
-		if(!desc) {
-			info.push(desc)
-			info.push(<br/>)
-		}
 		info.push("Created on 13 May 2020")
 		return info;
 	}
@@ -72,7 +67,7 @@ const Details = (props) => {
 					{dbInfo && <DetailsCard icon={icons.INFO}
 						title = "DB Name"
 						value = {getCurrentDBName(woqlClient)}
-						subTitle="asdjk"
+						subTitle={getCurrentDbDescr(woqlClient)}
 						info = {dbInfo}/>}
 				</Col>
 
@@ -88,7 +83,7 @@ const Details = (props) => {
 					{userInfo && <DetailsCard icon={icons.USERS}
 						title="Users"
 						value="5"
-						subTitle="sad"
+						subTitle="some info here"
 						info={userInfo}/>}
 				</Col>
 
