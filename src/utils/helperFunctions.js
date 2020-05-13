@@ -17,6 +17,13 @@ export const getCurrentDBID = (client) => {
     else return false;
 }
 
+export const trimContent = (str, limit) => {
+    if(str.length > limit){
+        const toShow = str.substring(0, limit) + "...";
+        return toShow;
+    }
+    else return str;
+}
 
 export const getCurrentDBName = (client) => {
     if (isObject(client)){

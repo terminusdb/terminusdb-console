@@ -4,6 +4,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import * as links from '../../variables/pageLabels'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { trimContent } from "../../utils/helperFunctions"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClock, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
 library.add(faClock, faCodeBranch)
@@ -11,7 +12,7 @@ library.add(faClock, faCodeBranch)
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
     let dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account()) || {}
-    
+
     const [DBMeta, setDBMeta] = useState(dbmeta)
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
@@ -42,7 +43,7 @@ export const DBNavbar = (props) => {
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
     let clockStatus = (ref ? "orange" : "green")
     let branchStatus = (branch != "master" ? "orange" : "green")
-    return ( 
+    return (
         <div className="d-flex db-al db-nav s-nav">
             <Nav className = "mr-auto"  navbar>
                 <NavItem>
@@ -51,7 +52,7 @@ export const DBNavbar = (props) => {
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            {DBMeta.title}
+                            {trimContent(DBMeta.title, 15)}
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -81,7 +82,7 @@ export const DBNavbar = (props) => {
                             {links.SCHEMA_PAGE.label}
                     </NavLink>
                 </NavItem>
-                {dbmeta.db != "terminus" && 
+                {dbmeta.db != "terminus" &&
                 <NavItem>
                     <NavLink onClick = {toggleNavbar}>
                        <FontAwesomeIcon icon="clock" className="mr-3" title={headText} color={clockStatus}/>

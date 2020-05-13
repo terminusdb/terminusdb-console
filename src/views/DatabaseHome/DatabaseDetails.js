@@ -19,7 +19,8 @@ const Details = (props) => {
 	const [branch, countBranch] = useState(1)
 	const always = true;
 
-    const {woqlClient} = WOQLClientObj();
+    const { woqlClient } = WOQLClientObj();
+	const db_uri = woqlClient.server() + '/db/' + woqlClient.account() + '/' + getCurrentDBID(woqlClient)
 
 	function prepareCommitInfo(r) {
 		var info = [];
@@ -29,17 +30,16 @@ const Details = (props) => {
 		return info
 	}
 
-
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q)
-			let buf = wr.count() + ' Branches'
-			countBranch(buf)
+            let wr = new TerminusClient.WOQLResult(results, q);
+			if(wr.count() > 1)
+				countBranch(wr.count() + ' Branches')
+		    else countBranch(wr.count() + ' Branch')
 			var inf = prepareCommitInfo(wr)
             setCommitInfo(inf)
-			setDbInfo("Created on 13 May 2020")
-			setOriginInfo('This database is local. Your ahead of origin by 2 commits.')
+			setOriginInfo('Your ahead of origin by 2 commits.')
         })
     }, [always]);
 
@@ -54,8 +54,8 @@ const Details = (props) => {
 					{dbInfo && <DetailsCard icon={icons.INFO}
 						title = {getCurrentDBID(woqlClient)}
 						main = {getCurrentDBName(woqlClient)}
-						subTitle = {getCurrentDbDescr(woqlClient)}
-						info = {dbInfo}/>}
+						subTitle = {db_uri}
+						info = {getCurrentDbDescr(woqlClient)}/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
