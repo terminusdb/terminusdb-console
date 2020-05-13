@@ -21,10 +21,11 @@ export const CodeViewer = ({text, language}) => {
         noHScroll: false,
         theme: theme,
         readOnly: "nocursor",
+        className: "readOnly",
         lineNumbers: true
     }
     if(language == "json") cmoptions['jsonld'] = true
-    return (<CodeMirror value={ text } options={ cmoptions }/>)
+    return (<CodeMirror value={ text } options={ cmoptions } className="readOnly"/>)
 }
 
 export const CodeEditor = ({text, language, onChange, onBlur}) => {

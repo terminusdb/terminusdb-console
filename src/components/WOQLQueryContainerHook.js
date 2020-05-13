@@ -14,11 +14,8 @@ function WOQLQueryContainerHook(startQuery){
 
     let commitMsg="Update";
 
-    const updateQuery = (nwoql, commitMsg, no_execute)=>{
-        //!no_execute && executeQuery(nwoql, commitMsg)
-        //setQueryCommitMsg(commitMsg);
+    const updateQuery = (nwoql, commitMsg)=>{
         commitMsg=commitMsg;
-        //executeQuery(nwoql, commitMsg)
         setWoqlQuery(nwoql)
     }
 
@@ -39,9 +36,8 @@ function WOQLQueryContainerHook(startQuery){
             duration: (end-start)*1000,
             error: e 
         }*/
-        alert(e.toString())
-        setBindings([])
-        setReport("error");
+        setBindings(undefined)
+        setReport({"error":e});
     }
 
     function executeQuery() {

@@ -62,7 +62,11 @@ span.result-reports{
 
 div.query-box{
     border-bottom: 1px solid #00C08B;
-    min-height: 700px;
+    min-height: calc(100% - 250px);
+    /*700px;*/
+    display: flex;
+    flex-direction: column;
+    margin-top:100px;
 }
 
 button.btn-secondary{
@@ -570,6 +574,7 @@ button.flatButton{
 
 div.q-e div.react-codemirror2{
     margin-top: 0px !important;
+
 }
 
 div.d3-component{
@@ -1069,14 +1074,27 @@ pre {
   width: 100%
 }
 
+.table-hover.table td{
+  word-break: break-word;
+}
+
+.readOnly.react-codemirror2  *.CodeMirror{
+   background-color: #cccccc !important;
+}
+
 .profile-header {
   text-align: center;
   margin-bottom: 3rem
 }
-
-div.react-codemirror2{
-    margin-top: 100px;
+div.CodeMirror{
+  min-height: 350px;
 }
+div.react-codemirror2{
+    /*margin-top: 100px;*/
+   min-height: 350px;
+}
+
+
 
 div.CodeMirror{
     height: auto;
@@ -1418,4 +1436,11 @@ span.qr-v{
         padding: 7px 15px;
         font-size: 14px
     }
+}
+
+.terminus-query-editor
+.dropdown-toggle {
+  border-bottom: none;
+  border-top: none;
+  border-radius: 0 !important;
 }
