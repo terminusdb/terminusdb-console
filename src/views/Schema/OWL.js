@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { RenderSnippet } from "../../components/RenderSnippet";
 import Loading from "../../components/Loading";
+import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
+import { ViolationReport } from "../../components/Reports/ViolationReport.js"
+import {FAILED_LOADING_OWL} from "./constants"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-
 export const OWL = (props) => {
     const [edit, setEdit] = useState(false);
     const [filter, setFilter] = useState(props.graph)
-    const [errors, setErrors] = useState()
+    const [error, setError] = useState()
     const [dataProvider, setDataProvider] = useState()
     const {woqlClient} = WOQLClientObj();
 
     useEffect(() => {
-        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type ))
-        setFilter(props.graph)
-    }, [props.graph])
-
-    useEffect(() => {
-        if(filter){
-            woqlClient.getTriples(filter.type, filter.gid)
+        if(props.graph){
+            setFilter(props.graph)
+            woqlClient.getTriples(props.graph.type, props.graph.gid)
             .then((cresults) => {
                 setDataProvider(cresults);
             })
             .catch((e) => {
-                setErrors(e)
+                setError({type: "read", error: e})
             })
         }
-    }, [props.graph, props.rebuild]);
+    }, [props.graph])
 
     function updateSchema(contents, commitmsg){
         woqlClient.updateTriples(filter.type, filter.gid, contents, commitmsg)
@@ -34,13 +32,25 @@ export const OWL = (props) => {
             setDataProvider(contents);
         })
         .catch((e) => {
-            setErrors(e)
+            setError({type: "update", error: e})
         })
     }
 
-    if(!dataProvider) return null
     return (
-        <RenderSnippet dataProvider = {dataProvider}
-            edit = {edit} onChange = {updateSchema} errors={errors}/>
+        <div className = "tab-co">
+            {(!dataProvider && !error) &&  
+                <Loading />
+            }
+            {(error && error.type == "read") && 
+                <ComponentFailure failure={FAILED_LOADING_OWL} error={error} />
+            }
+            {(error && error.type == "update") &&
+                <ViolationReport />
+            }
+            {dataProvider &&  
+                <RenderSnippet dataProvider = {dataProvider}
+                    edit = {edit} onChange = {updateSchema}/>
+            }
+        </div>
     )
 }

@@ -5,6 +5,48 @@
     margin-top: 40px
 }
 
+div.modal-body{
+    min-height: 200px;
+}
+
+img.center {
+    margin: auto;
+    width: 30%;
+    padding: 20px;
+    margin: 0px 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.del-mod{
+    margin-top: 40px;
+}
+
+button.man-btn{
+    margin-top: -40px;
+}
+
+img.cancel-ic{
+    float:right;
+    width: 2%;
+    color: #6290c3
+}
+
+div.b-del{
+    float: left !important;
+}
+
+img.cancel-ic:hover{
+    cursor: pointer;
+}
+
+div.card-title{
+    text-align: center;
+    /*margin-top: 10%;*/
+    font-size: large;
+}
+
 div.terminus-violation{
    margin: 10px 0px 10px 0px;
 }
@@ -210,6 +252,10 @@ hr.my-space-15{
     margin-top: 15px;
 }
 
+img.al-ic{
+    margin: 0px 10px 0px 10px
+}
+
 hr.my-space-5{
     border-top: 0px !important;
     margin-top: 15px;
@@ -388,7 +434,7 @@ div.css-yk16xz-control{
 }
 
 .navbar-brand {
-  margin-right: 20px;
+  margin: 10px 20px;
 }
 
 .navbar-nav .nav-link {
@@ -443,12 +489,32 @@ div.css-yk16xz-control{
   left: auto;
 }
 
+img.cms-i{
+    width: 10%
+}
+
 h1.d-head1{
-    font-size: 130px;
+    /*font-size: 130px;
     font-weight: 500;
     margin: 100px -100px -80px 0px;
-    text-align: center;
+    text-align: center;*/
     color: #002855;
+    font-size: 50px;
+    font-weight: 500;
+}
+
+div.head-bg{
+    margin-bottom: -600px;
+}
+
+div.head-t{
+    margin-top: -50px
+}
+
+h1.d-head2{
+    color: #002855;
+    font-size: 30px;
+    font-weight: 500;
 }
 
 div.img-c{
@@ -635,6 +701,16 @@ a.dropdown-profile svg, button.dropdown-item svg {
 .nav-item.dropdown .dropdown-item:last-child {
   border-bottom: 0
 }
+
+img.card-img-top{
+    width: 40%;
+    /*margin-top: 10%;*/
+    margin-left: 30%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+
 
 div.div-hide {
     display: none !important;
@@ -1135,6 +1211,48 @@ a {
     transform: none !important;
 }
 
+legend.dd-l{
+    margin-top: 0px
+}
+
+legend.dd-mute {
+    color: #8c9caf;
+    text-transform: uppercase;
+    font-size: large;
+}
+
+p.dd-st{
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+p.dd-p{
+    font-size: 30px;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+div.dd-ico svg {
+    color: #002859 !important;
+    margin: 25px 0px 20px 10px;
+    opacity: 0.7;
+    zoom: 240%;
+}
+
+div.dd-f-txt{
+    margin: 15px;
+}
+
+div.dd-c div.card {
+    min-height: 280px;
+}
+
+div.dd-t {
+    margin: 30px 0px 10px 0px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
 .card {
     background-color: #fff !important;
     padding: 0px 20px 30px 20px !important
@@ -1187,7 +1305,7 @@ legend {
 }
 
 div.card{
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 
 span.nav-al{

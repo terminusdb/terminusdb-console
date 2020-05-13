@@ -3,7 +3,7 @@ import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
 import { QueryEditor } from "./QueryEditor"
 import { QueryLibrary } from "./QueryLibrary"
-import { ResultReport } from "./ResultReport"
+import { ResultReport } from "../Reports/ResultReport"
 import { ViewEditor } from "./ViewEditor"
 import { ResultPane } from "./ResultPane"
 import { ViewChooser } from "./ViewChooser";

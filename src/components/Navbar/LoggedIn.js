@@ -4,6 +4,7 @@ import * as links from '../../variables/pageLabels'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth0 } from "../../react-auth0-spa";
+import * as icon from "../../labels/iconLabels"
 
 export const LoggedIn = (props) => {
     const { user, logout } = useAuth0();
@@ -27,10 +28,10 @@ export const LoggedIn = (props) => {
                     to= {links.PROFILE_PAGE.page}
                     className="dropdown-profile"
                     activeClassName="router-link-exact-active">
-                    <FontAwesomeIcon icon="user" className="mr-3" /> {links.PROFILE_PAGE.label}
+                    <FontAwesomeIcon icon={icons.USER} className="mr-3" /> {links.PROFILE_PAGE.label}
                 </DropdownItem>
                 <DropdownItem id="qsLogoutBtn" onClick={() => logoutWithRedirect()}>
-                    <FontAwesomeIcon icon="power-off" className="mr-3" /> {links.LOGOUT.label}
+                    <FontAwesomeIcon icon={icons.POWER_OFF} className="mr-3" /> {links.LOGOUT.label}
                 </DropdownItem>
             </DropdownMenu>
         </UncontrolledDropdown>

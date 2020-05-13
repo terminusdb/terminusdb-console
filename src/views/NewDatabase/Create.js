@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
-import { Report } from "../../components/Reports/Report"
+import { ViolationReport } from "../../components/Reports/ViolationReport"
 import { createDatabaseForm } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
@@ -21,6 +21,8 @@ const CreateDB = (props) => {
   const [dbId, updateDbId] = useState(tag.BLANK)
 
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(true);
+  const [advancedSettings, setAdvancedSettings] = useState(false)
 
   const {woqlClient} = WOQLClientObj();
 
@@ -40,13 +42,13 @@ const CreateDB = (props) => {
   }, [dbInfo]);
 
   const onSubmit = (data) => {
-	if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
-		loginWithRedirect();  // authenticate
-	}
-	let doc = {label: data.databaseName,
-	   comment: data.databaseDescr,
-	   base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
-	updateDbId(data.databaseID) ;
+    if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
+    	loginWithRedirect();  // authenticate
+    }
+    let doc = {label: data.databaseName,
+       comment: data.databaseDescr,
+       base_uri: "http://local.terminusdb.com/" + data.id + "/data"}
+    updateDbId(data.databaseID) ;
     updateDbInfo(doc)
     setLoading(true);
   };
@@ -59,12 +61,25 @@ const CreateDB = (props) => {
 	  setDBLoction(CREATE_TERMINUS_DB);
   }
 
+  const handleNext = () => {
+      setCreateOptions(true)
+      setShow(false);
+  }
+
+  const handleAdvancedSettings = () => {
+      setAdvancedSettings(true)
+  }
+
+  const handleHideAdvancedSettings = () => {
+      setAdvancedSettings(false)
+  }
+
   return (
   		<>
             <hr className = "my-space-15"/>
-			{isObject(rep) && <Report report = { rep }/>}
+			{isObject(rep) && <ViolationReport report = { rep }/>}
             { loading && <Loading /> }
-            <form onSubmit={handleSubmit(onSubmit) }>
+            {show && <form onSubmit={handleSubmit(onSubmit) }>
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>
             		{ createDatabaseForm.id.label.text + ' *' }
@@ -103,7 +118,9 @@ const CreateDB = (props) => {
 
 				 <hr className = "my-space-15"/>
 
-				 <span className="d-fl">
+                 <button onClick={handleNext}>Create</button>
+
+				 {/*<span className="d-fl">
 				     <Col md={1} className="mb-1">
 		                 <input type="radio"
 		                    name={ createDatabaseForm.createLocally.label.name }
@@ -132,8 +149,13 @@ const CreateDB = (props) => {
             	<button className = { createDatabaseForm.action.className }
         		    type =  { createDatabaseForm.action.type } >
         			{ createDatabaseForm.action.text }
-            	</button>
-            </form>
+            	</button>*/}
+            </form>}
+            {!advancedSettings && <button onClick={handleAdvancedSettings}>Advanced Settings</button>}
+            {advancedSettings && <>
+                <button onClick={handleHideAdvancedSettings}>Hide Advanced Settings</button>
+                this is a placeholder to show Schema or instance graph ...
+            </>}
           </>)
 }
 

@@ -6,10 +6,10 @@ import * as links from '../../variables/pageLabels'
 
 
 export const ServerNavbar = (props) => {
-    return ( 
+    return (
         <span className="m-opts d-flex">
             <div className="d-flex main-nav">
-                <NavbarBrand href="https://terminusdb.com" className="logo"/>
+                <NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>
                 <Nav className = "mr-auto"  navbar>
                     <NavItem>
                         <NavLink tag = {RouterNavLink}
@@ -24,6 +24,3 @@ export const ServerNavbar = (props) => {
         </div>
     </span>)
 }
-
-
-

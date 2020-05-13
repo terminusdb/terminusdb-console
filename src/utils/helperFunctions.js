@@ -17,6 +17,13 @@ export const getCurrentDBID = (client) => {
     else return false;
 }
 
+export const trimContent = (str, limit) => {
+    if(str.length > limit){
+        const toShow = str.substring(0, limit) + "...";
+        return toShow;
+    }
+    else return str;
+}
 
 export const getCurrentDBName = (client) => {
     if (isObject(client)){
@@ -26,6 +33,16 @@ export const getCurrentDBName = (client) => {
     }
     else return false;
 }
+
+export const getCurrentDbDescr = (client) => {
+    if (isObject(client)){
+        const dbRec = client.connection.getDBMetadata(client.db(), client.account())
+        if (isObject(dbRec)) return dbRec.description
+        else return false;
+    }
+    else return false;
+}
+
 
 export const getCurrentSchema = (client) => {
     if (isObject(client)){
