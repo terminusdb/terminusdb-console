@@ -12,7 +12,7 @@ import { queryControls } from "../../variables/formLabels";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {ResultQueryPane} from './ResultQueryPane';
 /*
-* this is only the queryEditor you don't need to process result; 
+* this is only the queryEditor you don't need to process result;
 */
 export const QueryPane = ({query,className,resultView}) => {
 
@@ -20,7 +20,7 @@ export const QueryPane = ({query,className,resultView}) => {
     const qpclass = className || "terminus-query-pane";
     const disabled = bindings ? {} : {disabled:true};
 
-    
+
     return(
             <>
                 <ResultReport currentReport={report} />
@@ -30,10 +30,10 @@ export const QueryPane = ({query,className,resultView}) => {
                         <QueryLibrary library="editor"/>
                     </QueryEditor>
                   </Tab>
-                  <Tab eventKey="viewer" label="Result Wiewer" {...disabled}>
-                    <ResultQueryPane resultView={resultView} bindings={bindings} query={woql} updateQuery={updateQuery}/>                    
+                  <Tab eventKey="viewer" label="Result Viewer" {...disabled}>
+                    <ResultQueryPane resultView={resultView} bindings={bindings} query={woql} updateQuery={updateQuery}/>
                   </Tab>
-                </Tabs>              
-            </>             
+                </Tabs>
+            </>
     )
 }
