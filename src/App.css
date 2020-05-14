@@ -320,14 +320,28 @@ input.form {
   font-size: 14px;
 }
 
+p.create-form-helptext {
+   font-size: 0.9em;
+   color: #555;
+}
+
+.advanced-settings-create-form {
+    float: left;
+}
+
+p.create-form-helptext::before {
+    display: inline;
+    content: "🛈 ";
+  }
+
 label.form {
   line-height: 2;
   text-align: left;
   display: block;
-  margin-bottom: 13px;
+  margin-bottom: 12px;
   margin-top: 20px;
   color: #000;
-  font-size: 14px;
+  font-size: 1.2em;
   font-weight: 200;
 }
 
@@ -1443,4 +1457,57 @@ span.qr-v{
   border-bottom: none;
   border-top: none;
   border-radius: 0 !important;
+}
+
+.inactive-checkbox-button,
+.btn-minor {
+    border-radius: 0;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+}
+  
+.active-checkbox-button,
+.btn-minor:hover {
+    background-color: #00C08B;
+    color: #fff;
+    opacity: 0.8;
+    border: 1px solid #fff;
+}
+  
+div.advanced-section-create-form {
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 54px;
+    border-top: 1px solid #f2f2f2;
+}
+
+div.graph-row-create-form {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.checkbox-create-form {
+    display: inline-block;
+    padding-right: 12px;
+    font-size: 1.4rem;
+    padding-bottom: 8px;
+}
+
+label.checkbox-label-create-form {
+    width: 250px;
+    display: inline-block;
+    padding-left: 1rem;
+}
+
+.checkbox-wrapper-create-form {
+    display: inline-block;
+    padding: 4px;
+    margin-right: 1em;
 }
