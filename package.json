@@ -44,6 +44,9 @@
     "react-dom": "^16.10.3"
   },
   "dependencies": {
+    "@terminusdb/terminusdb-client": "terminusdb/terminusdb-client#v2.0",
+    "@terminusdb/terminusdb-react-graph": "terminusdb/terminusdb-react-graph#dev",
+    "@terminusdb/terminusdb-react-table": "terminusdb/terminusdb-react-table#dev",
     "@auth0/auth0-spa-js": "^1.6.5",
     "@babel/runtime-corejs2": "^7.9.2",
     "@fortawesome/fontawesome-free": "^5.13.0",
