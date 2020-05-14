@@ -5,9 +5,28 @@
     margin-top: 40px
 }
 
+button.flat-buttons-link {
+    border: 0px !important;
+    background-color: transparent !important;
+    padding: 10px 10px 30px 10px;
+    width: auto;
+    min-width: 0px !important;
+}
+
+button.flat-buttons-link:hover  {
+    color: #0055bb !important;
+}
+
+button.flat-buttons-link:visited  {
+    color: #0055bb !important;
+    font-weight: bold;
+}
+
 div.modal-body{
     min-height: 200px;
 }
+
+
 
 div.history-navigator-Collapsible {
     background-color: #f5f5f5;
@@ -51,9 +70,13 @@ img.cancel-ic:hover{
     cursor: pointer;
 }
 
+div.card-grid {
+    display: grid;
+}
+
 div.db-view-cards:hover {
-    /*background-color: #f5f5f5 !important;*/
-    border: 5px solid #CCDDF1 !important;
+    /*background-color: #CCDDF1 !important;*/
+    background-color: #f5f5f5 !important;
     cursor: pointer;
 }
 

@@ -6,6 +6,8 @@ import { cloneLocalDB } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { isObject } from "../../utils/helperFunctions";
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { Crumbs } from "../../components/BreadCrumbs"
+import * as view from "../../labels/createView"
 
 const CloneLocalDB = (props) => {
 	const {woqlClient} = WOQLClientObj();
@@ -46,6 +48,7 @@ const CloneLocalDB = (props) => {
 	return (
 			<>
 	        <hr className = "my-space-50"/>
+			<Crumbs buttons = {[view.CREATE_VIEW, view.CREATE_OPTIONS, view.COPY_TYPES]}/>
 			{ loading && <Loading /> }
 	        <form onSubmit={handleSubmit(onSubmit) }>
 	            <span className="d-fl">

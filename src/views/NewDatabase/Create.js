@@ -106,9 +106,9 @@ const CreateDB = (props) => {
     }
 
     function generateFieldPrompt(field_id){
-        if(error[field_id]){
+        /*if(error[field_id]){
 
-        }
+        } */
     }
 
 
@@ -136,7 +136,7 @@ const CreateDB = (props) => {
             <hr className = "my-space-15"/>
 			{isObject(rep) && <ViolationReport report = { rep }/>}
             { loading && <Loading /> }
-            {show && <form onSubmit={handleSubmit(onSubmit) }>
+            {<form onSubmit={handleSubmit(onSubmit) }>
                 {generateFormFields("id", "databaseName", "databaseDescr")}
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>

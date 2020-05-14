@@ -7,8 +7,8 @@ export const DatabaseCard = (props) => {
     return (
         <><hr className = "my-space-100"/>
           <CardTitle className="db-view-card-title">{ card.title }</CardTitle>
-          <CardText className="db-view-card-text">{ card.text }</CardText>
           <CardImg top width="100%" src={ card.image }/>
+          <CardText className="db-view-card-text">{ card.text }</CardText>
           <hr className = "my-space-25"/></>
     )
 }
