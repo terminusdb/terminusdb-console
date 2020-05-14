@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Col, Button, Row, Container } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
-import { APIUpdateReport } from "../../components/Reports/ViolationReport"
+import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
 import { createDBText } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
@@ -62,10 +62,10 @@ const CreateDB = (props) => {
         doCreate(data.dbid, doc, data.accountid, data.schema, data.instance)
     }
 
-    let update_start = Date().now() 
+    let update_start = Date.now() 
 
     function doCreate(id, doc, acc, schema, instance){
-        update_start = Date().now()
+        update_start = new Date.now()
         woqlClient.createDatabase(id , doc, acc)
         .then((cresults) => {
             let message = `Successfully created database with id {id}`
@@ -266,7 +266,7 @@ const CreateDB = (props) => {
         )
     }
     if(rep){
-        rep.time = Date().now() - update_start
+       rep.time = Date.now() - update_start
     }
     return (<>
             <hr className = "my-space-15"/>
