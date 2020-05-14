@@ -40,7 +40,17 @@ export const createDBText = {
     checkboxClassName: "checkbox-create-form",
     createButtonText: "Create New Database",
     hideAdvanced: "Hide Advanced Settings",
-    showAdvanced: "Show Advanced Settings",    
+    showAdvanced: "Show Advanced Settings",  
+    schemaGraphCommitMessage: "Main Schema Graph Created by console during DB create",  
+    instanceGraphCommitMessage: "Main Instance Graph Created by console during DB create", 
+    instanceFailedSchemaWorkedMessage: " and schema graph main, but failed to create instance graph",
+    schemaFailedMessage: " but failed to create main schema graph",
+    instanceFailedSchemaWorkedMessage: " created main schema graph but failed to create main instance graph. You must create an instance graph before you can add data to this database",
+    noDataGraphMessage: " Database has no instance graph.  You must create an instance graph before you can add data to this database",
+    noSchemaGraphMessage: " Database is schema free. If you want to enable quality control and advanced WOQL features, you must add a schema to this database",
+    instanceFailedMessage: "but failed to create main instance graph",
+    noGraphMessage: " Empty Database - at least one graph must be created before anything can be stored in this database.",
+    createSuccessMessage: "Successfully Created Database: ",
     sections: {
         details: { 
             fields: {
