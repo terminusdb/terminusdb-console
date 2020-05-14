@@ -24,13 +24,10 @@
   "scripts": {
     "build": "npm run build-es6 && webpack --mode production --config console/webpack.config.js",
     "buildConsole": "webpack --mode development --config console/webpack.config.js",
-    "start": "webpack-dev-server --mode development --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js --history-api-fallback",
+    "start": "webpack-dev-server --mode development --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.dev.config.js --history-api-fallback",
     "test": "exit 0",
     "lint": "eslint src",
-    "autofix": "eslint src --fix",
-    "installClient:local": "npm install --no-save ../terminusdb-client",
-    "installTable:local": "npm install --no-save ../terminusdb-react-table",
-    "installGraph:local": "npm install --no-save ../terminusdb-react-graph"
+    "autofix": "eslint src --fix"
   },
   "pre-commit": [],
   "pre-push": [
@@ -45,8 +42,8 @@
   },
   "dependencies": {
     "@terminusdb/terminusdb-client": "terminusdb/terminusdb-client#v2.0",
-    "@terminusdb/terminusdb-react-graph": "terminusdb/terminusdb-react-graph#dev",
-    "@terminusdb/terminusdb-react-table": "terminusdb/terminusdb-react-table#dev",
+    "@terminusdb/terminusdb-react-graph": "0.0.2",
+    "@terminusdb/terminusdb-react-table": "0.0.2",
     "@auth0/auth0-spa-js": "^1.6.5",
     "@babel/runtime-corejs2": "^7.9.2",
     "@fortawesome/fontawesome-free": "^5.13.0",
@@ -93,6 +90,7 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
     "@babel/plugin-proposal-function-bind": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
+    "@babel/plugin-transform-react-jsx": "^7.9.4",
     "@babel/plugin-transform-regenerator": "^7.8.7",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/polyfill": "^7.8.7",

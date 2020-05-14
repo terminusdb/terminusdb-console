@@ -5,8 +5,6 @@ const Dotenv = require('dotenv-webpack');
 var PACKAGE = require('../package.json');
 var version = `v${PACKAGE.version}`;
 
-//console.log("__dirname",__dirname);
-
 module.exports = (env, argv) => ({
   entry: [
     path.join(__dirname, './index.js'),
@@ -16,7 +14,7 @@ module.exports = (env, argv) => ({
     filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
-  devtool: argv.mode === 'production' ? false : '#inline-source-map',
+  devtool:false,
   devServer: {
     historyApiFallback: true,
   },
@@ -37,11 +35,8 @@ module.exports = (env, argv) => ({
     }),*/
   ],
   resolve: {
-      alias: {
-        "@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
-         react: path.resolve('./node_modules/react'),
-      },
-    extensions: ['.js', '.jsx', '.json'],
+      alias:{"@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js')},
+      extensions: ['.js', '.jsx', '.json'],
   },
   module: {
     rules: [
