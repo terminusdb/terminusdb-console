@@ -25,14 +25,6 @@ module.exports = (env, argv) => ({
         template: path.resolve(__dirname, './index.html'),
         bundleFileName:"terminusdb-console.min.js"
       }),
-
-
-  //{ chunks:["contact", "vendor"], template: "src/pages/contact.html",  filename: "contact.html"}
-   /*new HtmlWebPackPlugin({
-      chunks:["bundle"],
-      template: path.join(__dirname, '..' , 'console/index.html'),
-      filename: 'index.html'
-    }),*/
   ],
   resolve: {
       alias:{"@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
@@ -103,18 +95,5 @@ module.exports = (env, argv) => ({
         ]
       }]
     },
-    /*optimization: {
-      minimize: argv.mode === 'production' ? true : false,
-      splitChunks: {
-        cacheGroups: {
-          vendor: {
-            test: /node_modules/,
-            chunks: "initial",
-            name: "vendor",
-            enforce: true
-          }
-        }
-      }
-    }*/
 });
 

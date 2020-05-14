@@ -92,23 +92,23 @@ const CreateDB = (props) => {
         if(textinputs.indexOf(field_id) != -1){
             return (
                 <input placeholder={ createDatabaseForm[field_id].input.placeholder }
-                    className = {cname }                
+                    className = {cname }
                     name = { name_prefix + field_id }
                     ref = { register({ validate: value => value.length > 0}) }/>
-            )                   
+            )
         }
         if(field_id == "databaseDescr"){
             return (<textarea name= { name_prefix + field_id }
             	   className = { cname }
             	   placeholder = { createDatabaseForm[field_id].input.placeholder }
-                   ref={register} />)            
+                   ref={register} />)
         }
     }
 
     function generateFieldPrompt(field_id){
-        if(error[field_id]){
-            
-        }
+        /*if(error[field_id]){
+
+        } */
     }
 
 
@@ -136,7 +136,7 @@ const CreateDB = (props) => {
             <hr className = "my-space-15"/>
 			{isObject(rep) && <ViolationReport report = { rep }/>}
             { loading && <Loading /> }
-            {show && <form onSubmit={handleSubmit(onSubmit) }>
+            {<form onSubmit={handleSubmit(onSubmit) }>
                 {generateFormFields("id", "databaseName", "databaseDescr")}
             	<label className = { createDatabaseForm.id.label.className }
                     htmlFor = { createDatabaseForm.id.label.htmlFor }>
@@ -212,7 +212,7 @@ const CreateDB = (props) => {
         		    type =  { createDatabaseForm.action.type } >
         			{ createDatabaseForm.action.text }
             	</button>*/}
-            </form>}            
+            </form>}
           </>)
 }
 

@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyWebPackPlugin= require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
 var PACKAGE = require('../package.json');
 var version = `v${PACKAGE.version}`;
@@ -15,9 +17,6 @@ module.exports = (env, argv) => ({
     publicPath: '/'
   },
   devtool:false,
-  devServer: {
-    historyApiFallback: true,
-  },
   plugins: [
     new Dotenv({path: path.resolve(__dirname, './.env')}),
     new HtmlWebPackPlugin({
@@ -25,6 +24,10 @@ module.exports = (env, argv) => ({
         template: path.resolve(__dirname, './index.html'),
         bundleFileName:"terminusdb-console.min.js"
       }),
+     new MiniCssExtractPlugin({
+      filename: 'terminusdb-console-main.css',
+     }),
+   
 
 
   //{ chunks:["contact", "vendor"], template: "src/pages/contact.html",  filename: "contact.html"}
@@ -54,29 +57,19 @@ module.exports = (env, argv) => ({
         },
       },
       {
-      // Transform our own .css files with PostCSS and CSS-modules
-      test: /\.css$/,
-      exclude: /node_modules/,
-      use: ['style-loader', 'css-loader'],
-    }, {
-      // Do not transform vendor's CSS with CSS-modules
-      // The point is that they remain in global scope.
-      // Since we require these CSS files in our JS or CSS files,
-      // they will be a part of our compilation either way.
-      // So, no need for ExtractTextPlugin here.
-      test: /\.css$/,
-      include: /node_modules/,
-      use: ['style-loader', 'css-loader'],
-    },
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
       {
         test: /\.(svg|jpg|gif|png)$/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[name].[ext]',
-              //outputPath: "images",
-              //publicPath: "images"
+              name: 'assets/images/[name].[ext]',
             }
           }
         ]
@@ -88,11 +81,7 @@ module.exports = (env, argv) => ({
             loader: 'file-loader',
             options: {
               outputPath: (url, resourcePath, context) => {
-                //if(argv.mode === 'development') {
-                  const relativePath = path.relative(context, resourcePath);
-                  return `/${relativePath}`;
-                //}
-                //return `/assets/fonts/${path.basename(resourcePath)}`;
+                return `assets/fonts/${path.basename(resourcePath)}`;
               }
             }
           }

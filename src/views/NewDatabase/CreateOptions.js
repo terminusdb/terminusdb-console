@@ -1,55 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
-import createLocallyImg from "../../img/icons/create-locally.png"
-import createRemoteImg from "../../img/icons/create-remote.png"
-import { DialogueBox } from "../../components/Reports/DialogueBox"
 import CreateDb from "./CreateForm"
+import { createDbCardOptions } from "../../variables/formLabels"
+import { DatabaseCard } from "../../components/Card/DatabaseCard"
+import * as view from "../../labels/createView"
 
 export const CreateOptions = (props) => {
-    const [show, setShow] = useState(true);
-    const [local, setLocal] = useState(false);
-    const [remote, setRemote] = useState(false);
+    const setPage = props.setPage;
+    const setCreateRemote = props.setCreateRemote;
+    const setCreateLocal = props.setCreateLocal;
 
     const handleLocal = () => {
-        setLocal(true)
-        setShow(false)
+        setPage(view.CREATE_LOCAL)
+        setCreateLocal(true)
+        setCreateRemote(false)
     }
 
     const handleRemote = () => {
-        setRemote(true)
-        setShow(false)
+        setPage(view.CREATE_REMOTE)
+        setCreateLocal(false)
+        setCreateRemote(true)
     }
 
 
     return (
         <>
-         {show && <><span className="d-fl">
+         {<><span className="d-fl">
             <Col md={6} className="col-md-6">
-                <Card body outline color="info">
-                    <hr className = "my-space-100"/>
-                    <CardImg top width="100%" src={createLocallyImg}/>
-                    <hr className = "my-space-100"/>
-                    <CardTitle>Do you want to create locally?</CardTitle>
-                    <Button color="secondary" onClick={handleLocal}>Create Locally</Button>
+                <Card body outline color="info" onClick={handleLocal} className="db-view-cards">
+                    <DatabaseCard card = {createDbCardOptions.local}/>
                 </Card>
             </Col>
 
             <Col md={6} className="col-md-6">
-                <Card body outline color="info">
-                    <hr className = "my-space-100"/>
-                    <CardImg top width="100%" src={createRemoteImg}/>
-                    <hr className = "my-space-100"/>
-                    <CardTitle>Do you want to create on Hub?</CardTitle>
-                    <Button color="secondary" onClick={handleRemote}>Create on Hub</Button>
+                <Card body outline color="info" onClick={handleRemote} className="db-view-cards">
+                    <DatabaseCard card = {createDbCardOptions.remote}/>
                 </Card>
             </Col>
 
         </span>
     </>}
-
-    {local && <CreateDb/>}
-
-    {remote && <DialogueBox message = { 'Coming soon ...!'}/>}
 
     </>)
 }

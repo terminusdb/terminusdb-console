@@ -38,7 +38,6 @@ const ServerHome = (props) => {
                         <hr className = "my-space-15"/>
                         <div className = "container-fluid">
 						<hr className = "my-space-15"/>
-                        {createDatabaseLabels.mainDescription}
 						<hr className = "my-space-15"/>
 						<CreateDatabase/>
                         </div>
