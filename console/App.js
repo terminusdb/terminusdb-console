@@ -17,8 +17,6 @@ const App = (props) => {
         <Router history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
-                <Route path = "/test" exact component = {consoleLib.TestHome} />
-                <Route path = "/test01" exact component = {consoleLib.TestHome01} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
                 <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />

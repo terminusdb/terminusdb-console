@@ -13,7 +13,6 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {
     	setCurrentView(viewType)
     }
    
-
 	return(
 		<Container >
             <ViewChooser updateView={updateView} view={currentView}/>    
@@ -23,4 +22,3 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {
 }
 
 // <ViewEditor display="hidden" query={query} bindings={bindings} updateQuery={updateQuery} />
-           
