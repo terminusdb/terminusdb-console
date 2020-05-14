@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
 import CloneLocalDB from "./CloneLocalDB"
 import CloneRemoteDB from "./CloneRemoteDB"
-import cloneImg from "../../img/icons/clone.png"
-import forkImg from "../../img/icons/fork.png"
+import { copyDbCardTypes } from "../../variables/formLabels"
+import { DatabaseCard } from "../../components/Card/DatabaseCard"
 
 export const CopyType = (props) => {
     const [show, setShow] = useState(true);
@@ -29,22 +29,14 @@ export const CopyType = (props) => {
              {show &&  <>
                  <span className="d-fl">
                     <Col md={6} className="col-md-6">
-                        <Card body outline color="info">
-                            <hr className = "my-space-100"/>
-                            <CardImg top width="100%" src={forkImg}/>
-                            <hr className = "my-space-100"/>
-                            <CardTitle>Do you want to Fork?</CardTitle>
-                            <Button color="secondary" onClick={handleFork}>Fork</Button>
+                        <Card body outline color="info" onClick={handleFork} className="db-view-cards">
+                            <DatabaseCard card = {copyDbCardTypes.fork}/>
                         </Card>
                     </Col>
 
                     <Col md={6} className="col-md-6">
-                    <Card body outline color="info">
-                        <hr className = "my-space-100"/>
-                        <CardImg top width="100%" src={cloneImg}/>
-                        <hr className = "my-space-100"/>
-                        <CardTitle>Do you want to Clone?</CardTitle>
-                        <Button color="secondary" onClick={handleClone}>Clone</Button>
+                    <Card body outline color="info" onClick={handleClone} className="db-view-cards">
+                        <DatabaseCard card = {copyDbCardTypes.clone}/>
                     </Card>
                 </Col>
             </span> </>}
