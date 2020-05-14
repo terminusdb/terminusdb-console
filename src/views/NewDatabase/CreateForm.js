@@ -64,45 +64,54 @@ const CreateDB = (props) => {
 
     let update_start = Date.now() 
 
+    function createStarterGraphs(instance, schema){
+        if(schema && instance){
+            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            .then(() => {
+                return woqlClient.createGraph("instance", "main", createDBText.schemaGraphCommitMessage)
+                .then(() => setReport({message: message, status: reportAlert.SUCCESS}))
+                .catch((e) => {
+                    message += createDBText.instanceFailedSchemaWorkedMessage
+                    setReport({message: message, error: e, status: reportAlert.WARNING})    
+                })
+            }).catch((e) => {
+                message += createDBText.schemaFailedMessage 
+                setReport({message: message, error: e, status: reportAlert.WARNING})
+            })
+        }
+        else if(schema){
+            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            .then(() => {
+                message += createDBText.noDataGraphMessage
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
+            }).catch((e) => {
+                message += createDBText.schemaFailedMessage 
+                setReport({message: message, error: e, status: reportAlert.WARNING})
+            })
+        }
+        else if(instance){
+            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            .then(() => {
+                message += createDBText.noSchemaGraphMessage
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
+            }).catch((e) => {
+                message += createDBText.instanceFailedMessage 
+                setReport({message: message, error: e, status: reportAlert.WARNING})
+            })
+        }        
+    }
+
     function doCreate(id, doc, acc, schema, instance){
         update_start = new Date.now()
         woqlClient.createDatabase(id , doc, acc)
         .then((cresults) => {
-            let message = `Successfully created database with id {id}`
-            if(schema){
-                return woqlClient.createGraph("schema", "main", "Main Schema Graph Created by console during DB create")
-                .then(() => {
-                    if(instance){
-                        return woqlClient.createGraph("instance", "main", 
-                            "Main Instance Graph Created by console during DB create")
-                        .then(() => setReport({message: message, status: reportAlert.SUCCESS}))
-                        .catch((e) => {
-                            message += " and schema graph main, but failed to create instance graph"
-                            setReport({message: message, error: e, status: reportAlert.WARNING})    
-                        })
-                    }
-                    else {
-                        message += " and schema graph main, but no instance graph"
-                        setReport({message: message, status: reportAlert.SUCCESS})
-                    }
-                }).catch((e) => {
-                    message += " but failed to create schema graph"
-                    setReport({message: message, error: e, status: reportAlert.WARNING})
-                })
+            let message = `${createDBText.createSuccessMessage} ${doc.label}, id: [${id}] `
+            if(instance || schema){
+                return createStarterGraphs(instance, schema, message)
             }
-            else if(instance){
-                return woqlClient.createGraph("instance", "main", "Main Instance Graph Created by console during DB create")
-                .then(() => {
-                    message += " and instance graph main, but no schema graph"
-                    setReport({message: message, status: reportAlert.SUCCESS})    
-                }).catch((e) => {
-                    message += " and schema graph main, but failed to create instance graph"
-                    setReport({message: message, error: e, status: reportAlert.WARNING})    
-                })    
-            }
-            else {
-                message += " but created without any graphs"
-                setReport({message: message, status: reportAlert.SUCCESS})    
+            else {                
+                message += createDBText.noGraphMessage
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
             }
         })
         .catch((err) => {
