@@ -7,9 +7,9 @@ import { CreateOptions } from "./CreateOptions"
 import CloneLocalDB from "./CloneLocalDB"
 import CloneRemoteDB from "./CloneRemoteDB"
 import { CopyFrom } from "./CopyFrom"
-import createImg from "../../img/icons/create-db.png"
-import copyImg from "../../img/icons/copy-db.png"
 import cancelImg from "../../img/icons/cancel.png"
+import { createDbCard } from "../../variables/formLabels"
+import { DatabaseCard } from "../../components/Card/DatabaseCard"
 
 const CreateDatabase = (props) => {
 	const [copy, setCopy] = useState(false)
@@ -39,22 +39,14 @@ const CreateDatabase = (props) => {
 				{!main && <img src={ cancelImg } onClick={ handleCancel } className='cancel-ic'/>}
 				{main && <span className="d-fl">
 					<Col md={6} className="col-md-6">
-						<Card body outline color="info">
-							<hr className = "my-space-100"/>
-							<CardImg top width="100%" src={createImg}/>
-							<hr className = "my-space-100"/>
-							<CardTitle>Do you want to create a brand new database?</CardTitle>
-							<Button color="secondary" onClick={handleCreate}>Create</Button>
+						<Card body outline color="info" onClick={handleCreate} className="db-view-cards">
+							<DatabaseCard card = {createDbCard.create}/>
 						</Card>
 					</Col>
 
 					<Col md={6} className="col-md-6">
-						<Card body outline color="info">
-							<hr className = "my-space-100"/>
-							<CardImg top width="100%" src={copyImg}/>
-							<hr className = "my-space-100"/>
-							<CardTitle>Do you want to copy an existing database?</CardTitle>
-							<Button color="secondary" onClick={handleCopy}>Copy</Button>
+						<Card body outline color="info" onClick={handleCopy} className="db-view-cards">
+							<DatabaseCard card = {createDbCard.copy}/>
 						</Card>
 					</Col>
 				</span>}

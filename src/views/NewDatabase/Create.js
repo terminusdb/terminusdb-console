@@ -92,22 +92,22 @@ const CreateDB = (props) => {
         if(textinputs.indexOf(field_id) != -1){
             return (
                 <input placeholder={ createDatabaseForm[field_id].input.placeholder }
-                    className = {cname }                
+                    className = {cname }
                     name = { name_prefix + field_id }
                     ref = { register({ validate: value => value.length > 0}) }/>
-            )                   
+            )
         }
         if(field_id == "databaseDescr"){
             return (<textarea name= { name_prefix + field_id }
             	   className = { cname }
             	   placeholder = { createDatabaseForm[field_id].input.placeholder }
-                   ref={register} />)            
+                   ref={register} />)
         }
     }
 
     function generateFieldPrompt(field_id){
         if(error[field_id]){
-            
+
         }
     }
 
@@ -212,7 +212,7 @@ const CreateDB = (props) => {
         		    type =  { createDatabaseForm.action.type } >
         			{ createDatabaseForm.action.text }
             	</button>*/}
-            </form>}            
+            </form>}
           </>)
 }
 

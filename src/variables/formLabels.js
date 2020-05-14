@@ -1,4 +1,12 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
+import createLocallyImg from "../img/icons/create-locally.png"
+import createRemoteImg from "../img/icons/create-remote.png"
+import createImg from "../img/icons/create-db.png"
+import copyImg from "../img/icons/copy-db.png"
+import copyLocallyImg from "../img/icons/copy-locally.png"
+import copyRemoteImg from "../img/icons/copy-remote.png"
+import cloneImg from "../img/icons/clone.png"
+import forkImg from "../img/icons/fork.png"
 
 export const createGraphText = {
     cancelButtonClassName: "btn btn-primary lead mt-4",
@@ -8,17 +16,17 @@ export const createGraphText = {
     requiredField: "is a required field",
     cancelButtonText: "Cancel",
     selectClassName: "brSeltr",
-    inputClassName: "form", 
+    inputClassName: "form",
     createButtonText: "Create Graph",
     fields: {
         gtype: {
             label: 'Graph Type',
             help: "Instance graphs contain data, schema graphs contain rules, inference graphs contain inference rules",
-            placeholder: "Select Graph Type"                    
+            placeholder: "Select Graph Type"
         },
         gid: {
             label: 'Graph ID',
-            placeholder: ""                    
+            placeholder: ""
         }
     }
 
@@ -52,25 +60,25 @@ export const createDBText = {
     noGraphMessage: " Empty Database - at least one graph must be created before anything can be stored in this database.",
     createSuccessMessage: "Successfully Created Database: ",
     sections: {
-        details: { 
+        details: {
             fields: {
                 dbid: {
                     label: 'Database ID',
                     help: "The database ID forms part of the URL - spaces are not allowed, simple ids using only alphanumerics and underscores are encouraged",
-                    placeholder: "Enter ID of new database"                    
+                    placeholder: "Enter ID of new database"
                 },
                 dbname: {
                     label: 'Database Name',
                     help: "Choose A short but distinctive name that allows you to easily understand what's in the database",
-                    placeholder: "Enter name new database"                    
+                    placeholder: "Enter name new database"
                 },
                 description: {
                     label: 'Description',
                     placeholder: "Enter a short text describing the database, its scope and purpose",
                 }
-            }    
+            }
         },
-        advanced: { 
+        advanced: {
             fields: {
                 graphs: {
                     label: 'Create Graphs',
@@ -86,12 +94,64 @@ export const createDBText = {
                     label: 'Schema Base URL (scm:)',
                     help: "Every TerminusDB database has a local namespace scm: available for defining local schema elements. You can choose the URL that you want this prefix to derefence to - this allows you to make your schemata dereferencable at the URL of your choice.",
                 }
-            }    
+            }
         }
 
     }
 }
 
+export const createDbCard = {
+    create:{
+        title: 'Create New Database',
+        text: 'You can opt to create a brand new empty database.',
+        image: createImg
+    },
+    copy:{
+        title: 'Copy Database',
+        text: 'You can opt to copy an existing database from you local machiene or from a remote server',
+        image: copyImg
+    }
+}
+
+export const createDbCardOptions = {
+    local:{
+        title: 'Create Database locally',
+        text: 'The database will be created on your local machine and can accessed only by you.',
+        image: createLocallyImg
+    },
+    remote:{
+        title: 'Create Database on terminusdb.com',
+        text: 'The database will be created on terminusdb.com and you can share this with other hub users as well.',
+        image: createRemoteImg
+    }
+}
+
+
+export const copyDbCardTypes = {
+    fork:{
+        title: 'Fork',
+        text: 'You can choose to fork your copy',
+        image: forkImg
+    },
+    clone:{
+        title: 'Clone',
+        text: 'You can choose to clone your copy',
+        image: cloneImg
+    }
+}
+
+export const copyDbCardOptions = {
+    local:{
+        title: 'Copy database from local machine',
+        text: 'You select any database in your local machine to copy',
+        image: copyLocallyImg
+    },
+    remote:{
+        title: 'Copy database from a remote server',
+        text: 'You can choose to copy database from any server, You will have to provide key if database resides in other server other than terminusdb.com',
+        image: copyRemoteImg
+    }
+}
 
 
 export const createDatabaseForm = {
