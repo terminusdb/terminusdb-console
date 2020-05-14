@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { Alert, Container, Row, Col } from 'reactstrap'
-import { ViolationReport } from './ViolationReport'
+import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
 
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)
     useEffect(() => { setReport(report)}, [report])
-
-    function hasViolations(err){return false}
-    function getViolations(err){return []}
 
     function getErrorReport(){
         let qtime = queryTimeDisplay()
@@ -57,25 +54,24 @@ export const ResultReport = ({report}) => {
     )
 }
 
-const QUERY_SUCCESS_MSG =  "Query returned {report.rows} records, each with {report.columns} variables, in {time}"
 const ImpotentQuery = ({report, time}) => {
     return (
         <Alert color="warning">
-            <span className="result-report-main">{IMPOTENT_QUERY_MSG}</span>
+            <span className="result-report-main">Query took {time} and returned no results - check your query for mistakes</span>
         </Alert>
     )
 }
 
-const IMPOTENT_QUERY_MSG = "Query took {time} and returned no results - check your query for mistakes"
 const QuerySuccess = ({report, time}) => {
     return (
         <Alert color="info">
             <span className="result-report-main">
-                {QUERY_SUCCESS_MSG}
+                Query returned {report.rows} records, each with {report.columns} variables, in {time}
             </span>
         </Alert>
     )
 }
+
 
 const HybridSuccess = ({report, time}) => {
     return (
@@ -112,7 +108,7 @@ const QueryError = ({violations, time}) => {
     return (
         <Alert color="warning">
             <span className="result-report-main">Query Error, {violations.length} violations identified in {time}.</span>
-            <ViolationReport violations={violations} />
+            <ViolationReport violations={violations} tone="warning"/>
         </Alert>
     )
 }
@@ -124,3 +120,5 @@ const QuerySystemError = ({error, time}) => {
         <SystemError error={error} />
     </Alert>)
 }
+
+

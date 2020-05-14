@@ -3,7 +3,7 @@ import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
 import createLocallyImg from "../../img/icons/create-locally.png"
 import createRemoteImg from "../../img/icons/create-remote.png"
 import { DialogueBox } from "../../components/Reports/DialogueBox"
-import CreateDb from "./Create"
+import CreateDb from "./CreateForm"
 
 export const CreateOptions = (props) => {
     const [show, setShow] = useState(true);

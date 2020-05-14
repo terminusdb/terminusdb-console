@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { WOQLGraph } from '@terminusdb/terminusdb-react-graph';
-//import TerminusClient from '@terminusdb/terminusdb-client';
 
 import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 import TerminusClient from '@terminusdb/terminusdb-client';
@@ -52,14 +51,4 @@ export const ResultViewer = ({bindings, report, type, viewConfig, query, updateQ
         </Container>
     )
 }
-
- {/*{(binds && type == "table") &&
->>>>>>> 2d57ad37625982fc55146f4563ab3282b2fac774
-                <WOQLTable bindings={binds} config={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            */
-            {/*(binds && type == "graph") &&
-                <WOQLGraph bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            */}
-            {/*(binds && type == "chart") &&
-                <WOQLChart bindings={binds} view={currentView} query={query} updateQuery={updateQuery} updateView={updateView}/>
-            }*/}
+*/

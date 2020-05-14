@@ -24,7 +24,7 @@ export const QueryPane = ({query,className,resultView}) => {
     return(
             <>
                 <ResultReport currentReport={report} />
-                <Tabs activeKey="query" id="query_tabs">
+                <Tabs activeKey="viewer" id="query_tabs">
                   <Tab eventKey="query" label="Query Panel">
                     <QueryEditor display={"hidden"} editable={true} closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
                         <QueryLibrary library="editor"/>

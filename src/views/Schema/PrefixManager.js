@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from "reactstrap"
-import RenderTable from "../../Components/Table/RenderTable"
+import RenderTable from "../../components/Table/RenderTable"
 import TerminusClient from "@terminusdb/terminusdb-client"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 

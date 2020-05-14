@@ -26,4 +26,7 @@ export const NO_DOCUMENT_CLASS = {
     message: "No document classes have been defined in the schema. Before you can view and create documents, you must define at least one document class in the database schema. "    
 }
 
+export const VIOLATIONS_DETECTED = "Violations Detected"
+export const VIOLATION_DETECTED = "Violation Detected"
+
  

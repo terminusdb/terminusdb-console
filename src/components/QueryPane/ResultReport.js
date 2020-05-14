@@ -18,5 +18,5 @@ export const ResultReport = ({currentReport}) => {
             <Alert color='success'>Success</Alert>
         )
     }
-    return (<Alert color="info">Please run your query</Alert>)
+    return (<Alert color="info" style={{display:'block'}}>Please run your query</Alert>)
 }

@@ -31,7 +31,7 @@ export const Classes = (props) => {
             {(report && report.error) && 
                 <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />
             }
-            {(report && report.rows > 0) &&   
+            {(report && report.rows > 0 && bindings) &&   
                 <ResultViewer type="table" query={woql} bindings={bindings} />
             }            
             {(report && report.rows == 0) && 
