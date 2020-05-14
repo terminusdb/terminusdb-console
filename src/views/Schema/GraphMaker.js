@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from "reactstrap"
 import RenderTable from "../../components/Table/RenderTable"
-import Select from "react-select";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import Loading from "../../components/Loading";
+import { createGraphText } from "../../variables/formLabels"
+import { CreateGraph } from "./CreateGraph"
 
 export const GraphMaker = (props) => {
     const {woqlClient} = WOQLClientObj();
     const canDeleteGraph = woqlClient.db() != "terminus" //need to be got from client
     const canCreateGraph =  woqlClient.db() != "terminus" //need to ge got from client
     const [dataProvider, setDataProvider] = useState(graphToTable(props.graphs))
-    const [newID, setNewID] = useState("")
-    const [newType, setNewType] = useState()
+    const [creating, setCreating] = useState(false)
     const [loading, setLoading] = useState(false)
 
     function getDeleteButton(type, id){
@@ -34,7 +34,7 @@ export const GraphMaker = (props) => {
         alert("Deleting " + type + id)
     }
 
-    function submitCreate(){
+    function submitCreate(newID, newType){
         if(newID && newType){
             setLoading(true)
             woqlClient.createGraph(newType, newID, "Graph Created with Command in Console")
@@ -49,33 +49,8 @@ export const GraphMaker = (props) => {
         }
     }
 
-    function changeGraphType(SelValue){
-        setNewType(SelValue.value)
-    }
-
-    function changeGraphID(SelValue){
-        setNewID(SelValue.target.value)
-    }
-
-
-    function getCreateButton(){
-        return (<Button onClick={submitCreate}>Create</Button>)
-    }
-
-    function getCreateTypes(){
-        return (<Select placeholder = "Graph Type"
-            className = "brSeltr"
-            selected = {newType}
-            onChange = {changeGraphType}
-            options = {[
-                {label: "Data", value: "instance"}, 
-                {label: "Schema Rules",  value: "schema"}, 
-                {label: "Inference Rules", value: "inference"}]}
-        />)        
-    }
-
-    function getCreateIDInput(){
-        return (<input placeholder="new graph id" onChange={changeGraphID} />)
+    function showCreate(){
+        setCreating(true)
     }
 
     function formatData(graphs){
@@ -113,8 +88,7 @@ export const GraphMaker = (props) => {
     }
 
     function graphToTable(graphs){
-        let x = {columnData:formatData(graphs), columnConf:formatColumns(graphs)};
-        return x
+        return {columnData:formatData(graphs), columnConf:formatColumns(graphs)}
     }
 
     return (
@@ -122,23 +96,18 @@ export const GraphMaker = (props) => {
             {(loading || !dataProvider) && 
                 <Loading />
             }
-            {dataProvider && 
-                <RenderTable dataProvider = {dataProvider}/>
+            {(!loading && canCreateGraph && !creating) && 
+                <Row>
+                    <button onClick={showCreate} className={createGraphText.createButtonClassName}>
+                        {createGraphText.createButtonText}
+                    </button>
+                </Row>
             }
-            {canCreateGraph && 
-                <Container>
-                    <Row>
-                        <Col>
-                            {getCreateTypes()},
-                        </Col>
-                        <Col>
-                            {getCreateIDInput()},
-                        </Col>
-                        <Col>
-                            {getCreateButton()},
-                        </Col>
-                    </Row>
-                </Container>
+            {creating && 
+                <CreateGraph onCancel={() => setCreating(false)} onCreate={submitCreate} />
+            }
+            {!(creating && dataProvider) && 
+                <RenderTable dataProvider = {dataProvider}/>
             }
         </Container>
     )

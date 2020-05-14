@@ -33,11 +33,8 @@ TerminusClient.axiosInstance.interceptors.response.use(function (response) {
  
   return response;
 }, function (error) {
-    if(error.response){
-        alert("response")
-    }
-    else if(error.data){
-        alert("data")
+    if(error.response && error.response.data){
+        error.data = error.response.data
     }
 	/*I have check better the error*/
   	//error.config.metadata.end = new Date();

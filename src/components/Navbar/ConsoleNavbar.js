@@ -18,7 +18,7 @@ export const ConsoleNavbar = (props) => {
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
-  
+
     function toggleTimeTravel(){
         toggleNavbar()
     }
@@ -30,28 +30,28 @@ export const ConsoleNavbar = (props) => {
                 <div className={containerClassName}>
                     <Row>
                     <ServerNavbar />
-                    { woqlClient.db() && 
+                    { woqlClient.db() &&
                         <DBNavbar page={props.page} toggleTimeTravel={toggleTimeTravel}/>
-                    }                    
+                    }
                     <Nav className = "d-none d-md-block ml-auto" navbar>
-                        {!isAuthenticated && 
-                            <Login />   
+                        {!isAuthenticated &&
+                            <Login/>
                         }
                         {isAuthenticated && user &&
-                            <LoggedIn />
+                            <LoggedIn/>
                         }
-                    </Nav>                    
+                    </Nav>
                     </Row>
-                {!collapsed && 
+                {!collapsed && <div className="history-navigator-Collapsible">
                    <Container>
                        <Row><Col>
-                            <HistoryNavigator />
+                            <HistoryNavigator/>
                             </Col>
                        </Row>
-                   </Container>
-                }                               
+                   </Container> </div>
+                }
                 </div>
-            </Container> 
+            </Container>
             </Navbar>
         </div>
     )

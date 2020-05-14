@@ -1,5 +1,89 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 
+export const createGraphText = {
+    cancelButtonClassName: "btn btn-primary lead mt-4",
+    createButtonClassName: "btn btn-primary lead mt-4",
+    errorClassName: "errors",
+    helpClassName: "create-form-helptext",
+    requiredField: "is a required field",
+    cancelButtonText: "Cancel",
+    selectClassName: "brSeltr",
+    inputClassName: "form", 
+    createButtonText: "Create Graph",
+    fields: {
+        gtype: {
+            label: 'Graph Type',
+            help: "Instance graphs contain data, schema graphs contain rules, inference graphs contain inference rules",
+            placeholder: "Select Graph Type"                    
+        },
+        gid: {
+            label: 'Graph ID',
+            placeholder: ""                    
+        }
+    }
+
+}
+
+export const createDBText = {
+    labelClassName: "form",
+    inputClassName: "form",
+    errorClassName: "errors",
+    helpClassName: "create-form-helptext",
+    requiredField: "is a required field",
+    createButtonClassName: "btn btn-primary lead mt-4",
+    advancedWrapperClassName: "advanced-settings-create-form",
+    advancedButtonClassName: "btn-minor lead mt-4 btn",
+    advancedSectionClassName: "advanced-section-create-form",
+    graphsRowClassName: "graph-row-create-form",
+    checkboxWrapperClassName: "checkbox-wrapper-create-form",
+    checkboxLabelClassName: "checkbox-label-create-form",
+    checkboxClassName: "checkbox-create-form",
+    createButtonText: "Create New Database",
+    hideAdvanced: "Hide Advanced Settings",
+    showAdvanced: "Show Advanced Settings",    
+    sections: {
+        details: { 
+            fields: {
+                dbid: {
+                    label: 'Database ID',
+                    help: "The database ID forms part of the URL - spaces are not allowed, simple ids using only alphanumerics and underscores are encouraged",
+                    placeholder: "Enter ID of new database"                    
+                },
+                dbname: {
+                    label: 'Database Name',
+                    help: "Choose A short but distinctive name that allows you to easily understand what's in the database",
+                    placeholder: "Enter name new database"                    
+                },
+                description: {
+                    label: 'Description',
+                    placeholder: "Enter a short text describing the database, its scope and purpose",
+                }
+            }    
+        },
+        advanced: { 
+            fields: {
+                graphs: {
+                    label: 'Create Graphs',
+                    help: "By default, databases are created with a schema graph (for defining rules about stored data) and an instance graph (for storing the data itself). If you do not wish to create these graphs (for example if you want a schema-free database or a schema-only database for storing libraries), uncheck the boxes here. You can always create them later.",
+                    schema_text: "Create Schema Graph (main)",
+                    instance_text: "Create Instance Graph (main)"
+                },
+                data_url: {
+                    label: 'Data Base URL (doc:)',
+                    help: "All data in TerminusDB is addressable by URL - you can choose the default URL prefix that you want to use for your internal data. This can be useful, for example, if you want to create a linked data application where all data is dereferencable",
+                },
+                schema_url: {
+                    label: 'Schema Base URL (scm:)',
+                    help: "Every TerminusDB database has a local namespace scm: available for defining local schema elements. You can choose the URL that you want this prefix to derefence to - this allows you to make your schemata dereferencable at the URL of your choice.",
+                }
+            }    
+        }
+
+    }
+}
+
+
+
 export const createDatabaseForm = {
     id: {
         label: {

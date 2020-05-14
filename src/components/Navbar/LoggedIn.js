@@ -4,7 +4,7 @@ import * as links from '../../variables/pageLabels'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem} from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth0 } from "../../react-auth0-spa";
-import * as icon from "../../labels/iconLabels"
+import * as icons from "../../labels/iconLabels"
 
 export const LoggedIn = (props) => {
     const { user, logout } = useAuth0();

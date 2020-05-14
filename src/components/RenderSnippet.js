@@ -43,7 +43,7 @@ export const RenderSnippet = (props) => {
 
     const handleUpdate = (ev) => {
         if(!commitMsg.value){
-            alert("error here no commit")
+            console.log("error here no commit")
         }
         else {
             props.onChange(content, commitMsg.value)
