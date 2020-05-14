@@ -3,7 +3,7 @@ import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
 import { QueryEditor } from "./QueryEditor"
 import { QueryLibrary } from "./QueryLibrary"
-import { ResultReport } from "../Reports/ResultReport"
+import { ResultReport } from "./ResultReport"
 import { ViewEditor } from "./ViewEditor"
 import { ResultPane } from "./ResultPane"
 import { ViewChooser } from "./ViewChooser";
@@ -20,11 +20,10 @@ export const QueryPane = ({query,className,resultView}) => {
     const qpclass = className || "terminus-query-pane";
     const disabled = bindings ? {} : {disabled:true};
 
-
     return(
             <>
-                <ResultReport currentReport={report} />
-                <Tabs activeKey="viewer" id="query_tabs">
+              <ResultReport currentReport={report} />
+              <Tabs activeKey="viewer" id="query_tabs">
                   <Tab eventKey="query" label="Query Panel">
                     <QueryEditor display={"hidden"} editable={true} closable="false" query={woql} bindings={bindings} updateQuery={updateQuery} language="js" languages={["js", "json", "python"]}>
                         <QueryLibrary library="editor"/>
@@ -37,3 +36,4 @@ export const QueryPane = ({query,className,resultView}) => {
             </>
     )
 }
+//

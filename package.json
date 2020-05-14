@@ -22,7 +22,6 @@
     "terminusdb"
   ],
   "scripts": {
-    "build-es6": "rimraf es6 && cross-env NODE_ENV=es6 babel ./src -d es6 --extensions '.js'",
     "build": "npm run build-es6 && webpack --mode production --config console/webpack.config.js",
     "buildConsole": "webpack --mode development --config console/webpack.config.js",
     "start": "webpack-dev-server --mode development --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js --history-api-fallback",
@@ -53,9 +52,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@o2xp/react-datatable": "^1.1.44",
-    "@terminusdb/terminusdb-client": "file:../terminusdb-client",
-    "@terminusdb/terminusdb-react-graph": "file:../terminusdb-react-graph",
-    "@terminusdb/terminusdb-react-table": "file:../terminusdb-react-table",
     "classnames": "^2.2.5",
     "codemirror": "^5.52.0",
     "core-js": "^3.4.2",
