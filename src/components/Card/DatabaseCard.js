@@ -9,6 +9,6 @@ export const DatabaseCard = (props) => {
           <CardTitle className="db-view-card-title">{ card.title }</CardTitle>
           <CardText className="db-view-card-text">{ card.text }</CardText>
           <CardImg top width="100%" src={ card.image }/>
-          <hr className = "my-space-50"/></>
+          <hr className = "my-space-25"/></>
     )
 }

@@ -60,12 +60,13 @@ div.db-view-cards:hover {
 div.db-view-card-title{
     text-align: center;
     font-size: large;
-    font-size: 24px;
+    font-size: 28px;
 }
 
 p.db-view-card-text{
     text-align: center;
     margin: 30px 0px 30px 0px;
+    font-size: 16px
 }
 
 div.terminus-violation{

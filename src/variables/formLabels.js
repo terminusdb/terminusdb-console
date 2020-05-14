@@ -119,12 +119,12 @@ export const createDbCardOptions = {
 
 export const copyDbCardTypes = {
     fork:{
-        title: 'Fork the database',
+        title: 'Fork',
         text: 'You can choose to fork your copy',
         image: forkImg
     },
     clone:{
-        title: 'Clone the database',
+        title: 'Clone',
         text: 'You can choose to clone your copy',
         image: cloneImg
     }
