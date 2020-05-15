@@ -2331,8 +2331,8 @@ a {
 
 @font-face {
 	font-family: 'icomoon';
-	src: url("../fonts/icomoon.eot?oqqotq");
-	src: url("../fonts/icomoon.eot?oqqotq#iefix") format("embedded-opentype"), url("../fonts/icomoon.woff2?oqqotq") format("woff2"), url("../fonts/icomoon.ttf?oqqotq") format("truetype"), url("../fonts/icomoon.woff?oqqotq") format("woff"), url("../fonts/icomoon.svg?oqqotq#icomoon") format("svg");
+	src: url("https://assets.terminusdb.com/fonts/icomoon.eot?oqqotq");
+	src: url("https://assets.terminusdb.com/fonts/icomoon.eot?oqqotq#iefix") format("embedded-opentype"), url("https://assets.terminusdb.com/fonts/icomoon.woff2?oqqotq") format("woff2"), url("https://assets.terminusdb.com/fonts/icomoon.ttf?oqqotq") format("truetype"), url("https://assets.terminusdb.com/fonts/icomoon.woff?oqqotq") format("woff"), url("https://assets.terminusdb.com/fonts/icomoon.svg?oqqotq#icomoon") format("svg");
 	font-weight: normal;
 	font-style: normal;
 	font-display: block
