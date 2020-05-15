@@ -41,8 +41,7 @@ export const DBNavbar = (props) => {
     }
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
-    let clockStatus = (ref ? "orange" : "green")
-    let branchStatus = (branch != "master" ? "orange" : "green")
+    let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
     return (
         <div className="d-flex db-al db-nav s-nav">
             <Nav className = "mr-auto"  navbar>
@@ -85,8 +84,7 @@ export const DBNavbar = (props) => {
                 {dbmeta.db != "terminus" &&
                 <NavItem>
                     <NavLink onClick = {toggleNavbar}>
-                       <FontAwesomeIcon icon="clock" className="mr-3" title={headText} color={clockStatus}/>
-                       <FontAwesomeIcon icon="code-branch" className="mr-3" title={branch} color={branchStatus}/>
+                        <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>
                     </NavLink>
                 </NavItem>
                 }
@@ -94,3 +92,5 @@ export const DBNavbar = (props) => {
         </div>
     )
 }
+
+

@@ -1533,3 +1533,114 @@ label.checkbox-label-create-form {
     padding: 4px;
     margin-right: 1em;
 }
+
+div.terminus-datetime-slider-container {
+    padding-top: 6px; 
+    height: 80px;
+}
+
+div.terminus-datetime-slider  {
+    margin: 10px 0px 0px 0px;
+}
+
+div.terminus-datetime-slider-viewing {
+    text-align: center;
+    font-family: "Arial";
+    padding-bottom: 16px;
+    font-size: 14px;
+    color:  #6290c3;
+    font-weight: 600;
+}
+
+.history-branch-col {
+    padding: 26px 0 0 0;
+    width: 200px;    
+    text-align: right;
+}
+
+.history-commit-col {
+}
+
+.history-slider-col {
+}
+
+.branch-selector {
+    display: inline-block;
+    font-size: 0.9em;
+    width: 200px;    
+}
+
+.history-bar-container {
+    min-width: 1300px;
+}
+
+.commit-traveller-navigation-col {
+    padding-right: 10px;
+}
+
+span.commit-traveller-navigation {
+    display: inline-block;
+    text-align: left;
+
+}
+
+.commit-traveller-commit {
+    display: inline-block;
+    border: 1px solid #888;
+    border-radius: 0 0 4px 4px;
+    background-color: #f8f8f8;
+    margin-left: 8px;
+    height: 90px;
+    margin-top: 6px;
+    margin-bottom: -24px;
+    width: 100%;
+}
+
+.history-navigator-icon {
+    font-size: 1.8em;
+    color: #0055bb;
+    margin-top: 40px;
+}
+
+.history-navigator-icon:hover {
+    font-size: 1.8em;
+    color:  #007bff;
+    margin-top: 40px;
+}
+
+.history-navigator-icon-inactive {
+    font-size: 1.8em;
+    color: #888;
+    margin-top: 40px;
+}
+
+.commit-traveller-navigation-col {
+    cursor: pointer;
+}
+
+span.commit-view-header {
+    background-color: #efefef;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #000;
+    padding: 4px 4px 2px 4px;
+} 
+
+span.commit-view-id {
+    width: 100%;
+    padding: 4px;
+    display: inline-block;
+    font-size: 0.8em;
+    color: #666;
+    font-family: "Courier"    
+}
+
+span.commit-view-message {
+    padding: 4px;
+    font-size: 0.9em;
+    color: #222;
+}
+
+.history-navigator-icon-left {
+}

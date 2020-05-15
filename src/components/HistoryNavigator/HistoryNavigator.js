@@ -4,12 +4,13 @@
  */
 import React, { useState, useEffect } from "react";
 import { subDays, startOfToday, addHours, startOfHour } from "date-fns";
-import { Container, Col } from "reactstrap";
-import BranchSelector from './BranchSelector'
+import { Container, Col, Row } from "reactstrap";
+import { BranchSelector } from './BranchSelector'
 import { DateTimeSlider } from './DateTimeSlider'
-import CommitView from './CommitView'
+import { CommitTraveller } from './CommitTraveller'
 import TerminusClient from '@terminusdb/terminusdb-client';
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import {HISTORY} from "./constants"
 
 export const HistoryNavigator = (props) => {
 	/*to be review*/
@@ -145,25 +146,22 @@ export const HistoryNavigator = (props) => {
 
     let cct = (currentCommit ? currentCommit.time : nowts)
     return (
-        <Container>
-            <span className = "d-fl mb-12">
-                <Col md={8} className="mb-8">
+        <Container className={HISTORY.containerClassName}>
+            <Row>
+                <Col md={6} className={HISTORY.sliderColClassName}>
                     <DateTimeSlider start={branchInfo.first}
                         onChange={userChangesTime}
                         end={end}
                         current={current}
                         updated={cct} />
                 </Col>
-                <Col md={1} className="mb-1"/>
-                <Col md={3} className="mb-3">
+                <Col md={4} className={HISTORY.commitColClassName}>
+                    <CommitTraveller commit={currentCommit}/>
+                </Col>
+                <Col md={2} className={HISTORY.branchColClassName}>
                     <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
                 </Col>
-            </span>
-            <span className = "d-fl mb-12">
-                <Col md={12} className="mb-12">
-                    <CommitView commit={currentCommit} branch={branchInfo} setRef={userChangesCommit} onBranch={userCreatesBranch} />
-                </Col>
-            </span>
+            </Row>
         </Container>
     )
 }
