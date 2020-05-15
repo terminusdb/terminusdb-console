@@ -3,5 +3,6 @@
 package-lock.json
 auth_config.json
 console/auth_config.json
-
-/dist
+console/public_pages
+console/dist
+console/.env
