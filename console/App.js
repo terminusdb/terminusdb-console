@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Route, Switch, useRouteMatch } from "react-router-dom";
+import { HashRouter, Route, Switch, useRouteMatch } from "react-router-dom";
 
 import TerminusClient from '@terminusdb/terminusdb-client';
 import * as consoleLib from '@terminusdb/terminusdb-console';
@@ -14,7 +14,7 @@ const App = (props) => {
 
   return (
 
-        <Router history={consoleLib.history}>
+        <HashRouter history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />
                 <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
@@ -23,7 +23,7 @@ const App = (props) => {
                 <Route path = {consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
                 <Route component={DBPages} path={consoleLib.DB_HOME_PAGE.page} />
             </Switch>
-        </Router>
+        </HashRouter>
 
   );
 };
