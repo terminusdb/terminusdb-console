@@ -14,7 +14,7 @@ export const PageView = (props) => {
         <Container className="terminus-console-page">
             <Container fluid className="console-top-navbar"> 
                 <Col className="console-top-navbar">
-                    <ConsoleNavbar page={props.page} />
+                    <ConsoleNavbar page={props.page} onHeadChange={props.onHeadChange} />
                 </Col>
             </Container>
             <Container fluid className="flex-grow-1  console-page-content">

@@ -8,6 +8,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DetailsCard } from "../../components/Card/DetailsCard"
 import * as icons from "../../labels/iconLabels"
 import TerminusClient from '@terminusdb/terminusdb-client';
+import {LatestUpdates} from "./LatestUpdates"
 
 const Details = (props) => {
 	const { isAuthenticated, user } = useAuth0();
@@ -83,7 +84,7 @@ const Details = (props) => {
 				</Col>
 			</Row>
 
-			<legend className="dd-l">Recent Updates</legend>
+			<LatestUpdates />
 
        </div>
     )

@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser, faPowerOff, faClock, faCheckCircle, faPenAlt, faUserFriends, faStarOfLife, faInfo,
-    faInfoCircle, faTimesCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+    faInfoCircle, faTimesCircle, faExclamationCircle, faPlayCircle, faCaretSquareLeft, faCaretSquareRight } from '@fortawesome/free-solid-svg-icons';
 
 export const initFontLib = library.add(faUser,
     faPowerOff,
@@ -12,4 +12,6 @@ export const initFontLib = library.add(faUser,
     faStarOfLife,
     faPenAlt,
     faInfo,
-    faTimesCircle );
+    faTimesCircle,
+    faPlayCircle, faCaretSquareLeft, faCaretSquareRight );
+

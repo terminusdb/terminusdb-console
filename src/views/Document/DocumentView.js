@@ -36,6 +36,10 @@ const DocumentView = (props) => {
         })
     }
 
+    function doRebuild(){
+        updateQuery(docQuery)
+    }
+
     function interpretEmptyResult(){
         const hasClasses = TerminusClient.WOQL.lib().concreteDocumentClasses()
         woqlClient.query(hasClasses).then((dresults) => {
@@ -65,7 +69,7 @@ const DocumentView = (props) => {
     }, [report]);
 
     return (
-    <PageView page="document">
+    <PageView page="document" onHeadChange={doRebuild}>
         {!happiness &&
             <Loading />
         }

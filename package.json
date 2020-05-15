@@ -12,6 +12,7 @@
   "files": [
     "*.md",
     "src",
+    "console",
     "es6"
   ],
   "keywords": [
@@ -20,7 +21,8 @@
     "chart",
     "react-component",
     "terminusdb"
-  ],  "scripts": {
+  ],
+  "scripts": {
     "build": "webpack --mode development --config console/webpack.config.js",
     "start": "webpack-dev-server --mode development  --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.dev.config.js --history-api-fallback",
     "test": "exit 0",

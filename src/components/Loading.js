@@ -1,9 +1,8 @@
 import React from "react";
-import loading from "../assets/loading.svg";
 
 const Loading = () => (
   <div className="spinner">
-    <img src={loading} alt="Loading" />
+    <img src="https://assets.terminusdb.com/terminusdb-console/images/loading.svg" alt="Loading" />
   </div>
 );
 

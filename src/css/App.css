@@ -14,7 +14,7 @@ button.flat-buttons-link {
 }
 
 button.flat-buttons-link:hover  {
-    color: #0055bb !important;
+    /*color: #0055bb !important; */
 }
 
 button.flat-buttons-link:visited  {
@@ -66,9 +66,27 @@ div.b-del{
     float: left !important;
 }
 
-img.cancel-ic:hover{
+div.crumbs-button-group {
+    line-height: 0px;
+    margin-top: -30px;
+}
+
+button.curr-flat-btn{
+    color: #0066f9 !important;
+    cursor: text;
+}
+
+button.already-selected-flat-btn{
+    color: #000 !important;
     cursor: pointer;
 }
+
+button.already-selected-flat-btn:hover {
+    color: #00C08B !important;
+    cursor: pointer;
+}
+
+
 
 div.card-grid {
     display: grid;
@@ -1555,4 +1573,115 @@ label.checkbox-label-create-form {
     display: inline-block;
     padding: 4px;
     margin-right: 1em;
+}
+
+div.terminus-datetime-slider-container {
+    padding-top: 6px;
+    height: 80px;
+}
+
+div.terminus-datetime-slider  {
+    margin: 10px 0px 0px 0px;
+}
+
+div.terminus-datetime-slider-viewing {
+    text-align: center;
+    font-family: "Arial";
+    padding-bottom: 16px;
+    font-size: 14px;
+    color:  #6290c3;
+    font-weight: 600;
+}
+
+.history-branch-col {
+    padding: 26px 0 0 0;
+    width: 200px;
+    text-align: right;
+}
+
+.history-commit-col {
+}
+
+.history-slider-col {
+}
+
+.branch-selector {
+    display: inline-block;
+    font-size: 0.9em;
+    width: 200px;
+}
+
+.history-bar-container {
+    width: 1280px;
+    height: 90px;
+}
+
+.commit-traveller-navigation-col {
+    padding-right: 10px;
+}
+
+span.commit-traveller-navigation {
+    display: inline-block;
+    text-align: left;
+
+}
+
+.commit-traveller-commit {
+    display: inline-block;
+    border: 1px solid #fff;
+    border-radius: 0 0 4px 4px;
+    background-color: #f8f8f8;
+    margin-left: 8px;
+    height: 90px;
+    margin-top: 6px;
+    margin-bottom: -24px;
+    width: 100%;
+}
+
+.history-navigator-icon {
+    font-size: 1.8em;
+    color: #0055bb;
+    margin-top: 40px;
+}
+
+.history-navigator-icon:hover {
+    font-size: 1.8em;
+    color:  #007bff;
+    margin-top: 40px;
+}
+
+.history-navigator-icon-inactive {
+    font-size: 1.8em;
+    color: #888;
+    margin-top: 40px;
+}
+
+.commit-traveller-navigation-col {
+    cursor: pointer;
+}
+
+div.commit-view-header {
+    background-color: #efefef;
+    width: 100%;
+    color: #666;
+    font-weight: bold;
+    font-family: "Arial";
+    padding: 6px 4px 6px 4px;
+}
+
+div.commit-view-id {
+    width: 100%;
+    padding: 2px 4px;
+    display: inline-block;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+div.commit-view-message {
+    padding: 8px 4px 6px 4px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.history-navigator-icon-left {
 }
