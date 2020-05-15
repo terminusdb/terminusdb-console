@@ -1,12 +1,13 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
-import createLocallyImg from "../img/icons/create-locally.png"
-import createRemoteImg from "../img/icons/create-remote.png"
-import createImg from "../img/icons/create-db.png"
-import copyImg from "../img/icons/copy-db.png"
-import copyLocallyImg from "../img/icons/copy-locally.png"
-import copyRemoteImg from "../img/icons/copy-remote.png"
-import cloneImg from "../img/icons/clone.png"
-import forkImg from "../img/icons/fork.png"
+
+const createLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/create-locally.png"
+const createRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/create-remote.png"
+const createImg = "https://assets.terminusdb.com/terminusdb-console/images/create-db.png"
+const copyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-db.png"
+const copyLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-locally.png"
+const copyRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-remote.png"
+const cloneImg = "https://assets.terminusdb.com/terminusdb-console/images/clone.png"
+const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.png"
 
 export const createGraphText = {
     cancelButtonClassName: "btn btn-primary lead mt-4",

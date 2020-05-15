@@ -1,7 +1,8 @@
 import React from "react";
 import { Col, Card, CardTitle, CardText, CardImg } from "reactstrap";
-import mascotImg from "../../img/mascot/Mascot-Color.png"
-import bg from "../../img/cards/card-shape-3.svg"
+
+const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png"
+const bg = "https://assets.terminusdb.com/terminusdb-console/images/card-shape-3.svg"
 
 export const DialogueBox = (props) => {
     const msg = props.message || "";

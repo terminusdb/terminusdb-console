@@ -10,9 +10,10 @@ import DeleteDatabase from "../../components/Modals/DeleteDatabase"
 import { CommitViewerText } from "../../variables/formLabels"
 import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
 import {BranchSelector} from "../../components/HistoryNavigator/BranchSelector"
-import mascotImg from "../../img/mascot/Mascot-Color.png"
-import cmsImg1 from "../../img/icons/comingSoon.png"
 import { WOQLClientObj } from "../../init/woql-client-instance";
+
+const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png";
+const cmsImg1 = "https://assets.terminusdb.com/terminusdb-console/images/comingSoon.png";
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
