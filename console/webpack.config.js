@@ -12,7 +12,7 @@ module.exports = (env, argv) => ({
     path.join(__dirname, './index.js'),
   ],
   output: {
-    path: path.resolve(__dirname, `/dist`),
+    path: path.resolve(__dirname, `dist`),
     filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
