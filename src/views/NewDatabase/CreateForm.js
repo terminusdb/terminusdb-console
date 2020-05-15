@@ -103,8 +103,8 @@ const CreateDB = (props) => {
     }
 
     function doCreate(id, doc, acc, schema, instance){
-        update_start = new Date.now()
-        woqlClient.createDatabase(id , doc, acc)
+        update_start = Date.now()
+        return woqlClient.createDatabase(id , doc, acc)
         .then((cresults) => {
             let message = `${createDBText.createSuccessMessage} ${doc.label}, id: [${id}] `
             if(instance || schema){
