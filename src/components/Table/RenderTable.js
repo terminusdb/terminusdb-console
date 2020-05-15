@@ -12,7 +12,7 @@ const RenderTable = (props) => {
     let explandableRows = false;
     let always = false
     if (props.fromPage == SERVER_HOME_PAGE.page)
-        explandableRows = true;
+        explandableRows = false;
 
     let dBuf = props.dataProvider.columnData || [];
 
