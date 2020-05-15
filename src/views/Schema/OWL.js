@@ -5,7 +5,7 @@ import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
 import {FAILED_LOADING_OWL} from "./constants"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { EmptyResult } from "../../components/Reports/EmptyResult"
-import { APIUpdateReport } from "../../components/Reports/ViolationReport"
+import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
 
 export const OWL = (props) => {
     const [edit, setEdit] = useState(false);
