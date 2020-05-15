@@ -73,7 +73,6 @@ const Schema = (props) => {
     }, []);
 
     function headChanged(){
-        alert("wahey")
         setRebuild(rebuild+1)
     }
 
