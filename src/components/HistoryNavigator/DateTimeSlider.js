@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { SliderRail, Handle, Track, Tick } from "./SliderComponents";
 import { scaleTime } from "d3-scale";
-import {printts, DATETIME_SHORT} from "../../utils/dateFormats"
+import {printts, DATETIME_YEAR, DATETIME_YY, DATETIME_YEAR_MONTH, DATETIME_COMPLETE,
+    DATETIME_DD_MM, DATETIME_HOUR, DATETIME_HHMM, DATETIME_SS, DATETIME_SSS, DATETIME_HH_DD} from "../../utils/dateFormats"
+import {DTSLIDER} from "./constants"
+import {Row, Col, Container} from "reactstrap"
 
+import { differenceInCalendarYears, differenceInMonths, differenceInHours, differenceInDays, differenceInMinutes, differenceInSeconds} from "date-fns"
 
 export const DateTimeSlider = (props) => {
     const [selectedTime, setSelected] = useState(props.current);
@@ -12,21 +16,12 @@ export const DateTimeSlider = (props) => {
     const [max, setMax] = useState(props.end);
     const sliderStyle = {position: "relative",
                          width: "100%"};
-
-    function formatTick(ms) {
-      return printts(ms/1000, DATETIME_SHORT);
-    }
-
     useEffect(() => {
         if(props.current && props.current != selectedTime) setSelected(props.current)
         if(props.updated && props.updated != updatedTime) setUpdated(props.updated)
         if(props.start && props.start != min) setMin(props.start)
         if(props.end && props.end != max) setMax(props.end)
     }, [props])
-
-
-
-    const halfHour = 1000 * 60 * 30;
 
     function tsToDate(ts){
       if (isNaN(parseFloat(ts))) return "NaN";
@@ -44,74 +39,81 @@ export const DateTimeSlider = (props) => {
       .domain([tsToDate(min), tsToDate(max)])
       .ticks()
       .map(d => +d);
-
-    const renderDateTime = (ts, header) => {
-      if(ts){
-          return (
-              <div style={{ width: "100%",
-                  textAlign: "center",
-                  fontFamily: "Arial",
-                  display: "flex",
-                  margin: '5px 40px 0px 0px'}}>
-              <b>{header}:</b>
-              <div style={{ fontSize: 12, margin: '3px 0px 0px 10px'}}>{printts(ts)}</div>
-            </div>
-          )
-        }
-        return ( <span/> )
+    
+    const tick_format = stepSizeToTickFormat(new Date(dateTicks[1]), new Date(dateTicks[0]))
+    
+    function formatTick(ms) {
+        return printts(ms/1000, tick_format);
     }
-
+    
+    function stepSizeToTickFormat(a, b){
+        let y = differenceInCalendarYears(a, b)
+        let m = differenceInMonths(a, b)
+        let d = differenceInDays(a, b)
+        let h = differenceInHours(a, b)
+        let min = differenceInMinutes(a, b)
+        let s = differenceInSeconds(a, b)
+        if(y > 5) return DATETIME_YEAR
+        if(y >= 1) return DATETIME_YY
+        if(m >= 1) return DATETIME_YEAR_MONTH
+        if(d >= 1 ) return DATETIME_DD_MM
+        if(h >= 3) return DATETIME_HH_DD
+        if(h >= 1) return DATETIME_HOUR
+        if(min >= 1) return DATETIME_HHMM
+        if(s >= 1) return DATETIME_SS
+        return DATETIME_SSS
+    }
+    
     return (
-      <div>
-        <span className="d-fl">
-            {renderDateTime(selectedTime, "Viewing")}
-            {renderDateTime(updatedTime, "Updated")}
-        </span>
-        <div style={{ margin: "20px 0px 0px 0px", height: 90, width: "90%" }}>
-          <Slider mode={1}
-                  domain={[+tsToDate(min), +tsToDate(max)]}
-                  rootStyle={sliderStyle}
-                  onChange={onChange}
-                  values={[+tsToDate(selectedTime)]}>
-            <Rail>
-              {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
-            </Rail>
-            <Handles>
-              {({ handles, getHandleProps }) => (
-                <div>
-                  {handles.map(handle => (
-                    <Handle key={handle.id}
-                            handle={handle}
-                            domain={[+ tsToDate(min), +tsToDate(max)]}
-                            getHandleProps={getHandleProps}/>))}
+      <div className={DTSLIDER.containerClassName}>
+           <div className={DTSLIDER.sliderClassName}>
+               <div className={DTSLIDER.viewingClassName}>
+                    {printts(selectedTime, DATETIME_COMPLETE)}
                 </div>
-              )}
-            </Handles>
-            <Tracks right={false}>
-              {({ tracks, getTrackProps }) => (
-                <div>
-                  {tracks.map(({ id, source, target }) => (
-                    <Track key={id}
-                           source={source}
-                           target={target}
-                           getTrackProps={getTrackProps}/>))}
-                </div>
-              )}
-            </Tracks>
-            <Ticks values={dateTicks}>
-              {({ ticks }) => (
-                <div>
-                  {ticks.map(tick => (
-                    <Tick key={tick.id}
-                          tick={tick}
-                          count={ticks.length}
-                          format={formatTick}/>
-                  ))}
-                </div>
-              )}
-            </Ticks>
-          </Slider>
-        </div>
-      </div>
+                    <Slider mode={1}
+                        domain={[+tsToDate(min), +tsToDate(max)]}
+                        rootStyle={sliderStyle}
+                        onChange={onChange}
+                        values={[+tsToDate(selectedTime)]}>
+                    <Rail>
+                    {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
+                    </Rail>
+                    <Handles>
+                    {({ handles, getHandleProps }) => (
+                        <div>
+                        {handles.map(handle => (
+                            <Handle key={handle.id}
+                                    handle={handle}
+                                    domain={[+ tsToDate(min), +tsToDate(max)]}
+                                    getHandleProps={getHandleProps}/>))}
+                        </div>
+                    )}
+                    </Handles>
+                    <Tracks right={false}>
+                    {({ tracks, getTrackProps }) => (
+                        <div>
+                        {tracks.map(({ id, source, target }) => (
+                            <Track key={id}
+                                source={source}
+                                target={target}
+                                getTrackProps={getTrackProps}/>))}
+                        </div>
+                    )}
+                    </Tracks>
+                    <Ticks values={dateTicks}>
+                    {({ ticks }) => (
+                        <div>
+                        {ticks.map(tick => (
+                            <Tick key={tick.id}
+                                tick={tick}
+                                count={ticks.length}
+                                format={formatTick}/>
+                        ))}
+                        </div>
+                    )}
+                    </Ticks>
+                </Slider>
+         </div>        
+    </div>
     );
 }

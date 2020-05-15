@@ -3,22 +3,22 @@ import PropTypes from "prop-types";
 
 // RAIL
 const railOuterStyle = {
-  position: "absolute",
-  width: "100%",
-  height: 40,
-  transform: "translate(0%, -50%)",
-  cursor: "pointer"
-  // border: "1px solid grey"
+    position: "absolute",
+    width: "100%",
+    height: 40,
+    transform: "translate(0%, -50%)",
+    cursor: "pointer"
+    // border: "1px solid grey"
 };
 
 const railInnerStyle = {
-  position: "absolute",
-  width: "100%",
-  height: 8,
-  transform: "translate(0%, -50%)",
-  borderRadius: 4,
-  pointerEvents: "none",
-  backgroundColor: "#CCDDF1"
+    position: "absolute",
+    width: "100%",
+    height: 8,
+    transform: "translate(0%, -50%)",
+    borderRadius: 4,
+    pointerEvents: "none",
+    backgroundColor: "#CCDDF1"
 };
 
 export function SliderRail({ getRailProps }) {

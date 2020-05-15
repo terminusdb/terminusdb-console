@@ -1,8 +1,8 @@
 /node_modules
 
 package-lock.json
-auth_config.json
 console/.env
 es6
 
 console/dist
+console/public_pages
