@@ -6,7 +6,7 @@ import * as consoleLib from '@terminusdb/terminusdb-console';
 
 const App = (props) => {
   const { loadingServer, clientError, woqlClient} = consoleLib.WOQLClientObj();
-
+  const subdir = "/console";
   if (clientError) return <consoleLib.ErrorPage/>;
   if (loadingServer) return <consoleLib.Loading/>;
 
@@ -16,12 +16,12 @@ const App = (props) => {
 
         <Router history={consoleLib.history}>
             <Switch>
-                <Route path = "/" exact component = {consoleLib.ServerHome} />
-                <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-                <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
-                <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-                <Route path = {consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
-                <Route component={DBPages} path={consoleLib.DB_HOME_PAGE.page} />
+                <Route path = {subdir} exact component = {consoleLib.ServerHome} />
+                <Route path = {subdir + consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
+                <Route path = {subdir + consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
+                <Route path = {subdir + consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
+                <Route path = {subdir + consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
+                <Route component={DBPages} path={subdir + consoleLib.DB_HOME_PAGE.page} />
             </Switch>
         </Router>
 
