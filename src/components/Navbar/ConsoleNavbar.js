@@ -43,12 +43,14 @@ export const ConsoleNavbar = (props) => {
                     </Nav>
                     </Row>
                 {!collapsed && <div className="history-navigator-Collapsible">
-                   <Container>
-                       <Row><Col>
-                            <HistoryNavigator/>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <HistoryNavigator onHeadChange={props.onHeadChange}/>
                             </Col>
-                       </Row>
-                   </Container> </div>
+                        </Row>
+                    </Container>
+                </div>
                 }
                 </div>
             </Container>

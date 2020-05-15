@@ -17,9 +17,6 @@ export const DBNavbar = (props) => {
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
 
-    const [collapsed, setCollapsed] = useState(true);
-
-
     useEffect(() => {
         dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account()) || {}
         setDBMeta(dbmeta)

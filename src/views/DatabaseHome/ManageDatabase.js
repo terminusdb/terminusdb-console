@@ -9,14 +9,16 @@ import { pull, push, fork } from "../../variables/formLabels"
 import DeleteDatabase from "../../components/Modals/DeleteDatabase"
 import { CommitViewerText } from "../../variables/formLabels"
 import { HistoryNavigator } from "../../components/HistoryNavigator/HistoryNavigator"
-import BranchSelector from "../../components/HistoryNavigator/BranchSelector"
+import {BranchSelector} from "../../components/HistoryNavigator/BranchSelector"
 import mascotImg from "../../img/mascot/Mascot-Color.png"
 import cmsImg1 from "../../img/icons/comingSoon.png"
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 const ManageDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const [userInfo, setCreateUserInfo] =  useState({})
 	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+    const {woqlClient} = WOQLClientObj();
 
 	const [modal, setModal] = useState(false);
 
@@ -28,12 +30,9 @@ const ManageDatabase = (props) => {
   	  }
     };
 
-    const onCreateBranch = (data) => {
-        dbClient.branch(data.bId, branchInfo.uri_prefix)
-        .then(() => {
-            changeBranch(bid)
-        })
+    function headChanged(b, r){
     }
+
 
 	const divider = <>
 		<hr className = "my-space-50"/>
@@ -81,7 +80,7 @@ const ManageDatabase = (props) => {
 			 {divider}
 		     <Label><b>Create New Branch</b></Label>
 			 <hr className = "my-space-25"/>
-			 <HistoryNavigator />
+			 <HistoryNavigator onHeadChange={headChanged} />
 		     {divider}
 
 			 {/***** merge branch *****/}
@@ -90,7 +89,7 @@ const ManageDatabase = (props) => {
 			 <span className="d-fl">
 			 	  <Col md={6} className="mb-6">
 				  	  <Label><b>Source</b></Label>
-				  	  <HistoryNavigator />
+				  	  <HistoryNavigator onHeadChange={headChanged}/>
 				  </Col>
 				  <Col md={6} className="mb-6">
 				      <Label><b>Target</b></Label>

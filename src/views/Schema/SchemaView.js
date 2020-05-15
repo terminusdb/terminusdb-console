@@ -73,6 +73,7 @@ const Schema = (props) => {
     }, []);
 
     function headChanged(){
+        alert("wahey")
         setRebuild(rebuild+1)
     }
 
@@ -133,7 +134,7 @@ const Schema = (props) => {
   if (loading) return <Loading />
   if (pageError) return <PageFailure failure={GRAPHS_LOAD_ERROR} report={pageError} />
   return (
-    <PageView page="schema">
+    <PageView page="schema" onHeadChange={headChanged}>
         <Tabs>
             {getTabsForView()}
         </Tabs>

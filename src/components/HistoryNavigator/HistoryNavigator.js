@@ -16,11 +16,11 @@ export const HistoryNavigator = (props) => {
 	/*to be review*/
 
     const {woqlClient} = WOQLClientObj();
-    const dbClient=woqlClient;
+    const dbClient=(props.local ? woqlClient.copy() : woqlClient);
 
+    // no history for terminus (master) db
     if(dbClient.db() == "terminus") return null
     let nowts = props.now || parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
-    let timelinemin = props.start || parseFloat(subDays(startOfToday(), 7).getTime()/1000)
     const [branches, setBranches] = useState(props.branches);
     const [ref, setRef] = useState(props.ref);
     const [settingCommit, setSettingCommit] = useState(false);
@@ -28,9 +28,8 @@ export const HistoryNavigator = (props) => {
     const [current, setCurrent] = useState(nowts);
     const [currentCommit, setCommit] = useState();
     const [branch, setBranch] = useState(props.branch || dbClient.checkout());
-    const [branchInfo, setBranchInfo] = useState({first: timelinemin, count: 0});
+    const [branchInfo, setBranchInfo] = useState();
 
-    // no history for terminus (master) db
     //retrieves details of the available branches
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
@@ -47,7 +46,6 @@ export const HistoryNavigator = (props) => {
 
     //retrieves details of the branch, only when the branch is changed
     useEffect(() => {
-        //alert("loading branch info for " + branch)
         const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClient)
         dbClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
@@ -77,7 +75,7 @@ export const HistoryNavigator = (props) => {
                 if(settingCommit){
                     setCurrent(commie.time)
                     setSettingCommit(false)
-                    if(props.onHeadChange) props.onHeadChange()
+                    if(props.onHeadChange) props.onHeadChange(branch, ref)
                 }
                 if(props.setCommitInfo) props.setCommitInfo(commie)
                 setCommit(commie)
@@ -102,7 +100,7 @@ export const HistoryNavigator = (props) => {
                     else dbClient.ref(false)
                     if(!currentCommit || commie.id != currentCommit.id){
                          setCommit(commie)
-                         if(props.onHeadChange) props.onHeadChange()
+                         if(props.onHeadChange) props.onHeadChange(branch, commie.id)
                          if(props.setCommitInfo) props.setCommitInfo(commie)
                     }
                 }
@@ -114,17 +112,8 @@ export const HistoryNavigator = (props) => {
     function userChangesCommit(cid){
         setSettingCommit(true);
         setRef(cid)
+        if(props.onHeadChange) props.onHeadChange(branch, cid)
     }
-
-    //change the commit and change the time on the timeline to the commit time
-    function userCreatesBranch(bid){
-        //if(!dbClient.ref()) dbClient.ref(ref)
-        dbClient.branch(bid, branchInfo.uri_prefix)
-        .then(() => {
-            changeBranch(bid)
-        })
-    }
-
 
     function extractCommitData(res){
         let commie = {}
@@ -141,26 +130,33 @@ export const HistoryNavigator = (props) => {
         setBranch(bid)
         dbClient.ref(false)
         dbClient.checkout(bid)
-        if(props.onHeadChange) props.onHeadChange()
+        if(props.onHeadChange) props.onHeadChange(bid, false)
     }
 
     let cct = (currentCommit ? currentCommit.time : nowts)
+    const showBranches = (branches && branchInfo && (branches.length > 0)) 
     return (
         <Container className={HISTORY.containerClassName}>
             <Row>
-                <Col md={6} className={HISTORY.sliderColClassName}>
-                    <DateTimeSlider start={branchInfo.first}
-                        onChange={userChangesTime}
-                        end={end}
-                        current={current}
-                        updated={cct} />
-                </Col>
-                <Col md={4} className={HISTORY.commitColClassName}>
-                    <CommitTraveller commit={currentCommit}/>
-                </Col>
-                <Col md={2} className={HISTORY.branchColClassName}>
-                    <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
-                </Col>
+                {(branches && branchInfo) && 
+                    <Col md={6} className={HISTORY.sliderColClassName}>
+                        <DateTimeSlider start={branchInfo.first}
+                            onChange={userChangesTime}
+                            end={end}
+                            current={current}
+                            updated={cct} />
+                    </Col>
+                }
+                {(branches && branchInfo) && 
+                    <Col md={4} className={HISTORY.commitColClassName}>
+                        {currentCommit && <CommitTraveller setRef={userChangesCommit} commit={currentCommit}/>}
+                    </Col>
+                }
+                {showBranches && 
+                    <Col md={2} className={HISTORY.branchColClassName}>
+                        <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
+                    </Col>
+                }
             </Row>
         </Container>
     )
