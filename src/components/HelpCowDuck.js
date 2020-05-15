@@ -1,7 +1,8 @@
 import React, { useState }  from "react";
 import ReactTooltip from "react-tooltip";
 import { UncontrolledAlert } from 'reactstrap';
-import cowDuckImg from "../img/icons/cowDuckHelp.png"
+
+const cowDuckImg = "https://assets.terminusdb.com/terminusdb-console/images/cowDuckHelp.png";
 
 export const HelpCowDuck = (props) => {
 
