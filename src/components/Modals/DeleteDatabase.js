@@ -7,7 +7,6 @@ import { ViolationReport } from "../../components/Reports/ViolationReport"
 import * as reportAlert from "../../labels/reportLabels"
 import history from '../../utils/history';
 import { isObject } from "../../utils/helperFunctions"
-import deleteImg from "../../img/icons/delete.png"
 import Loading from "../Loading";
 
 const DeleteDatabase = (props) => {
@@ -45,7 +44,7 @@ const DeleteDatabase = (props) => {
             <ModalBody>
                   <Col md={12}>
                     <div className="del-mod">
-                        <img src={deleteImg} className="center"/>
+                        <img src="http://assets.terminusdb.com/terminusdb-console/images/delete.png" className="center"/>
                         {isObject(rep) && <ViolationReport report = { rep }/>}
                         <form onSubmit={ handleSubmit(onDelete) }>
                             <input type="text" name="dbId" id="dbId"

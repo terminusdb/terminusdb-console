@@ -23,7 +23,7 @@
     "terminusdb"
   ],
   "scripts": {
-    "build": "webpack --mode production --config console/webpack.config.js",
+    "build": "webpack --mode development --config console/webpack.config.js",
     "start": "webpack-dev-server --mode development  --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.dev.config.js --history-api-fallback",
     "test": "exit 0",
     "lint": "eslint src",
@@ -77,6 +77,7 @@
     "react-select": "^3.1.0",
     "react-simple-code-editor": "^0.11.0",
     "react-slick": "^0.25.2",
+    "react-tooltip": "^4.2.6",
     "reactstrap": "^8.2.0",
     "recharts": "^2.0.0-beta.5",
     "simple-react-notifications": "^1.2.15"

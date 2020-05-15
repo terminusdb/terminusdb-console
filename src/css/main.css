@@ -891,12 +891,12 @@ a {
 .page-strip--with-background {
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-image: url("../img/placeholders/half-background-mobile.png")
+	background-image: url("https://assets.terminusdb.com/terminusdb-console/half-background-mobile.png")
 }
 
 @media only screen and (min-width: 768px) {
 	.page-strip--with-background {
-		background-image: url("../img/placeholders/half-background.png")
+		background-image: url("https://assets.terminusdb.com/terminusdb-console/half-background.png")
 	}
 }
 

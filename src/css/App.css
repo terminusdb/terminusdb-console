@@ -5,6 +5,50 @@
     margin-top: 40px
 }
 
+img.cow-duck-help {
+    float: right;
+    width: 80px;
+    margin-bottom: -15px;
+    max-width: unset !important;
+}
+
+img.cow-duck-help:hover {
+    cursor: pointer;
+}
+
+div.help-text {
+    width: auto;
+    max-width: 360px;
+    position: relative;
+    margin-top: -110px;
+    backgroun-color: hsl(180,100%,50%);
+    margin-left: -310px;
+    /* background-color: hsla(180,100%,50%, 0.4) !important; */
+    background-color: white;
+    border: 1px solid #bee5eb !important;
+    color: #0c5460;
+    padding: .75rem 1.25rem;
+    /*margin-bottom: 1rem;*/
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+div.adjust-help-text{
+    max-width: 28.666667% !important;
+}
+
+button.cow-duck-help-btn {
+    background-color: transparent !important;
+    padding: 0px 0px 5px 0px;
+    margin: 0px;
+    margin-bottom: -40px;
+    cursor: auto;
+}
+
+button.cow-duck-help-btn:active{
+    border: 0px !important;
+}
+
 button.flat-buttons-link {
     border: 0px !important;
     background-color: transparent !important;
@@ -72,12 +116,13 @@ div.crumbs-button-group {
 }
 
 button.curr-flat-btn{
-    color: #0066f9 !important;
+    color: #000 !important;
     cursor: text;
 }
 
 button.already-selected-flat-btn{
-    color: #000 !important;
+    /*color: #0066f9 !important;*/
+    color: #0055bb !important;
     cursor: pointer;
 }
 
@@ -86,7 +131,12 @@ button.already-selected-flat-btn:hover {
     cursor: pointer;
 }
 
-
+button.cow-duck-help-cancel{
+    width: auto;
+    padding: 0px;
+    margin: 0px;
+    min-width: auto;
+}
 
 div.card-grid {
     display: grid;
@@ -857,13 +907,14 @@ p.dscr{
     border-left: 1px solid #00C08B !important;
     border-right: 1px solid #00C08B !important;
    /* border-right: 1px solid #dee2e6 !important;*/
-    color: #0055bb !important;
+    color: #000 !important;
     font-weight: 600px;
 }
 
 .nav-tabs .nav-link {
     /* border: 1px solid transparent; */
     border: 0;
+    color: #0055bb !important;
     border-top-left-radius: .25rem !important;;
     border-top-right-radius: .25rem !important;
 }

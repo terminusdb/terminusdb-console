@@ -1,12 +1,13 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
-import createLocallyImg from "../img/icons/create-locally.png"
-import createRemoteImg from "../img/icons/create-remote.png"
-import createImg from "../img/icons/create-db.png"
-import copyImg from "../img/icons/copy-db.png"
-import copyLocallyImg from "../img/icons/copy-locally.png"
-import copyRemoteImg from "../img/icons/copy-remote.png"
-import cloneImg from "../img/icons/clone.png"
-import forkImg from "../img/icons/fork.png"
+
+const createLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/create-locally.png"
+const createRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/create-remote.png"
+const createImg = "https://assets.terminusdb.com/terminusdb-console/images/create-db.png"
+const copyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-db.png"
+const copyLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-locally.png"
+const copyRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-remote.png"
+const cloneImg = "https://assets.terminusdb.com/terminusdb-console/images/clone.png"
+const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.png"
 
 export const createGraphText = {
     cancelButtonClassName: "btn btn-primary lead mt-4",
@@ -48,9 +49,9 @@ export const createDBText = {
     checkboxClassName: "checkbox-create-form",
     createButtonText: "Create New Database",
     hideAdvanced: "Hide Advanced Settings",
-    showAdvanced: "Show Advanced Settings",  
-    schemaGraphCommitMessage: "Main Schema Graph Created by console during DB create",  
-    instanceGraphCommitMessage: "Main Instance Graph Created by console during DB create", 
+    showAdvanced: "Show Advanced Settings",
+    schemaGraphCommitMessage: "Main Schema Graph Created by console during DB create",
+    instanceGraphCommitMessage: "Main Instance Graph Created by console during DB create",
     instanceFailedSchemaWorkedMessage: " and schema graph main, but failed to create instance graph",
     schemaFailedMessage: " but failed to create main schema graph",
     instanceFailedSchemaWorkedMessage: " created main schema graph but failed to create main instance graph. You must create an instance graph before you can add data to this database",
@@ -107,7 +108,7 @@ export const createDbCard = {
         image: createImg
     },
     copy:{
-        title: 'Copy Database',
+        title: 'Copy Existing Database',
         text: 'You can opt to copy an existing database from you local machiene or from a remote server',
         image: copyImg
     }
