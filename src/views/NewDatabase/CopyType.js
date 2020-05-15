@@ -11,15 +11,18 @@ export const CopyType = (props) => {
     const setPage = props.setPage;
     const local = props.local || false;
     const remote = props.remote || false;
+    const setClone = props.setClone;
 
     const handleClone = () => {
         if(local) setPage(view.CLONE_LOCAL)
         if(remote) setPage(view.CLONE_REMOTE)
+        setClone(true)
     }
 
     const handleFork = () =>{
         if(local) setPage(view.CLONE_LOCAL)
         if(remote) setPage(view.CLONE_REMOTE)
+        setClone(false)
     }
 
     return (<>
