@@ -72,12 +72,12 @@ div.crumbs-button-group {
 }
 
 button.curr-flat-btn{
-    color: #000 !important;
+    color: #0066f9 !important;
     cursor: text;
 }
 
 button.already-selected-flat-btn{
-    color: #0066f9 !important;
+    color: #000 !important;
     cursor: pointer;
 }
 
@@ -1576,7 +1576,7 @@ label.checkbox-label-create-form {
 }
 
 div.terminus-datetime-slider-container {
-    padding-top: 6px; 
+    padding-top: 6px;
     height: 80px;
 }
 
@@ -1595,7 +1595,7 @@ div.terminus-datetime-slider-viewing {
 
 .history-branch-col {
     padding: 26px 0 0 0;
-    width: 200px;    
+    width: 200px;
     text-align: right;
 }
 
@@ -1608,7 +1608,7 @@ div.terminus-datetime-slider-viewing {
 .branch-selector {
     display: inline-block;
     font-size: 0.9em;
-    width: 200px;    
+    width: 200px;
 }
 
 .history-bar-container {
@@ -1667,7 +1667,7 @@ div.commit-view-header {
     font-weight: bold;
     font-family: "Arial";
     padding: 6px 4px 6px 4px;
-} 
+}
 
 div.commit-view-id {
     width: 100%;
