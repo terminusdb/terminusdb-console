@@ -14,7 +14,7 @@ button.flat-buttons-link {
 }
 
 button.flat-buttons-link:hover  {
-    color: #0055bb !important;
+    /*color: #0055bb !important; */
 }
 
 button.flat-buttons-link:visited  {
@@ -66,9 +66,27 @@ div.b-del{
     float: left !important;
 }
 
-img.cancel-ic:hover{
+div.crumbs-button-group {
+    line-height: 0px;
+    margin-top: -30px;
+}
+
+button.curr-flat-btn{
+    color: #000 !important;
+    cursor: text;
+}
+
+button.already-selected-flat-btn{
+    color: #0066f9 !important;
     cursor: pointer;
 }
+
+button.already-selected-flat-btn:hover {
+    color: #00C08B !important;
+    cursor: pointer;
+}
+
+
 
 div.card-grid {
     display: grid;

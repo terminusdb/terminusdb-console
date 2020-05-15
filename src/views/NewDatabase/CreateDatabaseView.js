@@ -22,14 +22,31 @@ const CreateDatabase = (props) => {
 	const [createRemote, setCreateRemote] = useState(false)
 	const [copyLocal, setCopyLocal] = useState(false);
     const [copyRemote, setCopyRemote] = useState(false);
+	const [clone, setClone] = useState(false)
+
+	const [action, setAction] = useState(false)
+	const [copyFrom, setCopyFrom] = useState(false)
+	const [copyType, setCopyType] = useState(false)
 
 	const handleCreate = () => {
 		setPage(view.CREATE_OPTIONS)
+		setAction(view.CREATE_DB)
 	}
 
 	const handleCopy = () => {
 		setPage(view.COPY_OPTIONS)
+		setAction(view.COPY_DB)
 	}
+
+	useEffect(() => {
+        if(copyLocal) setCopyFrom(view.LOCAL)
+		else if(copyRemote) setCopyFrom(view.REMOTE)
+    }, [copyLocal, copyRemote]);
+
+	useEffect(() => {
+        if(clone) setCopyType(view.CLONE)
+		else  setCopyType(view.FORK)
+    }, [clone]);
 
 	return (
 		<Container fluid className="h-100 pl-0 pr-0">
@@ -50,31 +67,47 @@ const CreateDatabase = (props) => {
 				</span>}
 
 				{(page == view.CREATE_OPTIONS) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.CREATE_OPTIONS]} setPage = { setPage }/>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.CREATE_OPTIONS, text:view.CREATE_OPTIONS}]} setPage = { setPage }/>
 					<CreateOptions setPage = { setPage } setCreateRemote = { setCreateRemote } setCreateLocal = { setCreateRemote }/>
 				</>}
 				{(page == view.COPY_OPTIONS) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.COPY_OPTIONS]} setPage = { setPage }/>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.COPY_OPTIONS, text:view.COPY_OPTIONS}]} setPage = { setPage }/>
 					<CopyFrom setPage = { setPage } setRemote = { setCopyRemote } setLocal = { setCopyLocal }/>
 				</>}
 				{(page == view.COPY_TYPES) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.COPY_OPTIONS, view.COPY_TYPES]} setPage = { setPage }/>
-					<CopyType setPage = { setPage } local = { copyLocal } remote = { copyRemote }/>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.COPY_OPTIONS, text: copyFrom},
+						{page:view.COPY_TYPES, text:view.COPY_TYPES}]} setPage = { setPage }/>
+					<CopyType setPage = { setPage } local = { copyLocal } remote = { copyRemote } setClone = { setClone }/>
 				</>}
-				{(page == view.CLONE_LOCAL) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.COPY_OPTIONS, view.COPY_TYPES, view.CLONE_LOCAL]} setPage = { setPage }/>
+				{(page == view.CLONE_LOCAL) && (copyLocal) && <>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.COPY_OPTIONS, text: copyFrom},
+						{page:view.COPY_TYPES, text:copyType},
+						{page:view.COPY, text: view.COPY}]} setPage = { setPage }/>
 					<CloneLocalDB setPage = { setPage }/>
 				</>}
-				{(page == view.CLONE_REMOTE) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.COPY_OPTIONS, view.COPY_TYPES, view.CLONE_REMOTE]} setPage = { setPage }/>
+				{(page == view.CLONE_REMOTE) && (copyRemote) && <>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.COPY_OPTIONS, text: copyFrom},
+						{page:view.COPY_TYPES, text:copyType},
+						{page:view.COPY, text:view.COPY}]} setPage = { setPage }/>
 					<CloneRemoteDB setPage = { setPage }/>
 				</>}
 				{(page == view.CREATE_LOCAL) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.CREATE_OPTIONS, view.CREATE_LOCAL]} setPage = { setPage }/>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.CREATE_OPTIONS, text: view.LOCAL},
+						{page:view.CREATE_LOCAL, text:view.CREATE_LOCAL}]}
+						setPage = { setPage }/>
 					<CreateDB setPage = { setPage }/>
 				</>}
 				{(page == view.CREATE_REMOTE) && <>
-					<Crumbs buttons = {[view.CREATE_VIEW, view.CREATE_OPTIONS, view.CREATE_REMOTE]} setPage = { setPage }/>
+					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
+						{page:view.CREATE_OPTIONS, text: view.REMOTE},
+						{page:view.CREATE_REMOTE, text:view.CREATE_REMOTE}]}
+						setPage = { setPage }/>
 					<DialogueBox message = { 'Coming soon ...!'}/>
 				</>}
 
