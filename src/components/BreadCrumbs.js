@@ -13,16 +13,19 @@ export const Crumbs = (props) => {
     let btnList = buttons.map((item, i) => {
          if(i == (len - 1)){
              list.push(<button key = {item.text + i} className="flat-buttons-link curr-flat-btn"
-                onClick={() => {setPage(item.page)}}>{item.text} </button>)
+                onClick={() => {setPage(item.page)}}> {item.text}</button>)
          }
          else list.push(<button key = {item.text + i} className="flat-buttons-link already-selected-flat-btn"
-            onClick={() => {setPage(item.page)}}>{item.text} /</button>)
+            onClick={() => {setPage(item.page)}}> {item.text} /</button>)
     })
 
 
-    return (
-        <ButtonGroup className={'crumbs-button-group'}>
+    return (<>
+        {isArray(list) && <ButtonGroup className={'crumbs-button-group'}>
             {list}
-        </ButtonGroup>
+        </ButtonGroup>}
+        {!isArray(list) && <ButtonGroup className={'crumbs-button-group'}>
+        </ButtonGroup>}
+        </>
     )
 }

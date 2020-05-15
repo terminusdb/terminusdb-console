@@ -6,12 +6,15 @@ import { trimContent } from "../../utils/helperFunctions"
 
 export const DetailsCard = (props) => {
 
+    const icon = props.icon || false
+
     return (
+
       <div className="dd-c">
           <div className="card card-stats">
             <div className="content">
               <Row>
-                <Col xs={4}>
+                {icon && <><Col xs={4}>
                   <div className="dd-ico">
                     <FontAwesomeIcon icon={props.icon} className="mr-3" />
                   </div>
@@ -22,7 +25,17 @@ export const DetailsCard = (props) => {
                     <p className="dd-p">{trimContent(props.main, MAIN_LIMIT)}</p>
                     <p className="dd-st">{trimContent(props.subTitle, SUB_TITLE_LIMIT)}</p>
                   </div>
-                </Col>
+                </Col></>}
+
+                {!icon &&
+                <Col xs={12}>
+                  <div className="dd-t">
+                    <legend className="dd-mute">{props.title}</legend>
+                    <p className="dd-p">{props.main}</p>
+                    <p className="dd-st">{props.subTitle}</p>
+                  </div>
+                </Col>}
+
               </Row>
               <div className="dd-footer">
                 <hr />
