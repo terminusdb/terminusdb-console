@@ -37,7 +37,7 @@ export const createDatabaseLabels ={
 }
 
 export const serverHomeLabels = {
-    title: "My Database",
+    title: "My Databases",
     mainDescription: "A list of all databases loaded and accessible in your TerminusDB"
 }
 
