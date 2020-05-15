@@ -14,13 +14,13 @@ const App = (props) => {
 
   return (
 
-        <Router history={consoleLib.history}>
+        <Router history={consoleLib.history} basename='/console'>
             <Switch>
-                <Route path = "/console" exact component = {consoleLib.ServerHome} />
-                <Route path = {"/console" + consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-                <Route path = {"/console" + consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
-                <Route path = {"/console" + consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-                <Route path = {"/console" + consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
+                <Route path = "/" exact component = {consoleLib.ServerHome} />
+                <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
+                <Route path = {consoleLib.SERVER_HOME_PAGE.page} component = {consoleLib.ServerHome} />
+                <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
+                <Route path = {consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
                 <Route component={DBPages} path={consoleLib.DB_HOME_PAGE.page} />
             </Switch>
         </Router>
