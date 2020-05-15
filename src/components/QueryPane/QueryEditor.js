@@ -10,50 +10,46 @@ import { commitBox } from "../../variables/formLabels"
 /**
  * Controls the display of query viewer and editor
  */
-export const QueryEditor = ({query, startLanguage, queryText, languages, editable, children, className, submit,updateQuery}) => {
+export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, setContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, className, submit,updateQuery}) => {
     const qeclass = className || 'terminus-query-editor'
     editable = typeof editable != "undefined" ? editable : true 
     submit = submit || QUERY_SUBMIT
-    
+     
+     /*
+    * origin base language this is the language that I can edit 
+    */
+    //const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     /*
     * if we have a start query or a start queryText for the editor and the startLanguage for the query
     */
-    let initcontent = queryText || "" 
-    if(!initcontent && query){
-        initcontent = makeWOQLIntoString(query, startLanguage)
-    }
-    /*
-    * 
-    */
+    //let initcontent = content || "" 
+    //if(!content && query){
+        //initcontent = makeWOQLIntoString(query, baseLanguage)
+    //}
 
-    const [content, setContent] = useState(initcontent);
     /*
-    * origin base language this is the language that I can edit 
+    *onChange will be update
     */
-    const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
+    // const [content, setContent] = useState(initcontent);
+
     
     /*
     *show language is the language selected 
     */
-    const [showLanguage, setShowLanguage] = useState(false);   
+   // const [showLanguage, setShowLanguage] = useState(false);   
 
-    const [showContent, setShowContent] = useState("");
+  //  const [showContent, setShowContent] = useState("");
     
     
     
     /*
-    * if is edit mode and I change something
+    * if is edit mode and the query is an update query
     */
     const [containsUpdate, setContainsUpdate] = useState(false);
+
     const [error, setError] = useState(false);
 
     const [commitMsg, setCommitMsg] = useState();
-
-    /*
-    *collapse navBar 
-    */
-    const [isOpen, setIsOpen] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
 
 
     /*
@@ -65,6 +61,9 @@ export const QueryEditor = ({query, startLanguage, queryText, languages, editabl
         if(content){
             let woql = makeWOQLFromString(content, baseLanguage)
             if(woql) {
+                /*
+                * check if the query is an update query and need a commitSMS
+                */
                 setContainsUpdate(woql.containsUpdate())
             }
             return woql
@@ -75,7 +74,7 @@ export const QueryEditor = ({query, startLanguage, queryText, languages, editabl
     function sendQuery(){
         let woql = checkContent()
         if(woql){
-            if(updateQuery) updateQuery(woql, commitMsg)
+            if(updateQuery) updateQuery(woql, commitMsg, content)
         }
     }
 
