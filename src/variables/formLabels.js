@@ -48,9 +48,9 @@ export const createDBText = {
     checkboxClassName: "checkbox-create-form",
     createButtonText: "Create New Database",
     hideAdvanced: "Hide Advanced Settings",
-    showAdvanced: "Show Advanced Settings",  
-    schemaGraphCommitMessage: "Main Schema Graph Created by console during DB create",  
-    instanceGraphCommitMessage: "Main Instance Graph Created by console during DB create", 
+    showAdvanced: "Show Advanced Settings",
+    schemaGraphCommitMessage: "Main Schema Graph Created by console during DB create",
+    instanceGraphCommitMessage: "Main Instance Graph Created by console during DB create",
     instanceFailedSchemaWorkedMessage: " and schema graph main, but failed to create instance graph",
     schemaFailedMessage: " but failed to create main schema graph",
     instanceFailedSchemaWorkedMessage: " created main schema graph but failed to create main instance graph. You must create an instance graph before you can add data to this database",
@@ -107,7 +107,7 @@ export const createDbCard = {
         image: createImg
     },
     copy:{
-        title: 'Copy Database',
+        title: 'Copy Existing Database',
         text: 'You can opt to copy an existing database from you local machiene or from a remote server',
         image: copyImg
     }

@@ -52,7 +52,7 @@ const Details = (props) => {
 
 			<Row>
 				<Col md={3} className="mb-3 dd-c">
-					{dbInfo && <DetailsCard icon={icons.INFO}
+					{dbInfo && <DetailsCard 
 						title = {getCurrentDBID(woqlClient)}
 						main = {getCurrentDBName(woqlClient)}
 						subTitle = {db_uri}

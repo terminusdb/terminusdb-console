@@ -10,6 +10,7 @@ import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"
 import * as reportAlert from "../../labels/reportLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { HelpCowDuck } from "../../components/HelpCowDuck"
 
 const CreateDB = (props) => {
     let initconfig = props.dbInfo;
@@ -22,19 +23,19 @@ const CreateDB = (props) => {
             dbname: "",
             description: "",
             data_url: "default",
-            schema_url: "default" 
+            schema_url: "default"
         }
     }
 
     let textinputs = ["dbid", "dbname", "data_url", "schema_url"]
-        
+
     const { register, handleSubmit, errors } = useForm();
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
     const [dbLocation, setDBLoction] = useState(CREATE_DB_LOCAL);
     const [rep, setReport] = useState({})
     const [dbInfo, updateDbInfo] = useState(initconfig)
-    
+
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(true);
     const [advancedSettings, setAdvancedSettings] = useState(false)
@@ -47,10 +48,10 @@ const CreateDB = (props) => {
         }
         data.accountid = data.accountid || woqlClient.account() || woqlClient.uid()
         if(!data.data_url || data.data_url == "default"){
-            data.data_url = getDefaultDocURL(data.accountid, data.dbid, (dbLocation === CREATE_TERMINUS_DB)) 
+            data.data_url = getDefaultDocURL(data.accountid, data.dbid, (dbLocation === CREATE_TERMINUS_DB))
         }
         if(!data.schema_url || data.schema_url == "default"){
-            data.schema_url = getDefaultScmURL(data.accountid, data.dbid, (dbLocation === CREATE_TERMINUS_DB)) 
+            data.schema_url = getDefaultScmURL(data.accountid, data.dbid, (dbLocation === CREATE_TERMINUS_DB))
         }
         let doc = {
             label: data.dbname,
@@ -62,7 +63,7 @@ const CreateDB = (props) => {
         doCreate(data.dbid, doc, data.accountid, data.schema, data.instance)
     }
 
-    let update_start = Date.now() 
+    let update_start = Date.now()
 
     function createStarterGraphs(instance, schema){
         if(schema && instance){
@@ -72,10 +73,10 @@ const CreateDB = (props) => {
                 .then(() => setReport({message: message, status: reportAlert.SUCCESS}))
                 .catch((e) => {
                     message += createDBText.instanceFailedSchemaWorkedMessage
-                    setReport({message: message, error: e, status: reportAlert.WARNING})    
+                    setReport({message: message, error: e, status: reportAlert.WARNING})
                 })
             }).catch((e) => {
-                message += createDBText.schemaFailedMessage 
+                message += createDBText.schemaFailedMessage
                 setReport({message: message, error: e, status: reportAlert.WARNING})
             })
         }
@@ -83,9 +84,9 @@ const CreateDB = (props) => {
             return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
             .then(() => {
                 message += createDBText.noDataGraphMessage
-                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})
             }).catch((e) => {
-                message += createDBText.schemaFailedMessage 
+                message += createDBText.schemaFailedMessage
                 setReport({message: message, error: e, status: reportAlert.WARNING})
             })
         }
@@ -93,12 +94,12 @@ const CreateDB = (props) => {
             return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
             .then(() => {
                 message += createDBText.noSchemaGraphMessage
-                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})
             }).catch((e) => {
-                message += createDBText.instanceFailedMessage 
+                message += createDBText.instanceFailedMessage
                 setReport({message: message, error: e, status: reportAlert.WARNING})
             })
-        }        
+        }
     }
 
     function doCreate(id, doc, acc, schema, instance){
@@ -109,9 +110,9 @@ const CreateDB = (props) => {
             if(instance || schema){
                 return createStarterGraphs(instance, schema, message)
             }
-            else {                
+            else {
                 message += createDBText.noGraphMessage
-                setReport({message: message, error: e, status: reportAlert.SUCCESS})    
+                setReport({message: message, error: e, status: reportAlert.SUCCESS})
             }
         })
         .catch((err) => {
@@ -119,16 +120,16 @@ const CreateDB = (props) => {
         })
         .finally(() => setLoading(false))
     }
-    
+
     //should be moved out into general settings
     function getDefaultDocURL(aid, did, on_hub){
         let base = (on_hub ? "http://hub.terminusdb.com/" : woqlClient.server())
-        return `${base}${aid}/${did}/data/`    
+        return `${base}${aid}/${did}/data/`
     }
 
     function getDefaultScmURL(aid, did, on_hub){
         let base = (on_hub ? "http://hub.terminusdb.com/" : woqlClient.server())
-        return `${base}${aid}/${did}/schema#`    
+        return `${base}${aid}/${did}/schema#`
     }
 
     function showMandatory(label){
@@ -136,7 +137,7 @@ const CreateDB = (props) => {
     }
 
     const advancedIcon = () => {
-        return null        
+        return null
     }
 
 
@@ -164,7 +165,7 @@ const CreateDB = (props) => {
         }
         let lab = (
             <label className={cname} htmlFor={field_id}>
-                {meta.label} {cbits}                 
+                {meta.label} {cbits}
             </label>
         )
         return lab
@@ -182,7 +183,7 @@ const CreateDB = (props) => {
                     defaultValue={val}
                     name = {field_id}
                     ref = { register({ validate: value => value.length > 0}) }/>
-            )                   
+            )
         }
         if(field_id == "description"){
             let ph = meta.placeholder || ""
@@ -193,7 +194,7 @@ const CreateDB = (props) => {
             	    placeholder = { ph }
                     ref={register}
                     defaultValue={val}/>
-            )            
+            )
         }
         else if(field_id == "graphs"){
             return (
@@ -208,7 +209,7 @@ const CreateDB = (props) => {
                         <label className={createDBText.checkboxLabelClassName} htmlFor="instancecbox">
                             {meta.schema_text}
                         </label>
-                    </span>                        
+                    </span>
                     <span className={createDBText.checkboxWrapperClassName}>
                         <input type="checkbox"
                             className = {createDBText.checkboxClassName  }
@@ -221,7 +222,7 @@ const CreateDB = (props) => {
                         </label>
                     </span>
                 </div>
-                
+
             )
         }
     }
@@ -230,15 +231,16 @@ const CreateDB = (props) => {
         if(errors[field_id]){
             return (
                 <p className = {createDBText.errorClassName}>
-                    {meta.label + " " + createDBText.requiredField} 
+                    {meta.label + " " + createDBText.requiredField}
                 </p>
             )
         }
         if(meta.help){
             return (
-                <p className = {createDBText.helpClassName}>
-                    {meta.help} 
-                </p>
+                <><HelpCowDuck text={meta.help} id={meta.label}/>
+               { /*<p className = {createDBText.helpClassName}>
+                    {meta.help}
+                </p>*/}</>
             )
         }
         return null
@@ -249,7 +251,13 @@ const CreateDB = (props) => {
         let y =  generateFieldInput(field_id, meta)
         let z =  generateFieldPrompt(field_id, meta)
         return (
-            <span class='form-field'>{x}{y}{z}</span>
+            <span class='form-field'>
+                <span className="d-fl">
+                    <Col md={10} className="mb-10">{x}</Col>
+                    <Col md={2} className="mb-2 adjust-help-text">{z}</Col>
+               </span>
+               {y}
+            </span>
         )
     }
 
@@ -267,7 +275,7 @@ const CreateDB = (props) => {
         }
         return (
             <Container>
-                {sec.name && 
+                {sec.name &&
                     <span class='form-section-header'>{sec.name}</span>
                 }
                 {fields}
@@ -279,39 +287,39 @@ const CreateDB = (props) => {
     }
     return (<>
             <hr className = "my-space-15"/>
-			{isObject(rep) && 
+			{isObject(rep) &&
                 <APIUpdateReport error = { rep.error } message={rep.message} status={rep.status} time={rep.time}/>
             }
             { loading && <Loading /> }
             {show && <form onSubmit={handleSubmit(onSubmit) }>
-                {generateSection("details")}            	
+                {generateSection("details")}
 				 <hr className = "my-space-15"/>
                  <span className={createDBText.advancedWrapperClassName}>
-                    {!advancedSettings && 
-                        <button className={createDBText.advancedButtonClassName} 
+                    {!advancedSettings &&
+                        <button className={createDBText.advancedButtonClassName}
                         onClick={handleAdvancedSettings}>
                             {createDBText.showAdvanced}
                             {advancedIcon()}
                         </button>
                     }
-                    {advancedSettings && 
-                        <button className={createDBText.advancedButtonClassName} 
+                    {advancedSettings &&
+                        <button className={createDBText.advancedButtonClassName}
                             onClick={handleHideAdvancedSettings}>
                                 {createDBText.hideAdvanced}
                                 {advancedIcon()}
                         </button>
                     }
                  </span>
-                {advancedSettings && 
+                {advancedSettings &&
                     <div className={createDBText.advancedSectionClassName}>
                         <hr className = "my-space-15"/>
-                        {generateSection("advanced")}            	
+                        {generateSection("advanced")}
                     </div>
                 }
                 <button type="submit" className={createDBText.createButtonClassName}>
                     {createDBText.createButtonText}
                 </button>
-            </form>}            
+            </form>}
           </>)
 }
 

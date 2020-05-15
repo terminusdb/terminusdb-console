@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, CardTitle, CardText, CardImg, ButtonGroup } from "reactstrap";
-import { createDatabaseLabels } from '../../variables/content'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CREATE_DATABASE_TAB, CLONE_LOCAL_DB_TAB, CLONE_REMOTE_DB_TAB } from "../../labels/tabLabels"
 import CloneLocalDB from "./CloneLocalDB"
@@ -52,19 +51,21 @@ const CreateDatabase = (props) => {
 		<Container fluid className="h-100 pl-0 pr-0">
 			<Container className="flex-grow-1">
 		        <hr className = "my-space-50"/>
-				{(page == view.CREATE_VIEW) && <span className="d-fl">
-					<Col md={6} className="col-md-6">
-						<Card body outline color="info" onClick={handleCreate} className="db-view-cards">
-							<DatabaseCard card = {createDbCard.create}/>
-						</Card>
-					</Col>
+				{(page == view.CREATE_VIEW) && <>
+					<Crumbs/>
+					<span className="d-fl">
+						<Col md={6} className="col-md-6">
+							<Card body outline color="info" onClick={handleCreate} className="db-view-cards">
+								<DatabaseCard card = {createDbCard.create}/>
+							</Card>
+						</Col>
 
-					<Col md={6} className="col-md-6">
-						<Card body outline color="info" onClick={handleCopy} className="db-view-cards">
-							<DatabaseCard card = {createDbCard.copy}/>
-						</Card>
-					</Col>
-				</span>}
+						<Col md={6} className="col-md-6">
+							<Card body outline color="info" onClick={handleCopy} className="db-view-cards">
+								<DatabaseCard card = {createDbCard.copy}/>
+							</Card>
+						</Col>
+				</span></>}
 
 				{(page == view.CREATE_OPTIONS) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},

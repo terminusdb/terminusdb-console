@@ -20,9 +20,12 @@ export const Crumbs = (props) => {
     })
 
 
-    return (
-        <ButtonGroup className={'crumbs-button-group'}>
+    return (<>
+        {isArray(list) && <ButtonGroup className={'crumbs-button-group'}>
             {list}
-        </ButtonGroup>
+        </ButtonGroup>}
+        {!isArray(list) && <ButtonGroup className={'crumbs-button-group'}>
+        </ButtonGroup>}
+        </>
     )
 }
