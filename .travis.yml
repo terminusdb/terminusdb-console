@@ -15,7 +15,7 @@ jobs:
   include:
     - stage: build_dev
       before_install:
-        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > .npmrc
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       install:
         - npm i
       script:
@@ -23,7 +23,7 @@ jobs:
 
     - stage: deploy_dev
       before_install:
-        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > .npmrc
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       install:
         - npm i
       script:
