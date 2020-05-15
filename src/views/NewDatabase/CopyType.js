@@ -4,29 +4,26 @@ import CloneLocalDB from "./CloneLocalDB"
 import CloneRemoteDB from "./CloneRemoteDB"
 import { copyDbCardTypes } from "../../variables/formLabels"
 import { DatabaseCard } from "../../components/Card/DatabaseCard"
+import * as view from "../../labels/createView"
 
+/** fork and clone logic not included **/
 export const CopyType = (props) => {
-    const [show, setShow] = useState(true);
-    const [fork, setFork] = useState(false);
-    const [clone, setClone] = useState(false);
-    const [next, setNext] = useState(false);
+    const setPage = props.setPage;
     const local = props.local || false;
     const remote = props.remote || false;
 
     const handleClone = () => {
-        setClone(true)
-        setShow(false)
-        setNext(true)
+        if(local) setPage(view.CLONE_LOCAL)
+        if(remote) setPage(view.CLONE_REMOTE)
     }
 
     const handleFork = () =>{
-        setFork(true)
-        setShow(false)
-        setNext(true)
+        if(local) setPage(view.CLONE_LOCAL)
+        if(remote) setPage(view.CLONE_REMOTE)
     }
 
     return (<>
-             {show &&  <>
+             {<div className="card-grid">
                  <span className="d-fl">
                     <Col md={6} className="col-md-6">
                         <Card body outline color="info" onClick={handleFork} className="db-view-cards">
@@ -39,10 +36,7 @@ export const CopyType = (props) => {
                         <DatabaseCard card = {copyDbCardTypes.clone}/>
                     </Card>
                 </Col>
-            </span> </>}
-
-           {next && local && <CloneLocalDB fork = { fork }/>}
-           {next && remote && <CloneRemoteDB clone = { clone }/>}
+            </span> </div>}
 
         </>
     )

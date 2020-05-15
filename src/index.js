@@ -1,7 +1,7 @@
 //export { ChartComponent } from './ChartComponent';
-import "./index.css";
+import "./css/index.css";
 import "./css/main.css"
-import "./App.css";
+import "./css/App.css";
 export {Auth0Provider, useAuth0} from "./react-auth0-spa";
 export history from "./utils/history";
 export PrivateRoute from "./components/PrivateRoute";

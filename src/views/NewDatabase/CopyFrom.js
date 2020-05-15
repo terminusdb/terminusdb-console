@@ -3,28 +3,28 @@ import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
 import { CopyType } from "./CopyType"
 import { copyDbCardOptions } from "../../variables/formLabels"
 import { DatabaseCard } from "../../components/Card/DatabaseCard"
+import * as view from "../../labels/createView"
 
 export const CopyFrom = (props) => {
-    const [show, setShow] = useState(true);
-    const [local, setLocal] = useState(false);
-    const [remote, setRemote] = useState(false);
-    const [showType, setShowType] = useState(false);
+    const setPage = props.setPage;
+    const setLocal = props.setLocal;
+    const setRemote = props.setRemote
 
     const handleLocal = () => {
         setLocal(true)
-        setShow(false)
-        setShowType(true)
+        setRemote(false)
+        setPage(view.COPY_TYPES)
     }
 
     const handleRemote = () => {
         setRemote(true)
-        setShow(false)
-        setShowType(true)
+        setLocal(false)
+        setPage(view.COPY_TYPES)
     }
 
     return (
         <>
-         {show && <>
+         {<div className="card-grid">
              <span className="d-fl">
                 <Col md={6} className="col-md-6">
                     <Card body outline color="info" onClick={handleLocal} className="db-view-cards">
@@ -39,9 +39,7 @@ export const CopyFrom = (props) => {
                 </Col>
 
             </span>
-    </>}
-
-    {showType && <CopyType remote = { remote } local = { local }/>}
+    </div>}
 
     </>)
 }
