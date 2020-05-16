@@ -94,16 +94,23 @@ export const CreateGraph = ({onCancel, onCreate}) => {
         </strong>)
     }
 
+    function showSubmitPane(){
+        return (
+            <button type="cancel" className={createGraphText.cancelButtonClassName}>
+                {createGraphText.cancelButtonText}
+            </button><span style={{"padding-right": 10}}>&nbsp;</span>
+            <button type="submit" className={createGraphText.createButtonClassName}>
+                    {createGraphText.createButtonText}
+            </button>
+        )
+    }
+
+
 
     return (<form onSubmit={handleSubmit(onSubmit) }>
         <Container>
             <Row>
-                <button type="cancel" className={createGraphText.cancelButtonClassName}>
-                        {createGraphText.cancelButtonText}
-                </button><span style={{"padding-right": 10}}>&nbsp;</span>
-                <button type="submit" className={createGraphText.createButtonClassName}>
-                        {createGraphText.createButtonText}
-                </button>
+                {showSubmitPane()}
             </Row>
             <Row>
                 <Col>{typeField}</Col><Col>{idField}</Col>
