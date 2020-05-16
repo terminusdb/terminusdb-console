@@ -15,7 +15,6 @@ const App = (props) => {
 
   
   return (
-
         <HashRouter history={consoleLib.history}>
             <Switch>
                 <Route path = "/" exact component = {consoleLib.ServerHome} />

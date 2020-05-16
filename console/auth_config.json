@@ -1,4 +1,5 @@
 {
   "domain": "terminushub.eu.auth0.com",
-  "clientId": "MJJndGp0zUdM7o3POTQPmRJImY2ho0ai"
+  "clientId": "MJJndGp0zUdM7o3POTQPmRJImY2ho0ai",
+  "audience": "https://terminushub/registerUser" 
 }
