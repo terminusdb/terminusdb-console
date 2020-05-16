@@ -31,14 +31,14 @@ export const OWL = (props) => {
     }, [props.graph])
 
     function updateSchema(contents, commitmsg){
-        let ts = Date().now()
+        let ts = Date.now()
         setUpdateSuccess(false)
         woqlClient.updateTriples(filter.type, filter.gid, contents, commitmsg)
         .then((cresults) => {
             setEdit(false)
             setDataProvider(contents);
             setEmpty(contents == "") 
-            setUpdateSuccess(Date().now() - ts)
+            setUpdateSuccess(Date.now() - ts)
         })
         .catch((e) => {
             setError({type: "update", error: e})
