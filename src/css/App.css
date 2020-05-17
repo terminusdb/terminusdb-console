@@ -1736,3 +1736,145 @@ div.commit-view-message {
 
 .history-navigator-icon-left {
 }
+
+
+/*
+    This section relates to the form components
+    export const REQUIRED_FIELD_CSS = "tcf-required"
+export const FORM_CONTAINER_CSS = "tcf-container"
+export const FORM_SECTION_CSS = "tcf-section"
+export const SECTION_TITLE_CSS = "tcf-section-title"
+export const SUBMIT_SECTION_CSS = "tcf-submit-section"
+export const BUTTONS_CONTAINER_CSS = "tcf-buttons-container"
+export const SUBMIT_CSS = "tcf-submit btn-primary"
+export const CANCEL_CSS = "tcf-cancel"
+export const LABEL_CSS = "tcf-label"
+export const ERROR_MESSAGE_CSS = "tcf-error"
+export const FORM_FIELD_CSS = "tcf-form-field"
+export const HELP_ROW_CSS = "tcf-help-row"
+export const PROMPT_ROW_CSS = "tcf-prompt-row"
+export const INPUT_ROW_CSS = "tcf-input-row"
+export const INPUT_GUTTER_CSS = "tcf-input-gutter"
+export const ERROR_ROW_CSS = "tcf-error-row"
+export const INPUT_CSS = "tcf-input"
+export const SELECT_CSS = "tcf-select"
+export const TEXTAREA_CSS = "tcf-textarea"
+export const CHECKBOX_CSS = "tcf-checkbox"
+export const CHECKBOX_WRAPPER_CSS = "tcf-checkbox-wrapper"
+export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
+*/
+
+.tcf-required {
+    color: #bf1650;
+    font-size: 1.6rem;
+}
+
+.tcf-container {
+    border: 2px solid blue;
+    padding: 2px;
+}
+
+.tcf-section {
+    border: 2px solid yellow;
+    padding: 2px;
+}
+
+.tcf-section-title {
+    color: green;
+}
+
+.tcf-submit-section {
+    width: 100%;
+}
+
+.tcf-buttons-container {
+    float: right;
+    padding: 0 6px;
+    border: 2px solid red;
+}
+
+.tcf-label {
+    line-height: 2;
+    text-align: left;
+    display: block;
+    margin-bottom: 12px;
+    margin-top: 20px;
+    color: #000;
+    font-size: 1.2em;
+    font-weight: 200;
+}
+
+.tcf-error {
+   color: #bf1650;
+}
+
+.tcf-error::before {
+    display: inline;
+    content: "⚠ ";
+}
+
+.tcf-form-field {
+    border: 1px solid orange;
+}
+
+.tcf-help-row {
+    background-color: gray;
+}
+ 
+.tcf-input-row {
+    background-color: blue;
+}
+
+.tcf-input-gutter {
+    background-color: orange;
+    width: 30px;
+}
+
+.tcf-error-row {
+    background-color: yellow;
+}
+
+.tcf-submit:before {
+    display: inline;
+    content: "⚠ ";
+}
+
+.tcf-cancel:before {
+    display: inline;
+    content: "⚠ ";
+}
+
+.tcf-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #000;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.tcf-select {
+    margin-top: 30px;
+    padding-right: 0px;
+}
+
+.tcf-textarea {
+    padding: 4px;
+}
+
+.tcf-checkbox {
+    font-size: 2em;
+}
+.tcf-checkbox-wrapper {
+    display: inline-block;
+    padding-right: 12px;
+    font-size: 1.4rem;
+    padding-bottom: 8px;
+
+}
+.tcf-checkbox-label {
+    width: 250px;
+    display: inline-block;
+    padding-left: 1rem;
+}
