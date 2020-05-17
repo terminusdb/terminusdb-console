@@ -21,6 +21,7 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
   
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 
+
     const [showLanguage, setShowLanguage] = useState(false);   
     const [showContent, setShowContent] = useState("");
     /*
@@ -42,7 +43,7 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
                     <QueryEditor 
                         baseLanguage={baseLanguage} setBaseLanguage={setBaseLanguage}
                         content={content}
-                        setContent={setContent}
+                        saveContent={setContent}
                         showLanguage={showLanguage}
                         setShowLanguage={setShowLanguage}
                         showContent={showContent}

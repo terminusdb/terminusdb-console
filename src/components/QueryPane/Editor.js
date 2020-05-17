@@ -7,9 +7,7 @@ require('codemirror/mode/python/python.js');
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import * as tag from "../../labels/tags"
 
-
 export const CodeViewer = ({text, language}) => {
-
     function getThemeForViewer(lang){
         return "mdn-like"
     }
@@ -21,7 +19,6 @@ export const CodeViewer = ({text, language}) => {
         noHScroll: false,
         theme: theme,
         readOnly: "nocursor",
-        className: "readOnly",
         lineNumbers: true
     }
     if(language == "json") cmoptions['jsonld'] = true
@@ -39,7 +36,8 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
         mode: language,
         noHScroll: false,
         theme: theme,
-        lineNumbers: true
+        lineNumbers: true,
+        autoCursor:false
     }
     if(language == "json"){
         cmoptions['json'] = true
@@ -50,8 +48,8 @@ export const CodeEditor = ({text, language, onChange, onBlur}) => {
         onChange={(editor, data, value) => {
             if(onChange) onChange(value);
         }}
-        onBlur={(editor, data, value) => {
-            if(onBlur) onBlur();
+        onBlur={(editor, data) => {
+            if(onBlur) onBlur(editor.doc.getValue());
         }}
     />
     )
