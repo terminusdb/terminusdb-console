@@ -10,7 +10,7 @@ import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"
 import * as reportAlert from "../../labels/reportLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { HelpCowDuck } from "../../components/HelpCowDuck"
+import { HelpCowDuck } from "../../components/Reports/HelpCowDuck"
 
 const CreateDB = (props) => {
     let initconfig = props.dbInfo;

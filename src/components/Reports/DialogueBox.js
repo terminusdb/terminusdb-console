@@ -1,18 +1,15 @@
 import React from "react";
-import { Col, Card, CardTitle, CardText, CardImg } from "reactstrap";
-
-const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png"
-const bg = "https://assets.terminusdb.com/terminusdb-console/images/card-shape-3.svg"
+import { Card, CardTitle, CardText, CardImg } from "reactstrap";
+import {MASCOT, DIALOGUE_BACKGROUND } from "../../constants/images"
 
 export const DialogueBox = (props) => {
     const msg = props.message || "";
     const header = props.header || false;
-
     return (
         <Card body outline color="info">
             {header && <>
-                <div className='head-bg'><CardImg top width="70%" src={bg}/></div>
-                <CardImg top width="70%" src={mascotImg}/>
+                <div className='head-bg'><CardImg top width="70%" src={DIALOGUE_BACKGROUND}/></div>
+                <CardImg top width="70%" src={MASCOT}/>
                 <div className='head-t'>
                     <CardTitle>
                         <h1 className="d-head1"> { header } </h1>
@@ -21,7 +18,7 @@ export const DialogueBox = (props) => {
                 </div>
             </>}
             {!header && <>
-                <CardImg top width="70%" src={mascotImg}/>
+                <CardImg top width="70%" src={MASCOT}/>
                 <CardTitle> { msg } </CardTitle>
             </>}
         </Card>

@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Alert } from 'reactstrap';
-import { isObject } from "../../utils/helperFunctions"
-import * as tag from "../../labels/tags"
-import * as reportAlert from "../../labels/reportLabels"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {VIOLATION_DETECTED, VIOLATIONS_DETECTED} from "./constants"
+import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS, 
+    VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants"
 
 export const ViolationReport = ({violations, tone}) => {
     let vioBuff = violations.map((item) => {
@@ -13,7 +10,7 @@ export const ViolationReport = ({violations, tone}) => {
     let vcount = vioBuff.length + " " + (vioBuff.length > 1 ? {VIOLATIONS_DETECTED} : {VIOLATION_DETECTED})
     if(!vioBuff) return null    
     return (
-        <span className = "result-reports">
+        <span className = {VIOLATIONS_CSS}>
             <Alert color = {tone}>
                 <b>{vcount}</b>
                 {vioBuff}
@@ -22,7 +19,7 @@ export const ViolationReport = ({violations, tone}) => {
     )
 }
 
-const TerminusViolation = ({vio}) => {
+export const TerminusViolation = ({vio}) => {
     let vioParts = []
     let msg = false
     
@@ -36,7 +33,7 @@ const TerminusViolation = ({vio}) => {
         }
     }
     return (
-        <div key={item} className = "terminus-violation">
+        <div key={item} className={VIOLATION_CSS}>
             {msg &&
                 <strong>{msg}</strong>
             }
@@ -50,14 +47,15 @@ const ViolationProperty = ({property, value}) => {
     if(!mval) return null
     if(typeof mval == "object") mval = JSON.stringify(mval)
     return (
-        <span className="terminus-violation-property">
-            <label className="terminus-violation-property-label">{property}</label>
-            <span className="terminus-violation-property-value">{mval}</span>
+        <span className={VIOLATION_PROPERTY_CSS}>
+            <label className={VIOLATION_PROPERTY_LABEL_CSS}>{property}</label>
+            <span className={VIOLATION_PROPERTY_VALUE_CSS}>{mval}</span>
         </span>
     )
 }
 
 export const hasViolations = (err) => {
+    if(!err.data && err.response.data) err.data = err.response.data
     if(err.data && err.data['terminus:witnesses']){
         return true
     }
@@ -68,6 +66,7 @@ export const hasViolations = (err) => {
 }
 
 export const getViolations = (err) => {
+    if(!err.data && err.response.data) err.data = err.response.data
     if(err.data && err.data['terminus:witnesses']){
         return err.data['terminus:witnesses']
     }

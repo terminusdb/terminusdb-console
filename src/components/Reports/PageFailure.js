@@ -1,5 +1,5 @@
 import { DialogueBox } from "./DialogueBox"
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import {ViolationReport} from "./ViolationReport"
 

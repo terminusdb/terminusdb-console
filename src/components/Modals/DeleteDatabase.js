@@ -3,40 +3,34 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Row, Col, For
 import {deleteDatabaseLabels} from '../../variables/content'
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { ViolationReport } from "../../components/Reports/ViolationReport"
+import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
 import * as reportAlert from "../../labels/reportLabels"
-import history from '../../utils/history';
-import { isObject } from "../../utils/helperFunctions"
-import Loading from "../Loading";
+import {DELETE_ICON} from "../../constants/images"
+import { goServerHome } from '../Router/ConsoleRouter';
 
 const DeleteDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const { woqlClient } = WOQLClientObj();
-    const [dbId, setDbId] = useState(false);
-    const [rep, setReport] = useState({});
-    const [loading, setLoading] = useState(false)
-
+    const [rep, setReport] = useState();
     const [modal, setModal] = useState(props.modal);
-
     const toggle = () => setModal(!modal);
 
     const onDelete = (data) => {
-        setDbId(data.dbId)
+        if(data.dbId && data.dbId == woqlClient.db()){
+            woqlClient.deleteDatabase(data.dbId)
+            .then((cresults) => {
+                setLoading(false)
+                goServerHome()
+            })
+            .catch((err) => {
+                setReport({error: err, status: reportAlert.ERROR});
+            })
+        }
+        else {
+            setModal(false)
+            alert("Error - the database ID was incorrect")
+        }
     }
-
-    useEffect(() => {
-  	  if(dbId){
-  		  let acc = woqlClient.account() || woqlClient.uid();
-  		  woqlClient.deleteDatabase(dbId, acc)
-  		  .then((cresults) => {
-              setLoading(false)
-              history.replace('/home');
-  		  })
-  		  .catch((err) => {
-  			 setReport({error: err, status: reportAlert.ERROR});
-  		  })
-  	  }
-    }, [dbId]);
 
     return (
           <Modal isOpen={modal} toggle={toggle}>
@@ -44,8 +38,10 @@ const DeleteDatabase = (props) => {
             <ModalBody>
                   <Col md={12}>
                     <div className="del-mod">
-                        <img src="http://assets.terminusdb.com/terminusdb-console/images/delete.png" className="center"/>
-                        {isObject(rep) && <ViolationReport report = { rep }/>}
+                        <img src={DELETE_ICON} className="center"/>
+                        {rep && 
+                            <APIUpdateReport report = { rep }/>
+                        }
                         <form onSubmit={ handleSubmit(onDelete) }>
                             <input type="text" name="dbId" id="dbId"
                                 ref = { register({ validate: value => value.length > 0}) }/>

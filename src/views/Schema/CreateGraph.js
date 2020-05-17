@@ -96,12 +96,14 @@ export const CreateGraph = ({onCancel, onCreate}) => {
 
     function showSubmitPane(){
         return (
-            <button type="cancel" className={createGraphText.cancelButtonClassName}>
-                {createGraphText.cancelButtonText}
-            </button><span style={{"padding-right": 10}}>&nbsp;</span>
-            <button type="submit" className={createGraphText.createButtonClassName}>
+            <div class="some-submit-pane">
+                <button type="cancel" className={createGraphText.cancelButtonClassName}>
+                    {createGraphText.cancelButtonText}
+                </button><span style={{"padding-right": 10}}>&nbsp;</span>
+                <button type="submit" className={createGraphText.createButtonClassName}>
                     {createGraphText.createButtonText}
-            </button>
+                </button>
+            </div>
         )
     }
 
