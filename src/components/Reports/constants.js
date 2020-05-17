@@ -43,6 +43,7 @@ export const VIOLATION_PROPERTY_VALUE_CSS = "terminus-violation-property-value"
 export const COWDUCK_HELP_CSS = "help-text"
 export const COWDUCK_CANCEL_CSS = "cow-duck-help-cancel"
 export const COWDUCK_ICON_CSS = "cow-duck-help"
+export const COWDUCK_WRAPPER_CSS = "cow-duck-wrapper"
 
 export const SYSTEM_ERROR_CSS = "terminus-system-error"
 export const HIDE_ERROR_DETAILS = "Hide Details"

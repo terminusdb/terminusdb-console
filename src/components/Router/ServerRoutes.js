@@ -1,6 +1,6 @@
 import React from "react"
 import { Route, Switch } from "react-router-dom"
-import { SERVER_ROUTE, CREATE_DB_ROUTE  } from "./constants"
+import { SERVER_ROUTE, CREATE_DB_ROUTE  } from "../../constants/routes"
 import ServerHome from "../../views/ServerHome/ServerHome"
 
 

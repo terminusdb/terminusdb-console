@@ -7,7 +7,7 @@ import { getDBListData, getDBListColumns } from '../../utils/dataFormatter';
 import { PageView } from '../PageView'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import CreateDatabase from '../NewDatabase/CreateDatabaseView'
-import { CREATE_DB_ROUTE } from "../../components/Router/constants"
+import { CREATE_DB_ROUTE } from "../../constants/routes"
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();

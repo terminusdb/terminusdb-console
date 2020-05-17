@@ -1,18 +1,20 @@
-import React from 'react'
-import { useForm, handleSubmit, register } from 'react-hook-form'
+import React, {useState} from 'react'
+import { handleSubmit, register, errors, useForm } from 'react-hook-form'
 import { Container, Row, Col } from "reactstrap"
 import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, FORM_CONTAINER_CSS, FORM_SECTION_CSS, SECTION_TITLE_CSS,
          SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS, SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, 
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS, 
-         PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS,
-         SELECT_CSS, INPUT_CSS, TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS
+         PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS, 
+         TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS
         } from "./constants"
-
+import Select from "react-select";
+import { HelpCowDuck } from "../Reports/HelpCowDuck"
 /**
 * Library of Terminus Console (TC) form patterns
 */
 
 export const TCForm = ({onSubmit, className, children}) => {
+    const { handleSubmit } = useForm();
     className = className || FORM_CONTAINER_CSS
     return (
         <Container className={className}>
@@ -22,6 +24,34 @@ export const TCForm = ({onSubmit, className, children}) => {
         </Container>
     )
 }
+
+/*
+export const TCDropdown = ({onSubmit, className, trigger, children, expanded, dropdownClassName}) => {
+    const [isExpanded, setExpanded] = useState(expanded)
+    
+    let nutrigger = (
+        <span onClick={() => }></span>
+    )
+    trigger.onClick = 
+    dropdownClassName = dropdownClassName || BUTTONS_CONTAINER_CSS
+    return (
+        <TCForm onSubmit={onSubmit} className={className} >
+            {!isExpanded && 
+                <Container className={className}>
+                    <Row>
+                        <span className = {dropdownClassName}>
+                            {trigger}
+                        </span>
+                    </Row>
+                </Container>
+            }
+            {isExpanded && 
+                {children}
+            }
+        </TCForm>
+    )
+}
+*/
 
 export const TCFormSection = ({title, className, titleClassName, children}) => {
     className = className || FORM_SECTION_CSS
@@ -68,12 +98,11 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
 
 /**
  * Puts an input element into its position on the form by drawing all the stuff around it
- * @param {} param0 
  */
 
 export const TCFormField = ({field_id, mandatory, className, label, labelClassName, 
     help, helpRowClassName, helpClassName, promptRowClassName, inputRowClassName, inputGutterClassName,
-    cowDuckClassName, errorRowClassName, error, fieldErrorClassName, children}) => {
+    cowDuckClassName, cowDuckIconClassName, errorRowClassName, error, fieldErrorClassName, children}) => {
     
     /** Set Field Level Defaults - defaults for elements are set within elements */
     className =  className || FORM_FIELD_CSS 
@@ -82,7 +111,9 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
     inputRowClassName = inputRowClassName || INPUT_ROW_CSS
     inputGutterClassName = inputGutterClassName || INPUT_GUTTER_CSS
     errorRowClassName = errorRowClassName || ERROR_ROW_CSS
-    
+    cowDuckClassName = cowDuckClassName || COWDUCK_WRAPPER_CSS
+    cowDuckIconClassName = cowDuckIconClassName || COWDUCK_ICON_CSS
+
     const flab = (        
         <TCFieldLabel
             field_id={field_id}
@@ -104,6 +135,7 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
         cdhelp = (
             <HelpCowDuck 
                 className={cowDuckClassName} 
+                iconClassName = {cowDuckIconClassName}
                 message={help}
                 field_id={field_id} 
             />
@@ -129,10 +161,12 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
                     </Row>
                 }
                 <Row className={inputRowClassName}>
-                    {children}
-                    <span className={inputGutterClassName} >
+                    <Col>
+                        {children}
+                    </Col>
+                    <Col md={{ size: 'auto'}} className={inputGutterClassName} >
                         {cdhelp}
-                    </span>
+                    </Col>
                 </Row>
                 <Row className={errorRowClassName}>
                     <TCFieldErrors 
@@ -146,8 +180,17 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
     )
 }
 
+export const TCFieldHelp = ({field_id, message, className}) => {
+    className = className || HELP_CSS
+    return (
+        <span className={className} id={field_id+"_help"}>
+            {message} 
+        </span>
+    )
+}
 
-export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryClassName, mandatoryTitle, mandatoryMarker}) => {
+
+export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryClassName, mandatoryTitle}) => {
     className = className || LABEL_CSS
     return (
         <label className={className} htmlFor={field_id}>
@@ -155,7 +198,6 @@ export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryCl
             {mandatory && 
                 <TCMandatory 
                     className={mandatoryClassName}
-                    marker={mandatoryMarker}
                     title={mandatoryTitle}
                 />
             }                 
@@ -163,18 +205,18 @@ export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryCl
     )
 }
 
-export const TCMandatory = (className, marker, title) => {
+export const TCMandatory = (className, title) => {
     className = className || REQUIRED_FIELD_CSS 
     title = title || REQUIRED_FIELD
-    marker = marker || "*"
     return (
         <strong title={title} className={className}>
-            {marker} 
+            *
         </strong>
     )
 }
 
 function TCFieldErrors(field_id, error, className){
+    const { errors } = useForm();
     className = className || ERROR_MESSAGE_CSS 
     error = error || REQUIRED_FIELD_ERROR
     if(errors[field_id]){
@@ -205,6 +247,7 @@ export const TCFormInput = ({field_id, value, mandatory, validate, onChange, pla
 }
 
 const _makeStrRef = (mandatory, validate) => {
+    const { register } = useForm();
     let ref = register
     if(mandatory){
         ref = register({ validate: value => value.length > 0})
@@ -252,12 +295,12 @@ export const TCFormSelect = ({field_id, onChange, className, options, placeholde
 
 
 export const TCFormCheckbox = ({field_id, onChange, className, label, checked, mandatory, wrapperClassName, labelClassName}) =>    {
-    placeholder = placeholder || ""
     className = className || CHECKBOX_CSS
     checked = checked || false
     onChange = onChange || function(){}
     wrapperClassName = wrapperClassName || CHECKBOX_WRAPPER_CSS
     labelClassName = labelClassName || CHECKBOX_LABEL_CSS
+    const { register } = useForm();
     let ref = register
     if(mandatory){
         ref = register({ validate: value => value})

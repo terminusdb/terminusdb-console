@@ -1,7 +1,8 @@
 import React from "react"
 import { Route, useRouteMatch, Switch } from "react-router-dom"
 import DatabaseHome from "../../views/DatabaseHome/DatabaseHome"
-import {DB_COLLABORATE, DB_MANAGE} from "./constants"
+import {DB_COLLABORATE, DB_MANAGE} from "../../constants/routes"
+
 
 export const DBHomeRoutes = () => {
     let { path } = useRouteMatch();

@@ -5,6 +5,8 @@ import { createGraphText } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import Select from "react-select";
+import {TCFormSubmits, TCForm, TCFormInput, TCFormField, TCFormSelect, TCFormCheckbox, TCFormTextarea} from  "../../components/Form/FormComponents"
+ 
 
 export const CreateGraph = ({onCancel, onCreate}) => {
 
@@ -107,18 +109,37 @@ export const CreateGraph = ({onCancel, onCreate}) => {
         )
     }
 
-
-
-    return (<form onSubmit={handleSubmit(onSubmit) }>
-        <Container>
-            <Row>
-                {showSubmitPane()}
-            </Row>
-            <Row>
-                <Col>{typeField}</Col><Col>{idField}</Col>
-            </Row>
-        </Container>
-    </form>)
+    //export const TCFormField = ({field_id, mandatory, className, label, labelClassName, 
+    //    help, helpRowClassName, helpClassName, promptRowClassName, inputRowClassName, inputGutterClassName,
+    //    cowDuckClassName, errorRowClassName, error, fieldErrorClassName, children}) => {
+    return (
+        <Col>
+            <TCForm onSubmit={onSubmit} >
+                <TCFormSubmits /> 
+                <Row>
+                    <Col>
+                        <TCFormField field_id="xyz" mandatory label="XYZ Yeah" help="Team America">
+                            <TCFormInput />
+                        </TCFormField>
+                    </Col>
+                    <Col>
+                        <TCFormField field_id="zpc" mandatory label="x" help="whoops">
+                            <TCFormSelect options={[{label: "a", value: "b"}]} />
+                        </TCFormField>
+                    </Col>
+                    <Col>
+                        <TCFormField field_id="zpc" mandatory label="x" help="whoops">
+                            <TCFormCheckbox />
+                        </TCFormField>
+                    </Col>
+                </Row>
+                <Row>
+                    <TCFormField field_id="zc" mandatory label="x" help="whoops">
+                        <TCFormTextarea />
+                    </TCFormField>
+                </Row>
+            </TCForm>
+        </Col>
+    )
 }
-
 

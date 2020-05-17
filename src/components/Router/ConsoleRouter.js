@@ -1,6 +1,6 @@
 import React from 'react'
 import { createHashHistory } from "history"
-import { ROUTER_TYPE, DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE } from "./constants"
+import { DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE } from "../../constants/routes"
 import { HashRouter, Switch, Route } from "react-router-dom";
 import { DBRoutes } from "./DBRoutes"
 import { ProfileRoutes } from "./ProfileRoutes"

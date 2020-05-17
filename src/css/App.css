@@ -1844,6 +1844,10 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
     content: "⚠ ";
 }
 
+.tcf-help {
+    background-color: #ff8;
+}
+
 .tcf-input {
     display: block;
     box-sizing: border-box;
@@ -1877,4 +1881,12 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
     width: 250px;
     display: inline-block;
     padding-left: 1rem;
+}
+
+.tcf-cow-duck-icon {
+
+}
+
+.tcf-cow-duck-wrapper {
+
 }
