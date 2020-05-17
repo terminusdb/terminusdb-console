@@ -10,38 +10,12 @@ import { commitBox } from "../../variables/formLabels"
 /**
  * Controls the display of query viewer and editor
  */
-export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, setContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, className, submit,updateQuery}) => {
+export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, className, submit,updateQuery}) => {
     const qeclass = className || 'terminus-query-editor'
     editable = typeof editable != "undefined" ? editable : true 
     submit = submit || QUERY_SUBMIT
      
-     /*
-    * origin base language this is the language that I can edit 
-    */
-    //const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
-    /*
-    * if we have a start query or a start queryText for the editor and the startLanguage for the query
-    */
-    //let initcontent = content || "" 
-    //if(!content && query){
-        //initcontent = makeWOQLIntoString(query, baseLanguage)
-    //}
-
-    /*
-    *onChange will be update
-    */
-    // const [content, setContent] = useState(initcontent);
-
-    
-    /*
-    *show language is the language selected 
-    */
-   // const [showLanguage, setShowLanguage] = useState(false);   
-
-  //  const [showContent, setShowContent] = useState("");
-    
-    
-    
+    //const [content, setContent] = useState(initcontent);
     /*
     * if is edit mode and the query is an update query
     */
@@ -51,12 +25,18 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, setC
 
     const [commitMsg, setCommitMsg] = useState();
 
+    function onBlur(value){
+        //const value=editor.doc.getValue();
+        saveContent(value);
+        return checkContent()
+    }
+
 
     /*
     * onBlur
     */
-    function checkContent(){
-        //sets errors internally if doesn't work
+    function checkContent(){        
+        //sets errors internally if doesn't work       
         setError(false)
         if(content){
             let woql = makeWOQLFromString(content, baseLanguage)
@@ -78,11 +58,13 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, setC
         }
     }
 
+    //let currentCont=''
 
-    function updateContent(cont){
-        setContent(cont)
+    /*function updateContent(cont){
+        //setContent(cont)
+        //currentCont=cont;
         setError(false)
-    }
+    }*/
 
     /*
     * change the current editable language
@@ -162,7 +144,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, setC
         </div>
 
         {(!showLanguage && editable) && 
-            <CodeEditor onChange={updateContent} onBlur={checkContent} text={content} language={baseLanguage}/>
+            <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
         }
 
         {!editable && !showLanguage &&  
