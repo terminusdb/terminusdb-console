@@ -5,7 +5,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { commitBox } from "../../variables/formLabels"
-
+import {queryEditorLabel} from "../../variables/content"
 
 /**
  * Controls the display of query viewer and editor
@@ -164,7 +164,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         }   
 
         {(editable && error) &&  
-            <Alert color="warning">Parse error: syntax error, please check your woql query</Alert>
+            <Alert color="warning">{queryEditorLabel.syntaxErrorMessage}</Alert>
         }      
         </Container>
     )
