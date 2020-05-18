@@ -3,8 +3,12 @@ import { Button, Container, Row, Col } from "reactstrap"
 import RenderTable from "../../components/Table/RenderTable"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import Loading from "../../components/Loading";
-import { createGraphText } from "../../variables/formLabels"
 import { CreateGraph } from "./CreateGraph"
+import { CREATE_GRAPH_FORM, DELETE_ICON_CSS } from "./constants"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
+import {DELETE_ICON} from "../../constants/images"
+import {APIUpdateReport} from "../../components/Reports/APIUpdateReport"
+
 
 export const GraphMaker = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -13,15 +17,24 @@ export const GraphMaker = (props) => {
     const [dataProvider, setDataProvider] = useState(graphToTable(props.graphs))
     const [creating, setCreating] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [updateSuccess, setUpdateSuccess] = useState()
+    const [updateError, setUpdateError] = useState()
 
     function getDeleteButton(type, id){
-        return (<Button onClick={function(){submitDelete(type, id)}}>Delete</Button>)
+        return (
+            <img 
+                className={DELETE_ICON_CSS}
+                src={DELETE_ICON} 
+                onClick={function(){submitDelete(type, id)}}
+             />
+        )
     }
 
-    function submitDelete(type, id){
+    function submitDelete(type, id, commit){
         if(type && id){
             setLoading(true)
-            woqlClient.deleteGraph(type, id, "Graph Deleted with Command in Console")
+            commit = (commit ? commit : "") + CREATE_GRAPH_FORM.graphDeletedLocation  
+            woqlClient.deleteGraph(type, id, commit)
             .then(() => {
                 setLoading(false)
                 alert("Need to rebuild the graph filter and delete the graph from the list")
@@ -34,19 +47,28 @@ export const GraphMaker = (props) => {
         alert("Deleting " + type + id)
     }
 
-    function submitCreate(newID, newType){
+    function submitCreate(newID, newType, commit){
         if(newID && newType){
+            setUpdateError(false)
+            setUpdateSuccess(false)
+            commit = (commit ? commit : "") + " " + newType + "/" + newID + " " + CREATE_GRAPH_FORM.graphCreatedLocation
             setLoading(true)
-            woqlClient.createGraph(newType, newID, "Graph Created with Command in Console")
+            let start = Date.now()
+            woqlClient.createGraph(newType, newID, commit)
             .then(() => {
                 setLoading(false)
-                alert("Need to rebuild the graph filter and add the graph to the list")
+                let message = CREATE_GRAPH_FORM.createSuccess + " (" + newType + "/" + newID + ")"
+                let t =  ((Date.now() - start )/ 1000) + " seconds"
+                setUpdateSuccess({message: message, status: TERMINUS_SUCCESS, time: t})
+                setCreating(false)
             })
             .catch((e) => {
                 setLoading(false)
-                //setError(e)
+                let t =  ((Date.now() - start )/ 1000) + " seconds"
+                let message = CREATE_GRAPH_FORM.createFailure
+                setUpdateError({message: message, error: e, status: TERMINUS_ERROR, time: t})
             })
-        }
+        }  
     }
 
     function showCreate(){
@@ -91,22 +113,23 @@ export const GraphMaker = (props) => {
         return {columnData:formatData(graphs), columnConf:formatColumns(graphs)}
     }
 
+    function setEditing(){
+        setCreating(true)
+        setUpdateSuccess(false)
+    }
+
     return (
         <Container>
             {(loading || !dataProvider) && 
                 <Loading />
             }
-            {(!loading && canCreateGraph && !creating) && 
-                <Row>
-                    <button onClick={showCreate} className={createGraphText.createButtonClassName}>
-                        {createGraphText.createButtonText}
-                    </button>
-                </Row>
+            {canCreateGraph && 
+                <CreateGraph report={updateError} visible={creating} onCreate={submitCreate} onEdit={setEditing} onCancel={() => setCreating(false)} />
             }
-            {creating && 
-                <CreateGraph onCancel={() => setCreating(false)} onCreate={submitCreate} />
+            {updateSuccess && 
+                <APIUpdateReport message={updateSuccess.message} status={updateSuccess.status} time={updateSuccess.time}/>
             }
-            {!(creating && dataProvider) && 
+            {(!creating && dataProvider) && 
                 <RenderTable dataProvider = {dataProvider}/>
             }
         </Container>

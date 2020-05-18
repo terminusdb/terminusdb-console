@@ -23,9 +23,9 @@ export const SystemError = ({error}) => {
             {detmsg}
             <span onClick={toggleFull} className={SHOW_ERROR_DETAILS_CSS}>{show_hide}</span>
             {showFull && 
-                <Container>
+                <pre>
                     {JSON.stringify(error, false, 2)}
-                </Container>
+                </pre>
             }
         </span>
     )

@@ -3,7 +3,7 @@ import { Alert, Container } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
 import { RESULT_REPORT_CSS } from "./constants"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING} from "../../constants/identifiers"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "../../constants/faicons"
 
@@ -19,34 +19,44 @@ export const APIUpdateReport = ({status, message, time, error}) => {
             {(status == TERMINUS_ERROR) &&
                 <APIUpdateError message={message} time={time} error={error} />
             }
+            {(status == TERMINUS_INFO) &&
+                <APIUpdateInfo message={message} />
+            }
         </Container>
     )
 }
 
+const APIUpdateInfo = ({message}) => {
+    return (
+        <Alert color="info">
+            <span className={ RESULT_REPORT_CSS }>
+                {message}
+            </span>
+        </Alert>
+    )
+}
+
 const APIUpdateSuccess  = ({message, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
         <Alert color="success">
             <FontAwesomeIcon icon={icons.CHECK} className="mr-3"/>
             <span className={RESULT_REPORT_CSS}>
-                {message}
-                {time &&  
-                    ({time})
-                }
+                {txt}
             </span>
         </Alert>
     )
 }
 
 const APIUpdateWarning = ({message, error, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
+
     let vios = hasViolations(error)
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
             <span className={RESULT_REPORT_CSS}>
-                {message}
-                {time &&  
-                    ({time})
-                }
+                {txt}
             </span>
             {vios && 
                 <ViolationReport violations={getViolations(error)} />
@@ -65,14 +75,12 @@ const APIUpdateError = ({message, error, time}) => {
 }
 
 const APIInputError = ({message, violations, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
             <span className={RESULT_REPORT_CSS}>
-                {message}
-                {time &&  
-                    ({time})
-                }
+                {txt}
             </span>
             <ViolationReport violations={violations} tone="warning"/>
         </Alert>
@@ -80,14 +88,12 @@ const APIInputError = ({message, violations, time}) => {
 }
 
 const APISystemError = ({message, error, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
     <Alert color="danger">
         <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>
         <span className={RESULT_REPORT_CSS}>
-            {message}
-            {time &&  
-                ({time})
-            }
+            {txt}
         </span>
         <SystemError error={error} />
     </Alert>)

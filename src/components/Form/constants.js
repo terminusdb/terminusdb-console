@@ -1,8 +1,9 @@
+//strings
 export const REQUIRED_FIELD = "Required Field"
 export const CANCEL_TEXT = "Cancel"
 export const SUBMIT_TEXT = "Submit"
 export const REQUIRED_FIELD_ERROR = "Missing data - you must complete this field"
-
+//css
 export const REQUIRED_FIELD_CSS = "tcf-required"
 export const FORM_CONTAINER_CSS = "tcf-container"
 export const FORM_SECTION_CSS = "tcf-section"
@@ -26,3 +27,12 @@ export const CHECKBOX_CSS = "tcf-checkbox"
 export const CHECKBOX_WRAPPER_CSS = "tcf-checkbox-wrapper"
 export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
 export const HELP_CSS = "tcf-help"
+export const COWDUCK_WRAPPER_CSS = "tcf-cowduck-wrapper"
+export const COWDUCK_ICON_CSS = "tcf-cowduck-icon"
+export const INTERNAL_COL_CSS = "tcf-internal-col"
+export const INTERNAL_ROW_CSS = "tcf-internal-row"
+export const INPUT_COL_CSS = "tcf-internal-row"
+export const HELP_COL_CSS = "tcf-help-col"
+export const HELP_LABEL_COL_CSS = "tcf-help-label-col"
+export const INVISIBLE_HELP_CSS = "tcf-help-hidden"
+export const ILLEGAL_ID_ERROR = "Illegal Characters in graph id - you cannot use space, colon or slash characters in ids"

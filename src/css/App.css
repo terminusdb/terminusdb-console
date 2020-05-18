@@ -438,8 +438,15 @@ p.create-form-helptext {
    color: #555;
 }
 
+.advanced-button {
+    float: left !important;
+} 
+
 .advanced-settings-create-form {
-    float: left;
+    margin-top: -40px;
+    width: 100%;
+    display: block;
+    height: 50px;
 }
 
 p.create-form-helptext::before {
@@ -1740,28 +1747,7 @@ div.commit-view-message {
 
 /*
     This section relates to the form components
-    export const REQUIRED_FIELD_CSS = "tcf-required"
-export const FORM_CONTAINER_CSS = "tcf-container"
-export const FORM_SECTION_CSS = "tcf-section"
-export const SECTION_TITLE_CSS = "tcf-section-title"
-export const SUBMIT_SECTION_CSS = "tcf-submit-section"
-export const BUTTONS_CONTAINER_CSS = "tcf-buttons-container"
-export const SUBMIT_CSS = "tcf-submit btn-primary"
-export const CANCEL_CSS = "tcf-cancel"
-export const LABEL_CSS = "tcf-label"
-export const ERROR_MESSAGE_CSS = "tcf-error"
-export const FORM_FIELD_CSS = "tcf-form-field"
-export const HELP_ROW_CSS = "tcf-help-row"
-export const PROMPT_ROW_CSS = "tcf-prompt-row"
-export const INPUT_ROW_CSS = "tcf-input-row"
-export const INPUT_GUTTER_CSS = "tcf-input-gutter"
-export const ERROR_ROW_CSS = "tcf-error-row"
-export const INPUT_CSS = "tcf-input"
-export const SELECT_CSS = "tcf-select"
-export const TEXTAREA_CSS = "tcf-textarea"
-export const CHECKBOX_CSS = "tcf-checkbox"
-export const CHECKBOX_WRAPPER_CSS = "tcf-checkbox-wrapper"
-export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
+    defined in components/Form/constants.js
 */
 
 .tcf-required {
@@ -1770,8 +1756,7 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
 }
 
 .tcf-container {
-    border: 2px solid blue;
-    padding: 2px;
+    padding: 0;
 }
 
 .tcf-section {
@@ -1784,25 +1769,101 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
 }
 
 .tcf-submit-section {
+    text-align: right;
     width: 100%;
+    padding: 0;
+    margin-bottom: 12px;
+    margin-left: 0;
 }
 
 .tcf-buttons-container {
-    float: right;
-    padding: 0 6px;
-    border: 2px solid red;
+    width: 100%;
+    text-align: right;
+    padding: 1em 0;
+}
+
+.tcf-internal-row {
+    padding: 0;
+}
+
+.tcf-internal-col {
+    padding: 0;
+}
+
+.tcf-form-field {
+}
+
+.tcf-help-row {
+    height: 100px;
+    vertical-align: baseline;
+}
+ 
+.tcf-input-row {
+    padding: 0
+}
+
+.tcf-input-col {
+    padding: 0
+}
+
+.tcf-input-gutter {
+    width: 38px;
+}
+
+.tcf-cowduck-icon {
+    max-width: unset !important;
+}
+
+.tcf-cowduck-wrapper {
+    display: inline-block;
+    width: 70px;
+    margin-top: -24px;
+    margin-left: -30px;
+    cursor: pointer
+}
+
+
+
+.tcf-error-row {
+    height: 30px;
+}
+
+.tcf-help-label-col {
+    padding: 0;
+    height: 100px;
 }
 
 .tcf-label {
+    padding-top: 54px;
+    padding-left: 14px;
     line-height: 2;
     text-align: left;
     display: block;
-    margin-bottom: 12px;
-    margin-top: 20px;
     color: #000;
     font-size: 1.2em;
     font-weight: 200;
 }
+
+.tcf-help-col {
+    padding: 0;
+}
+
+.tcf-help-hidden {
+    display: none
+}
+
+.tcf-help {
+    height: 100px;
+    display: inline-block;
+    width: 100%;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 6px;
+    margin-top: -6px;
+    border: 1px solid #eec;
+    background-color: #ffd;
+}
+
 
 .tcf-error {
    color: #bf1650;
@@ -1813,40 +1874,47 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
     content: "⚠ ";
 }
 
-.tcf-form-field {
-    border: 1px solid orange;
+.tcf-open {
+    
 }
 
-.tcf-help-row {
-    background-color: gray;
-}
- 
-.tcf-input-row {
-    background-color: blue;
-}
-
-.tcf-input-gutter {
-    background-color: orange;
-    width: 30px;
+.tcf-submit,
+.tcf-cancel {
+    font-size: 1.1rem;
+    margin-left: 2em;
+    border-radius: 0;
+    padding: 8px 2.5em;
 }
 
-.tcf-error-row {
-    background-color: yellow;
+.tcf-submit {
+    margin-left: 2em;
+    background-color: #00C08B;
+    border: 0px solid #fff;
+    border-radius: 0
 }
 
-.tcf-submit:before {
-    display: inline;
-    content: "⚠ ";
+.tcf-cancel {
+    background-color: #666;
+    color: white;
 }
 
-.tcf-cancel:before {
-    display: inline;
-    content: "⚠ ";
+.tcf-cancel:hover {
+    background-color: #666;
+    opacity: 0.8;
+    border: 0px solid #fff;
 }
 
-.tcf-help {
-    background-color: #ff8;
+.tcf-secondary {
+    font-size: 1.1em;
+    padding: 8px 2.5em;
 }
+
+
+.tcf-submit:hover {
+    background-color: #00C08B;
+    opacity: 0.8;
+    border: 0px solid #fff;
+ }
 
 .tcf-input {
     display: block;
@@ -1854,12 +1922,11 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
     width: 100%;
     border-radius: 4px;
     border: 1px solid #000;
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 13px 12px;
+    font-size: 17px;
 }
 
 .tcf-select {
-    margin-top: 30px;
     padding-right: 0px;
 }
 
@@ -1868,25 +1935,32 @@ export const CHECKBOX_LABEL_CSS = "tcf-checkbox-label"
 }
 
 .tcf-checkbox {
+    margin-left: 20px;
     font-size: 2em;
 }
 .tcf-checkbox-wrapper {
-    display: inline-block;
-    padding-right: 12px;
-    font-size: 1.4rem;
-    padding-bottom: 8px;
-
+    border: 1px solid #000;
+    height: 54px;
+    padding-left: 4px;
+    margin-left: 0;
+    margin-right: 0
 }
+
 .tcf-checkbox-label {
     width: 250px;
     display: inline-block;
-    padding-left: 1rem;
+    margin-left: 1em;
+    margin-top: 4px;
+    height: 40px;
 }
 
-.tcf-cow-duck-icon {
-
+h4.prefix-section-header {
+    margin-top: 3em;
 }
 
-.tcf-cow-duck-wrapper {
-
+.tcf-delete-icon {
+    width: 24px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;   
 }

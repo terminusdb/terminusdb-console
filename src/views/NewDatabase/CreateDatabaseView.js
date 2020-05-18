@@ -10,7 +10,7 @@ import * as view from "../../labels/createView"
 import { CreateOptions } from "./CreateOptions"
 import { CopyFrom } from "./CopyFrom"
 import { CopyType } from "./CopyType"
-import CreateDB from "./CreateForm"
+import DBDetailsForm from "./DBDetailsForm"
 import { DialogueBox } from "../../components/Reports/DialogueBox"
 import { Crumbs } from "../../components/BreadCrumbs"
 
@@ -102,7 +102,7 @@ const CreateDatabase = (props) => {
 						{page:view.CREATE_OPTIONS, text: view.LOCAL},
 						{page:view.CREATE_LOCAL, text:view.CREATE_LOCAL}]}
 						setPage = { setPage }/>
-					<CreateDB setPage = { setPage }/>
+					<DBDetailsForm setPage = { setPage }/>
 				</>}
 				{(page == view.CREATE_REMOTE) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},

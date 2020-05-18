@@ -1,21 +1,25 @@
 import React, {useState} from 'react'
-import { handleSubmit, register, errors, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Container, Row, Col } from "reactstrap"
 import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, FORM_CONTAINER_CSS, FORM_SECTION_CSS, SECTION_TITLE_CSS,
          SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS, SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, 
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS, 
          PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS, 
-         TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS
+         TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS,
+         COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, INPUT_COL_CSS,
+         HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS
         } from "./constants"
 import Select from "react-select";
 import { HelpCowDuck } from "../Reports/HelpCowDuck"
+import { isObject } from '../../utils/helperFunctions';
+
 /**
 * Library of Terminus Console (TC) form patterns
 */
 
 export const TCForm = ({onSubmit, className, children}) => {
     const { handleSubmit } = useForm();
-    className = className || FORM_CONTAINER_CSS
+    if(!className || isObject(className)) className = FORM_CONTAINER_CSS
     return (
         <Container className={className}>
             <form onSubmit={handleSubmit(onSubmit) }>
@@ -54,8 +58,8 @@ export const TCDropdown = ({onSubmit, className, trigger, children, expanded, dr
 */
 
 export const TCFormSection = ({title, className, titleClassName, children}) => {
-    className = className || FORM_SECTION_CSS
-    titleClassName = titleClassName || SECTION_TITLE_CSS
+    if(!className || isObject(className)) className = FORM_SECTION_CSS
+    if(!titleClassName || isObject(titleClassName))  titleClassName = SECTION_TITLE_CSS
     return (
         <Container className={className}>
             {title &&
@@ -67,52 +71,73 @@ export const TCFormSection = ({title, className, titleClassName, children}) => {
 }
 
 export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText, cancelClassName, submitText, submitClassName}) => {
-    className = className || SUBMIT_SECTION_CSS
-    buttonsClassName = buttonsClassName || BUTTONS_CONTAINER_CSS
-    submitClassName = submitClassName || SUBMIT_CSS
-    cancelClassName = cancelClassName || CANCEL_CSS
-    cancelText = cancelText || CANCEL_TEXT
-    submitText = submitText || SUBMIT_TEXT    
+    if(!className || isObject(className)) className = SUBMIT_SECTION_CSS
+    if(!buttonsClassName || isObject(buttonsClassName)) buttonsClassName = BUTTONS_CONTAINER_CSS
+    if(!submitClassName || isObject(submitClassName) )submitClassName = SUBMIT_CSS
+    if(!cancelClassName || isObject(cancelClassName) )cancelClassName = CANCEL_CSS
+    if(!cancelText || isObject(cancelText) ) cancelText = CANCEL_TEXT
+    if(!submitText|| isObject(submitText) ) submitText = SUBMIT_TEXT    
 
     let myCancel = function(e){
         e.preventDefault()
         onCancel()
     }
     return (
-        <Container className={className}>
-            <Row>
-                <span className = {buttonsClassName}>
-                    {onCancel && 
-                        <button type="cancel" onClick={myCancel} className={cancelClassName}>
-                                {cancelText}
-                        </button>
-                    }
-                    <button type="submit" className={submitClassName}>
-                            {submitText}
+        <Row className={className}>
+            <span className = {buttonsClassName}>
+                <button type="submit" className={submitClassName}>
+                    {submitText}
+                </button>
+                {onCancel && 
+                    <button onClick={myCancel} className={cancelClassName}>
+                            {cancelText}
                     </button>
-                </span>
-            </Row>
-        </Container>
+                }
+            </span>
+        </Row>
     )        
 }
+
+export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
+    if(!className || isObject(className)) className = SUBMIT_SECTION_CSS
+    if(!buttonsClassName || isObject(buttonsClassName)) buttonsClassName = BUTTONS_CONTAINER_CSS
+    return (
+        <Row className={className}>
+            <span className = {buttonsClassName}>
+               {children}
+            </span>
+        </Row>
+    )
+} 
 
 /**
  * Puts an input element into its position on the form by drawing all the stuff around it
  */
 
 export const TCFormField = ({field_id, mandatory, className, label, labelClassName, 
-    help, helpRowClassName, helpClassName, promptRowClassName, inputRowClassName, inputGutterClassName,
+    help, helpExpanded, helpRowClassName, helpClassName, helpLabelColClassName, helpColClassName, helpCols, promptRowClassName, inputRowClassName, inputGutterClassName,
     cowDuckClassName, cowDuckIconClassName, errorRowClassName, error, fieldErrorClassName, children}) => {
     
     /** Set Field Level Defaults - defaults for elements are set within elements */
-    className =  className || FORM_FIELD_CSS 
-    helpRowClassName = helpRowClassName || HELP_ROW_CSS
-    promptRowClassName = promptRowClassName || PROMPT_ROW_CSS
-    inputRowClassName = inputRowClassName || INPUT_ROW_CSS
-    inputGutterClassName = inputGutterClassName || INPUT_GUTTER_CSS
-    errorRowClassName = errorRowClassName || ERROR_ROW_CSS
-    cowDuckClassName = cowDuckClassName || COWDUCK_WRAPPER_CSS
-    cowDuckIconClassName = cowDuckIconClassName || COWDUCK_ICON_CSS
+    if(!className || isObject(className)) className = FORM_FIELD_CSS 
+    if(!helpRowClassName || isObject(helpRowClassName)) helpRowClassName = HELP_ROW_CSS
+    if(!promptRowClassName || isObject( promptRowClassName)) promptRowClassName = PROMPT_ROW_CSS
+    if(!inputRowClassName  || isObject(inputRowClassName )) inputRowClassName = INPUT_ROW_CSS
+    if(!inputGutterClassName || isObject(inputGutterClassName )) inputGutterClassName = INPUT_GUTTER_CSS
+    if(!errorRowClassName || isObject(errorRowClassName)) errorRowClassName = ERROR_ROW_CSS
+    if(!cowDuckClassName || isObject(cowDuckClassName)) cowDuckClassName = COWDUCK_WRAPPER_CSS
+    if(!cowDuckIconClassName || isObject(cowDuckIconClassName)) cowDuckIconClassName = COWDUCK_ICON_CSS
+    if(!helpLabelColClassName|| isObject(helpLabelColClassName)) helpLabelColClassName = HELP_LABEL_COL_CSS 
+    if(!helpColClassName || isObject(helpColClassName)) helpColClassName = HELP_COL_CSS
+    
+    helpExpanded = helpExpanded || false 
+    const [helpVisible, setHelpVisible] = useState(helpExpanded)
+    function toggleHelp(){
+        setHelpVisible(!helpVisible)
+    }
+
+    helpCols = helpCols || 6
+    let helpLabelCols = (12 - helpCols)
 
     const flab = (        
         <TCFieldLabel
@@ -129,6 +154,7 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
             <TCFieldHelp 
                 className={helpClassName} 
                 message={help}
+                visible={helpVisible}
                 field_id={field_id}                             
             />                        
         )
@@ -137,6 +163,8 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
                 className={cowDuckClassName} 
                 iconClassName = {cowDuckIconClassName}
                 message={help}
+                visible={helpVisible}
+                onClick={toggleHelp}
                 field_id={field_id} 
             />
         )
@@ -147,10 +175,10 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
             <Col>
                 {help && 
                    <Row className={helpRowClassName}>
-                        <Col md={6}>
+                        <Col className={helpLabelColClassName} md={helpLabelCols}>
                             {flab}
                         </Col>
-                        <Col md={6}>
+                        <Col className={helpColClassName} md={helpCols}>
                             {help}
                         </Col>
                     </Row>
@@ -161,7 +189,7 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
                     </Row>
                 }
                 <Row className={inputRowClassName}>
-                    <Col>
+                    <Col className={INPUT_COL_CSS}>
                         {children}
                     </Col>
                     <Col md={{ size: 'auto'}} className={inputGutterClassName} >
@@ -180,10 +208,12 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
     )
 }
 
-export const TCFieldHelp = ({field_id, message, className}) => {
-    className = className || HELP_CSS
+export const TCFieldHelp = ({field_id, message, className, invisibleHelpClassName, visible}) => {
+    if(!className || isObject(className)) className = HELP_CSS
+    if(!invisibleHelpClassName || isObject(invisibleHelpClassName)) invisibleHelpClassName = INVISIBLE_HELP_CSS
+    let vis = (visible ? className : invisibleHelpClassName)
     return (
-        <span className={className} id={field_id+"_help"}>
+        <span className={vis} id={field_id+"_help"}>
             {message} 
         </span>
     )
@@ -191,7 +221,7 @@ export const TCFieldHelp = ({field_id, message, className}) => {
 
 
 export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryClassName, mandatoryTitle}) => {
-    className = className || LABEL_CSS
+    if(!className || isObject(className)) className = LABEL_CSS
     return (
         <label className={className} htmlFor={field_id}>
             {label} 
@@ -205,21 +235,18 @@ export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryCl
     )
 }
 
-export const TCMandatory = (className, title) => {
-    className = className || REQUIRED_FIELD_CSS 
-    title = title || REQUIRED_FIELD
+export const TCMandatory = ({className, title}) => {
+    if(!className || isObject(className)) className = REQUIRED_FIELD_CSS 
+    if(!title || isObject(title)) title = REQUIRED_FIELD
     return (
-        <strong title={title} className={className}>
-            *
-        </strong>
+        <strong title={title} className={className}> * </strong>
     )
 }
 
-function TCFieldErrors(field_id, error, className){
-    const { errors } = useForm();
-    className = className || ERROR_MESSAGE_CSS 
-    error = error || REQUIRED_FIELD_ERROR
-    if(errors[field_id]){
+function TCFieldErrors({field_id, error, className}){
+    if(!className || isObject(className)) className = ERROR_MESSAGE_CSS 
+    if(error && error[field_id]){
+        error = error[field_id] 
         return (
             <p className = {className}>
                 {error}
@@ -231,20 +258,42 @@ function TCFieldErrors(field_id, error, className){
 
 export const TCFormInput = ({field_id, value, mandatory, validate, onChange, placeholder, className}) =>    {
     placeholder = placeholder || ""
-    className = className || INPUT_CSS
+    if(!className || isObject(className)) className = INPUT_CSS
     value = value || ""
-    onChange = onChange || function(){}
+    const { register } = useForm();
+    let vchange = _onChange(onChange, field_id)
     return (
         <input
             placeholder={ placeholder }
             className = {className }
             defaultValue={value}
+            onChange={vchange}
             name = {field_id}
-            onChange = {onChange}
-            ref = { _makeStrRef(mandatory, validate) }
+            ref = { register }
         />
     )
 }
+
+const _onChange = (ch, field_id) => {
+    if(ch){
+        let vchange = function(val){
+            ch(field_id, val.target.value)
+        }
+        return vchange
+    }
+    return false
+}
+
+const _onSChange = (ch, field_id) => {
+    if(ch){
+        let vchange = function(SelValue){
+            ch(field_id, SelValue.value)
+        }
+        return vchange
+    }
+    return false
+}
+
 
 const _makeStrRef = (mandatory, validate) => {
     const { register } = useForm();
@@ -260,16 +309,16 @@ const _makeStrRef = (mandatory, validate) => {
 
 export const TCFormTextarea = ({field_id, value, mandatory, validate, onChange, placeholder, className}) =>    {
     placeholder = placeholder || ""
-    className = className || TEXTAREA_CSS
+    if(!className || isObject(className)) className = TEXTAREA_CSS
     value = value || ""
-    onChange = onChange || function(){}
+    let vchange = _onChange(onChange, field_id)
     return (
         <textarea 
             name= { field_id }
             className = { className }
             placeholder = { placeholder }
             ref = { _makeStrRef(mandatory, validate) }
-            onChange={onChange}
+            onChange ={vchange}
             defaultValue={value}
         />
     )
@@ -277,15 +326,15 @@ export const TCFormTextarea = ({field_id, value, mandatory, validate, onChange, 
 
 export const TCFormSelect = ({field_id, onChange, className, options, placeholder, value, mandatory, validate}) =>    {
     placeholder = placeholder || ""
-    className = className || SELECT_CSS
+    if(!className || isObject(className)) className = SELECT_CSS
     value = value || ""
-    onChange = onChange || function(){}
+    let vchange = _onSChange(onChange, field_id)
     return(
         <Select 
             placeholder = {placeholder}
             className = {className}
+            onChange ={vchange}
             ref = { _makeStrRef(mandatory, validate) }
-            onChange = {onChange}
             name = {field_id}
             options = {options}
             defaultValue = {value}
@@ -295,7 +344,7 @@ export const TCFormSelect = ({field_id, onChange, className, options, placeholde
 
 
 export const TCFormCheckbox = ({field_id, onChange, className, label, checked, mandatory, wrapperClassName, labelClassName}) =>    {
-    className = className || CHECKBOX_CSS
+    if(!className || isObject(className)) className = CHECKBOX_CSS
     checked = checked || false
     onChange = onChange || function(){}
     wrapperClassName = wrapperClassName || CHECKBOX_WRAPPER_CSS
@@ -305,14 +354,17 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, m
     if(mandatory){
         ref = register({ validate: value => value})
     }
+    let vchange = _onChange(onChange, field_id)
+
     return(
         <Row className={wrapperClassName} >
             <input type="checkbox"
                 className = {className}
+                onChange = {vchange}
                 defaultChecked ={checked}
                 name = {field_id}
                 id={field_id}
-                ref = {ref}
+                ref = {register}
             />
             <label className={labelClassName} htmlFor={field_id}>
                 {label}
@@ -321,3 +373,22 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, m
     )        
 }
 
+export const TCRow = ({className, children}) => {
+    if(!className || isObject(className)) className = INTERNAL_ROW_CSS
+    return (
+        <Row className={className}>
+            {children}
+        </Row>
+    )
+}
+
+export const TCCol = ({className, children}) => {
+    if(!className || isObject(className)) className = INTERNAL_COL_CSS
+    return (
+        <Col className={className}>
+            {children}
+        </Col>
+    )
+}
+
+ 

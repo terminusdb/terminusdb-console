@@ -27,9 +27,9 @@ export const PrefixManager = (props) => {
         
     return (
         <Container>
-            <h4>User Defined Prefixes</h4> 
+            <h4 className="prefix-section-header">User Defined Prefixes</h4> 
             <RenderTable dataProvider = {Extended}/>
-            <h4>Built in Prefixes</h4> 
+            <h4 className="prefix-section-header">Built in Prefixes</h4> 
             <RenderTable dataProvider = {BuiltIn}/>            
         </Container>
     )
