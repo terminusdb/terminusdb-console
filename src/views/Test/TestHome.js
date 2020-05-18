@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 //import WOQLQueryContainer from "../components/WOQLQueryContainer";
-import * as q from "../labels/queryLabels";
+import * as q from "../../labels/queryLabels";
 import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 
 import TerminusClient from '@terminusdb/terminusdb-client';
 //import {ResultViewer} from  "../components/QueryPane/ResultViewer"
-import {WOQLQueryContainerHook} from "../components/WOQLQueryContainerHook";
+import {WOQLQueryContainerHook} from "../../components/WOQLQueryContainerHook";
 //const WOQLQueryContainer = ({query=false,children}) => {
 
-import {QueryLibrary} from "../components/QueryPane/QueryLibrary"
+import {QueryLibrary} from "../../components/QueryPane/QueryLibrary"
 
 import TestResult from "./TestResult";
 

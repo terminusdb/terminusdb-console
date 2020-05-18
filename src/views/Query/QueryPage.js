@@ -9,7 +9,7 @@ import { PageView } from '../PageView'
 import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 
 
-const Query = (props) => {
+const QueryPage = (props) => {
   const editor = {edit: true,
       submit: 'Run Query',
       library: [q.SHOW_ALL_SCHEMA_ELEMENTS,
@@ -82,4 +82,4 @@ const Query = (props) => {
 <PageView>
         <NewQueryPane/>
     </PageView>*/
-export default Query;
+export default QueryPage;

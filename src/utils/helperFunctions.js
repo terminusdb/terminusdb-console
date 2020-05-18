@@ -18,7 +18,7 @@ export const getCurrentDBID = (client) => {
 }
 
 export const trimContent = (str, limit) => {
-    if(str.length > limit){
+    if(str && str.length > limit){
         const toShow = str.substring(0, limit) + "...";
         return toShow;
     }

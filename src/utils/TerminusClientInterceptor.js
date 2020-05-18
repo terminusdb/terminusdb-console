@@ -33,11 +33,20 @@ TerminusClient.axiosInstance.interceptors.response.use(function (response) {
  
   return response;
 }, function (error) {
+    //copy the data response and report infomation into the error.data object
     if(error.response && error.response.data){
         error.data = error.response.data
+    }
+    else {
+        error.data = {}
+    }
+    error.data.end = new Date()
+    if(error.config && error.config.metadata && error.config.metadata.startTime){
+        error.data.start = error.config.metadata.startTime
+        error.data.duration = error.data.start = error.data.end
     }
 	/*I have check better the error*/
   	//error.config.metadata.end = new Date();
   	//error.config.metadata.duration = error.config.metadata.endTime - error.config.metadata.startTime;
-  return Promise.reject(error);
+    return Promise.reject(error);
 });

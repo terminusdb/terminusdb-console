@@ -1,47 +1,62 @@
-import React, { useState, useEffect } from "react"
-import { Alert, Container, Row, Col } from 'reactstrap'
+import React from "react"
+import { Alert, Container } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
+import { RESULT_REPORT_CSS } from "./constants"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as icons from "../../constants/faicons"
 
 export const APIUpdateReport = ({status, message, time, error}) => {
-    
     return (
         <Container>
-            {(status == "success") &&
+            {(status == TERMINUS_SUCCESS) &&
                 <APIUpdateSuccess message={message} time={time} />
             }
-            {(status == "warning") &&
+            {(status == TERMINUS_WARNING) &&
                 <APIUpdateWarning message={message} time={time} error={error} />
             }
-            {(status == "error") &&
+            {(status == TERMINUS_ERROR) &&
                 <APIUpdateError message={message} time={time} error={error} />
+            }
+            {(status == TERMINUS_INFO) &&
+                <APIUpdateInfo message={message} />
             }
         </Container>
     )
 }
 
+const APIUpdateInfo = ({message}) => {
+    return (
+        <Alert color="info">
+            <span className={ RESULT_REPORT_CSS }>
+                {message}
+            </span>
+        </Alert>
+    )
+}
+
 const APIUpdateSuccess  = ({message, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
         <Alert color="success">
-            <span className="result-report-main">
-                {message}
-                {time &&  
-                    ({time})
-                }
+            <FontAwesomeIcon icon={icons.CHECK} className="mr-3"/>
+            <span className={RESULT_REPORT_CSS}>
+                {txt}
             </span>
         </Alert>
     )
 }
 
 const APIUpdateWarning = ({message, error, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
+
     let vios = hasViolations(error)
     return (
         <Alert color="warning">
-            <span className="result-report-main">
-            {message}
-            {time &&  
-                ({time})
-            }
+            <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
+            <span className={RESULT_REPORT_CSS}>
+                {txt}
             </span>
             {vios && 
                 <ViolationReport violations={getViolations(error)} />
@@ -49,7 +64,6 @@ const APIUpdateWarning = ({message, error, time}) => {
         </Alert>
     )
 }
-
 
 const APIUpdateError = ({message, error, time}) => {
     if(hasViolations(error)){
@@ -61,13 +75,12 @@ const APIUpdateError = ({message, error, time}) => {
 }
 
 const APIInputError = ({message, violations, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
         <Alert color="warning">
-            <span className="result-report-main">
-            {message}
-            {time &&  
-                ({time})
-            }
+            <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
+            <span className={RESULT_REPORT_CSS}>
+                {txt}
             </span>
             <ViolationReport violations={violations} tone="warning"/>
         </Alert>
@@ -75,14 +88,13 @@ const APIInputError = ({message, violations, time}) => {
 }
 
 const APISystemError = ({message, error, time}) => {
+    let txt = message + (time ? " (" + time + ")" : "")
     return (
     <Alert color="danger">
-            <span className="result-report-main">
-            {message}
-            {time &&  
-                ({time})
-            }
-            </span>
+        <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>
+        <span className={RESULT_REPORT_CSS}>
+            {txt}
+        </span>
         <SystemError error={error} />
     </Alert>)
 }

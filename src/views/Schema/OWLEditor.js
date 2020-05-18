@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { editSchema } from "../variables/formLabels"
+import { editSchema } from "../../variables/formLabels"
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/base16-light.css');
 require('codemirror/mode/turtle/turtle.js');
-import { commit } from "../variables/formLabels"
+import { commit } from "../../variables/formLabels"
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
-export const RenderSnippet = (props) => {
+export const OWLEditor = (props) => {
     let action = props.edit || false;
     const [content, setContent] = useState(props.dataProvider);
     const [commitMsg, setCommitMsg] = useState();

@@ -8,7 +8,7 @@ import { WOQLQueryContainerHook } from "../../components/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 
-const DocumentView = (props) => {
+const DocumentPage = (props) => {
     const {woqlClient} = WOQLClientObj();
     const [happiness, setHappiness] = useState(false);
 
@@ -84,4 +84,4 @@ const DocumentView = (props) => {
 }
 
 
-export default DocumentView
+export default DocumentPage

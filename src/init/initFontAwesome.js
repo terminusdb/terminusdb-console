@@ -13,5 +13,8 @@ export const initFontLib = library.add(faUser,
     faPenAlt,
     faInfo,
     faTimesCircle,
-    faPlayCircle, faCaretSquareLeft, faCaretSquareRight );
+    faPlayCircle, 
+    faCaretSquareLeft, 
+    faCaretSquareRight 
+);
 

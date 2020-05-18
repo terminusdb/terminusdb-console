@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import WOQLQueryContainer from "../components/WOQLQueryContainer";
-import * as q from "../labels/queryLabels";
+import WOQLQueryContainer from "../../components/WOQLQueryContainer";
+import * as q from "../../labels/queryLabels";
 
 import TerminusClient from '@terminusdb/terminusdb-client';
 //import {ResultViewer} from  "../components/QueryPane/ResultViewer"
 //import {WOQLQueryContainerHook} from "../components/WOQLQueryContainerHook";
-import {QueryLibrary} from "../components/QueryPane/QueryLibrary"
+import {QueryLibrary} from "../../components/QueryPane/QueryLibrary"
 
 import TestResult from "./TestResult";
 

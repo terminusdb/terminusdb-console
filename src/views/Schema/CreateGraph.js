@@ -1,115 +1,91 @@
 import React, { useState, useEffect } from "react";
 import { Col, Button, Row, Container } from "reactstrap";
 import Loading from "../../components/Loading";
-import { createGraphText } from "../../variables/formLabels"
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import Select from "react-select";
+import {TCFormSubmits, TCForm, TCFormInput, TCFormField, TCFormSelect, TCFormCheckbox, TCFormTextarea, TCCol, TCRow, TCSubmitWrap} from  "../../components/Form/FormComponents"
+import {APIUpdateReport} from "../../components/Reports/APIUpdateReport"
+import {REQUIRED_FIELD_ERROR, ILLEGAL_ID_ERROR, INTERNAL_COL_CSS} from "../../components/Form/constants"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
+import { CREATE_GRAPH_FORM } from "./constants"
 
-export const CreateGraph = ({onCancel, onCreate}) => {
 
-    const { register, handleSubmit, errors } = useForm();
 
-    const [dbInfo, setDbInfo] = useState({gid: "", gtype: ""});
+export const CreateGraph = ({onCancel, onCreate, onEdit, visible, report}) => {
 
-    function generateFieldLabel(field_id, meta){
-        let cname = createGraphText.labelClassName
-        let cbits = ""
-        if(field_id == "gid") cbits =showMandatory(meta.label)
-        let lab = (
-            <label className={cname} htmlFor={field_id}>
-                {meta.label} {cbits}                 
-            </label>
-        )
-        return lab
-    }
+    const [formInfo, setFormInfo] = useState({
+        gid: "", gtype: "", commit: ""
+    })
+    const [formErrors, setFormErrors] = useState({})
 
-    function generateFieldInput(field_id, meta){
-        if(field_id == "gid"){
-            let ph = meta.placeholder || ""
-            let val = dbInfo[field_id] || ""
-            return (
-                <input
-                    placeholder={ ph }
-                    className = {createGraphText.inputClassName }
-                    defaultValue={val}
-                    name = {field_id}
-                    ref = { register({ validate: value => value.length > 0}) }/>
-            )                   
+
+    function findError(field, val){
+        val = val.trim()
+        if(val == "" && field != "commit") return REQUIRED_FIELD_ERROR
+        if(field == "gid" && val.indexOf(" ") != -1 || val.indexOf(":") != -1 || val.indexOf("/") != -1){
+            return ILLEGAL_ID_ERROR
         }
-        if(field_id == "gtype"){
-            let ph = meta.placeholder || ""
-            return(<Select placeholder = {ph}
-                className = {createGraphText.selectClassName}
-                ref={register}
-                options = {[
-                    {label: "Data", value: "instance"}, 
-                    {label: "Schema",  value: "schema"}, 
-                    {label: "Inference", value: "inference"}]}
-                />
-            )        
-        }
-    }
-
-    function generateFieldPrompt(field_id, meta){
-        if(errors[field_id]){
-            return (
-                <p className = {createGraphText.errorClassName}>
-                    {meta.label + " " + createGraphText.requiredField} 
-                </p>
-            )
-        }
-        if(meta.help){
-            return (
-                <p className = {createGraphText.helpClassName}>
-                    {meta.help} 
-                </p>
-            )
-        }
-        return null
-    }
-
-    function generateFormField(field_id, meta){
-        let x = generateFieldLabel(field_id, meta)
-        let y =  generateFieldInput(field_id, meta)
-        let z =  generateFieldPrompt(field_id, meta)
-        return (
-            <span class='form-field'>{x}{y}{z}</span>
-        )
+        return false
     }
 
     function onSubmit(data){
-        alert(JSON.stringify(data))
+        let nformErrors = {}
+        let ok = true
+        for(var i in formInfo){
+            let e = findError(i, formInfo[i])
+            if(e) {
+                nformErrors[i] = e
+                ok = false
+            }
+        }
+        setFormErrors(nformErrors)
+        if(ok){
+            onCreate(formInfo.gid, formInfo.gtype, formInfo.commit )
+        }
     }
 
-    let typeField = generateFormField("gtype", createGraphText.fields.gtype)
-    let idField = generateFormField("gid", createGraphText.fields.gid)
-
-    function showMandatory(label){
-        return (<strong 
-            title={label + " " + createGraphText.requiredField} 
-            style={{"color": "red"}} 
-            className={createGraphText.errorClassName}>
-                * 
-        </strong>)
+    if(!visible){
+        return (
+            <TCSubmitWrap>
+                <Button className="tcf-secondary" onClick={onEdit} outline color="secondary">
+                    {CREATE_GRAPH_FORM.createButtonText}
+                </Button>
+            </TCSubmitWrap>            
+        )
     }
 
+    function onChangeField(field_id, value){
+        formInfo[field_id] = value
+        setFormInfo(formInfo)
+    }
 
-    return (<form onSubmit={handleSubmit(onSubmit) }>
-        <Container>
-            <Row>
-                <button type="cancel" className={createGraphText.cancelButtonClassName}>
-                        {createGraphText.cancelButtonText}
-                </button><span style={{"padding-right": 10}}>&nbsp;</span>
-                <button type="submit" className={createGraphText.createButtonClassName}>
-                        {createGraphText.createButtonText}
-                </button>
-            </Row>
-            <Row>
-                <Col>{typeField}</Col><Col>{idField}</Col>
-            </Row>
-        </Container>
-    </form>)
+    return (
+        <TCForm onSubmit={onSubmit} >
+            <TCFormSubmits submitText={CREATE_GRAPH_FORM.createButtonText} visible={visible} cancel= {CREATE_GRAPH_FORM.cancelButtonText} onCancel={onCancel} onEdit={onEdit} />
+            {report && 
+                <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
+            }
+            <TCRow>
+                <TCCol>
+                    <TCFormField error={formErrors} field_id="gid" mandatory label={CREATE_GRAPH_FORM.fields["gid"].label}  help={CREATE_GRAPH_FORM.fields["gid"].help}>
+                        <TCFormInput field_id="gid" mandatory placeholder={CREATE_GRAPH_FORM.fields["gid"].placeholder} onChange={onChangeField}/>
+                    </TCFormField>
+                </TCCol>
+                <TCCol>
+                    <TCFormField error={formErrors} field_id="gtype" mandatory label={CREATE_GRAPH_FORM.fields["gtype"].label} help={CREATE_GRAPH_FORM.fields["gtype"].help}>
+                        <TCFormSelect placeholder={CREATE_GRAPH_FORM.fields["gtype"].placeholder} field_id="gtype" options={CREATE_GRAPH_FORM.fields["gtype"].options} onChange={onChangeField} />
+                    </TCFormField>
+                </TCCol>
+            </TCRow>
+            <TCRow>
+                <TCCol>
+                    <TCFormField error={formErrors} field_id="commit" mandatory label={CREATE_GRAPH_FORM.fields["commit"].label} help={CREATE_GRAPH_FORM.fields["commit"].help}>
+                        <TCFormTextarea placeholder={CREATE_GRAPH_FORM.fields["commit"].placeholder} field_id="commit" onChange={onChangeField} />
+                    </TCFormField>
+                </TCCol>
+            </TCRow>
+        </TCForm>
+    )
 }
-
 

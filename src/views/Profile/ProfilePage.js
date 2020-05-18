@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 import { Button } from "reactstrap"
 import { useForm } from 'react-hook-form';
-import Loading from "../components/Loading";
-import { useAuth0 } from "../react-auth0-spa";
-import { UserCard } from "../components/Card/UserCard"
-import { FormInputs } from "../components/Form/FormInputs"
-import { Card } from "../components/Card/Cards"
-import { CardDecks } from "../components/Card/CardDeck";
-import { PageView } from './PageView'
+import Loading from "../../components/Loading";
+import { useAuth0 } from "../../react-auth0-spa";
+import { UserCard } from "../../components/Card/UserCard"
+import { FormInputs } from "../../components/Form/FormInputs"
+import { Card } from "../../components/Card/Cards"
+import { CardDecks } from "../../components/Card/CardDeck";
+import { PageView } from '../PageView'
 
-const Profile = () => {
+const ProfilePage = () => {
   const { loading, user } = useAuth0();
   const [ modal, setModal ] = useState(false);
   const { register, handleSubmit, errors } = useForm();
@@ -102,4 +102,4 @@ const Profile = () => {
   )
  }
 
-export default Profile;
+export default ProfilePage;

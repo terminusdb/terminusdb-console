@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RenderSnippet } from "../../components/RenderSnippet";
+import { OWLEditor } from "./OWLEditor";
 import Loading from "../../components/Loading";
 import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
 import {FAILED_LOADING_OWL} from "./constants"
@@ -63,7 +63,7 @@ export const OWL = (props) => {
                 <EmptyResult />
             }
             {(dataProvider || empty) &&  
-                <RenderSnippet dataProvider = {dataProvider}
+                <OWLEditor dataProvider = {dataProvider}
                     edit = {edit} onChange = {updateSchema}/>
             }
         </div>

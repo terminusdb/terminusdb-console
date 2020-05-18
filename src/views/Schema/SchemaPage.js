@@ -14,7 +14,7 @@ import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
 import {GRAPHS_LOAD_ERROR} from "./constants"
 
-const Schema = (props) => {
+const SchemaPage = (props) => {
     const [graphs, setGraphs] = useState();
     const [graphFilter, setGraphFilter] = useState(props.graphFilter);
     const [rebuild, setRebuild] = useState(0);
@@ -94,13 +94,13 @@ const Schema = (props) => {
         let tabs = []
         if(hasSchema && graphFilter.type == "schema"){
             tabs.push(
-                <Tab eventKey="classes" label = {CLASSES_TAB}>
+                <Tab key="classes" eventKey="classes" label = {CLASSES_TAB}>
                     <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
                     <Classes graph={graphFilter} rebuild={rebuild}/>
                 </Tab>
             )
             tabs.push(
-                <Tab eventKey="properties"  label = {PROPERTIES_TAB}>
+                <Tab key="classes" eventKey="properties"  label = {PROPERTIES_TAB}>
                     <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
                     <Properties graph={graphFilter} rebuild={rebuild}/>
                 </Tab>
@@ -108,19 +108,19 @@ const Schema = (props) => {
         }
         if(hasSchema || hasInference){
             tabs.push(
-                <Tab eventKey="owl" label = {OWL_TAB}>
+                <Tab key="classes" eventKey="owl" label = {OWL_TAB}>
                     <GraphFilter filter={graphFilter} graphs={graphs} onChange={graphFilterChanged} />
                     <OWL graph={graphFilter} rebuild={rebuild} onUpdate={graphUpdated}/>
                 </Tab>
             )
         }
         tabs.push(
-            <Tab eventKey="graphs" label = {GRAPHS_TAB}>
+            <Tab key="classes" eventKey="graphs" label = {GRAPHS_TAB}>
                 <GraphMaker graphs={graphs} rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
         )
         tabs.push(
-            <Tab eventKey="prefixes" label = {PREFIXES_TAB}>
+            <Tab key="classes" eventKey="prefixes" label = {PREFIXES_TAB}>
                 <PrefixManager rebuild={rebuild} onUpdate={graphUpdated}/>
             </Tab>
         )
@@ -142,4 +142,4 @@ const Schema = (props) => {
 }
 
 
-export default Schema;
+export default SchemaPage;

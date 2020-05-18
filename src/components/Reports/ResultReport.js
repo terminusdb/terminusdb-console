@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import { Alert, Container, Row, Col } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
+import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS, 
+    NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS} from "./constants"
 
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)
@@ -57,7 +59,13 @@ export const ResultReport = ({report}) => {
 const ImpotentQuery = ({report, time}) => {
     return (
         <Alert color="warning">
-            <span className="result-report-main">Query took {time} and returned no results - check your query for mistakes</span>
+            <span className={ RESULT_REPORT_CSS }>
+                {NO_RESULTS}
+                {time && 
+                    ({time})
+                }
+                {NO_RESULTS_ADVICE}
+            </span>
         </Alert>
     )
 }
@@ -65,7 +73,7 @@ const ImpotentQuery = ({report, time}) => {
 const QuerySuccess = ({report, time}) => {
     return (
         <Alert color="info">
-            <span className="result-report-main">
+            <span className={ RESULT_REPORT_CSS }>
                 Query returned {report.rows} records, each with {report.columns} variables, in {time}
             </span>
         </Alert>
@@ -86,19 +94,30 @@ const HybridSuccess = ({report, time}) => {
 const UpdateSuccess = ({report, time}) => {
     return (
         <Alert color="success">
-            <span className="result-report-main">Successfully updated database in {time}</span>
-            <Row>
-                <Col>Inserts: </Col>
-                <Col>{report.inserts}</Col>
-            </Row>
-            <Row>
-                <Col>Deletes: </Col>
-                <Col>{report.deletes}</Col>
-            </Row>
-            <Row>
-                <Col>Transaction Restarts: </Col>
-                <Col>{report.transaction_restart_count}</Col>
-            </Row>
+            <span className={ RESULT_REPORT_CSS }>
+                Successfully updated database 
+                {time && 
+                    ({time})
+                }
+                <span className={ RESULT_REPORT_LABEL_CSS }>
+                    {INSERTS}
+                </span>
+                <span className={ RESULT_REPORT_COUNT_CSS }>
+                    {report.inserts}
+                </span>
+                <span className={ RESULT_REPORT_LABEL_CSS }>
+                    {DELETES}
+                </span>
+                <span className={ RESULT_REPORT_COUNT_CSS }>
+                    {report.deletes}
+                </span>
+                <span className={ RESULT_REPORT_LABEL_CSS }>
+                    {TRANSACTION_RESTARTS}
+                </span>
+                <span className={ RESULT_REPORT_COUNT_CSS }>
+                    {report.transaction_restart_count}
+                </span>
+            </span>
         </Alert>
     )
 }
@@ -107,7 +126,12 @@ const UpdateSuccess = ({report, time}) => {
 const QueryError = ({violations, time}) => {
     return (
         <Alert color="warning">
-            <span className="result-report-main">Query Error, {violations.length} violations identified in {time}.</span>
+            <span className={ RESULT_REPORT_CSS }>
+                {violations.length} {VIOLATIONS_IDENTIFIED} 
+                {time && 
+                    ({time})
+                }
+                </span>
             <ViolationReport violations={violations} tone="warning"/>
         </Alert>
     )
@@ -116,7 +140,12 @@ const QueryError = ({violations, time}) => {
 const QuerySystemError = ({error, time}) => {
     return (
     <Alert color="danger">
-        <span className="result-report-main">Query Caused Error after {time}.</span>
+        <span className={ RESULT_REPORT_CSS }>
+            {QUERY_CAUSED_ERROR}
+            {time && 
+                ({time})
+            }
+        </span>
         <SystemError error={error} />
     </Alert>)
 }

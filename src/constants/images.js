@@ -1,0 +1,5 @@
+export const TERMINUS_IMAGE_BASE = "http://assets.terminusdb.com/terminusdb-console/images/" 
+export const DELETE_ICON = TERMINUS_IMAGE_BASE + "delete.png" 
+export const COWDUCK_HELP_ICON = TERMINUS_IMAGE_BASE + "cowDuckHelp.png" 
+export const MASCOT = TERMINUS_IMAGE_BASE + "Mascot-Color.png"
+export const DIALOGUE_BACKGROUND = TERMINUS_IMAGE_BASE + "card-shape-3.svg"

@@ -1,11 +1,8 @@
 import React, { useState, useCallback } from "react";
-import history from '../../utils/history';
-import { stripDocFromUrl } from '../../utils/extractStrings'
-import styled from 'styled-components'
-import { Container, Row, Col ,Button } from "reactstrap";
 import DataTable from 'react-data-table-component';
 import { SERVER_HOME_PAGE } from '../../variables/pageLabels'
 import ExpandedComponent from '../ExpandedComponent'
+import { goDBHome } from "../Router/ConsoleRouter"
 
 const RenderTable = (props) => {
     const [onRowClicked, setSelectedRows] = useState([]);
@@ -36,11 +33,7 @@ const RenderTable = (props) => {
             case SERVER_HOME_PAGE.page:
                 var dbId = state['db'];
                 var account = state['account'];
-                //dbClient.connectionConfig.clearCursor()
-                //dbClient.db(dbId);
-                //dbClient.account(account);
-                if(dbId == "terminus") history.replace('/db/' + dbId + "/");
-                else history.replace('/db/' + account + "/" + dbId + "/");
+                goDBHome(dbId, account)
                 break;
             default:
                 console.log('RenderTable.js - Invalid page label')

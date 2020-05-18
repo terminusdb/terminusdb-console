@@ -9,42 +9,41 @@ export const DetailsCard = (props) => {
     const icon = props.icon || false
 
     return (
-
-      <div className="dd-c">
+    <div className="dd-c">
           <div className="card card-stats">
-            <div className="content">
-              <Row>
-                {icon && <><Col xs={4}>
-                  <div className="dd-ico">
-                    <FontAwesomeIcon icon={props.icon} className="mr-3" />
-                  </div>
-                </Col>
-                <Col xs={8}>
-                  <div className="dd-t">
-                    <legend className="dd-mute">{trimContent(props.title, TITLE_LIMIT)}</legend>
-                    <p className="dd-p">{trimContent(props.main, MAIN_LIMIT)}</p>
-                    <p className="dd-st">{trimContent(props.subTitle, SUB_TITLE_LIMIT)}</p>
-                  </div>
-                </Col></>}
-
-                {!icon &&
-                <Col xs={12}>
-                  <div className="dd-t">
-                    <legend className="dd-mute">{props.title}</legend>
-                    <p className="dd-p">{props.main}</p>
-                    <p className="dd-st">{props.subTitle}</p>
-                  </div>
-                </Col>}
-
-              </Row>
-              <div className="dd-footer">
-                <hr />
-                <div className="dd-f-txt">
-                   {trimContent(props.info, INFO_LIMIT)}
+                <div className="content">
+                    <Row>
+                        {icon && <> 
+                            <Col xs={4}>
+                                <div className="dd-ico">
+                                    <FontAwesomeIcon icon={props.icon} className="mr-3" />
+                                </div>
+                            </Col>
+                            <Col xs={8}>
+                                <div className="dd-t">
+                                    <legend className="dd-mute">{trimContent(props.title, TITLE_LIMIT)}</legend>
+                                    <p className="dd-p">{trimContent(props.main, MAIN_LIMIT)}</p>
+                                    <p className="dd-st">{trimContent(props.subTitle, SUB_TITLE_LIMIT)}</p>
+                                </div>
+                            </Col>
+                        </>}
+                        {!icon &&
+                            <Col xs={12}>
+                                <div className="dd-t">
+                                    <legend className="dd-mute">{props.title}</legend>
+                                    <p className="dd-p">{props.main}</p>
+                                    <p className="dd-st">{props.subTitle}</p>
+                                </div>
+                            </Col>
+                        }
+                    </Row>
+                    <div className="dd-footer">
+                        <hr />
+                        <div className="dd-f-txt">
+                            {trimContent(props.info, INFO_LIMIT)}
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
           </div>
-      </div>
-    );
+    </div> )
 }
