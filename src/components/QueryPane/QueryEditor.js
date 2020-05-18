@@ -164,7 +164,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         }   
 
         {(editable && error) &&  
-            <Alert color="warning">Error Message</Alert>
+            <Alert color="warning">Parse error: syntax error, please check your woql query</Alert>
         }      
         </Container>
     )
