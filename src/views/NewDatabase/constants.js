@@ -63,4 +63,3 @@ export const CREATE_DB_FORM = {
         }
     }
 }
-

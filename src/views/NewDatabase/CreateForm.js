@@ -3,7 +3,8 @@ import { Col, Button, Row, Container } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Loading";
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
-import { createDBText } from "../../variables/formLabels"
+//import { createDBText } from "../../variables/formLabels"
+import { CREATE_DB_FORM } from "./constants"
 import { useForm } from 'react-hook-form';
 import { CREATE_TERMINUS_DB, CREATE_DB_LOCAL } from "../../labels/actionLabels"
 import { isObject } from "../../utils/helperFunctions";
@@ -67,31 +68,31 @@ const CreateDB = (props) => {
 
     function createStarterGraphs(instance, schema){
         if(schema && instance){
-            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
             .then(() => {
-                return woqlClient.createGraph("instance", "main", createDBText.schemaGraphCommitMessage)
+                return woqlClient.createGraph("instance", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
                 .then(() => setReport({message: message, status: reportAlert.SUCCESS}))
                 .catch((e) => {
-                    message += createDBText.instanceFailedSchemaWorkedMessage
+                    message += CREATE_DB_FORM.instanceFailedSchemaWorkedMessage
                     setReport({message: message, error: e, status: reportAlert.WARNING})
                 })
             }).catch((e) => {
-                message += createDBText.schemaFailedMessage
+                message += CREATE_DB_FORM.schemaFailedMessage
                 setReport({message: message, error: e, status: reportAlert.WARNING})
             })
         }
         else if(schema){
-            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
             .then(() => {
-                message += createDBText.noDataGraphMessage
+                message += CREATE_DB_FORM.noDataGraphMessage
                 setReport({message: message, error: e, status: reportAlert.SUCCESS})
             }).catch((e) => {
-                message += createDBText.schemaFailedMessage
+                message += CREATE_DB_FORM.schemaFailedMessage
                 setReport({message: message, error: e, status: reportAlert.WARNING})
             })
         }
         else if(instance){
-            return woqlClient.createGraph("schema", "main", createDBText.schemaGraphCommitMessage)
+            return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
             .then(() => {
                 message += createDBText.noSchemaGraphMessage
                 setReport({message: message, error: e, status: reportAlert.SUCCESS})
@@ -106,12 +107,12 @@ const CreateDB = (props) => {
         update_start = Date.now()
         return woqlClient.createDatabase(id , doc, acc)
         .then((cresults) => {
-            let message = `${createDBText.createSuccessMessage} ${doc.label}, id: [${id}] `
+            let message = `${CREATE_DB_FORM.createSuccessMessage} ${doc.label}, id: [${id}] `
             if(instance || schema){
                 return createStarterGraphs(instance, schema, message)
             }
             else {
-                message += createDBText.noGraphMessage
+                message += CREATE_DB_FORM.noGraphMessage
                 setReport({message: message, error: e, status: reportAlert.SUCCESS})
             }
         })
@@ -133,7 +134,7 @@ const CreateDB = (props) => {
     }
 
     function showMandatory(label){
-        return (<strong title={label + " " + createDBText.requiredField} style={{"color": "red"}} className={createDBText.errorClassName}> * </strong>)
+        return (<strong title={label + " " + CREATE_DB_FORM.requiredField} style={{"color": "red"}} className={CREATE_DB_FORM.errorClassName}> * </strong>)
     }
 
     const advancedIcon = () => {
@@ -158,7 +159,7 @@ const CreateDB = (props) => {
     }
 
     function generateFieldLabel(field_id, meta){
-        let cname = createDBText.labelClassName
+        let cname = CREATE_DB_FORM.labelClassName
         let cbits = ""
         if(textinputs.indexOf(field_id) != -1 || errors[field_id]){
             if(textinputs.indexOf(field_id) != -1) cbits =showMandatory(meta.label)
@@ -172,7 +173,7 @@ const CreateDB = (props) => {
     }
 
     function generateFieldInput(field_id, meta){
-        let cname = createDBText.inputClassName
+        let cname = CREATE_DB_FORM.inputClassName
         if(textinputs.indexOf(field_id) != -1){
             let ph = meta.placeholder || ""
             let val = dbInfo[field_id] || ""
@@ -198,26 +199,26 @@ const CreateDB = (props) => {
         }
         else if(field_id == "graphs"){
             return (
-                <div className={createDBText.graphsRowClassName}>
-                    <span className={createDBText.checkboxWrapperClassName}>
+                <div className={CREATE_DB_FORM.graphsRowClassName}>
+                    <span className={CREATE_DB_FORM.checkboxWrapperClassName}>
                         <input type="checkbox"
-                            className = {createDBText.checkboxClassName }
+                            className = {CREATE_DB_FORM.checkboxClassName }
                             defaultChecked={dbInfo.schema}
                             name = "schema"
                             id="instancecbox"
                             ref = {register}/>
-                        <label className={createDBText.checkboxLabelClassName} htmlFor="instancecbox">
+                        <label className={CREATE_DB_FORM.checkboxLabelClassName} htmlFor="instancecbox">
                             {meta.schema_text}
                         </label>
                     </span>
-                    <span className={createDBText.checkboxWrapperClassName}>
+                    <span className={CREATE_DB_FORM.checkboxWrapperClassName}>
                         <input type="checkbox"
-                            className = {createDBText.checkboxClassName  }
+                            className = {CREATE_DB_FORM.checkboxClassName  }
                             defaultChecked ={dbInfo.instance}
                             name = "instance"
                             id="schemacbox"
                             ref = {register}/>
-                        <label className={createDBText.checkboxLabelClassName} htmlFor="schemacbox">
+                        <label className={CREATE_DB_FORM.checkboxLabelClassName} htmlFor="schemacbox">
                             {meta.instance_text}
                         </label>
                     </span>
@@ -230,15 +231,15 @@ const CreateDB = (props) => {
     function generateFieldPrompt(field_id, meta){
         if(errors[field_id]){
             return (
-                <p className = {createDBText.errorClassName}>
-                    {meta.label + " " + createDBText.requiredField}
+                <p className = {CREATE_DB_FORM.errorClassName}>
+                    {meta.label + " " + CREATE_DB_FORM.requiredField}
                 </p>
             )
         }
         if(meta.help){
             return (
                 <><HelpCowDuck text={meta.help} id={meta.label}/>
-               { /*<p className = {createDBText.helpClassName}>
+               { /*<p className = {CREATE_DB_FORM.helpClassName}>
                     {meta.help}
                 </p>*/}</>
             )
@@ -262,7 +263,7 @@ const CreateDB = (props) => {
     }
 
     function generateSection(secid){
-        let sec = createDBText.sections[secid]
+        let sec = CREATE_DB_FORM.sections[secid]
         let fields = []
         for(var k in sec.fields){
             fields.push(generateFormField(k, sec.fields[k]))
@@ -294,30 +295,30 @@ const CreateDB = (props) => {
             {show && <form onSubmit={handleSubmit(onSubmit) }>
                 {generateSection("details")}
 				 <hr className = "my-space-15"/>
-                 <span className={createDBText.advancedWrapperClassName}>
+                 <span className={CREATE_DB_FORM.advancedWrapperClassName}>
                     {!advancedSettings &&
-                        <button className={createDBText.advancedButtonClassName}
+                        <button className={CREATE_DB_FORM.advancedButtonClassName}
                         onClick={handleAdvancedSettings}>
-                            {createDBText.showAdvanced}
+                            {CREATE_DB_FORM.showAdvanced}
                             {advancedIcon()}
                         </button>
                     }
                     {advancedSettings &&
-                        <button className={createDBText.advancedButtonClassName}
+                        <button className={CREATE_DB_FORM.advancedButtonClassName}
                             onClick={handleHideAdvancedSettings}>
-                                {createDBText.hideAdvanced}
+                                {CREATE_DB_FORM.hideAdvanced}
                                 {advancedIcon()}
                         </button>
                     }
                  </span>
                 {advancedSettings &&
-                    <div className={createDBText.advancedSectionClassName}>
+                    <div className={CREATE_DB_FORM.advancedSectionClassName}>
                         <hr className = "my-space-15"/>
                         {generateSection("advanced")}
                     </div>
                 }
-                <button type="submit" className={createDBText.createButtonClassName}>
-                    {createDBText.createButtonText}
+                <button type="submit" className={CREATE_DB_FORM.createButtonClassName}>
+                    {CREATE_DB_FORM.createButtonText}
                 </button>
             </form>}
           </>)
