@@ -9,9 +9,12 @@ export const WOQLClientProvider = ({children,params}) => {
 	const [loadingServer, setLoading] = useState(true);
     const [woqlClient, setWoqlClient] = useState(null);
     const [clientError, setError] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [newKeyValue, setNewKeyValue] = useState(undefined);
 
     let database=false;
     let account=false;
+    //let key;
 
         /*
         * Important Warning Cannot update a component (`WOQLClientProvider`) while rendering a different component (`DBPages`). To locate the bad setState() call inside `DBPages`, follow the stack trace as described
@@ -20,26 +23,40 @@ export const WOQLClientProvider = ({children,params}) => {
 
         useEffect(() => {
         const initWoqlClient = async () => {
+            setShowLogin(false);
+            setLoading(true);
+            setError(false);
+
             const opts = params || {};
             const dbClient = new TerminusClient.WOQLClient();
-            try{
-                const result = await dbClient.connect(opts);
-                setWoqlClient(dbClient);
-                setLoading(false);
-                /*
-                * we can't know when the server response will be arrive
-                * if we have already set this variable we can unpdate woqlClient
-                */
-                if(database)setDatabase(database)
-                if(account)setAccount(account)
-            }catch(err){
-                setError(err)
+
+            if(opts.key===undefined){
+                setShowLogin(true);
+            }else{
+                try{
+                    const result = await dbClient.connect(opts);
+                    setWoqlClient(dbClient);               
+                    setLoading(false);
+                    /*
+                    * we can't know when the server response will be arrive
+                    * if we have already set this variable we can unpdate woqlClient
+                    */
+                    if(database)setDatabase(database)
+                    if(account)setAccount(account)
+                }catch(err){
+                    setError(err)
+                }
             }
         }
         initWoqlClient();
         // eslint-disable-next-line
-        }, [params]);
+        }, [params,newKeyValue]);
 
+
+        const setKey=(key)=>{
+            if(params)params.key=key
+            setNewKeyValue(key)
+        }
         /*
         * you can change the woqlCLient settings
         */
@@ -75,7 +92,9 @@ export const WOQLClientProvider = ({children,params}) => {
                 woqlClient,
                 clientError,
                 setAccount,
-                setDatabase
+                setDatabase,
+                setKey,
+                showLogin
             }}
         >
             {children}

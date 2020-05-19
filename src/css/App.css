@@ -1,3 +1,20 @@
+.formSignin{  
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.containerSignIn{
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #002855;
+    text-align: center;
+}
+
 .next-steps .fa-link {
   margin-right: 5px;
 }

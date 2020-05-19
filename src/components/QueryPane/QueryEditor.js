@@ -54,7 +54,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     function sendQuery(){
         let woql = checkContent()
         if(woql){
-            if(updateQuery) updateQuery(woql, commitMsg, content)
+            if(updateQuery) updateQuery(woql, commitMsg)
         }
     }
 

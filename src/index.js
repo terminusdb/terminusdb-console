@@ -7,4 +7,5 @@ export PrivateRoute from "./components/Router/PrivateRoute"
 export LoadingAppPage from "./components/Reports/LoadingAppPage"
 export ConnectionErrorPage from "./components/Reports/ConnectionErrorPage";
 export {initFontLib} from "./init/initFontAwesome";
-export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance"
+export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance";
+export {LoginPage} from "./views/LoginPage";

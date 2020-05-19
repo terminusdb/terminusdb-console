@@ -9,9 +9,6 @@ const copyRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/c
 const cloneImg = "https://assets.terminusdb.com/terminusdb-console/images/clone.png"
 const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.png"
 
-
-
-
 export const createDbCard = {
     create:{
         title: 'Create New Database',
