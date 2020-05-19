@@ -9,16 +9,18 @@ export const ServerNavbar = (props) => {
     return (
         <span className="m-opts d-flex">
             <div className="d-flex main-nav">
-                <NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>
+                {/*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/}
                 <Nav className = "mr-auto"  navbar>
                     <NavItem>
-                        <NavLink tag = {RouterNavLink}
+                        {<NavLink tag = {RouterNavLink}
                                 to = {links.SERVER_HOME_PAGE.page}
                                 activeClassName = "router-link-exact-active"
                                 onClick = {props.onClick}
                                 exact>
-                                {links.SERVER_HOME_PAGE.label}
-                        </NavLink>
+                                <span className="d-fl">
+                                    <div className="logo"/>{links.SERVER_HOME_PAGE.label}
+                                </span>
+                        </NavLink>}
                     </NavItem>
             </Nav>
         </div>

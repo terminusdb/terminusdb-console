@@ -5,6 +5,17 @@
     margin-top: 40px
 }
 
+div.server-home-table table tr:hover {
+    cursor: pointer;
+}
+
+button.collapsible-head {
+    background-color: transparent !important;
+    color: #000 !important;
+    height: auto;
+    margin: 20px 0px 0px 0px;
+}
+
 img.cow-duck-help {
     float: right;
     width: 80px;
@@ -52,7 +63,8 @@ button.cow-duck-help-btn:active{
 button.flat-buttons-link {
     border: 0px !important;
     background-color: transparent !important;
-    padding: 10px 10px 30px 10px;
+    /*padding: 10px 10px 30px 10px;*/
+    padding: 10px 5px 10px 0px;
     width: auto;
     min-width: 0px !important;
 }
@@ -440,7 +452,7 @@ p.create-form-helptext {
 
 .advanced-button {
     float: left !important;
-} 
+}
 
 .advanced-settings-create-form {
     margin-top: -40px;
@@ -519,11 +531,12 @@ div.css-yk16xz-control{
 .logo{
     /*background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzYgNDEiIHZlcnNpb249IjEuM…MuOTg3MDQ1MyAxMi42MDQ3OTE4Ij48L3BvbHlnb24+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg==);
     */
-    background-image:url('https://terminusdb.com/img/logos/logo.svg');/*url('./assets/logoOnly.jpg')*/;
-    width: 3rem;
-    height: 3rem;
+    background-image: url(https://terminusdb.com/img/logos/logo.svg);
+    width: 2rem;
+    height: 2rem;
     background-repeat: no-repeat;
-    background-size: cover
+    background-size: cover;
+    margin: -5px 10px 0px 0px;
 }
 
 .userProfile{
@@ -1797,7 +1810,7 @@ div.commit-view-message {
     height: 100px;
     vertical-align: baseline;
 }
- 
+
 .tcf-input-row {
     padding: 0
 }
@@ -1875,7 +1888,7 @@ div.commit-view-message {
 }
 
 .tcf-open {
-    
+
 }
 
 .tcf-submit,
@@ -1962,5 +1975,5 @@ h4.prefix-section-header {
     width: 24px;
     display: block;
     margin-left: auto;
-    margin-right: auto;   
+    margin-right: auto;
 }
