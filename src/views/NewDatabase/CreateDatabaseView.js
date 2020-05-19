@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, CardTitle, CardText, CardImg, ButtonGroup } from "reactstrap";
+import { Container, Row, Col, Card, Button } from "reactstrap";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import { CREATE_DATABASE_TAB, CLONE_LOCAL_DB_TAB, CLONE_REMOTE_DB_TAB } from "../../labels/tabLabels"
 import CloneLocalDB from "./CloneLocalDB"
@@ -53,19 +53,19 @@ const CreateDatabase = (props) => {
 		        <hr className = "my-space-50"/>
 				{(page == view.CREATE_VIEW) && <>
 					<Crumbs/>
-					<span className="d-fl">
-						<Col md={6} className="col-md-6">
-							<Card body outline color="info" onClick={handleCreate} className="db-view-cards">
+					<Row className="col-md-12 justify-content-center" >
+						<Col className="col-md-5">
+							<div onClick={handleCreate} className="square db-view-cards">
 								<DatabaseCard card = {createDbCard.create}/>
-							</Card>
+							</div>
 						</Col>
 
-						<Col md={6} className="col-md-6">
-							<Card body outline color="info" onClick={handleCopy} className="db-view-cards">
+						<Col className="col-md-5">
+							<div onClick={handleCopy} className="square db-view-cards">							
 								<DatabaseCard card = {createDbCard.copy}/>
-							</Card>
+							</div>
 						</Col>
-				</span></>}
+				</Row></>}
 
 				{(page == view.CREATE_OPTIONS) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
@@ -118,3 +118,20 @@ const CreateDatabase = (props) => {
 }
 
 export default CreateDatabase;
+
+/*
+{(page == view.CREATE_VIEW) && <>
+					<Crumbs/>
+					<span className="d-fl">
+						<Col md={6} className="col-md-6">
+							<Card body outline color="info" onClick={handleCreate} className="db-view-cards">
+								<DatabaseCard card = {createDbCard.create}/>
+							</Card>
+						</Col>
+
+						<Col md={6} className="col-md-6">
+							<Card body outline color="info" onClick={handleCopy} className="db-view-cards">
+								<DatabaseCard card = {createDbCard.copy}/>
+							</Card>
+						</Col>
+				</span></>}*/

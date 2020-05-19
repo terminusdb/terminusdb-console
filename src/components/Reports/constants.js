@@ -27,7 +27,7 @@ export const NO_DOCUMENT_CLASS = {
 }
 
 export const CONNECTING_MESSAGE = "Connecting To TerminusDB Server"
-export const CONNECTION_FAILURE_ADVICE = "Cannot connect to Terminus Server. Please make sure your server is running and try connecting again. Or you insert a wrong password"
+export const CONNECTION_FAILURE_ADVICE = "Cannot connect to Terminus Server. Please make sure your server is running and try connecting again."
 export const CONNECTION_FAILURE = "Connection Failure"
 
 export const RESULT_REPORT_CSS = "result-report-main"

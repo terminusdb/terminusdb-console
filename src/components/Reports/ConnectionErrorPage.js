@@ -14,20 +14,20 @@ const ConnectionErrorPage = () => {
 	}
 
     return (
-    	<Container fluid className="h-100 connectErrorPage">
-    		<div className="connectLayout">
-    			<img src="http://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png" alt="" width="70%" height="auto"></img>
-    			<h2 className="mb-4">{CONNECTION_FAILURE}</h2>
-    			<p className="mb-4" >{ CONNECTION_FAILURE_ADVICE}</p>
-    			<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Insert your passwod</button>
-    		</div>
-    		
-    	</Container>
-
-        
+    	<DialogueBox message = { CONNECTION_FAILURE_ADVICE} header = {CONNECTION_FAILURE}>
+    		<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Enter your passwod</button>
+    	</DialogueBox>
     )
 }
 // /<img width="70%" src="http://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png" class="card-img-top">
 export default ConnectionErrorPage;
-
-//<DialogueBox message = { CONNECTION_FAILURE_ADVICE}header = {CONNECTION_FAILURE}/>
+/*
+<Container fluid className="h-100 connectErrorPage">
+    		<div className="connectLayout">
+    			<img src="http://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png" alt="" width="70%" height="auto"></img>
+    			<h2 className="mb-4">{CONNECTION_FAILURE}</h2>
+    			<p className="mb-4" >{ CONNECTION_FAILURE_ADVICE}</p>
+    			<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Enter your passwod</button>
+    		</div>    		
+    	</Container>*/
+//

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import CloneLocalDB from "./CloneLocalDB"
 import CloneRemoteDB from "./CloneRemoteDB"
 import { copyDbCardTypes } from "../../variables/formLabels"
@@ -26,7 +26,26 @@ export const CopyType = (props) => {
     }
 
     return (<>
-             {<div className="card-grid">
+             { <Row className="col-md-12 justify-content-center" >
+                    <Col className="col-md-5">
+                        <div onClick={handleFork} className="square db-view-cards">
+                            <DatabaseCard card = {copyDbCardTypes.fork}/>
+                        </div>
+                    </Col>
+
+                    <Col className="col-md-5">
+                        <div onClick={handleClone} className="square db-view-cards">                           
+                            <DatabaseCard card = {copyDbCardTypes.clone}/>
+                        </div>
+                    </Col>
+                </Row>}
+
+        </>
+    )
+}
+
+/*
+<div className="card-grid">
                  <span className="d-fl">
                     <Col md={6} className="col-md-6">
                         <Card body outline color="info" onClick={handleFork} className="db-view-cards">
@@ -39,8 +58,4 @@ export const CopyType = (props) => {
                         <DatabaseCard card = {copyDbCardTypes.clone}/>
                     </Card>
                 </Col>
-            </span> </div>}
-
-        </>
-    )
-}
+            </span> </div>*/

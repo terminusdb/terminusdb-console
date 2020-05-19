@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import CreateDb from "./CreateForm"
 import { createDbCardOptions } from "../../variables/formLabels"
 import { DatabaseCard } from "../../components/Card/DatabaseCard"
@@ -22,10 +22,29 @@ export const CreateOptions = (props) => {
         setCreateRemote(true)
     }
 
+                
 
     return (
         <>
-         {<><span className="d-fl">
+         {<Row className="col-md-12 justify-content-center" >
+                    <Col className="col-md-5">
+                        <div onClick={handleLocal} className="square db-view-cards">
+                            <DatabaseCard card = {createDbCardOptions.local}/>
+                        </div>
+                    </Col>
+
+                    <Col className="col-md-5">
+                        <div onClick={handleRemote} className="square db-view-cards">                           
+                            <DatabaseCard card = {createDbCardOptions.remote}/>
+                        </div>
+                    </Col>
+                </Row>}
+    </>)
+}
+
+
+/*
+<span className="d-fl">
             <Col md={6} className="col-md-6">
                 <Card body outline color="info" onClick={handleLocal} className="db-view-cards">
                     <DatabaseCard card = {createDbCardOptions.local}/>
@@ -38,8 +57,4 @@ export const CreateOptions = (props) => {
                 </Card>
             </Col>
 
-        </span>
-    </>}
-
-    </>)
-}
+        </span>*/
