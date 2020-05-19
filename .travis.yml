@@ -5,9 +5,11 @@ node_js:
 
 stages:
   - name: build_dev
-    if: branch = dev
+    if: branch = dev or branch = canary
   - name: deploy_dev
     if: branch = dev
+  - name: deploy_canary
+    if: branch = canary
   - name: build
     if: branch = master
 
@@ -24,7 +26,15 @@ jobs:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       script:
         - npm run build
+        - bash .ci/trigger_canary.sh
         - bash .ci/publish_dev.sh
+
+    - stage: deploy_canary
+      before_install:
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
+      script:
+        - npm run build
+        - bash .ci/publish_canary.sh
 
     - stage: build
       script:
@@ -34,6 +44,7 @@ branches:
   only:
     - dev
     - master
+    - canary
 
 deploy:
   - provider: script
