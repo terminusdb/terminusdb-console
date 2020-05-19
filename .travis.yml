@@ -26,9 +26,10 @@ jobs:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       script:
         - npm run build
+        - bash .ci/trigger_canary.sh
         - bash .ci/publish_dev.sh
 
-    - stage: deploy_dev
+    - stage: deploy_canary
       before_install:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       script:
