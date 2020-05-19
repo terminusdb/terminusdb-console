@@ -15,6 +15,8 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from
 import {CREATE_DB_FORM} from "./constants"
 import {REQUIRED_FIELD_ERROR, ILLEGAL_ID_ERROR} from "../../components/Form/constants"
 import {getDefaultScmURL, getDefaultDocURL} from "../../constants/functions"
+import { goDBHome } from "../../components/Router/ConsoleRouter"
+
 
 const DBDetailsForm = (props) => {
     let initconfig = props.dbInfo;
@@ -85,11 +87,12 @@ const DBDetailsForm = (props) => {
         .then((cresults) => {
             let message = `${CREATE_DB_FORM.createSuccessMessage} ${doc.label}, id: [${id}] `
             if(schema){
-                return createStarterGraph(schema, message)
+                return createStarterGraph(schema, message, id, acc)
             }
             else {
                 message += CREATE_DB_FORM.noSchemaMessage
                 setReport({message: message, error: e, status: TERMINUS_SUCCESS})
+                goDBHome(id, acc)
             }
         })
         .catch((err) => {
@@ -100,11 +103,12 @@ const DBDetailsForm = (props) => {
     }
 
 
-    function createStarterGraph( schema, message ){
+    function createStarterGraph(schema, message, id, acc){
         if(schema){
             return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
             .then(() => {
                 setReport({message: message, status: TERMINUS_SUCCESS})
+                goDBHome(id, acc)
             }).catch((e) => {
                 message += CREATE_DB_FORM.schemaFailedMessage
                 setReport({message: message, error: e, status: TERMINUS_WARNING})

@@ -1,8 +1,52 @@
+.connectErrorPage{
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    margin: auto;
+}
+
+.connectLayout{
+    flex-direction: column;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: white;
+    text-align: center;
+}
+
+.formSignin{  
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.containerSignIn{
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background-color: #002855;
+    text-align: center;
+}
+
 .next-steps .fa-link {
   margin-right: 5px;
 }
 .free-p-div{
     margin-top: 40px
+}
+
+div.server-home-table table tr:hover {
+    cursor: pointer;
+}
+
+button.collapsible-head {
+    background-color: transparent !important;
+    color: #000 !important;
+    height: auto;
+    margin: 20px 0px 0px 0px;
 }
 
 img.cow-duck-help {
@@ -52,7 +96,8 @@ button.cow-duck-help-btn:active{
 button.flat-buttons-link {
     border: 0px !important;
     background-color: transparent !important;
-    padding: 10px 10px 30px 10px;
+    /*padding: 10px 10px 30px 10px;*/
+    padding: 10px 5px 10px 0px;
     width: auto;
     min-width: 0px !important;
 }
@@ -441,7 +486,7 @@ p.create-form-helptext {
 
 .advanced-button {
     float: left !important;
-} 
+}
 
 .advanced-settings-create-form {
     margin-top: -40px;
@@ -520,11 +565,12 @@ div.css-yk16xz-control{
 .logo{
     /*background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzYgNDEiIHZlcnNpb249IjEuM…MuOTg3MDQ1MyAxMi42MDQ3OTE4Ij48L3BvbHlnb24+PC9nPjwvZz48L2c+PC9nPjwvc3ZnPg==);
     */
-    background-image:url('https://terminusdb.com/img/logos/logo.svg');/*url('./assets/logoOnly.jpg')*/;
-    width: 3rem;
-    height: 3rem;
+    background-image: url(https://terminusdb.com/img/logos/logo.svg);
+    width: 2rem;
+    height: 2rem;
     background-repeat: no-repeat;
-    background-size: cover
+    background-size: cover;
+    margin: -5px 10px 0px 0px;
 }
 
 .userProfile{
@@ -1370,9 +1416,13 @@ p.dd-p{
 
 div.dd-ico svg {
     color: #002859 !important;
-    margin: 25px 0px 20px 10px;
+    /*margin: 25px 0px 20px 10px;*/
+    margin-top: 25px;
+    margin-bottom: 20px;
+    margin-left: 10px;
     opacity: 0.7;
     zoom: 240%;
+    -moz-transform: scale(2);
 }
 
 div.dd-f-txt{
@@ -1798,7 +1848,7 @@ div.commit-view-message {
     height: 100px;
     vertical-align: baseline;
 }
- 
+
 .tcf-input-row {
     padding: 0
 }
@@ -1876,7 +1926,7 @@ div.commit-view-message {
 }
 
 .tcf-open {
-    
+
 }
 
 .tcf-submit,
@@ -1938,14 +1988,13 @@ div.commit-view-message {
 .tcf-checkbox {
     margin-left: 20px;
     font-size: 2em;
+    border: 0;
+    outline: none;
 }
 
 .tcf-checkbox-wrapper {
     border: 1px solid #000;
-    height: 54px;
-    padding-left: 4px;
-    margin-left: 0;
-    margin-right: 0;
+    background-color: #efefef;
 }
 
 .tcf-checkbox-wrapper-checked {
@@ -1971,18 +2020,5 @@ h4.prefix-section-header {
     width: 24px;
     display: block;
     margin-left: auto;
-    margin-right: auto;   
-}
-
-/*
-Exception consule form classes - for testing non-defaults...
-*/
-
-.xcf {
-    border: 3px solid blue;
-    padding: 4; 
-    font-size: 2em;
-    background-color: red;
-    min-height: 100;
-    min-width: 100;
+    margin-right: auto;
 }

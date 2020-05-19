@@ -17,8 +17,6 @@ import {ResultQueryPane} from './ResultQueryPane';
 export const QueryPane = ({query,className,resultView, startLanguage, queryText}) => {
 
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
-
-  
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 
 

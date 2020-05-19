@@ -75,4 +75,8 @@ export const downloadTerminusDBLabels={
 
 }
 
+export const queryEditorLabel={
+  syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
+}
+
 //export default {contentData,CreateDataBaseLabels};

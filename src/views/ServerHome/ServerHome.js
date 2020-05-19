@@ -1,13 +1,16 @@
 import React from "react";
 import { CREATEDB_TITLE, DBLIST_TITLE, CREATE_FIRSTDB_CSS, CREATE_FIRSTDB, DBLIST_HEADER_CSS } from './constants';
-import { ResultViewer } from "../../components/QueryPane/ResultViewer";
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { getDBListData, getDBListColumns } from './FormatDBList';
 import { PageView } from '../PageView'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import CreateDatabase from '../NewDatabase/CreateDatabaseView'
 import { CREATE_DB_ROUTE } from "../../constants/routes"
 import AccessControlErrorPage from "../../components/Reports/AccessControlErrorPage"
 import ConnectionErrorPage from "../../components/Reports/ConnectionErrorPage"
+import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import RenderTable  from "../../components/Table/RenderTable"
+
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();
@@ -21,7 +24,15 @@ const ServerHome = (props) => {
         return (<AccessControlErrorPage />)
     }
 
-    let lview = (dblist.length > 0 ? (<ResultViewer bindings={dblist} type="table"/>) : false)
+    //let lview = (dblist.length > 0 ? (<ResultViewer bindings={dblist} type="table"/>) : false)
+    
+    const columnConf = getDBListColumns(dblist);
+    const columnData = getDBListData(dblist);
+    const dataProvider = {columnData:columnData, columnConf:columnConf}
+    //alert(JSON.stringify(dataProvider))
+    let lview = (<RenderTable fromPage="home" dataProvider = {dataProvider} />)
+
+
     let cview = (canCreate ? (<CreateDatabase/>) : false) 
 
     if(!(lview && cview)){

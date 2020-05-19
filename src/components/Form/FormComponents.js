@@ -85,19 +85,20 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
         }
     }        
     let tcf = JSONTCFields(fields, currentValues, fieldErrors, onChangeField)
-
+    let showGrid = (layout && tcf)
+    let noGrid = (!layout && tcf)
     return (
         <form onSubmit={interceptSubmit} errors={fieldErrors} values={currentValues}>
             <JSONTCButtons buttons={buttons} />
             {(report && isObject(report)) && 
                 <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
             }
-            {layout && 
+            {showGrid &&  
                 <TCGrid layout={layout}>
                     {tcf}
                 </TCGrid>
             }
-            {!layout && 
+            {noGrid && 
                 {tcf}
             }
             {children}
@@ -363,7 +364,10 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
 
     if(typeof labelClassName != "string" || !labelClassName) labelClassName = CHECKBOX_LABEL_CSS
   
-    let vchange = _onTChange(onChange, field_id)
+    let vchange = function(){
+        _onTChange(onChange, field_id)
+        changeWrapper()
+    }
 
     return(
         <Row className={wcss}>
@@ -375,7 +379,7 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
                 name = {field_id}
                 id={field_id}
             />
-            <label className={labelClassName} htmlFor={field_id} onClick={changeWrapper}>
+            <label className={labelClassName} htmlFor={field_id}>
                 {label}
             </label>
         </Row>
@@ -584,7 +588,6 @@ const _onSChange = (ch, field_id) => {
 const _onTChange = (ch, field_id) => {
     if(ch){
         let vchange = function(SelValue){
-            alert(SelValue.target.checked)
             ch(field_id, SelValue.target.checked)
         }
         return vchange

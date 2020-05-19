@@ -5,19 +5,16 @@ import { useAuth0 } from "../../react-auth0-spa";
 
 export const Login = (props) => {
     const { loginWithRedirect } = useAuth0();
-    return ( 
+    return (
         <Nav className = "mr-auto"  navbar>
             <NavItem>
                 <Button id = "qsLoginBtn"
                     color = "primary"
                     className = "btn-margin"
-                    onClick = {() => loginWithRedirect({})}>
+                    onClick = {() => {loginWithRedirect({})}}>
                     {links.LOGIN.label}
                 </Button>
             </NavItem>
         </Nav>
     )
 }
-
-
-

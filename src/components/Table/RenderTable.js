@@ -8,9 +8,6 @@ const RenderTable = (props) => {
     const [onRowClicked, setSelectedRows] = useState([]);
     let explandableRows = false;
     let always = false
-    if (props.fromPage == SERVER_HOME_PAGE.page)
-        explandableRows = false;
-
     let dBuf = props.dataProvider.columnData || [];
 
     // get datatable data and column
@@ -30,7 +27,7 @@ const RenderTable = (props) => {
 
     const handleChange = useCallback(state => {
         switch(props.fromPage){
-            case SERVER_HOME_PAGE.page:
+            case "home":
                 var dbId = state['db'];
                 var account = state['account'];
                 goDBHome(dbId, account)

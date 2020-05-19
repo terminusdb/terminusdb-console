@@ -1,5 +1,24 @@
 import React from "react";
+import { getNameFromUrl, getNameFromVariable, formatColumnNames,
+    stripDocFromUrl } from '../../utils/extractStrings'
 
+function parseObject(item){
+    const row = {};
+    for (let itemId of Object.keys(item)){
+          if(typeof item[itemId] === 'object'){
+              row[itemId] = item[itemId]['@value'];
+              if(itemId === "v:Date"){
+                row['timestamp'] = row[itemId];
+              }
+          }
+          else {
+              if(item[itemId] == "unknown") row[itemId] = "";
+              else row[itemId] = stripDocFromUrl(item[itemId])
+              //else row[itemId] = getNameFromUrl(item[itemId])
+          }
+    }
+    return row;
+}
 
 export const getDBListColumns = (list) => {
     const columns = [];
@@ -21,7 +40,6 @@ export const getDBListColumns = (list) => {
     }
 
 }
-
 
 export const getDBListData = (list) => {
     const data = [];
