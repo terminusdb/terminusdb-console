@@ -70,8 +70,7 @@ const DBDetailsForm = (props) => {
             let doc = {
                 label: dbInfo.dbname,
                 comment: dbInfo.description,
-                base_uri: dbInfo.data_url,
-                prefixes: {scm: dbInfo.schema_url}
+                prefixes: {doc: dbInfo.data_url, scm: dbInfo.schema_url}
             }
             setLoading(true)
             doCreate(dbInfo.dbid, doc, accountid, dbInfo.schema, dbInfo.instance)

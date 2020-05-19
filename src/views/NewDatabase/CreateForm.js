@@ -57,8 +57,7 @@ const CreateDB = (props) => {
         let doc = {
             label: data.dbname,
             comment: data.description,
-            base_uri: data.data_url,
-            prefixes: {scm: data.schema_url}
+            prefixes: {doc: data.data_url, scm: data.schema_url}
         }
         setLoading(true)
         doCreate(data.dbid, doc, data.accountid, data.schema, data.instance)
