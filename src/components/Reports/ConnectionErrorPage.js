@@ -19,7 +19,7 @@ const ConnectionErrorPage = () => {
     			<img src="http://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png" alt="" width="70%" height="auto"></img>
     			<h2 className="mb-4">{CONNECTION_FAILURE}</h2>
     			<p className="mb-4" >{ CONNECTION_FAILURE_ADVICE}</p>
-    			<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Insert your passwod</button>
+    			<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Insert your password</button>
     		</div>
     		
     	</Container>
