@@ -27,3 +27,12 @@ export const MANAGE_COMPONENTS = {
 
 export const TERMINUS_HOME_TITLE = "TerminusDB - Terminus Database"
 export const TERMINUS_HOME_ADVICE = "This is the TerminusDB Terminus Database. It stores the internal meta-data about users, roles, databases, etc. It should not be updated directly - treat with care."
+
+export const TERMINUS_BRANCH_BLURB = "Creating a new branch allows you to have multiple different live versions of the database at the same time which can be merged back together when desired"
+export const TERMINUS_BRANCH_TITLE = "Create a new Branch"
+
+export const TERMINUS_MERGE_BLURB = "Merging branches together creates a unified copy of the database from different branches which may have converged."
+export const TERMINUS_MERGE_TITLE = "Merge Branches"
+
+export const TERMINUS_FORK_BLURB = "A fork allows you to ingest an existing database to become a branch of your current database."
+export const TERMINUS_FORK_TITLE = "Create a Fork"

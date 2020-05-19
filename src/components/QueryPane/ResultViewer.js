@@ -14,7 +14,7 @@ export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) =
     to be review  I have to move from here
     */
     const woqlGraphConfig= TerminusClient.View.graph();
-    woqlGraphConfig.height(500).width(800)
+    woqlGraphConfig.height(800).width(1000)
 
     const result = new TerminusClient.WOQLResult({bindings:bindings},query);
 

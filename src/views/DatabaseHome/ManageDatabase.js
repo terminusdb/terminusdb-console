@@ -13,6 +13,8 @@ import {BranchSelector} from "../../components/HistoryNavigator/BranchSelector"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import {TCFormSubmits, TCForm, TCFormInput, TCFormField, TCFormSelect, TCFormCheckbox, TCFormTextarea, TCCol, TCRow, TCSubmitWrap} from  "../../components/Form/FormComponents"
 
+import { TERMINUS_FORK_TITLE, TERMINUS_MERGE_BLURB, TERMINUS_MERGE_TITLE, TERMINUS_FORK_BLURB, TERMINUS_BRANCH_TITLE, TERMINUS_BRANCH_BLURB } from "./constants"
+
 const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png";
 const cmsImg1 = "https://assets.terminusdb.com/terminusdb-console/images/comingSoon.png";
 
@@ -49,8 +51,7 @@ const ManageDatabase = (props) => {
 
 			 <Col md={12} className="mb-12">
 			 	<Label><b>Pull Branch</b></Label>
-			 	<img src={cmsImg1} className="cms-i"/>
-			 	<img src={mascotImg} className="cms-i"/>
+			 	<p>{TERMINUS_FORK_BLURB}</p>
 			 	<Button outline className="man-btn" color="secondary" type={ pull.action.type }>
 			 		 { pull.action.text }
 			 	</Button>

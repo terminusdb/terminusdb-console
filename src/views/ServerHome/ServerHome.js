@@ -30,7 +30,7 @@ const ServerHome = (props) => {
     const columnData = getDBListData(dblist);
     const dataProvider = {columnData:columnData, columnConf:columnConf}
     //alert(JSON.stringify(dataProvider))
-    let lview = (<RenderTable fromPage="home" dataProvider = {dataProvider} />)
+    let lview = (dblist.length > 0 ? (<RenderTable fromPage="home" dataProvider = {dataProvider} />) : false)
 
 
     let cview = (canCreate ? (<CreateDatabase/>) : false) 

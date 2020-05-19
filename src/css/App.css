@@ -2022,3 +2022,12 @@ h4.prefix-section-header {
     margin-left: auto;
     margin-right: auto;
 }
+
+.terminus-result-report-label {
+    padding-right: 8px;
+} 
+
+.terminus-result-report-count {
+    font-weight: 600;
+    padding-right: 6px;
+} 
