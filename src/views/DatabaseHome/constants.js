@@ -4,3 +4,9 @@ export const FAILED_LOADING_LATEST_UPDATES = {
     title: "Failed to load latest updates",
     message: "An error occurred while loading latest updates"    
 }
+
+
+export const EXAMPLE_FORM = {
+    
+
+}

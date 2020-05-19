@@ -47,7 +47,7 @@ export const GraphMaker = (props) => {
         alert("Deleting " + type + id)
     }
 
-    function submitCreate(newID, newType, commit){
+    function submitCreate({gid: newID, gtype: newType, commit: commit}){
         if(newID && newType){
             setUpdateError(false)
             setUpdateSuccess(false)
@@ -57,10 +57,11 @@ export const GraphMaker = (props) => {
             woqlClient.createGraph(newType, newID, commit)
             .then(() => {
                 setLoading(false)
+                props.onUpdate()
+                setCreating(false)
                 let message = CREATE_GRAPH_FORM.createSuccess + " (" + newType + "/" + newID + ")"
                 let t =  ((Date.now() - start )/ 1000) + " seconds"
                 setUpdateSuccess({message: message, status: TERMINUS_SUCCESS, time: t})
-                setCreating(false)
             })
             .catch((e) => {
                 setLoading(false)

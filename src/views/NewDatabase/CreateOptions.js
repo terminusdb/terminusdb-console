@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Col, Card, Button, CardTitle, CardText, CardImg } from "reactstrap";
-import CreateDb from "./CreateForm"
 import { createDbCardOptions } from "../../variables/formLabels"
 import { DatabaseCard } from "../../components/Card/DatabaseCard"
 import * as view from "../../labels/createView"

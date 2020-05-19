@@ -1,52 +1,76 @@
-import React, { useState, useEffect } from "react";
-import { serverHomeConstants, createDatabaseConstants } from './constants';
-import RenderTable from "../../components/Table/RenderTable";
-import { SERVER_HOME_PAGE } from "../../variables/pageLabels"
+import React from "react";
+import { CREATEDB_TITLE, DBLIST_TITLE, CREATE_FIRSTDB_CSS, CREATE_FIRSTDB, DBLIST_HEADER_CSS } from './constants';
+import { ResultViewer } from "../../components/QueryPane/ResultViewer";
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { getDBListData, getDBListColumns } from '../../utils/dataFormatter';
 import { PageView } from '../PageView'
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import CreateDatabase from '../NewDatabase/CreateDatabaseView'
 import { CREATE_DB_ROUTE } from "../../constants/routes"
+import AccessControlErrorPage from "../../components/Reports/AccessControlErrorPage"
+import ConnectionErrorPage from "../../components/Reports/ConnectionErrorPage"
 
 const ServerHome = (props) => {
 	const {woqlClient} = WOQLClientObj();
-	const [dataProvider, setDataProvider] = useState({});
-
-	useEffect(() => {
-        woqlClient.connectionConfig.clearCursor()
-        const records = woqlClient.connection.getServerDBMetadata();
-        const columnConf = getDBListColumns(records);
-        const columnData = getDBListData(records);
-        setDataProvider({columnData:columnData, columnConf:columnConf})
-    }, [])
-
+    const records = woqlClient.connection.getServerDBMetadata() || [];
+    if(!records || records.length == 0){
+        return (<ConnectionErrorPage />)
+    }
+    const dblist = records.filter(meta => meta.db != "terminus");    
     const canCreate =  woqlClient.connection.capabilitiesPermit("create_database")
-    
+    if(dblist.length == 0 && !canCreate){
+        return (<AccessControlErrorPage />)
+    }
 
-    const active_page = ((props && props.page == CREATE_DB_ROUTE && canCreate ) ?  createDatabaseConstants.page : serverHomeConstants.page )
+    let lview = (dblist.length > 0 ? (<ResultViewer bindings={dblist} type="table"/>) : false)
+    let cview = (canCreate ? (<CreateDatabase/>) : false) 
 
-	return (
-        <PageView page="/home">
-            <Tabs activeKey={active_page}>
-                <Tab eventKey={serverHomeConstants.page} label = {serverHomeConstants.title}>
-                    <hr className = "my-space-15"/>
-                    <div className = "container-fluid">
-                        <RenderTable fromPage={SERVER_HOME_PAGE.page} dataProvider = {dataProvider} />
-	    	        </div>
-                </Tab>
-                { canCreate &&
-                    <Tab eventKey={createDatabaseConstants.page} label = {createDatabaseConstants.title}>
-                        <hr className = "my-space-15"/>
-                        <div className = "container-fluid">
-                            <hr className = "my-space-15"/>
-                            <hr className = "my-space-15"/>
-                            <CreateDatabase/>
-                        </div>
-                    </Tab>
-                }
+    if(!(lview && cview)){
+        let content = lview || cview
+        let pageHeader = (cview ? 
+            (<div className={CREATE_FIRSTDB_CSS}>{CREATE_FIRSTDB}</div>) :              
+            (<div className={DBLIST_HEADER_CSS}>{DBLIST_TITLE}</div>)
+        )             
+        
+        let pageBody = (
+            <div className = "container-fluid">
+                <hr className = "my-space-15"/>
+                {content}
+            </div>
+        )
+        return (
+            <PageView>
+                { pageHeader }
+                { pageBody }
+            </PageView>
+        )
+    }
+
+    let listTab = (
+        <Tab key="dblist" label = {DBLIST_TITLE}>
+            <hr className = "my-space-15"/>
+            {lview}
+        </Tab>
+    )
+
+    let createTab = (
+        <Tab key="createdb" label = {CREATEDB_TITLE}>
+            <hr className = "my-space-15"/>
+            <div className = "container-fluid">
+                <hr className = "my-space-15"/>
+                <hr className = "my-space-15"/>
+                {cview}
+            </div>
+        </Tab>
+    )
+
+    let otabs = ((props && props.page == CREATE_DB_ROUTE) ? [createTab, listTab] : [listTab, createTab])
+    return (
+        <PageView>
+            <Tabs>
+                {otabs}
             </Tabs>
         </PageView>
-	)
+    )
 }
+
 export default ServerHome;

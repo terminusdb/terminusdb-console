@@ -6,7 +6,7 @@ export const CREATE_DB_FORM = {
     requiredField: "is a required field",
     createButtonClassName: "btn btn-primary lead mt-4",
     advancedWrapperClassName: "advanced-settings-create-form",
-    advancedButtonClassName: "btn-minor lead mt-4 btn",
+    advancedButtonClassName: "advanced-button btn-minor lead mt-4 btn",
     advancedSectionClassName: "advanced-section-create-form",
     graphsRowClassName: "graph-row-create-form",
     checkboxWrapperClassName: "checkbox-wrapper-create-form",

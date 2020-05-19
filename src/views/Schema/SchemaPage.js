@@ -19,8 +19,10 @@ const SchemaPage = (props) => {
     const [graphFilter, setGraphFilter] = useState(props.graphFilter);
     const [rebuild, setRebuild] = useState(0);
     const [hasSchema, setHasSchema] = useState(false);
+    const [graphsUpdated, setGraphsUpdated] = useState(false);
     const [hasInference, setHasInference] = useState(false);
     const [tabKey, setTabKey] = useState();
+    let letgu = false
 
     const [pageError, setPageError] = useState(false)
     const [loading, setLoading] = useState(false);
@@ -70,14 +72,15 @@ const SchemaPage = (props) => {
             setLoading(false)
             setPageError(e)
         })
-    }, []);
+    }, [graphsUpdated]);
 
     function headChanged(){
         setRebuild(rebuild+1)
     }
 
+
     function graphUpdated(){
-        setRebuild(rebuild+1)
+        setGraphsUpdated(true)
     }
 
     function graphFilterChanged(newFilter){

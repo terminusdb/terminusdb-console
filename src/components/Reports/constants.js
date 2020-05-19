@@ -61,3 +61,6 @@ export const DELETES = "Deletes"
 export const TRANSACTION_RESTARTS = "Transaction Restart Count"
 
 export const COMPONENT_ERROR = "Component Failure"
+
+export const SERVER_ACCESS_CONTROL_FAILURE = "Concedo Nulli - thou cannot pass"
+export const SERVER_ACCESS_CONTROL_FAILURE_ADVICE = "No capabilities on this server were found for this user. Check your configuration and credentials and try again"

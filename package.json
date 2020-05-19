@@ -48,7 +48,7 @@
     "@o2xp/react-datatable": "^1.1.44",
     "@terminusdb/terminusdb-client": "^2.0.0",
     "@terminusdb/terminusdb-react-graph": "^0.0",
-    "@terminusdb/terminusdb-react-table": "^0.0",
+    "@terminusdb/terminusdb-react-table": "file:../terminusdb-react-table",
     "classnames": "^2.2.5",
     "codemirror": "^5.52.0",
     "core-js": "^3.4.2",

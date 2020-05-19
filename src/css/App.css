@@ -300,6 +300,7 @@ div.user-pic{
 
 textarea {
     border-radius: 4px;
+    padding: 4px;
 }
 /*
 input[type="radio"] {
@@ -1938,20 +1939,28 @@ div.commit-view-message {
     margin-left: 20px;
     font-size: 2em;
 }
+
 .tcf-checkbox-wrapper {
     border: 1px solid #000;
     height: 54px;
     padding-left: 4px;
     margin-left: 0;
-    margin-right: 0
+    margin-right: 0;
 }
 
+.tcf-checkbox-wrapper-checked {
+    background-color: #00C08B;
+    color: white;
+}
+
+
 .tcf-checkbox-label {
-    width: 250px;
     display: inline-block;
     margin-left: 1em;
     margin-top: 4px;
     height: 40px;
+    font-size: 1.1em;
+    padding: 8px 0;
 }
 
 h4.prefix-section-header {
@@ -1963,4 +1972,17 @@ h4.prefix-section-header {
     display: block;
     margin-left: auto;
     margin-right: auto;   
+}
+
+/*
+Exception consule form classes - for testing non-defaults...
+*/
+
+.xcf {
+    border: 3px solid blue;
+    padding: 4; 
+    font-size: 2em;
+    background-color: red;
+    min-height: 100;
+    min-width: 100;
 }

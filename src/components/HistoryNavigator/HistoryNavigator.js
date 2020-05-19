@@ -56,7 +56,6 @@ export const HistoryNavigator = (props) => {
                 first: res['First']['@value'] || res['Last']['@value'],
                 head: res['HeadID']["@value"],
                 count: ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1),
-                uri_prefix: res['Base_URI']['@value']
             })
             setRef(res['HeadID']["@value"])
             if(props.setCreated) props.setCreated(res['First']['@value'] || res['Last']['@value'])
