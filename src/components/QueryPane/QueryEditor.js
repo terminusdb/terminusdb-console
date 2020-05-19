@@ -28,7 +28,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     function onBlur(value){
         //const value=editor.doc.getValue();
         saveContent(value);
-        return checkContent()
+        //return checkContent()
     }
 
 

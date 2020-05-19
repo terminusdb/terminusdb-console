@@ -3,7 +3,7 @@ import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
 import { QueryEditor } from "./QueryEditor"
 import { QueryLibrary } from "./QueryLibrary"
-import { ResultReport } from "./ResultReport"
+import { ReportWrapper } from "./ReportWrapper"
 import { ViewEditor } from "./ViewEditor"
 import { ResultPane } from "./ResultPane"
 import { ViewChooser } from "./ViewChooser";
@@ -35,7 +35,7 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
 
     return(
             <>
-              <ResultReport currentReport={report} />
+              <ReportWrapper currentReport={report} />
               <Tabs activeKey="viewer" id="query_tabs">
                   <Tab eventKey="query" label="Query Panel">
                     <QueryEditor 

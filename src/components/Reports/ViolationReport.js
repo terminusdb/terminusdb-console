@@ -4,10 +4,10 @@ import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS,
     VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants"
 
 export const ViolationReport = ({violations, tone}) => {
-    let vioBuff = violations.map((item) => {
-        return (<TerminusViolation vio={item} />)
+    let vioBuff = violations.map((item, index) => {    
+        return (<TerminusViolation key={"_"+index} vio={item} />)
     })
-    let vcount = vioBuff.length + " " + (vioBuff.length > 1 ? {VIOLATIONS_DETECTED} : {VIOLATION_DETECTED})
+    let vcount = vioBuff.length + " " + (vioBuff.length > 1 ? VIOLATIONS_DETECTED : VIOLATION_DETECTED)
     if(!vioBuff) return null    
     return (
         <span className = {VIOLATIONS_CSS}>
@@ -33,7 +33,7 @@ export const TerminusViolation = ({vio}) => {
         }
     }
     return (
-        <div key={item} className={VIOLATION_CSS}>
+        <div className={VIOLATION_CSS}>
             {msg &&
                 <strong>{msg}</strong>
             }
