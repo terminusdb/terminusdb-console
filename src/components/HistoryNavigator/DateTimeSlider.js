@@ -3,9 +3,8 @@ import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { SliderRail, Handle, Track, Tick } from "./SliderComponents";
 import { scaleTime } from "d3-scale";
 import {printts, DATETIME_YEAR, DATETIME_YY, DATETIME_YEAR_MONTH, DATETIME_COMPLETE,
-    DATETIME_DD_MM, DATETIME_HOUR, DATETIME_HHMM, DATETIME_SS, DATETIME_SSS, DATETIME_HH_DD} from "../../utils/dateFormats"
+    DATETIME_DD_MM, DATETIME_HOUR, DATETIME_HHMM, DATETIME_SS, DATETIME_SSS, DATETIME_HH_DD} from "../../constants/dates"
 import {DTSLIDER} from "./constants"
-import {Row, Col, Container} from "reactstrap"
 
 import { differenceInCalendarYears, differenceInMonths, differenceInHours, differenceInDays, differenceInMinutes, differenceInSeconds} from "date-fns"
 
