@@ -14,11 +14,11 @@ import { ForkBranch } from "./ManageActions/Fork"
 import { ManageGraphs } from "./ManageActions/Graphs"
 import { ManagePrefixes } from "./ManageActions/Prefixes"
 
-import { 
-    TERMINUS_FORK_TITLE, TERMINUS_MERGE_BLURB, TERMINUS_MERGE_TITLE, TERMINUS_FORK_BLURB, 
-    TERMINUS_BRANCH_TITLE, TERMINUS_BRANCH_BLURB, TERMINUS_PREFIXES_TITLE, TERMINUS_GRAPHS_TITLE, 
+import {
+    TERMINUS_FORK_TITLE, TERMINUS_MERGE_BLURB, TERMINUS_MERGE_TITLE, TERMINUS_FORK_BLURB,
+    TERMINUS_BRANCH_TITLE, TERMINUS_BRANCH_BLURB, TERMINUS_PREFIXES_TITLE, TERMINUS_GRAPHS_TITLE,
     TERMINUS_DELETE_TITLE, TERMINUS_DELETE_BLURB, TERMINUS_PREFIXES_BLURB, TERMINUS_GRAPHS_BLURB,
-    DELETE_BUTTON 
+    DELETE_BUTTON
  } from "./constants"
 
 const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png";
@@ -93,7 +93,7 @@ const ManageDatabase = (props) => {
 			 	<p>{TERMINUS_DELETE_BLURB}</p>
                 <TCSubmitWrap>
                     <Button color="danger" onClick={toggle}>{DELETE_BUTTON}</Button>
-                </TCSubmitWrap>            
+                </TCSubmitWrap>
 		    	 {modal && <DeleteDatabase modal={modal}/>}
 			 </Col>
 		 </>

@@ -5,6 +5,8 @@ export const COPY_TYPES = 'Copy Types'
 export const COPY = 'Copy'
 export const CREATE_REMOTE = 'Create Database on terminusdb.com'
 export const CREATE_LOCAL = 'Create Database Locally'
+export const CLONE_LOCAL = 'Clone from Local Database'
+export const CLONE_REMOTE = 'Clone from Remote Database'
 
 
 export const CREATE_DB = 'Create Database'
