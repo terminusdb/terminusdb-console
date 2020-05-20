@@ -26,6 +26,5 @@ export const PageView = (props) => {
                 </Col>
             </Container>
         </Container>
-        <Footer />        
     </>)
 }

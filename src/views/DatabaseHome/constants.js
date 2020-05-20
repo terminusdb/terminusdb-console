@@ -62,7 +62,7 @@ export const CREATE_BRANCH_FORM =     {
             label: "Commit Message",
             inputElement: {
                 type: "textarea",
-                placeholder: "A short description of the reason for your changes",
+                placeholder: "A short description of the reason for creating the new branch",
             }
         }
     ],

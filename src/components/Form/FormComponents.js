@@ -18,23 +18,24 @@ import {APIUpdateReport} from '../Reports/APIUpdateReport'
 */
 
 
-export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, children}) => {    
-    let initValues = {} 
-    let initErrors = {}
-    if(fields) {
-        for(var i = 0 ; i<fields.length; i++){
-            let item = fields[i]
-            if(item.id){
-                initValues[item.id] = (item.value ? item.value : "")
-                if(item.error) initErrors[item.id] = item.error
-            }
-        }    
+export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, children}) => {    
+    if(!values) {
+        values = {}
+        if(fields){
+            for(var i = 0 ; i<fields.length; i++){
+                let item = fields[i]
+                if(item.id){
+                    values[item.id] = (item.value ? item.value : "")
+                }
+            }    
+        }
     }
+    
         
     //these are the things that this component changes internally - 
     //if they change in props, assume whole component will be re-rendered by parent.. need no effect
-    const [currentValues, setCurrentValues] = useState(initValues)
-    const [fieldErrors, setFieldErrors] = useState(initErrors)
+    const [currentValues, setCurrentValues] = useState(values)
+    const [fieldErrors, setFieldErrors] = useState({})
 
     function findMissingMandatories(){
         if(!fields) return 0;
