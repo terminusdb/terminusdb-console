@@ -11,6 +11,7 @@ export const WOQLClientProvider = ({children,params}) => {
     const [clientError, setError] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [newKeyValue, setNewKeyValue] = useState(undefined);
+    const [reload, setReloadTime] = useState(0);
 
     let database=false;
     let account=false;
@@ -50,7 +51,7 @@ export const WOQLClientProvider = ({children,params}) => {
         }
         initWoqlClient();
         // eslint-disable-next-line
-        }, [params,newKeyValue]);
+        }, [params,newKeyValue,reload]);
 
 
         const setKey=(key)=>{
@@ -74,6 +75,10 @@ export const WOQLClientProvider = ({children,params}) => {
 
         };
 
+        const reconnectServer= ()=>{
+            setReloadTime(Date.now());
+        }
+
         const setDatabase =(dbName) => {
             if(woqlClient){
                 woqlClient.db(dbName)
@@ -95,7 +100,8 @@ export const WOQLClientProvider = ({children,params}) => {
                 setAccount,
                 setDatabase,
                 setKey,
-                showLogin
+                showLogin,
+                reconnectServer
             }}
         >
             {children}
