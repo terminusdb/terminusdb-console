@@ -12,6 +12,8 @@ import { CURRENT_USERS, CREATE_USER, ADD_USER, INVITE_USER } from '../../labels/
 import CreateNewUser from './CreateUser'
 import UserList from './UserList'
 import AddUsers from './AddUsers'
+import { ComingSoon } from "../../components/Reports/ComingSoon"
+import {collaborateSoonIntro, collaborateSoonTop, collaborateSoonBottom, collaborateSoonBox, collaborateSoonButton} from "./constants"
 
 const Collaborate = (props) => {
     const { register, handleSubmit, errors } = useForm();
@@ -24,56 +26,35 @@ const Collaborate = (props) => {
     const users = true;
     const managePermissions = true;
 
+
+
     return (
         <div>
 			<hr className="my-space-50"/>
+            <Container>
+                <Row>
+                    <Col md={4} className={collaborateSoonIntro}>
+                        <ComingSoon size="small"/>
+                    </Col>
+                    <Col md={2} className={collaborateSoonBox}>
+                         <Row className={collaborateSoonTop}>Share your database on Terminus DB Hub</Row>
+                         <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Share</div></Row>
+                    </Col>
+                    <Col md={2} className={collaborateSoonBox}>
+                        <Row className={collaborateSoonTop}>Push updates to your collaborators</Row> 
+                        <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Push</div></Row>
+                    </Col>
+                    <Col md={2} className={collaborateSoonBox}>
+                        <Row className={collaborateSoonTop}>Pull Updates from collaborators</Row>
+                        <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Pull</div></Row> 
+                    </Col>
+                    <Col md={2} className={collaborateSoonBox}>
+                        <Row className={collaborateSoonTop}>Data Operations Pipelines</Row>
+                        <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Pipeline</div></Row>
+                    </Col>
+                </Row>
+            </Container>
 			<hr className="my-space-50"/>
-			<hr className="my-space-50"/>
-
-            	<label className = { collaborate.accessHeader.className }
-                    htmlFor = { collaborate.accessHeader.name }>
-            		{ collaborate.accessHeader.label }
-                </label>
-
-                 <span className="d-fl">
-                    <Col md={1} className="mb-1">
-                        <input type="checkbox"
-                           name={ READ.name }
-						   ref = { register }
-                           checked={dbStats === READ.name }/>
-                   </Col>
-                   <Col md={3} className="mb-3">
-                       <label htmlFor = { READ.name }/>
-                           { READ.label }
-                   </Col>
-
-                   <Col md={1} className="mb-1">
-                       <input type="checkbox"
-                          name={ READ.name }
-						  ref = { register }
-                          checked={dbStats === WRITE.name }/>
-                  </Col>
-                  <Col md={3} className="mb-3">
-                      <label htmlFor = { WRITE.name }/>
-                          { WRITE.label }
-                  </Col>
-
-                  <Col md={1} className="mb-1">
-                      <input type="checkbox"
-                         name={ MANAGE.name }
-						 ref = { register }
-                         checked={dbStats === MANAGE.name }/>
-                 </Col>
-                 <Col md={3} className="mb-3">
-                     <label htmlFor = { MANAGE.name }/>
-                         { MANAGE.label }
-                 </Col>
-              </span>
-
-             <hr className = "my-space-15"/>
-             <hr className = "my-2"/>
-             <hr className = "my-space-50"/>
-
               {managePermissions && <>
                  <Tabs>
                      <Tab label = {CURRENT_USERS}>

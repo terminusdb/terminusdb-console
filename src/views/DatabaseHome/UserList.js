@@ -57,10 +57,6 @@ const UserList = (props) => {
                 highlightOnHover
                 responsive/>
 
-            {(!loading) && <Alert color="success">
-               Successfully updated permissions of User - <b>{ chosenUser }</b>
-             </Alert>}
-
            {edit && <>
                <hr className = "my-space-15"/>
                <hr className = "my-2"/>
