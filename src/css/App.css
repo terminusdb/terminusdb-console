@@ -58,7 +58,7 @@ div.db-view-cards {
     text-align: center;
 }
 
-.formSignin{  
+.formSignin{
     width: 100%;
     max-width: 330px;
     padding: 15px;
@@ -972,6 +972,7 @@ div.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
     border-radius: 3px;
+    max-width: 600px;
 }
 
 div.curr-pr{
@@ -2067,12 +2068,12 @@ h4.prefix-section-header {
 
 .terminus-result-report-label {
     padding-right: 8px;
-} 
+}
 
 .terminus-result-report-count {
     font-weight: 600;
     padding-right: 6px;
-} 
+}
 
 .terminus-console-page {
     margin-bottom: 350px;
