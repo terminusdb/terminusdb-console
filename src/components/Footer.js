@@ -5,7 +5,7 @@ const Footer = () => (
 		<div className="wrapper wrapper--increased">
 			<div className="footer__body">
 				<a href="https://terminusdb.com" className="footer__brand" role="button">
-					<img src="img/logos/logo.svg" className="footer__logo" alt="Terminus DB logo" ></img>
+					<img src="https://terminusdb.com/img/logos/logo.svg" className="footer__logo" alt="Terminus DB logo" ></img>
 				</a>
 				<ul className="footer__list">
 					<li className="footer__item">

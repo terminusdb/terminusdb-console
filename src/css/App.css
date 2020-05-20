@@ -2031,3 +2031,14 @@ h4.prefix-section-header {
     font-weight: 600;
     padding-right: 6px;
 } 
+
+.terminus-console-page {
+    margin-bottom: 180px;
+
+}
+
+.terminus-coming-soon {
+    display: inline-block;
+    margin: 20px;
+
+}
