@@ -3,7 +3,8 @@ console.log("____TERMINUSDB_SERVER",process.env.TERMINUSDB_SERVER);
 
 const server=process.env.TERMINUSDB_SERVER || "http://localhost:6363" 
 
-const user0bj=window.user || {}
+const TERMINUSDB=window.TERMINUSDB || {}
+const user0bj=TERMINUSDB.user || {}
 
 let key=user0bj.password || undefined
 
