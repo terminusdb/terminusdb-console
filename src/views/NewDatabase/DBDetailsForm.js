@@ -43,7 +43,7 @@ const DBDetailsForm = (props) => {
     const [loading, setLoading] = useState(false);
     const [advancedSettings, setAdvancedSettings] = useState(false)
 
-    const {woqlClient} = WOQLClientObj();
+    const {woqlClient,reconnectServer} = WOQLClientObj();
 
     const onSubmit = (data) => {
         if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
@@ -99,7 +99,13 @@ const DBDetailsForm = (props) => {
             let message = `${CREATE_DB_FORM.createFailureMessage} ${doc.label}, id: [${id}] `
             setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
-        .finally(() => setLoading(false))
+        .finally(() => 
+            {
+                setLoading(false)
+                reconnectServer()
+            }
+
+        )
     }
 
 

@@ -51,7 +51,7 @@ export const WOQLClientProvider = ({children,params}) => {
         }
         initWoqlClient();
         // eslint-disable-next-line
-        }, [params,newKeyValue]);
+        }, [params,newKeyValue,reload]);
 
 
         const setKey=(key)=>{
@@ -76,7 +76,7 @@ export const WOQLClientProvider = ({children,params}) => {
         };
 
         const reconnectServer= ()=>{
-            //setReloadTime(Date.now());
+            setReloadTime(Date.now());
         }
 
         const setDatabase =(dbName) => {
