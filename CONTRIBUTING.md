@@ -25,7 +25,7 @@ It you are running TerminusDB via quickstart, then you can set this in your
 
 ## Working with a local version of console
 
-Most likely, if you running console locally, it's because you are
+Most likely, if you are running console locally, it's because you are
 a developer, and thus will be working with the `dev` branch of
 console, so you probably want to want to point npm to our dev
 repository by adding this line to your .npmrc
