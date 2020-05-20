@@ -34,8 +34,8 @@ export const getDBListColumns = (list) => {
            // }
         }
         // hardcoding Source col as of now coz not sure from where to get this info
-        columns.push({name: 'Source', selector: 'Source', sortable: true, minWidth: '200px'})
-        columns.push({name: 'View', selector: 'View', sortable: true, minWidth: '200px'})
+        //columns.push({name: 'Source', selector: 'Source', sortable: true, minWidth: '200px'})
+        //columns.push({name: 'View', selector: 'View', sortable: true, minWidth: '200px'})
         return columns;
     }
 
