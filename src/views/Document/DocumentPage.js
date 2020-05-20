@@ -69,6 +69,7 @@ const DocumentPage = (props) => {
     }, [report]);
 
     return (
+    
     <PageView page="document" onHeadChange={doRebuild}>
         {!happiness &&
             <Loading />

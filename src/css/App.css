@@ -1,3 +1,47 @@
+.navbar{
+  min-height: 70px!important;
+}
+
+div.db-view-cards {
+    /*background-color: #CCDDF1 !important;*/
+   /* background-color: #00C08B !important;*/
+    cursor: pointer;
+    border: 2px #00C08B solid;
+    border-radius: 25px
+}
+
+.square {
+  position: relative;
+  width: 100%;
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.contentSquare {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  padding-top: 20%;
+  align-items: center;
+}
+
+
+.img.card-img-top{
+    width: 40%;
+    /* margin-top: 10%; */
+    margin-left: auto;
+    margin-right: auto;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
 .connectErrorPage{
     width: 100%;
     max-width: 500px;
@@ -189,20 +233,21 @@ div.card-grid {
 
 div.db-view-cards:hover {
     /*background-color: #CCDDF1 !important;*/
-    background-color: #f5f5f5 !important;
+    background-color: #dddddd !important;
     cursor: pointer;
 }
 
 div.db-view-card-title{
     text-align: center;
-    font-size: large;
     font-size: 28px;
 }
 
 p.db-view-card-text{
     text-align: center;
     margin: 30px 0px 30px 0px;
-    font-size: 16px
+    font-size: 18px;
+    color: #002856;
+    font-weight: 600;
 }
 
 div.terminus-violation{
@@ -583,7 +628,7 @@ div.css-yk16xz-control{
 }
 
 .spinner {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   height: 100vh;

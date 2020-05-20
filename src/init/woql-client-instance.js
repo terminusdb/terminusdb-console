@@ -30,7 +30,7 @@ export const WOQLClientProvider = ({children,params}) => {
             const opts = params || {};
             const dbClient = new TerminusClient.WOQLClient();
 
-            if(opts.key===undefined){
+            if(!opts.key){
                 setShowLogin(true);
             }else{
                 try{
@@ -55,6 +55,7 @@ export const WOQLClientProvider = ({children,params}) => {
 
         const setKey=(key)=>{
             if(params)params.key=key
+            window.sessionStorage.setItem("apiKey", key);
             setNewKeyValue(key)
         }
         /*
