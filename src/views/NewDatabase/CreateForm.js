@@ -41,7 +41,7 @@ const CreateDB = (props) => {
     const [show, setShow] = useState(true);
     const [advancedSettings, setAdvancedSettings] = useState(false)
 
-    const {woqlClient} = WOQLClientObj();
+    const {woqlClient,reconnectServer} = WOQLClientObj();
 
     const onSubmit = (data) => {
         if((dbLocation === CREATE_TERMINUS_DB) &&(!user)) {
@@ -118,7 +118,11 @@ const CreateDB = (props) => {
         .catch((err) => {
             setReport({error: err, status: reportAlert.ERROR});
         })
-        .finally(() => setLoading(false))
+        .finally(() => {
+            setLoading(false)
+            reconnectServer();
+
+        })
     }
 
     //should be moved out into general settings
