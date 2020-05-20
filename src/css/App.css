@@ -1,3 +1,7 @@
+.navbar{
+  min-height: 70px!important;
+}
+
 div.db-view-cards {
     /*background-color: #CCDDF1 !important;*/
    /* background-color: #00C08B !important;*/

@@ -34,12 +34,7 @@ export const ConsoleNavbar = (props) => {
                         <DBNavbar page={props.page} toggleTimeTravel={toggleTimeTravel}/>
                     }
                     <Nav className = "d-none d-md-block ml-auto" navbar>
-                        {!isAuthenticated &&
-                            <Login/>
-                        }
-                        {isAuthenticated && user &&
-                            <LoggedIn/>
-                        }
+                       
                     </Nav>
                     </Row>
                 {!collapsed && <div className="history-navigator-Collapsible">
@@ -58,3 +53,10 @@ export const ConsoleNavbar = (props) => {
         </div>
     )
 };
+
+/* {!isAuthenticated && 
+                            <Login/>
+                        }
+                        {isAuthenticated && user &&
+                            <LoggedIn/>
+                        }*/
