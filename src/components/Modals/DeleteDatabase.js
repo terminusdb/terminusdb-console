@@ -15,12 +15,13 @@ const DeleteDatabase = (props) => {
     const [modal, setModal] = useState(props.modal);
     const toggle = () => setModal(!modal);
 
+
     const onDelete = (data) => {
         if(data.dbId && data.dbId == woqlClient.db()){
             woqlClient.deleteDatabase(data.dbId)
             .then((cresults) => {
-                setLoading(false)
                 goServerHome()
+
             })
             .catch((err) => {
                 setReport({error: err, status: reportAlert.ERROR});
@@ -39,7 +40,7 @@ const DeleteDatabase = (props) => {
                   <Col md={12}>
                     <div className="del-mod">
                         <img src={DELETE_ICON} className="center"/>
-                        {rep && 
+                        {rep &&
                             <APIUpdateReport report = { rep }/>
                         }
                         <form onSubmit={ handleSubmit(onDelete) }>
