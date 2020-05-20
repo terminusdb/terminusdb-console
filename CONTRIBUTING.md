@@ -20,7 +20,7 @@ If you are working on TermminusDB Server and want to have
 a development version of the console available, just set this
 environment variable.
 
-It you are running TerminusDB via [quickstart], then you can set this in your ENV file, see ENV.example.
+It you are running TerminusDB via quickstart, then you can set this in your `ENV` file, see `ENV.example`.
 
 ## Working with a local version of console
 
@@ -50,8 +50,8 @@ TERMINUSDB_CONSOLE_BASE_URL=https://localhost:3005
 
 ## Working with local versions of dependencies
 
-If you also want to have local versions of the dependencies of console, such as `@terminusdb/terminusdb-client`, then you should clone those repos locally and use `npm link` to make npm use the local version as well
+If you also want to have local versions of the dependencies of console, such as `@terminusdb/terminusdb-client`, then you should clone those repos locally and use `npm link` to make npm use the local version.
 
-**Do not edit package.json or the webpack config with file paths** Use npm link if you want to use local packages, or set `.npmrc` if you want to use our dev packages.
+**Do not edit package.json or the webpack config with file paths** Use `npm link` if you want to use local packages, or set `.npmrc` if you want to use our dev packages.
 
 
