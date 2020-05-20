@@ -14,16 +14,18 @@ const DeleteDatabase = (props) => {
     const [rep, setReport] = useState();
     const [modal, setModal] = useState(props.modal);
     const toggle = () => setModal(!modal);
-
+    const [disabled, setDisabled] = useState(false);
 
     const onDelete = (data) => {
+        setDisabled(true);
         if(data.dbId && data.dbId == woqlClient.db()){
             woqlClient.deleteDatabase(data.dbId)
             .then((cresults) => {
                 goServerHome()
-
+                setDisabled(false)
             })
             .catch((err) => {
+                setDisabled(false)
                 setReport({error: err, status: reportAlert.ERROR});
             })
         }
@@ -47,7 +49,7 @@ const DeleteDatabase = (props) => {
                             <input type="text" name="dbId" id="dbId"
                                 ref = { register({ validate: value => value.length > 0}) }/>
                             <hr className = "my-space-25"/>
-                            <Button color="danger">{ deleteDatabaseLabels.confirmText }</Button>
+                            <Button color="danger" disabled={disabled}>{ deleteDatabaseLabels.confirmText }</Button>
                         </form>
                     </div>
                   </Col>
