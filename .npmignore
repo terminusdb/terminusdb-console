@@ -1,0 +1,7 @@
+node_modules
+.npmrc
+
+package-lock.json
+console/.env
+es6
+console/public_pages
