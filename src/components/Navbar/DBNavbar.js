@@ -18,7 +18,7 @@ export const DBNavbar = (props) => {
     const [ref, setRef] = useState(woqlClient.ref())
 
     useEffect(() => {
-        dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account()) || {}
+        dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account());
         setDBMeta(dbmeta)
         setBranch(woqlClient.checkout())
         setRef(woqlClient.ref())
@@ -89,5 +89,3 @@ export const DBNavbar = (props) => {
         </div>
     )
 }
-
-
