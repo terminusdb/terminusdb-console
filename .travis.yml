@@ -2,6 +2,8 @@ language: node_js
 sudo: required
 node_js:
   - 10
+cache:
+  npm: false
 
 stages:
   - name: build_dev
