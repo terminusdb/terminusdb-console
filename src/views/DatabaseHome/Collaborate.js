@@ -45,11 +45,11 @@ const Collaborate = (props) => {
                         <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Push</div></Row>
                     </Col>
                     <Col md={2} className={collaborateSoonBox}>
-                        <Row className={collaborateSoonTop}>Pull Updates from collaborators</Row>
+                        <Row className={collaborateSoonTop}>Pull updates from collaborators</Row>
                         <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Pull</div></Row> 
                     </Col>
                     <Col md={2} className={collaborateSoonBox}>
-                        <Row className={collaborateSoonTop}>Data Operations Pipelines</Row>
+                        <Row className={collaborateSoonTop}>Build data operations pipelines</Row>
                         <Row className={collaborateSoonBottom}><div className={collaborateSoonButton}>Pipeline</div></Row>
                     </Col>
                 </Row>
