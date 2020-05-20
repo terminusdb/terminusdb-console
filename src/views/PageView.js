@@ -8,9 +8,10 @@
 import React, { useState } from "react";
 import {ConsoleNavbar} from "../components/Navbar/ConsoleNavbar";
 import { Col, Container } from "reactstrap";
+import Footer  from "../components/Footer"
 
 export const PageView = (props) => {
-    return (
+    return (<>
         <Container className="terminus-console-page">
             <Container fluid className="console-top-navbar"> 
                 <Col className="console-top-navbar">
@@ -25,5 +26,5 @@ export const PageView = (props) => {
                 </Col>
             </Container>
         </Container>
-    )
+    </>)
 }

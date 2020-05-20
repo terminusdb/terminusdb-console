@@ -26,7 +26,7 @@ export const contentData = [
 ];
 
 export const deleteDatabaseLabels={
-   mainDescription:"Enter Database Id you wish to delete.",
+   mainDescription:"Enter the ID of the database you want to delete.",
    confirmText:"Delete",
    cancelText: "Cancel"
 }

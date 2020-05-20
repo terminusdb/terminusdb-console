@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Row, Col  } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const SUB_TITLE_LIMIT = 18, MAIN_LIMIT = 10, TITLE_LIMIT = 12, INFO_LIMIT = 90;
+const SUB_TITLE_LIMIT = 24, MAIN_LIMIT = 10, TITLE_LIMIT = 12, INFO_LIMIT = 100;
 import { trimContent } from "../../utils/helperFunctions"
 
 export const DetailsCard = (props) => {
@@ -16,7 +16,7 @@ export const DetailsCard = (props) => {
                         {icon && <> 
                             <Col xs={4}>
                                 <div className="dd-ico">
-                                    <FontAwesomeIcon icon={props.icon} className="mr-3" />
+                                    <FontAwesomeIcon icon={props.icon} size="4x" className="terminus-title-icon" />
                                 </div>
                             </Col>
                             <Col xs={8}>

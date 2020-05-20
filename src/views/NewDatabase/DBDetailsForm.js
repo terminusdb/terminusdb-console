@@ -11,10 +11,11 @@ import * as reportAlert from "../../labels/reportLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { HelpCowDuck } from "../../components/Reports/HelpCowDuck"
 import {TCFormSubmits, TCForm, TCFormInput, TCFormField, TCFormSelect, TCFormCheckbox, TCFormTextarea, TCCol, TCRow, TCSubmitWrap} from  "../../components/Form/FormComponents"
-//import {REQUIRED_FIELD_ERROR, ILLEGAL_ID_ERROR, INTERNAL_COL_CSS} from "../../components/Form/constants"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
 import {CREATE_DB_FORM} from "./constants"
 import {REQUIRED_FIELD_ERROR, ILLEGAL_ID_ERROR} from "../../components/Form/constants"
+import {getDefaultScmURL, getDefaultDocURL} from "../../constants/functions"
+import { goDBHome } from "../../components/Router/ConsoleRouter"
 
 
 const DBDetailsForm = (props) => {
@@ -70,28 +71,28 @@ const DBDetailsForm = (props) => {
             let doc = {
                 label: dbInfo.dbname,
                 comment: dbInfo.description,
-                base_uri: dbInfo.data_url,
-                prefixes: {scm: dbInfo.schema_url}
+                prefixes: {scm: dbInfo.schema_url, doc: dbInfo.data_url}
             }
             setLoading(true)
-            doCreate(dbInfo.dbid, doc, accountid, dbInfo.schema, dbInfo.instance)
+            doCreate(dbInfo.dbid, doc, accountid, dbInfo.schema)
         }
     }
 
 
     let update_start = Date.now()
 
-    function doCreate(id, doc, acc, schema, instance){
+    function doCreate(id, doc, acc, schema){
         update_start = Date.now()
         return woqlClient.createDatabase(id , doc, acc)
         .then((cresults) => {
             let message = `${CREATE_DB_FORM.createSuccessMessage} ${doc.label}, id: [${id}] `
-            if(instance || schema){
-                return createStarterGraphs(instance, schema, message)
+            if(schema){
+                return createStarterGraph(schema, message, id, acc)
             }
             else {
-                message += CREATE_DB_FORM.noGraphMessage
+                message += CREATE_DB_FORM.noSchemaMessage
                 setReport({message: message, error: e, status: TERMINUS_SUCCESS})
+                goDBHome(id, acc)
             }
         })
         .catch((err) => {
@@ -102,55 +103,21 @@ const DBDetailsForm = (props) => {
     }
 
 
-    function createStarterGraphs(instance, schema){
-        let message = ""
-        if(schema && instance){
+    function createStarterGraph(schema, message, id, acc){
+        if(schema){
             return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
             .then(() => {
-                return woqlClient.createGraph("instance", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
-                .then(() => setReport({message: message, status: TERMINUS_SUCCESS}))
-                .catch((e) => {
-                    message += CREATE_DB_FORM.instanceFailedSchemaWorkedMessage
-                    setReport({message: message, error: e, status: TERMINUS_WARNING})
-                })
+                setReport({message: message, status: TERMINUS_SUCCESS})
+                goDBHome(id, acc)
             }).catch((e) => {
                 message += CREATE_DB_FORM.schemaFailedMessage
                 setReport({message: message, error: e, status: TERMINUS_WARNING})
             })
         }
-        else if(schema){
-            return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
-            .then(() => {
-                message += CREATE_DB_FORM.noDataGraphMessage
-                setReport({message: message, error: e, status: TERMINUS_SUCCESS})
-            }).catch((e) => {
-                message += CREATE_DB_FORM.schemaFailedMessage
-                setReport({message: message, error: e, status: TERMINUS_WARNING})
-            })
-        }
-        else if(instance){
-            return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
-            .then(() => {
-                message += CREATE_DB_FORM.noSchemaGraphMessage
-                setReport({message: message, error: e, status: TERMINUS_SUCCESS})
-            }).catch((e) => {
-                message += CREATE_DB_FORM.instanceFailedMessage
-                setReport({message: message, error: e, status: TERMINUS_WARNING})
-            })
-        }
     }
 
 
-    //should be moved out into general settings
-    function getDefaultDocURL(aid, did, on_hub){
-        let base = (on_hub ? "http://hub.terminusdb.com/" : woqlClient.server())
-        return `${base}${aid}/${did}/data/`
-    }
 
-    function getDefaultScmURL(aid, did, on_hub){
-        let base = (on_hub ? "http://hub.terminusdb.com/" : woqlClient.server())
-        return `${base}${aid}/${did}/schema#`
-    }
 
     const advancedIcon = () => {
         return null
@@ -191,7 +158,6 @@ const DBDetailsForm = (props) => {
     if(report){
         report.time = Date.now() - update_start
     }
-    if(loading) return (<Loading /> )
     return (
         <TCForm onSubmit={onSubmit} >
             <TCFormSubmits submitText={CREATE_DB_FORM.createButtonText} visible="true" />
@@ -244,7 +210,7 @@ const DBDetailsForm = (props) => {
                         </TCFormField>
                     </TCCol>
                     <TCCol>
-                        <TCFormField  helpCols="7" error={formErrors} field_id="instance" label={CREATE_DB_FORM.fields["instance"].label} help={CREATE_DB_FORM.fields["instance"].help}>
+                        <TCFormField  helpCols="8" error={formErrors} field_id="instance" label={CREATE_DB_FORM.fields["instance"].label} help={CREATE_DB_FORM.fields["instance"].help}>
                             <TCFormCheckbox checked={dbInfo["instance"]} label={CREATE_DB_FORM.fields["instance"].placeholder} field_id="instance" onChange={onChangeField} />
                         </TCFormField>
                     </TCCol>

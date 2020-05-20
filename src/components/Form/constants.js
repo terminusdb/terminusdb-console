@@ -36,3 +36,5 @@ export const HELP_COL_CSS = "tcf-help-col"
 export const HELP_LABEL_COL_CSS = "tcf-help-label-col"
 export const INVISIBLE_HELP_CSS = "tcf-help-hidden"
 export const ILLEGAL_ID_ERROR = "Illegal Characters in graph id - you cannot use space, colon or slash characters in ids"
+export const DEPLOY_COWDUCKS = true
+export const CHECKED_WRAPPER_CSS = "tcf-checkbox-wrapper-checked"

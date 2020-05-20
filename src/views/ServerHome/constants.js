@@ -1,11 +1,5 @@
-export const createDatabaseConstants ={
-    title:"Create New Database",
-    page: "create",
-    mainDescription:"Create a new database on this server"
-  }
-  
-  export const serverHomeConstants = {
-      title: "My Databases",
-      page: "home",
-      mainDescription: "A list of all the databases that you have access to on TerminusDB"
-  }
+export const CREATEDB_TITLE = "New Database"
+export const DBLIST_TITLE  = "My Databases"
+export const CREATE_FIRSTDB_CSS = "color-primary alert"
+export const CREATE_FIRSTDB = ""
+export const DBLIST_HEADER_CSS = "some-old-header-css"

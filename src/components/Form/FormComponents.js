@@ -1,106 +1,142 @@
 import React, {useState} from 'react'
-import { useForm } from 'react-hook-form'
 import { Container, Row, Col } from "reactstrap"
-import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, FORM_CONTAINER_CSS, FORM_SECTION_CSS, SECTION_TITLE_CSS,
-         SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS, SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, 
+import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, FORM_CONTAINER_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS, 
+         SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, ILLEGAL_ID_ERROR,
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS, 
          PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS, 
          TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS,
-         COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, INPUT_COL_CSS,
-         HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS
+         DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, INPUT_COL_CSS,
+         HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS, CHECKED_WRAPPER_CSS
         } from "./constants"
 import Select from "react-select";
 import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
+import {APIUpdateReport} from '../Reports/APIUpdateReport'
 
 /**
 * Library of Terminus Console (TC) form patterns
 */
 
-export const TCForm = ({onSubmit, className, children}) => {
-    const { handleSubmit } = useForm();
-    if(!className || isObject(className)) className = FORM_CONTAINER_CSS
-    return (
-        <Container className={className}>
-            <form onSubmit={handleSubmit(onSubmit) }>
-                {children}   
-            </form>     
-        </Container>
-    )
-}
 
-/*
-export const TCDropdown = ({onSubmit, className, trigger, children, expanded, dropdownClassName}) => {
-    const [isExpanded, setExpanded] = useState(expanded)
+export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, children}) => {    
+    if(!values) {
+        values = {}
+        if(fields){
+            for(var i = 0 ; i<fields.length; i++){
+                let item = fields[i]
+                if(item.id){
+                    values[item.id] = (item.value ? item.value : "")
+                }
+            }    
+        }
+    }
     
-    let nutrigger = (
-        <span onClick={() => }></span>
-    )
-    trigger.onClick = 
-    dropdownClassName = dropdownClassName || BUTTONS_CONTAINER_CSS
-    return (
-        <TCForm onSubmit={onSubmit} className={className} >
-            {!isExpanded && 
-                <Container className={className}>
-                    <Row>
-                        <span className = {dropdownClassName}>
-                            {trigger}
-                        </span>
-                    </Row>
-                </Container>
-            }
-            {isExpanded && 
-                {children}
-            }
-        </TCForm>
-    )
-}
-*/
+        
+    //these are the things that this component changes internally - 
+    //if they change in props, assume whole component will be re-rendered by parent.. need no effect
+    const [currentValues, setCurrentValues] = useState(values)
+    const [fieldErrors, setFieldErrors] = useState({})
 
-export const TCFormSection = ({title, className, titleClassName, children}) => {
-    if(!className || isObject(className)) className = FORM_SECTION_CSS
-    if(!titleClassName || isObject(titleClassName))  titleClassName = SECTION_TITLE_CSS
+    function findMissingMandatories(){
+        if(!fields) return 0;
+        let missings = {}
+        for(var i = 0 ; i<fields.length; i++){
+            let item = fields[i]
+            if(item.id){
+                if(!currentValues[item.id] && item.mandatory){
+                    missings[item.id] = REQUIRED_FIELD_ERROR
+                }
+            }
+        }        
+        setFieldErrors(missings)
+        return Object.keys(missings).length
+    }
+
+    function findIllegalIDs(){
+        if(!fields) return 0;
+        let bads = {}
+        for(var i = 0 ; i<fields.length; i++){
+            let item = fields[i]
+            if(item.id){
+                let xval = currentValues[item.id] 
+                if(typeof xval == "string" && (xval.indexOf(" ") != -1 || xval.indexOf(":") != -1 || xval.indexOf("/") != -1)){
+                    bads[item.id] = ILLEGAL_ID_ERROR
+                }
+            }
+        }        
+        setFieldErrors(bads)
+        return Object.keys(bads).length
+    }
+
+
+    function interceptSubmit(e){
+        e.preventDefault()
+        if(findMissingMandatories() == 0 && findIllegalIDs() == 0 && (!validate || validate(currentValues, fields) == 0)){
+            onSubmit(currentValues)
+        }
+    }
+
+    function onChangeField(field_id, value){
+        currentValues[field_id] = value
+        setCurrentValues(currentValues)
+        if(onChange) onChange(field_id, value, currentValues)
+        if(fieldErrors[field_id]){
+            delete(fieldErrors[field_id])
+            setFieldErrors(fieldErrors)
+        }
+    }        
+    let tcf = JSONTCFields(fields, currentValues, fieldErrors, onChangeField)
+    let showGrid = (layout && tcf)
+    let noGrid = (!layout && tcf)
     return (
-        <Container className={className}>
-            {title &&
-                <span className={titleClassName}>{title}</span>
+        <form onSubmit={interceptSubmit} errors={fieldErrors} values={currentValues}>
+            <JSONTCButtons buttons={buttons} />
+            {(report && isObject(report)) && 
+                <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
+            }
+            {showGrid &&  
+                <TCGrid layout={layout}>
+                    {tcf}
+                </TCGrid>
+            }
+            {noGrid && 
+                {tcf}
             }
             {children}
-        </Container>
+        </form>
     )
 }
 
 export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText, cancelClassName, submitText, submitClassName}) => {
-    if(!className || isObject(className)) className = SUBMIT_SECTION_CSS
-    if(!buttonsClassName || isObject(buttonsClassName)) buttonsClassName = BUTTONS_CONTAINER_CSS
-    if(!submitClassName || isObject(submitClassName) )submitClassName = SUBMIT_CSS
-    if(!cancelClassName || isObject(cancelClassName) )cancelClassName = CANCEL_CSS
-    if(!cancelText || isObject(cancelText) ) cancelText = CANCEL_TEXT
-    if(!submitText|| isObject(submitText) ) submitText = SUBMIT_TEXT    
+    if(typeof className != "string" || !className) className = SUBMIT_SECTION_CSS
+    if(!buttonsClassName || typeof buttonsClassName != "string") buttonsClassName = BUTTONS_CONTAINER_CSS
+    if(!submitClassName || typeof submitClassName != "string") submitClassName = SUBMIT_CSS
+    if(!cancelClassName || typeof cancelClassName != "string" )cancelClassName = CANCEL_CSS
+    if(!cancelText || typeof cancelClassName != "string") cancelText = CANCEL_TEXT
+    if(!submitText || typeof cancelClassName != "string") submitText = SUBMIT_TEXT    
 
     let myCancel = function(e){
         e.preventDefault()
         onCancel()
     }
+
     return (
-        <Row className={className}>
-            <span className = {buttonsClassName}>
-                <button type="submit" className={submitClassName}>
-                    {submitText}
+        <TCSubmitWrap buttonsClassName={buttonsClassName} className={className}>
+            <button type="submit" className={submitClassName}>
+                {submitText}
+            </button>
+            {onCancel && 
+                <button onClick={myCancel} className={cancelClassName}>
+                    {cancelText}
                 </button>
-                {onCancel && 
-                    <button onClick={myCancel} className={cancelClassName}>
-                            {cancelText}
-                    </button>
-                }
-            </span>
-        </Row>
+            }
+        </TCSubmitWrap>
     )        
 }
 
 export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
-    if(!className || isObject(className)) className = SUBMIT_SECTION_CSS
-    if(!buttonsClassName || isObject(buttonsClassName)) buttonsClassName = BUTTONS_CONTAINER_CSS
+    if(typeof className != "string" || !className) className = SUBMIT_SECTION_CSS
+    if(!buttonsClassName || typeof buttonsClassName != "string") buttonsClassName = BUTTONS_CONTAINER_CSS
     return (
         <Row className={className}>
             <span className = {buttonsClassName}>
@@ -114,23 +150,28 @@ export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
  * Puts an input element into its position on the form by drawing all the stuff around it
  */
 
-export const TCFormField = ({field_id, mandatory, className, label, labelClassName, 
-    help, helpExpanded, helpRowClassName, helpClassName, helpLabelColClassName, helpColClassName, helpCols, promptRowClassName, inputRowClassName, inputGutterClassName,
-    cowDuckClassName, cowDuckIconClassName, errorRowClassName, error, fieldErrorClassName, children}) => {
+export const TCFormField = ({
+        field_id, value, inputElement, mandatory, className, label, labelClassName, onChangeField,
+        help, helpExpanded, helpRowClassName, helpClassName, helpLabelColClassName, helpColClassName, helpCols, 
+        promptRowClassName, inputRowClassName, inputGutterClassName, cowDuck, cowDuckClassName, cowDuckIconClassName, 
+        errorRowClassName, error, fieldErrorClassName, children
+    }) => {
     
+    if(typeof cowDuck != "string" ) cowDuck = DEPLOY_COWDUCKS 
+
     /** Set Field Level Defaults - defaults for elements are set within elements */
-    if(!className || isObject(className)) className = FORM_FIELD_CSS 
-    if(!helpRowClassName || isObject(helpRowClassName)) helpRowClassName = HELP_ROW_CSS
-    if(!promptRowClassName || isObject( promptRowClassName)) promptRowClassName = PROMPT_ROW_CSS
-    if(!inputRowClassName  || isObject(inputRowClassName )) inputRowClassName = INPUT_ROW_CSS
-    if(!inputGutterClassName || isObject(inputGutterClassName )) inputGutterClassName = INPUT_GUTTER_CSS
-    if(!errorRowClassName || isObject(errorRowClassName)) errorRowClassName = ERROR_ROW_CSS
-    if(!cowDuckClassName || isObject(cowDuckClassName)) cowDuckClassName = COWDUCK_WRAPPER_CSS
-    if(!cowDuckIconClassName || isObject(cowDuckIconClassName)) cowDuckIconClassName = COWDUCK_ICON_CSS
-    if(!helpLabelColClassName|| isObject(helpLabelColClassName)) helpLabelColClassName = HELP_LABEL_COL_CSS 
-    if(!helpColClassName || isObject(helpColClassName)) helpColClassName = HELP_COL_CSS
+    if(typeof className != "string" || !className) className = FORM_FIELD_CSS 
+    if(!helpRowClassName || typeof helpRowClassName != "string") helpRowClassName = HELP_ROW_CSS
+    if(!promptRowClassName || typeof  promptRowClassName != "string") promptRowClassName = PROMPT_ROW_CSS
+    if(!inputRowClassName  || typeof inputRowClassName  != "string") inputRowClassName = INPUT_ROW_CSS
+    if(!inputGutterClassName || typeof inputGutterClassName != "string") inputGutterClassName = INPUT_GUTTER_CSS
+    if(!errorRowClassName || typeof errorRowClassName != "string") errorRowClassName = ERROR_ROW_CSS
+    if(!cowDuckClassName || typeof cowDuckClassName != "string") cowDuckClassName = COWDUCK_WRAPPER_CSS
+    if(!cowDuckIconClassName || typeof cowDuckIconClassName != "string") cowDuckIconClassName = COWDUCK_ICON_CSS
+    if(!helpLabelColClassName|| typeof helpLabelColClassName != "string") helpLabelColClassName = HELP_LABEL_COL_CSS 
+    if(!helpColClassName || typeof helpColClassName != "string") helpColClassName = HELP_COL_CSS
     
-    helpExpanded = helpExpanded || false 
+    helpExpanded = ((helpExpanded && !isObject(helpExpanded)) ? helpExpanded  : false) 
     const [helpVisible, setHelpVisible] = useState(helpExpanded)
     function toggleHelp(){
         setHelpVisible(!helpVisible)
@@ -190,11 +231,14 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
                 }
                 <Row className={inputRowClassName}>
                     <Col className={INPUT_COL_CSS}>
+                        <JSONTCInputElement field_id={field_id} value={value} mandatory={mandatory} elt={inputElement} onChange={onChangeField}/>
                         {children}
                     </Col>
-                    <Col md={{ size: 'auto'}} className={inputGutterClassName} >
-                        {cdhelp}
-                    </Col>
+                    {cowDuck && 
+                        <Col md={{ size: 'auto'}} className={inputGutterClassName} >
+                            {cdhelp}
+                        </Col>
+                    }
                 </Row>
                 <Row className={errorRowClassName}>
                     <TCFieldErrors 
@@ -209,7 +253,7 @@ export const TCFormField = ({field_id, mandatory, className, label, labelClassNa
 }
 
 export const TCFieldHelp = ({field_id, message, className, invisibleHelpClassName, visible}) => {
-    if(!className || isObject(className)) className = HELP_CSS
+    if(typeof className != "string" || !className)  className = HELP_CSS
     if(!invisibleHelpClassName || isObject(invisibleHelpClassName)) invisibleHelpClassName = INVISIBLE_HELP_CSS
     let vis = (visible ? className : invisibleHelpClassName)
     return (
@@ -221,7 +265,7 @@ export const TCFieldHelp = ({field_id, message, className, invisibleHelpClassNam
 
 
 export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryClassName, mandatoryTitle}) => {
-    if(!className || isObject(className)) className = LABEL_CSS
+    if(typeof className != "string" || !className) className = LABEL_CSS
     return (
         <label className={className} htmlFor={field_id}>
             {label} 
@@ -236,7 +280,7 @@ export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryCl
 }
 
 export const TCMandatory = ({className, title}) => {
-    if(!className || isObject(className)) className = REQUIRED_FIELD_CSS 
+    if(typeof className != "string" || !className) className = REQUIRED_FIELD_CSS 
     if(!title || isObject(title)) title = REQUIRED_FIELD
     return (
         <strong title={title} className={className}> * </strong>
@@ -244,127 +288,97 @@ export const TCMandatory = ({className, title}) => {
 }
 
 function TCFieldErrors({field_id, error, className}){
-    if(!className || isObject(className)) className = ERROR_MESSAGE_CSS 
-    if(error && error[field_id]){
-        error = error[field_id] 
-        return (
-            <p className = {className}>
-                {error}
-            </p>
-        )
-    }
-    return null
+    if(typeof error != "string" ||!error) return null
+    if(typeof className != "string" || !className)  className = ERROR_MESSAGE_CSS 
+    return (
+        <p className = {className}>
+            {error}
+        </p>
+    )
 }
 
-export const TCFormInput = ({field_id, value, mandatory, validate, onChange, placeholder, className}) =>    {
+export const TCFormInput = ({field_id, value, disabled, onChange, placeholder, className}) =>    {
     placeholder = placeholder || ""
-    if(!className || isObject(className)) className = INPUT_CSS
+    if(typeof className != "string" || !className)  className = INPUT_CSS
     value = value || ""
-    const { register } = useForm();
     let vchange = _onChange(onChange, field_id)
     return (
         <input
+            disabled={disabled}
             placeholder={ placeholder }
-            className = {className }
+            className = { className }
             defaultValue={value}
             onChange={vchange}
             name = {field_id}
-            ref = { register }
         />
     )
 }
 
-const _onChange = (ch, field_id) => {
-    if(ch){
-        let vchange = function(val){
-            ch(field_id, val.target.value)
-        }
-        return vchange
-    }
-    return false
-}
 
-const _onSChange = (ch, field_id) => {
-    if(ch){
-        let vchange = function(SelValue){
-            ch(field_id, SelValue.value)
-        }
-        return vchange
-    }
-    return false
-}
-
-
-const _makeStrRef = (mandatory, validate) => {
-    const { register } = useForm();
-    let ref = register
-    if(mandatory){
-        ref = register({ validate: value => value.length > 0})
-    }
-    else if(validate){
-        ref = register({ validate: value => validate(value)})
-    }
-    return ref
-}
-
-export const TCFormTextarea = ({field_id, value, mandatory, validate, onChange, placeholder, className}) =>    {
-    placeholder = placeholder || ""
-    if(!className || isObject(className)) className = TEXTAREA_CSS
+export const TCFormTextarea = ({field_id, value, disabled, onChange, placeholder, className}) =>    {
+    placeholder = (placeholder && !isObject(placeholder) ? placeholder  : "")
+    if(typeof className != "string" || !className)  className = TEXTAREA_CSS
     value = value || ""
     let vchange = _onChange(onChange, field_id)
     return (
         <textarea 
             name= { field_id }
+            disabled={disabled}
             className = { className }
             placeholder = { placeholder }
-            ref = { _makeStrRef(mandatory, validate) }
             onChange ={vchange}
             defaultValue={value}
         />
     )
 }
-
-export const TCFormSelect = ({field_id, onChange, className, options, placeholder, value, mandatory, validate}) =>    {
+export const TCFormSelect = ({field_id, onChange, className, options, placeholder, value, disabled}) =>    {
     placeholder = placeholder || ""
-    if(!className || isObject(className)) className = SELECT_CSS
+    if(typeof className != "string" || !className) className = SELECT_CSS
     value = value || ""
+    if(disabled){
+        options = options.map((item) => {
+            item["isDisabled"] = true;
+            return item;
+        })
+    }
     let vchange = _onSChange(onChange, field_id)
     return(
         <Select 
             placeholder = {placeholder}
             className = {className}
             onChange ={vchange}
-            ref = { _makeStrRef(mandatory, validate) }
             name = {field_id}
             options = {options}
             defaultValue = {value}
         />
     )        
 }
-
-
-export const TCFormCheckbox = ({field_id, onChange, className, label, checked, mandatory, wrapperClassName, labelClassName}) =>    {
-    if(!className || isObject(className)) className = CHECKBOX_CSS
+    
+export const TCFormCheckbox = ({field_id, onChange, className, label, checked, disabled, wrapperClassName, labelClassName}) =>    {
     checked = checked || false
-    onChange = onChange || function(){}
-    wrapperClassName = wrapperClassName || CHECKBOX_WRAPPER_CSS
-    labelClassName = labelClassName || CHECKBOX_LABEL_CSS
-    const { register } = useForm();
-    let ref = register
-    if(mandatory){
-        ref = register({ validate: value => value})
+    if(typeof className != "string" || !className)  className = CHECKBOX_CSS
+    const [wcss, setWcss] = useState(checked ? CHECKED_WRAPPER_CSS : CHECKBOX_WRAPPER_CSS) 
+    
+    function changeWrapper(){
+        setWcss((wcss == CHECKBOX_WRAPPER_CSS) ? CHECKED_WRAPPER_CSS : CHECKBOX_WRAPPER_CSS)
     }
-    let vchange = _onChange(onChange, field_id)
+
+    if(typeof labelClassName != "string" || !labelClassName) labelClassName = CHECKBOX_LABEL_CSS
+  
+    let vchange = function(){
+        _onTChange(onChange, field_id)
+        changeWrapper()
+    }
 
     return(
-        <Row className={wrapperClassName} >
+        <Row className={wcss}>
             <input type="checkbox"
+                disabled = {disabled}
                 className = {className}
                 onChange = {vchange}
                 defaultChecked ={checked}
                 name = {field_id}
                 id={field_id}
-                ref = {register}
             />
             <label className={labelClassName} htmlFor={field_id}>
                 {label}
@@ -374,7 +388,7 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, m
 }
 
 export const TCRow = ({className, children}) => {
-    if(!className || isObject(className)) className = INTERNAL_ROW_CSS
+    if(typeof className != "string" || !className)  className = INTERNAL_ROW_CSS
     return (
         <Row className={className}>
             {children}
@@ -383,7 +397,7 @@ export const TCRow = ({className, children}) => {
 }
 
 export const TCCol = ({className, children}) => {
-    if(!className || isObject(className)) className = INTERNAL_COL_CSS
+    if(typeof className != "string" || !className) className = INTERNAL_COL_CSS
     return (
         <Col className={className}>
             {children}
@@ -391,4 +405,193 @@ export const TCCol = ({className, children}) => {
     )
 }
 
- 
+
+/**
+ * 
+ * @param {array} layout - array of row sizes ([3, 4, 1]) describing grid 
+ * @param {string} [rowClassName] css class to be applied to rows 
+ * @param {string} colClassName css class to be applied to columns 
+ */
+export const TCGrid = ({layout, rowClassName, colClassName, children}) => {
+    if(!colClassName || typeof colClassName != "string") colClassName  = INTERNAL_COL_CSS
+    if(!rowClassName || typeof rowClassName != "string") rowClassName = INTERNAL_ROW_CSS
+    
+    function wrapCols(arr){
+        let cols = []
+        for(var j = 0; j<arr.length; j++){
+            cols.push(<TCCol className={colClassName} >{arr[j]}</TCCol>)
+        }
+        return cols 
+    }
+
+    let els = React.Children.toArray(children)
+    let rows = []
+    let index = 0
+    for(var i = 0; i<layout.length; i++){
+        let colcount = layout[i]
+        let cols = []
+        let k = 0
+        while(cols.length < colcount && ((index + k) < els.length)){
+            if(els[k+index]) cols.push(els[k+index])
+            k++
+        }
+        index += k
+        rows.push(
+            <TCRow key={i+"_" + k} className={rowClassName}>
+                {wrapCols(cols)}
+            </TCRow>
+        )
+    }
+    return rows
+}
+
+/**
+ * Generator functions which create TC elements from json configs
+ */
+
+/**
+ * First one is super easy - converts arrays while screening out nulls so that misconfigured fields 
+ * are ignored at this stage and won't cause trouble further down the line
+ * @param {} fields 
+ */
+export const JSONTCFields = (fields, values, errors, onChangeField) => {
+    if(!fields || !Array.isArray(fields)) return null
+    let tcfields = []
+    for(var i = 0; i< fields.length; i++){
+        let tcf = <JSONTCField key={fields[i]} field={fields[i]} value={values[fields[i].id]} error = { errors[fields[i].id] } onChangeField={onChangeField} />
+        if(tcf) tcfields.push(tcf)
+    }
+    return tcfields
+}
+
+export const JSONTCField = ({field, value, error, onChangeField}) => {
+    if(!field || !field.id || !field.inputElement) return false
+    
+    return (<TCFormField 
+        field_id={field.id} 
+        value={value}
+        inputElement={field.inputElement}
+        mandatory={field.mandatory}
+        className={field.className}
+        label ={field.label}
+        labelClassName ={field.labelClassName} 
+        help = {field.help}
+        helpExpanded = {field.helpExpanded} 
+        helpRowClassName = {field.helpRowClassName} 
+        helpClassName = {field.helpClassName}
+        helpLabelColClassName = {field.helpLabelColClassName} 
+        helpColClassName = {field.helpColClassName}
+        helpCols = {field.helpCols}
+        promptRowClassName = {field.promptRowClassName}
+        inputRowClassName = {field.inputRowClassName}
+        inputGutterClassName = {field.inputGutterClassName}
+        cowDuckClassName = {field.cowDuckClassName}
+        cowDuckIconClassName = {field.cowDuckIconClassName} 
+        errorRowClassName = {field.errorRowClassName}
+        error = {error}
+        onChangeField={onChangeField}
+        fieldErrorClassName = {field.fieldErrorClassName} 
+    />)
+}
+
+export const JSONTCInputElement = ({field_id, value, mandatory, onChange, elt}) => {
+    if(!elt || !elt.type) return null
+    if(elt.type == "input"){
+        return (
+            <TCFormInput 
+                field_id={field_id}
+                disabled ={elt.disabled}
+                mandatory ={mandatory}
+                value={value}
+                className={elt.className}
+                onChange={onChange}
+                placeholder={elt.placeholder} 
+            />
+        )
+    }
+    else if(elt.type == "select" && elt.options){
+        return (
+            <TCFormSelect
+                field_id={field_id}
+                disabled ={elt.disabled}
+                mandatory ={mandatory}
+                value={value}
+                options={elt.options}
+                className={elt.className}
+                onChange={onChange}
+                placeholder={elt.placeholder} 
+            />
+        )
+    }
+    else if(elt.type == "textarea"){
+        return (
+            <TCFormTextarea
+                field_id={field_id}
+                disabled ={elt.disabled}
+                mandatory ={mandatory}
+                value={value}
+                className={elt.className}
+                onChange={onChange}
+                placeholder={elt.placeholder} 
+            />
+        )
+    }
+    else if(elt.type == "checkbox"){
+        return (
+            <TCFormCheckbox
+                field_id={field_id}
+                mandatory ={elt.mandatory}
+                disabled ={elt.disabled}
+                checked={value}
+                className={elt.className}
+                onChange={onChange}
+                label={elt.label}
+                placeholder={elt.placeholder} 
+            />
+        )        
+    }
+    return null
+}
+
+export const JSONTCButtons = ({buttons}) => {
+    if(! buttons ) return null
+    return (<TCFormSubmits
+        className={buttons.className}
+        buttonsClassName={buttons.buttonsClassName}
+        onCancel={buttons.onCancel}
+        cancelText={buttons.cancelText}
+        cancelClassName={buttons.cancelClassName}
+        submitText={buttons.submitText}
+        submitClassName={buttons.submitClassName}
+    />)
+}
+
+const _onChange = (ch, field_id) => {
+    if(ch){
+        let vchange = function(val){
+            ch(field_id, val.target.value)
+        }
+        return vchange
+    }
+    return undefined
+}
+
+const _onSChange = (ch, field_id) => {
+    if(ch){
+        let vchange = function(SelValue){
+            ch(field_id, SelValue.value)
+        }
+        return vchange
+    }
+    return undefined
+}
+
+const _onTChange = (ch, field_id) => {
+    if(ch){
+        let vchange = function(SelValue){
+            ch(field_id, SelValue.target.checked)
+        }
+        return vchange
+    }
+    return undefined
+}

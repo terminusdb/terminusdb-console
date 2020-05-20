@@ -12,25 +12,25 @@ const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.pn
 export const createDbCard = {
     create:{
         title: 'Create New Database',
-        text: 'You can opt to create a brand new empty database.',
+        text: 'Create a New Empty Database.',
         image: createImg
     },
     copy:{
         title: 'Copy Existing Database',
-        text: 'You can opt to copy an existing database from you local machiene or from a remote server',
+        text: 'Copy an Existing database from a Local Machine or Remote Server.',
         image: copyImg
     }
 }
 
 export const createDbCardOptions = {
     local:{
-        title: 'Create Database locally',
-        text: 'The database will be created on your local machine and can accessed only by you.',
+        title: 'Create Database Locally',
+        text: 'Database Created on Your Local Machine and Accessed Only by You.',
         image: createLocallyImg
     },
     remote:{
-        title: 'Create Database on terminusdb.com',
-        text: 'The database will be created on terminusdb.com and you can share this with other hub users as well.',
+        title: 'Create Database of TerminusDB.com',
+        text: 'Database Created on TerminusDB.com and You Can Share with Other Hub Users.',
         image: createRemoteImg
     }
 }

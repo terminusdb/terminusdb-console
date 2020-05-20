@@ -127,6 +127,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         else return ""
     }
 
+    if(editable && error) console.log(error)
     return(<Container className={qeclass} >
         <div style={{display: "flex", justifyContent:"flex-end"}}>
             {languages && 
@@ -157,8 +158,8 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
 
         {children}
        
-        {(editable && containsUpdate) && 
-            <textarea onChange={(editor, data, value) => { setCommitMsg(value)}} placeholder = { commitBox.input.placeholder }>
+        {(editable) && 
+            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { commitBox.input.placeholder }>
                 {commitMsg}
             </textarea>
         }   

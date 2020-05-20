@@ -12,10 +12,10 @@ function WOQLQueryContainerHook(startQuery){
     const [bindings, setBindings] = useState();
     const {woqlClient} = WOQLClientObj();
 
-    let commitMsg="Update";
+    const [cmsg, setCMsg] = useState("Update Query from Console Query Page")
 
     const updateQuery = (nwoql, commitMsg)=>{
-        commitMsg=commitMsg;
+        setCMsg(commitMsg)
         setWoqlQuery(nwoql)
     }
 
@@ -42,7 +42,7 @@ function WOQLQueryContainerHook(startQuery){
 
     function executeQuery() {
 
-		woql.execute(woqlClient, commitMsg)
+		woql.execute(woqlClient, cmsg)
 	    .then((response) => {
 	        processSuccessfulResult(response)//, start, Date.now())
 	    })

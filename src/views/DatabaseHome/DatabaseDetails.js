@@ -25,9 +25,7 @@ const Details = (props) => {
 
 	function prepareCommitInfo(r) {
 		var info = [];
-		info.push('Last Modified by - ' + 'Someone?')
-		info.push(<br/>)
-		info.push('Last Commit Message - ' + 'blah')
+		info.push('Last modified by local administrator on 20 May 2020, latest updates are listed below')
 		return info
 	}
 
@@ -40,7 +38,7 @@ const Details = (props) => {
 		    else countBranch(wr.count() + ' Branch')
 			var inf = prepareCommitInfo(wr)
             setCommitInfo(inf)
-			setOriginInfo('Your ahead of origin by 2 commits.')
+			setOriginInfo('Your database has processed all transactions correctly and is up to dated')
         })
     }, [always]);
 
@@ -62,24 +60,24 @@ const Details = (props) => {
 				<Col md={3} className="mb-3 dd-c">
 	               {commitInfo && branch && <DetailsCard icon={icons.COMMIT}
 	                    title = "Commits"
-	                    main = "234"
+	                    main = "23"
 						subTitle = {branch}
 	                    info = {commitInfo}/>}
 	            </Col>
 
 				<Col md={3} className="mb-3 dd-c">
 					{userInfo && <DetailsCard icon={icons.USERS}
-						title = "Users"
-						main = "5"
-						subTitle = "Storage space 3 GB"
-						info={userInfo}/>}
+						title = "User"
+                        main = " 1 "
+						subTitle = "Desktop Client"
+						info="Desktop users can add collaborators to their databases through TerminusDB hub"/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
 					{originInfo && <DetailsCard icon={icons.ORIGIN}
 						title = "Origin"
 						main="Local"
-						subTitle="something goes here"
+						subTitle="Database Local Only"
 						info={originInfo}/>}
 				</Col>
 			</Row>

@@ -3,7 +3,7 @@ import { Alert, Container, Row, Col } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
 import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS, 
-    NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS} from "./constants"
+    NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS, VIOLATIONS_DETECTED, VIOLATION_DETECTED} from "./constants"
 
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)
@@ -24,7 +24,7 @@ export const ResultReport = ({report}) => {
         if(currentReport.rows == 0 && currentReport.inserts == 0 && currentReport.deletes == 0){
             return (<ImpotentQuery time={qtime} />)
         }
-        if(currentReport.rows == 0){
+        if(!currentReport.rows || currentReport.rows == 0){
             return (<UpdateSuccess report={currentReport} time={qtime} />)
         }
         else if(currentReport.inserts == 0 && currentReport.deletes == 0){
@@ -36,8 +36,8 @@ export const ResultReport = ({report}) => {
     }
 
     function queryTimeDisplay(){
-        let qtime = currentReport.duration
-        return qtime + " seconds"
+        let qtime = (currentReport.duration ? currentReport.duration / 1000 : false)
+        return (qtime ? qtime + " seconds" : false)
     }
 
     if(!currentReport) return null
@@ -57,13 +57,13 @@ export const ResultReport = ({report}) => {
 }
 
 const ImpotentQuery = ({report, time}) => {
+    let txt = (time ? " (" + time + ")" : "")
+
     return (
         <Alert color="warning">
             <span className={ RESULT_REPORT_CSS }>
                 {NO_RESULTS}
-                {time && 
-                    ({time})
-                }
+                <span> {txt} </span> 
                 {NO_RESULTS_ADVICE}
             </span>
         </Alert>
@@ -74,7 +74,7 @@ const QuerySuccess = ({report, time}) => {
     return (
         <Alert color="info">
             <span className={ RESULT_REPORT_CSS }>
-                Query returned {report.rows} records, each with {report.columns} variables, in {time}
+                Query returned {report.rows} records in {time}
             </span>
         </Alert>
     )
@@ -92,13 +92,12 @@ const HybridSuccess = ({report, time}) => {
 
 
 const UpdateSuccess = ({report, time}) => {
+    let txt = (time ? " (" + time + ")" : "")
     return (
         <Alert color="success">
             <span className={ RESULT_REPORT_CSS }>
                 Successfully updated database 
-                {time && 
-                    ({time})
-                }
+                <span> {txt} </span> 
                 <span className={ RESULT_REPORT_LABEL_CSS }>
                     {INSERTS}
                 </span>
@@ -124,27 +123,25 @@ const UpdateSuccess = ({report, time}) => {
 
 
 const QueryError = ({violations, time}) => {
+    let txt = (time ? " (" + time + ")" : "")
+
     return (
         <Alert color="warning">
-            <span className={ RESULT_REPORT_CSS }>
-                {violations.length} {VIOLATIONS_IDENTIFIED} 
-                {time && 
-                    ({time})
-                }
-                </span>
-            <ViolationReport violations={violations} tone="warning"/>
+            <span className={ RESULT_REPORT_CSS }> {txt}
+                <ViolationReport violations={violations} tone="warning"/>
+            </span>
         </Alert>
     )
 }
 
 const QuerySystemError = ({error, time}) => {
+    let txt = (time ? " (" + time + ")" : "")
+
     return (
     <Alert color="danger">
         <span className={ RESULT_REPORT_CSS }>
             {QUERY_CAUSED_ERROR}
-            {time && 
-                ({time})
-            }
+            <span> {txt} </span> 
         </span>
         <SystemError error={error} />
     </Alert>)
