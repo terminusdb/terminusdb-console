@@ -57,8 +57,9 @@ const GraphFilter = (props) => {
 
     if(hasSchema() && filter) {
         return (
-            <Select placeholder = {"Graph: " + graphLabel(filter)}
-                className = "brSeltr"
+            <Select 
+                placeholder = {graphLabel(filter)}
+                className = {GRAPH_FILTER_CSS}
                 value = {filterString(filter)}
                 onChange = {changeFilter}
                 options = {graphOptions(graphs)}/>
@@ -68,3 +69,8 @@ const GraphFilter = (props) => {
 }
 
 export default GraphFilter;
+//GRAPH_FILTER_CSS"brSeltr"
+//"All Schema Graphs"
+//"All Inference Graphs"
+//"Schema Graph "
+//"Inference Graph "

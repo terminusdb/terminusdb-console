@@ -63,8 +63,7 @@ export const OWL = (props) => {
                 <EmptyResult />
             }
             {(dataProvider || empty) &&  
-                <OWLEditor dataProvider = {dataProvider}
-                    edit = {edit} onChange = {updateSchema}/>
+                <OWLEditor dataProvider = {dataProvider} edit = {edit} onChange = {updateSchema}/>
             }
         </div>
     )

@@ -6,12 +6,13 @@ export const WOQLQueryContainer = ({query=false,children}) => {
 	const elements = React.Children.toArray(children) ;	
     
     const childrenEl = elements.map((child)=>{
-    	return React.cloneElement(child, { setCommitMsg:setCommitMsg,
-    							           setWoql:setWoql,
-
-    									   report:report,
-    									   woql:woql, 
-    									   bindings:bindings})
+    	return React.cloneElement(child, { 
+            setCommitMsg:setCommitMsg,
+            setWoql:setWoql,
+            report:report,
+            woql:woql, 
+            bindings:bindings
+        })
     })
    
 	return(
