@@ -38,7 +38,7 @@ Then clone this repo and do `npm install` and `npm run serve`
 
 ```
 npm install
-npm run serve
+npm run server
 ```
 
 Now the console should be running on `https://localhost:3005`
