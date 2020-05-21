@@ -9,7 +9,6 @@ import { isObject } from "../../utils/helperFunctions";
 import * as tag from "../../labels/tags"
 import * as reportAlert from "../../labels/reportLabels"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { HelpCowDuck } from "../../components/Reports/HelpCowDuck"
 import {TCFormSubmits, TCForm, TCFormInput, TCFormField, TCFormSelect, TCFormCheckbox, TCFormTextarea, TCCol, TCRow, TCSubmitWrap} from  "../../components/Form/FormComponents"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
 import {CREATE_DB_FORM} from "./constants"
@@ -99,7 +98,7 @@ const DBDetailsForm = (props) => {
             let message = `${CREATE_DB_FORM.createFailureMessage} ${doc.label}, id: [${id}] `
             setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
-        .finally(() => 
+        .finally(() =>
             {
                 setLoading(false)
                 reconnectServer()
@@ -167,7 +166,7 @@ const DBDetailsForm = (props) => {
     return (
         <TCForm onSubmit={onSubmit} >
             <TCFormSubmits submitText={CREATE_DB_FORM.createButtonText} visible="true" />
-            {report && 
+            {report &&
                 <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
             }
             <TCRow>

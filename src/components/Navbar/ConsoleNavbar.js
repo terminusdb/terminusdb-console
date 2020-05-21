@@ -24,7 +24,7 @@ export const ConsoleNavbar = (props) => {
     }
 
     return (
-        <div className="nav-container">
+        <div className="nav-container" >
             <Navbar expand="md" dark fixed="top">
             <Container>
                 <div className={containerClassName}>
