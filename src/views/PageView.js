@@ -5,7 +5,7 @@
  *      PageContent (some passed jsonx thingummy)
  */
 
-import React, { useState } from "react";
+import React from "react";
 import {ConsoleNavbar} from "../components/Navbar/ConsoleNavbar";
 import { Col, Container } from "reactstrap";
 import Footer  from "../components/Footer"

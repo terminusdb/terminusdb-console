@@ -36,8 +36,13 @@ const APIUpdateInfo = ({message}) => {
     )
 }
 
+function queryTimeDisplay(t){
+    let qtime = (t ? (t / 1000) : false)
+    return (qtime ? " (" + qtime + " seconds" + ")" : "")
+}
+
 const APIUpdateSuccess  = ({message, time}) => {
-    let txt = message + (time ? " (" + time + ")" : "")
+    let txt = message + queryTimeDisplay(time)
     return (
         <Alert color="success">
             <FontAwesomeIcon icon={icons.CHECK} className="mr-3"/>
@@ -49,7 +54,7 @@ const APIUpdateSuccess  = ({message, time}) => {
 }
 
 const APIUpdateWarning = ({message, error, time}) => {
-    let txt = message + (time ? " (" + time + ")" : "")
+    let txt = message + queryTimeDisplay(time)
 
     let vios = hasViolations(error)
     return (
@@ -75,7 +80,7 @@ const APIUpdateError = ({message, error, time}) => {
 }
 
 const APIInputError = ({message, violations, time}) => {
-    let txt = message + (time ? " (" + time + ")" : "")
+    let txt = message + queryTimeDisplay(time)
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
@@ -88,7 +93,7 @@ const APIInputError = ({message, violations, time}) => {
 }
 
 const APISystemError = ({message, error, time}) => {
-    let txt = message + (time ? " (" + time + ")" : "")
+    let txt = message + queryTimeDisplay(time)
     return (
     <Alert color="danger">
         <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>

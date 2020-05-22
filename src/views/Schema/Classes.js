@@ -27,7 +27,7 @@ export const Classes = (props) => {
     return (
         <div className = "tab-co">
             {!report && 
-                <Loading type="COMPONENT_LOADING"/>
+                <Loading type="component"/>
             }
             {(report && report.error) && 
                 <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />

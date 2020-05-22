@@ -11,7 +11,7 @@ import { CreateOptions } from "./CreateOptions"
 import { CopyFrom } from "./CopyFrom"
 import { CopyType } from "./CopyType"
 import DBDetailsForm from "./DBDetailsForm"
-import { DialogueBox } from "../../components/Reports/DialogueBox"
+import { ComingSoon } from "../../components/Reports/ComingSoon"
 import { Crumbs } from "../../components/BreadCrumbs"
 
 const CreateDatabase = (props) => {
@@ -53,6 +53,7 @@ const CreateDatabase = (props) => {
 		        <hr className = "my-space-50"/>
 				{(page == view.CREATE_VIEW) && <>
 					<Crumbs/>
+                    <hr className = "my-space-50"/>
 					<Row className="col-md-12 justify-content-center" >
 						<Col className="col-md-5">
 							<div onClick={handleCreate} className="square db-view-cards">
@@ -70,24 +71,28 @@ const CreateDatabase = (props) => {
 				{(page == view.CREATE_OPTIONS) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
 						{page:view.CREATE_OPTIONS, text:view.CREATE_OPTIONS}]} setPage = { setPage }/>
+    		        <hr className = "my-space-50"/>
 					<CreateOptions setPage = { setPage } setCreateRemote = { setCreateRemote } setCreateLocal = { setCreateRemote }/>
 				</>}
 				{(page == view.COPY_OPTIONS) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
 						{page:view.COPY_OPTIONS, text:view.COPY_OPTIONS}]} setPage = { setPage }/>
-					<CopyFrom setPage = { setPage } setRemote = { setCopyRemote } setLocal = { setCopyLocal }/>
+			        <hr className = "my-space-50"/>
+    				<CopyFrom setPage = { setPage } setRemote = { setCopyRemote } setLocal = { setCopyLocal }/>
 				</>}
 				{(page == view.COPY_TYPES) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
 						{page:view.COPY_OPTIONS, text: copyFrom},
 						{page:view.COPY_TYPES, text:view.COPY_TYPES}]} setPage = { setPage }/>
-					<CopyType setPage = { setPage } local = { copyLocal } remote = { copyRemote } setClone = { setClone }/>
+			        <hr className = "my-space-50"/>
+    				<CopyType setPage = { setPage } local = { copyLocal } remote = { copyRemote } setClone = { setClone }/>
 				</>}
 				{(page == view.CLONE_LOCAL) && (copyLocal) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
 						{page:view.COPY_OPTIONS, text: copyFrom},
 						{page:view.COPY_TYPES, text:copyType},
 						{page:view.COPY, text: view.COPY}]} setPage = { setPage }/>
+    		        <hr className = "my-space-50"/>
 					<CloneLocalDB setPage = { setPage }/>
 				</>}
 				{(page == view.CLONE_REMOTE) && (copyRemote) && <>
@@ -95,6 +100,7 @@ const CreateDatabase = (props) => {
 						{page:view.COPY_OPTIONS, text: copyFrom},
 						{page:view.COPY_TYPES, text:copyType},
 						{page:view.COPY, text:view.COPY}]} setPage = { setPage }/>
+    		        <hr className = "my-space-50"/>
 					<CloneRemoteDB setPage = { setPage }/>
 				</>}
 				{(page == view.CREATE_LOCAL) && <>
@@ -102,6 +108,7 @@ const CreateDatabase = (props) => {
 						{page:view.CREATE_OPTIONS, text: view.LOCAL},
 						{page:view.CREATE_LOCAL, text:view.CREATE_LOCAL}]}
 						setPage = { setPage }/>
+    		        <hr className = "my-space-50"/>
 					<DBDetailsForm setPage = { setPage }/>
 				</>}
 				{(page == view.CREATE_REMOTE) && <>
@@ -109,7 +116,8 @@ const CreateDatabase = (props) => {
 						{page:view.CREATE_OPTIONS, text: view.REMOTE},
 						{page:view.CREATE_REMOTE, text:view.CREATE_REMOTE}]}
 						setPage = { setPage }/>
-					<DialogueBox message = { 'Coming soon ...!'}/>
+    		        <hr className = "my-space-50"/>
+					<ComingSoon />
 				</>}
 
 			</Container>

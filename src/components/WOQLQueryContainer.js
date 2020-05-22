@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 import {WOQLQueryContainerHook} from "./WOQLQueryContainerHook" 
 
 export const WOQLQueryContainer = ({query=false,children}) => {
-    const [setWoql,setCommitMsg,report,bindings,woql] = WOQLQueryContainerHook(query);
-	const elements = React.Children.toArray(children) ;	
+    const [setWoql,setCommitMsg,report,bindings,woql] = WOQLQueryContainerHook(query)
+	const elements = React.Children.toArray(children) 
     
     const childrenEl = elements.map((child)=>{
     	return React.cloneElement(child, { 
@@ -16,8 +16,8 @@ export const WOQLQueryContainer = ({query=false,children}) => {
     })
    
 	return(
-		  <React.Fragment>
+		<React.Fragment>
     		{childrenEl}
- 		  </React.Fragment>
+ 		</React.Fragment>
 	)
 }

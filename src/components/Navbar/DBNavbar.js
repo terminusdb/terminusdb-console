@@ -17,13 +17,6 @@ export const DBNavbar = (props) => {
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
 
-    useEffect(() => {
-        dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account());
-        setDBMeta(dbmeta)
-        setBranch(woqlClient.checkout())
-        setRef(woqlClient.ref())
-    }, []);
-
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()
     }

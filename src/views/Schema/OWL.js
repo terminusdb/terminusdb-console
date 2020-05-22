@@ -18,8 +18,9 @@ export const OWL = (props) => {
 
     useEffect(() => {
         if(props.graph){
-            setFilter(props.graph)
-            woqlClient.getTriples(props.graph.type, props.graph.gid)
+            let id = (props.graph.id == "*" ? "main" : props.graph.id) 
+            setFilter({type: props.graph.type, id: id})
+            woqlClient.getTriples(props.graph.type, id)
             .then((cresults) => {
                 setDataProvider(cresults);
                 setEmpty(cresults == "") 
@@ -48,7 +49,7 @@ export const OWL = (props) => {
     return (
         <div className = "tab-co">
             {(!dataProvider && !error && !empty) &&  
-                <Loading />
+                <Loading type="component"/>
             }
             {(error && error.type == "read") && 
                 <ComponentFailure failure={FAILED_LOADING_OWL} error={error} />

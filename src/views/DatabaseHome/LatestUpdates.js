@@ -18,7 +18,7 @@ export const LatestUpdates = (props) => {
     return (
         <div className = "tab-co">
             {!report && 
-                <Loading />
+                <Loading type="component"/>
             }
             {(report && report.error) && 
                 <ComponentFailure failure={FAILED_LOADING_LATEST_UPDATES} error={report.error} />
@@ -26,9 +26,6 @@ export const LatestUpdates = (props) => {
             {(report && report.rows > 0 && bindings) &&   
                 <ResultViewer type="table" query={woql} bindings={bindings} />
             }            
-            {(report && report.rows == 0) && 
-                <EmptyResult report={report} />
-            }
         </div>
     )
 }

@@ -7,7 +7,7 @@ export const DOCUMENT_NO_SCHEMA = {
 
 export const SYSTEM_ERROR = {
     id: "SYSTEM_ERROR",
-    title: "System Error",
+    title: "TerminusDB reports",
     color: "error",
     message: "Failed to load documents from database"
 }
@@ -47,8 +47,12 @@ export const COWDUCK_WRAPPER_CSS = "cow-duck-wrapper"
 export const ASK_COWDUCK = "Ask CowDuck, CowDuck knows"
 
 export const SYSTEM_ERROR_CSS = "terminus-system-error"
-export const HIDE_ERROR_DETAILS = "Hide Details"
-export const SHOW_ERROR_DETAILS =  "Show Details"
+export const SYSTER_ERROR_TITLE_CSS = "terminus-system-error-title"
+export const SYSTER_ERROR_MSG_CSS = "terminus-system-error-message"
+
+
+export const HIDE_ERROR_DETAILS = "less"
+export const SHOW_ERROR_DETAILS =  "more"
 export const SHOW_ERROR_DETAILS_CSS = "terminus-show-error-details"
 
 export const QUERY_CAUSED_ERROR = "Query Failed"
