@@ -12,9 +12,7 @@ export const ServerNavbar = (props) => {
     }
 
     return (
-        <span className="m-opts d-flex">
-            <div className="d-flex main-nav">
-                {/*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/}
+
                 <Nav className = "mr-auto"  navbar>
                     <NavItem>
                         {<NavLink tag = {RouterNavLink}
@@ -28,6 +26,12 @@ export const ServerNavbar = (props) => {
                         </NavLink>}
                     </NavItem>
             </Nav>
-        </div>
-    </span>)
+      )
 }
+
+/*
+{ /* <span className="m-opts d-flex">
+      <div className="d-flex main-nav">*/
+          /*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/
+          /* </div>
+         </span>*/

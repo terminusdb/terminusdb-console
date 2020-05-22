@@ -968,7 +968,7 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
-div.db-nav {
+ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
     border-radius: 3px;
@@ -1162,8 +1162,14 @@ p.dscr{
   .container {
     max-width: 1480px
   }
+
+  background: #fff;
+  box-shadow: 0 -1px 2px 0 #dfe3ec;
 }*/
 
+div.nav-bar-collapse{
+    margin: 0px 0px 0px 60px
+}
 
 
 @media (max-width:767px) {
@@ -1196,8 +1202,7 @@ p.dscr{
     margin-top: 1.5em
   }
   .navbar-nav:last-child {
-    background: #fff;
-    box-shadow: 0 -1px 2px 0 #dfe3ec;
+
     margin: 1.5em 0 0 0;
     padding: 1.5em 2.5rem
   }

@@ -16,7 +16,11 @@ export const DBNavbar = (props) => {
     const [DBMeta, setDBMeta] = useState(dbmeta)
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
-
+    var cn;
+  //  if(!props.isOpen) cn = 'db-nav'
+  //  else cn = ''
+    console.log('cn', cn)
+    console.log('props.isOpen', props.isOpen)
     useEffect(() => {
         dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account());
         setDBMeta(dbmeta)
@@ -37,11 +41,39 @@ export const DBNavbar = (props) => {
         return dbb + (type == "home" ? "/" : "/" + type)
     }
 
+
+
+  /*  const links = [
+      { href: '#home', text: 'Home' },
+      { href: '#card', text: 'Product' },
+      { href: '#about', text: 'About' },
+      { href: '#cata', text: 'Categories' },
+      { href: '#test', text: 'Blogs' },
+      { href: '#test2', text: 'News' },
+      { href: '#busns', text: 'Adds', className: 'btnadd' },
+      { href: '/login', text: 'LOGIN' },
+  ];*/
+
+
+
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
+
+    /*return <Nav className="ml-auto" navbar>
+      {links.map(createNavItem)}
+    </Nav>*/
+
+    /* <div className="d-flex db-al db-nav s-nav">*/
+
+
+  /*  const createNavItem = ({ href, text, className }) => (
+      <NavItem>
+        <NavLink href={href} className={className}>{text}</NavLink>
+      </NavItem>
+  );*/
     return (
-        <div className="d-flex db-al db-nav s-nav">
-            <Nav className = "mr-auto"  navbar>
+
+            <Nav className = {"ml-auto "} navbar>
                 <NavItem>
                     <NavLink tag = {RouterNavLink}
                             to = {getNavURL("home")}
@@ -86,6 +118,5 @@ export const DBNavbar = (props) => {
                 </NavItem>
                 }
         </Nav>
-        </div>
     )
 }
