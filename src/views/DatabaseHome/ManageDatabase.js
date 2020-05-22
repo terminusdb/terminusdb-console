@@ -21,24 +21,23 @@ import {
     DELETE_BUTTON
  } from "./constants"
 
-
 const ManageDatabase = (props) => {
     const [userInfo, setCreateUserInfo] =  useState({})
-	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-    const {woqlClient} = WOQLClientObj();
+	const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0()
+    const {woqlClient} = WOQLClientObj()
 
-	const [modal, setModal] = useState(false);
+	const [modal, setModal] = useState(false)
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => setModal(!modal)
 
     const onSubmit = (data) => {
 		if (!user){
   		    loginWithRedirect();  // authenticate
   	    }
-    };
+    }
 
     function headChanged(b, r){}
-    
+
 	const divider = <>
 		<hr className = "my-space-50"/>
 		<hr className = "my-space-2"/>

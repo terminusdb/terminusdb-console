@@ -13,6 +13,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
 import {GRAPHS_LOAD_ERROR} from "./constants"
+import {PageFailure} from "../../components/Reports/PageFailure"
 
 const SchemaPage = (props) => {
     const [graphs, setGraphs] = useState();

@@ -68,9 +68,8 @@ export const CREATE_DB_ADVANCED = {
             helpCols: 9,
             help: "By default, databases are created with a schema graph for defining rules about stored data. If you want a schema-free database, uncheck the box here.",
             inputElement: {
-                label: "create schema graph main",
-                type: "checkbox",
-                placeholder: "Create Schema Graph",
+                label: "Create schema graph main",
+                type: "checkbox"
             },
         },
         {
@@ -94,6 +93,25 @@ export const CREATE_DB_ADVANCED = {
                 placeholder: "Leave Blank to use default URI"
             },
             help: "Every TerminusDB database has a local namespace scm: available for defining local schema elements. You can choose the URL that you want this prefix to derefence to - by convention schema URLs end in a '#' character.",
+        }
+    ]
+}
+
+export const COPY_LOCAL_DB = {
+    //advancedWrapperClassName: "advanced-settings-create-form",
+    //advancedButtonClassName: "advanced-button btn-minor lead mt-4 btn",
+    //advancedSectionClassName: "advanced-section-create-form",
+    //hideAdvanced: "Hide Advanced Settings",
+    //showAdvanced: "Show Advanced Settings",    
+    fields: [
+        {
+            id: "dbsource",
+            value: "",
+            label: 'Copy From',
+            inputElement: {
+                type: "select",
+                placeholder: "Choose Database to Copy",
+            }
         }
     ]
 }

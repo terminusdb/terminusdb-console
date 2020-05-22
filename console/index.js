@@ -7,11 +7,8 @@ import { localSettings } from "./localSettings"
 import {WOQLClientProvider} from '@terminusdb/terminusdb-console'
 
 const onRedirectCallback = appState => {
-    ConsoleHistory.push(
-        appState && appState.targetUrl
-        ? appState.targetUrl
-        : window.location.pathname
-    )
+    //go back two steps, skipping over login
+    ConsoleHistory.go(-2)
 }
 
 /*
