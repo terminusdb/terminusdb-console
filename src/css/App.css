@@ -164,7 +164,7 @@ div.modal-body{
 div.history-navigator-Collapsible {
     background-color: #f5f5f5;
     border-radius: 10px;
-    margin: 40px 20px 20px 20px;
+    margin: 5px 20px 20px 20px;
     padding: 0px 25px 25px 25px;
     position: absolute;
     border: 1px solid rgba(0,0,0,.125);
@@ -604,7 +604,9 @@ button{
 }
 
 div.css-yk16xz-control{
-    border-color: #000 !important;
+    /*border-color: #000 !important;*/
+    border:2px solid rgb(226, 232, 240) !important;
+    border-radius: 4px
 }
 
 .logo{
@@ -1342,6 +1344,10 @@ div.CodeMirror{
   margin-bottom: 1.5rem
 }
 
+#profileDropDown{
+    margin-top: -25px;
+}
+
 @media (min-width:768px) {
   .profile-header {
     text-align: left
@@ -1896,11 +1902,13 @@ div.commit-view-message {
 
 
 .tcf-help-row {
-    height: 80px;
+    /*height: 80px;*/
+    height: 50px;
 }
 
 .tcf-prompt-row {
-    height: 80px;
+    /*height: 80px;*/
+    height: 50px;
 }
 
 
@@ -1941,8 +1949,8 @@ div.commit-view-message {
 }
 
 .tcf-label {
-    padding-top: 26px;
-    padding-left: 14px;
+    /*padding-top: 26px;
+    padding-left: 14px;*/
     line-height: 2;
     text-align: left;
     display: block;
@@ -2031,14 +2039,23 @@ div.commit-view-message {
     border: 1px solid #000;
     padding: 13px 12px;
     font-size: 17px;
+    border:2px solid rgb(226, 232, 240);
 }
+
+.tcf-input:hover, .tcf-select:hover, .tcf-textarea:hover, .tcf-checkbox:hover, div.css-yk16xz-control:hover{
+    border:2px solid rgb(203, 213, 224);
+}
+
 
 .tcf-select {
     padding-right: 0px;
+    border:1px solid rgb(226, 232, 240);
+    border-radius: 4px;
 }
 
 .tcf-textarea {
     padding: 4px;
+   border:2px solid rgb(226, 232, 240);
 }
 
 .tcf-checkbox {
@@ -2048,10 +2065,11 @@ div.commit-view-message {
     outline: none;
     width: 20px;
     height: 20px;
+    border:2px solid rgb(226, 232, 240);
 }
 
 
-.tcf-checkbox-wrapper, 
+.tcf-checkbox-wrapper,
 .tcf-checkbox-wrapper-checked {
     display: inline-block;
     width: 100%;
@@ -2164,7 +2182,7 @@ h4.prefix-section-header {
 }
 
 .terminus-show-error-details {
-    float: right; 
+    float: right;
     font-size: 0.9em;
     cursor: pointer;
     color: #0066f9

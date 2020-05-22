@@ -8,6 +8,7 @@ import { trimContent } from "../../utils/helperFunctions"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClock, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
 library.add(faClock, faCodeBranch)
+import ToggleButton from 'react-toggle-button'
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -16,6 +17,7 @@ export const DBNavbar = (props) => {
     const [DBMeta, setDBMeta] = useState(dbmeta)
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
+    const [toggleTime, setToggleTime] = useState(false)
 
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()
@@ -30,39 +32,17 @@ export const DBNavbar = (props) => {
         return dbb + (type == "home" ? "/" : "/" + type)
     }
 
-
-
-  /*  const links = [
-      { href: '#home', text: 'Home' },
-      { href: '#card', text: 'Product' },
-      { href: '#about', text: 'About' },
-      { href: '#cata', text: 'Categories' },
-      { href: '#test', text: 'Blogs' },
-      { href: '#test2', text: 'News' },
-      { href: '#busns', text: 'Adds', className: 'btnadd' },
-      { href: '/login', text: 'LOGIN' },
-  ];*/
-
+    let dbClass = ""
+    if(!props.isOpen) dbClass = "ml-auto db-nav"
+    else dbClass = "ml-auto"
 
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
 
-    /*return <Nav className="ml-auto" navbar>
-      {links.map(createNavItem)}
-    </Nav>*/
-
-    /* <div className="d-flex db-al db-nav s-nav">*/
-
-
-  /*  const createNavItem = ({ href, text, className }) => (
-      <NavItem>
-        <NavLink href={href} className={className}>{text}</NavLink>
-      </NavItem>
-  );*/
     return (
 
-            <Nav className = {"ml-auto "} navbar>
+            <Nav className = {dbClass} navbar>
                 <NavItem>
                     <NavLink tag = {RouterNavLink}
                             to = {getNavURL("home")}
@@ -99,10 +79,20 @@ export const DBNavbar = (props) => {
                             {links.SCHEMA_PAGE.label}
                     </NavLink>
                 </NavItem>
-                {dbmeta.db != "terminus" &&
+                {dbmeta.db != "terminus" && !props.isOpen &&
                 <NavItem>
-                    <NavLink onClick = {toggleNavbar}>
-                        <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>
+                    <NavLink onClick = {toggleNavbar} title={branch  + headText}>
+                       {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
+                       { <ToggleButton value={ toggleTime || false }
+                            colors={{ activeThumb: {
+                                      base: branchStatus,
+                                    },
+                                    active: {
+                                      base: branchStatus,
+                                      hover: 'rgb(177, 191, 215)',
+                                    }} }
+                          onToggle={(value) => { setToggleTime(!toggleTime)
+                          }} />}
                     </NavLink>
                 </NavItem>
                 }

@@ -16,6 +16,7 @@ export const ConsoleNavbar = (props) => {
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
     const [isOpen, setIsOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
+    const [extraItems, showExtraItems] = useState(false);
 
     const toggleHistoryNavigator = () => setCollapsed(!collapsed);
 
@@ -23,29 +24,12 @@ export const ConsoleNavbar = (props) => {
         toggleHistoryNavigator()
     }
 
+    const toggleNavBar = () => {
+        showExtraItems(!extraItems)
+        setIsOpen(!isOpen)
+    }
 
-
-
-
-const toggleNavBar = () => {
-    setIsOpen(!isOpen)
-}
-
-  /*  return (
-      <div>
-        <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
-          <NavbarToggler onClick={toggleNavBar} />
-          <Collapse isOpen={isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              {links.map(createNavItem)}
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
-  );   */
-
-   return (
+    return (
         <div className="nav-container" >
             <Navbar expand="md" dark fixed="top">
             <NavbarToggler onClick={toggleNavBar} />
@@ -77,7 +61,7 @@ const toggleNavBar = () => {
                               {<ServerNavbar />}
                               <div className="nav-bar-collapse">
                               { woqlClient.db() &&
-                                  <DBNavbar page={props.page} toggleTimeTravel={toggleTimeTravel}/>
+                                  <DBNavbar page={props.page} toggleTimeTravel={toggleTimeTravel} isOpen={extraItems}/>
                               }
                               {!isAuthenticated &&
                                   <Login/>
