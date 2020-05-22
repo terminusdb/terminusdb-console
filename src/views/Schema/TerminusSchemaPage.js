@@ -9,6 +9,7 @@ import { PrefixManager } from './PrefixManager'
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
 
+
 const TerminusSchemaPage = () => {
     const graphs = {schema: ["main"], instance: ["main"], inference: ["main"]}
     const [graphFilter, setGraphFilter] = useState({type: "schema", gid: "main"})

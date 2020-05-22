@@ -56,7 +56,7 @@ export const SHOW_ERROR_DETAILS =  "more"
 export const SHOW_ERROR_DETAILS_CSS = "terminus-show-error-details"
 
 export const QUERY_CAUSED_ERROR = "Query Failed"
-export const NO_RESULTS = "No Results Returned"
+export const NO_RESULTS = "No Results Returned" 
 export const NO_RESULTS_ADVICE = "Check your query for errors and try again"
 export const RESULT_REPORT_LABEL_CSS = "terminus-result-report-label"
 export const RESULT_REPORT_COUNT_CSS = "terminus-result-report-count"
