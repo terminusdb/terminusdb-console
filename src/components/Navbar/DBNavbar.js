@@ -16,17 +16,6 @@ export const DBNavbar = (props) => {
     const [DBMeta, setDBMeta] = useState(dbmeta)
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
-    var cn;
-  //  if(!props.isOpen) cn = 'db-nav'
-  //  else cn = ''
-    console.log('cn', cn)
-    console.log('props.isOpen', props.isOpen)
-    useEffect(() => {
-        dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account());
-        setDBMeta(dbmeta)
-        setBranch(woqlClient.checkout())
-        setRef(woqlClient.ref())
-    }, []);
 
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()

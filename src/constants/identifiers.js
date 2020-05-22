@@ -8,3 +8,7 @@ export const TERMINUS_INFO = "info"
 export const TERMINUS_PROTOCOL = "terminus://"
 export const TERMINUS_USER_DATA = "http://hub.terminusdb.com/users/"
 export const TERMINUS_USER_SCHEMA = "http://hub.terminusdb.com/users/"
+//scope for loading pages, etc
+export const TERMINUS_COMPONENT = "component"
+export const TERMINUS_PAGE = "page"
+export const TERMINUS_SYSTEM = "system"

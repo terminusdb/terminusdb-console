@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "reactstrap";
 import { WOQLClientObj } from "../init/woql-client-instance";
 import {TerminusClientInterceptor} from '../utils/TerminusClientInterceptor';
 

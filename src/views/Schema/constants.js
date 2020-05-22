@@ -64,3 +64,20 @@ export const CREATE_GRAPH_FORM = {
 }
 
 export const DELETE_ICON_CSS = "tcf-delete-icon"
+
+export const CLASSES_QUERY_LIMIT = 200
+
+/* schema tabs */
+export const CLASSES_TAB = "Classes"
+export const PROPERTIES_TAB = "Properties"
+export const OWL_TAB = "OWL"
+export const GRAPHS_TAB = "Graphs"
+export const PREFIXES_TAB = "URL Prefixes"
+
+/* Graph Filter */
+export const GRAPH_FILTER_CSS = "graph-filter"
+export const GRAPH_FILTER_CONTAINER = "graph-filter-container"
+export const ALL_SCHEMA_GRAPHS = "All Schema Graphs"
+export const ALL_INFERENCE_GRAPHS = "All Inference Graphs"
+export const SCHEMA_GRAPH = "Schema Graph"
+export const INFERENCE_GRAPH = "Inference Graph"

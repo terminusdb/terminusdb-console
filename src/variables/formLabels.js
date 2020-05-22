@@ -12,52 +12,52 @@ const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.pn
 export const createDbCard = {
     create:{
         title: 'Create New Database',
-        text: 'Create a New Empty Database.',
+        text: 'Create a brand-new, empty database',
         image: createImg
     },
     copy:{
         title: 'Copy Existing Database',
-        text: 'Copy an Existing database from a Local Machine or Remote Server.',
+        text: 'Copy an existing database',
         image: copyImg
     }
 }
 
 export const createDbCardOptions = {
     local:{
-        title: 'Create Database Locally',
-        text: 'Database Created on Your Local Machine and Accessed Only by You.',
+        title: 'Create Local Database',
+        text: 'The database will be created on this server and only locally accessible',
         image: createLocallyImg
     },
     remote:{
-        title: 'Create Database of TerminusDB.com',
-        text: 'Database Created on TerminusDB.com and You Can Share with Other Hub Users.',
+        title: 'Create on TerminusDB.com',
+        text: 'Host your database on terminusdb.com and share with collaborators through our secure sharing hub',
         image: createRemoteImg
     }
 }
 
 
 export const copyDbCardTypes = {
-    fork:{
-        title: 'Fork',
-        text: 'You can choose to fork your copy',
-        image: forkImg
-    },
     clone:{
         title: 'Clone',
-        text: 'You can choose to clone your copy',
+        text: 'A cloned version is still connected to the original and can be merged with it',
         image: cloneImg
-    }
+    },
+    fork:{
+        title: 'Fork',
+        text: 'A forked database is a completely independent copy of the original with all its history',
+        image: forkImg
+    },
 }
 
 export const copyDbCardOptions = {
     local:{
-        title: 'Copy database from local machine',
-        text: 'You select any database in your local machine to copy',
+        title: 'Copy from this Server',
+        text: 'Rapidly copy any database from this terminusdb server',
         image: copyLocallyImg
     },
     remote:{
-        title: 'Copy database from a remote server',
-        text: 'You can choose to copy database from any server, You will have to provide key if database resides in other server other than terminusdb.com',
+        title: 'Copy from Remote Server',
+        text: 'You can copy a database from any terminusdb server - you may have to provide security credentials',
         image: copyRemoteImg
     }
 }
