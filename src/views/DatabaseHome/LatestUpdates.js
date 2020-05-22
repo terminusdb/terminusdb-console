@@ -25,8 +25,9 @@ export const LatestUpdates = (props) => {
             }
             {(report && report.rows > 0 && bindings) && <>
                 <hr className="my-space-2"/>
-                <hr className="my-space-10"/>
+                <hr className="my-space-25"/>
                 <p><b>Recent Updates</b></p>
+                <hr className="my-space-25"/>
                 <ResultViewer type="table" query={woql} bindings={bindings} />
                 </>
             }

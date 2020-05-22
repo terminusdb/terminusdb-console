@@ -81,7 +81,8 @@ export const DBNavbar = (props) => {
                 </NavItem>
                 {dbmeta.db != "terminus" && !props.isOpen &&
                 <NavItem>
-                    <NavLink onClick = {toggleNavbar} title={branch + ' ' + headText}>
+                    {/*<NavLink onClick = {toggleNavbar} title={branch + ' ' + headText*/}
+                    <NavLink onClick = {toggleNavbar} title={'Click to view History Navigator'}>
                        {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
                        { <ToggleButton value={ toggleTime || false }
                             colors={{ activeThumb: {
