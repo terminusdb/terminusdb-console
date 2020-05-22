@@ -55,4 +55,8 @@ If you also want to have local versions of the dependencies of console, such as 
 
 **Do not edit `package.json` or the webpack config with file paths** Use `npm link` if you want to use local packages, or set `.npmrc` if you want to use our dev packages.
 
+### Rebuild Dependencies
 
+Keep in mind that when you make changes in the dependencies, you
+will need to do an `npm build` in the one ones that have changed to
+see those changes in console.
