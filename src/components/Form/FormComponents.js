@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { Container, Row, Col } from "reactstrap"
-import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS, 
+import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS,
          SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, ILLEGAL_ID_ERROR,
-         LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS, 
-         PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS, 
+         LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS,
+         PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS,
          TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS,
          DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, INPUT_COL_CSS,
          HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS, CHECKED_WRAPPER_CSS
@@ -13,11 +13,11 @@ import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
 import {APIUpdateReport} from '../Reports/APIUpdateReport'
 
-export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children}) => {    
-        
-    //these are the things that this component changes internally - 
+export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children}) => {
+
+    //these are the things that this component changes internally -
     //if they change in props, assume whole component will be re-rendered by parent.. need no effect
-    const [currentValues, setCurrentValues] = useState(values || {})  
+    const [currentValues, setCurrentValues] = useState(values || {})
     const [fieldErrors, setFieldErrors] = useState(errors || {})
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
             if(item.id && !currentValues[item.id] && item.mandatory){
                 missings[item.id] = REQUIRED_FIELD_ERROR
             }
-        }        
+        }
         setFieldErrors(missings)
         return Object.keys(missings).length
     }
@@ -44,12 +44,12 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
         for(var i = 0 ; i<fields.length; i++){
             let item = fields[i]
             if(item.id && item.terminusID){
-                let xval = currentValues[item.id] 
+                let xval = currentValues[item.id]
                 if(typeof xval == "string" && (xval.indexOf(" ") != -1 || xval.indexOf(":") != -1 || xval.indexOf("/") != -1)){
                     bads[item.id] = ILLEGAL_ID_ERROR
                 }
             }
-        }        
+        }
         setFieldErrors(bads)
         return Object.keys(bads).length
     }
@@ -70,21 +70,21 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
             delete(fieldErrors[field_id])
             setFieldErrors(fieldErrors)
         }
-    }    
-    
+    }
+
     let tcf = JSONTCFields(fields, currentValues, fieldErrors, onChangeField)
-    
+
     let showGrid = (layout && tcf)
     let noGrid = (!layout && tcf)
     return (
         <form onSubmit={interceptSubmit} errors={fieldErrors} values={currentValues}>
-            {(report && isObject(report)) && 
+            {(report && isObject(report)) &&
                 <TCRow>
                     <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
                 </TCRow>
             }
             <JSONTCButtons buttons={buttons} />
-            {showGrid &&  
+            {showGrid &&
                 <TCGrid layout={layout}>
                     {tcf}
                 </TCGrid>
@@ -103,7 +103,7 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
     if(!submitClassName || typeof submitClassName != "string") submitClassName = SUBMIT_CSS
     if(!cancelClassName || typeof cancelClassName != "string" )cancelClassName = CANCEL_CSS
     if(!cancelText || typeof cancelClassName != "string") cancelText = CANCEL_TEXT
-    if(!submitText || typeof cancelClassName != "string") submitText = SUBMIT_TEXT    
+    if(!submitText || typeof cancelClassName != "string") submitText = SUBMIT_TEXT
 
     let myCancel = function(e){
         e.preventDefault()
@@ -115,13 +115,13 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
             <button type="submit" className={submitClassName}>
                 {submitText}
             </button>
-            {onCancel && 
+            {onCancel &&
                 <button onClick={myCancel} className={cancelClassName}>
                     {cancelText}
                 </button>
             }
         </TCSubmitWrap>
-    )        
+    )
 }
 
 export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
@@ -134,7 +134,7 @@ export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
             </span>
         </Row>
     )
-} 
+}
 
 /**
  * Puts an input element into its position on the form by drawing all the stuff around it
@@ -142,15 +142,15 @@ export const TCSubmitWrap = ({className, buttonsClassName, children}) => {
 
 export const TCFormField = ({
         field_id, value, inputElement, mandatory, className, label, labelClassName, onChangeField,
-        help, helpExpanded, helpRowClassName, helpClassName, helpLabelColClassName, helpColClassName, helpCols, 
-        promptRowClassName, inputRowClassName, inputGutterClassName, cowDuck, cowDuckClassName, cowDuckIconClassName, 
+        help, helpExpanded, helpRowClassName, helpClassName, helpLabelColClassName, helpColClassName, helpCols,
+        promptRowClassName, inputRowClassName, inputGutterClassName, cowDuck, cowDuckClassName, cowDuckIconClassName,
         errorRowClassName, error, fieldErrorClassName, children
     }) => {
 
-    if(typeof cowDuck != "string" ) cowDuck = DEPLOY_COWDUCKS 
+    if(typeof cowDuck != "string" ) cowDuck = DEPLOY_COWDUCKS
 
     /** Set Field Level Defaults - defaults for elements are set within elements */
-    if(typeof className != "string" || !className) className = FORM_FIELD_CSS 
+    if(typeof className != "string" || !className) className = FORM_FIELD_CSS
     if(!helpRowClassName || typeof helpRowClassName != "string") helpRowClassName = HELP_ROW_CSS
     if(!promptRowClassName || typeof  promptRowClassName != "string") promptRowClassName = PROMPT_ROW_CSS
     if(!inputRowClassName  || typeof inputRowClassName  != "string") inputRowClassName = INPUT_ROW_CSS
@@ -158,11 +158,11 @@ export const TCFormField = ({
     if(!errorRowClassName || typeof errorRowClassName != "string") errorRowClassName = ERROR_ROW_CSS
     if(!cowDuckClassName || typeof cowDuckClassName != "string") cowDuckClassName = COWDUCK_WRAPPER_CSS
     if(!cowDuckIconClassName || typeof cowDuckIconClassName != "string") cowDuckIconClassName = COWDUCK_ICON_CSS
-    if(!helpLabelColClassName|| typeof helpLabelColClassName != "string") helpLabelColClassName = HELP_LABEL_COL_CSS 
+    if(!helpLabelColClassName|| typeof helpLabelColClassName != "string") helpLabelColClassName = HELP_LABEL_COL_CSS
     if(!helpColClassName || typeof helpColClassName != "string") helpColClassName = HELP_COL_CSS
-    
-    helpExpanded = ((helpExpanded && !isObject(helpExpanded)) ? helpExpanded  : false) 
-    
+
+    helpExpanded = ((helpExpanded && !isObject(helpExpanded)) ? helpExpanded  : false)
+
     const [helpVisible, setHelpVisible] = useState(helpExpanded)
     //const [currentValue, setValue] = useState(value)
     //const [currentError, setError] = useState(error)
@@ -174,33 +174,33 @@ export const TCFormField = ({
     helpCols = helpCols || 6
     let helpLabelCols = (12 - helpCols)
 
-    const flab = (        
+    const flab = (
         <TCFieldLabel
             field_id={field_id}
             label={label}
             mandatory = {mandatory}
             className= {labelClassName}
-        />    
+        />
     )
 
     let cdhelp = ""
     if(help){
         help = (
-            <TCFieldHelp 
-                className={helpClassName} 
+            <TCFieldHelp
+                className={helpClassName}
                 message={help}
                 visible={helpVisible}
-                field_id={field_id}                             
-            />                        
+                field_id={field_id}
+            />
         )
         cdhelp = (
-            <HelpCowDuck 
-                className={cowDuckClassName} 
+            <HelpCowDuck
+                className={cowDuckClassName}
                 iconClassName = {cowDuckIconClassName}
                 message={help}
                 visible={helpVisible}
                 onClick={toggleHelp}
-                field_id={field_id} 
+                field_id={field_id}
             />
         )
     }
@@ -210,7 +210,7 @@ export const TCFormField = ({
     return (
         <Container className={className}>
             <Col>
-                {help && 
+                {help &&
                    <Row className={helpRowClassName}>
                         <Col className={helpLabelColClassName} md={helpLabelCols}>
                             {flab}
@@ -220,7 +220,7 @@ export const TCFormField = ({
                         </Col>
                     </Row>
                 }
-                {!help && 
+                {!help &&
                     <Row className={promptRowClassName}>
                         {flab}
                     </Row>
@@ -230,15 +230,15 @@ export const TCFormField = ({
                     {fcontents}
                     {children}
                     </Col>
-                    {cowDuck && 
+                    {cowDuck &&
                         <Col md={{ size: 'auto'}} className={inputGutterClassName} >
                             {cdhelp}
                         </Col>
                     }
                 </Row>
                 <Row className={errorRowClassName}>
-                    <TCFieldErrors 
-                        className={fieldErrorClassName} 
+                    <TCFieldErrors
+                        className={fieldErrorClassName}
                         error={error}
                         field_id={field_id}
                     />
@@ -254,7 +254,7 @@ export const TCFieldHelp = ({field_id, message, className, invisibleHelpClassNam
     let vis = (visible ? className : invisibleHelpClassName)
     return (
         <span className={vis} id={field_id+"_help"}>
-            {message} 
+            {message}
         </span>
     )
 }
@@ -264,19 +264,19 @@ export const TCFieldLabel = ({field_id, label, mandatory, className, mandatoryCl
     if(typeof className != "string" || !className) className = LABEL_CSS
     return (
         <label className={className} htmlFor={field_id}>
-            {label} 
-            {mandatory && 
-                <TCMandatory 
+            {label}
+            {mandatory &&
+                <TCMandatory
                     className={mandatoryClassName}
                     title={mandatoryTitle}
                 />
-            }                 
+            }
         </label>
     )
 }
 
 export const TCMandatory = ({className, title}) => {
-    if(typeof className != "string" || !className) className = REQUIRED_FIELD_CSS 
+    if(typeof className != "string" || !className) className = REQUIRED_FIELD_CSS
     if(!title || isObject(title)) title = REQUIRED_FIELD
     return (
         <strong title={title} className={className}> * </strong>
@@ -285,7 +285,7 @@ export const TCMandatory = ({className, title}) => {
 
 function TCFieldErrors({field_id, error, className}){
     if(typeof error != "string" ||!error) return null
-    if(typeof className != "string" || !className)  className = ERROR_MESSAGE_CSS 
+    if(typeof className != "string" || !className)  className = ERROR_MESSAGE_CSS
     return (
         <p className = {className}>
             {error}
@@ -325,7 +325,7 @@ export const TCFormTextarea = ({field_id, value, disabled, onChange, placeholder
         onChange(field_id, val.target.value)
     }
     return (
-        <textarea 
+        <textarea
             name= { field_id }
             disabled={disabled}
             className = { className }
@@ -353,7 +353,7 @@ export const TCFormSelect = ({field_id, onChange, className, options, placeholde
     }
 
     return(
-        <Select 
+        <Select
             placeholder = {placeholder}
             className = {className}
             onChange ={vchange}
@@ -361,9 +361,9 @@ export const TCFormSelect = ({field_id, onChange, className, options, placeholde
             options = {options}
             defaultValue= {val}
         />
-    )        
+    )
 }
-    
+
 export const TCFormCheckbox = ({field_id, onChange, className, label, checked, disabled, wrapperClassName, labelClassName}) =>    {
     const [val, setVal] = useState(checked || false)
     useEffect(() => {setVal(checked)}, [checked])
@@ -374,14 +374,14 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
     }
 
     if(typeof className != "string" || !className)  className = CHECKBOX_CSS
-    const [wcss, setWcss] = useState(checked ? CHECKED_WRAPPER_CSS : CHECKBOX_WRAPPER_CSS) 
-    
+    const [wcss, setWcss] = useState(checked ? CHECKED_WRAPPER_CSS : CHECKBOX_WRAPPER_CSS)
+
     function changeWrapper(){
         setWcss((wcss == CHECKBOX_WRAPPER_CSS) ? CHECKED_WRAPPER_CSS : CHECKBOX_WRAPPER_CSS)
     }
 
     if(typeof labelClassName != "string" || !labelClassName) labelClassName = CHECKBOX_LABEL_CSS
-  
+
     return(
         <span className={wcss}>
             <input type="checkbox"
@@ -396,7 +396,7 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
                 {label}
             </label>
         </span>
-    )        
+    )
 }
 
 export const TCRow = ({className, children}) => {
@@ -419,21 +419,21 @@ export const TCCol = ({className, children}) => {
 
 
 /**
- * 
- * @param {array} layout - array of row sizes ([3, 4, 1]) describing grid 
- * @param {string} [rowClassName] css class to be applied to rows 
- * @param {string} colClassName css class to be applied to columns 
+ *
+ * @param {array} layout - array of row sizes ([3, 4, 1]) describing grid
+ * @param {string} [rowClassName] css class to be applied to rows
+ * @param {string} colClassName css class to be applied to columns
  */
 export const TCGrid = ({layout, rowClassName, colClassName, children}) => {
     if(!colClassName || typeof colClassName != "string") colClassName  = INTERNAL_COL_CSS
     if(!rowClassName || typeof rowClassName != "string") rowClassName = INTERNAL_ROW_CSS
-    
+
     function wrapCols(arr, i){
         let cols = []
         for(var j = 0; j<arr.length; j++){
             cols.push(<TCCol key={i+"_"+j} className={colClassName} >{arr[j]}</TCCol>)
         }
-        return cols 
+        return cols
     }
 
     let els = React.Children.toArray(children)
@@ -462,9 +462,9 @@ export const TCGrid = ({layout, rowClassName, colClassName, children}) => {
  */
 
 /**
- * First one is super easy - converts arrays while screening out nulls so that misconfigured fields 
+ * First one is super easy - converts arrays while screening out nulls so that misconfigured fields
  * are ignored at this stage and won't cause trouble further down the line
- * @param {} fields 
+ * @param {} fields
  */
 export const JSONTCFields = (fields, values, errors, onChangeField) => {
 
@@ -479,31 +479,31 @@ export const JSONTCFields = (fields, values, errors, onChangeField) => {
 
 export const JSONTCField = (field, value, error, onChangeField, key) => {
     if(!field || !field.id || !field.inputElement) return false
-    return (<TCFormField 
+    return (<TCFormField
         key={key}
-        field_id={field.id} 
+        field_id={field.id}
         value={value}
         inputElement={field.inputElement}
         mandatory={field.mandatory}
         className={field.className}
         label ={field.label}
-        labelClassName ={field.labelClassName} 
+        labelClassName ={field.labelClassName}
         help = {field.help}
-        helpExpanded = {field.helpExpanded} 
-        helpRowClassName = {field.helpRowClassName} 
+        helpExpanded = {field.helpExpanded}
+        helpRowClassName = {field.helpRowClassName}
         helpClassName = {field.helpClassName}
-        helpLabelColClassName = {field.helpLabelColClassName} 
+        helpLabelColClassName = {field.helpLabelColClassName}
         helpColClassName = {field.helpColClassName}
         helpCols = {field.helpCols}
         promptRowClassName = {field.promptRowClassName}
         inputRowClassName = {field.inputRowClassName}
         inputGutterClassName = {field.inputGutterClassName}
         cowDuckClassName = {field.cowDuckClassName}
-        cowDuckIconClassName = {field.cowDuckIconClassName} 
+        cowDuckIconClassName = {field.cowDuckIconClassName}
         errorRowClassName = {field.errorRowClassName}
         error = {error}
         onChangeField={onChangeField}
-        fieldErrorClassName = {field.fieldErrorClassName} 
+        fieldErrorClassName = {field.fieldErrorClassName}
     />)
 }
 
@@ -511,14 +511,14 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
     if(!elt || !elt.type) return null
     if(elt.type == "input"){
         return (
-            <TCFormInput 
+            <TCFormInput
                 field_id={field_id}
                 disabled ={elt.disabled}
                 mandatory ={mandatory}
                 value={value}
                 className={elt.className}
                 onChange={onChange}
-                placeholder={elt.placeholder} 
+                placeholder={elt.placeholder}
             />
         )
     }
@@ -532,7 +532,7 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
                 options={elt.options}
                 className={elt.className}
                 onChange={onChange}
-                placeholder={elt.placeholder} 
+                placeholder={elt.placeholder}
             />
         )
     }
@@ -545,7 +545,7 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
                 value={value}
                 className={elt.className}
                 onChange={onChange}
-                placeholder={elt.placeholder} 
+                placeholder={elt.placeholder}
             />
         )
     }
@@ -559,9 +559,9 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
                 className={elt.className}
                 onChange={onChange}
                 label={elt.label}
-                placeholder={elt.placeholder} 
+                placeholder={elt.placeholder}
             />
-        )        
+        )
     }
     return null
 }

@@ -53,7 +53,6 @@ const CreateDatabase = (props) => {
 		        <hr className = "my-space-50"/>
 				{(page == view.CREATE_VIEW) && <>
 					<Crumbs/>
-                    <hr className = "my-space-50"/>
 					<Row className="col-md-12 justify-content-center" >
 						<Col className="col-md-5">
 							<div onClick={handleCreate} className="square db-view-cards">
@@ -62,7 +61,7 @@ const CreateDatabase = (props) => {
 						</Col>
 
 						<Col className="col-md-5">
-							<div onClick={handleCopy} className="square db-view-cards">							
+							<div onClick={handleCopy} className="square db-view-cards">
 								<DatabaseCard card = {createDbCard.copy}/>
 							</div>
 						</Col>
@@ -71,7 +70,6 @@ const CreateDatabase = (props) => {
 				{(page == view.CREATE_OPTIONS) && <>
 					<Crumbs buttons = {[{page:view.CREATE_VIEW, text:action},
 						{page:view.CREATE_OPTIONS, text:view.CREATE_OPTIONS}]} setPage = { setPage }/>
-    		        <hr className = "my-space-50"/>
 					<CreateOptions setPage = { setPage } setCreateRemote = { setCreateRemote } setCreateLocal = { setCreateRemote }/>
 				</>}
 				{(page == view.COPY_OPTIONS) && <>

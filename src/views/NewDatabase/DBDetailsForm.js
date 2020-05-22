@@ -11,12 +11,12 @@ import { goDBHome } from "../../components/Router/ConsoleRouter"
 
 
 const DBDetailsForm = (props) => {
-    
+
     let dbLocation = false;//to be added for hub
 
     let dbInfo = {}
     let advancedInfo = {}
-    
+
     CREATE_DB_FORM.fields.map((item) => {
         dbInfo[item.id] = item.value || ""
     })
@@ -26,7 +26,7 @@ const DBDetailsForm = (props) => {
     })
 
     const [report, setReport] = useState()
-    
+
     const [values, setValues] = useState(dbInfo)
     const [advanced, setAdvanced] = useState(advancedInfo)
 
@@ -61,8 +61,8 @@ const DBDetailsForm = (props) => {
             }
             else {
                 message += CREATE_DB_FORM.noSchemaGraphMessage
-                setReport({message: message, status: TERMINUS_SUCCESS})       
-                afterCreate(dbInfo.dbid, accountid)                
+                setReport({message: message, status: TERMINUS_SUCCESS})
+                afterCreate(dbInfo.dbid, accountid)
             }
         })
         .catch((err) => {
@@ -87,7 +87,7 @@ const DBDetailsForm = (props) => {
             setReport({message: message, error: e, status: TERMINUS_WARNING})
             afterCreate(id, acc)
         })
-    }    
+    }
 
 
     /**
@@ -95,7 +95,7 @@ const DBDetailsForm = (props) => {
      */
     function afterCreate(id, acc){
         reconnectServer()
-        goDBHome(id, acc)        
+        goDBHome(id, acc)
     }
 
     function onChangeField(field_id, value){
@@ -116,42 +116,42 @@ const DBDetailsForm = (props) => {
     }
 
     return (<>
-        {loading && 
+        {loading &&
             <Loading />
         }
-        <TCForm 
-            onSubmit={onSubmit} 
-            report={report} 
+        <TCForm
+            onSubmit={onSubmit}
+            report={report}
             layout = {[2, 1]}
             fields={CREATE_DB_FORM.fields}
             values={values}
-            buttons={CREATE_DB_FORM.buttons} 
+            buttons={CREATE_DB_FORM.buttons}
         />
 
         <span className={CREATE_DB_ADVANCED.advancedWrapperClassName}>
             {!advancedSettings &&
-                <button 
+                <button
                     className={CREATE_DB_ADVANCED.advancedButtonClassName}
                     onClick={toggleAdvanced}>
                     {CREATE_DB_ADVANCED.showAdvanced}
                 </button>
             }
             {advancedSettings &&
-                <button 
+                <button
                     className={CREATE_DB_ADVANCED.advancedButtonClassName}
                     onClick={toggleAdvanced}>
                     {CREATE_DB_ADVANCED.hideAdvanced}
                 </button>
             }
         </span>
-        { advancedSettings && 
-            <TCForm 
+        { advancedSettings &&
+            <TCForm
                 fields={CREATE_DB_ADVANCED.fields}
                 layout = {[1, 1, 1]}
                 values={advanced}
                 onChange = {onChangeField}
             />
-        }       
+        }
     </>)
 }
 

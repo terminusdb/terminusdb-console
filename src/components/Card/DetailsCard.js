@@ -13,10 +13,10 @@ export const DetailsCard = (props) => {
           <div className="card card-stats">
                 <div className="content">
                     <Row>
-                        {icon && <> 
+                        {icon && <>
                             <Col xs={4}>
                                 <div className="dd-ico">
-                                    <FontAwesomeIcon icon={props.icon} size="4x" className="terminus-title-icon" />
+                                    <FontAwesomeIcon icon={props.icon} size="3x" className="terminus-title-icon" />
                                 </div>
                             </Col>
                             <Col xs={8}>
