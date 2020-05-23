@@ -78,7 +78,7 @@ const DBDetailsForm = (props) => {
      * Creates default main schema graph when chosen
      */
     function createStarterGraph(message, id, acc){
-        return woqlClient.createGraph("x", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
+        return woqlClient.createGraph("schema", "main", CREATE_DB_FORM.schemaGraphCommitMessage)
         .then(() => {
             setReport({status: TERMINUS_SUCCESS, message: message})
             afterCreate(id, acc)
