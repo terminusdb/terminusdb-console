@@ -1,5 +1,5 @@
 export const SERVER_HOME_PAGE = {
-    page: '/home',
+    page: '/',
     label: 'Home'
 }
 

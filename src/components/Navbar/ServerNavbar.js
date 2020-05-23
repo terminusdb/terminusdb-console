@@ -13,18 +13,18 @@ export const ServerNavbar = (props) => {
 
     return (
 
-                <Nav className = "mr-auto"  navbar>
-                    <NavItem>
-                        {<NavLink tag = {RouterNavLink}
-                                to = {links.SERVER_HOME_PAGE.page}
-                                activeClassName = "router-link-exact-active"
-                                onClick = {handleClick}
-                                exact>
-                                <span className="d-fl">
-                                    <div className="logo"/>{links.SERVER_HOME_PAGE.label}
-                                </span>
-                        </NavLink>}
-                    </NavItem>
+            <Nav className = "mr-auto"  navbar>
+                <NavItem>
+                    {<NavLink tag = {RouterNavLink}
+                            to = {links.SERVER_HOME_PAGE.page}
+                            activeClassName = "router-link-exact-active"
+                            onClick = {handleClick}
+                            exact>
+                            <span className="d-fl">
+                                <div className="logo"/>{links.SERVER_HOME_PAGE.label}
+                            </span>
+                    </NavLink>}
+                </NavItem>
             </Nav>
       )
 }
