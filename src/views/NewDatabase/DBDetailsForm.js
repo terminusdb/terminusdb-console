@@ -120,7 +120,7 @@ const DBDetailsForm = (props) => {
             <Loading />
         }
         <TCForm
-            onSubmit={onSubmit}
+            onSubmit={onSubmit} 
             report={report}
             layout = {[2, 1]}
             fields={CREATE_DB_FORM.fields}

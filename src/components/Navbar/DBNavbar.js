@@ -40,6 +40,26 @@ export const DBNavbar = (props) => {
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
 
+    const handleToggle = (toggleTime) => {
+        setToggleTime(!toggleTime)
+    }
+
+    const testStyle = {
+        fontSize: '11px',
+        display: 'flex',
+        AlignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        color:'rgb(250, 250, 250)',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        lineHeight: 0,
+        opacity: 0,
+        width: '26px',
+        height: '20px',
+        left: '4px'
+    }
+
     return (
 
             <Nav className = {dbClass} navbar>
@@ -92,11 +112,13 @@ export const DBNavbar = (props) => {
                                       base: branchStatus,
                                       hover: 'rgb(177, 191, 215)',
                                     }} }
-                          onToggle={(value) => { setToggleTime(!toggleTime)
-                          }} />}
+                          onToggle={ (value) => handleToggle(value)
+                          } />}
                     </NavLink>
                 </NavItem>
                 }
         </Nav>
     )
 }
+
+/*(value) => { setToggleTime(!toggleTime) */

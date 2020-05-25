@@ -133,27 +133,27 @@ export const HistoryNavigator = (props) => {
     }
 
     let cct = (currentCommit ? currentCommit.time : nowts)
-    const showBranches = (branches && branchInfo && (branches.length > 0)) 
+    const showBranches = (branches && branchInfo && (branches.length > 0))
     return (
         <Container className={HISTORY.containerClassName}>
             <Row>
-                {(branches && branchInfo) && 
+                {(branches && branchInfo) &&
                     <Col md={6} className={HISTORY.sliderColClassName}>
-                        <DateTimeSlider start={branchInfo.first}
-                            onChange={userChangesTime}
-                            end={end}
-                            current={current}
-                            updated={cct} />
+                            <DateTimeSlider start={branchInfo.first}
+                                onChange={userChangesTime}
+                                end={end}
+                                current={current}
+                                updated={cct} />
                     </Col>
                 }
-                {(branches && branchInfo) && 
+                {(branches && branchInfo) &&
                     <Col md={4} className={HISTORY.commitColClassName}>
-                        {currentCommit && <CommitTraveller setRef={userChangesCommit} commit={currentCommit}/>}
+                            {currentCommit && <CommitTraveller setRef={userChangesCommit} commit={currentCommit}/>}
                     </Col>
                 }
-                {showBranches && 
-                    <Col md={2} className={HISTORY.branchColClassName}>
-                        <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
+                {showBranches &&
+                    <Col md={1} className={HISTORY.branchColClassName}>
+                            <BranchSelector branch={branchInfo} branches={branches} onChange={changeBranch}/>
                     </Col>
                 }
             </Row>

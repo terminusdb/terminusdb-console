@@ -24,11 +24,8 @@ const DeleteDatabase = (props) => {
             woqlClient.deleteDatabase(data.dbId)
             .then(() => {
                 setReport({message: "Deleted Database " + data.dbId, status: TERMINUS_SUCCESS, time: Date.now() - st});
-                alert("whasup")
                 reconnectServer()
-                alert("pussycat")
                 goServerHome()
-                alert("yo")
                 setDisabled(false)
             })
             .catch((err) => {
@@ -49,7 +46,7 @@ const DeleteDatabase = (props) => {
                 <Col md={12}>
                     {rep &&
                         <APIUpdateReport message = { rep.message } error={rep.error} status={rep.status} time={rep.time} />
-                    }                        
+                    }
                     <div className="del-mod">
                         <img src={DELETE_ICON} className="center"/>
                         <form onSubmit={ handleSubmit(onDelete) }>
