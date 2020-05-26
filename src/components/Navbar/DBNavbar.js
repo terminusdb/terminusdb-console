@@ -38,8 +38,9 @@ export const DBNavbar = (props) => {
 
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
+    /*console.log('headText', headText)
     console.log('ref', ref)
-    console.log('branch', branch)
+    console.log('branch', branch)*/
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
 
     const handleToggle = (toggleTime) => {
@@ -71,7 +72,7 @@ export const DBNavbar = (props) => {
         fontSize: '14px'
     }
 
-    console.log('branchStatus', branchStatus)
+    //console.log('branchStatus', branchStatus)
 
 
     return (
