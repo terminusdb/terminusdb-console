@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { Alert, Container, Row, Col } from 'reactstrap'
+import { Alert, Container } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
 import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS, 
-    NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS, VIOLATIONS_DETECTED, VIOLATION_DETECTED} from "./constants"
+    NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS} from "./constants.reports"
 
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)

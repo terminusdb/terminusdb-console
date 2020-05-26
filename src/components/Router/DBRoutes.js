@@ -4,9 +4,9 @@ import { DB_QUERY_ROUTE, DB_SCHEMA_ROUTE, DB_DOCUMENT_ROUTE, SPECIFIC_DB_ROUTE, 
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBHomeRoutes } from "./DBHomeRoutes"
 import { SchemaRoutes, TerminusSchemaRoutes } from "./SchemaRoutes"
-import QueryPage from "../../views/Query/QueryPage"
-import DocumentPage from "../../views/Document/DocumentPage"
-import TerminusHome from "../../views/DatabaseHome/TerminusHome"
+import QueryPage from "../../views/Pages/QueryPage"
+import DocumentPage from "../../views/Pages/DocumentPage"
+import TerminusHome from "../../views/Pages/TerminusHome"
 
 
 export const DBRoutes = () => {

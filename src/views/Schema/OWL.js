@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { OWLEditor } from "./OWLEditor";
-import Loading from "../../components/Loading";
+import Loading from "../../components/Reports/Loading";
 import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
-import {FAILED_LOADING_OWL} from "./constants"
+import {FAILED_LOADING_OWL} from "./constants.schema"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { EmptyResult } from "../../components/Reports/EmptyResult"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"

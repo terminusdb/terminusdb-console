@@ -1,8 +1,7 @@
 
 import React from "react"
+import {COMING_SOON, MASCOT_COLOR} from "../../constants/images"
 
-const mascotImg = "https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png";
-const cmsImg1 = "https://assets.terminusdb.com/terminusdb-console/images/comingSoon.png";
 
 export const ComingSoon = (props) => {
     let cname = ((props && props.size == "small") ? "terminus-mini-coming-soon" : "terminus-coming-soon")
@@ -11,8 +10,8 @@ export const ComingSoon = (props) => {
      
     return (
         <span width ="100%" className={cname}> 
-            <img className={csClassName} src={cmsImg1}/>
-            <img className={cdClassName} src={mascotImg}/>
+            <img className={csClassName} src={COMING_SOON}/>
+            <img className={cdClassName} src={MASCOT_COLOR}/>
         </span>
     )
 }

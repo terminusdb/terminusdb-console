@@ -6,7 +6,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 
 import { DBNavbar } from "./DBNavbar"
 import { ServerNavbar } from "./ServerNavbar"
-import { HistoryNavigator } from "../HistoryNavigator/HistoryNavigator"
+import { HistoryNavigator } from "../History/HistoryNavigator"
 import { Login } from "./Login"
 import { LoggedIn } from "./LoggedIn"
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Loading from "../../components/Loading";
+import Loading from "../../components/Reports/Loading";
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { WOQLQueryContainerHook } from "../../components/WOQLQueryContainerHook"
-import { FAILED_LOADING_SCHEMA_CLASSES } from "./constants"  
+import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
+import { FAILED_LOADING_SCHEMA_CLASSES } from "./constants.schema"  
 import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
 import { EmptyResult } from "../../components/Reports/EmptyResult"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"

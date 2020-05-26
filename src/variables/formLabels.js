@@ -1,66 +1,6 @@
 import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 
-const createLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/create-locally.png"
-const createRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/create-remote.png"
-const createImg = "https://assets.terminusdb.com/terminusdb-console/images/create-db.png"
-const copyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-db.png"
-const copyLocallyImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-locally.png"
-const copyRemoteImg = "https://assets.terminusdb.com/terminusdb-console/images/copy-remote.png"
-const cloneImg = "https://assets.terminusdb.com/terminusdb-console/images/clone.png"
-const forkImg = "https://assets.terminusdb.com/terminusdb-console/images/fork.png"
 
-export const createDbCard = {
-    create:{
-        title: 'Create New Database',
-        text: 'Create a brand-new, empty database',
-        image: createImg
-    },
-    copy:{
-        title: 'Copy Existing Database',
-        text: 'Copy an existing database',
-        image: copyImg
-    }
-}
-
-export const createDbCardOptions = {
-    local:{
-        title: 'Create Local Database',
-        text: 'The database will be created on this server and only locally accessible',
-        image: createLocallyImg
-    },
-    remote:{
-        title: 'Create on TerminusDB.com',
-        text: 'Host your database on terminusdb.com and share with collaborators through our secure sharing hub',
-        image: createRemoteImg
-    }
-}
-
-
-export const copyDbCardTypes = {
-    clone:{
-        title: 'Clone',
-        text: 'A cloned version is still connected to the original and can be merged with it',
-        image: cloneImg
-    },
-    fork:{
-        title: 'Fork',
-        text: 'A forked database is a completely independent copy of the original with all its history',
-        image: forkImg
-    },
-}
-
-export const copyDbCardOptions = {
-    local:{
-        title: 'Copy from this Server',
-        text: 'Rapidly copy any database from this terminusdb server',
-        image: copyLocallyImg
-    },
-    remote:{
-        title: 'Copy from Remote Server',
-        text: 'You can copy a database from any terminusdb server - you may have to provide security credentials',
-        image: copyRemoteImg
-    }
-}
 
 
 export const createDatabaseForm = {

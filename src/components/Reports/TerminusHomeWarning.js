@@ -1,6 +1,8 @@
 import React from "react";
 import { Container} from "reactstrap";
-import {WOQLClientObj} from "../../init/woql-client-instance";
+import { WOQLClientObj } from "../../init/woql-client-instance";
+import { MASCOT_COLOR } from "../../constants/images"
+import { WARNING_PAGE_CSS, WARNING_BOX_CSS } from "./constants.reports"
 
 export const TerminusHomeWarning = ({heading, body}) => {
 
@@ -12,9 +14,9 @@ export const TerminusHomeWarning = ({heading, body}) => {
 	}
 
     return (
-    	<Container fluid className="h-100 connectErrorPage">
-    		<div className="connectLayout">
-    			<img src="http://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png" alt="" width="70%" height="auto"></img>
+    	<Container fluid className={WARNING_PAGE_CSS}>
+    		<div className={WARNING_BOX_CSS}>
+    			<img src={MASCOT_COLOR} alt="" width="70%" height="auto"></img>
     			<h2 className="mb-4">{heading}</h2>
     			<p className="mb-4" >{ body}</p>
     		</div>

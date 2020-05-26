@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import {DropdownToggle, Container, Button, Alert, Navbar , Collapse, Nav, UncontrolledDropdown,DropdownMenu,DropdownItem, NavbarText} from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
 import TerminusClient from '@terminusdb/terminusdb-client';
-import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants'
+import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.querypane'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { commitBox } from "../../variables/formLabels"
 import {queryEditorLabel} from "../../variables/content"

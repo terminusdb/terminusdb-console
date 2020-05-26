@@ -1,7 +1,6 @@
 import React from "react";
 import { DialogueBox } from "./DialogueBox"
-import { CONNECTION_FAILURE, CONNECTION_FAILURE_ADVICE } from "./constants"
-import { Container} from "reactstrap";
+import { CONNECTION_FAILURE, CONNECTION_FAILURE_ADVICE } from "./constants.reports"
 import {WOQLClientObj} from "../../init/woql-client-instance";
 
 const ConnectionErrorPage = () => {

@@ -2,34 +2,27 @@ import {  Nav,NavItem, NavLink, Alert } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { NavLink as RouterNavLink } from "react-router-dom";
-import * as links from '../../variables/pageLabels'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { trimContent } from "../../utils/helperFunctions"
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faClock, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
-library.add(faClock, faCodeBranch)
 import ToggleButton from 'react-toggle-button'
+import { getDBPageRoute } from "../Router/ConsoleRouter"
+import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL} from './constants.navbar'
+
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
     let dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account()) || {}
 
-    const [DBMeta, setDBMeta] = useState(dbmeta)
-    const [branch, setBranch] = useState(woqlClient.checkout())
-    const [ref, setRef] = useState(woqlClient.ref())
+    const branch = woqlClient.checkout()
+    const ref = woqlClient.ref()
     const [toggleTime, setToggleTime] = useState(false)
 
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()
     }
 
-    function getNavURL(type){
-        let dbb = "/db/"
-        if(woqlClient && woqlClient.db()){
-            if(woqlClient.db() == "terminus") dbb += "terminus"
-            else dbb += woqlClient.account() + "/" + woqlClient.db()
-        }
-        return dbb + (type == "home" ? "/" : "/" + type)
+    function getNavURL(page){
+        let aid = woqlClient.account() || woqlClient.uid()
+        return getDBPageRoute(woqlClient.db(), aid, page)
     }
 
     let dbClass = ""
@@ -45,11 +38,11 @@ export const DBNavbar = (props) => {
             <Nav className = {dbClass} navbar>
                 <NavItem>
                     <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("home")}
+                            to = {getNavURL("")}
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            {trimContent(DBMeta.title, 15)}
+                            {trimContent(dbmeta.title, 15)}
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -58,7 +51,7 @@ export const DBNavbar = (props) => {
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            {links.DOCUMENT_PAGE.label}
+                            {DOCUMENT_PAGE_LABEL}
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -67,7 +60,7 @@ export const DBNavbar = (props) => {
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            {links.QUERY_PAGE.label}
+                            {QUERY_PAGE_LABEL}
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -76,13 +69,12 @@ export const DBNavbar = (props) => {
                             activeClassName = "router-link-exact-active"
                             onClick = {props.onClick}
                             exact>
-                            {links.SCHEMA_PAGE.label}
+                            {SCHEMA_PAGE_LABEL}
                     </NavLink>
                 </NavItem>
                 {dbmeta.db != "terminus" && !props.isOpen &&
                 <NavItem>
-                    {/*<NavLink onClick = {toggleNavbar} title={branch + ' ' + headText*/}
-                    <NavLink onClick = {toggleNavbar} title={'Click to view History Navigator'}>
+                    <NavLink onClick = {toggleNavbar} title={branch + ' ' + headText}>
                        {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
                        { <ToggleButton value={ toggleTime || false }
                             colors={{ activeThumb: {

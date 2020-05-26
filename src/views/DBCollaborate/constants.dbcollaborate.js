@@ -1,0 +1,5 @@
+export const collaborateSoonIntro = "collaborate-soon-icon"
+export const collaborateSoonTop = "collaborate-soon-top"
+export const collaborateSoonBottom = "collaborate-soon-bottom"
+export const collaborateSoonBox = "collaborate-soon-box"
+export const collaborateSoonButton = "collaborate-soon-button"

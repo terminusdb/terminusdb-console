@@ -1,37 +1,32 @@
-import {  Nav,NavItem, NavLink, NavbarBrand } from "reactstrap";
-import React, { useState, useEffect } from "react";
-import { WOQLClientObj } from "../../init/woql-client-instance";
-import { NavLink as RouterNavLink } from "react-router-dom";
-import * as links from '../../variables/pageLabels'
+import React from "react"
+import { Nav, NavItem, NavLink } from "reactstrap"
+import { WOQLClientObj } from "../../init/woql-client-instance"
+import { NavLink as RouterNavLink } from "react-router-dom"
+import { SERVER_ROUTE} from "../../constants/routes"
+import { SERVER_HOME_LABEL } from "./constants.navbar"
 
 export const ServerNavbar = (props) => {
 
     const {woqlClient} = WOQLClientObj();
     const handleClick = () => {
-        woqlClient.db(null);
+        //clear the database context 
+        woqlClient.connectionConfig.clearCursor()
     }
 
     return (
-
-            <Nav className = "mr-auto"  navbar>
-                <NavItem>
-                    {<NavLink tag = {RouterNavLink}
-                            to = {links.SERVER_HOME_PAGE.page}
-                            activeClassName = "router-link-exact-active"
-                            onClick = {handleClick}
-                            exact>
-                            <span className="d-fl">
-                                <div className="logo"/>{links.SERVER_HOME_PAGE.label}
-                            </span>
-                    </NavLink>}
-                </NavItem>
-            </Nav>
+        <Nav className = "mr-auto"  navbar>
+            <NavItem>
+                {<NavLink tag = {RouterNavLink}
+                        to = {SERVER_ROUTE}
+                        activeClassName = "router-link-exact-active"
+                        onClick = {handleClick}
+                        exact>
+                        <span className="d-fl">
+                            <div className="logo"/>{SERVER_HOME_LABEL}
+                        </span>
+                </NavLink>}
+            </NavItem>
+        </Nav>
       )
 }
 
-/*
-{ /* <span className="m-opts d-flex">
-      <div className="d-flex main-nav">*/
-          /*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/
-          /* </div>
-         </span>*/

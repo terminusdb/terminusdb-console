@@ -1,8 +1,8 @@
 import React from "react"
 import { Route, Switch } from "react-router-dom"
-import {SCHEMA_PROPERTIES_ROUTE, SCHEMA_CLASSES_ROUTE, SCHEMA_OWL_ROUTE, SCHEMA_PREFIXES_ROUTE, SCHEMA_GRAPHS_ROUTE }from "../../constants/routes"
-import SchemaPage from "../../views/Schema/SchemaPage"
-import TerminusSchemaPage  from "../../views/Schema/TerminusSchemaPage"
+import {SCHEMA_PROPERTIES_ROUTE, SCHEMA_CLASSES_ROUTE, SCHEMA_OWL_ROUTE, SCHEMA_PREFIXES_ROUTE, SCHEMA_GRAPHS_ROUTE } from "../../constants/routes"
+import SchemaPage from "../../views/Pages/SchemaPage"
+import TerminusSchemaPage  from "../../views/Pages/TerminusSchemaPage"
 
 
 export const SchemaRoutes = () => {

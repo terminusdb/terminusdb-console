@@ -1,14 +1,3 @@
-/* schema tabs */
-export const CLASSES_TAB = "Classes"
-export const PROPERTIES_TAB = "Properties"
-export const OWL_TAB = "OWL"
-export const GRAPHS_TAB = "Graphs"
-export const PREFIXES_TAB = "URL Prefixes"
-
-/* database home tabs */
-export const DETAILS_TAB = 'Details'
-export const COLLABORATE_TAB = 'Collaborate'
-export const MANAGE_TAB = 'Manage'
 
 /* create database tabs */
 export const CREATE_DATABASE_TAB = 'Create New Database'

@@ -5,15 +5,15 @@ import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAIN
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS,
          PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS,
          TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS,
-         DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, INPUT_COL_CSS,
-         HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS, CHECKED_WRAPPER_CSS
-        } from "./constants"
+         DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, 
+         INPUT_COL_CSS, HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS, CHECKED_WRAPPER_CSS
+        } from "./constants.form"
 import Select from "react-select";
 import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
 import {APIUpdateReport} from '../Reports/APIUpdateReport'
 
-export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children}) => {
+export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children, noCowDucks}) => {
 
     //these are the things that this component changes internally -
     //if they change in props, assume whole component will be re-rendered by parent.. need no effect
@@ -72,7 +72,7 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
         }
     }
 
-    let tcf = JSONTCFields(fields, currentValues, fieldErrors, onChangeField)
+    let tcf = JSONTCFields(fields, currentValues, fieldErrors, onChangeField, noCowDucks)
 
     let showGrid = (layout && tcf)
     let noGrid = (!layout && tcf)
@@ -102,8 +102,8 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
     if(!buttonsClassName || typeof buttonsClassName != "string") buttonsClassName = BUTTONS_CONTAINER_CSS
     if(!submitClassName || typeof submitClassName != "string") submitClassName = SUBMIT_CSS
     if(!cancelClassName || typeof cancelClassName != "string" )cancelClassName = CANCEL_CSS
-    if(!cancelText || typeof cancelClassName != "string") cancelText = CANCEL_TEXT
-    if(!submitText || typeof cancelClassName != "string") submitText = SUBMIT_TEXT
+    if(!cancelText || typeof cancelText != "string") cancelText = CANCEL_TEXT
+    submitText = (typeof submitText == "string" && submitText ? submitText : false)
 
     let myCancel = function(e){
         e.preventDefault()
@@ -112,9 +112,11 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
 
     return (
         <TCSubmitWrap buttonsClassName={buttonsClassName} className={className}>
-            <button type="submit" className={submitClassName}>
-                {submitText}
-            </button>
+            {submitText && 
+                <button type="submit" className={submitClassName}>
+                    {submitText}
+                </button>
+            }
             {onCancel &&
                 <button onClick={myCancel} className={cancelClassName}>
                     {cancelText}
@@ -147,7 +149,7 @@ export const TCFormField = ({
         errorRowClassName, error, fieldErrorClassName, children
     }) => {
 
-    if(typeof cowDuck != "string" ) cowDuck = DEPLOY_COWDUCKS
+    if(typeof cowDuck != "boolean" ) cowDuck = DEPLOY_COWDUCKS
 
     /** Set Field Level Defaults - defaults for elements are set within elements */
     if(typeof className != "string" || !className) className = FORM_FIELD_CSS
@@ -164,9 +166,7 @@ export const TCFormField = ({
     helpExpanded = ((helpExpanded && !isObject(helpExpanded)) ? helpExpanded  : false)
 
     const [helpVisible, setHelpVisible] = useState(helpExpanded)
-    //const [currentValue, setValue] = useState(value)
-    //const [currentError, setError] = useState(error)
-
+  
     function toggleHelp(){
         setHelpVisible(!helpVisible)
     }
@@ -466,18 +466,19 @@ export const TCGrid = ({layout, rowClassName, colClassName, children}) => {
  * are ignored at this stage and won't cause trouble further down the line
  * @param {} fields
  */
-export const JSONTCFields = (fields, values, errors, onChangeField) => {
+export const JSONTCFields = (fields, values, errors, onChangeField, noCowDucks) => {
 
     if(!fields || !Array.isArray(fields)) return null
     let tcfields = []
     for(var i = 0; i< fields.length; i++){
-        let tcf = JSONTCField(fields[i], values[fields[i].id], errors[fields[i].id], onChangeField, fields[i].id + "_key")
+        let tcf = JSONTCField(fields[i], values[fields[i].id], errors[fields[i].id], onChangeField, fields[i].id + "_key", noCowDucks)
         if(tcf) tcfields.push(tcf)
     }
     return tcfields
 }
 
-export const JSONTCField = (field, value, error, onChangeField, key) => {
+export const JSONTCField = (field, value, error, onChangeField, key, noCowDucks) => {
+    let cowduck = (typeof noCowDucks == "object" || typeof noCowDucks == "undefined")
     if(!field || !field.id || !field.inputElement) return false
     return (<TCFormField
         key={key}
@@ -502,6 +503,7 @@ export const JSONTCField = (field, value, error, onChangeField, key) => {
         cowDuckIconClassName = {field.cowDuckIconClassName}
         errorRowClassName = {field.errorRowClassName}
         error = {error}
+        cowDuck = {cowduck}
         onChangeField={onChangeField}
         fieldErrorClassName = {field.fieldErrorClassName}
     />)
@@ -577,34 +579,4 @@ export const JSONTCButtons = ({buttons}) => {
         submitText={buttons.submitText}
         submitClassName={buttons.submitClassName}
     />)
-}
-
-const _onChange = (ch, field_id) => {
-    if(ch){
-        let vchange = function(val){
-            ch(field_id, val.target.value)
-        }
-        return vchange
-    }
-    return undefined
-}
-
-const _onSChange = (ch, field_id) => {
-    if(ch){
-        let vchange = function(SelValue){
-            ch(field_id, SelValue.value)
-        }
-        return vchange
-    }
-    return undefined
-}
-
-const _onTChange = (ch, field_id) => {
-    if(ch){
-        let vchange = function(SelValue){
-            ch(field_id, SelValue.target.checked)
-        }
-        return vchange
-    }
-    return undefined
 }
