@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import { SYSTEM_ERROR, SYSTEM_ERROR_CSS, HIDE_ERROR_DETAILS, SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS } from "./constants"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as icons from "../../constants/faicons"
+import { SYSTEM_ERROR, SYSTEM_ERROR_CSS, HIDE_ERROR_DETAILS, SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS, 
+    SYSTER_ERROR_MSG_CSS, SYSTER_ERROR_TITLE_CSS } from "./constants"
 
 export const SystemError = ({error}) => {
     const [showFull, setFull] = useState(false) 
@@ -18,9 +17,12 @@ export const SystemError = ({error}) => {
 
     return (
         <span className={SYSTEM_ERROR_CSS}>
-            <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>
-            <strong>{SYSTEM_ERROR.title}</strong>
-            {detmsg}
+            <span className={SYSTER_ERROR_TITLE_CSS}>
+                {SYSTEM_ERROR.title}
+            </span>
+            <span className={SYSTER_ERROR_MSG_CSS}>
+                {detmsg}
+            </span>
             <span onClick={toggleFull} className={SHOW_ERROR_DETAILS_CSS}>{show_hide}</span>
             {showFull && 
                 <pre>

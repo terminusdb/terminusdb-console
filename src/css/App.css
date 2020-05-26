@@ -160,15 +160,41 @@ div.modal-body{
 }
 
 
+div.date-time-slider-box{
+    border: 1px solid #cacaca;
+    padding: 30px 30px 30px 30px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+div.commit-info-box {
+    border: 1px solid #cacaca;
+    padding: 30px 18px 30px 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+div.branch-selector-box{
+    border: 1px solid #cacaca;
+    /*padding: 65px 18px 10px 15px;*/
+    border-radius: 4px;
+    margin-top: -15px;
+    min-width: 180px;
+}
 
 div.history-navigator-Collapsible {
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    margin: 40px 20px 20px 20px;
+    /*background-color: #f5f5f5;
+    border-radius: 10px;*/
+    margin: 5px 20px 20px 20px;
     padding: 0px 25px 25px 25px;
     position: absolute;
-    border: 1px solid rgba(0,0,0,.125);
-    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);
+    /*border: 1px solid rgba(0,0,0,.125);
+    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
+
+
+    background-color: #fff;
+    z-index: 99!important;
+    box-shadow: 0 1px 10px -1px rgba(0,0,0,.2)!important;
 }
 
 img.center {
@@ -239,7 +265,7 @@ div.db-view-cards:hover {
 
 div.db-view-card-title{
     text-align: center;
-    font-size: 28px;
+    font-size: 40px;
 }
 
 p.db-view-card-text{
@@ -247,7 +273,6 @@ p.db-view-card-text{
     margin: 30px 0px 30px 0px;
     font-size: 18px;
     color: #002856;
-    font-weight: 600;
 }
 
 div.terminus-violation{
@@ -530,14 +555,15 @@ p.create-form-helptext {
 }
 
 .advanced-button {
-    float: left !important;
+    float: right !important;
 }
 
 .advanced-settings-create-form {
-    margin-top: -40px;
+    margin-top: -20px;
     width: 100%;
     display: block;
-    height: 50px;
+    height: 70px;
+    margin-bottom: 10px;
 }
 
 p.create-form-helptext::before {
@@ -604,7 +630,10 @@ button{
 }
 
 div.css-yk16xz-control{
-    border-color: #000 !important;
+    /*border-color: #000 !important;*/
+    border:2px solid rgb(226, 232, 240) !important;
+    border-radius: 4px;
+    max-width: 150px;
 }
 
 .logo{
@@ -968,14 +997,14 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
-div.db-nav {
+ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
     border-radius: 3px;
     max-width: 600px;
 }
 
-div.curr-pr{
+div.curr-pr {
     border: 5px solid #CCDDF1;
 }
 
@@ -1162,8 +1191,14 @@ p.dscr{
   .container {
     max-width: 1480px
   }
+
+  background: #fff;
+  box-shadow: 0 -1px 2px 0 #dfe3ec;
 }*/
 
+div.nav-bar-collapse{
+    margin: 0px 0px 0px 60px
+}
 
 
 @media (max-width:767px) {
@@ -1196,8 +1231,7 @@ p.dscr{
     margin-top: 1.5em
   }
   .navbar-nav:last-child {
-    background: #fff;
-    box-shadow: 0 -1px 2px 0 #dfe3ec;
+
     margin: 1.5em 0 0 0;
     padding: 1.5em 2.5rem
   }
@@ -1337,6 +1371,10 @@ div.CodeMirror{
   margin-bottom: 1.5rem
 }
 
+#profileDropDown{
+    margin-top: -25px;
+}
+
 @media (min-width:768px) {
   .profile-header {
     text-align: left
@@ -1467,6 +1505,7 @@ div.dd-ico svg {
     margin-bottom: 20px;
     margin-left: 20px;
     opacity: 0.7;
+    overflow: auto;
 }
 
 div.dd-f-txt{
@@ -1475,6 +1514,7 @@ div.dd-f-txt{
 
 div.dd-c div.card {
     min-height: 280px;
+    border: 1px solid #00C08B ;
 }
 
 div.dd-t {
@@ -1867,6 +1907,7 @@ div.commit-view-message {
     width: 100%;
     padding: 0;
     margin-bottom: 12px;
+    margin-top: 10px;
     margin-left: 0;
 }
 
@@ -1874,6 +1915,7 @@ div.commit-view-message {
     width: 100%;
     text-align: right;
     padding: 1em 0;
+    height: 50px;
 }
 
 .tcf-internal-row {
@@ -1887,13 +1929,28 @@ div.commit-view-message {
 .tcf-form-field {
 }
 
-.tcf-help-row {
-    height: 100px;
-    vertical-align: baseline;
+.tcf-form {
+    padding: 50px;
+    border: 1px solid #cacaca;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);
+    margin: 20px 0px 30px 0px;
 }
 
+
+.tcf-help-row {
+    /*height: 80px;*/
+    height: 50px;
+}
+
+.tcf-prompt-row {
+    /*height: 80px;*/
+    height: 50px;
+}
+
+
 .tcf-input-row {
-    padding: 0
+    padding: 0;
 }
 
 .tcf-input-col {
@@ -1913,7 +1970,8 @@ div.commit-view-message {
     width: 70px;
     margin-top: -24px;
     margin-left: -30px;
-    cursor: pointer
+    margin-bottom: -20px;
+    cursor: pointer;
 }
 
 
@@ -1924,12 +1982,12 @@ div.commit-view-message {
 
 .tcf-help-label-col {
     padding: 0;
-    height: 100px;
+    height: 80px;
 }
 
 .tcf-label {
-    padding-top: 54px;
-    padding-left: 14px;
+    /*padding-top: 26px;
+    padding-left: 14px;*/
     line-height: 2;
     text-align: left;
     display: block;
@@ -1947,7 +2005,7 @@ div.commit-view-message {
 }
 
 .tcf-help {
-    height: 100px;
+    height: 80px;
     display: inline-block;
     width: 100%;
     border-radius: 6px;
@@ -2018,21 +2076,52 @@ div.commit-view-message {
     border: 1px solid #000;
     padding: 13px 12px;
     font-size: 17px;
+    border: 0px;
+    border-bottom:2px solid rgb(226, 232, 240);
 }
+
+.tcf-input:hover {
+    border: 0px;
+    border-bottom:2px solid rgb(203, 213, 224);
+}
+
+.tcf-input:focus, .tcf-input:after {
+    border: 0px !important;
+    border-bottom: 2px solid rgb(226, 232, 240) !important;
+}
+
+.tcf-select:hover, .tcf-textarea:hover, .tcf-checkbox:hover, div.css-yk16xz-control:hover{
+    border:2px solid rgb(203, 213, 224);
+}
+
 
 .tcf-select {
     padding-right: 0px;
+    border:1px solid rgb(226, 232, 240);
+    border-radius: 4px;
 }
 
 .tcf-textarea {
     padding: 4px;
+   border:2px solid rgb(226, 232, 240);
 }
 
 .tcf-checkbox {
     margin-left: 20px;
-    font-size: 2em;
-    border: 0;
+    margin-top: 10px;
+    margin-bottom: 16px;
     outline: none;
+    width: 20px;
+    height: 20px;
+    border:2px solid rgb(226, 232, 240);
+}
+
+
+.tcf-checkbox-wrapper,
+.tcf-checkbox-wrapper-checked {
+    display: inline-block;
+    width: 100%;
+    border-radius: 4px;
 }
 
 .tcf-checkbox-wrapper {
@@ -2042,6 +2131,7 @@ div.commit-view-message {
 
 .tcf-checkbox-wrapper-checked {
     background-color: #00C08B;
+    border: 1px solid #000;
     color: white;
 }
 
@@ -2053,6 +2143,7 @@ div.commit-view-message {
     height: 40px;
     font-size: 1.1em;
     padding: 8px 0;
+    width: 90%;
 }
 
 h4.prefix-section-header {
@@ -2136,4 +2227,30 @@ h4.prefix-section-header {
     font-weight: 600;
     background-color: #00C08B  !important;
     color: white !important;
+}
+
+.terminus-show-error-details {
+    float: right;
+    font-size: 0.9em;
+    cursor: pointer;
+    color: #0066f9
+}
+
+.terminus-system-error-title {
+    padding: 8px;
+}
+
+.terminus-system-error-message {
+    color: black;
+    font-size: 1.1em;
+}
+
+.graph-filter-container {
+    padding-bottom: 10px;
+}
+
+.graph-filter {
+    font-size: 1em;
+    border: 0;
+    padding: 4px;
 }

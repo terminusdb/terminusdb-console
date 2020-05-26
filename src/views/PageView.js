@@ -1,19 +1,19 @@
 /**
- * Defines universal structure of Terminus Console page: 
- * Full Page Container 
+ * Defines universal structure of Terminus Console page:
+ * Full Page Container
  *      Navbar (top of page)
  *      PageContent (some passed jsonx thingummy)
  */
 
-import React, { useState } from "react";
+import React from "react";
 import {ConsoleNavbar} from "../components/Navbar/ConsoleNavbar";
 import { Col, Container } from "reactstrap";
 import Footer  from "../components/Footer"
 
 export const PageView = (props) => {
     return (<>
-        <Container className="terminus-console-page">
-            <Container fluid className="console-top-navbar"> 
+        <Container className="terminus-console-page" id="terminus-console-page">
+            <Container fluid className="console-top-navbar">
                 <Col className="console-top-navbar">
                     <ConsoleNavbar page={props.page} onHeadChange={props.onHeadChange} />
                 </Col>

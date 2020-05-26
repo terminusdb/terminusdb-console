@@ -7,11 +7,7 @@ import { localSettings } from "./localSettings"
 import {WOQLClientProvider} from '@terminusdb/terminusdb-console'
 
 const onRedirectCallback = appState => {
-    ConsoleHistory.push(
-        appState && appState.targetUrl
-        ? appState.targetUrl
-        : window.location.pathname
-    )
+   ConsoleHistory.go(-2)
 }
 
 /*
@@ -23,7 +19,7 @@ ReactDOM.render(
     <Auth0Provider
       domain={config.domain}
       client_id={config.clientId}
-      redirect_uri={window.location.origin} //{`${window.location.origin}/download`}
+      redirect_uri={window.location.origin + window.location.pathname} //{`${window.location.origin}/download`}
       onRedirectCallback={onRedirectCallback}
       audience={config.audience}
     > 

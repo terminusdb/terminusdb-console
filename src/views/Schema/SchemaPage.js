@@ -13,6 +13,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 import GraphFilter  from './GraphFilter'
 import { PageView } from '../PageView'
 import {GRAPHS_LOAD_ERROR} from "./constants"
+import {PageFailure} from "../../components/Reports/PageFailure"
 
 const SchemaPage = (props) => {
     const [graphs, setGraphs] = useState();
@@ -21,21 +22,12 @@ const SchemaPage = (props) => {
     const [hasSchema, setHasSchema] = useState(false);
     const [graphsUpdated, setGraphsUpdated] = useState(false);
     const [hasInference, setHasInference] = useState(false);
-    const [tabKey, setTabKey] = useState();
-    let letgu = false
 
     const [pageError, setPageError] = useState(false)
     const [loading, setLoading] = useState(false);
     const {woqlClient} = WOQLClientObj();
   //retrieves details of the available graphs on mount
     useEffect(() => {
-        if(woqlClient.db() == "terminus"){
-            setGraphs({schema: ["main"], instance: ["main"], inference: ["main"]})
-            setGraphFilter({type: "schema", gid: "main"})
-            setHasSchema(true)
-            setHasInference(true)
-            return
-        }
         setLoading(true)
         const q = TerminusClient.WOQL.lib().loadBranchGraphNames(woqlClient)
         woqlClient.query(q).then((results) => {
@@ -67,7 +59,6 @@ const SchemaPage = (props) => {
             }
             let x = getDefaultActiveKey()
             setLoading(false)
-            setTabKey(x)
         }).catch((e) => {
             setLoading(false)
             setPageError(e)
@@ -77,7 +68,6 @@ const SchemaPage = (props) => {
     function headChanged(){
         setRebuild(rebuild+1)
     }
-
 
     function graphUpdated(){
         setGraphsUpdated(true)
@@ -133,13 +123,17 @@ const SchemaPage = (props) => {
   let gs = (graphs && graphs.schema && graphs.schema[0] ? graphs.schema[0] : "none")
   let is = (graphs && graphs.instance && graphs.instance[0] ? graphs.instance[0] : "none")
 
-  if (loading) return <Loading />
   if (pageError) return <PageFailure failure={GRAPHS_LOAD_ERROR} report={pageError} />
   return (
     <PageView page="schema" onHeadChange={headChanged}>
-        <Tabs>
-            {getTabsForView()}
-        </Tabs>
+        {!loading && 
+            <Tabs>
+                {getTabsForView()}
+            </Tabs>
+        }
+        {loading &&
+            <Loading /> 
+        }
     </PageView>
     )
 }

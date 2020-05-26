@@ -8,6 +8,7 @@ import { trimContent } from "../../utils/helperFunctions"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faClock, faCodeBranch } from '@fortawesome/free-solid-svg-icons'
 library.add(faClock, faCodeBranch)
+import ToggleButton from 'react-toggle-button'
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -16,13 +17,7 @@ export const DBNavbar = (props) => {
     const [DBMeta, setDBMeta] = useState(dbmeta)
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [ref, setRef] = useState(woqlClient.ref())
-
-    useEffect(() => {
-        dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account());
-        setDBMeta(dbmeta)
-        setBranch(woqlClient.checkout())
-        setRef(woqlClient.ref())
-    }, []);
+    const [toggleTime, setToggleTime] = useState(false)
 
     function toggleNavbar(){
         if(props.toggleTimeTravel) props.toggleTimeTravel()
@@ -37,11 +32,37 @@ export const DBNavbar = (props) => {
         return dbb + (type == "home" ? "/" : "/" + type)
     }
 
+    let dbClass = ""
+    if(!props.isOpen) dbClass = "ml-auto db-nav"
+    else dbClass = "ml-auto"
+
+
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
+
+    const handleToggle = (toggleTime) => {
+        setToggleTime(!toggleTime)
+    }
+
+    const testStyle = {
+        fontSize: '11px',
+        display: 'flex',
+        AlignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        color:'rgb(250, 250, 250)',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        lineHeight: 0,
+        opacity: 0,
+        width: '26px',
+        height: '20px',
+        left: '4px'
+    }
+
     return (
-        <div className="d-flex db-al db-nav s-nav">
-            <Nav className = "mr-auto"  navbar>
+
+            <Nav className = {dbClass} navbar>
                 <NavItem>
                     <NavLink tag = {RouterNavLink}
                             to = {getNavURL("home")}
@@ -78,14 +99,26 @@ export const DBNavbar = (props) => {
                             {links.SCHEMA_PAGE.label}
                     </NavLink>
                 </NavItem>
-                {dbmeta.db != "terminus" &&
+                {dbmeta.db != "terminus" && !props.isOpen &&
                 <NavItem>
-                    <NavLink onClick = {toggleNavbar}>
-                        <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>
+                    {/*<NavLink onClick = {toggleNavbar} title={branch + ' ' + headText*/}
+                    <NavLink onClick = {toggleNavbar} title={'Click to view History Navigator'}>
+                       {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
+                       { <ToggleButton value={ toggleTime || false }
+                            colors={{ activeThumb: {
+                                      base: branchStatus,
+                                    },
+                                    active: {
+                                      base: branchStatus,
+                                      hover: 'rgb(177, 191, 215)',
+                                    }} }
+                          onToggle={ (value) => handleToggle(value)
+                          } />}
                     </NavLink>
                 </NavItem>
                 }
         </Nav>
-        </div>
     )
 }
+
+/*(value) => { setToggleTime(!toggleTime) */

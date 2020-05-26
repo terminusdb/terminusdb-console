@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Col, Row } from "reactstrap";
-import CreateDb from "./CreateForm"
 import { createDbCardOptions } from "../../variables/formLabels"
 import { DatabaseCard } from "../../components/Card/DatabaseCard"
 import * as view from "../../labels/createView"

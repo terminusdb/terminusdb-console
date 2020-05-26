@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
+import {Row, Col} from "reactstrap"
+import { GRAPH_FILTER_CSS, ALL_SCHEMA_GRAPHS, ALL_INFERENCE_GRAPHS,  SCHEMA_GRAPH, INFERENCE_GRAPH, GRAPH_FILTER_CONTAINER } from "./constants"
 
 const GraphFilter = (props) => {
     const [filter, setFilter] = useState(props.filter);
@@ -21,7 +23,7 @@ const GraphFilter = (props) => {
 
     function graphOptions(grs){
         let opts = []
-        if(grs.schema.length > 1) opts.push({label: graphLabel("schema/*"), "value": "schema/*"})
+        if(grs.schema.length > 1) opts.push({label: graphLabel({type: "schema", gid: "*"}), "value": "schema/*"})
         for(var i = 0; i< grs.schema.length ; i++){
             opts.push({
                 label: graphLabel({type: "schema", gid: grs.schema[i]}), value: "schema/" + grs.schema[i] 
@@ -36,18 +38,19 @@ const GraphFilter = (props) => {
         return opts
     }
 
-    function hasSchema(){
-        return (graphs && 
-            ((graphs.inference && graphs.inference.length > 0 )
-            || (graphs.schema && graphs.schema.length > 0)))
+    function needsFilter(){
+        if(!graphs) return false
+        let c = graphs.inference ? graphs.inference.length : 0
+        c += graphs.schema ? graphs.schema.length : 0
+        return c>1
     }
 
     function graphLabel(f){
-        if(f.type == "schema" && f.gid == "*") return "All Schema Graphs"
-        else if(f.type == "inference" && f.gid == "*") return "All Inference Graphs"
+        if(f.type == "schema" && f.gid == "*") return ALL_SCHEMA_GRAPHS
+        else if(f.type == "inference" && f.gid == "*") return ALL_INFERENCE_GRAPHS
         else {
-            if(f.type == "schema") return "Schema Graph " + f.gid
-            else return "Inference Graph " + f.gid
+            if(f.type == "schema") return `${SCHEMA_GRAPH} ${f.gid}`
+            else return `${INFERENCE_GRAPH} ${f.gid}`
         }        
     }
 
@@ -55,13 +58,19 @@ const GraphFilter = (props) => {
         return filter.type + "/" + filter.gid
     }
 
-    if(hasSchema() && filter) {
+    if(needsFilter() && filter) {
         return (
-            <Select placeholder = {"Graph: " + graphLabel(filter)}
-                className = "brSeltr"
-                value = {filterString(filter)}
-                onChange = {changeFilter}
-                options = {graphOptions(graphs)}/>
+            <Row>
+                <Col md={9} />
+                <Col md={3} className={GRAPH_FILTER_CONTAINER} >
+                    <Select 
+                        placeholder = {graphLabel(filter)}
+                        className = {GRAPH_FILTER_CSS}
+                        value = {filterString(filter)}
+                        onChange = {changeFilter}
+                        options = {graphOptions(graphs)}/>
+                </Col>
+            </Row>
         )
     }
     return null;

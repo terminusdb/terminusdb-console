@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CommitViewerText } from "../../variables/formLabels"
 import { Container, Row, Col } from "reactstrap";
-import {printts, DATETIME_FULL} from "../../utils/dateFormats"
+import {printts, DATETIME_FULL} from "../../constants/dates"
 
 export const CommitView = (props) => {
     if(!props.commit) return <div/>

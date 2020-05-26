@@ -14,8 +14,9 @@ export const CreateBranch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
     visible = visible || false
     const [isVisible, setVisible] = useState(visible)
+    
     let ics = {}
-    let ls = CREATE_BRANCH_FORM.fields.map((item) => {
+    CREATE_BRANCH_FORM.fields.map((item) => {
         ics[item.id] = item.value || ""
     })
 
@@ -50,13 +51,17 @@ export const CreateBranch = ({onCancel, onCreate, onEdit, visible}) => {
 
 
     function headChanged(branch, ref){
-        let nf = values
-        nf.source = ref
-        setValues(nf)
+        let nvalues = {source: (ref ? ref : ""), branch: branch}
+        for(var key in values){
+            if(typeof[nvalues[key]] == "undefined") nvalues[key] = values[key]
+        }
+        setValues(nvalues)
     }
+
     if(report && report.status == TERMINUS_SUCCESS){
         return (<APIUpdateReport status="success" message="Successfully Created New Branch" />)
     }
+
     return (        
         <TCForm 
             onSubmit={onCreate} 

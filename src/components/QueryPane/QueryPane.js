@@ -1,14 +1,8 @@
-import React, {useMemo, useState } from "react";
-import { Container, Row } from "reactstrap";
-import { ResultViewer } from "./ResultViewer"
+import React, {useState } from "react";
 import { QueryEditor } from "./QueryEditor"
 import { QueryLibrary } from "./QueryLibrary"
 import { ReportWrapper } from "./ReportWrapper"
-import { ViewEditor } from "./ViewEditor"
-import { ResultPane } from "./ResultPane"
-import { ViewChooser } from "./ViewChooser";
 import {WOQLQueryContainerHook} from "../WOQLQueryContainerHook";
-import { queryControls } from "../../variables/formLabels";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {ResultQueryPane} from './ResultQueryPane';
 /*
@@ -39,7 +33,8 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
               <Tabs activeKey="viewer" id="query_tabs">
                   <Tab eventKey="query" label="Query Panel">
                     <QueryEditor 
-                        baseLanguage={baseLanguage} setBaseLanguage={setBaseLanguage}
+                        baseLanguage={baseLanguage}
+                        setBaseLanguage={setBaseLanguage}
                         content={content}
                         saveContent={setContent}
                         showLanguage={showLanguage}
@@ -55,11 +50,14 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
                     </QueryEditor>
                   </Tab>
                   <Tab eventKey="viewer" label="Result Viewer" {...disabled}>
-                    <ResultQueryPane resultView={resultView} bindings={bindings} query={woql} updateQuery={updateQuery}/>
+                    <ResultQueryPane 
+                        resultView={resultView} 
+                        bindings={bindings} 
+                        query={woql} 
+                        updateQuery={updateQuery}/>
                   </Tab>
                 </Tabs>
             </>
     )
 }
-//<QueryEditor queryText={queryText} display={"hidden"} editable={true} closable="false" query={woql} bindings={bindings} updateQuery={updateQueryObject} language="js" languages={["js", "json", "python"]}>
                    

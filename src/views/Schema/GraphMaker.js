@@ -8,7 +8,7 @@ import { CREATE_GRAPH_FORM, DELETE_ICON_CSS } from "./constants"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
 import {DELETE_ICON} from "../../constants/images"
 import {APIUpdateReport} from "../../components/Reports/APIUpdateReport"
-
+import {ResultViewer} from "../../components/QueryPane/ResultViewer"
 
 export const GraphMaker = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -41,10 +41,9 @@ export const GraphMaker = (props) => {
             })
             .catch((e) => {
                 setLoading(false)
-                //setError(e)
+                setUpdateError({message: message, error: e, status: TERMINUS_ERROR, time: t})
             })        
         }
-        alert("Deleting " + type + id)
     }
 
     function submitCreate({gid: newID, gtype: newType, commit: commit}){
@@ -60,12 +59,12 @@ export const GraphMaker = (props) => {
                 props.onUpdate()
                 setCreating(false)
                 let message = CREATE_GRAPH_FORM.createSuccess + " (" + newType + "/" + newID + ")"
-                let t =  ((Date.now() - start )/ 1000) + " seconds"
+                let t =  (Date.now() - start )
                 setUpdateSuccess({message: message, status: TERMINUS_SUCCESS, time: t})
             })
             .catch((e) => {
                 setLoading(false)
-                let t =  ((Date.now() - start )/ 1000) + " seconds"
+                let t =  (Date.now() - start )
                 let message = CREATE_GRAPH_FORM.createFailure
                 setUpdateError({message: message, error: e, status: TERMINUS_ERROR, time: t})
             })

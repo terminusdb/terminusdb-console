@@ -12,22 +12,26 @@ export const ServerNavbar = (props) => {
     }
 
     return (
-        <span className="m-opts d-flex">
-            <div className="d-flex main-nav">
-                {/*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/}
-                <Nav className = "mr-auto"  navbar>
-                    <NavItem>
-                        {<NavLink tag = {RouterNavLink}
-                                to = {links.SERVER_HOME_PAGE.page}
-                                activeClassName = "router-link-exact-active"
-                                onClick = {handleClick}
-                                exact>
-                                <span className="d-fl">
-                                    <div className="logo"/>{links.SERVER_HOME_PAGE.label}
-                                </span>
-                        </NavLink>}
-                    </NavItem>
+
+            <Nav className = "mr-auto"  navbar>
+                <NavItem>
+                    {<NavLink tag = {RouterNavLink}
+                            to = {links.SERVER_HOME_PAGE.page}
+                            activeClassName = "router-link-exact-active"
+                            onClick = {handleClick}
+                            exact>
+                            <span className="d-fl">
+                                <div className="logo"/>{links.SERVER_HOME_PAGE.label}
+                            </span>
+                    </NavLink>}
+                </NavItem>
             </Nav>
-        </div>
-    </span>)
+      )
 }
+
+/*
+{ /* <span className="m-opts d-flex">
+      <div className="d-flex main-nav">*/
+          /*<NavbarBrand href={links.SERVER_HOME_PAGE.page} className="logo"/>*/
+          /* </div>
+         </span>*/

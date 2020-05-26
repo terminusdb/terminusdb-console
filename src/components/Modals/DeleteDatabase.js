@@ -4,13 +4,14 @@ import {deleteDatabaseLabels} from '../../variables/content'
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
-import * as reportAlert from "../../labels/reportLabels"
 import {DELETE_ICON} from "../../constants/images"
+import {TERMINUS_ERROR, TERMINUS_SUCCESS} from "../../constants/identifiers"
 import { goServerHome } from '../Router/ConsoleRouter';
+
 
 const DeleteDatabase = (props) => {
     const { register, handleSubmit, errors } = useForm();
-    const { woqlClient } = WOQLClientObj();
+    const {woqlClient,reconnectServer} = WOQLClientObj();
     const [rep, setReport] = useState();
     const [modal, setModal] = useState(props.modal);
     const toggle = () => setModal(!modal);
@@ -19,14 +20,17 @@ const DeleteDatabase = (props) => {
     const onDelete = (data) => {
         setDisabled(true);
         if(data.dbId && data.dbId == woqlClient.db()){
+            let st = Date.now()
             woqlClient.deleteDatabase(data.dbId)
-            .then((cresults) => {
+            .then(() => {
+                setReport({message: "Deleted Database " + data.dbId, status: TERMINUS_SUCCESS, time: Date.now() - st});
+                reconnectServer()
                 goServerHome()
                 setDisabled(false)
             })
             .catch((err) => {
                 setDisabled(false)
-                setReport({error: err, status: reportAlert.ERROR});
+                setReport({error: err, message: "Failed to Delete Database " + data.dbId, status: TERMINUS_ERROR, time: Date.now() - st});
             })
         }
         else {
@@ -39,12 +43,12 @@ const DeleteDatabase = (props) => {
           <Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}> {deleteDatabaseLabels.mainDescription} </ModalHeader>
             <ModalBody>
-                  <Col md={12}>
+                <Col md={12}>
+                    {rep &&
+                        <APIUpdateReport message = { rep.message } error={rep.error} status={rep.status} time={rep.time} />
+                    }
                     <div className="del-mod">
                         <img src={DELETE_ICON} className="center"/>
-                        {rep &&
-                            <APIUpdateReport report = { rep }/>
-                        }
                         <form onSubmit={ handleSubmit(onDelete) }>
                             <input type="text" name="dbId" id="dbId"
                                 ref = { register({ validate: value => value.length > 0}) }/>

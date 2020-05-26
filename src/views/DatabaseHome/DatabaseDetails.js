@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Col } from "reactstrap";
 import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
-import { createDatabaseForm, database, size } from "../../variables/formLabels"
-import { printts, DATETIME_FULL } from "../../utils/dateFormats"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DetailsCard } from "../../components/Card/DetailsCard"
 import * as icons from "../../labels/iconLabels"

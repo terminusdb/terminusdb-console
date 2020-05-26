@@ -2,6 +2,7 @@ export const DB_ROUTE = "/db"
 export const PROFILE_ROUTE = "/profile"
 export const SERVER_ROUTE = "/"
 export const CREATE_DB_ROUTE = "/newDB"
+
 export const ROUTER_TYPE = "hash"
 export const TERMINUS_ROUTE = "/terminus"
 export const SPECIFIC_DB_ROUTE = "/:aid/:dbid"
