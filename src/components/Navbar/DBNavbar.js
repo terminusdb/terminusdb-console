@@ -38,14 +38,16 @@ export const DBNavbar = (props) => {
 
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
+    console.log('ref', ref)
+    console.log('branch', branch)
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
 
     const handleToggle = (toggleTime) => {
         setToggleTime(!toggleTime)
     }
 
-    const testStyle = {
-        fontSize: '11px',
+    const inactiveLabelStyle = {
+        fontSize: '14px',
         display: 'flex',
         AlignItems: 'center',
         justifyContent: 'center',
@@ -59,6 +61,18 @@ export const DBNavbar = (props) => {
         height: '20px',
         left: '4px'
     }
+
+    const borderRadiusStyle = {
+        minWidth: '100px',
+        width: 'auto'
+    }
+
+    const activeLabelStyle = {
+        fontSize: '14px'
+    }
+
+    console.log('branchStatus', branchStatus)
+
 
     return (
 
@@ -105,6 +119,12 @@ export const DBNavbar = (props) => {
                     <NavLink onClick = {toggleNavbar} title={'Click to view History Navigator'}>
                        {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
                        { <ToggleButton value={ toggleTime || false }
+                            inactiveLabel={branch}
+                            inactiveLabelStyle={inactiveLabelStyle}
+                            activeLabel={'Commits'}
+                            activeLabelStyle={activeLabelStyle}
+                            trackStyle={borderRadiusStyle}
+                            thumbAnimateRange = {[0, 80]}
                             colors={{ activeThumb: {
                                       base: branchStatus,
                                     },
