@@ -77,7 +77,7 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
     let showGrid = (layout && tcf)
     let noGrid = (!layout && tcf)
     return (
-        <form onSubmit={interceptSubmit} errors={fieldErrors} values={currentValues}>
+        <form onSubmit={interceptSubmit} errors={fieldErrors} values={currentValues} className={'tcf-form'}>
             {(report && isObject(report)) &&
                 <TCRow>
                     <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>

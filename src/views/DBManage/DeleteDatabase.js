@@ -45,7 +45,7 @@ export const DeleteDatabase = (props) => {
                 <Col md={12}>
                     {rep &&
                         <APIUpdateReport message = { rep.message } error={rep.error} status={rep.status} time={rep.time} />
-                    }                        
+                    }
                     <div className="del-mod">
                         <img src={DELETE_ICON} className="center"/>
                         <form onSubmit={ handleSubmit(onDelete) }>

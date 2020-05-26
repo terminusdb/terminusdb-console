@@ -31,7 +31,42 @@ export const DBNavbar = (props) => {
 
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
+    /*console.log('headText', headText)
+    console.log('ref', ref)
+    console.log('branch', branch)*/
     let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
+
+    const handleToggle = (toggleTime) => {
+        setToggleTime(!toggleTime)
+    }
+
+    const inactiveLabelStyle = {
+        fontSize: '14px',
+        display: 'flex',
+        AlignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        color:'rgb(250, 250, 250)',
+        marginTop: 'auto',
+        marginBottom: 'auto',
+        lineHeight: 0,
+        opacity: 0,
+        width: '26px',
+        height: '20px',
+        left: '4px'
+    }
+
+    const borderRadiusStyle = {
+        minWidth: '100px',
+        width: 'auto'
+    }
+
+    const activeLabelStyle = {
+        fontSize: '14px'
+    }
+
+    //console.log('branchStatus', branchStatus)
+
 
     return (
 
@@ -77,6 +112,12 @@ export const DBNavbar = (props) => {
                     <NavLink onClick = {toggleNavbar} title={branch + ' ' + headText}>
                        {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
                        { <ToggleButton value={ toggleTime || false }
+                            inactiveLabel={branch}
+                            inactiveLabelStyle={inactiveLabelStyle}
+                            activeLabel={'Commits'}
+                            activeLabelStyle={activeLabelStyle}
+                            trackStyle={borderRadiusStyle}
+                            thumbAnimateRange = {[0, 80]}
                             colors={{ activeThumb: {
                                       base: branchStatus,
                                     },
@@ -84,11 +125,13 @@ export const DBNavbar = (props) => {
                                       base: branchStatus,
                                       hover: 'rgb(177, 191, 215)',
                                     }} }
-                          onToggle={(value) => { setToggleTime(!toggleTime)
-                          }} />}
+                          onToggle={ (value) => handleToggle(value)
+                          } />}
                     </NavLink>
                 </NavItem>
                 }
         </Nav>
     )
 }
+
+/*(value) => { setToggleTime(!toggleTime) */
