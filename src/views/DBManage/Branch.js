@@ -35,6 +35,11 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
         })
     }
 
+    function onUpdate(key, val){
+        values[key] = val
+        setValues(values)
+    }
+
 
     function headChanged(branch, ref){
         let nvalues = {source: (ref ? ref : ""), branch: branch}
@@ -53,6 +58,7 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
             onSubmit={onCreate} 
             report={report} 
             layout = {[2, 1]}
+            onChange={onUpdate}
             fields={CREATE_BRANCH_FORM.fields}
             values={values}
             buttons={btns} 
