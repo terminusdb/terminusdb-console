@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import DataTable from 'react-data-table-component';
-import { SERVER_HOME_PAGE } from '../../variables/pageLabels'
-import ExpandedComponent from '../ExpandedComponent'
+import ExpandedComponent from './ExpandedComponent'
 import { goDBHome } from "../Router/ConsoleRouter"
 
 const RenderTable = (props) => {
@@ -39,31 +38,31 @@ const RenderTable = (props) => {
     }, [always]);
 
     return (
-              <>
-                { explandableRows && <DataTable
-                    columns = {columns}
-                    data = {data}
-                    onRowClicked = {handleChange}
-                    pagination
-                    striped
-                    pointerOnHover
-                    highlightOnHover
-                    expandableRows
-                    expandableRowDisabled={row => row.disabled}
-                    responsive
-                    expandableRowsComponent={<ExpandedComponent
-                                                fromPage={ props.fromPage }
-                                                dataProvider= { props.dataProvider }/>}/>}
-               { !(explandableRows) && <DataTable
-                   columns = {columns}
-                   data = {data}
-                   onRowClicked = {handleChange}
-                   pagination
-                   striped
-                   pointerOnHover
-                   highlightOnHover
-                   responsive/>}
-            </>
+        <>
+            { explandableRows && <DataTable
+                columns = {columns}
+                data = {data}
+                onRowClicked = {handleChange}
+                pagination
+                striped
+                pointerOnHover
+                highlightOnHover
+                expandableRows
+                expandableRowDisabled={row => row.disabled}
+                responsive
+                expandableRowsComponent={<ExpandedComponent
+                                            fromPage={ props.fromPage }
+                                            dataProvider= { props.dataProvider }/>}/>}
+            { !(explandableRows) && <DataTable
+                columns = {columns}
+                data = {data}
+                onRowClicked = {handleChange}
+                pagination
+                striped
+                pointerOnHover
+                highlightOnHover
+                responsive/>}
+        </>
     )
 }
 

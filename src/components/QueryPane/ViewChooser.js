@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import * as viewLabels from "../../labels/viewLabels"
-import { Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Badge, Container} from "reactstrap";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container} from "reactstrap";
+import {TABLE_VIEW, GRAPH_VIEW} from "./constants.querypane"
 
 export const ViewChooser = ({view, views, updateView}) => {
     
-    views = views || [{id: "table", label: "Table View"}, {id: "graph", label: "Graph View"}]
+    views = views || [{id: "table", label: TABLE_VIEW}, {id: "graph", label: GRAPH_VIEW}]
 
     const currentView = view || 'table';
     let currentLabel;

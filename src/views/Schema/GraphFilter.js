@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
 import {Row, Col} from "reactstrap"
-import { GRAPH_FILTER_CSS, ALL_SCHEMA_GRAPHS, ALL_INFERENCE_GRAPHS,  SCHEMA_GRAPH, INFERENCE_GRAPH, GRAPH_FILTER_CONTAINER } from "./constants"
+import { GRAPH_FILTER_CSS, ALL_SCHEMA_GRAPHS, ALL_INFERENCE_GRAPHS,  SCHEMA_GRAPH, INFERENCE_GRAPH, GRAPH_FILTER_CONTAINER } from "./constants.schema"
 
 const GraphFilter = (props) => {
     const [filter, setFilter] = useState(props.filter);

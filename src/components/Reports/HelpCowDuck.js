@@ -1,6 +1,6 @@
-import React, { useState }  from "react";
+import React from "react";
 import { COWDUCK_HELP_ICON } from "../../constants/images"
-import { COWDUCK_ICON_CSS, COWDUCK_WRAPPER_CSS, ASK_COWDUCK } from "./constants"
+import { COWDUCK_ICON_CSS, COWDUCK_WRAPPER_CSS, ASK_COWDUCK } from "./constants.reports"
 
 
 export const HelpCowDuck = ({className, title, onHover, endHover, onClick}) => {

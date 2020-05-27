@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert } from 'reactstrap';
 import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS, 
-    VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants"
+    VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants.reports"
 
 export const ViolationReport = ({violations, tone}) => {
     let vioBuff = violations.map((item, index) => {    

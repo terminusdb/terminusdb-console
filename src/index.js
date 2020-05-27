@@ -8,4 +8,4 @@ export LoadingAppPage from "./components/Reports/LoadingAppPage"
 export ConnectionErrorPage from "./components/Reports/ConnectionErrorPage";
 export {initFontLib} from "./init/initFontAwesome";
 export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance";
-export {LoginPage} from "./views/LoginPage";
+export {LoginPage} from "./views/Pages/LoginPage";

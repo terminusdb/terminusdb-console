@@ -1,6 +1,6 @@
 import React from "react"
-import {CONNECTING_MESSAGE} from "./constants"
-import Loading from "../Loading"
+import {CONNECTING_MESSAGE} from "./constants.reports"
+import Loading from "./Loading"
 
 const LoadingAppPage = () => {
     return (

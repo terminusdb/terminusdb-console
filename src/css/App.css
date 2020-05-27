@@ -668,6 +668,15 @@ div.css-yk16xz-control{
   left: 0;
   right: 0;
 }
+
+.page-spinner,
+.component-spinner {
+    width: 50%;
+    background-color: white;
+    margin: 20px auto;
+    text-align: center
+}
+
 .user_info_box{
     width: 100%;
     border-top: 1px solid white;
@@ -1906,8 +1915,8 @@ div.commit-view-message {
     text-align: right;
     width: 100%;
     padding: 0;
-    margin-bottom: 12px;
-    margin-top: 10px;
+    margin-bottom: 40px;
+    margin-top: -10px;
     margin-left: 0;
 }
 
@@ -1930,7 +1939,8 @@ div.commit-view-message {
 }
 
 .tcf-form {
-    padding: 50px;
+    padding: 40px;
+    width: 100%;
     border: 1px solid #cacaca;
     border-radius: 4px;
     box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);
@@ -2059,8 +2069,12 @@ div.commit-view-message {
 .tcf-secondary {
     font-size: 1.1em;
     padding: 8px 2.5em;
+    display: inline-block;
 }
 
+.tcf-secondary:hover {
+    margin: -2px;
+}
 
 .tcf-submit:hover {
     background-color: #00C08B;
@@ -2090,20 +2104,24 @@ div.commit-view-message {
     border-bottom: 2px solid rgb(226, 232, 240) !important;
 }
 
-.tcf-select:hover, .tcf-textarea:hover, .tcf-checkbox:hover, div.css-yk16xz-control:hover{
+div.css-yk16xz-control:hover{
     border:2px solid rgb(203, 213, 224);
 }
 
+.tcf-textarea:hover, .tcf-checkbox:hover, .tcf-select:hover { 
+    border:1px solid rgb(203, 213, 224);
+}
 
 .tcf-select {
     padding-right: 0px;
+    width: 100%;
     border:1px solid rgb(226, 232, 240);
     border-radius: 4px;
 }
 
 .tcf-textarea {
     padding: 4px;
-   border:2px solid rgb(226, 232, 240);
+    border:2px solid rgb(226, 232, 240);
 }
 
 .tcf-checkbox {
@@ -2168,7 +2186,10 @@ h4.prefix-section-header {
 
 .terminus-console-page {
     margin-bottom: 350px;
+}
 
+.terminus-console-content {
+    margin-top: 120px;
 }
 
 .terminus-coming-soon {
@@ -2254,3 +2275,132 @@ h4.prefix-section-header {
     border: 0;
     padding: 4px;
 }
+
+.newdb-card-img {
+    width: 200px;
+    height: 200px;
+}
+
+.copy-db-details-form {
+    background-color: #efefef;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.copy-db-details-header {
+    height: 14px;
+}
+
+/** styles for river of sections 
+* manage / collaborate pages
+*/
+.ros-container {
+    padding-top: 40px;
+}
+
+.ros-crumbs {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+}
+
+
+.ros-summary-section{
+    padding: 40px 0 10px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.ros-summary-icon {
+    margin-top: -8px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.ros-close-icon:hover {
+    color: rgba(0, 30, 86, 0.8);
+    cursor: pointer;
+}
+
+.ros-close-icon, 
+.ros-icon {
+    color: rgba(0, 30, 86, 0.1)
+}
+
+.ros-delete {
+    color: rgba(86, 30, 0, 0.1)
+}
+
+.ros-delete-button {
+    width: 180px;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+.row-summary-buttonrow{
+    height: 100px;
+}
+.ros-summary-content {
+    padding-bottom: 20px;
+}
+
+.ros-summary-title {
+    font-size: 1.3em;
+    margin-bottom: 4px;
+}
+
+.ros-summary-blurb {
+    color: #444;
+}
+
+.ros-open-page {
+    width: 180px;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+
+.ros-summary-open {
+}
+
+
+.ros-active-page {
+}
+
+.ros-active-header {
+    padding: 6px;
+    background-color: rgba(0, 102, 253, 0.1)
+}
+
+.ros-active-body {
+}
+
+.ros-header-section{
+    width: 100%;
+    padding-right: 0px;
+}
+
+.ros-header-icon{
+    color: rgba(0, 30, 86, 0.5);
+}
+
+.ros-header-title{
+}
+
+.ros-header-blurb{
+    width: 100%;
+    padding-left: 0;
+    padding-top: 10px;
+    color: rgba(0, 30, 86, 0.9)
+}
+
+.ros-close {
+    padding-right: 0px;
+}
+.ros-close-icon {
+    float: right;
+    margin-right: -10px;
+}
+
+

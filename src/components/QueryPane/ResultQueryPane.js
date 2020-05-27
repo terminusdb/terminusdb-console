@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
-import { ViewEditor } from "./ViewEditor"
 import { ViewChooser } from "./ViewChooser";
 
 export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {

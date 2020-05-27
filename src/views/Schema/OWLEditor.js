@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { editSchema } from "../../variables/formLabels"
 require('codemirror/lib/codemirror.css');
 require('codemirror/theme/base16-light.css');
 require('codemirror/mode/turtle/turtle.js');
-import { commit } from "../../variables/formLabels"
+import { COMMIT, EDIT_SCHEMA } from "./constants.schema"
 
 import {Controlled as CodeMirror} from 'react-codemirror2';
 
@@ -70,28 +69,28 @@ export const OWLEditor = (props) => {
             {(edit) && <>
                 <hr className = "my-space-15"/>
                 <hr className = "my-space-100"/>
-            	<textarea placeholder={ commit.act.input.placeholder }
-                    className = { commit.act.input.className }
+            	<textarea placeholder={ COMMIT.act.input.placeholder }
+                    className = { COMMIT.act.input.className }
                     ref={cmsg  => (setCommitMsg(cmsg))}/>
                 <hr className = "my-2"/>
                 <hr className = "my-space-15"/>
             </>}
-            {(!edit) && <button className = { editSchema.edit.className }
-                type =  { editSchema.edit.type }
+            {(!edit) && <button className = { EDIT_SCHEMA.edit.className }
+                type =  { EDIT_SCHEMA.edit.type }
                 onClick = {handleEdit}>
-                { editSchema.edit.text }
+                { EDIT_SCHEMA.edit.text }
             </button>}
             {(edit) && <button
-                className = { editSchema.update.className }
-                type =  { editSchema.update.type }
+                className = { EDIT_SCHEMA.update.className }
+                type =  { EDIT_SCHEMA.update.type }
                 onClick = {handleUpdate}>
-                { editSchema.update.text } </button>
+                { EDIT_SCHEMA.update.text } </button>
             }
             {(edit) && <button
-                className = { editSchema.cancel.className }
-                type =  { editSchema.cancel.type }
+                className = { EDIT_SCHEMA.cancel.className }
+                type =  { EDIT_SCHEMA.cancel.type }
                 onClick = {handleCancel}>
-                { editSchema.cancel.text } </button>
+                { EDIT_SCHEMA.cancel.text } </button>
             }
         </>
     )
