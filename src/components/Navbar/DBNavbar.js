@@ -72,6 +72,20 @@ export const DBNavbar = (props) => {
         fontSize: '14px'
     }
 
+    const thumbStyle = {
+        width: '18px',
+        height: '18px',
+        display: 'flex',
+        alignSelf: 'center',
+        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 0px 1px',
+        borderRadius: '50%',
+        boxSizing: 'border-box',
+        left: '3px',
+        border: '1px solid green',
+        backgroundColor: 'rgb(250, 250, 250)',
+        position: 'relative',
+    }
+
     //console.log('branchStatus', branchStatus)
 
 
@@ -123,6 +137,7 @@ export const DBNavbar = (props) => {
                             inactiveLabel={branch}
                             inactiveLabelStyle={inactiveLabelStyle}
                             activeLabel={'Commits'}
+                            activeThumbStyle = {thumbStyle}
                             activeLabelStyle={activeLabelStyle}
                             trackStyle={borderRadiusStyle}
                             thumbAnimateRange = {[0, 80]}
