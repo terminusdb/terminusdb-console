@@ -44,9 +44,6 @@ export const DELETE_DB_MODAL = {
     failed: "Failed to Delete Database"
 }
 
-
-export const DELETE_BUTTON = "DELETE"
-
 export const CREATE_BRANCH_FORM = {
     fields: [
         {
