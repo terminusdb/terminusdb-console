@@ -34,7 +34,7 @@ const ServerHome = (props) => {
 
     if(canCreate && dblist.length == 0){  //single page view - no tab
         return (
-            <SimplePageView onHeadChange={onHeadChange}>
+            <SimplePageView>
                 <div key="createfirst" className={CREATE_FIRSTDB_CSS}>{CREATE_FIRSTDB}</div>
                 <CreateDatabase key="createpage" />
             </SimplePageView>
@@ -42,7 +42,7 @@ const ServerHome = (props) => {
     }
     else if(!canCreate){
         return (
-            <SimplePageView onHeadChange={onHeadChange}>
+            <SimplePageView >
                 <div key="title" className={DBLIST_HEADER_CSS}>{DBLIST_TITLE}</div>
                 <DBList key="dbl" dataProvider={dbs}/>
             </SimplePageView>
