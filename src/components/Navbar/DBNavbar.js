@@ -31,10 +31,7 @@ export const DBNavbar = (props) => {
 
 
     let headText = (ref ? "Commit (" + ref + ")" : "Latest")
-    /*console.log('headText', headText)
-    console.log('ref', ref)
-    console.log('branch', branch)*/
-    let branchStatus = ((ref || branch != "master") ? "orange" : "#ccc")
+    let branchStatus = ((ref || branch != "master") ? "#ffa500" : "#ccc")
 
     const handleToggle = (toggleTime) => {
         setToggleTime(!toggleTime)
@@ -79,8 +76,10 @@ export const DBNavbar = (props) => {
         position: 'relative',
     }
 
-    //console.log('branchStatus', branchStatus)
-
+    console.log('branchStatus', branchStatus)
+    console.log('ref', ref)
+    console.log('headText', headText)
+    console.log('branch', branch)
 
     return (
 
@@ -133,7 +132,8 @@ export const DBNavbar = (props) => {
                             activeLabelStyle={activeLabelStyle}
                             trackStyle={borderRadiusStyle}
                             thumbAnimateRange = {[0, 80]}
-                            colors={{ activeThumb: {
+                            colors={{
+                                    inactiveThumb: {
                                       base: branchStatus,
                                     },
                                     active: {

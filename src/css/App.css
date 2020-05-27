@@ -1381,7 +1381,8 @@ div.CodeMirror{
 }
 
 #profileDropDown{
-    margin-top: -25px;
+    /*margin-top: -25px;*/
+    display:inline-block;
 }
 
 @media (min-width:768px) {
@@ -2015,11 +2016,11 @@ div.commit-view-message {
 }
 
 .tcf-help {
-    height: 80px;
+    /*height: 80px;*/
     display: inline-block;
     width: 100%;
     border-radius: 6px;
-    padding: 8px;
+    padding: 3px 8px 3px 8px;
     margin-bottom: 6px;
     margin-top: -6px;
     border: 1px solid #ddd;

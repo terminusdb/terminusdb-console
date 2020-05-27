@@ -16,14 +16,14 @@ const ServerHome = (props) => {
     if(!records || records.length == 0){
         return (<TerminusDBSpeaks failure={CONNECTION_FAILURE} />)
     }
-    const dblist = records.filter(meta => meta.db != "terminus");    
+    const dblist = records.filter(meta => meta.db != "terminus");
     const canCreate =  woqlClient.connection.capabilitiesPermit("create_database")
     if(dblist.length == 0 && !canCreate){
         return (<TerminusDBSpeaks failure={ACCESS_FAILURE} />)
     }
 
     const [dbs, setdbs] = useState(dblist)
-    
+
     const [dbDetails, report] = LoadDatabaseListDetails(dblist)
 
     useEffect(() => {
@@ -31,6 +31,10 @@ const ServerHome = (props) => {
         if(report) console.log("Failed to load database list details", report)
     }, [dbDetails, report])
 
+	//temp
+	function onHeadChange(){
+        //setRebuild(rebuild+1)
+    }
 
     if(canCreate && dblist.length == 0){  //single page view - no tab
         return (
@@ -51,9 +55,9 @@ const ServerHome = (props) => {
 
     let sections = [{id: SERVER_ROUTE, label: DBLIST_TITLE}, {id: CREATE_DB_ROUTE, label: CREATEDB_TITLE}]
     let active = props.page
-    return ( 
+    return (
         <TabbedPageView active={active} sections={sections}>
-            <DBList key="dbl" list={dbs}/>            
+            <DBList key="dbl" list={dbs}/>
             <div key="create" className = "container-fluid">
                 <hr className = "my-space-15"/>
                 <hr className = "my-space-15"/>
