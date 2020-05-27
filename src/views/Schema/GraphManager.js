@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col } from "reactstrap"
-import RenderTable from "../../components/Table/RenderTable"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import Loading from "../../components/Reports/Loading";
 import { CreateGraph } from "./CreateGraph"
@@ -9,13 +8,13 @@ import { DELETE_ICON_CSS } from "./constants.schema"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_INFO} from "../../constants/identifiers"
 import {DELETE_ICON} from "../../constants/images"
 import {APIUpdateReport} from "../../components/Reports/APIUpdateReport"
-import {ResultViewer} from "../../components/QueryPane/ResultViewer"
+import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import {GraphList} from "../Tables/GraphList"
 
-export const GraphMaker = (props) => {
+export const GraphManager = (props) => {
     const {woqlClient} = WOQLClientObj();
     const canDeleteGraph = woqlClient.db() != "terminus" //need to be got from client
     const canCreateGraph =  woqlClient.db() != "terminus" //need to ge got from client
-    const [dataProvider, setDataProvider] = useState(graphToTable(props.graphs))
     const [creating, setCreating] = useState(false)
     const [loading, setLoading] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState()
@@ -98,22 +97,6 @@ export const GraphMaker = (props) => {
         return rows
     }
 
-    function formatColumns(graphs){
-        let columnList = [
-            {name: "Graph Type", selector: "type"},    
-            {name: "ID",  selector: "gid"},    
-            {name: "Size", selector: "size"},    
-        ]
-        if(canDeleteGraph) {
-            columnList.push({name: "Delete", selector: "delete"})
-        }
-        return columnList
-    }
-
-    function graphToTable(graphs){
-        return {columnData:formatData(graphs), columnConf:formatColumns(graphs)}
-    }
-
     function setEditing(){
         setCreating(true)
         setUpdateSuccess(false)
@@ -121,7 +104,7 @@ export const GraphMaker = (props) => {
 
     return (
         <Container>
-            {(loading || !dataProvider) && 
+            {(loading) && 
                 <Loading />
             }
             {canCreateGraph && 
@@ -130,8 +113,8 @@ export const GraphMaker = (props) => {
             {updateSuccess && 
                 <APIUpdateReport message={updateSuccess.message} status={updateSuccess.status} time={updateSuccess.time}/>
             }
-            {(!creating && dataProvider) && 
-                <RenderTable dataProvider = {dataProvider}/>
+            {(!creating && props.graphs) && 
+                <ResultViewer type = "table" bindings= {props.graphs}/>
             }
         </Container>
     )

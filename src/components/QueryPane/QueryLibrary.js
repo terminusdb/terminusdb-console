@@ -1,7 +1,6 @@
 import React from "react"
 import { Button, ButtonGroup } from 'reactstrap'
 import TerminusClient from '@terminusdb/terminusdb-client';
-//import * as query from "../labels/queryLabels";
 
 
 export const QueryLibrary = (props) => {

@@ -18,7 +18,7 @@ export const OWL = (props) => {
 
     useEffect(() => {
         if(props.graph){
-            let id = (props.graph.id == "*" ? "main" : props.graph.id) 
+            let id = (props.graph.gid == "*" ? "main" : props.graph.gid) 
             setFilter({type: props.graph.type, id: id})
             woqlClient.getTriples(props.graph.type, id)
             .then((cresults) => {
@@ -34,7 +34,7 @@ export const OWL = (props) => {
     function updateSchema(contents, commitmsg){
         let ts = Date.now()
         setUpdateSuccess(false)
-        woqlClient.updateTriples(filter.type, filter.gid, contents, commitmsg)
+        woqlClient.updateTriples(filter.type, filter.id, contents, commitmsg)
         .then((cresults) => {
             setEdit(false)
             setDataProvider(contents);
