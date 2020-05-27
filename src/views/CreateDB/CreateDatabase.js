@@ -12,7 +12,11 @@ import { Crumbs } from "../Templates/BreadCrumbs"
 import {CREATE_BREADCRUMB, COPY_BREADCRUMB, LOCAL_BREADCRUMB, REMOTE_BREADCRUMB, 
     CREATE_REMOTE, COPY_REMOTE, CREATE_LOCAL, COPY_LOCAL, LOCAL_OR_REMOTE } from "./constants.createdb"
 
-const CreateDatabase = (props) => {
+/**
+ * Manages the user journey for creating database
+ */
+
+export const CreateDatabase = (props) => {
 	const [page, setPage] = useState()
     const [btns, setBtns] = useState()
 
@@ -141,4 +145,3 @@ const CreateDatabase = (props) => {
 	)
 }
 
-export default CreateDatabase;

@@ -4,11 +4,11 @@ import { Row, Col } from "reactstrap";
 import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DetailsCard } from "./DetailsCard"
-import * as icons from "../../labels/iconLabels"
+import * as icons from "../../constants/faicons"
 import TerminusClient from '@terminusdb/terminusdb-client';
-import {LatestUpdates} from "../Tables/LatestUpdates"
+import { LatestUpdates } from "../Tables/LatestUpdates"
 
-const Details = (props) => {
+export const MonitorDB = (props) => {
 	const { isAuthenticated, user } = useAuth0();
 	const [commitInfo, setCommitInfo] = useState([])
 	const [dbInfo, setDbInfo] = useState([])
@@ -86,46 +86,4 @@ const Details = (props) => {
     )
 }
 
-export default Details;
 
-/*
-
-<label className = { createDatabaseForm.id.label.className } htmlFor = "database-id">
-	{ createDatabaseForm.id.label.text }
-</label>
-<input placeholder={ createDatabaseForm.id.input.placeholder }
-	className = { createDatabaseForm.id.input.className }
-	name = "database-id"
-	readOnly
-	value = {woqlClient.db()}
-	ref = { register({ validate: value => value.length > 0}) }/>
-{errors.databaseID &&
-	<p className = { createDatabaseForm.id.error.className }>
-		{ createDatabaseForm.id.error.text }
-	</p>
-}
-<label className = { createDatabaseForm.databaseName.label.className } htmlFor = "database-name">
-	{ createDatabaseForm.databaseName.label.text }
-</label>
-<input name= "database-name" value = {getCurrentDBName(woqlClient)}
-   className = { createDatabaseForm.databaseName.input.className }
-   readOnly
-   placeholder = { createDatabaseForm.databaseName.input.placeholder }
-   ref = { register({ validate: value => value.length > 0}) }/>
-{ errors.databaseName &&
-	<p className = { createDatabaseForm.databaseName.error.className }>
-		{ createDatabaseForm.databaseName.error.text }
-	</p>
-}
-<label className = { createDatabaseForm.databaseDescr.label.className } htmlFor = "database-description">
-   { createDatabaseForm.databaseDescr.label.text }
-</label>
-
-<textarea name = "database-description"
-	className = { createDatabaseForm.databaseDescr.input.className }
-	readOnly
-	placeholder = { createDatabaseForm.databaseDescr.input.placeholder }
-	ref={register} />
-
-
-*/

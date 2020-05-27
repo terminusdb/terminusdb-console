@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Row } from "reactstrap";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
-import { PageView } from '../Templates/PageView'
+import { SimplePageView } from '../Templates/SimplePageView'
 import { NEW_QUERY_BUTTON_CSS, NEW_QUERY_BUTTON_TEXT, NEW_QUERY_ROW_CSS, QUERY_BOX_CSS } from "./constants.pages"
 
 /**
@@ -38,9 +38,9 @@ const QueryPage = () => {
     }
 
     return (
-        <PageView type="query">
+        <SimplePageView>
             <NewQueryPane/>
-        </PageView>    
+        </SimplePageView>    
     )
 }
 

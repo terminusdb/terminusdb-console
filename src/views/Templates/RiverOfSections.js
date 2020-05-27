@@ -11,10 +11,19 @@ export const RiverOfSections = ({active, label, sections, children}) => {
     let contents = []
     const elements = React.Children.toArray(children) 
 
+    function openSection(i){
+        setActiveSection(i) 
+    }
+
+    function closeSection(){
+        setActiveSection() 
+    }
+
+
     for(var i = 0 ; i<sections.length; i++){
         contents.push(
             <ExpandableSubsection 
-                active={active} 
+                active={activeSection} 
                 index={i} 
                 section={sections[i]}
                 onOpen={openSection}
@@ -29,17 +38,10 @@ export const RiverOfSections = ({active, label, sections, children}) => {
         contents.push(elements[j])
     }
 
-    let openSection = function(i){
-        setActiveSection(i) 
-    }
-
-    function closeSection(){
-        setActiveSection() 
-    }
 
     let ros = (
         <Container className={RIVER_OF_SECTIONS.pageCSS}>
-            {activeSection && 
+            {(typeof activeSection != "undefined") && 
                 <Container className={RIVER_OF_SECTIONS.crumbsCSS}>
                     <Crumbs 
                         buttons={[{text: label}, {text: sections[activeSection].title}]} 

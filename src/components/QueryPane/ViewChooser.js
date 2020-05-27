@@ -4,7 +4,7 @@ import {TABLE_VIEW, GRAPH_VIEW} from "./constants.querypane"
 
 export const ViewChooser = ({view, views, updateView}) => {
     
-    views = views || [{id: "table", label: {TABLE_VIEW}}, {id: "graph", label: {GRAPH_VIEW}}]
+    views = views || [{id: "table", label: TABLE_VIEW}, {id: "graph", label: GRAPH_VIEW}]
 
     const currentView = view || 'table';
     let currentLabel;

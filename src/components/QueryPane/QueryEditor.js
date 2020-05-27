@@ -4,8 +4,7 @@ import { CodeEditor, CodeViewer } from './Editor'
 import TerminusClient from '@terminusdb/terminusdb-client';
 import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.querypane'
 import {LanguageSwitcher} from "./LanguageSwitcher"
-import { commitBox } from "../../variables/formLabels"
-import {queryEditorLabel} from "../../variables/content"
+import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 
 /**
  * Controls the display of query viewer and editor
@@ -159,13 +158,13 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         {children}
        
         {(editable) && 
-            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { commitBox.input.placeholder }>
+            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
                 {commitMsg}
             </textarea>
         }   
 
         {(editable && error) &&  
-            <Alert color="warning">{queryEditorLabel.syntaxErrorMessage}</Alert>
+            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
         }      
         </Container>
     )

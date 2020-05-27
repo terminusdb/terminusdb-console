@@ -1,7 +1,8 @@
 import React from "react";
-import { Col, Row } from "reactstrap";
+import { Col, Row, Button, Container } from "reactstrap";
 import { RIVER_OF_SECTIONS, SUMMARY_SECTION, SECTION_HEADER } from "./constants.templates"
 import { CHECK } from "../../constants/faicons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ExpandableSubsection = ({section, index, active, onClose, onOpen, children}) => {
 
@@ -27,8 +28,13 @@ export const ExpandableSubsection = ({section, index, active, onClose, onOpen, c
 const SubsectionSummary = ({section, onOpen}) => {
 
     function getOpen(section){
+        if(section.id == "delete") return (
+            <Button color="danger" onClick={onOpen} className={SUMMARY_SECTION.deleteButtonCSS}>
+                {section.button}
+            </Button>
+        )
         return (
-            <Button onClick={onOpen} className={SUMMARY_SECTION.openButtonCSS}>
+            <Button outline color="secondary" onClick={onOpen} className={SUMMARY_SECTION.openButtonCSS}>
                 {section.button}
             </Button>
         )
@@ -36,26 +42,34 @@ const SubsectionSummary = ({section, onOpen}) => {
 
     function getIcon(section){
         if(!section.icon) return null
-        return (<FontAwesomeIcon className={SUMMARY_SECTION.iconCSS} icon={section.icon}/>)
+        if(section.id == "delete") return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.deleteCSS} icon={section.icon}/>)
+        else return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.iconCSS} icon={section.icon}/>)
     }
 
     return (
-        <Row key={section.id + "_summary"} className={SUMMARY_SECTION.containerCSS}>
-            <Col md={2} className={SUMMARY_SECTION.iconContainerCSS}>
-                {getIcon(section)}
-            </Col>
-            <Col md={8} className={SUMMARY_SECTION.contentCSS}>
-                <span className={SUMMARY_SECTION.titleCSS}>
-                    {section.title}
-                </span>
-                <span className={SUMMARY_SECTION.blurbCSS}>
-                    {section.blurb}
-                </span>
-            </Col>
-            <Col md={2} className={SUMMARY_SECTION.openCSS}>
-                {getOpen(section)}
-            </Col>
-        </Row>
+        <Container className={SUMMARY_SECTION.containerCSS}>
+            <Row key={section.id + "_summary"} className={SUMMARY_SECTION.contentRowCSS}>
+                <Col md={1} className={SUMMARY_SECTION.iconContainerCSS}>
+                    {getIcon(section)}
+                </Col>
+                <Col md={10} className={SUMMARY_SECTION.contentCSS}>
+                    <div className={SUMMARY_SECTION.titleCSS}>
+                        {section.title}
+                    </div>
+                    <div className={SUMMARY_SECTION.blurbCSS}>
+                        {section.blurb}
+                    </div>
+                </Col>
+                <Col md={1} className={SUMMARY_SECTION.openCSS}>
+                </Col>
+            </Row>
+            <Row key = {section.id + "_s2"} className={SUMMARY_SECTION.buttonRowCSS}>
+                <Col md={10}></Col>
+                <Col md={2}>
+                    {getOpen(section)}
+                </Col>
+            </Row>
+        </Container>
     )
 }
 
@@ -63,26 +77,23 @@ const SubsectionHeader = ({section, onClose}) => {
     
     function getIcon(sec){
         if(!sec.icon) return null
-        return (<FontAwesomeIcon className={SECTION_HEADER.iconCSS} icon={sec.icon}/>)
+        return (<FontAwesomeIcon size="3x" className={SECTION_HEADER.iconCSS} icon={sec.icon}/>)
     }
     
     function getClose(sec){
-        return (<FontAwesomeIcon className={SECTION_HEADER.closeIconCSS} icon={CHECK} onClick={onClose}/>)
+        return (<FontAwesomeIcon size="3x" className={SECTION_HEADER.closeIconCSS} icon="times-circle" onClick={onClose}/>)
     }
 
     if(!section) return null
     return (
         <Row key={section.id + "_hdr"}  className={SECTION_HEADER.containerCSS}>
-            <Col md={2} className={SECTION_HEADER.iconContainerCSS}>
+            <Col md={1} className={SECTION_HEADER.iconContainerCSS}>
                 {getIcon(section)}
-            </Col>
-            <Col md={4} className={SECTION_HEADER.titleCSS}>
-                {section.title}
-            </Col>
-            <Col md={6} className={SECTION_HEADER.blurbCSS}>
+            </Col>           
+            <Col md={10} className={SECTION_HEADER.blurbCSS}>
                 {section.blurb}
             </Col>
-            <Col md={2} className={SECTION_HEADER.closeCSS}>
+            <Col md={1} className={SECTION_HEADER.closeCSS}>
                 {getClose(section)}
             </Col>
         </Row>

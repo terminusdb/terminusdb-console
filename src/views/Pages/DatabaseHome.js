@@ -1,10 +1,10 @@
 import React from "react";
 import { DETAILS_TAB, COLLABORATE_TAB, MANAGE_TAB } from "./constants.pages"
 import { DB_COLLABORATE, DB_MANAGE } from "../../constants/routes"
-import Details from '../DBHome/DatabaseDetails'
-import Collaborate from '../DBCollaborate/Collaborate'
-import ManageDatabase from '../DBManage/ManageDatabase'
-import { TabbedPageView } from '../Templates/PageView'
+import { MonitorDB } from '../DBHome/MonitorDB'
+import { Collaborate } from '../DBCollaborate/Collaborate'
+import { ManageDB}  from '../DBManage/ManageDB'
+import { TabbedPageView } from '../Templates/TabbedPageView'
 
 const DatabaseHome = (props) => {
     let sections = [
@@ -14,9 +14,9 @@ const DatabaseHome = (props) => {
     ]
     return (  
         <TabbedPageView sections={sections} active={props.page} report={props.report}>            
-            <Details key="monitor" />
-            <Collaborate key="collaborate" />
-            <ManageDatabase key="manage" />
+            <MonitorDB key="monitor" label={DETAILS_TAB} />
+            <Collaborate key="collaborate" label={COLLABORATE_TAB} />
+            <ManageDB key="manage" label={MANAGE_TAB}/>
         </TabbedPageView>        
 	)
 }

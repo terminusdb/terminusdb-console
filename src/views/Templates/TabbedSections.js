@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Tabs, Tab } from "react-bootstrap-tabs/dist";
 //this really should be changed to use reacstrap tabs - this one is crap and doesn't work properly
 /**

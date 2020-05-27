@@ -2,36 +2,37 @@
  * Controller application for metadata update form
  */
 import React, {useState} from "react";
-import {TCForm, TCSubmitWrap} from  "../../components/Form/FormComponents"
-import { MERGE_BRANCH_FORM, MERGE_BUTTON } from "./constants.dbmanage"
-import { Button } from "reactstrap";
+import { BACKUP_FORM } from "./constants.dbmanage"
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
+import { TERMINUS_COMPONENT } from "../../constants/identifiers";
+import { WOQLClientObj } from "../../init/woql-client-instance";
+import { useAuth0 } from "../../react-auth0-spa";
+import { UnderConstruction } from "../../components/Reports/UnderConstruction"
+import { TCForm, TCSubmitWrap} from "../../components/Form/FormComponents"
 
-export const Backup = ({onCancel, onCreate, onEdit, visible, report}) => {
-    visible = visible || false
-    const [isVisible, setVisible] = useState(visible)
+export const Backup = ({onCancel, onCreate, onEdit, visible}) => {
+    //const {woqlClient,reconnectServer} = WOQLClientObj();
+    const { loading, user } = useAuth0()
+    const [report, setReport] = useState()
+    let buttons = (user ? BACKUP_FORM.buttons : false)
 
-    if(!isVisible){
-        return (
+    return (<>
+        {(loading) && 
+            <Loading type={TERMINUS_COMPONENT} />
+        }
+        {(report && report.error) && 
+            <TerminusDBSpeaks report={report} />
+        }
+        {!user && 
             <TCSubmitWrap>
-                <Button className="tcf-secondary" onClick={() => setVisible(true)} outline color="secondary">
-                    {MERGE_BUTTON}
-                </Button>
-            </TCSubmitWrap>            
-        )
-    }
-
-    let btns = MERGE_BRANCH_FORM.buttons
-    btns.onCancel = function(){
-        setVisible(false)
-    }
-
-    return (
-        <TCForm 
-            onSubmit={onCreate} 
-            report={report} 
-            layout = {[2, 1]}
-            fields={MERGE_BRANCH_FORM.fields}
-            buttons={btns} 
-        />       
-    )
+                <UnderConstruction action={BACKUP_FORM.actionText} />
+            </TCSubmitWrap>
+        }
+        <TCForm
+            layout = {[3, 1]}
+            noCowDucks
+            fields={BACKUP_FORM.fields}
+            buttons={buttons}
+        />    
+    </>)
 }

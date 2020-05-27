@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, Col} from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DELETE_ICON } from "../../constants/images"
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from "../../constants/identifiers"
 import { goServerHome } from '../../components/Router/ConsoleRouter';
 import { DELETE_DB_MODAL } from "./constants.dbmanage"
 
-export const DeleteDatabase = (props) => {
+export const DeleteDB = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const {woqlClient,reconnectServer} = WOQLClientObj();
     const [rep, setReport] = useState();
@@ -44,7 +44,7 @@ export const DeleteDatabase = (props) => {
             <ModalBody>
                 <Col md={12}>
                     {rep &&
-                        <APIUpdateReport message = { rep.message } error={rep.error} status={rep.status} time={rep.time} />
+                        <TerminusDBSpeaks report={rep} />
                     }
                     <div className="del-mod">
                         <img src={DELETE_ICON} className="center"/>

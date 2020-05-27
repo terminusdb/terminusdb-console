@@ -4,6 +4,7 @@ import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth0 } from "../../react-auth0-spa";
 import { USER, POWER_OFF } from "../../constants/faicons"
+import { PROFILE_ROUTE } from "../../constants/routes"
 import { PROFILE_PAGE_LABEL, LOGOUT_LABEL, DROPDOWN_PROFILE_CSS} from "./constants.navbar"
 
 export const LoggedIn = (props) => {
@@ -25,7 +26,7 @@ export const LoggedIn = (props) => {
             <DropdownMenu>
                 <DropdownItem header>{user.name}</DropdownItem>
                 <DropdownItem tag = {RouterNavLink}
-                    to= {PROFILE_PAGE_LABEL}
+                    to= {PROFILE_ROUTE}
                     className={DROPDOWN_PROFILE_CSS}
                     activeClassName="router-link-exact-active">
                     <FontAwesomeIcon icon={USER} className="mr-3" /> {PROFILE_PAGE_LABEL}

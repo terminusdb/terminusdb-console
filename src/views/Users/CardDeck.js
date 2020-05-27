@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, CardImg, CardTitle, CardText, CardDeck,
 CardSubtitle, CardBody } from 'reactstrap';
-import { FREE_PLAN, PRO_PLAN } from "../../variables/pricingPlan"
+import { FREE_PLAN, PRO_PLAN } from "./variables/pricingPlan"
 
 export const CardDecks = () => {
     const freePlanText = [], proPlanText = [];

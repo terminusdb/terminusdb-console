@@ -1,6 +1,7 @@
 import React from "react"
 import {APIUpdateReport} from "./APIUpdateReport"
 import {SystemError} from "./SystemError"
+import {PageFailure} from "./PageFailure"
 
 /** failures are for situations where have encountered some sort of serious system failure in 
  * doing whatever we were trying to do (connect to db, etc) and we are bailing out now 
@@ -11,7 +12,7 @@ import {SystemError} from "./SystemError"
 export const TerminusDBSpeaks = ({report, failure}) => {
     if(!report) return null
     if(failure){
-        return (<PageFailure failure={failure} />)
+        return (<PageFailure failure={failure} report={report}/>)
     }
     if(report.status){
         return (<APIUpdateReport 

@@ -15,7 +15,7 @@ export const Crumbs = (props) => {
             )
          }
          else {
-             let pid = item.page || item.text
+             let pid = (typeof item.page != "undefined" ? item.page : item.text )
              list.push(
                 <button key = {item.text + i} className={BREADCRUMB.oldCSS} onClick={() => {props.setPage(pid)}}>
                     {item.text}
@@ -29,6 +29,7 @@ export const Crumbs = (props) => {
         }
     })
 
+    if(list.length == 0) list = ""
     return (
         <ButtonGroup className={BREADCRUMB.buttonGroupCSS}>
             {list}

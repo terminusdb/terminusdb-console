@@ -1,6 +1,6 @@
 import React from "react";
 import { PageView } from "./PageView"
-
+import {PAGEVIEW} from "./constants.templates"
 /**
  * Generates a simple page view, single pane of content
  */
@@ -8,7 +8,7 @@ import { PageView } from "./PageView"
 export const SimplePageView = ({children, onHeadChange, loading, report}) => {
     return (
         <PageView onHeadChange={onHeadChange} loading={loading} report={report}>
-            <div className = {PAGE_CONTENT_CSS}>
+            <div className = {PAGEVIEW.containerCSS}>
                 <hr className = "my-space-15"/>
                 {children}
             </div>

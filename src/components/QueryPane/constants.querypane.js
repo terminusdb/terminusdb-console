@@ -28,3 +28,31 @@ export const QUERY_PANE_INTRO = "Please enter your query in the box below"
 
 export const TABLE_VIEW = "Table"
 export const GRAPH_VIEW = "Graph"
+
+
+
+export const COMMIT_BOX = {
+    label: {
+        text: "As this query contains an update, you must provide a commit"
+                + " message, to explain the reason for the change",
+        className: "form"
+    },
+    input: {
+        placeholder: "Enter reason for update here",
+        name: "commitMessage",
+        className: "form"
+    },
+    confirm: {
+        type: "submit",
+        text: "Confirm"
+    },
+    cancel: {
+        type: "cancel",
+        text: "Cancel"
+    }
+}
+
+
+export const QUERY_EDITOR_LABEL ={
+    syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
+  }

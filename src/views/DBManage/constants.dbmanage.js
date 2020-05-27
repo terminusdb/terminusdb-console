@@ -2,35 +2,35 @@ export const MANAGE_SECTIONS = [
     { 
         id: "metadata",
         title: "Update Database Metadata",
-        icon: "",
+        icon: "stamp",
         button: "Metadata",
         blurb: "Change the name of the database, its description and other metadata"
     },
     { 
         id: "branch",
         title: "Create a new Branch",
-        icon: "",
+        icon: "code-branch",
         button: "Branch",
         blurb: "Creating a new branch allows you to have multiple different live versions of the database at the same time which can be merged back together when desired",
     },
     { 
         id: "merge",
         title: "Merge Branches",
-        icon: "",
+        icon: "infinity",
         button: "Merge",
         blurb: "Merging branches together creates a unified copy of the database from different branches which may have converged."
     },
     { 
         id: "backup",
         title: "Backup and Restore",
-        icon: "",
+        icon: "hdd",
         button: "Backup",
         blurb: "Backup your data either to disk or to the cloud, or restore it from backups"
     },
     { 
         id: "delete",
         title: "Delete Database",
-        icon: "",
+        icon: "trash-alt",
         button: "DELETE",
         blurb: "This will permanently remove this database and all its contents from the system - be careful not to delete any data that might be important in the future!"
     }
@@ -82,7 +82,6 @@ export const CREATE_BRANCH_FORM = {
         }
     ],
     buttons: {
-        cancelText: "Cancel",
         submitText: "Create New Branch"
     }
 }
@@ -122,60 +121,68 @@ export const MERGE_BRANCH_FORM = {
         }
     ],
     buttons: {
-        cancelText: "Cancel",
         submitText: "Merge Branches"
     }
 }
 
 
-export const CREATE_GRAPH_FORM = {
-    graphDeletedLocation: "(Console, Graph Delete)",
-    graphCreatedLocation: "(Console, Graph Create)",
-    createSuccess: "Graph Successfully Created",
-    createFailure: "Failed to Create Graph",
+export const METADATA_FORM = {
+    actionText: "Update Database Metadata",
+    buttons: {
+        submitText: "Update Metadata"
+    }
+}
+
+
+export const BACKUP_FORM = {
     fields: [
         {
-            id: "gtype",
+            id: "which",
+            value: "backup",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [{label: "Backup", value:"backup"}, {label: "Restore", value: "restore"}]
+            },
+            label: 'Backup or Restore'
+        },
+        {
+            id: "target",
             value: "",
             mandatory: true,
             inputElement: {
                 type: "select",
-                options: [{value: "schema", label: "Schema Graph"}, {value: "instance", label: "Instance Graph"}, {value: "inference", label: "Inference Graph"}],
-                placeholder: "Select Graph Type"
+                placeholder: "Choose Target",
+                options: [{label: "Browser Download", value:"browser"}, {label: "Local Storage", value: "local"}, {label: "Online Storage", value:"online"}]
             },
-            label: 'Graph Type',
-            help: "Instance graphs contain data, schema graphs contain rules, inference graphs contain inference rules",
+            label: 'Target',
         },
         {
-            id: "gid",
+            id: "format",
             value: "",
             mandatory: true,
             inputElement: {
-                type: "input",
-                placeholder: "Enter ID of new graph",
+                type: "select",
+                placeholder: "Choose Format",
+                options: [{label: "TerminusDB Compressed", value:"terminus"}, {label: "Turtle (RDF)", value: "ttl"}, {label: "CSV", value:"csv"}]
             },
-            label: 'Graph ID',
-            help: "A short simple string to identify the graph - no spaces or special characters allowed",
+            label: 'Format',
         },
         {
-            id: "commit",
-            label: "Commit Message",
+            id: "filename",
+            value: "",
             inputElement: {
-                type: "textarea",
-                placeholder: "A short description of the reason for your changes",
-            }
-        }
+                type: "input",
+                placeholder: "Choose Title of file",
+            },
+            label: 'Format',
+        },
     ],
+    actionText: "Backup Database",
     buttons: {
-        cancelText: "Cancel",
-        submitText: "Create New Graph"
+        submitText: "Backup Database"
     }
 }
 
 
 
-export const MERGE_BUTTON = "Merge"
-export const PREFIXES_BUTTON = "URI Prefixes"
-export const GRAPHS_BUTTON = "Graphs"
-export const BRANCH_BUTTON = "Branch"
-export const FORK_BUTTON = "Fork"

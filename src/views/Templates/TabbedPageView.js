@@ -16,7 +16,6 @@ export const TabbedPageView = ({children, onHeadChange, loading, report, active,
                 id="terminus-tabbed-page"
                 sections={sections}
                 active={active}
-                report={internalReport}
             >
                 {children}
             </TabbedSections>

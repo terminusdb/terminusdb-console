@@ -2,18 +2,16 @@
  * Controller application for branch creation form
  */
 import React, {useState} from "react";
-import {TCForm, TCSubmitWrap} from  "../../components/Form/FormComponents"
-import { CREATE_BRANCH_FORM, BRANCH_BUTTON } from "./constants.dbmanage"
-import { Button } from "reactstrap";
+import { TCForm } from  "../../components/Form/FormComponents"
+import { CREATE_BRANCH_FORM  } from "./constants.dbmanage"
 import { HistoryNavigator} from "../../components/History/HistoryNavigator"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR } from "../../constants/identifiers";
-import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
     visible = visible || false
-    const [isVisible, setVisible] = useState(visible)
     
     let ics = {}
     CREATE_BRANCH_FORM.fields.map((item) => {
@@ -23,20 +21,8 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const [values, setValues] = useState(ics)
     const [report, setReport] = useState()
 
-    if(!isVisible){
-        return (
-            <TCSubmitWrap>
-                <Button className="tcf-secondary" onClick={() => setVisible(true)} outline color="secondary">
-                    {BRANCH_BUTTON}
-                </Button>
-            </TCSubmitWrap>            
-        )
-    }
-
     let btns = CREATE_BRANCH_FORM.buttons
-    btns.onCancel = function(){
-        setVisible(false)
-    }
+   
 
     function onCreate(){
         woqlClient.ref(values.source)
@@ -59,7 +45,7 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     }
 
     if(report && report.status == TERMINUS_SUCCESS){
-        return (<APIUpdateReport status="success" message="Successfully Created New Branch" />)
+        return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Created New Branch"}} />)
     }
 
     return (       

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { CREATEDB_TITLE, DBLIST_TITLE, CREATE_FIRSTDB_CSS, CREATE_FIRSTDB, DBLIST_HEADER_CSS } from './constants.pages';
 import { CONNECTION_FAILURE, ACCESS_FAILURE } from "../../constants/identifiers"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { SimplePageView, TabbedPageView } from '../Templates/PageView'
-import CreateDatabase from '../CreateDB/CreateDatabase'
+import { SimplePageView } from '../Templates/SimplePageView'
+import { TabbedPageView } from '../Templates/TabbedPageView'
+import { CreateDatabase } from '../CreateDB/CreateDatabase'
 import { CREATE_DB_ROUTE, SERVER_ROUTE } from "../../constants/routes"
 import { DBList } from "../Tables/DBList"
 import { LoadDatabaseListDetails } from "../../components/Query/MetadataLoader"
@@ -34,16 +35,16 @@ const ServerHome = (props) => {
     if(canCreate && dblist.length == 0){  //single page view - no tab
         return (
             <SimplePageView onHeadChange={onHeadChange}>
-                <div className={CREATE_FIRSTDB_CSS}>{CREATE_FIRSTDB}</div>
-                <CreateDatabase />
+                <div key="createfirst" className={CREATE_FIRSTDB_CSS}>{CREATE_FIRSTDB}</div>
+                <CreateDatabase key="createpage" />
             </SimplePageView>
         )
     }
     else if(!canCreate){
         return (
             <SimplePageView onHeadChange={onHeadChange}>
-                <div className={DBLIST_HEADER_CSS}>{DBLIST_TITLE}</div>
-                <DBList dataProvider={dbs}/>
+                <div key="title" className={DBLIST_HEADER_CSS}>{DBLIST_TITLE}</div>
+                <DBList key="dbl" dataProvider={dbs}/>
             </SimplePageView>
         )
     }
@@ -51,12 +52,9 @@ const ServerHome = (props) => {
     let sections = [{id: SERVER_ROUTE, label: DBLIST_TITLE}, {id: CREATE_DB_ROUTE, label: CREATEDB_TITLE}]
     let active = props.page
     return ( 
-        <TabbedPageView 
-            active={active}
-            sections={sections}
-        >
-            <DBList list={dbs}/>            
-            <div className = "container-fluid">
+        <TabbedPageView active={active} sections={sections}>
+            <DBList key="dbl" list={dbs}/>            
+            <div key="create" className = "container-fluid">
                 <hr className = "my-space-15"/>
                 <hr className = "my-space-15"/>
                 <CreateDatabase />
