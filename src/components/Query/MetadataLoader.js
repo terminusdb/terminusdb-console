@@ -50,7 +50,11 @@ export const loadGraphStructure = (branch, ref) => {
     }
 
     function structureFromBindings(bindings){
-        return bindings;
+        let graphs = [];
+        for(var i = 0; i<bindings.length; i++){
+            graphs.push({gid: bindings[i]["GraphID"], type: bindings[i]["GraphType"], head: bindings[i]["Head"], updated: bindings[i]["Time"]})
+        }
+        return graphs;
     } 
 
     return [graphStructure, report, loading]
