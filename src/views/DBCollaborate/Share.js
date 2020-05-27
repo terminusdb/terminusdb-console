@@ -3,7 +3,7 @@
  */
 import React, {useState} from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
-import { CREATE_REMOTE_FORM } from "../createDB/constants.createdb"
+import { CREATE_REMOTE_FORM } from "../CreateDB/constants.createdb"
 
 
 export const Share = ({onCancel, onCreate, onEdit, report}) => {
