@@ -633,7 +633,7 @@ div.css-yk16xz-control{
     /*border-color: #000 !important;*/
     border:2px solid rgb(226, 232, 240) !important;
     border-radius: 4px;
-    max-width: 150px;
+    /*max-width: 150px;*/
 }
 
 .logo{
@@ -2108,7 +2108,7 @@ div.css-yk16xz-control:hover{
     border:2px solid rgb(203, 213, 224);
 }
 
-.tcf-textarea:hover, .tcf-checkbox:hover, .tcf-select:hover { 
+.tcf-textarea:hover, .tcf-checkbox:hover, .tcf-select:hover {
     border:1px solid rgb(203, 213, 224);
 }
 
@@ -2293,7 +2293,7 @@ h4.prefix-section-header {
     height: 14px;
 }
 
-/** styles for river of sections 
+/** styles for river of sections
 * manage / collaborate pages
 */
 .ros-container {
@@ -2323,7 +2323,7 @@ h4.prefix-section-header {
     cursor: pointer;
 }
 
-.ros-close-icon, 
+.ros-close-icon,
 .ros-icon {
     color: rgba(0, 30, 86, 0.1)
 }
@@ -2402,5 +2402,3 @@ h4.prefix-section-header {
     float: right;
     margin-right: -10px;
 }
-
-
