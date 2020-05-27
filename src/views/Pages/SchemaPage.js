@@ -10,28 +10,24 @@ import { Properties } from '../Schema/Properties'
 import { OWL } from '../Schema/OWL'
 import { GraphMaker } from '../Schema/GraphManager'
 import { PrefixManager } from '../Schema/PrefixManager'
-import GraphFilter  from '../Schema/GraphFilter'
-import {TabbedPageView} from "../Templates/TabbedPageView"
+import { TabbedPageView } from "../Templates/TabbedPageView"
+import { loadGraphStructure } from "../../components/Query/MetadataLoader"
 
 const SchemaPage = (props) => {
 
-    const [graphs, setGraphs] = useState();
+    const [graphStructure, report, loading] = loadGraphStructure()
     const [graphFilter, setGraphFilter] = useState();
-    const [rebuild, setRebuild] = useState(0);
-    const [hasSchema, setHasSchema] = useState(false);
+
     const [graphsUpdated, setGraphsUpdated] = useState(false);
-    const [hasInference, setHasInference] = useState(false);
 
     const [pageError, setPageError] = useState(false)
-    const [loading, setLoading] = useState(false);
-    const {woqlClient} = WOQLClientObj();
 
     function headChanged(){
-        setRebuild(rebuild+1)
+        //setRebuild(rebuild+1)
     }
 
     function structureUpdated(){
-        setGraphsUpdated(true)
+        //setGraphsUpdated(true)
     }
     
     function schemaUpdated(){
@@ -52,19 +48,19 @@ const SchemaPage = (props) => {
         let tabs = []
         let sections = []
         if(hasSchema && graphFilter.type == "schema"){
-            tabs.push(<Classes graph={graphFilter} rebuild={rebuild} onChangeGraph={graphFilterChanged} />)
+            tabs.push( <Classes key="cl" graph={graphFilter} onChangeGraph={graphFilterChanged} /> )
             sections.push({id: SCHEMA_CLASSES_ROUTE, label: CLASSES_TAB})
-            tabs.push(<Properties graph={graphFilter} rebuild={rebuild} onChangeGraph={graphFilterChanged} />)
+            tabs.push(<Properties key = "pr" graph={graphFilter} onChangeGraph={graphFilterChanged} />)
             sections.push({id: SCHEMA_PROPERTIES_ROUTE, label: PROPERTIES_TAB})
         }
         if(hasSchema || hasInference){
-            tabs.push(<OWL graph={graphFilter} rebuild={rebuild} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated}/>)
+            tabs.push(<OWL key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated}/>)
             sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
         }
-        tabs.push(<GraphMaker graphs={graphs} rebuild={rebuild} onUpdate={structureUpdated} />)
+        tabs.push(<GraphMaker key="gr" graphs={graphStructure} onUpdate={structureUpdated} />)
         sections.push({id: SCHEMA_GRAPHS_ROUTE, label: GRAPHS_TAB})
 
-        tabs.push(<PrefixManager rebuild={rebuild} onUpdate={prefixesUpdated} />)
+        tabs.push(<PrefixManager key="pr" onUpdate={prefixesUpdated} />)
         sections.push({id: SCHEMA_PREFIXES_ROUTE, label: PREFIXES_TAB})
         return [tabs, sections]
     }

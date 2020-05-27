@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminusdb-client';
 import { WOQLQueryContainerHook } from "./WOQLQueryContainerHook"
-
+import { TERMINUS_ERROR } from "../../constants/identifiers"
+import { FAILED_LOADING_GRAPH_STRUCTURE } from "./constants.query"
 /**
  * Library of functions which load useful metadata via woql queries and return it in simple json formats that are easier to process
  */
@@ -26,6 +27,10 @@ export const loadGraphStructure = (branch, ref) => {
     const [report, setReport] = useState()
     const [graphStructure, setGraphStructure] = useState()
     const {woqlClient} = WOQLClientObj();
+    const [loading, setLoading] = useState()
+
+    ref = ref || woqlClient.ref()
+    branch = branch || woqlClient.checkout()
 
     useEffect(() => {
         askTerminus(branch, ref)
@@ -39,13 +44,16 @@ export const loadGraphStructure = (branch, ref) => {
         .catch((e) => {
             setReport({status: TERMINUS_ERROR, message: FAILED_LOADING_GRAPH_STRUCTURE, error: e})
         })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     function structureFromBindings(bindings){
         return bindings;
     } 
 
-    return [graphStructure, report]
+    return [graphStructure, report, loading]
 }
 
 /*function loadBranchStructure(){
