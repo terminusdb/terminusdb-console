@@ -1045,6 +1045,7 @@ p.dscr{
 }
 
 .under-construction-header{
+    padding: 40px 10px 10px 20px !important;
     border-bottom: 2px solid rgb(226, 232, 240);
     background-image: url(https://terminusdb.com/img/cards/card-shape-3.svg);
 }
@@ -1063,7 +1064,6 @@ p.dscr{
 
 .under-construction-icon {
     font-size: xxx-large;
-    margin-top: 15px;
     padding: 2px;
     color: rgba(0, 30, 86, 0.7);
     /*color: rgba(0, 30, 86, 0.8);*/
