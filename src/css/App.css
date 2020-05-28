@@ -1045,7 +1045,7 @@ p.dscr{
 }
 
 .under-construction-header{
-    border-bottom: 1px solid #041433;
+    border-bottom: 2px solid rgb(226, 232, 240);
     background-image: url(https://terminusdb.com/img/cards/card-shape-3.svg);
 }
 
