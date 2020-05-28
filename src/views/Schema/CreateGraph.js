@@ -1,6 +1,6 @@
 import React from "react";
 import {TCForm, TCSubmitWrap} from  "../../components/Form/FormComponents"
-import { CREATE_GRAPH_FORM } from "./constants"
+import { CREATE_GRAPH_FORM } from "./constants.schema"
 import { Button } from "reactstrap";
 
 export const CreateGraph = ({onCancel, onCreate, onEdit, visible, report}) => {

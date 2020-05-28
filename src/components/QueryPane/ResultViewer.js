@@ -4,7 +4,6 @@ import { WOQLGraph } from '@terminusdb/terminusdb-react-graph';
 import { WOQLTable } from '@terminusdb/terminusdb-react-table';
 import TerminusClient from '@terminusdb/terminusdb-client';
 //import { WOQLChart } from '@terminusdb/terminusdb-react-chart';
-import { Container } from 'reactstrap'
 
 export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) => {
 

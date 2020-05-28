@@ -1,6 +1,6 @@
 import {  Nav,NavItem, Button } from "reactstrap";
-import React, { useState, useEffect } from "react";
-import * as links from '../../variables/pageLabels'
+import React from "react";
+import {LOGIN_LABEL, LOGIN_BUTTON_CSS} from './constants.navbar'
 import { useAuth0 } from "../../react-auth0-spa";
 
 export const Login = (props) => {
@@ -10,9 +10,9 @@ export const Login = (props) => {
             <NavItem>
                 <Button id = "qsLoginBtn"
                     color = "primary"
-                    className = "btn-margin"
+                    className = {LOGIN_BUTTON_CSS}
                     onClick = {() => {loginWithRedirect({})}}>
-                    {links.LOGIN.label}
+                    {LOGIN_LABEL}
                 </Button>
             </NavItem>
         </Nav>
