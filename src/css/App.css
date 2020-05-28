@@ -1053,6 +1053,10 @@ p.dscr{
     font-size: 17px;
 }
 
+.under-construction-input {
+    border: 2px solid rgb(226, 232, 240) !important;
+}
+
 .under-construction-icon {
     font-size: xxx-large;
     margin-top: 15px;

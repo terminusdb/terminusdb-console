@@ -49,6 +49,7 @@ export const UnderConstruction = (props) => {
                                 name="useremail"
                                 id="useremail"
                                 placeholder={UNDER_CONSTRUCTION.emailPlaceholder}
+                                className={UNDER_CONSTRUCTION.inputClassName}
                                 ref = { register({ validate: value => value.length > 0}) }
                             />
                             <hr className="my-space-25"/>
@@ -56,6 +57,7 @@ export const UnderConstruction = (props) => {
                                 placeholder={UNDER_CONSTRUCTION.messagePlaceholder}
                                 name="usermessage"
                                 id="usermessage"
+                                className={UNDER_CONSTRUCTION.inputClassName}
                                 ref = { register({ validate: value => value.length > 0}) }
                             />
                             <hr className = "my-space-25"/>

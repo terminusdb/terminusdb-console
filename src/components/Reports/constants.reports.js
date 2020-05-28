@@ -77,6 +77,7 @@ export const UNKNOWN_ERROR = "API Failure - check your network connection and ma
 export const UNDER_CONSTRUCTION = {
     buttonClassName: "",
     introClassName: "under-construction-intro-icon",
+    inputClassName: "under-construction-input",
     buttonText: "Under Construction",
     submitText: "Submit Your Feedback",
     introText: " is not yet publically available but is on our roadmap for public release. If this is a feature that particularly interests you, please fill in the form below and let us know why! It is very helpful to us to know which specific features to focus on and why and, at this stage, your input can be very influential",
