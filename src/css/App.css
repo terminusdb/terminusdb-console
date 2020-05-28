@@ -1006,6 +1006,10 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
+.ml-auto{
+    margin-left: calc(100% - 750px) !important;
+}
+
 ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
