@@ -11,7 +11,7 @@ export const LANGUAGE_DROPDOWN = "Language Views"
 
 export const EDITOR_READ_OPTIONS = {
     noHScroll: false,
-    readOnly: "nocursor",
+    readOnly: true,
     lineNumbers: true,
     theme: "mdn-like"
 }
