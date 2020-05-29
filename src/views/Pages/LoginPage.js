@@ -27,7 +27,7 @@ export const LoginPage = () => {
     			<img className={LOGIN_LOGO_CSS} src={LOGIN_LOGO} alt="" width="70%" height="auto"></img>
 	    		<h3 className={LOGIN_PROMPT_CSS} style={{color:"white"}}>{LOGIN_PROMPT}</h3>
 	    		<FormGroup>	        		
-	        		<Input onBlur={onBlur} required type="password" name="password" id="password" placeholder={LOGIN_PLACEHOLDER} />
+	        		<Input autoFocus onBlur={onBlur} required type="password" name="password" id="password" placeholder={LOGIN_PLACEHOLDER} />
 	      		</FormGroup>
 	      		<button className={LOGIN_BUTTON_CSS} onClick={setKeyUpdate}>{CONNECT_PROMPT}</button>
 	      	</Form>
