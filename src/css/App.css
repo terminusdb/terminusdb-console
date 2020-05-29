@@ -1006,6 +1006,10 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
+.ml-auto{
+    margin-left: calc(100% - 750px) !important;
+}
+
 ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
@@ -1038,6 +1042,31 @@ div.user-card-bg img {
 p.dscr{
     margin: 50px 0px 50px 0px;
     padding-left: 100px;
+}
+
+.under-construction-header{
+    padding: 40px 10px 10px 20px !important;
+    border-bottom: 2px solid rgb(226, 232, 240);
+    background-image: url(https://terminusdb.com/img/cards/card-shape-3.svg);
+}
+
+.under-construction-header .modal-title{
+    font-size: large;
+}
+
+.under-construction-intro-icon {
+    font-size: 17px;
+}
+
+.under-construction-input {
+    border: 2px solid rgb(226, 232, 240) !important;
+}
+
+.under-construction-icon {
+    font-size: xxx-large;
+    padding: 2px;
+    color: rgba(0, 30, 86, 0.7);
+    /*color: rgba(0, 30, 86, 0.8);*/
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {

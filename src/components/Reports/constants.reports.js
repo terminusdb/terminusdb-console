@@ -56,7 +56,7 @@ export const SHOW_ERROR_DETAILS =  "more"
 export const SHOW_ERROR_DETAILS_CSS = "terminus-show-error-details"
 
 export const QUERY_CAUSED_ERROR = "Query Failed"
-export const NO_RESULTS = "No Results Returned" 
+export const NO_RESULTS = "No Results Returned"
 export const NO_RESULTS_ADVICE = "Check your query for errors and try again"
 export const RESULT_REPORT_LABEL_CSS = "terminus-result-report-label"
 export const RESULT_REPORT_COUNT_CSS = "terminus-result-report-count"
@@ -76,12 +76,16 @@ export const UNKNOWN_ERROR = "API Failure - check your network connection and ma
 
 export const UNDER_CONSTRUCTION = {
     buttonClassName: "",
-    introClassName: "",
+    introClassName: "under-construction-intro-icon",
+    inputClassName: "under-construction-input",
     buttonText: "Under Construction",
     submitText: "Submit Your Feedback",
     introText: " is not yet publically available but is on our roadmap for public release. If this is a feature that particularly interests you, please fill in the form below and let us know why! It is very helpful to us to know which specific features to focus on and why and, at this stage, your input can be very influential",
     headerText: " is currently being tested for public release",
     formWrapperClassName: "",
     messagePlaceholder: "Enter your message",
-    emailPlaceholder: "Enter your email"
+    emailPlaceholder: "Enter your email",
+    icon: "tools",
+    iconClassName: "mr-3 under-construction-icon",
+    headerClassName: 'under-construction-header'
 }
