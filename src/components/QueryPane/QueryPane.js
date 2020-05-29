@@ -29,37 +29,36 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
     //if(!initcontent && query){
         //initcontent = makeWOQLIntoString(query, baseLanguage)
     //}
-    const disabled = bindings ? {} : {disabled:true};
+    const disabled = {}////bindings ? {} : {disabled:true};
 
     return(
         <>
-            <ReportWrapper currentReport={report} />
-            <Tabs activeKey="viewer" id="query_tabs">
-                <Tab eventKey="query" label={QUERY_PANEL_TITLE}>
-                <QueryEditor 
-                    baseLanguage={baseLanguage}
-                    setBaseLanguage={setBaseLanguage}
-                    content={content}
-                    saveContent={setContent}
-                    showLanguage={showLanguage}
-                    setShowLanguage={setShowLanguage}
-                    showContent={showContent}
-                    setShowContent={setShowContent}
-                    display={"hidden"} 
-                    editable={true} 
-                    query={woql} 
-                    updateQuery={updateQuery} 
-                    languages={["js", "json", "python"]}>
-                    <QueryLibrary library="editor"/>
-                </QueryEditor>
+            <ReportWrapper currentReport={report} />          
+            <Tabs defaultActiveKey={2} activeKey={2} id="query_tabs">
+                <Tab eventKey={1} label={QUERY_PANEL_TITLE}>
+                    <QueryEditor 
+                        baseLanguage={baseLanguage}
+                        setBaseLanguage={setBaseLanguage}
+                        content={content}
+                        saveContent={setContent}
+                        showLanguage={showLanguage}
+                        setShowLanguage={setShowLanguage}
+                        showContent={showContent}
+                        setShowContent={setShowContent}
+                        editable={true} 
+                        query={woql} 
+                        updateQuery={updateQuery} 
+                        languages={["js", "json", "python"]}>
+                        <QueryLibrary library="editor"/>
+                    </QueryEditor>
                 </Tab>
-                <Tab eventKey="viewer" label="Result Viewer" {...disabled}>
-                <ResultQueryPane 
-                    resultView={resultView} 
-                    bindings={bindings} 
-                    query={woql} 
-                    updateQuery={updateQuery}/>
-                </Tab>
+                <Tab eventKey={2} label="Result Viewer" {...disabled}>
+                    <ResultQueryPane 
+                        resultView={resultView} 
+                        bindings={bindings} 
+                        query={woql} 
+                        updateQuery={updateQuery}/>
+                    </Tab>
             </Tabs>
         </>
     )
