@@ -23,7 +23,7 @@ export const LoadDatabaseListDetails = (dblist) => {
 
 
 
-export const loadGraphStructure = (branch, ref) => {
+export const loadGraphStructure = (head) => {
     const [report, setReport] = useState()
     const [graphStructure, setGraphStructure] = useState()
     const {woqlClient} = WOQLClientObj();
@@ -59,6 +59,9 @@ export const loadGraphStructure = (branch, ref) => {
 
     return [graphStructure, report, loading]
 }
+
+
+
 
 /*function loadBranchStructure(){
 

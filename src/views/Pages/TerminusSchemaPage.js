@@ -5,7 +5,7 @@ import { SCHEMA_CLASSES_ROUTE, SCHEMA_PROPERTIES_ROUTE, SCHEMA_GRAPHS_ROUTE, SCH
 import { Classes } from '../Schema/Classes'
 import { Properties } from '../Schema/Properties'
 import { OWL } from '../Schema/OWL'
-import { GraphMaker } from '../Schema/GraphManager'
+import { GraphManager } from '../Schema/GraphManager'
 import { PrefixManager } from '../Schema/PrefixManager'
 import { TabbedPageView } from '../Templates/TabbedPageView'
 
@@ -33,7 +33,7 @@ const TerminusSchemaPage = (props) => {
         tabs.push(<OWL graph={graphFilter} onUpdate={schemaUpdated} onChangeGraph={graphFilterChanged} />)
         sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
 
-        tabs.push(<GraphMaker graphs={graphs} />)
+        tabs.push(<GraphManager graphs={graphs} />)
         sections.push({id: SCHEMA_GRAPHS_ROUTE, label: GRAPHS_TAB})
 
         tabs.push(<PrefixManager />)
