@@ -12,34 +12,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-/*
-@media (min-width: 1012px)
-.d-lg-flex {
-    display: flex!important;
-}
-
-@media (min-width: 1012px)
-.p-responsive {
-    padding-right: 16px!important;
-    padding-left: 16px!important;
-}
-@media (min-width: 544px)
-.p-responsive {
-    padding-right: 40px!important;
-    padding-left: 40px!important;
-}
-.p-responsive {
-    padding-right: 16px!important;
-    padding-left: 16px!important;
-}
-.flex-items-center {
-    align-items: center!important;
-}
-.container-xl {
-    max-width: 1280px;
-}
-.container-lg, .container-xl {
-    margin-right: auto;
-    margin-left: auto;
-}*/

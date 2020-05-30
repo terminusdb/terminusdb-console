@@ -16,7 +16,7 @@ module.exports = (env, argv) => ({
     filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
-  devtool:false,
+  devtool:argv.mode === 'production' ? false : '#inline-source-map',
   plugins: [
     new Dotenv({path: path.resolve(__dirname, './.env')}),
     new HtmlWebPackPlugin({
