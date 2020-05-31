@@ -7,13 +7,18 @@ import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+//import {HistoryNavigatorObj} from "../../init/history-navigator-instance";
 
 const DocumentPage = (props) => {
-    const {woqlClient} = WOQLClientObj();
-    const [happiness, setHappiness] = useState(false);
+    /*
+    * global woqlClient obj
+    */
+    const {woqlClient,refId} = WOQLClientObj();
+   // const {refId} = HistoryNavigatorObj();
 
+    const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(docQuery);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refId);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)
@@ -36,9 +41,9 @@ const DocumentPage = (props) => {
         })
     }
 
-    function doRebuild(){
+    /*function doRebuild(){
         updateQuery(docQuery)
-    }
+    }*/
 
     function interpretEmptyResult(){
         const hasClasses = TerminusClient.WOQL.lib().concreteDocumentClasses()
@@ -69,8 +74,8 @@ const DocumentPage = (props) => {
     }, [report]);
 
     return (
-    
-    <SimplePageView page="document" onHeadChange={doRebuild}>
+    //onHeadChange={doRebuild}
+    <SimplePageView page="document" >
         {!happiness &&
             <Loading />
         }

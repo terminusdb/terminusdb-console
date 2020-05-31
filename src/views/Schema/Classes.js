@@ -7,10 +7,13 @@ import { TERMINUS_COMPONENT } from "../../constants/identifiers"
 import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
 import { EmptyResult } from "../../components/Reports/EmptyResult"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const Classes = (props) => {
+    const {woqlClient} = WOQLClientObj();
+
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(getClassQuery(props.graph));
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,getClassQuery(props.graph));
 
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type )){

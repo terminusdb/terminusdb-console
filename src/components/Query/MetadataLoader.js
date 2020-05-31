@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { WOQLQueryContainerHook } from "./WOQLQueryContainerHook"
 import { TERMINUS_ERROR } from "../../constants/identifiers"
 import { FAILED_LOADING_GRAPH_STRUCTURE } from "./constants.query"
 /**

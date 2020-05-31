@@ -12,7 +12,7 @@ import { LoggedIn } from "./LoggedIn"
 
 export const ConsoleNavbar = (props) => {
     const {isAuthenticated, user } = useAuth0();
-    const {woqlClient} = WOQLClientObj();
+    const {woqlClient,setCommitRefId} = WOQLClientObj();
     const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
     const [isOpen, setIsOpen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
@@ -78,7 +78,7 @@ export const ConsoleNavbar = (props) => {
                         <Container>
                             <Row>
                                 <Col>
-                                    <HistoryNavigator onHeadChange={props.onHeadChange}/>
+                                    <HistoryNavigator woqlClient={woqlClient} setRefId={setCommitRefId}/>
                                 </Col>
                             </Row>
                         </Container>
@@ -91,3 +91,4 @@ export const ConsoleNavbar = (props) => {
         </div>
     )
 };
+//<HistoryNavigator onHeadChange={props.onHeadChange}/>

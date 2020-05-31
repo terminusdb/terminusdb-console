@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { WOQLClientObj } from "../../init/woql-client-instance";
+//import { WOQLClientObj } from "../../init/woql-client-instance";
 import {TerminusClientInterceptor} from './TerminusClientInterceptor';
-
 import TerminusClient from '@terminusdb/terminusdb-client';
 
-function WOQLQueryContainerHook(startQuery){	
+function WOQLQueryContainerHook(woqlClient,startQuery,refId){	
 	const query=startQuery || false; 
 	const [woql, setWoqlQuery] = useState(query);
     const [report, setReport] = useState();
     const [bindings, setBindings] = useState();
-    const {woqlClient} = WOQLClientObj();
+    //const {woqlClient} = WOQLClientObj();
 
     const [cmsg, setCMsg] = useState("Update Query from Console Query Page")
 
@@ -51,7 +50,7 @@ function WOQLQueryContainerHook(startQuery){
 
     useEffect(() => {       
         if(woql!==false) executeQuery();
-    }, [woql])
+    }, [woql,refId])
 
     
     return [updateQuery, report, bindings, woql];

@@ -13,6 +13,8 @@ export const WOQLClientProvider = ({children,params}) => {
     const [newKeyValue, setNewKeyValue] = useState(undefined);
     const [reload, setReloadTime] = useState(0);
 
+    const [refId, setRef] = useState(0);
+
     let database=false;
     let account=false;
     //let key;
@@ -23,33 +25,33 @@ export const WOQLClientProvider = ({children,params}) => {
         */
 
         useEffect(() => {
-        const initWoqlClient = async () => {
-            setShowLogin(false);
-            setLoading(true);
-            setError(false);
+            const initWoqlClient = async () => {
+                setShowLogin(false);
+                setLoading(true);
+                setError(false);
 
-            const opts = params || {};
-            const dbClient = new TerminusClient.WOQLClient();
+                const opts = params || {};
+                const dbClient = new TerminusClient.WOQLClient();
 
-            if(!opts.key){
-                setShowLogin(true);
-            }else{
-                try{
-                    const result = await dbClient.connect(opts);
-                    setWoqlClient(dbClient);               
-                    setLoading(false);
-                    /*
-                    * we can't know when the server response will be arrive
-                    * if we have already set this variable we can unpdate woqlClient
-                    */
-                    if(database)setDatabase(database)
-                    if(account)setAccount(account)
-                }catch(err){
-                    setError(err)
+                if(!opts.key){
+                    setShowLogin(true);
+                }else{
+                    try{
+                        const result = await dbClient.connect(opts);
+                        setWoqlClient(dbClient);               
+                        setLoading(false);
+                        /*
+                        * we can't know when the server response will be arrive
+                        * if we have already set this variable we can unpdate woqlClient
+                        */
+                        if(database)setDatabase(database)
+                        if(account)setAccount(account)
+                    }catch(err){
+                        setError(err)
+                    }
                 }
             }
-        }
-        initWoqlClient();
+            initWoqlClient();
         // eslint-disable-next-line
         }, [params,newKeyValue,reload]);
 
@@ -79,6 +81,14 @@ export const WOQLClientProvider = ({children,params}) => {
             setReloadTime(Date.now());
         }
 
+        /*
+        * set the commit global reference 
+        */
+        const setCommitRefId = (refId) =>{
+            woqlClient.ref(refId)
+            setRef(refId)
+        }
+
         const setDatabase =(dbName) => {
             if(woqlClient){
                 woqlClient.db(dbName)
@@ -100,6 +110,8 @@ export const WOQLClientProvider = ({children,params}) => {
                 setAccount,
                 setDatabase,
                 setKey,
+                refId,
+                setCommitRefId,
                 showLogin,
                 reconnectServer
             }}

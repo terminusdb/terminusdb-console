@@ -13,9 +13,12 @@ import {QUERY_PANEL_TITLE} from "./constants.querypane"
 * this is only the queryEditor you don't need to process result;
 */
 export const QueryPane = ({query,className,resultView, startLanguage, queryText}) => {
+    /*
+    * maybe a copy of this
+    */
     const {woqlClient} = WOQLClientObj();
-    TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
+    //TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(WOQLClientObj,query);
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 
 
