@@ -11,7 +11,7 @@ import { OWL } from '../Schema/OWL'
 import { GraphManager } from '../Schema/GraphManager'
 import { PrefixManager } from '../Schema/PrefixManager'
 import { TabbedPageView } from "../Templates/TabbedPageView"
-import { loadGraphStructure } from "../../components/Query/MetadataLoader"
+import { loadGraphStructure } from "../../components/Query/QueryLoaders"
 
 const SchemaPage = (props) => {
 

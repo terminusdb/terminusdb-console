@@ -7,7 +7,7 @@ import { TabbedPageView } from '../Templates/TabbedPageView'
 import { CreateDatabase } from '../CreateDB/CreateDatabase'
 import { CREATE_DB_ROUTE, SERVER_ROUTE } from "../../constants/routes"
 import { DBList } from "../Tables/DBList"
-import { LoadDatabaseListDetails } from "../../components/Query/MetadataLoader"
+import { LoadDatabaseListDetails } from "../../components/Query/QueryLoaders"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 
 const ServerHome = (props) => {

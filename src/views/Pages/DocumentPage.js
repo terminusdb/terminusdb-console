@@ -19,17 +19,18 @@ const DocumentPage = (props) => {
         setHappiness(NO_DOCUMENT)
         const hasSchemaGraph = TerminusClient.WOQL.lib().loadBranchGraphNames(woqlClient)
         woqlClient.query(hasSchemaGraph).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, hasSchemaGraph)
-            let found = false
-            var res
-            while(res = wr.next()){
-                if(res['SchemaName']["@value"]){
-                    found = true
-                    continue
+            if(results.bindings && results.bindings.length){
+                let found = false
+                for(var i = 0; i<results.bindings.length ; i++){
+                    let res = results.bindings[0]
+                    if(res['SchemaName']["@value"]){
+                        found = true
+                        continue
+                    }
                 }
-            }
-            if(!found){
-                setHappiness(DOCUMENT_NO_SCHEMA)
+                if(!found){
+                    setHappiness(DOCUMENT_NO_SCHEMA)
+                }    
             }
         }).catch( (e) => {
             setHappiness(SYSTEM_ERROR)

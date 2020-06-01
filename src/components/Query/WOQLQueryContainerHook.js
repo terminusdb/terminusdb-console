@@ -9,6 +9,7 @@ function WOQLQueryContainerHook(startQuery){
 	const [woql, setWoqlQuery] = useState(query);
     const [report, setReport] = useState();
     const [bindings, setBindings] = useState();
+    const [loading, setLoading] = useState();
     const {woqlClient} = WOQLClientObj();
 
     const [cmsg, setCMsg] = useState("Update Query from Console Query Page")
@@ -40,13 +41,17 @@ function WOQLQueryContainerHook(startQuery){
     }
 
     function executeQuery() {
+        setLoading(true)
 		woql.execute(woqlClient, cmsg)
 	    .then((response) => {
 	        processSuccessfulResult(response)//, start, Date.now())
 	    })
 	    .catch((error) => {
 	        processErrorResult(error)
-	    })
+        })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     useEffect(() => {       
@@ -54,7 +59,7 @@ function WOQLQueryContainerHook(startQuery){
     }, [woql])
 
     
-    return [updateQuery, report, bindings, woql];
+    return [updateQuery, report, bindings, woql, loading];
     
 }
  

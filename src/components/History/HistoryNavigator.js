@@ -34,11 +34,12 @@ export const HistoryNavigator = (props) => {
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(dbClient)
         dbClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q)
             let bchoices = []
-            var res
-            while(res = wr.next()){
-               bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
+            if(results.bindings && results.bindings.length){
+                for(var i = 0; i<results.bindings.length; i++){
+                    let res = results[i]
+                    bchoices.push({value: res['BranchName']["@value"], label: res['BranchName']["@value"]})
+                }
             }
             setBranches(bchoices)
         })
@@ -48,17 +49,18 @@ export const HistoryNavigator = (props) => {
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClient)
         dbClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q)
-            let res = wr.first()
-            setBranchInfo({
-                id: dbClient.checkout(),
-                last: res['Last']['@value'],
-                first: res['First']['@value'] || res['Last']['@value'],
-                head: res['HeadID']["@value"],
-                count: ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1),
-            })
-            setRef(res['HeadID']["@value"])
-            if(props.setCreated) props.setCreated(res['First']['@value'] || res['Last']['@value'])
+            if(results.bindings && results.bindings.length){
+                let res = results.bindings[0]
+                setBranchInfo({
+                    id: dbClient.checkout(),
+                    last: res['Last']['@value'],
+                    first: res['First']['@value'] || res['Last']['@value'],
+                    head: res['HeadID']["@value"],
+                    count: ((res['Path'] && Array.isArray(res['Path'])) ? res['Path'].length : 1),
+                })
+                setRef(res['HeadID']["@value"])
+                if(props.setCreated) props.setCreated(res['First']['@value'] || res['Last']['@value'])
+            }
         })
     }, [branch]);
 
@@ -67,17 +69,18 @@ export const HistoryNavigator = (props) => {
         if(ref){
             const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClient, ref)
             dbClient.query(q2).then((cresults) => {
-                let cwr = new TerminusClient.WOQLResult(cresults, q2)
-                let cres = cwr.first()
-                let commie = extractCommitData(cres)
-                commie.id = ref
-                if(settingCommit){
-                    setCurrent(commie.time)
-                    setSettingCommit(false)
-                    if(props.onHeadChange) props.onHeadChange(branch, ref)
+                if(results.bindings && results.bindings.length){
+                    let cres = results.bindings[0]
+                    let commie = extractCommitData(cres)
+                    commie.id = ref
+                    if(settingCommit){
+                        setCurrent(commie.time)
+                        setSettingCommit(false)
+                        if(props.onHeadChange) props.onHeadChange(branch, ref)
+                    }
+                    if(props.setCommitInfo) props.setCommitInfo(commie)
+                    setCommit(commie)
                 }
-                if(props.setCommitInfo) props.setCommitInfo(commie)
-                setCommit(commie)
             })
         }
     }, [ref]);
@@ -89,18 +92,19 @@ export const HistoryNavigator = (props) => {
             const fts = String(ts)
             const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClient, fts)
             dbClient.query(q3).then((lresults) => {
-                let lwr = new TerminusClient.WOQLResult(lresults, q3)
-                let lres = lwr.first()
-                if(lres){
-                    let commie = extractCommitData(lres)
-                    if(commie.child){
-                        dbClient.ref(commie.id)
-                    }
-                    else dbClient.ref(false)
-                    if(!currentCommit || commie.id != currentCommit.id){
-                         setCommit(commie)
-                         if(props.onHeadChange) props.onHeadChange(branch, commie.id)
-                         if(props.setCommitInfo) props.setCommitInfo(commie)
+                if(results.bindings && results.bindings.length){
+                    let lres = results.bindings[0]
+                    if(lres){
+                        let commie = extractCommitData(lres)
+                        if(commie.child){
+                            dbClient.ref(commie.id)
+                        }
+                        else dbClient.ref(false)
+                        if(!currentCommit || commie.id != currentCommit.id){
+                            setCommit(commie)
+                            if(props.onHeadChange) props.onHeadChange(branch, commie.id)
+                            if(props.setCommitInfo) props.setCommitInfo(commie)
+                        }
                     }
                 }
             })

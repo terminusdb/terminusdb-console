@@ -30,11 +30,10 @@ export const MonitorDB = (props) => {
     useEffect(() => {
         const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
         woqlClient.query(q).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, q);
-			if(wr.count() > 1)
-				countBranch(wr.count() + ' Branches')
-		    else countBranch(wr.count() + ' Branch')
-			var inf = prepareCommitInfo(wr)
+			if(results.bindings &&  results.bindings.length > 1)
+				countBranch(results.bindings.length + ' Branches')
+		    else if(results.bindings) countBranch(results.bindings.length + ' Branch')
+			var inf = prepareCommitInfo()
             setCommitInfo(inf)
 			setOriginInfo('Your database has processed all transactions correctly and is up to dated')
         })

@@ -46,8 +46,10 @@ export const CopyRemoteForm = () => {
         update_start = Date.now()
         setDetailsLoaded(true)
         setUpdateLoading(true)
-        let accountid = woqlClient.account() || woqlClient.uid()
-        return woqlClient.clonedb(sourceURL)
+        woqlClient.account( woqlClient.uid() )
+        woqlClient.remote_auth({type: "basic", content: "YWRtaW46cm9vdA=="})
+        let src = {"remote_url": sourceURL, "label": "teee", "comment": "xxx"}
+        return woqlClient.clonedb(src, "x")
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
