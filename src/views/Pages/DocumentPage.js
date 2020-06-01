@@ -14,8 +14,7 @@ const DocumentPage = (props) => {
     * global woqlClient obj
     */
     const {woqlClient,refId} = WOQLClientObj();
-   // const {refId} = HistoryNavigatorObj();
-
+    
     const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refId);
