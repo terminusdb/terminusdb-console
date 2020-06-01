@@ -1,31 +1,27 @@
 import React, { useState, useEffect, useContext } from "react";
 import TerminusClient from '@terminusdb/terminusdb-client';
-import { WOQLClientObj } from "./woql-client-instance";
 import { addHours, startOfHour } from "date-fns";
 
 export const HistoryNavigatorContext = React.createContext();
 export const HistoryNavigatorObj = () => useContext(HistoryNavigatorContext);
 
-export const HistoryNavigatorProvider = ({children,props={}}) => {
-    const {woqlClient} = WOQLClientObj();
-    const dbClientCopy=(props.local ? woqlClient.copy() : woqlClient)
+export const HistoryNavigatorProvider = ({children,woqlClient}) => {
 
-    // no history for terminus (master) db
-    let nowts = props.now || parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
+    let nowts = parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
     const [branches, setBranches] = useState([])//props.branches);
-    const [refId, setRef] = useState(null);//props.ref
+    const [refId, setRef] = useState(woqlClient.ref());//props.ref
     const [settingCommit, setSettingCommit] = useState(false);
     const [end, setEnd] = useState(nowts);
     const [current, setCurrent] = useState(nowts);
     const [currentCommit, setCommit] = useState();
-    const [branch, setBranch] = useState(props.branch || dbClientCopy.checkout());
+    const [branch, setBranch] = useState(woqlClient.checkout());
     const [branchInfo, setBranchInfo] = useState();
 
 
     //retrieves details of the available branches
     useEffect(() => {
-        const q = TerminusClient.WOQL.lib().loadBranchNames(dbClientCopy)
-        dbClientCopy.query(q).then((results) => {
+        const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
+        woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
             let bchoices = []
             var res
@@ -38,12 +34,12 @@ export const HistoryNavigatorProvider = ({children,props={}}) => {
 
     //retrieves details of the branch, only when the branch is changed
     useEffect(() => {
-        const q = TerminusClient.WOQL.lib().loadBranchLimits(dbClientCopy)
-        dbClientCopy.query(q).then((results) => {
+        const q = TerminusClient.WOQL.lib().loadBranchLimits(woqlClient)
+        woqlClient.query(q).then((results) => {
             let wr = new TerminusClient.WOQLResult(results, q)
             let res = wr.first()
             setBranchInfo({
-                id: dbClientCopy.checkout(),
+                id: woqlClient.checkout(),
                 last: res['Last']['@value'],
                 first: res['First']['@value'] || res['Last']['@value'],
                 head: res['HeadID']["@value"],
@@ -57,8 +53,8 @@ export const HistoryNavigatorProvider = ({children,props={}}) => {
     //retrieves details of the commit with id ref
     useEffect(() => {
         if(refId){
-            const q2 = TerminusClient.WOQL.lib().loadCommitDetails(dbClientCopy, refId)
-            dbClientCopy.query(q2).then((cresults) => {
+            const q2 = TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, refId)
+            woqlClient.query(q2).then((cresults) => {
                 let cwr = new TerminusClient.WOQLResult(cresults, q2)
                 let cres = cwr.first()
                 let commie = undefined;
@@ -81,8 +77,8 @@ export const HistoryNavigatorProvider = ({children,props={}}) => {
         if(ts && (Math.floor(current) != Math.floor(ts))){
             setCurrent(ts)
             const fts = String(ts)
-            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(dbClientCopy, fts)
-            dbClientCopy.query(q3).then((lresults) => {
+            const q3 = TerminusClient.WOQL.lib().loadCommitBefore(woqlClient, fts)
+            woqlClient.query(q3).then((lresults) => {
                 let lwr = new TerminusClient.WOQLResult(lresults, q3)
                 let lres = lwr.first()
                 if(lres){
@@ -92,8 +88,12 @@ export const HistoryNavigatorProvider = ({children,props={}}) => {
                         *I add the commit at the main instance of terminus client
                         */
                         woqlClient.ref(commie.id)
+                        setRef(commie.id)
                     }
-                    else woqlClient.ref(false)
+                    else {
+                        woqlClient.ref(false)
+                        setRef(false)
+                    }
 
                     if(!currentCommit || commie.id != currentCommit.id){
                          setCommit(commie)
@@ -125,10 +125,10 @@ export const HistoryNavigatorProvider = ({children,props={}}) => {
         return commie
     }
 
-    const changeBranch = (bid)=>{
+    const changeBranch = (bid)=>{       
+        woqlClient.ref(false)
+        woqlClient.checkout(bid)
         setBranch(bid)
-        dbClientCopy.ref(false)
-        dbClientCopy.checkout(bid)
         //if(props.onHeadChange) props.onHeadChange(bid, false)
     }
 

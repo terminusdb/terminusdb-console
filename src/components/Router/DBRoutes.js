@@ -11,6 +11,8 @@ import TerminusHome from "../../views/Pages/TerminusHome"
 import {HistoryNavigatorProvider} from "../../init/history-navigator-instance"
 
 export const DBRoutes = () => {
+    const { woqlClient } = WOQLClientObj();
+
     const { path } = useRouteMatch();
     const routes = []
     return (<Switch>
@@ -18,7 +20,9 @@ export const DBRoutes = () => {
                     <MasterDBRoute />
                 </Route>
                 <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-                    <DBRoute/>
+                    <HistoryNavigatorProvider woqlClient={woqlClient}>
+                        <DBRoute/>
+                    </HistoryNavigatorProvider>
                 </Route>
             </Switch>
             )

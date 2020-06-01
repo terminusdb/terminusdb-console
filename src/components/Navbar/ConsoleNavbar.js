@@ -78,7 +78,7 @@ export const ConsoleNavbar = (props) => {
                         <Container>
                             <Row>
                                 <Col>
-                                    <HistoryNavigator woqlClient={woqlClient} setRefId={setCommitRefId}/>
+                                    <HistoryNavigator />
                                 </Col>
                             </Row>
                         </Container>
@@ -91,4 +91,5 @@ export const ConsoleNavbar = (props) => {
         </div>
     )
 };
+// <HistoryNavigator woqlClient={woqlClient} setRefId={setCommitRefId}/>
 //<HistoryNavigator onHeadChange={props.onHeadChange}/>

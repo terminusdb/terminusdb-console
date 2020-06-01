@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-//import { WOQLClientObj } from "../../init/woql-client-instance";
 import {TerminusClientInterceptor} from './TerminusClientInterceptor';
 import TerminusClient from '@terminusdb/terminusdb-client';
 
-function WOQLQueryContainerHook(woqlClient,startQuery,refId){	
+function WOQLQueryContainerHook(woqlClient,startQuery,refId,branch){	
 	const query=startQuery || false; 
 	const [woql, setWoqlQuery] = useState(query);
     const [report, setReport] = useState();
@@ -48,9 +47,12 @@ function WOQLQueryContainerHook(woqlClient,startQuery,refId){
 	    })
     }
 
+    /*
+    * the query have to change if branch or commit refId change
+    */
     useEffect(() => {       
         if(woql!==false) executeQuery();
-    }, [woql,refId])
+    }, [woql,refId,branch])
 
     
     return [updateQuery, report, bindings, woql];

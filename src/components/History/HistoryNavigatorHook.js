@@ -5,8 +5,7 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 export const HistoryNavigatorHook = (woqlClient,setRefId)=>{
 	let nowts = parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
    
-    const [branchList, setBranches] = useState([])
-   
+    const [branchList, setBranches] = useState([])  
     const [refId, setRef] = useState(null);
     const [settingCommit, setSettingCommit] = useState(false);
     const [end, setEnd] = useState(nowts);

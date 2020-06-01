@@ -83,10 +83,15 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             setShowLanguage(false)
             setShowContent("")            
         }else {
-            let woql = makeWOQLFromString(content, baseLanguage)
-            if(woql){
+            if(typeof content !=="string" || content===""){
                 setShowLanguage(lang)
-                setShowContent(makeWOQLIntoString(woql, lang))    
+                setShowContent("")
+            }else{
+                let woql = makeWOQLFromString(content, baseLanguage)
+                if(woql){
+                    setShowLanguage(lang)   
+                    setShowContent(makeWOQLIntoString(woql, lang))    
+               }
             }
         }
     }
@@ -135,7 +140,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
                     baseLanguage={baseLanguage} 
                     showLanguage={showLanguage} 
                     languages={languages} 
-                    editable="true" 
+                    editable={true} 
                     onChange={showLanguageVersion} 
                     onEdit={newLanguageVersion} 
                 />

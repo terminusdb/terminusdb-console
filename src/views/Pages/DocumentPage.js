@@ -7,17 +7,18 @@ import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
-//import {HistoryNavigatorObj} from "../../init/history-navigator-instance";
+import {HistoryNavigatorObj} from "../../init/history-navigator-instance";
 
 const DocumentPage = (props) => {
     /*
     * global woqlClient obj
     */
-    const {woqlClient,refId} = WOQLClientObj();
-    
+    const {woqlClient} = WOQLClientObj();
+    const {refId,branch} =HistoryNavigatorObj();
+
     const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refId);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refId,branch);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)

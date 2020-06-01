@@ -11,22 +11,12 @@ import { CommitTraveller } from './CommitTraveller'
 import TerminusClient from '@terminusdb/terminusdb-client';
 import {HISTORY} from "./constants.history"
 
-/*
-Those are the only 2 state variables we have to ever set directly which is great
-There are then a number of other piece of state that have to be loaded:
-1. Branch Details -> loads all branches and their details (name: x, head: ref, time: timestamp) -> 
-    this does not change with state, only with create branch (and eventually delete branch which is not there yet)
-2. Graph Structures -> loads the current set of schema / inference / instance graphs available and their 
-    metadata (size, triple_count) -> this changes with Head
-
-Those state variables are common to all Database Pages, so we should fire them in the dbroute part (or similar)*/
-
-import {HistoryNavigatorHook} from "./HistoryNavigatorHook"
-//import {HistoryNavigatorObj } from "../../init/history-navigator-instance";
+//import {HistoryNavigatorHook} from "./HistoryNavigatorHook"
+import {HistoryNavigatorObj } from "../../init/history-navigator-instance";
 
 export const HistoryNavigator = (props) => {
 
-     const [changeBranch,
+     const {changeBranch,
             userChangesCommit,
             userChangesTime,
             branches,
@@ -34,7 +24,9 @@ export const HistoryNavigator = (props) => {
             current,
             currentCommit,
             settingCommit,
-            branchInfo] = HistoryNavigatorHook(props.woqlClient,props.setRefId)
+            branchInfo} = HistoryNavigatorObj()
+
+            //HistoryNavigatorHook(props.woqlClient,props.setRefId)
 
 	
     const cct = (currentCommit ? currentCommit.time : current)
