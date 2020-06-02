@@ -1,6 +1,17 @@
 .navbar{
   min-height: 70px!important;
 }
+.pagination button{
+    background: transparent;
+    font-weight: bold;
+    font-size: 20px;
+    min-width:30px;
+}
+.rdt_TableCol_Sortable{
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
 
 div.db-view-cards {
     /*background-color: #CCDDF1 !important;*/

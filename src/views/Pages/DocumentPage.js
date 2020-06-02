@@ -14,11 +14,22 @@ const DocumentPage = (props) => {
     * global woqlClient obj
     */
     const {woqlClient} = WOQLClientObj();
-    const {refId,branch} =HistoryNavigatorObj();
+    let refHeadId,branchHead
+
+    try{
+        /*
+        * this dosen't exist for terminus db to be review
+        */
+        const {refId,branch} =HistoryNavigatorObj();
+        refHeadId=refId;
+        branchHead=branch;
+    }catch(err){
+        console.log("terminus-db")
+    }
 
     const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refId,branch);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refHeadId,branchHead);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)
