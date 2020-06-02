@@ -6,10 +6,12 @@ import { FAILED_LOADING_SCHEMA_CLASSES } from "./constants.schema"
 import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
 import { EmptyResult } from "../../components/Reports/EmptyResult"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const Properties = (props) => {
+    const {woqlClient} = WOQLClientObj();
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(getPropertiesQuery(props.graph));
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,getPropertiesQuery(props.graph));
 
     useEffect(() => {
         if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type )){

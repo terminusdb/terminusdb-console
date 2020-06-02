@@ -9,85 +9,44 @@ import { ServerNavbar } from "./ServerNavbar"
 import { HistoryNavigator } from "../History/HistoryNavigator"
 import { Login } from "./Login"
 import { LoggedIn } from "./LoggedIn"
+import { NAV_CSS } from "./constants.navbar";
 
 export const ConsoleNavbar = (props) => {
-    const {isAuthenticated, user } = useAuth0();
+    const {isAuthenticated, user, loading } = useAuth0();
     const {woqlClient} = WOQLClientObj();
-    const containerClassName = isAuthenticated ? "justify-content-start container-fluid" : "justify-content-start container";
     const [isOpen, setIsOpen] = useState(false);
-    const [collapsed, setCollapsed] = useState(false);
-    const [extraItems, showExtraItems] = useState(false);
 
-    const toggleHistoryNavigator = () => setCollapsed(!collapsed);
-
-    function toggleTimeTravel(){
-        toggleHistoryNavigator()
-    }
-
-    const toggleNavBar = () => {
-        showExtraItems(!extraItems)
-        setIsOpen(!isOpen)
-    }
+    const toggleNavBar = () => setIsOpen(!isOpen);
 
     return (
-        <div className="nav-container" >
+        <div className={NAV_CSS.container} >
             <Navbar expand="md" dark fixed="top">
-            <NavbarToggler onClick={toggleNavBar} />
-            <Collapse isOpen={isOpen} navbar>
-                <Container>
-                    <div className={containerClassName}>
-                        {!isOpen && <Row>
-                             <Col md={2} className="mb-2">
-                                {<ServerNavbar />}
-                             </Col>
-                             <Col md={8} className="mb-8">
-                                { woqlClient.db() &&
-                                    <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleTimeTravel}/>
-                                }
-                            </Col>
-                            <Col md={2} className="mb-2">
-                        {/*<Nav className = "d-none d-md-block ml-auto" navbar>*/}
-                            {!isAuthenticated &&
-                                <Login/>
-                            }
-                            {isAuthenticated && user &&
-                                <LoggedIn/>
-                            }
-                            </Col>
-                      {  /*</Nav>*/}
-                        </Row>}
-
-                        {isOpen && <>
-                              {<ServerNavbar />}
-                              <div className="nav-bar-collapse">
-                              { woqlClient.db() &&
-                                  <DBNavbar page={props.page} toggleTimeTravel={toggleTimeTravel} isOpen={extraItems}/>
-                              }
-                              {!isAuthenticated &&
-                                  <Login/>
-                              }
-                              </div>
-                              <div>
-                                  {isAuthenticated && user &&
-                                      <LoggedIn/>
-                                  }
-                              </div>
-                         </>
+                <Row className={NAV_CSS.toprow}>
+                    <Col md={2} className={NAV_CSS.homeCol}> 
+                        {<ServerNavbar />}
+                    </Col>
+                    <Col md={9} className={NAV_CSS.dbCol}>
+                        { woqlClient.db() &&
+                            <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
                         }
-                    {collapsed && <div className="history-navigator-Collapsible">
-                        <Container>
-                            <Row>
-                                <Col>
-                                    <HistoryNavigator onHeadChange={props.onHeadChange}/>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
-                   }
-                    </div>
-                </Container>
-            </Collapse>
+                    </Col>
+                    <Col md={1} className={NAV_CSS.loginCol}>
+                        {!(isAuthenticated || loading) &&
+                            <Login/>
+                        }
+                        {!loading && isAuthenticated && user &&
+                            <LoggedIn/>
+                        }
+                    </Col>
+                </Row>
             </Navbar>
+            {isOpen && 
+                <div className={NAV_CSS.historyContainer}>
+                    <Row className={NAV_CSS.historyRow}>
+                        <HistoryNavigator />
+                    </Row>
+                </div>                                        
+            }
         </div>
     )
-};
+}

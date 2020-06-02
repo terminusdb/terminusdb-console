@@ -1,32 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Col, Row } from "reactstrap"
 import { CommitView } from "./CommitView"
 import { GO_RIGHT, GO_LEFT } from "../../constants/faicons"
 import { COMMIT_TRAVELLER } from "./constants.history"
+import TerminusClient from '@terminusdb/terminusdb-client';
+import { DBContextObj} from "../Query/DBContext"
+import { WOQLClientObj } from "../../init/woql-client-instance";
+import { TERMINUS_ERROR } from "../../constants/identifiers";
+
 
 export const CommitTraveller = (props) => {
+    const [commit, setCommit] = useState()
+    const {woqlClient} = WOQLClientObj();
+    const {branch, ref, setHead, consoleTime} = DBContextObj();
+
+    let mb = props.branch || branch
+
+    //retrieves details of the commit with id ref
+    useEffect(() => {
+        if(props.commit){
+            TerminusClient.WOQL.lib().loadCommitBranchDetails(woqlClient, props.commit, mb).execute(woqlClient)
+           .then((res) => {
+                let commie = (res && res.bindings ? extractCommitData(res.bindings[0]) : [])
+                setCommit(commie)
+            })
+        }
+    }, [props.commit]);
+
+    
+    const extractCommitData = (res)=>{
+        let commie = {}
+        if(res){
+            if(res['CommitID'] && res['CommitID']['@value']) commie.id = res['CommitID']["@value"]
+            if(res['Time'] && res['Time']["@value"]) commie.time = parseFloat(res['Time']["@value"])
+            if(res['Author'] && res['Author']["@value"]) commie.author = res['Author']["@value"]
+            if(res['Message'] && res['Message']["@value"]) commie.message = res['Message']["@value"]
+            if(res['Parent'] && res['Parent']["@value"]) commie.parent = res['Parent']["@value"]
+            if(res['Child'] && res['Child']["@value"]) commie.child = res['Child']["@value"]
+        }
+        return commie
+    }
 
     function handleNextCommit(){
-        props.setRef(props.commit.child)
+        props.setRef(commit.child)
     }
 
     function handlePreviousCommit(){
-        props.setRef(props.commit.parent)
+        props.setRef(commit.parent)
     } 
 
     function getForwardButton(){
-        if(props.commit && props.commit.child) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_RIGHT}/>)
+        if(commit && commit.child) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_RIGHT}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_RIGHT}/>)
     }
 
     function getBackButton(){
-        if(props.commit && props.commit.parent) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_LEFT}/>)
+        if(commit && commit.parent) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_LEFT}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_LEFT}/>)
     }
 
     function getBackNavigation(){
-        if(props.commit && props.commit.parent){
+        if(commit && commit.parent){
             return (
                 <Col onClick={handlePreviousCommit} className={COMMIT_TRAVELLER.navColClassName} md={1}>
                     <span className={COMMIT_TRAVELLER.navClassName}>
@@ -47,7 +82,7 @@ export const CommitTraveller = (props) => {
     }
 
     function getForwardNavigation(){
-        if(props.commit && props.commit.child){
+        if(commit && commit.child){
             return (
                 <Col onClick={handleNextCommit} className={COMMIT_TRAVELLER.navColClassName} md={1}>
                     <span className={COMMIT_TRAVELLER.navClassName}>
@@ -72,14 +107,13 @@ export const CommitTraveller = (props) => {
     const forwardNavigation = getForwardNavigation()
 
     //backNavigation
-
     return (
         <Container className={COMMIT_TRAVELLER.containerClassName}>
             <Row>
                 {backNavigation}
                 <Col  className={COMMIT_TRAVELLER.commitColClassName} md={10}>
                     <span className={COMMIT_TRAVELLER.commitClassName}>
-                        <CommitView commit={props.commit} />
+                        <CommitView commit={commit} />
                     </span>
                 </Col>
                 {forwardNavigation}

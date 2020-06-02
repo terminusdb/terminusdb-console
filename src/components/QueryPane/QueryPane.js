@@ -8,14 +8,19 @@ import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {ResultQueryPane} from './ResultQueryPane';
 import TerminusClient from '@terminusdb/terminusdb-client';
 import {QUERY_PANEL_TITLE} from "./constants.querypane"
+import {DBContextObj} from "..//Query/DBContext";
 
 /*
 * this is only the queryEditor you don't need to process result;
 */
 export const QueryPane = ({query,className,resultView, startLanguage, queryText}) => {
+    /*
+    * maybe a copy of this
+    */
     const {woqlClient} = WOQLClientObj();
-    TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
+    const {ref,branch} =DBContextObj()
+    //TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,query,ref,branch);
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 
 

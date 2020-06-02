@@ -47,9 +47,14 @@ export const CopyRemoteForm = () => {
         setDetailsLoaded(true)
         setUpdateLoading(true)
         woqlClient.account( woqlClient.uid() )
-        woqlClient.remote_auth({type: "basic", content: "YWRtaW46cm9vdA=="})
-        let src = {"remote_url": sourceURL, "label": "teee", "comment": "xxx"}
-        return woqlClient.clonedb(src, "x")
+
+        if(details.user && details.password){
+            woqlClient.remote_auth({type: "basic", key: details.password, user: details.user})
+        }
+        let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf("/")+1)
+
+        let src = {"remote_url": sourceURL, label: details.name || newid, comment: " aa"}
+        return woqlClient.clonedb(src, newid)
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -89,7 +94,7 @@ export const CopyRemoteForm = () => {
         }
         <TCForm 
             onSubmit={onClone} 
-            layout = {[2]}
+            layout = {[1, 2, 2]}
             noCowDucks
             onChange={onChangeBasics} 
             fields={fields}

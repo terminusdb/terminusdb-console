@@ -11,7 +11,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
 
-    const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) != -1) 
+    const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) !== -1) 
     const setEditLanguage = () => {onEdit(currentLanguage)}
 
     const disabled = active=== true ? true : false;
@@ -34,6 +34,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
     })
     
    //origin disabled={disabled}
+   {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
     return (
         <>    
         <Dropdown  isOpen={dropdownOpen} toggle={toggle}>

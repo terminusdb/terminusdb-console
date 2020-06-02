@@ -220,6 +220,43 @@ export const COPY_REMOTE_FORM = {
                 placeholder: "Enter URL of TerminusDB Database",
             },
             help: "The URL of the database is normally of the form: https://my.host.com/db/<account_id>/<database_id>"
+        },
+        {
+            id: "newid",
+            value: "",
+            label: 'New ID',
+            inputElement: {
+                type: "input",
+                placeholder: "enter id of new db",
+            }
+        },
+        {
+            id: "name",
+            value: "",
+            mandatory: true,
+            label: 'New DB Name',
+            inputElement: {
+                type: "input",
+                placeholder: "Enter name of new db",
+            }
+        },
+        {
+            id: "user",
+            value: "",
+            label: 'User Name',
+            inputElement: {
+                type: "input",
+                placeholder: "enter username",
+            }
+        },
+        {
+            id: "password",
+            value: "",
+            label: 'Password',
+            inputElement: {
+                type: "input",
+                placeholder: "enter password",
+            }
         }
     ],
     buttons: {

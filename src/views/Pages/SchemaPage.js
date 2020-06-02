@@ -4,6 +4,7 @@ import { SCHEMA_CLASSES_ROUTE, SCHEMA_PROPERTIES_ROUTE, SCHEMA_GRAPHS_ROUTE, SCH
 
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import TerminusClient from '@terminusdb/terminusdb-client';
+import { DBContextObj } from "../../components/Query/DBContext"
 
 import { Classes } from '../Schema/Classes'
 import { Properties } from '../Schema/Properties'
@@ -11,16 +12,74 @@ import { OWL } from '../Schema/OWL'
 import { GraphManager } from '../Schema/GraphManager'
 import { PrefixManager } from '../Schema/PrefixManager'
 import { TabbedPageView } from "../Templates/TabbedPageView"
-import { loadGraphStructure } from "../../components/Query/QueryLoaders"
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
+import Loading  from "../../components/Reports/Loading";
+import { TERMINUS_COMPONENT, TERMINUS_PAGE } from "../../constants/identifiers";
 
 const SchemaPage = (props) => {
 
-    const [graphStructure, report, loading] = loadGraphStructure()
-    const [graphFilter, setGraphFilter] = useState({type: "schema", gid: "main"});
+    
+    const {woqlClient} = WOQLClientObj();
+    const {graphs, ref, branch, report, loading} = DBContextObj();
+
+    const [graphFilter, setGraphFilter] = useState();
     const [graphsUpdated, setGraphsUpdated] = useState(false);
+
+    useEffect(() => {
+        if(graphs){
+            if(graphFilter){
+                setGraphFilter(updateFilter())
+            }
+            else {
+                setGraphFilter(getDefaultFilter())
+            }            
+        }
+    }, [graphs])
 
 
     const [pageError, setPageError] = useState(false)
+
+    //updates filter when / if graphs changes
+    function updateFilter(){
+        let putative = false
+        for(var key in graphs){
+            if(graphs[key].id == graphFilter.id && graphs[key].type == graphFilter.type ) return
+            if( graphs[key].type == graphFilter.type && graphFilter.id == "*") return
+            if( graphs[key].type == graphFilter.type) putative = graphs[key].id  
+        }
+        if(putative) setGraphFilter({id: putative, type: graphFilter.type})
+        else setGraphFilter(getDefaultFilter())
+    }
+
+
+    //sets default graph filter depending on graphs configuration
+    function getDefaultFilter(){
+        let t = false
+        let id = false
+        for(var key in graphs){
+            if(graphs[key].type == "schema"){
+                if(t == "schema"){
+                    return {type: "schema", id: "*"}
+                }
+                else {
+                    t = "schema"
+                    id = graphs[key].id
+                }
+            }
+            else if(graphs[key].type == "inference"){
+                if(t == "inference"){
+                    id = "*"
+                }
+                else {
+                    t = "inference"
+                    id = graphs[key].id
+                }
+            }
+        }
+        if(t && id)  return { type: t, id: id }
+        return null
+    }
+
 
     function headChanged(){
         //setRebuild(rebuild+1)
@@ -47,22 +106,32 @@ const SchemaPage = (props) => {
     function getTabsForView(){
         let tabs = []
         let sections = []
-        tabs.push( <Classes key="cl" graph={graphFilter} graphs={graphStructure} onChangeGraph={graphFilterChanged} /> )
-        sections.push({id: SCHEMA_CLASSES_ROUTE, label: CLASSES_TAB})
-        tabs.push(<Properties key = "pr" graphs={graphStructure} graph={graphFilter} onChangeGraph={graphFilterChanged} />)
-        sections.push({id: SCHEMA_PROPERTIES_ROUTE, label: PROPERTIES_TAB})
-        tabs.push(<OWL key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated}/>)
-        sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
-        tabs.push(<GraphManager key="gr" graphs={graphStructure} onUpdate={structureUpdated} />)
-        sections.push({id: SCHEMA_GRAPHS_ROUTE, label: GRAPHS_TAB})
-        tabs.push(<PrefixManager key="pr" graphs={graphStructure} onUpdate={prefixesUpdated} />)
-        sections.push({id: SCHEMA_PREFIXES_ROUTE, label: PREFIXES_TAB})
+        if(graphFilter){
+            tabs.push( <Classes key="cl" graph={graphFilter} graphs={Object.values(graphs)} onChangeGraph={graphFilterChanged} /> )
+            sections.push({id: SCHEMA_CLASSES_ROUTE, label: CLASSES_TAB})
+            tabs.push(<Properties key = "pr" graphs={Object.values(graphs)} graph={graphFilter} onChangeGraph={graphFilterChanged} />)
+            sections.push({id: SCHEMA_PROPERTIES_ROUTE, label: PROPERTIES_TAB})
+            tabs.push(<OWL graphs={Object.values(graphs)} key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated} />)
+            sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
+        }
+        if(graphs){
+            tabs.push(<GraphManager key="gr" graphs={Object.values(graphs)} onUpdate={structureUpdated} />)
+            sections.push({id: SCHEMA_GRAPHS_ROUTE, label: GRAPHS_TAB})
+            tabs.push(<PrefixManager key="pr" graphs={Object.values(graphs)} onUpdate={prefixesUpdated} />)
+            sections.push({id: SCHEMA_PREFIXES_ROUTE, label: PREFIXES_TAB})
+        }
         return [tabs, sections]
     }
 
     let [tabs, sections] = getTabsForView()
+    if(!graphs){
+        if(report){
+            return (<TerminusDBSpeaks failure={GRAPHS_LOAD_ERROR} report={report} />)
+        } 
+        return (<Loading type={TERMINUS_PAGE} />)
+    }
     return (
-        <TabbedPageView loading={loading} onHeadChange={headChanged} sections={sections} active={props.page}>
+        <TabbedPageView onHeadChange={headChanged} sections={sections} active={props.page}>
             {tabs}
         </TabbedPageView>
     )

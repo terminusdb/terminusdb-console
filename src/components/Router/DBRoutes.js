@@ -8,32 +8,44 @@ import QueryPage from "../../views/Pages/QueryPage"
 import DocumentPage from "../../views/Pages/DocumentPage"
 import TerminusHome from "../../views/Pages/TerminusHome"
 
+//import {HistoryNavigatorProvider} from "../../init/history-navigator-instance"
+import {DBContextProvider} from "../Query/DBContext"
+
 
 export const DBRoutes = () => {
-    let { path } = useRouteMatch();
-    let routes = []
-    routes.push(
-        <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
-            <MasterDBRoute />
-        </Route>
+    const { woqlClient } = WOQLClientObj();
+
+    const { path } = useRouteMatch();
+
+    return (
+        <Switch>
+            <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
+                <MasterDBRoute />
+            </Route>
+            <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
+                <DBContextProvider woqlClient={woqlClient}>
+                    <DBRoute/>
+                </DBContextProvider>
+            </Route>
+        </Switch>
     )
-    routes.push(
-        <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-            <DBRoute/>
-        </Route>
-    )
-    return (<Switch>{routes}</Switch>)
 }
+
+/*
+<HistoryNavigatorProvider>
+    <DBRoute/>
+</HistoryNavigatorProvider>
+*/
 
 /**
  * Routes specific to Terminus (master) DB 
  */
 const MasterDBRoute = () => {
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
     const {setDatabase, setAccount} = WOQLClientObj();
     setDatabase("terminus")
     setAccount(false)
-    let routes = []
+    const routes = []
     routes.push(
         <Route key="query" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />
@@ -61,13 +73,13 @@ const MasterDBRoute = () => {
  * Routes specific to any other specific database
  */
 const DBRoute = () => {
-    let { path } = useRouteMatch();
+    const { path } = useRouteMatch();
 
-    let { aid, dbid } = useParams();
+    const { aid, dbid } = useParams();
     const {setDatabase, setAccount} = WOQLClientObj();
     setDatabase(dbid)
     setAccount(aid)
-    let routes = []
+    const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />

@@ -13,7 +13,7 @@ export const LatestUpdates = (props) => {
     let query = TerminusClient.WOQL.limit(50).select("v:Time", "v:Author", "v:Message").order_by("v:Time",
         TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, "v:B"))
 
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(query);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(WOQLClientObj,query);
 
     return (
         <div className = "tab-co">

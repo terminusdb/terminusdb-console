@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth0 } from "../../react-auth0-spa";
 import { USER, POWER_OFF } from "../../constants/faicons"
 import { PROFILE_ROUTE } from "../../constants/routes"
-import { PROFILE_PAGE_LABEL, LOGOUT_LABEL, DROPDOWN_PROFILE_CSS} from "./constants.navbar"
+import { PROFILE_PAGE_LABEL, LOGOUT_LABEL, DROPDOWN_PROFILE_CSS, NAV_CSS} from "./constants.navbar"
 
 export const LoggedIn = (props) => {
     const { user, logout } = useAuth0();
@@ -17,10 +17,10 @@ export const LoggedIn = (props) => {
 
     return (
         <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret id="profileDropDown">
+            <DropdownToggle  nav caret id="profileDropDown" className={NAV_CSS.profileButton} >
                 <img src={user.picture}
                     alt={PROFILE_PAGE_LABEL}
-                    className="nav-user-profile rounded-circle"
+                    className={NAV_CSS.profileImage} 
                     width="50"/>
             </DropdownToggle>
             <DropdownMenu>

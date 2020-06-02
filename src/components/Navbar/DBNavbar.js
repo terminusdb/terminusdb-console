@@ -1,150 +1,135 @@
-import {  Nav,NavItem, NavLink, Alert } from "reactstrap";
+import {  Nav,NavItem, NavLink, Row, Col } from "reactstrap";
 import React, { useState, useEffect } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { trimContent } from "../../utils/helperFunctions"
 import ToggleButton from 'react-toggle-button'
 import { getDBPageRoute } from "../Router/ConsoleRouter"
-import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL} from './constants.navbar'
-
+import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, SLIDER_CSS, NAV_CSS} from './constants.navbar'
+import { DBContextObj } from "../Query/DBContext"
+import {BranchSelector} from "../History/BranchSelector"
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
+    const {branches, branch, ref, setHead, consoleTime} = DBContextObj();
+
     let dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.account()) || {}
 
-    const branch = woqlClient.checkout()
-    const ref = woqlClient.ref()
     const [toggleTime, setToggleTime] = useState(false)
-
-    function toggleNavbar(){
-        if(props.toggleTimeTravel) props.toggleTimeTravel()
-    }
 
     function getNavURL(page){
         let aid = woqlClient.account() || woqlClient.uid()
         return getDBPageRoute(woqlClient.db(), aid, page)
     }
 
-    let dbClass = ""
-    if(!props.isOpen) dbClass = "ml-auto db-nav"
-    else dbClass = "ml-auto"
-
-
-    let headText = (ref ? "Commit (" + ref + ")" : "Latest")
-    let branchStatus = ((ref || branch != "master") ? "#ffa500" : "#ccc")
+    let dbClass = (!props.isOpen ? SLIDER_CSS.openButton : SLIDER_CSS.closedButton) 
 
     const handleToggle = (toggleTime) => {
         setToggleTime(!toggleTime)
+        if(props.toggleTimeTravel) props.toggleTimeTravel()
     }
 
-    const inactiveLabelStyle = {
-        fontSize: '14px',
-        display: 'flex',
-        AlignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        color:'rgb(250, 250, 250)',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        lineHeight: 0,
-        opacity: 0,
-        width: '26px',
-        height: '20px',
-        left: '4px'
+
+    function onChangeBranch(b){
+        setHead(b)
     }
 
-    const borderRadiusStyle = {
-        minWidth: '100px',
-        width: 'auto'
+    let branchStatus = ( ref  ? "#ffa500" : "#ccc")
+
+    function getDBHomeDetails(){
+        if(dbmeta.db == "terminus" || !branches ){
+            return null
+        }
+
+        let currentTime = (<span className={NAV_CSS.latest}>Latest</span>)
+        if(consoleTime) currentTime = (<span className={NAV_CSS.history}>{consoleTime}</span>)
+
+        let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
+
+        let bs = (<BranchSelector 
+            branch={branch} 
+            branches={Object.values(branches)} 
+            onUpdate={onChangeBranch}
+        />) 
+
+        let toggler = (
+            <ToggleButton value={ toggleTime || false }
+                inactiveLabel={SLIDER_CSS.inactiveText}
+                inactiveLabelStyle={SLIDER_CSS.inactiveLabel}
+                activeLabel={SLIDER_CSS.activeText}
+                activeThumbStyle = {SLIDER_CSS.thumb}
+                activeLabelStyle={SLIDER_CSS.activeLabel}
+                trackStyle={SLIDER_CSS.borderRadius}
+                thumbAnimateRange = {[0, 80]}
+                colors={
+                    {
+                        inactiveThumb: {
+                            base: branchStatus,
+                        },
+                        active: {
+                            base: branchStatus,
+                            hover: 'rgb(177, 191, 215)',
+                        }
+                    } 
+                }
+                onToggle={ (value) => handleToggle(value) } 
+            />
+        )
+        return (
+            <Row className={NAV_CSS.dbDetails} >
+                {bs && 
+                    <Col className={NAV_CSS.branchContainer}>{bs}</Col>
+                }
+                <Col className={timeCSS}>
+                    {currentTime}
+                    {toggler}
+                </Col>
+            </Row>
+        )
     }
 
-    const activeLabelStyle = {
-        fontSize: '14px'
-    }
-
-    const thumbStyle = {
-        width: '18px',
-        height: '18px',
-        display: 'flex',
-        alignSelf: 'center',
-        boxShadow: 'rgba(0, 0, 0, 0.3) 0px 0px 0px 1px',
-        borderRadius: '50%',
-        boxSizing: 'border-box',
-        left: '3px',
-        border: '1px solid green',
-        backgroundColor: 'rgb(250, 250, 250)',
-        position: 'relative',
-    }
-
-    console.log('branchStatus', branchStatus)
-    console.log('ref', ref)
-    console.log('headText', headText)
-    console.log('branch', branch)
 
     return (
-
-            <Nav className = {dbClass} navbar>
-                <NavItem>
-                    <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("")}
-                            activeClassName = "router-link-exact-active"
-                            onClick = {props.onClick}
-                            exact>
-                            {trimContent(dbmeta.title, 15)}
-                    </NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("document")}
-                            activeClassName = "router-link-exact-active"
-                            onClick = {props.onClick}
-                            exact>
-                            {DOCUMENT_PAGE_LABEL}
-                    </NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("query")}
-                            activeClassName = "router-link-exact-active"
-                            onClick = {props.onClick}
-                            exact>
-                            {QUERY_PAGE_LABEL}
-                    </NavLink>
-                </NavItem>
-                <NavItem>
-                    <NavLink tag = {RouterNavLink}
-                            to = {getNavURL("schema")}
-                            activeClassName = "router-link-exact-active"
-                            onClick = {props.onClick}
-                            exact>
-                            {SCHEMA_PAGE_LABEL}
-                    </NavLink>
-                </NavItem>
-                {dbmeta.db != "terminus" && !props.isOpen &&
-                <NavItem>
-                    <NavLink onClick = {toggleNavbar} title={branch + ' ' + headText}>
-                       {/* <FontAwesomeIcon size="2x" icon="code-branch" className="mr-3" title={branch + " " + headText} color={branchStatus}/>*/}
-                       { <ToggleButton value={ toggleTime || false }
-                            inactiveLabel={branch}
-                            inactiveLabelStyle={inactiveLabelStyle}
-                            activeLabel={'Commits'}
-                            activeThumbStyle = {thumbStyle}
-                            activeLabelStyle={activeLabelStyle}
-                            trackStyle={borderRadiusStyle}
-                            thumbAnimateRange = {[0, 80]}
-                            colors={{
-                                    inactiveThumb: {
-                                      base: branchStatus,
-                                    },
-                                    active: {
-                                      base: branchStatus,
-                                      hover: 'rgb(177, 191, 215)',
-                                    }} }
-                          onToggle={ (value) => handleToggle(value)
-                          } />}
-                    </NavLink>
-                </NavItem>
-                }
+        <Nav className = {dbClass} navbar>
+            <NavItem>
+                <NavLink tag = {RouterNavLink}
+                    to = {getNavURL("")}
+                    activeClassName = "router-link-exact-active"
+                    onClick = {props.onClick}
+                    exact>
+                    {trimContent(dbmeta.title, 15)}
+                </NavLink>
+            </NavItem>
+            <NavItem>
+                {getDBHomeDetails()}
+            </NavItem>
+            <NavItem>
+                <NavLink tag = {RouterNavLink}
+                    to = {getNavURL("document")}
+                    activeClassName = "router-link-exact-active"
+                    onClick = {props.onClick}
+                    exact>
+                    {DOCUMENT_PAGE_LABEL}
+                </NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink tag = {RouterNavLink}
+                    to = {getNavURL("query")}
+                    activeClassName = "router-link-exact-active"
+                    onClick = {props.onClick}
+                    exact>
+                    {QUERY_PAGE_LABEL}
+                </NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink tag = {RouterNavLink}
+                    to = {getNavURL("schema")}
+                    activeClassName = "router-link-exact-active"
+                    onClick = {props.onClick}
+                    exact>
+                    {SCHEMA_PAGE_LABEL}
+                </NavLink>
+            </NavItem>
         </Nav>
     )
 }

@@ -187,7 +187,7 @@ div.history-navigator-Collapsible {
     border-radius: 10px;*/
     margin: 5px 20px 20px 20px;
     padding: 0px 25px 25px 25px;
-    position: absolute;
+    position: fixed;
     /*border: 1px solid rgba(0,0,0,.125);
     box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
 
@@ -196,6 +196,8 @@ div.history-navigator-Collapsible {
     z-index: 99!important;
     box-shadow: 0 1px 10px -1px rgba(0,0,0,.2)!important;
 }
+
+
 
 img.center {
     margin: auto;
@@ -975,13 +977,16 @@ img.card-img-top{
 }
 
 
-
 div.div-hide {
     display: none !important;
 }
 
 ul.nav-tabs {
     border-bottom: 1px solid #00C08B !important;
+}
+
+.ml-auto {
+    margin-left: 20px
 }
 
 ul.nav-tabs li.nav-item:hover, ul.nav-tabs li.nav-item a.nav-link:visited {
@@ -1006,15 +1011,11 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
-.ml-auto{
-    margin-left: calc(100% - 750px) !important;
-}
+
 
 ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
-    border-radius: 3px;
-    max-width: 600px;
 }
 
 div.curr-pr {
@@ -1192,15 +1193,31 @@ p.dscr{
   content: "";
 }
 
-.navbar {
-  padding: 10px 0
-}
 
 .navbar {
   background-color: #002856;
-  padding: 5px;
-  box-shadow: 0 1px 2px 0 #dfe3ec
+  box-shadow: 0 1px 2px 0 #dfe3ec;
+  padding: 0;
 }
+
+.navbar-home-col {
+    padding: 0 10px;
+}
+
+.navbar-db-col {
+    padding: 0;
+}
+
+.navbar-login-col {
+    text-align: right;
+    padding: 0 10px;
+}
+
+.navbar-toprow {
+    padding: 0;
+}
+
+
 
 .subNavBar{
     background-color: #fff !important;
@@ -1604,9 +1621,7 @@ div.dd-t {
 }
 
 #qsLoginBtn{
-    /*margin-right: -200px;*/
-    margin: 10px 0px 10px 5px;
-    float: right;
+    margin: 16px 0px 10px -26px;
 }
 
 legend {
@@ -1837,10 +1852,32 @@ div.terminus-datetime-slider-viewing {
 .history-slider-col {
 }
 
+.navbar-dbetails {
+    margin-right: 10px;
+}
+
+.navbar-branch {
+}
+
+.navbar-time {
+    width: 140px;
+    padding-top: 6px;
+    font-size: 0.9em;
+    color: white;
+}
+
+.navbar-old-time {
+    width: 140px;
+    padding-top: 6px;
+    font-size: 0.9em;
+    color: white;
+}
+
+
+
 .branch-selector {
     display: inline-block;
-    font-size: 0.9em;
-    width: 200px;
+    width: 180px;
 }
 
 .history-bar-container {
@@ -2432,3 +2469,4 @@ h4.prefix-section-header {
     float: right;
     margin-right: -10px;
 }
+

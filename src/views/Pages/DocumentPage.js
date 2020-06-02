@@ -7,13 +7,18 @@ import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import {DBContextObj} from "../../components/Query/DBContext";
 
 const DocumentPage = (props) => {
+    /*
+    * global woqlClient obj
+    */
     const {woqlClient} = WOQLClientObj();
-    const [happiness, setHappiness] = useState(false);
+    const {ref,branch} = DBContextObj();
 
+    const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(docQuery);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,ref,branch);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)
@@ -37,9 +42,9 @@ const DocumentPage = (props) => {
         })
     }
 
-    function doRebuild(){
+    /*function doRebuild(){
         updateQuery(docQuery)
-    }
+    }*/
 
     function interpretEmptyResult(){
         const hasClasses = TerminusClient.WOQL.lib().concreteDocumentClasses()
@@ -70,8 +75,8 @@ const DocumentPage = (props) => {
     }, [report]);
 
     return (
-    
-    <SimplePageView page="document" onHeadChange={doRebuild}>
+    //onHeadChange={doRebuild}
+    <SimplePageView page="document" >
         {!happiness &&
             <Loading />
         }

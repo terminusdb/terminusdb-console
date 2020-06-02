@@ -79,10 +79,11 @@ export const MonitorDB = (props) => {
 				</Col>
 			</Row>
 
-			<LatestUpdates />
+			
 
        </div>
     )
 }
 
 
+//<LatestUpdates />
