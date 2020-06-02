@@ -33,10 +33,10 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
                     {langname}</DropdownItem>) 
     })
     
-   //origin disabled={disabled}
-   {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
+   //origin disabled={disabled}  
     return (
-        <>    
+        <>
+        {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}    
         <Dropdown  isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle caret>
                 {currentLabel}

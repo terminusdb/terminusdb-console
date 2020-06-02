@@ -17,13 +17,12 @@ import Loading  from "../../components/Reports/Loading";
 import { TERMINUS_COMPONENT, TERMINUS_PAGE } from "../../constants/identifiers";
 
 const SchemaPage = (props) => {
-
     
-    const {woqlClient} = WOQLClientObj();
-    const {graphs, ref, branch, report, loading} = DBContextObj();
+    const {woqlClient} = WOQLClientObj()
+    const { graphs, ref, branch, report, loading } = DBContextObj()
 
-    const [graphFilter, setGraphFilter] = useState();
-    const [graphsUpdated, setGraphsUpdated] = useState(false);
+    const [graphFilter, setGraphFilter] = useState()
+    const [graphsUpdated, setGraphsUpdated] = useState(false)
 
     useEffect(() => {
         if(graphs){
@@ -47,8 +46,8 @@ const SchemaPage = (props) => {
             if( graphs[key].type == graphFilter.type && graphFilter.id == "*") return
             if( graphs[key].type == graphFilter.type) putative = graphs[key].id  
         }
-        if(putative) setGraphFilter({id: putative, type: graphFilter.type})
-        else setGraphFilter(getDefaultFilter())
+        if(putative) return {id: putative, type: graphFilter.type}
+        else return getDefaultFilter()
     }
 
 
@@ -70,14 +69,14 @@ const SchemaPage = (props) => {
                 if(t == "inference"){
                     id = "*"
                 }
-                else {
+                else if(t != "schema") {
                     t = "inference"
                     id = graphs[key].id
                 }
             }
         }
         if(t && id)  return { type: t, id: id }
-        return null
+        return undefined
     }
 
 
@@ -107,17 +106,26 @@ const SchemaPage = (props) => {
         let tabs = []
         let sections = []
         if(graphFilter){
-            tabs.push( <Classes key="cl" graph={graphFilter} graphs={Object.values(graphs)} onChangeGraph={graphFilterChanged} /> )
+            tabs.push( 
+                <Classes key="cl" graph={graphFilter} onChangeGraph={graphFilterChanged} /> 
+            )
             sections.push({id: SCHEMA_CLASSES_ROUTE, label: CLASSES_TAB})
-            tabs.push(<Properties key = "pr" graphs={Object.values(graphs)} graph={graphFilter} onChangeGraph={graphFilterChanged} />)
+            tabs.push(
+                <Properties key = "pr" graph={graphFilter} onChangeGraph={graphFilterChanged} />
+            )
             sections.push({id: SCHEMA_PROPERTIES_ROUTE, label: PROPERTIES_TAB})
-            tabs.push(<OWL graphs={Object.values(graphs)} key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated} />)
+            tabs.push(
+                <OWL graphs={Object.values(graphs)} key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated} />)
             sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
         }
         if(graphs){
-            tabs.push(<GraphManager key="gr" graphs={Object.values(graphs)} onUpdate={structureUpdated} />)
+            tabs.push(
+                <GraphManager key="gr" onUpdate={structureUpdated} />
+            )
             sections.push({id: SCHEMA_GRAPHS_ROUTE, label: GRAPHS_TAB})
-            tabs.push(<PrefixManager key="pr" graphs={Object.values(graphs)} onUpdate={prefixesUpdated} />)
+            tabs.push(
+                <PrefixManager key="pr" onUpdate={prefixesUpdated} />
+            )
             sections.push({id: SCHEMA_PREFIXES_ROUTE, label: PREFIXES_TAB})
         }
         return [tabs, sections]

@@ -56,7 +56,7 @@ function WOQLQueryContainerHook(woqlClient,startQuery,branch, ref){
     */
     useEffect(() => {       
         if(woql!==false) executeQuery();
-    }, [woql, ref, branch])
+    }, [woql, branch, ref])
 
     
     return [updateQuery, report, bindings, woql, loading];

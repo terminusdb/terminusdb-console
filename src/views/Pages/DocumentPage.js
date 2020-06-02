@@ -16,9 +16,10 @@ const DocumentPage = (props) => {
     const {woqlClient} = WOQLClientObj();
     const {ref,branch} = DBContextObj();
 
+
     const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,ref,branch);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,branch, ref);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)

@@ -10,13 +10,16 @@ import {DELETE_ICON} from "../../constants/images"
 import {APIUpdateReport} from "../../components/Reports/APIUpdateReport"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 import {GraphList} from "../Tables/GraphList"
+import { DBContextObj } from "../../components/Query/DBContext"
+
 
 export const GraphManager = (props) => {
-    const {woqlClient} = WOQLClientObj();
+    const {woqlClient} = WOQLClientObj()
+    const {graphs} = DBContextObj();
+
     const canDeleteGraph = woqlClient.db() != "terminus" //need to be got from client
     const canCreateGraph =  woqlClient.db() != "terminus" //need to ge got from client
     const [creating, setCreating] = useState(false)
-    const [loading, setLoading] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState()
     const [updateError, setUpdateError] = useState()
 
@@ -104,9 +107,6 @@ export const GraphManager = (props) => {
 
     return (
         <Container>
-            {(loading) && 
-                <Loading />
-            }
             {canCreateGraph && 
                 <CreateGraph report={updateError} visible={creating} onCreate={submitCreate} onEdit={setEditing} onCancel={() => setCreating(false)} />
             }
@@ -114,7 +114,7 @@ export const GraphManager = (props) => {
                 <APIUpdateReport message={updateSuccess.message} status={updateSuccess.status} time={updateSuccess.time}/>
             }
             {(!creating && props.graphs) && 
-                <ResultViewer type = "table" bindings= {props.graphs}/>
+                <ResultViewer type = "table" bindings= {Object.values(graphs)}/>
             }
         </Container>
     )

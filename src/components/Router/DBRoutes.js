@@ -16,18 +16,17 @@ export const DBRoutes = () => {
     const { woqlClient } = WOQLClientObj();
 
     const { path } = useRouteMatch();
-
     return (
-        <Switch>
-            <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
-                <MasterDBRoute />
-            </Route>
-            <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-                <DBContextProvider woqlClient={woqlClient}>
-                    <DBRoute/>
-                </DBContextProvider>
-            </Route>
-        </Switch>
+        <DBContextProvider woqlClient={woqlClient}>
+            <Switch>
+                <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
+                    <MasterDBRoute />
+                </Route>
+                <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
+                        <DBRoute/>
+                </Route>
+            </Switch>
+        </DBContextProvider>
     )
 }
 
@@ -58,7 +57,7 @@ const MasterDBRoute = () => {
     )
     routes.push(
         <Route key="terminusschema" path={`${path}${DB_SCHEMA_ROUTE}`}>
-            <TerminusSchemaRoutes />
+            <SchemaRoutes />
         </Route>
     )
     routes.push(

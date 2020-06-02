@@ -16,10 +16,10 @@ export const Classes = (props) => {
     const {ref, branch} = DBContextObj();
 
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient.getClassQuery(props.graph), branch, ref)
+    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, getClassQuery(props.graph), branch, ref)
 
     useEffect(() => {
-        if(props.graph && (!filter || filter.gid != props.graph.gid || filter.type != props.graph.type )){
+        if(props.graph && (!filter || filter.id != props.graph.id || filter.type != props.graph.type )){
             if(filter) updateQuery(getClassQuery(props.graph));
             setFilter(props.graph)
         }

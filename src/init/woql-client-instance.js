@@ -31,7 +31,7 @@ export const WOQLClientProvider = ({children,params}) => {
                 setError(false);
 
                 const opts = params || {};
-                const dbClient = new TerminusClient.WOQLClient();
+                const dbClient = new TerminusClient.WOQLClient(opts.server);
 
                 if(!opts.key){
                     setShowLogin(true);

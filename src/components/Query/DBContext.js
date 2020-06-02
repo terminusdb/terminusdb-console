@@ -5,7 +5,17 @@ import { TERMINUS_ERROR } from "../../constants/identifiers";
 
 export const DBContext = React.createContext();
 export const DBContextObj = () => useContext(DBContext);
+
 export const DBContextProvider = ({children,woqlClient}) => {
+    if(woqlClient.db() == "terminus"){ 
+        return (
+            <DBContext.Provider
+                value={TerminusDBProvider(woqlClient)}
+            >
+                {children}
+            </DBContext.Provider>
+        )
+    }
     const [branches, setBranches] = useState()
     const [graphs, setGraphs] = useState()
     const [DBInfo, setDBInfo] = useState()
@@ -97,7 +107,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
         for(var i = 0; i<bindings.length; i++){
             let fid = `${bindings[i]["GraphType"]["@value"]}/${bindings[i]["GraphID"]["@value"]}`
             gs[fid] ={
-                gid: bindings[i]["GraphID"]["@value"], 
+                id: bindings[i]["GraphID"]["@value"], 
                 type: bindings[i]["GraphType"]["@value"], 
                 head: bindings[i]["Head"]["@value"], 
                 updated: bindings[i]["Time"]["@value"]}
@@ -148,3 +158,36 @@ export const DBContextProvider = ({children,woqlClient}) => {
         </DBContext.Provider>
     )
 }
+
+/**
+ * Creates a prebaked context for the terminusdb situation
+ */
+export const TerminusDBProvider = (woqlClient) => {
+    let branches = false
+    let graphs = {
+        "schema/main": {type: "schema", id: "main"},
+        "inference/main": {type: "inference", id: "main"},
+        "instance/main": {type: "instance", id: "main"}
+    }
+    let DBInfo = {created: 0}
+    function setHead(){}
+    function setConsoleTime(){}
+    let report = false
+    let branch = false
+    let ref = false
+    let loading = false
+    let consoleTime = false
+    return {
+        setConsoleTime,
+        setHead,
+        consoleTime,
+        DBInfo,
+        branches,
+        graphs,
+        report,
+        branch,
+        ref,
+        loading
+    }
+}
+

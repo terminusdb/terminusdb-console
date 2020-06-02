@@ -23,6 +23,8 @@ export const FAILED_LOADING_OWL = {
 export const DELETE_ICON_CSS = "tcf-delete-icon"
 
 export const CLASSES_QUERY_LIMIT = 200
+export const PROPERTIES_QUERY_LIMIT = 200
+
 
 /* schema tabs */
 export const CLASSES_TAB = "Classes"
