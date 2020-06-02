@@ -26,6 +26,9 @@ export const CLASSES_QUERY_LIMIT = 200
 export const PROPERTIES_QUERY_LIMIT = 200
 
 
+export const TAB_SCREEN_CSS = "tab-co"
+
+
 /* schema tabs */
 export const CLASSES_TAB = "Classes"
 export const PROPERTIES_TAB = "Properties"

@@ -8,6 +8,7 @@ import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContaine
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
 import {DBContextObj} from "../../components/Query/DBContext";
+import { TERMINUS_PAGE } from "../../constants/identifiers";
 
 const DocumentPage = (props) => {
     /*
@@ -79,7 +80,7 @@ const DocumentPage = (props) => {
     //onHeadChange={doRebuild}
     <SimplePageView page="document" >
         {!happiness &&
-            <Loading />
+            <Loading type={TERMINUS_PAGE} />
         }
         {(happiness === true) &&
             <ResultViewer type="table" query={woql} bindings={bindings} />

@@ -3,7 +3,7 @@ import { Route, useParams, useRouteMatch, Switch} from "react-router-dom"
 import { DB_QUERY_ROUTE, DB_SCHEMA_ROUTE, DB_DOCUMENT_ROUTE, SPECIFIC_DB_ROUTE, TERMINUS_ROUTE } from "../../constants/routes"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBHomeRoutes } from "./DBHomeRoutes"
-import { SchemaRoutes, TerminusSchemaRoutes } from "./SchemaRoutes"
+import { SchemaRoutes } from "./SchemaRoutes"
 import QueryPage from "../../views/Pages/QueryPage"
 import DocumentPage from "../../views/Pages/DocumentPage"
 import TerminusHome from "../../views/Pages/TerminusHome"
