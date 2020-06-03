@@ -1079,6 +1079,13 @@ p.dscr{
     color: #A37B05
 }
 
+.under-construction-send-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0px 30px 0px;
+}
+
 .under-construction-header{
     padding: 40px 10px 10px 20px !important;
     border-bottom: 2px solid rgb(226, 232, 240);
