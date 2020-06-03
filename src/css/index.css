@@ -12,3 +12,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@media (min-width: 768px){
+	.navbar-expand-md .navbar-nav {
+	    -ms-flex-direction: row;
+	    flex-direction: row;
+	    /* background: red; */
+	    width: 100% !important;
+	    justify-content: center !important;
+	}
+}

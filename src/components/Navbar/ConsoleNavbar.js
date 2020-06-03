@@ -15,22 +15,27 @@ export const ConsoleNavbar = (props) => {
     const {isAuthenticated, user, loading } = useAuth0();
     const {woqlClient} = WOQLClientObj();
     const [isOpen, setIsOpen] = useState(false);
+    const [isCollapseOpen, setCollapseIsOpen] = useState(false);
 
     const toggleNavBar = () => setIsOpen(!isOpen);
+    const collapseIsOpen= () => setCollapseIsOpen(!isCollapseOpen)
 
     return (
         <div className={NAV_CSS.container} >
-            <Navbar expand="md" dark fixed="top">
-                <Row className={NAV_CSS.toprow}>
-                    <Col md={2} className={NAV_CSS.homeCol}> 
+            <Navbar expand="md" dark fixed="top" navbar>
+                <Row className={NAV_CSS.toprow}> 
+                    <Col md={2} className={NAV_CSS.homeCol}>
                         {<ServerNavbar />}
                     </Col>
-                    <Col md={9} className={NAV_CSS.dbCol}>
-                        { woqlClient.db() &&
-                            <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
-                        }
-                    </Col>
-                    <Col md={1} className={NAV_CSS.loginCol}>
+                    <NavbarToggler onClick={collapseIsOpen} />                      
+                    <Col md={8} className={NAV_CSS.dbCol}>
+                        <Collapse isOpen={isCollapseOpen} navbar >
+                            { woqlClient.db() &&
+                                <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
+                            }
+                        </Collapse>
+                    </Col>                    
+                    <Col md={2} className={NAV_CSS.loginCol}> 
                         {!(isAuthenticated || loading) &&
                             <Login/>
                         }
@@ -38,6 +43,8 @@ export const ConsoleNavbar = (props) => {
                             <LoggedIn/>
                         }
                     </Col>
+                
+               
                 </Row>
             </Navbar>
             {isOpen && 
