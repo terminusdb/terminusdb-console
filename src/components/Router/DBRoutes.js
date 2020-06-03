@@ -7,8 +7,6 @@ import { SchemaRoutes } from "./SchemaRoutes"
 import QueryPage from "../../views/Pages/QueryPage"
 import DocumentPage from "../../views/Pages/DocumentPage"
 import TerminusHome from "../../views/Pages/TerminusHome"
-
-//import {HistoryNavigatorProvider} from "../../init/history-navigator-instance"
 import {DBContextProvider} from "../Query/DBContext"
 
 
@@ -23,7 +21,7 @@ export const DBRoutes = () => {
                     <MasterDBRoute />
                 </Route>
                 <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-                        <DBRoute/>
+                    <DBRoute/>
                 </Route>
             </Switch>
         </DBContextProvider>
