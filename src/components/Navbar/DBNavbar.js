@@ -41,7 +41,7 @@ export const DBNavbar = (props) => {
 
         let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
 
-        let bs = (<BranchSelector />) 
+        //let bs = (<BranchSelector />) 
 
         let toggler = (
             <ToggleButton value={ toggleTime || false }
@@ -67,7 +67,18 @@ export const DBNavbar = (props) => {
             />
         )
         return (
-            <Row className={NAV_CSS.dbDetails} >
+        
+                <Row className={NAV_CSS.dbDetails} >
+                    <Col className={timeCSS}>
+                        {currentTime}
+                        {toggler}
+                    </Col>
+                </Row>
+        )
+    }
+
+    /*
+    <Row className={NAV_CSS.dbDetails} >
                 {bs && 
                     <Col className={NAV_CSS.branchContainer}>{bs}</Col>
                 }
@@ -76,8 +87,7 @@ export const DBNavbar = (props) => {
                     {toggler}
                 </Col>
             </Row>
-        )
-    }
+    */
 
 
     return (
@@ -91,8 +101,13 @@ export const DBNavbar = (props) => {
                     {trimContent(dbmeta.title, 15)}
                 </NavLink>
             </NavItem>
-            <NavItem>
-                {getDBHomeDetails()}
+            <NavItem className="d-none d-md-block" >
+                <div className="select-nav-bar">
+                    <BranchSelector />
+                </div>
+            </NavItem>
+            <NavItem className="d-none d-md-block" >               
+                    {getDBHomeDetails()}               
             </NavItem>
             <NavItem>
                 <NavLink tag = {RouterNavLink}
