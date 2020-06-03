@@ -1,18 +1,19 @@
 /**
  * Controller application for branch creation form
  */
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
-import { CREATE_BRANCH_FORM  } from "./constants.dbmanage"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR } from "../../constants/identifiers";
+import { CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM  } from "./constants.dbmanage"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_INFO } from "../../constants/identifiers";
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
 import {Row, Col} from "reactstrap"
+import { printts } from "../../constants/dates";
 
 export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
-    const {branch, ref, consoleTime} = DBContextObj();
+    const {branch, ref, consoleTime, updateBranches} = DBContextObj();
 
     
     visible = visible || false
@@ -23,6 +24,16 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     })
 
     const [values, setValues] = useState(ics)
+    const [sourceValues, setSourceValues] = useState()
+
+    useEffect(() => {
+        setSourceValues({
+            branch: branch,
+            ref: ref || "head",
+            time: (consoleTime ? printts(consoleTime) : "now")
+        })
+    }, [branch, ref, consoleTime])
+ 
     const [report, setReport] = useState()
 
     let btns = CREATE_BRANCH_FORM.buttons
@@ -32,6 +43,7 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
         woqlClient.branch(values.bid)
         .then(() => {
             setReport({ status: TERMINUS_SUCCESS })
+            updateBranches()
         })
         .catch((e) => {
             setReport({ status: TERMINUS_ERROR, message: "Failed to create branch", error: e})
@@ -43,22 +55,16 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
         setValues(values)
     }
 
-    function showCurrentHead(){
-        return (
-            <Row>
-                <Col>Branch From</Col>
-                <Col>Branch:  {branch}</Col>
-                <Col>Ref: {ref || "head"}</Col>
-                <Col>Time: {consoleTime}</Col>
-            </Row>
-        )
-    }
-
     if(report && report.status == TERMINUS_SUCCESS){
         return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Created New Branch"}} />)
     }
     return (<>
-        {showCurrentHead()}    
+        <TCForm 
+            layout = {[3]}
+            fields={BRANCH_SOURCE_FORM.fields}
+            values={sourceValues}
+            report={{status: TERMINUS_INFO, message: BRANCH_SOURCE_FORM.infoMessage } }
+        />
         <TCForm 
             onSubmit={onCreate} 
             report={report} 
