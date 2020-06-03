@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from "react-select";
 import {BRANCH_SELECTOR} from "./constants.history"
-import { WidgetSelector } from "./WidgetSelector"
 
 /**
  * Simple Dropdown for switching between branches
