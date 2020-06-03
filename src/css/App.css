@@ -1063,6 +1063,11 @@ p.dscr{
     padding-left: 100px;
 }
 
+.under-construction-button {
+    font-weight: 600;
+    color: #A37B05
+}
+
 .under-construction-header{
     padding: 40px 10px 10px 20px !important;
     border-bottom: 2px solid rgb(226, 232, 240);
@@ -2519,7 +2524,7 @@ h4.prefix-section-header {
 .schema-toolbar-create {
     text-align: right;
     padding: 2px;
-}  
+}
 
 
 
@@ -2538,8 +2543,8 @@ h4.prefix-section-header {
     border: 0 !important;
 }
 
-.schema-toolbar-cancel, 
-.schema-toolbar-action, 
+.schema-toolbar-cancel,
+.schema-toolbar-action,
 .schema-toolbar-update {
     font-size: 0.9em;
     font-weight: 600;
@@ -2597,7 +2602,7 @@ h4.prefix-section-header {
 .schema-toolbar-messages {
     padding: 5px;
     text-align: center;
-    width: 100%;    
+    width: 100%;
 }
 
 .schema-toolbar-message-container {
@@ -2641,4 +2646,3 @@ h4.prefix-section-header {
 .owl-editor-write {
     border: 1px solid #002856;
 }
-

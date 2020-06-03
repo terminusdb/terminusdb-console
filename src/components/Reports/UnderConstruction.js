@@ -21,7 +21,7 @@ export const UnderConstruction = (props) => {
     let hdr = props.action + " " + UNDER_CONSTRUCTION.headerText
     return (<>
         {!modal &&
-           <Button className={UNDER_CONSTRUCTION.buttonClassName} onClick={toggle}>
+           <Button className={UNDER_CONSTRUCTION.buttonClassName} outline color={UNDER_CONSTRUCTION.color} onClick={toggle}>
                {UNDER_CONSTRUCTION.buttonText}
             </Button>
         }
