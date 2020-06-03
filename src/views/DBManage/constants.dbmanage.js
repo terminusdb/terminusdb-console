@@ -59,17 +59,6 @@ export const CREATE_BRANCH_FORM = {
 
         },
         {
-            id: "source",
-            value: "",
-            mandatory: true,
-            inputElement: {
-                type: "input",
-                placeholder: "ID of commit to branch from",
-            },
-            label: 'Source Commit',
-            help: "You can choose to start a new branch from anywhere in the history of any branch. All commits are uniquely identified",
-        },
-        {
             id: "commit",
             label: "Commit Message",
             inputElement: {
@@ -117,6 +106,7 @@ export const MERGE_BRANCH_FORM = {
             }
         }
     ],
+    actionText: "Merge Branches",
     buttons: {
         submitText: "Merge Branches"
     }

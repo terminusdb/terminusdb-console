@@ -21,7 +21,7 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
         return {label: item.id, value: item.id}
     })
 
-    if(branch && branches && branches.length > 0) {
+    if(branch && branches && branches.length > 1) {
         return (
             <Select placeholder = {BRANCH_SELECTOR.label + " " + branch}
                 className = {className || BRANCH_SELECTOR.selectClassName}
