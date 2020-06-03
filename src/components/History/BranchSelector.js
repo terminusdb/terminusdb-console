@@ -17,13 +17,17 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
         }
     }
 
+    let bopts = branches.map( (item) => {
+        return {label: item.id, value: item.id}
+    })
+
     if(branch && branches && branches.length > 0) {
         return (
             <Select placeholder = {BRANCH_SELECTOR.label + " " + branch}
                 className = {className || BRANCH_SELECTOR.selectClassName}
                 value = {branch}
                 onChange = {changeBranch}
-                options = {branches}/>
+                options = {bopts}/>
         )
     }
     else if(branch && branches && branches.length == 1 && !hideSingle){
