@@ -1,6 +1,25 @@
 .navbar{
   min-height: 70px!important;
 }
+
+.dd-mute{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dd-st{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wrap-text{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .pagination button{
     background: transparent;
     font-weight: bold;
