@@ -75,7 +75,8 @@ export const WARNING_BOX_CSS = "connectLayout"
 export const UNKNOWN_ERROR = "API Failure - check your network connection and make sure your server is running"
 
 export const UNDER_CONSTRUCTION = {
-    buttonClassName: "",
+    buttonClassName: "under-construction-button",
+    color: "warning",
     introClassName: "under-construction-intro-icon",
     inputClassName: "under-construction-input",
     buttonText: "Currently Being Tested - Release Imminent",
