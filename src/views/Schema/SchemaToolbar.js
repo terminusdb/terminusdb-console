@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { TOOLBAR_CSS, EDIT_OWL_BUTTON, CANCEL_OWL_BUTTON, UPDATE_OWL_BUTTON, COMMIT_PLACEHOLDER, SUBMIT_INPUT_LABEL, CREATE_GRAPH_BUTTON } from "./constants.schema"  
+import { TOOLBAR_CSS, EDIT_OWL_BUTTON, CANCEL_OWL_BUTTON, UPDATE_OWL_BUTTON, COMMIT_PLACEHOLDER, SUBMIT_INPUT_LABEL, CREATE_GRAPH_BUTTON } from "./constants.schema"
 import { GraphFilter } from "./GraphFilter"
 import { Row, Col, Button } from "reactstrap"
 import { SCHEMA_OWL_ROUTE, SCHEMA_GRAPHS_ROUTE } from '../../constants/routes';
@@ -8,8 +8,8 @@ import { DBContextObj } from "../../components/Query/DBContext"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 
 export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onAction, onCancel, onUpdate}) => {
-    
-    const { consoleTime } = DBContextObj()    
+
+    const { consoleTime } = DBContextObj()
 
     const {woqlClient} = WOQLClientObj()
 
@@ -63,19 +63,20 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
     let cr = getCreateForPage(page)
     let but = getSubmitButtons(page)
 
+
     function getEditModeBar(p){
         if(p == SCHEMA_GRAPHS_ROUTE){
             return (
                 <Row className={TOOLBAR_CSS.container} >
                     <Col md={12} className={TOOLBAR_CSS.messageCol}>
-                        {report && 
+                        {report &&
                             <span className={TOOLBAR_CSS.messageContainer} >
                                 <TerminusDBSpeaks report={report} />
                             </span>
                         }
                     </Col>
                 </Row>
-            )            
+            )
         }
         let mwidth = (but ? 8 : 11)
         return (
@@ -86,7 +87,7 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
                 <Col md={mwidth} className={TOOLBAR_CSS.commitMsgCol}>
                     <input className={TOOLBAR_CSS.commitInput} onChange={updateCommit} placeholder={COMMIT_PLACEHOLDER} />
                 </Col>
-                {but && 
+                {but &&
                     <Col md={3} className={TOOLBAR_CSS.submitButtonsCol}>
                         {but}
                     </Col>
@@ -114,21 +115,23 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
     if(gf) mwidth = mwidth-3
     if(cr) mwidth = mwidth-2
 
+    console.log('report',report)
+    
     return (
         <Row className={TOOLBAR_CSS.container} >
             <Col md={mwidth} className={TOOLBAR_CSS.messageCol}>
-                {report && 
+                {report &&
                     <span className={TOOLBAR_CSS.messageContainer} >
                         <TerminusDBSpeaks report={report} />
                     </span>
                 }
             </Col>
-            {cr && 
+            {cr &&
                 <Col md={2} className={TOOLBAR_CSS.createCol}>
-                    {cr}                    
+                    {cr}
                 </Col>
             }
-            {gf && 
+            {gf &&
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                     {gf}
                 </Col>

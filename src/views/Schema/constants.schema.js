@@ -1,22 +1,22 @@
-export const FAILED_LOADING_SCHEMA_CLASSES = { 
+export const FAILED_LOADING_SCHEMA_CLASSES = {
     id: "FAILED_LOADING_SCHEMA_CLASSES",
     color: "danger",
     title: "Failed to load schema classes",
-    message: "An error occurred while loading classes"    
+    message: "An error occurred while loading classes"
 }
 
-export const GRAPHS_LOAD_ERROR = { 
+export const GRAPHS_LOAD_ERROR = {
     id: "GRAPHS_LOAD_ERROR",
     color: "danger",
     title: "Failed to load graphs",
-    message: "An error occurred while loading the list of database graphs"    
+    message: "An error occurred while loading the list of database graphs"
 }
 
 export const FAILED_LOADING_OWL = {
     id: "GRAPHS_LOAD_ERROR",
     color: "danger",
     title: "Failed loading triples",
-    message: "An error occurred while loading the triples from the graph"    
+    message: "An error occurred while loading the triples from the graph"
 }
 
 
@@ -49,10 +49,10 @@ export const INFERENCE_GRAPH = "Inference Graph"
 
 
 
-export const TERMINUS_GRAPHS_BLURB = "TerminusDB databases are divided internally into one or more named graphs. This gives you greater control over data-integration but comes at the cost of complexity." 
+export const TERMINUS_GRAPHS_BLURB = "TerminusDB databases are divided internally into one or more named graphs. This gives you greater control over data-integration but comes at the cost of complexity."
 export const TERMINUS_GRAPHS_TITLE = "Graph Management"
 
-export const TERMINUS_PREFIXES_BLURB = "TerminusDB stores all data as RDF which uses URLs (IRIs more accurately) to give data global addressability and namespace protection. You can choose what URLs the data in your database will use." 
+export const TERMINUS_PREFIXES_BLURB = "TerminusDB stores all data as RDF which uses URLs (IRIs more accurately) to give data global addressability and namespace protection. You can choose what URLs the data in your database will use."
 export const TERMINUS_PREFIXES_TITLE = "URI Prefix Management"
 
 
@@ -102,14 +102,14 @@ export const CREATE_GRAPH_FORM = {
 }
 
 export const TOOLBAR_CSS = {
-    container: "schema-toolbar",  
-    messageCol: "schema-toolbar-messages",  
-    createCol: "schema-toolbar-create",  
-    graphCol: "schema-toolbar-graphs",  
+    container: "schema-toolbar",
+    messageCol: "schema-toolbar-messages",
+    createCol: "schema-toolbar-create",
+    graphCol: "schema-toolbar-graphs",
     actionButton: "schema-toolbar-action",
     editOWLButton: "schema-toolbar-edit schema-toolbar-action",
     createGraphButton: "schema-toolbar-create-button schema-toolbar-action",
-    updateContainer: "schema-edit-toolbar",  
+    updateContainer: "schema-edit-toolbar",
     updateReportContainer: "schema-edit-report",
     cancelOWLButton: "schema-toolbar-cancel",
     updateOWLButton: "schema-toolbar-update",
@@ -134,6 +134,8 @@ export const OWL_CSS = {
     writeContainer: "owl-editor-write"
 }
 
+export const CLASS_TABLE_INFO_MSG = "List of Classes"
+export const PROPERTIES_TABLE_INFO_MSG = "List of Properties"
 export const OWL_INFO_MSG = "OWL, the ontology web language, can be used directly to view and edit schema and inference rules"
 export const GRAPHS_INFO_MSG = "Graphs are internal database partitions where data and rules are stored separately"
 export const GRAPHS_CREATE_INFO = "Choose the type of graph you want to create and a name for it and a commit message"

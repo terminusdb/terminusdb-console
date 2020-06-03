@@ -15,17 +15,17 @@ export const GraphManager = (props) => {
     const {graphs} = DBContextObj();
     const [loading, setLoading] = useState(false)
     const [creating, setCreating] = useState(false)
-    
-    let initMsg = (GRAPHS_INFO_MSG ? {status: TERMINUS_INFO, message: GRAPHS_INFO_MSG} : null) 
+
+    let initMsg = (GRAPHS_INFO_MSG ? {status: TERMINUS_INFO, message: GRAPHS_INFO_MSG} : null)
     let initCreate = (GRAPHS_CREATE_INFO ? {status: TERMINUS_INFO, message: GRAPHS_CREATE_INFO} : null)
     const [report, setReport] = useState(initMsg)
 
 
-    /* 
+    /*
     function submitDelete(type, id, commit){
         if(type && id){
             setLoading(true)
-            commit = (commit ? commit : "") + CREATE_GRAPH_FORM.graphDeletedLocation  
+            commit = (commit ? commit : "") + CREATE_GRAPH_FORM.graphDeletedLocation
             woqlClient.deleteGraph(type, id, commit)
             .then(() => {
                 setLoading(false)
@@ -34,7 +34,7 @@ export const GraphManager = (props) => {
             .catch((e) => {
                 setLoading(false)
                 setUpdateError({message: message, error: e, status: TERMINUS_ERROR, time: t})
-            })        
+            })
         }
     }
     */
@@ -59,7 +59,7 @@ export const GraphManager = (props) => {
                 setReport({message: message, error: e, status: TERMINUS_ERROR, time: t})
             })
             .finally(() => setLoading(false))
-        }  
+        }
     }
 
     function setEditing(){
@@ -74,22 +74,22 @@ export const GraphManager = (props) => {
 
     return (
         <div className = {TAB_SCREEN_CSS}>
-            {!graphs && 
+            {!graphs &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
-            {graphs && 
-                <SchemaToolbar 
-                    report={report} 
-                    page={SCHEMA_GRAPHS_ROUTE} 
-                    onAction={setEditing} 
-                    onCancel={unsetEditing} 
+            {graphs &&
+                <SchemaToolbar
+                    report={report}
+                    page={SCHEMA_GRAPHS_ROUTE}
+                    onAction={setEditing}
+                    onCancel={unsetEditing}
                     editmode={creating}
                 />
             }
-            {!creating && graphs && 
+            {!creating && graphs &&
                 <GraphList graphs={Object.values(graphs)} />
             }
-            {creating && 
+            {creating &&
                 <CreateGraph visible={creating} onCreate={submitCreate} onCancel={unsetEditing} />
             }
     </div>
