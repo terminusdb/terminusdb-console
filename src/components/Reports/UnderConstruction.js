@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Col, Row} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Col, Row, Label, Input} from 'reactstrap';
 import { useForm } from 'react-hook-form';
 import { UNDER_CONSTRUCTION } from "./constants.reports"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,28 +42,9 @@ export const UnderConstruction = (props) => {
                         {introText}
                     </div>
                     <div className={UNDER_CONSTRUCTION.formWrapperClassName}>
-                        <form onSubmit={ handleSubmit(onSubmit) }>
-                            <hr className="my-space-25"/>
-                            <input
-                                type="text"
-                                name="useremail"
-                                id="useremail"
-                                placeholder={UNDER_CONSTRUCTION.emailPlaceholder}
-                                className={UNDER_CONSTRUCTION.inputClassName}
-                                ref = { register({ validate: value => value.length > 0}) }
-                            />
-                            <hr className="my-space-25"/>
-                            <textarea
-                                placeholder={UNDER_CONSTRUCTION.messagePlaceholder}
-                                name="usermessage"
-                                id="usermessage"
-                                className={UNDER_CONSTRUCTION.inputClassName}
-                                ref = { register({ validate: value => value.length > 0}) }
-                            />
-                            <hr className = "my-space-25"/>
-                            <Button disabled={disabled}>{ UNDER_CONSTRUCTION.submitText }</Button>
-                            <hr className = "my-space-25"/>
-                        </form>
+                        <a href="mailto:team@terminusdb.com" class={UNDER_CONSTRUCTION.submitButtonClassName}>
+                           {UNDER_CONSTRUCTION.submitText}
+                        </a>
                     </div>
                 </Col>
             </ModalBody>
