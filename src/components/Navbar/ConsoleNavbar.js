@@ -27,22 +27,24 @@ export const ConsoleNavbar = (props) => {
                     <Col md={2} sm={6} className={NAV_CSS.homeCol}>
                         {<ServerNavbar />}
                     </Col>
-                    <NavbarToggler onClick={collapseIsOpen} />                      
-                    <Col md={8} className={NAV_CSS.dbCol}>
-                        <Collapse isOpen={isCollapseOpen} navbar >
-                            { woqlClient.db() &&
-                                <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
+                    <NavbarToggler onClick={collapseIsOpen} />
+                    <Collapse isOpen={isCollapseOpen} navbar >                      
+                        <Col md={8} className={NAV_CSS.dbCol}>
+                            
+                                { woqlClient.db() &&
+                                    <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
+                                }
+                           
+                        </Col>                    
+                        <Col md={2} className={NAV_CSS.loginCol}> 
+                            {!(isAuthenticated || loading) &&
+                                <Login/>
                             }
-                        </Collapse>
-                    </Col>                    
-                    <Col md={2} sm={6} className={NAV_CSS.loginCol}> 
-                        {!(isAuthenticated || loading) &&
-                            <Login/>
-                        }
-                        {!loading && isAuthenticated && user &&
-                            <LoggedIn/>
-                        }
-                    </Col>             
+                            {!loading && isAuthenticated && user &&
+                                <LoggedIn/>
+                            }
+                        </Col> 
+                    </Collapse>            
                 </Row>
             </Navbar>
             {isOpen && 
