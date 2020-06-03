@@ -86,6 +86,7 @@ export const DB_DETAILS_FORM = {
     fields: [
         {   
             id: "dbid",
+            maxLenght:200,
             value: "",
             helpCols: 9,
             label: 'Database ID',

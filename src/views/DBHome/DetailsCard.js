@@ -26,23 +26,23 @@ export const DetailsCard = (props) => {
                                         {trimContent(props.title, TITLE_LIMIT)}
                                     </legend>
                                     <p className="dd-p">{trimContent(props.main, MAIN_LIMIT)}</p>
-                                    <p className="dd-st">{trimContent(props.subTitle, SUB_TITLE_LIMIT)}</p>
+                                    <p className="dd-st" >{trimContent(props.subTitle, SUB_TITLE_LIMIT)}</p>
                                 </div>
                             </Col>
                         </>}
                         {!icon &&
                             <Col xs={12}>
                                 <div className="dd-t">
-                                    <legend className="dd-mute" title={props.title} >{props.title}</legend>
+                                   <legend className="dd-mute" title={props.title} >{props.title}</legend>
                                     <p className="dd-p">{props.main}</p>
-                                    <p className="dd-st" title={props.subTitle} >{props.subTitle}</p>
+                                    <p className="dd-st">{props.subTitle}</p>
                                 </div>
                             </Col>
                         }
                     </Row>
                     <div className="dd-footer">
                         <hr />
-                        <div className="dd-f-txt">
+                        <div className="dd-f-txt" title={props.info}>
                             {trimContent(props.info, INFO_LIMIT)}
                         </div>
                     </div>
