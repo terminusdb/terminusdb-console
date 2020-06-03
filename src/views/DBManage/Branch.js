@@ -8,14 +8,11 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_INFO } from "../../constants
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
-import {Row, Col} from "reactstrap"
 import { printts } from "../../constants/dates";
 
 export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
     const {branch, ref, consoleTime, updateBranches} = DBContextObj();
-
-    
     visible = visible || false
     
     let ics = {}

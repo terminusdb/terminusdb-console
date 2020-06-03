@@ -89,7 +89,7 @@ export const BRANCH_SOURCE_FORM = {
                 type: "input",
             },
             label: 'Commit ID',
-            helpRows: 8,
+            helpCols: 8,
             help: "The position in the branch that the new branch will sprout from",
 
         },
