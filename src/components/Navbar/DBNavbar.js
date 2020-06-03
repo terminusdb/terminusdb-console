@@ -29,11 +29,6 @@ export const DBNavbar = (props) => {
         if(props.toggleTimeTravel) props.toggleTimeTravel()
     }
 
-
-    function onChangeBranch(b){
-        setHead(b)
-    }
-
     let branchStatus = ( ref  ? "#ffa500" : "#ccc")
 
     function getDBHomeDetails(){
@@ -46,11 +41,7 @@ export const DBNavbar = (props) => {
 
         let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
 
-        let bs = (<BranchSelector 
-            branch={branch} 
-            branches={Object.values(branches)} 
-            onUpdate={onChangeBranch}
-        />) 
+        let bs = (<BranchSelector />) 
 
         let toggler = (
             <ToggleButton value={ toggleTime || false }

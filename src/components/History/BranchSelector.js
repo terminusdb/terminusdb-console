@@ -1,33 +1,37 @@
 import React from 'react';
 import Select from "react-select";
 import {BRANCH_SELECTOR} from "./constants.history"
+import { DBContextObj } from "../Query/DBContext"
 
 /**
  * Simple Dropdown for switching between branches
  */
 
-export const BranchSelector = ({branch, branches, onChange, hideSingle, className}) => {
+export const BranchSelector = ({ onChange, hideSingle, className }) => {
 
-    hideSingle = hideSingle || false
+    hideSingle = hideSingle || true
+
+    const {branches, branch, setHead} = DBContextObj();
+
 
     function changeBranch(SelValue){
         let nub = SelValue.value
         if(nub != branch){
-            onChange(nub)
+            setHead(nub)
         }
     }
 
-    let bopts = branches.map( (item) => {
-        return {label: item.id, value: item.id}
-    })
 
-    if(branch && branches && branches.length > 1) {
+    if(branch && branches) {
+        let bopts = Object.values(branches).map( (item) => {
+            return {label: item.id, value: item.id}
+        })
         return (
-            <Select placeholder = {BRANCH_SELECTOR.label + " " + branch}
-                className = {className || BRANCH_SELECTOR.selectClassName}
-                value = {branch}
-                onChange = {changeBranch}
-                options = {bopts}/>
+        <Select placeholder = {BRANCH_SELECTOR.label + " " + branch}
+            className = {className || BRANCH_SELECTOR.selectClassName}
+            defaultValue = {branch}
+            onChange = {changeBranch}
+            options = {bopts}/>
         )
     }
     else if(branch && branches && branches.length == 1 && !hideSingle){
