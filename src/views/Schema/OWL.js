@@ -1,70 +1,123 @@
 import React, { useState, useEffect } from 'react';
 import { OWLEditor } from "./OWLEditor";
 import Loading from "../../components/Reports/Loading";
-import { ComponentFailure } from "../../components/Reports/ComponentFailure.js"
-import {FAILED_LOADING_OWL} from "./constants.schema"
+import { FAILED_LOADING_OWL, TAB_SCREEN_CSS, OWL_INFO_MSG, UPDATE_TURTLE_ERROR, UPDATE_TURTLE_SUCCESS, DEFAULT_TURTLE_UPDATE_MSG } from "./constants.schema"
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { EmptyResult } from "../../components/Reports/EmptyResult"
-import { APIUpdateReport } from "../../components/Reports/APIUpdateReport"
+import { SchemaToolbar } from './SchemaToolbar';
+import { SCHEMA_OWL_ROUTE } from '../../constants/routes';
+import { DBContextObj } from "../../components/Query/DBContext"
+import { TERMINUS_ERROR, TERMINUS_INFO, TERMINUS_COMPONENT, TERMINUS_SUCCESS } from '../../constants/identifiers';
+import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks';
+
 
 export const OWL = (props) => {
     const [edit, setEdit] = useState(false);
-    const [filter, setFilter] = useState(props.graph)
+    const [filter, setFilter] = useState()
     const [empty, setEmpty] = useState()
-    const [updateSuccess, setUpdateSuccess] = useState()
-    const [error, setError] = useState()
+    const [updatedTurtle, setUpdatedTurtle] = useState()
     const [dataProvider, setDataProvider] = useState()
     const {woqlClient} = WOQLClientObj();
+    const [loading, setLoading] = useState()
+
+    let initMsg = (OWL_INFO_MSG ? {status: TERMINUS_INFO, message: OWL_INFO_MSG} : null) 
+    const [report, setReport] = useState(initMsg)
+    const [failure, setFailure] = useState()
+
+    const { graphs, ref, branch } = DBContextObj()    
 
     useEffect(() => {
-        if(props.graph){
-            let id = (props.graph.gid == "*" ? "main" : props.graph.gid) 
-            setFilter({type: props.graph.type, id: id})
-            woqlClient.getTriples(props.graph.type, id)
+        if(props.graph && graphs){
+            let fid = props.graph.type + "/" + props.graph.id
+            if(graphs[fid]) setFilter(props.graph)
+            else {
+                for(var key in graphs){
+                    if(graphs[key].type == props.graph.type){
+                        setFilter({type: props.graph.type, id: graphs[key].id})
+                        continue
+                    }
+                }
+            }
+        }
+    }, [props.graph, graphs])
+
+    useEffect(() => {
+        if(filter){
+            setLoading(true)
+            woqlClient.getTriples(filter.type, filter.id)
             .then((cresults) => {
                 setDataProvider(cresults);
+                setUpdatedTurtle(cresults)
                 setEmpty(cresults == "") 
             })
             .catch((e) => {
-                setError({type: "read", error: e})
+                let rep = {status: TERMINUS_ERROR, error: e}
+                let f = FAILED_LOADING_OWL
+                setFailure({failure: f, report: rep})
             })
+            .finally(() => setLoading(false))
         }
-    }, [props.graph])
+    }, [branch, ref, filter])
 
-    function updateSchema(contents, commitmsg){
+    function updateSchema(commit){
         let ts = Date.now()
-        setUpdateSuccess(false)
-        woqlClient.updateTriples(filter.type, filter.id, contents, commitmsg)
-        .then((cresults) => {
+        let cmsg = (commit ? commit : DEFAULT_TURTLE_UPDATE_MSG + " [" + props.graph.type + "," + props.graph.id + "]") 
+        setLoading(true)
+        woqlClient.updateTriples(filter.type, filter.id, updatedTurtle, cmsg)
+        .then(() => {
             setEdit(false)
-            setDataProvider(contents);
-            setEmpty(contents == "") 
-            setUpdateSuccess(Date.now() - ts)
+            setDataProvider(updatedTurtle);
+            setReport({status: TERMINUS_SUCCESS, message: UPDATE_TURTLE_SUCCESS, time: Date.now() - ts})
         })
         .catch((e) => {
-            setError({type: "update", error: e})
+            setReport({status: TERMINUS_ERROR, message: UPDATE_TURTLE_ERROR, error: e, time: Date.now() - ts})
         })
+        .finally(() => setLoading(false))
+    }
+
+    function setEditMode(){
+        setReport()
+        setEdit(true)
+    }
+
+    function unsetEditMode(){
+        setReport(initMsg)
+        setEdit(false)
+    }
+
+    function getContents(cnt){
+        if(report && report.status != TERMINUS_INFO){
+            setReport()
+        }
+        setUpdatedTurtle(cnt)
+    }
+
+    function tryUpdateSchema(cmg){
+        setReport()
+        updateSchema(cmg)
     }
 
     return (
-        <div className = "tab-co">
-            {(!dataProvider && !error && !empty) &&  
-                <Loading type="component"/>
+        <div className = {TAB_SCREEN_CSS}>
+            {!failure && 
+                <SchemaToolbar 
+                    report={report} 
+                    editmode={edit} 
+                    page={SCHEMA_OWL_ROUTE} 
+                    graph={filter} 
+                    onChangeGraph={props.onChangeGraph} 
+                    onAction={setEditMode} 
+                    onCancel={unsetEditMode} 
+                    onUpdate={tryUpdateSchema}
+                />
             }
-            {(error && error.type == "read") && 
-                <ComponentFailure failure={FAILED_LOADING_OWL} error={error} />
+            {(loading) &&  
+                <Loading type={TERMINUS_COMPONENT}/>
             }
-            {(error && error.type == "update") &&
-                <APIUpdateReport error={error.error} status="error" message="Failed to update triples"/>
+            {failure && 
+                <TerminusDBSpeaks failure={failure.failure} report={failure.report} />
             }
-            {updateSuccess && 
-                <APIUpdateReport status="success" message="Successfully update graph" time={updateSuccess}/>
-            }
-            { empty && 
-                <EmptyResult />
-            }
-            {(dataProvider || empty) &&  
-                <OWLEditor dataProvider = {dataProvider} edit = {edit} onChange = {updateSchema}/>
+            {!(loading || failure) &&  
+                <OWLEditor dataProvider = {dataProvider} edit = {edit} onChange = {getContents} />
             }
         </div>
     )

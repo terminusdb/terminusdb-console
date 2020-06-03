@@ -1,7 +1,6 @@
 
-console.log("____TERMINUSDB_SERVER",process.env.TERMINUSDB_SERVER);
 
-const server=process.env.TERMINUSDB_SERVER || "http://localhost:6363" 
+const server=process.env.TERMINUSDB_SERVER || "http://195.201.12.87:6380/" 
 
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
@@ -15,7 +14,6 @@ const db=process.env.TERMINUSDB_DB || ""
 if(!key){
 
 	key=window.sessionStorage.getItem("apiKey");
-	console.log("___sessionkey__",key)
 }
 
 export const localSettings = {server : server,

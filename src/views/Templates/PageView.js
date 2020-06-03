@@ -7,6 +7,7 @@ import React from "react";
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 import { Container } from "reactstrap";
 import Footer  from "./Footer"
+import Loading from "../../components/Reports/Loading"
 import { PAGEVIEW } from "./constants.templates"
 import { TERMINUS_PAGE } from "../../constants/identifiers"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"

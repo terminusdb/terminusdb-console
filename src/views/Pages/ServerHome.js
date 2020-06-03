@@ -7,7 +7,6 @@ import { TabbedPageView } from '../Templates/TabbedPageView'
 import { CreateDatabase } from '../CreateDB/CreateDatabase'
 import { CREATE_DB_ROUTE, SERVER_ROUTE } from "../../constants/routes"
 import { DBList } from "../Tables/DBList"
-import { LoadDatabaseListDetails } from "../../components/Query/MetadataLoader"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 
 const ServerHome = (props) => {
@@ -20,20 +19,6 @@ const ServerHome = (props) => {
     const canCreate =  woqlClient.connection.capabilitiesPermit("create_database")
     if(dblist.length == 0 && !canCreate){
         return (<TerminusDBSpeaks failure={ACCESS_FAILURE} />)
-    }
-
-    const [dbs, setdbs] = useState(dblist)
-
-    const [dbDetails, report] = LoadDatabaseListDetails(dblist)
-
-    useEffect(() => {
-        if(dbDetails) setdbs(dbDetails)
-        if(report) console.log("Failed to load database list details", report)
-    }, [dbDetails, report])
-
-	//temp
-	function onHeadChange(){
-        //setRebuild(rebuild+1)
     }
 
     if(canCreate && dblist.length == 0){  //single page view - no tab
@@ -57,7 +42,7 @@ const ServerHome = (props) => {
     let active = props.page
     return (
         <TabbedPageView active={active} sections={sections}>
-            <DBList key="dbl" list={dbs}/>
+            <DBList key="dbl" list={dblist}/>
             <div key="create" className = "container-fluid">
                 <hr className = "my-space-15"/>
                 <hr className = "my-space-15"/>

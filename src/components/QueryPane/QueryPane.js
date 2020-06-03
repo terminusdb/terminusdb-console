@@ -8,7 +8,7 @@ import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {ResultQueryPane} from './ResultQueryPane';
 import TerminusClient from '@terminusdb/terminusdb-client';
 import {QUERY_PANEL_TITLE} from "./constants.querypane"
-import {HistoryNavigatorObj} from "../../init/history-navigator-instance";
+import {DBContextObj} from "..//Query/DBContext";
 
 /*
 * this is only the queryEditor you don't need to process result;
@@ -19,24 +19,9 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
     */
 
     const {woqlClient} = WOQLClientObj();
-    let refHeadId,branchHead
-    /*
-    * not do the query if the value don't change
-    */
-    try{
-        /*
-        * this dosen't exist for terminus db to be review
-        */
-        const {refId,branch} =HistoryNavigatorObj();
-        refHeadId=refId;
-        branchHead=branch;
-
-        console.log("__REF___",refHeadId,"__BRANCH___",branchHead)
-    }catch(err){
-        console.log("terminus-db")
-    }
-    //TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,query,refHeadId,branchHead);
+    const {ref,branch} = DBContextObj()
+    TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
+    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, query, branch, ref);
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 
 

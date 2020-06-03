@@ -3,29 +3,31 @@ import { Route, useParams, useRouteMatch, Switch} from "react-router-dom"
 import { DB_QUERY_ROUTE, DB_SCHEMA_ROUTE, DB_DOCUMENT_ROUTE, SPECIFIC_DB_ROUTE, TERMINUS_ROUTE } from "../../constants/routes"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBHomeRoutes } from "./DBHomeRoutes"
-import { SchemaRoutes, TerminusSchemaRoutes } from "./SchemaRoutes"
+import { SchemaRoutes } from "./SchemaRoutes"
 import QueryPage from "../../views/Pages/QueryPage"
 import DocumentPage from "../../views/Pages/DocumentPage"
 import TerminusHome from "../../views/Pages/TerminusHome"
 
-import {HistoryNavigatorProvider} from "../../init/history-navigator-instance"
+//import {HistoryNavigatorProvider} from "../../init/history-navigator-instance"
+import {DBContextProvider} from "../Query/DBContext"
+
 
 export const DBRoutes = () => {
     const { woqlClient } = WOQLClientObj();
 
     const { path } = useRouteMatch();
-    const routes = []
-    return (<Switch>
+    return (
+        <DBContextProvider woqlClient={woqlClient}>
+            <Switch>
                 <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
                     <MasterDBRoute />
                 </Route>
                 <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-                    <HistoryNavigatorProvider woqlClient={woqlClient}>
                         <DBRoute/>
-                    </HistoryNavigatorProvider>
                 </Route>
             </Switch>
-            )
+        </DBContextProvider>
+    )
 }
 
 /*
@@ -55,7 +57,7 @@ const MasterDBRoute = () => {
     )
     routes.push(
         <Route key="terminusschema" path={`${path}${DB_SCHEMA_ROUTE}`}>
-            <TerminusSchemaRoutes />
+            <SchemaRoutes />
         </Route>
     )
     routes.push(

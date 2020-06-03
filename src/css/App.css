@@ -217,15 +217,14 @@ div.history-navigator-Collapsible {
     border-radius: 10px;*/
     margin: 5px 20px 20px 20px;
     padding: 0px 25px 25px 25px;
-    position: absolute;
+    position: fixed;
     /*border: 1px solid rgba(0,0,0,.125);
     box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
-
-
     background-color: #fff;
     z-index: 99!important;
     box-shadow: 0 1px 10px -1px rgba(0,0,0,.2)!important;
 }
+
 
 img.center {
     margin: auto;
@@ -327,10 +326,9 @@ div.query-box{
     margin-top:100px;
 }
 
-button.btn-secondary{
+button.btn-secondary {
     color: #000;
     background-color: #f5f5f5;
-    border-radius: 25px !important;
 }
 
 button.pr {
@@ -630,14 +628,6 @@ input.form[type="submit"]:hover {
   background: #bf1650;
 }
 
-button.form[type="submit"]:active,
-input.form[type="button"]:active,
-input.form[type="submit"]:active {
-  transition: 0.3s all;
-  transform: translateY(3px);
-  border: 1px solid transparent;
-  opacity: 0.8;
-}
 
 input.form:disabled {
   opacity: 0.4;
@@ -653,11 +643,6 @@ input.form[type="submit"] {
   -webkit-appearance: none;
 }
 
-button{
-    float: right;
-    min-width: 100px;
-    margin: 20px 0px 10px 0x;
-}
 
 div.css-yk16xz-control{
     /*border-color: #000 !important;*/
@@ -916,7 +901,7 @@ span.d-ddps div.dropdown div{
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
 }
 
-button.btn-q-fmt:hover, span.d-ddps div.dropdown button:hover{
+button.btn-q-fmt:hover, span.d-ddps div.dropdown {
     background-color: #d9d9d9;
     color: black;
     border: 0;
@@ -1005,13 +990,16 @@ img.card-img-top{
 }
 
 
-
 div.div-hide {
     display: none !important;
 }
 
 ul.nav-tabs {
     border-bottom: 1px solid #00C08B !important;
+}
+
+.ml-auto {
+    margin-left: 20px
 }
 
 ul.nav-tabs li.nav-item:hover, ul.nav-tabs li.nav-item a.nav-link:visited {
@@ -1036,15 +1024,11 @@ span.nav-al ul.navbar-nav li.nav-item a.nav-link:visited {
     border-bottom: 1px solid #00C08B;
 }
 
-.ml-auto{
-    margin-left: calc(100% - 750px) !important;
-}
+
 
 ul.db-nav {
     /*background-color: #CCDDF1;*/
     background-image: url(https://terminusdb.com/img/cards/card-shape-5.svg);
-    border-radius: 3px;
-    max-width: 600px;
 }
 
 div.curr-pr {
@@ -1222,15 +1206,31 @@ p.dscr{
   content: "";
 }
 
-.navbar {
-  padding: 10px 0
-}
 
 .navbar {
   background-color: #002856;
-  padding: 5px;
-  box-shadow: 0 1px 2px 0 #dfe3ec
+  box-shadow: 0 1px 2px 0 #dfe3ec;
+  padding: 0;
 }
+
+.navbar-home-col {
+    padding: 0 10px;
+}
+
+.navbar-db-col {
+    padding: 0;
+}
+
+.navbar-login-col {
+    text-align: right;
+    padding: 0 10px;
+}
+
+.navbar-toprow {
+    padding: 0;
+}
+
+
 
 .subNavBar{
     background-color: #fff !important;
@@ -1634,9 +1634,7 @@ div.dd-t {
 }
 
 #qsLoginBtn{
-    /*margin-right: -200px;*/
-    margin: 10px 0px 10px 5px;
-    float: right;
+    margin: 16px 0px 10px -26px;
 }
 
 legend {
@@ -1867,10 +1865,32 @@ div.terminus-datetime-slider-viewing {
 .history-slider-col {
 }
 
+.navbar-dbetails {
+    margin-right: 10px;
+}
+
+.navbar-branch {
+}
+
+.navbar-time {
+    width: 140px;
+    padding-top: 6px;
+    font-size: 0.9em;
+    color: white;
+}
+
+.navbar-old-time {
+    width: 140px;
+    padding-top: 6px;
+    font-size: 0.9em;
+    color: white;
+}
+
+
+
 .branch-selector {
     display: inline-block;
-    font-size: 0.9em;
-    width: 200px;
+    width: 180px;
 }
 
 .history-bar-container {
@@ -2462,3 +2482,158 @@ h4.prefix-section-header {
     float: right;
     margin-right: -10px;
 }
+
+.schema-toolbar {
+    height: 60px;
+    background-color: rgba(0, 102, 253, 0.1);
+    margin: 0px 0px 0px 0px;
+    padding: 2px;
+}
+
+.schema-edit-toolbar {
+    height: 60px;
+    color: white;
+    background-color: #002856;
+    margin: 0px 0px 0px 0px;
+    padding: 2px;
+}
+
+.schema-edit-report {
+    width: 100%;
+    height: 60px;
+    padding: 4px;
+    background-color: #002856;
+    margin: 0px 0px 0px 0px;
+}
+
+.schema-toolbar-graphs {
+    padding: 0;
+    margin-top: -3px;
+}
+
+.schema-toolbar-create {
+    text-align: right;
+    padding: 2px;
+}  
+
+
+
+.schema-toolbar-cancel:visited,
+.schema-toolbar-cancel:active {
+    border: 0 !important;
+}
+
+.schema-toolbar-action:visited,
+.schema-toolbar-action:active {
+    border: 0 !important;
+}
+
+.schema-toolbar-update:visited,
+.schema-toolbar-update:active{
+    border: 0 !important;
+}
+
+.schema-toolbar-cancel, 
+.schema-toolbar-action, 
+.schema-toolbar-update {
+    font-size: 0.9em;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.schema-toolbar-cancel {
+    background-color:#888 !important;
+    color: #eee !important;
+    width: 120px  !important;
+    margin-right: 10px;
+    border: 2px solid  #888  !important;
+}
+
+.schema-toolbar-update {
+    background-color: #00C08B !important;
+    color: #eee !important;
+    width: 120px  !important;
+    border: 2px solid #00C08B  !important;
+}
+
+.schema-toolbar-cancel:hover {
+    background-color:#666 !important;
+    color: white  !important;
+    border: 2px solid white !important;
+}
+
+
+.schema-toolbar-update:hover {
+    background-color: #00C08B !important;
+    color: white  !important;
+    border: 2px solid white !important;
+}
+
+.schema-toolbar-action {
+    background-color: white !important;
+    height: 52px;
+    width: 150px;
+    color: #888 !important;
+    border: 1px solid #ddd;
+}
+
+.schema-toolbar-commit-input {
+    padding: 10px !important;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    width: 100% !important;
+    color: #446 !important;
+    background-color:#f3f1f9;
+
+}
+
+.schema-toolbar-messages {
+    padding: 5px;
+    text-align: center;
+    width: 100%;    
+}
+
+.schema-toolbar-message-container {
+    margin: 0;
+    padding: 0;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.schema-toolbar-commitcol {
+    padding: 5px;
+}
+
+.schema-toolbar-labelcol {
+    padding: 16px 10px;
+    color:#f3f1f9;
+    font-weight: 600;
+    text-align: right;
+}
+
+.schema-toolbar-submits {
+    text-align: right;
+    padding-top: 6px;
+}
+
+.schema-toolbar-action:hover {
+    background-color: #00C08B !important;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: white  !important;
+    opacity: 0.8;
+    border: 1px solid #ddd;
+}
+
+.owl-editor-read {
+    border: 1px solid rgba(0, 102, 253, 0.1);
+
+}
+
+.owl-editor-write {
+    border: 1px solid #002856;
+}
+

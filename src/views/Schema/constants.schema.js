@@ -23,6 +23,8 @@ export const FAILED_LOADING_OWL = {
 export const DELETE_ICON_CSS = "tcf-delete-icon"
 
 export const CLASSES_QUERY_LIMIT = 200
+export const PROPERTIES_QUERY_LIMIT = 200
+
 
 /* schema tabs */
 export const CLASSES_TAB = "Classes"
@@ -99,46 +101,44 @@ export const CREATE_GRAPH_FORM = {
     }
 }
 
-
-export const COMMIT = {
-    act: {
-        label: {
-            htmlFor: "commit",
-            text: 'Commit',
-            className: "form"
-        },
-        input: {
-            placeholder: "Commit message",
-            name: "commit",
-            className: "form"
-        },
-        error: {
-            text: "Cannot be blank.",
-            className: "errors"
-        }
-    },
-    action: {
-        type: "submit",
-        className: "btn btn-primary lead mt-4",
-        text: "Commit"
-    }
+export const TOOLBAR_CSS = {
+    container: "schema-toolbar",  
+    messageCol: "schema-toolbar-messages",  
+    createCol: "schema-toolbar-create",  
+    graphCol: "schema-toolbar-graphs",  
+    actionButton: "schema-toolbar-action",
+    editOWLButton: "schema-toolbar-edit schema-toolbar-action",
+    createGraphButton: "schema-toolbar-create-button schema-toolbar-action",
+    updateContainer: "schema-edit-toolbar",  
+    updateReportContainer: "schema-edit-report",
+    cancelOWLButton: "schema-toolbar-cancel",
+    updateOWLButton: "schema-toolbar-update",
+    commitMsgCol: "schema-toolbar-commitcol",
+    commitLabelCol: "schema-toolbar-labelcol",
+    commitInput: "schema-toolbar-commit-input",
+    messageContainer: "schema-toolbar-message-container",
+    submitButtonsCol: "schema-toolbar-submits"
 }
 
+export const SUBMIT_INPUT_LABEL = "Commit Log"
 
-export const EDIT_SCHEMA = {
-    edit: {
-        type: "submit",
-        className: "btn btn-primary lead mt-4 formMrg",
-        text: "Edit"
-    },
-    cancel: {
-        type: "cancel",
-        className: "btn btn-primary lead mt-4 formMrg",
-        text: "Cancel"
-    },
-    update: {
-        type: "update",
-        className: "btn btn-primary lead mt-4 formMrg",
-        text: "Update"
-    }
+export const EDIT_OWL_BUTTON = "Edit OWL"
+export const CANCEL_OWL_BUTTON = "Cancel"
+export const UPDATE_OWL_BUTTON = "Save Changes"
+export const COMMIT_PLACEHOLDER = "Enter a brief description of the update and its purpose"
+
+export const TAB_SCREEN_CSS = "tab-co"
+
+export const OWL_CSS = {
+    readContainer: "owl-editor-read",
+    writeContainer: "owl-editor-write"
 }
+
+export const OWL_INFO_MSG = "OWL, the ontology web language, can be used directly to view and edit schema and inference rules"
+export const GRAPHS_INFO_MSG = "Graphs are internal database partitions where data and rules are stored separately"
+export const GRAPHS_CREATE_INFO = "Choose the type of graph you want to create and a name for it and a commit message"
+export const UPDATE_TURTLE_SUCCESS = "Successfully updated OWL"
+export const UPDATE_TURTLE_ERROR = "Failed to update OWL"
+export const DEFAULT_TURTLE_UPDATE_MSG = "Console update triples interface updated "
+
+export const CREATE_GRAPH_BUTTON = "Create New Graph"

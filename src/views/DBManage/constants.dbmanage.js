@@ -1,11 +1,11 @@
 export const MANAGE_SECTIONS = [
-    { 
+   /* { 
         id: "metadata",
         title: "Update Database Metadata",
         icon: "stamp",
         button: "Metadata",
         blurb: "Change the name of the database, its description and other metadata"
-    },
+    },*/
     { 
         id: "branch",
         title: "Create a new Branch",
@@ -43,9 +43,6 @@ export const DELETE_DB_MODAL = {
     deleted: "Database Deleted",
     failed: "Failed to Delete Database"
 }
-
-
-export const DELETE_BUTTON = "DELETE"
 
 export const CREATE_BRANCH_FORM = {
     fields: [

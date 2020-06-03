@@ -6,46 +6,38 @@ import { SimplePageView } from '../Templates/SimplePageView'
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
-import { ResultViewer } from "../../components/QueryPane/ResultViewer"
-import {HistoryNavigatorObj} from "../../init/history-navigator-instance";
+import { DocumentList } from "../Tables/DocumentList"
+import {DBContextObj} from "../../components/Query/DBContext";
+import { TERMINUS_PAGE } from "../../constants/identifiers";
 
 const DocumentPage = (props) => {
     /*
     * global woqlClient obj
     */
     const {woqlClient} = WOQLClientObj();
-    let refHeadId,branchHead
+    const {ref,branch} = DBContextObj();
 
-    try{
-        /*
-        * this dosen't exist for terminus db to be review
-        */
-        const {refId,branch} =HistoryNavigatorObj();
-        refHeadId=refId;
-        branchHead=branch;
-    }catch(err){
-        console.log("terminus-db")
-    }
 
     const [happiness, setHappiness] = useState(false);
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,refHeadId,branchHead);
+    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,branch, ref);
 
     function interpretQueryError(report){
         setHappiness(NO_DOCUMENT)
         const hasSchemaGraph = TerminusClient.WOQL.lib().loadBranchGraphNames(woqlClient)
         woqlClient.query(hasSchemaGraph).then((results) => {
-            let wr = new TerminusClient.WOQLResult(results, hasSchemaGraph)
-            let found = false
-            var res
-            while(res = wr.next()){
-                if(res['SchemaName']["@value"]){
-                    found = true
-                    continue
+            if(results.bindings && results.bindings.length){
+                let found = false
+                for(var i = 0; i<results.bindings.length ; i++){
+                    let res = results.bindings[0]
+                    if(res['SchemaName']["@value"]){
+                        found = true
+                        continue
+                    }
                 }
-            }
-            if(!found){
-                setHappiness(DOCUMENT_NO_SCHEMA)
+                if(!found){
+                    setHappiness(DOCUMENT_NO_SCHEMA)
+                }    
             }
         }).catch( (e) => {
             setHappiness(SYSTEM_ERROR)
@@ -88,10 +80,10 @@ const DocumentPage = (props) => {
     //onHeadChange={doRebuild}
     <SimplePageView page="document" >
         {!happiness &&
-            <Loading />
+            <Loading type={TERMINUS_PAGE} />
         }
         {(happiness === true) &&
-            <ResultViewer type="table" query={woql} bindings={bindings} />
+            <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
         }
         {(happiness && happiness !== true) &&
             <TerminusDBSpeaks failure={happiness} report={report} />

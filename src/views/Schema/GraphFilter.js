@@ -1,79 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
-import {Row, Col} from "reactstrap"
-import { GRAPH_FILTER_CSS, ALL_SCHEMA_GRAPHS, ALL_INFERENCE_GRAPHS,  SCHEMA_GRAPH, INFERENCE_GRAPH, GRAPH_FILTER_CONTAINER } from "./constants.schema"
+import { GRAPH_FILTER_CSS, ALL_SCHEMA_GRAPHS, ALL_INFERENCE_GRAPHS,  SCHEMA_GRAPH, INFERENCE_GRAPH } from "./constants.schema"
+import { DBContextObj } from "../../components/Query/DBContext"
+import { SCHEMA_OWL_ROUTE } from '../../constants/routes';
 
-const GraphFilter = (props) => {
-    const [filter, setFilter] = useState(props.filter);
-    const [graphs, setGraphs] = useState(props.graphs);
+export const GraphFilter = (page, graph, onChange ) => {
+    const [filter, setFilter] = useState(graph);
+    const { graphs } = DBContextObj();
+
+    const addAlls = (page && page == SCHEMA_OWL_ROUTE ? false : true)
 
     //update state whenever props change
     useEffect(() => {
-        setGraphs(props.graphs) 
-        setFilter(props.filter) 
-    }, [props])
+        if(graph) setFilter(graph) 
+    }, [page, graph])
 
     function changeFilter(SelValue){
         let nub = SelValue.value
         if(nub !=  filterString(filter)){
             let bits = nub.split("/")
-            if(props.onChange) props.onChange({type: bits[0], gid: bits[1]})
+            if(onChange) onChange({type: bits[0], id: bits[1]})
         }
     }
 
     function graphOptions(grs){
-        let opts = []
-        if(grs.schema.length > 1) opts.push({label: graphLabel({type: "schema", gid: "*"}), "value": "schema/*"})
-        for(var i = 0; i< grs.schema.length ; i++){
-            opts.push({
-                label: graphLabel({type: "schema", gid: grs.schema[i]}), value: "schema/" + grs.schema[i] 
-            })
+        let schemas = []
+        let infs = []
+        for(var key in grs){
+            if(grs[key].type == "schema" ) schemas.push(grs[key])
+            if(grs[key].type == "inference" ) infs.push(grs[key])
         }
-        if(grs.inference.length > 1) opts.push({label:  graphLabel({type: "inference", gid: "*"}), "value": "inference/*"})
-        for(var i = 0; i< grs.inference.length ; i++){
-            opts.push({
-                label: graphLabel({type: "inference", gid: grs.inference[i]}), value: "inference/" + grs.inference[i] 
-            })
+        if(addAlls){        
+            if(schemas.length > 1) schemas.unshift({type: "schema", id: "*"})
+            if(infs.length > 1) schemas.unshift({type: "schema", id: "*"})
         }
+        let choices = schemas.concat(infs)
+        if(filter && filter.type == "inference"){
+            choices = infs.concat(schemas)
+        }
+        let opts = choices.map((item) => {
+            let lab = graphLabel(item)
+            return { label: lab, value: filterString(item) }
+        })
         return opts
     }
 
-    function needsFilter(){
-        if(!graphs) return false
-        let c = graphs.inference ? graphs.inference.length : 0
-        c += graphs.schema ? graphs.schema.length : 0
-        return c>1
-    }
-
     function graphLabel(f){
-        if(f.type == "schema" && f.gid == "*") return ALL_SCHEMA_GRAPHS
-        else if(f.type == "inference" && f.gid == "*") return ALL_INFERENCE_GRAPHS
+        if(f.type == "schema" && f.id == "*") return ALL_SCHEMA_GRAPHS
+        else if(f.type == "inference" && f.id == "*") return ALL_INFERENCE_GRAPHS
         else {
-            if(f.type == "schema") return `${SCHEMA_GRAPH} ${f.gid}`
-            else return `${INFERENCE_GRAPH} ${f.gid}`
+            if(f.type == "schema") return `${SCHEMA_GRAPH} ${f.id}`
+            else return `${INFERENCE_GRAPH} ${f.id}`
         }        
     }
 
     function filterString(filter){
-        return filter.type + "/" + filter.gid
+        return filter.type + "/" + filter.id
     }
 
-    if(needsFilter() && filter) {
+    let opts = graphOptions(graphs)
+
+    if(opts && opts.length > 1 && filter) {
         return (
-            <Row>
-                <Col md={9} />
-                <Col md={3} className={GRAPH_FILTER_CONTAINER} >
-                    <Select 
-                        placeholder = {graphLabel(filter)}
-                        className = {GRAPH_FILTER_CSS}
-                        value = {filterString(filter)}
-                        onChange = {changeFilter}
-                        options = {graphOptions(graphs)}/>
-                </Col>
-            </Row>
+            <Select 
+                placeholder = {graphLabel(filter)}
+                className = {GRAPH_FILTER_CSS}
+                defaultValue = {filterString(filter)}
+                onChange = {changeFilter}
+                options = {graphOptions(graphs)}
+            />
         )
     }
     return null;
 }
 
-export default GraphFilter;

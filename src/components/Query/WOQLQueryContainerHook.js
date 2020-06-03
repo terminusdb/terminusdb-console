@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import {TerminusClientInterceptor} from './TerminusClientInterceptor';
 import TerminusClient from '@terminusdb/terminusdb-client';
 
-function WOQLQueryContainerHook(woqlClient,startQuery,refId,branch){	
+function WOQLQueryContainerHook(woqlClient,startQuery,branch, ref){	
 	const query=startQuery || false; 
 	const [woql, setWoqlQuery] = useState(query);
     const [report, setReport] = useState();
     const [bindings, setBindings] = useState();
-    //const {woqlClient} = WOQLClientObj();
+    const [loading, setLoading] = useState();
 
     const [cmsg, setCMsg] = useState("Update Query from Console Query Page")
 
@@ -38,13 +38,17 @@ function WOQLQueryContainerHook(woqlClient,startQuery,refId,branch){
     }
 
     function executeQuery() {
+        setLoading(true)
 		woql.execute(woqlClient, cmsg)
 	    .then((response) => {
 	        processSuccessfulResult(response)//, start, Date.now())
 	    })
 	    .catch((error) => {
 	        processErrorResult(error)
-	    })
+        })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     /*
@@ -52,10 +56,10 @@ function WOQLQueryContainerHook(woqlClient,startQuery,refId,branch){
     */
     useEffect(() => {       
         if(woql!==false) executeQuery();
-    }, [woql,refId,branch])
+    }, [woql, branch, ref])
 
     
-    return [updateQuery, report, bindings, woql];
+    return [updateQuery, report, bindings, woql, loading];
     
 }
  
