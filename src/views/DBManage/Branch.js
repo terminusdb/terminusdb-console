@@ -4,13 +4,17 @@
 import React, {useState} from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
 import { CREATE_BRANCH_FORM  } from "./constants.dbmanage"
-import { HistoryNavigator} from "../../components/History/HistoryNavigator"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR } from "../../constants/identifiers";
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import { WOQLClientObj } from "../../init/woql-client-instance";
+import { DBContextObj } from "../../components/Query/DBContext"
+import {Row, Col} from "reactstrap"
 
 export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
+    const {branch, ref, consoleTime} = DBContextObj();
+
+    
     visible = visible || false
     
     let ics = {}
@@ -25,7 +29,6 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
    
 
     function onCreate(){
-        woqlClient.ref(values.source)
         woqlClient.branch(values.bid)
         .then(() => {
             setReport({ status: TERMINUS_SUCCESS })
@@ -40,30 +43,30 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
         setValues(values)
     }
 
-
-    function headChanged(branch, ref){
-        let nvalues = {source: (ref ? ref : ""), branch: branch}
-        for(var key in values){
-            if(typeof[nvalues[key]] == "undefined") nvalues[key] = values[key]
-        }
-        setValues(nvalues)
+    function showCurrentHead(){
+        return (
+            <Row>
+                <Col>Branch From</Col>
+                <Col>Branch:  {branch}</Col>
+                <Col>Ref: {ref || "head"}</Col>
+                <Col>Time: {consoleTime}</Col>
+            </Row>
+        )
     }
 
     if(report && report.status == TERMINUS_SUCCESS){
         return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Created New Branch"}} />)
     }
-
-    return (       
+    return (<>
+        {showCurrentHead()}    
         <TCForm 
             onSubmit={onCreate} 
             report={report} 
-            layout = {[2, 1]}
+            layout = {[1, 1]}
             onChange={onUpdate}
             fields={CREATE_BRANCH_FORM.fields}
             values={values}
             buttons={btns} 
-        >
-            <HistoryNavigator onHeadChange={headChanged} />
-        </TCForm>       
-    )
+        />
+    </>)
 }

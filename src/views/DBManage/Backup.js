@@ -11,7 +11,6 @@ import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 import { TCForm, TCSubmitWrap} from "../../components/Form/FormComponents"
 
 export const Backup = ({onCancel, onCreate, onEdit, visible}) => {
-    //const {woqlClient,reconnectServer} = WOQLClientObj();
     const { loading, user } = useAuth0()
     const [report, setReport] = useState()
     let buttons = (user ? BACKUP_FORM.buttons : false)

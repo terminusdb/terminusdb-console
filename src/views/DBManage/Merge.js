@@ -2,15 +2,33 @@
  * Controller application for branch creation form
  */
 import React, {useState} from "react";
-import {TCForm} from  "../../components/Form/FormComponents"
+import {TCForm, TCSubmitWrap} from  "../../components/Form/FormComponents"
 import { MERGE_BRANCH_FORM } from "./constants.dbmanage"
+import { useAuth0 } from "../../react-auth0-spa";
+import { UnderConstruction } from "../../components/Reports/UnderConstruction"
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 
-export const Merge = ({onCancel, onCreate, onEdit, visible, report}) => {
+
+export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
     visible = visible || false
+    const { loading, user } = useAuth0()
+    const [report, setReport] = useState()
 
-    let btns = MERGE_BRANCH_FORM.buttons
+    
+    let btns = (user ? MERGE_BRANCH_FORM.buttons : false)
 
-    return (
+    return (<>
+        {(loading) && 
+            <Loading type={TERMINUS_COMPONENT} />
+        }
+        {(report && report.error) && 
+            <TerminusDBSpeaks report={report} />
+        }
+        {!user && 
+            <TCSubmitWrap>
+                <UnderConstruction action={MERGE_BRANCH_FORM.actionText} />
+            </TCSubmitWrap>
+        }
         <TCForm 
             onSubmit={onCreate} 
             report={report} 
@@ -18,5 +36,5 @@ export const Merge = ({onCancel, onCreate, onEdit, visible, report}) => {
             fields={MERGE_BRANCH_FORM.fields}
             buttons={btns} 
         />       
-    )
+    </>)
 }

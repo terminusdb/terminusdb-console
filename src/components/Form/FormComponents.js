@@ -400,6 +400,10 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
     )
 }
 
+export const TCFormRefSelector = ({field_id, onChange, className, label, checked, disabled, wrapperClassName, labelClassName}) => {
+    
+}
+
 export const TCRow = ({className, children}) => {
     if(typeof className != "string" || !className)  className = INTERNAL_ROW_CSS
     return (
@@ -538,6 +542,16 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
                 placeholder={elt.placeholder}
             />
         )
+    }
+    else if(elt.type == "ref"){
+        <TCFormRefSelector
+            field_id={field_id}
+            disabled ={elt.disabled}
+            mandatory ={mandatory}
+            value={value}
+            className={elt.className}
+            onChange={onChange}
+        />        
     }
     else if(elt.type == "textarea"){
         return (
