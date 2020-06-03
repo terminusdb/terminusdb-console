@@ -304,6 +304,7 @@ export const TCFormInput = ({field_id, value, disabled, onChange, placeholder, c
     }
     return (
         <input
+            maxLength="200"
             disabled={disabled}
             placeholder={ placeholder }
             className = { className }

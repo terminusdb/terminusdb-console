@@ -1,5 +1,3 @@
-
-
 const server=process.env.TERMINUSDB_SERVER || "http://195.201.12.87:6380/" 
 
 const TERMINUSDB=window.TERMINUSDB || {}
