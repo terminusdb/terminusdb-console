@@ -2,42 +2,50 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Col } from "reactstrap";
 import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
-import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DetailsCard } from "./DetailsCard"
 import * as icons from "../../constants/faicons"
 import TerminusClient from '@terminusdb/terminusdb-client';
 import { LatestUpdates } from "../Tables/LatestUpdates"
+import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
+
+import { WOQLClientObj } from "../../init/woql-client-instance";
+import { DBContextObj } from "../../components/Query/DBContext"
+import { printts, DATETIME_FULL } from "../../constants/dates";
+
+
 
 export const MonitorDB = (props) => {
-	const { isAuthenticated, user } = useAuth0();
-	const [commitInfo, setCommitInfo] = useState([])
-	const [dbInfo, setDbInfo] = useState([])
-	const [userInfo, setUserInfo] = useState([])
-	const [originInfo, setOriginInfo] = useState([])
+    const { isAuthenticated, user } = useAuth0();
+    const {woqlClient} = WOQLClientObj()
+    const {graphs, branch, branches,  DBInfo,  ref, consoleTime} = DBContextObj();
+    
+    let ts = consoleTime || (Date.now() / 1000)
 
-	const [branch, countBranch] = useState(1)
-	const always = true;
+    let q = TerminusClient.WOQL.lib().getCommitBefore("v:BranchName", String(ts), woqlClient.resource("commits"))
+    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, q, branch, ref)
+    
+	let q2 = TerminusClient.WOQL.using(woqlClient.resource("commits"), TerminusClient.WOQL.triple("v:X", "ref:commit_timestamp", "v:Time"))
+    
 
-    const { woqlClient } = WOQLClientObj();
-	const db_uri = woqlClient.server() + '/db/' + woqlClient.account() + '/' + getCurrentDBID(woqlClient)
+    const [uq, report2, binds2, woql2] = WOQLQueryContainerHook(woqlClient, q2, branch, ref)
 
-	function prepareCommitInfo(r) {
-		var info = [];
-		info.push('Last modified by local administrator on 20 May 2020, latest updates are listed below')
-		return info
-	}
 
-    useEffect(() => {
-        const q = TerminusClient.WOQL.lib().loadBranchNames(woqlClient)
-        woqlClient.query(q).then((results) => {
-			if(results.bindings &&  results.bindings.length > 1)
-				countBranch(results.bindings.length + ' Branches')
-		    else if(results.bindings) countBranch(results.bindings.length + ' Branch')
-			var inf = prepareCommitInfo()
-            setCommitInfo(inf)
-			setOriginInfo('Your database has processed all transactions correctly and is up to dated')
-        })
-    }, [always]);
+    let latestUpdates = TerminusClient.WOQL.limit(50).select("v:Time", "v:Author", "v:Message").order_by("v:Time", TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, "v:ANYCOMMIT"))
+
+    const [uq3, report3, latests, woql3] = WOQLQueryContainerHook(woqlClient, latestUpdates, branch, ref)
+
+
+	const db_uri = woqlClient.server() + woqlClient.account() + '/' + woqlClient.db()
+
+    function getCommitInfo(){
+        let str = ""
+        if(bindings){
+            let r = bindings[0]
+            let ubranch = r["BranchName"]["@value"]
+            str += "Last Update (" + ubranch + "): " + printts(r["Time"]["@value"]) + " "
+        }
+        return str         
+    }
 
     return (
         <div>
@@ -47,39 +55,40 @@ export const MonitorDB = (props) => {
 
 			<Row>
 				<Col md={3} className="mb-3 dd-c">
-					{dbInfo && <DetailsCard 
-						title = {getCurrentDBID(woqlClient)}
+					{DBInfo && <DetailsCard 
+						title = {woqlClient.db()}
 						main = {getCurrentDBName(woqlClient)}
-						subTitle = {db_uri}
+						subTitle = {"Created " + printts(DBInfo.created, DATETIME_FULL)}
 						info = {getCurrentDbDescr(woqlClient)}/>}
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
-	               {commitInfo && branch && <DetailsCard icon={icons.COMMIT}
+	               {branches && <DetailsCard icon={icons.COMMIT}
 	                    title = "Commits"
-	                    main = "23"
-						subTitle = {branch}
-	                    info = {commitInfo}/>}
+	                    main = {binds2 ? binds2.length : ""}
+	                    subTitle = {Object.keys(branches).length + (Object.keys(branches).length > 1 ? " Branches" : " Branch")}
+	                    info = {getCommitInfo()}/>}
 	            </Col>
 
 				<Col md={3} className="mb-3 dd-c">
-					{userInfo && <DetailsCard icon={icons.USERS}
+					<DetailsCard icon={icons.USERS}
 						title = "User"
                         main = " 1 "
 						subTitle = "Desktop Client"
-						info="Desktop users can add collaborators to their databases through TerminusDB hub"/>}
+						info="Desktop users can add collaborators to their databases through TerminusDB hub"/>
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
-					{originInfo && <DetailsCard icon={icons.ORIGIN}
+					<DetailsCard icon={icons.ORIGIN}
 						title = "Origin"
 						main="Local"
-						subTitle="Database Local Only"
-						info={originInfo}/>}
+                        info= {db_uri}
+                        subTitle={(graphs? Object.keys(graphs).length : 0) + " Graphs"} />
 				</Col>
 			</Row>
-
-			
+            {latests && 
+                <LatestUpdates latests={latests} query={woql3} updateQuery={uq3} />
+            }
 
        </div>
     )

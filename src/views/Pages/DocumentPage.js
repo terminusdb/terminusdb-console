@@ -6,7 +6,7 @@ import { SimplePageView } from '../Templates/SimplePageView'
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContainerHook"
 import { DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS } from "./constants.pages"
-import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import { DocumentList } from "../Tables/DocumentList"
 import {DBContextObj} from "../../components/Query/DBContext";
 import { TERMINUS_PAGE } from "../../constants/identifiers";
 
@@ -83,7 +83,7 @@ const DocumentPage = (props) => {
             <Loading type={TERMINUS_PAGE} />
         }
         {(happiness === true) &&
-            <ResultViewer type="table" query={woql} bindings={bindings} />
+            <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
         }
         {(happiness && happiness !== true) &&
             <TerminusDBSpeaks failure={happiness} report={report} />

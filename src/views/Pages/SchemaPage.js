@@ -18,16 +18,15 @@ import { TERMINUS_COMPONENT, TERMINUS_PAGE } from "../../constants/identifiers";
 
 const SchemaPage = (props) => {
     
-    const {woqlClient} = WOQLClientObj()
-    const { graphs, ref, branch, report, loading } = DBContextObj()
+    const { graphs, setHead, branch, report } = DBContextObj()
 
     const [graphFilter, setGraphFilter] = useState()
-    const [graphsUpdated, setGraphsUpdated] = useState(false)
 
     useEffect(() => {
         if(graphs){
             if(graphFilter){
-                setGraphFilter(updateFilter())
+                let fi = updateFilter()
+                setGraphFilter(fi)
             }
             else {
                 setGraphFilter(getDefaultFilter())
@@ -36,14 +35,12 @@ const SchemaPage = (props) => {
     }, [graphs])
 
 
-    const [pageError, setPageError] = useState(false)
-
     //updates filter when / if graphs changes
     function updateFilter(){
         let putative = false
         for(var key in graphs){
-            if(graphs[key].id == graphFilter.id && graphs[key].type == graphFilter.type ) return
-            if( graphs[key].type == graphFilter.type && graphFilter.id == "*") return
+            if(graphs[key].id == graphFilter.id && graphs[key].type == graphFilter.type ) return graphFilter
+            if( graphs[key].type == graphFilter.type && graphFilter.id == "*") return graphFilter
             if( graphs[key].type == graphFilter.type) putative = graphs[key].id  
         }
         if(putative) return {id: putative, type: graphFilter.type}
@@ -85,16 +82,17 @@ const SchemaPage = (props) => {
     }
 
     function structureUpdated(){
-        //setGraphsUpdated(true)
+        setHead(branch)
     }
     
+    /**
+     * Prompt refresh by setting time to slightly in future
+     */
     function schemaUpdated(){
-        //setGraphsUpdated(true)
-        console.log("schema updated")
+        setHead(branch)
     }
 
     function prefixesUpdated(){
-        //setGraphsUpdated(true)
         console.log("prefixes updated")
     }
 
@@ -115,7 +113,8 @@ const SchemaPage = (props) => {
             )
             sections.push({id: SCHEMA_PROPERTIES_ROUTE, label: PROPERTIES_TAB})
             tabs.push(
-                <OWL graphs={Object.values(graphs)} key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated} />)
+                <OWL key="ow" graph={graphFilter} onChangeGraph={graphFilterChanged} onUpdate={schemaUpdated} />
+            )
             sections.push({id: SCHEMA_OWL_ROUTE, label: OWL_TAB})
         }
         if(graphs){

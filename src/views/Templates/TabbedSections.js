@@ -8,16 +8,18 @@ import { Tabs, Tab } from "react-bootstrap-tabs/dist";
  */
 export const TabbedSections = ({ id, active, sections, children }) => {
     id = id || "tabbed-sections"
-    const [key, setKey] = useState(active || sections[0].id);
-    useEffect( active => setKey(active), [active] )
+    const [selectedTab, changeTab] = useState();
+
+    useEffect( (active) => {
+        if(active) changeTab(active)
+    }, [active] )
+
     const elements = React.Children.toArray(children) 
     const tabs = elements.map((child, index)=>{
         let tab = (
             <Tab
                 key={sections[index].id}
-                eventKey={sections[index].id}
                 label={sections[index].label}
-                title={sections[index].label}
             >
                 {child}
             </Tab>
@@ -27,8 +29,8 @@ export const TabbedSections = ({ id, active, sections, children }) => {
     return (
         <Tabs
             id={id}
-            activeKey={key}
-            //onSelect={(k) => setKey(k)}
+            selected={selectedTab}
+            onSelect={changeTab}
         >
             {tabs}
         </Tabs>

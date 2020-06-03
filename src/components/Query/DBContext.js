@@ -24,6 +24,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
     const [consoleTime, setConsoleTime] = useState()
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
+    const [headUpdating, setHeadUpdating] = useState(false)
 
     //load branch structure
     useEffect(() => {
@@ -54,7 +55,6 @@ export const DBContextProvider = ({children,woqlClient}) => {
     }, [])
     
 
-
     //load graph structure
     useEffect(() => {
         setLoading(loading+1)
@@ -71,13 +71,23 @@ export const DBContextProvider = ({children,woqlClient}) => {
 
     //load head ref when consoleTime is set
     useEffect(() => {
-        if(consoleTime && branches){
+        if(headUpdating && ref){
+            TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, ref).execute(woqlClient)
+            .then((res) => {
+                if(res.bindings && res.bindings[0] && res.bindings[0]["Time"]){
+                    let ts = res.bindings[0]["Time"]["@value"]
+                    setConsoleTime(ts)
+                }
+            })
+            setHeadUpdating(false)
+        }
+        else if(consoleTime && branches ){
             setLoading(loading+1)
             if(consoleTime < branches[branch].updated){
-                TerminusClient.WOQL.lib().getCommitAtTime(woqlClient, String(consoleTime)).execute(woqlClient)
+                TerminusClient.WOQL.lib().loadCommitAtTime(woqlClient, String(consoleTime)).execute(woqlClient)
                 .then((res) => {
                     if(res.bindings && res.bindings[0] && res.bindings[0]["CommitID"]){
-                        let cid = res.bindings[0]["CommitID"]
+                        let cid = res.bindings[0]["CommitID"]["@value"]
                         if(cid != branches[branch].head){
                             woqlClient.ref(cid)
                             setRef(cid)
@@ -90,15 +100,23 @@ export const DBContextProvider = ({children,woqlClient}) => {
                 .finally(() => setLoading(loading-1))
     
             }
+            else {
+                if(ref) setRef(false)
+                if(consoleTime >= (Date.now()/1000)){
+                    setConsoleTime()
+                }
+            }
         }
-    }, [consoleTime, branches, branch])
+    }, [consoleTime, ref, branches, branch])
 
     function setHead(bid, rid){
-        alert("bid " + bid + " rid " + rid)
         woqlClient.checkout(bid)
         woqlClient.ref(rid)
         setBranch(bid)
         setRef(rid)
+        if(rid){
+            setHeadUpdating(true)
+        }
     }
 
 

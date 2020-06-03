@@ -16,11 +16,18 @@ import { DBContextObj} from "../Query/DBContext"
 //import {HistoryNavigatorObj } from "../../init/history-navigator-instance";
 
 export const HistoryNavigator = (props) => {
-    const { setConsoleTime, setHead, branch, ref, DBInfo, branches} = DBContextObj();
+    const { setConsoleTime, consoleTime, setHead, branch, ref, DBInfo, branches} = DBContextObj();
+
+    let st = consoleTime || (Date.now()/1000)
 
     let endts = parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
     const [end, setEnd] = useState(endts);
-    const [current, setCurrent] = useState(props.time || (Date.now()/1000));
+    const [current, setCurrent] = useState(st);
+
+    useEffect(() => {
+        if(consoleTime) setCurrent(consoleTime)
+        else setCurrent(Date.now()/1000)
+    }, [consoleTime])
     
     function userChangesTime(ts){
         if(props.onChangeTime) props.onChangeTime(ts)

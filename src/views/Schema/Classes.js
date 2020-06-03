@@ -9,11 +9,13 @@ import { EmptyResult } from "../../components/Reports/EmptyResult"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
 import { ClassList } from "../Tables/ClassList"
+import { SchemaToolbar } from './SchemaToolbar';
+import { SCHEMA_CLASSES_ROUTE } from '../../constants/routes';
 
 export const Classes = (props) => {
     
     const {woqlClient} = WOQLClientObj();
-    const {ref, branch} = DBContextObj();
+    const {ref, branch, graphs} = DBContextObj();
 
     const [filter, setFilter] = useState(props.graph)
     const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, getClassQuery(props.graph), branch, ref)
@@ -32,6 +34,7 @@ export const Classes = (props) => {
 
     return (
         <div className = {TAB_SCREEN_CSS}>
+            <SchemaToolbar page={SCHEMA_CLASSES_ROUTE} graph={filter} onChangeGraph={props.onChangeGraph} />
             {loading && 
                 <Loading type={TERMINUS_COMPONENT}/>
             }

@@ -1,11 +1,11 @@
 export const MANAGE_SECTIONS = [
-    { 
+   /* { 
         id: "metadata",
         title: "Update Database Metadata",
         icon: "stamp",
         button: "Metadata",
         blurb: "Change the name of the database, its description and other metadata"
-    },
+    },*/
     { 
         id: "branch",
         title: "Create a new Branch",
