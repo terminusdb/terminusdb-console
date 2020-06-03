@@ -13,7 +13,13 @@ code {
     monospace;
 }
 
+@media (max-width: 767px){
+  .nav-item .nav-link.router-link-exact-active {
+    border-left: 0px !important;
+  }
+}
 @media (min-width: 768px){
+ 
 	.navbar-expand-md .navbar-nav {
 	    -ms-flex-direction: row;
 	    flex-direction: row;

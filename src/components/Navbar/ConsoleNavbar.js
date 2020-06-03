@@ -24,7 +24,7 @@ export const ConsoleNavbar = (props) => {
         <div className={NAV_CSS.container} >
             <Navbar expand="md" dark fixed="top" navbar>
                 <Row className={NAV_CSS.toprow}> 
-                    <Col md={2} className={NAV_CSS.homeCol}>
+                    <Col md={2} sm={6} className={NAV_CSS.homeCol}>
                         {<ServerNavbar />}
                     </Col>
                     <NavbarToggler onClick={collapseIsOpen} />                      
@@ -35,16 +35,14 @@ export const ConsoleNavbar = (props) => {
                             }
                         </Collapse>
                     </Col>                    
-                    <Col md={2} className={NAV_CSS.loginCol}> 
+                    <Col md={2} sm={6} className={NAV_CSS.loginCol}> 
                         {!(isAuthenticated || loading) &&
                             <Login/>
                         }
                         {!loading && isAuthenticated && user &&
                             <LoggedIn/>
                         }
-                    </Col>
-                
-               
+                    </Col>             
                 </Row>
             </Navbar>
             {isOpen && 
