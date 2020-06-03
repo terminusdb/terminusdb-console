@@ -18,7 +18,6 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
     }
 
     if(branch && branches && branches.length > 0) {
-        console.log('branches', branches)
         return (
             <Select placeholder = {BRANCH_SELECTOR.label + " " + branch}
                 className = {className || BRANCH_SELECTOR.selectClassName}
@@ -26,13 +25,6 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
                 onChange = {changeBranch}
                 options = {branches}/>
         )
-        /*return (
-            <WidgetSelector placeholder = {BRANCH_SELECTOR.label + " " + branch}
-                className = {className || BRANCH_SELECTOR.selectClassName}
-                value = {branch}
-                onChange = {changeBranch}
-                options = {branches}/>
-        )*/
     }
     else if(branch && branches && branches.length == 1 && !hideSingle){
         return (
