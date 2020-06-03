@@ -31,7 +31,7 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
             <span className={BRANCH_SELECTOR.singleBranchClassName}>
                 <label className={BRANCH_SELECTOR.singleBranchLabelClassName}>
                     {BRANCH_SELECTOR.label}
-                </label> 
+                </label>
                 <span className={BRANCH_SELECTOR.branchIDClassName}>
                     {branch}
                 </span>
@@ -40,4 +40,3 @@ export const BranchSelector = ({branch, branches, onChange, hideSingle, classNam
     }
     return (<span className={BRANCH_SELECTOR.emptyBranchClassName}/>)
 }
-

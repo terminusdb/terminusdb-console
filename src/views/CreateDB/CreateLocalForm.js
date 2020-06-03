@@ -69,8 +69,10 @@ export const DBCreateForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, acc, mreport){
-        reconnectServer()
-        goDBHome(id, acc, mreport)
+        /*reconnectServer()*/
+        woqlClient.connect().then(result=>{
+            goDBHome(id, acc, mreport)
+        })
     }
 
      return (<>

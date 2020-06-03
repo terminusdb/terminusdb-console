@@ -4,7 +4,6 @@ import { TCForm } from  "../../components/Form/FormComponents"
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from "./constants.createdb"
 import { getDefaultScmURL, getDefaultDocURL } from "../../constants/functions"
 
-
 /**
  * Form for viewing and editing database meta data
  */
