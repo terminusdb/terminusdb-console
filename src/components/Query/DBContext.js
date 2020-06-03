@@ -26,6 +26,8 @@ export const DBContextProvider = ({children,woqlClient}) => {
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
 
+    const [branchesReload, setBranchesReload] = useState(0)
+
     //load branch structure
     useEffect(() => {
         setLoading(loading+1)
@@ -38,7 +40,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
             setReport({error:e, status: TERMINUS_ERROR});
         })
         .finally(() => setLoading(loading-1))
-    }, [])
+    }, [branchesReload])
 
     //load db info
     useEffect(() => {
@@ -119,6 +121,10 @@ export const DBContextProvider = ({children,woqlClient}) => {
         }
     }
 
+    function updateBranches(){
+        setBranchesReload(branchesReload+1)
+    }
+
 
     function graphStructureFromBindings(bindings){
         let gs = {};
@@ -162,6 +168,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
             value={{
                 setConsoleTime,
                 setHead,
+                updateBranches,
                 consoleTime,
                 DBInfo,
                 branches,

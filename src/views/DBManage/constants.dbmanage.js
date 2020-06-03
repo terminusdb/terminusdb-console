@@ -59,17 +59,6 @@ export const CREATE_BRANCH_FORM = {
 
         },
         {
-            id: "source",
-            value: "",
-            mandatory: true,
-            inputElement: {
-                type: "input",
-                placeholder: "ID of commit to branch from",
-            },
-            label: 'Source Commit',
-            help: "You can choose to start a new branch from anywhere in the history of any branch. All commits are uniquely identified",
-        },
-        {
             id: "commit",
             label: "Commit Message",
             inputElement: {
@@ -82,6 +71,41 @@ export const CREATE_BRANCH_FORM = {
         submitText: "Create New Branch"
     }
 }
+
+export const BRANCH_SOURCE_FORM = {
+    fields: [
+        {
+            id: "branch",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Branch',
+        },
+        {
+            id: "ref",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Commit ID',
+            helpCols: 8,
+            help: "The position in the branch that the new branch will sprout from",
+
+        },
+        {
+            id: "time",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Time',
+            help: "The time at which the new branch will start",
+        },
+    ],
+    infoMessage: "Start Branch From : the new branch will be started from your current database state - you can change this with the time traveller or branch selector component in the top navigation bar"
+}
+ 
 
 export const MERGE_BRANCH_FORM = {
     fields: [
@@ -117,6 +141,7 @@ export const MERGE_BRANCH_FORM = {
             }
         }
     ],
+    actionText: "Merge Branches",
     buttons: {
         submitText: "Merge Branches"
     }
