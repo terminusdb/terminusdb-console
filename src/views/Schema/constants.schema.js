@@ -134,8 +134,8 @@ export const OWL_CSS = {
     writeContainer: "owl-editor-write"
 }
 
-export const CLASS_TABLE_INFO_MSG = "List of Classes"
-export const PROPERTIES_TABLE_INFO_MSG = "List of Properties"
+export const CLASS_TABLE_INFO_MSG = "Classes define the different types of data objects that you can save in your database"
+export const PROPERTIES_TABLE_INFO_MSG = "Properties are attached to classes, they point to data of a specific type"
 export const OWL_INFO_MSG = "OWL, the ontology web language, can be used directly to view and edit schema and inference rules"
 export const GRAPHS_INFO_MSG = "Graphs are internal database partitions where data and rules are stored separately"
 export const GRAPHS_CREATE_INFO = "Choose the type of graph you want to create and a name for it and a commit message"

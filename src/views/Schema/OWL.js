@@ -13,7 +13,6 @@ import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks';
 export const OWL = (props) => {
     const [edit, setEdit] = useState(false);
     const [filter, setFilter] = useState()
-    const [empty, setEmpty] = useState()
     const [updatedTurtle, setUpdatedTurtle] = useState()
     const [dataProvider, setDataProvider] = useState()
     const {woqlClient} = WOQLClientObj();
@@ -45,9 +44,9 @@ export const OWL = (props) => {
             setLoading(true)
             woqlClient.getTriples(filter.type, filter.id)
             .then((cresults) => {
-                setDataProvider(cresults);
-                setUpdatedTurtle(cresults)
-                setEmpty(cresults == "") 
+                let res = cresults || getEmptyTurtle()
+                setDataProvider(res);
+                setUpdatedTurtle(res)
             })
             .catch((e) => {
                 let rep = {status: TERMINUS_ERROR, error: e}
@@ -61,6 +60,7 @@ export const OWL = (props) => {
     function updateSchema(commit){
         let ts = Date.now()
         let cmsg = (commit ? commit : DEFAULT_TURTLE_UPDATE_MSG + " [" + props.graph.type + "," + props.graph.id + "]") 
+        alert(updatedTurtle)
         setLoading(true)
         woqlClient.updateTriples(filter.type, filter.id, updatedTurtle, cmsg)
         .then(() => {
@@ -94,6 +94,15 @@ export const OWL = (props) => {
     function tryUpdateSchema(cmg){
         setReport()
         updateSchema(cmg)
+    }
+
+    function getEmptyTurtle(){
+        let ctxt = woqlClient.connection.getJSONContext()
+        let ttlprefixes  = "";
+        for(var prefix in ctxt){
+            if(prefix != "_") ttlprefixes += `@prefix ${prefix}: <${ctxt[prefix]}> .` + "\n"
+        }
+        return ttlprefixes
     }
 
     return (

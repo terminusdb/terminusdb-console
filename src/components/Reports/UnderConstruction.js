@@ -43,7 +43,7 @@ export const UnderConstruction = (props) => {
                     </div>
                     <div className={UNDER_CONSTRUCTION.formWrapperClassName}>
                         <a href="mailto:team@terminusdb.com" class={UNDER_CONSTRUCTION.submitButtonClassName}>
-                           {UNDER_CONSTRUCTION.submitText}
+                           {UNDER_CONSTRUCTION.submitText + " " + "team@terminusdb.com"}
                         </a>
                     </div>
                 </Col>
