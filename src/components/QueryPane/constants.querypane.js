@@ -55,4 +55,8 @@ export const COMMIT_BOX = {
 
 export const QUERY_EDITOR_LABEL ={
     syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
-  }
+}
+
+export const QUERY_DROPDOWN = {
+    dropdown:"query-pane-dropdown"
+}

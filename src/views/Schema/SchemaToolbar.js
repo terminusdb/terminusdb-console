@@ -114,8 +114,6 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
     let mwidth = 12
     if(gf) mwidth = mwidth-3
     if(cr) mwidth = mwidth-2
-
-    console.log('report',report)
     
     return (
         <Row className={TOOLBAR_CSS.container} >

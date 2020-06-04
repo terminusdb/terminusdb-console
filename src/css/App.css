@@ -779,6 +779,11 @@ div.css-yk16xz-control{
   color: #041433
 }
 
+.query-pane-dropdown{
+    float: right;
+    margin: 0px -30px 0px 0px;
+}
+
 .dropdown-menu{
   right: 0;
   left: auto;

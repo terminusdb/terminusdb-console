@@ -11,7 +11,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
 
-    const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) !== -1) 
+    const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) !== -1)
     const setEditLanguage = () => {onEdit(currentLanguage)}
 
     const disabled = active=== true ? true : false;
@@ -24,19 +24,19 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
             active={active:true}
             currentLabel=langname;
         }
-              
-        return (<DropdownItem 
-                    key={lang} 
-                    //disabled={disabled} 
+
+        return (<DropdownItem
+                    key={lang}
+                    //disabled={disabled}
                     {...active}
                     onClick={function(){onChange(lang)}}>
-                    {langname}</DropdownItem>) 
+                    {langname}</DropdownItem>)
     })
-    
-   //origin disabled={disabled}  
+
+   //origin disabled={disabled}
     return (
         <>
-        {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}    
+        {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
         <Dropdown  isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle caret>
                 {currentLabel}
@@ -44,7 +44,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
             <DropdownMenu>
                 {entries}
             </DropdownMenu>
-        </Dropdown>       
+        </Dropdown>
         </>
     )
 }
