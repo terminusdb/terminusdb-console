@@ -60,7 +60,6 @@ export const OWL = (props) => {
     function updateSchema(commit){
         let ts = Date.now()
         let cmsg = (commit ? commit : DEFAULT_TURTLE_UPDATE_MSG + " [" + props.graph.type + "," + props.graph.id + "]") 
-        alert(updatedTurtle)
         setLoading(true)
         woqlClient.updateTriples(filter.type, filter.id, updatedTurtle, cmsg)
         .then(() => {
