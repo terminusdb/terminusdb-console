@@ -10,7 +10,7 @@ import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContaine
 
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
-import { printts, DATETIME_FULL } from "../../constants/dates";
+import { printts, DATETIME_FULL, DATETIME_COMPLETE } from "../../constants/dates";
 
 
 
@@ -55,19 +55,19 @@ export const MonitorDB = (props) => {
 
 			<Row>
 				<Col md={3} className="mb-3 dd-c">
-					{DBInfo && <DetailsCard 
+					<DetailsCard 
 						title = {woqlClient.db()}
 						main = {getCurrentDBName(woqlClient)}
-						subTitle = {"Created " + printts(DBInfo.created, DATETIME_FULL)}
-						info = {getCurrentDbDescr(woqlClient)}/>}
+						subTitle = {"Created " + (DBInfo ? printts(DBInfo.created, DATETIME_COMPLETE) : "...")}
+						info = {getCurrentDbDescr(woqlClient)}/>
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
-	               {branches && <DetailsCard icon={icons.COMMIT}
+	               <DetailsCard icon={icons.COMMIT}
 	                    title = "Commits"
 	                    main = {binds2 ? binds2.length : ""}
-	                    subTitle = {Object.keys(branches).length + (Object.keys(branches).length > 1 ? " Branches" : " Branch")}
-	                    info = {getCommitInfo()}/>}
+	                    subTitle = {(branches ? Object.keys(branches).length + (Object.keys(branches).length > 1 ? " Branches" : " Branch") : "...")}
+	                    info = {getCommitInfo()}/>
 	            </Col>
 
 				<Col md={3} className="mb-3 dd-c">

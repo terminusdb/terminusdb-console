@@ -29,7 +29,7 @@ export const ConsoleNavbar = (props) => {
                     </Col>
                     <NavbarToggler onClick={collapseIsOpen} />
                     <Collapse isOpen={isCollapseOpen} navbar md={10}>                      
-                        <Col md={8} className={NAV_CSS.dbCol}>
+                        <Col md={8} className={NAV_CSS.dbCol} >
                             
                                 { woqlClient.db() &&
                                     <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
