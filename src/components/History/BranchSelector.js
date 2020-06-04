@@ -17,8 +17,6 @@ export const BranchSelector = ({ onChange, hideSingle, className }) => {
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
-
-
     function changeBranch(SelValue){
         let nub = SelValue
         if(nub !== branch){

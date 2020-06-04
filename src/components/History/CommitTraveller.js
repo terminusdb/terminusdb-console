@@ -9,7 +9,6 @@ import { DBContextObj} from "../Query/DBContext"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { TERMINUS_ERROR } from "../../constants/identifiers";
 
-
 export const CommitTraveller = (props) => {
     const [commit, setCommit] = useState()
     const {woqlClient} = WOQLClientObj();
@@ -121,4 +120,3 @@ export const CommitTraveller = (props) => {
         </Container>
     )
 }
-

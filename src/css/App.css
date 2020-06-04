@@ -1247,6 +1247,7 @@ p.dscr{
 
 .navbar-db-col {
     padding: 0;
+    margin-bottom: .5rem!important;
 }
 
 .navbar-login-col {

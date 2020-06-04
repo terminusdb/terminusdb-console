@@ -28,7 +28,7 @@ export const ConsoleNavbar = (props) => {
                         {<ServerNavbar />}
                     </Col>
                     <NavbarToggler onClick={collapseIsOpen} />
-                    <Collapse isOpen={isCollapseOpen} navbar >                      
+                    <Collapse isOpen={isCollapseOpen} navbar md={10}>                      
                         <Col md={8} className={NAV_CSS.dbCol}>
                             
                                 { woqlClient.db() &&
@@ -36,7 +36,7 @@ export const ConsoleNavbar = (props) => {
                                 }
                            
                         </Col>                    
-                        <Col md={2} className={NAV_CSS.loginCol}> 
+                        <Col md={4} className={NAV_CSS.loginCol} > 
                             {!(isAuthenticated || loading) &&
                                 <Login/>
                             }
