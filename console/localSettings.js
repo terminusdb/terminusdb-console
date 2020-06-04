@@ -3,7 +3,7 @@ const server=process.env.TERMINUSDB_SERVER || "http://localhost:6363/"
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
 
-let key = process.env.TERMINUSDB_KEY || user0bj.password 
+let key=process.env.TERMINUSDB_KEY || user0bj.password 
 
 const userName=user0bj.username || 'admin'
 

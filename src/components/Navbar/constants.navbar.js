@@ -22,7 +22,7 @@ export const NAV_CSS = {
     historyContainer: "history-navigator-Collapsible",
     historyRow: "nav-container",
     homeCol: "navbar-home-col mb-2",
-    dbCol: "mb-9 navbar-db-col",
+    dbCol: "navbar-db-col",
     loginCol: "mb-1 navbar-login-col",
     toprow: "justify-content-start container-fluid navbar-toprow",
     container: "nav-container",
