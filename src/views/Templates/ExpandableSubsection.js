@@ -29,7 +29,7 @@ const SubsectionSummary = ({section, onOpen}) => {
 
     function getOpen(section){
         if(section.id == "delete") return (
-            <Button color="danger" onClick={onOpen} className={SUMMARY_SECTION.deleteButtonCSS}>
+            <Button color="danger" outline onClick={onOpen} className={SUMMARY_SECTION.deletebuttonCSS}>
                 {section.button}
             </Button>
         )
@@ -74,12 +74,12 @@ const SubsectionSummary = ({section, onOpen}) => {
 }
 
 const SubsectionHeader = ({section, onClose}) => {
-    
+
     function getIcon(sec){
         if(!sec.icon) return null
         return (<FontAwesomeIcon size="3x" className={SECTION_HEADER.iconCSS} icon={sec.icon}/>)
     }
-    
+
     function getClose(sec){
         return (<FontAwesomeIcon size="3x" className={SECTION_HEADER.closeIconCSS} icon="times-circle" onClick={onClose}/>)
     }
@@ -89,7 +89,7 @@ const SubsectionHeader = ({section, onClose}) => {
         <Row key={section.id + "_hdr"}  className={SECTION_HEADER.containerCSS}>
             <Col md={1} className={SECTION_HEADER.iconContainerCSS}>
                 {getIcon(section)}
-            </Col>           
+            </Col>
             <Col md={10} className={SECTION_HEADER.blurbCSS}>
                 {section.blurb}
             </Col>
@@ -99,4 +99,3 @@ const SubsectionHeader = ({section, onClose}) => {
         </Row>
     )
 }
-
