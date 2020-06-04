@@ -793,7 +793,6 @@ div.css-yk16xz-control{
     margin-left: -40px;
 }
 
-
 .query-pane-container
 .dropdown-toggle {
     background-color:#888 !important;
@@ -808,7 +807,7 @@ div.css-yk16xz-control{
 .dropdown-toggle:hover {
     background-color:#666 !important;
     color: white  !important;
-    border: 2px solid white !important;
+    border: 2px solid #041433 !important;
 }
 
 .run-query-button {
@@ -821,7 +820,7 @@ div.css-yk16xz-control{
 .run-query-button:hover {
     background-color: #00C08B !important;
     color: white  !important;
-    border: 2px solid white !important;
+    border: 2px solid #041433 !important;
 }
 
 .query-pane-toolbar {
