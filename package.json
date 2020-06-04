@@ -1,6 +1,6 @@
 {
   "name": "@terminusdb/terminusdb-console",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "homepage": "./",
   "description": "console for terminusdb",
   "main": "src/index",
@@ -12,6 +12,9 @@
     "console",
     "es6"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "reactjs",
