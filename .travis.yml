@@ -52,6 +52,6 @@ deploy:
     keep_history: true
     auth_method: "authToken"
     on:
-      branch : master
+      branch: master
       tags: true
 
