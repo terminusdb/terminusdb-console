@@ -12,6 +12,9 @@
     "console",
     "es6"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "reactjs",
