@@ -10,7 +10,7 @@ export const WOQLClientProvider = ({children,params}) => {
     const [woqlClient, setWoqlClient] = useState(null);
     const [clientError, setError] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
-    const [newKeyValue, setNewKeyValue] = useState(undefined);
+    const [newKeyValue, setNewKeyValue] = useState();
     const [reload, setReloadTime] = useState(0);
 
     const [refId, setRef] = useState(0);
@@ -33,7 +33,7 @@ export const WOQLClientProvider = ({children,params}) => {
                 const opts = params || {};
                 const dbClient = new TerminusClient.WOQLClient(opts.server);
 
-                if(!opts.key){
+                if(!opts.key || opts.key==="undefined"){
                     setShowLogin(true);
                 }else{
                     try{
@@ -60,6 +60,7 @@ export const WOQLClientProvider = ({children,params}) => {
             if(params)params.key=key
             window.sessionStorage.setItem("apiKey", key);
             setNewKeyValue(key)
+            setReloadTime(Date.now());
         }
         /*
         * you can change the woqlCLient settings
