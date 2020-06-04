@@ -42,12 +42,6 @@ jobs:
       script:
         - npm run build
 
-branches:
-  only:
-    - dev
-    - master
-    - canary
-
 deploy:
   - provider: npm
     registry: "https://registry.npmjs.org/"
