@@ -39,7 +39,7 @@ export const MonitorDB = (props) => {
 
     function getCommitInfo(){
         let str = ""
-        if(bindings){
+        if(bindings && bindings[0]){
             let r = bindings[0]
             let ubranch = r["BranchName"]["@value"]
             str += "Last Update (" + ubranch + "): " + printts(r["Time"]["@value"]) + " "
