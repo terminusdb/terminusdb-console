@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
-import {DropdownToggle, Container, Button, Alert, Navbar , Collapse, Nav, UncontrolledDropdown,DropdownMenu,DropdownItem, NavbarText} from 'reactstrap'
+import {DropdownToggle, Container, Button, Alert, Navbar , Collapse, Nav, UncontrolledDropdown,DropdownMenu,DropdownItem, NavbarText, Row, Col} from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
-import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.querypane'
+import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR, TOOLBAR_CSS} from './constants.querypane'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
@@ -9,8 +9,8 @@ import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
  * Controls the display of query viewer and editor
  */
 export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, className, submit,updateQuery}) => {
-    const qeclass = className || 'terminus-query-editor'
-    editable = typeof editable != "undefined" ? editable : true 
+    const qeclass = className || TOOLBAR_CSS.container
+    editable = typeof editable != "undefined" ? editable : true
     submit = submit || QUERY_SUBMIT
     /*
     * if is edit mode and the query is an update query
@@ -31,8 +31,8 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     /*
     * onBlur
     */
-    function checkContent(){        
-        //sets errors internally if doesn't work       
+    function checkContent(){
+        //sets errors internally if doesn't work
         setError(false)
         if(content){
             let woql = makeWOQLFromString(content, baseLanguage, setError)
@@ -45,7 +45,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             return woql
         }
         return false
-    }    
+    }
 
     function sendQuery(){
         let woql = checkContent()
@@ -76,12 +76,12 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     }
 
     /*
-    * the current language visualized 
+    * the current language visualized
     */
     function showLanguageVersion(lang){
         if(lang == baseLanguage){
             setShowLanguage(false)
-            setShowContent("")            
+            setShowContent("")
         }else {
             if(typeof content !=="string" || content===""){
                 setShowLanguage(lang)
@@ -89,59 +89,67 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             }else{
                 let woql = makeWOQLFromString(content, baseLanguage)
                 if(woql){
-                    setShowLanguage(lang)   
-                    setShowContent(makeWOQLIntoString(woql, lang))    
+                    setShowLanguage(lang)
+                    setShowContent(makeWOQLIntoString(woql, lang))
                }
             }
         }
     }
 
 
-    
+
 
     if(editable && error) console.log(error)
     return(<Container className={qeclass} >
         <div style={{display: "flex", justifyContent:"flex-end"}}>
-            {languages && 
-                <LanguageSwitcher 
-                    active={!error}
-                    baseLanguage={baseLanguage} 
-                    showLanguage={showLanguage} 
-                    languages={languages} 
-                    editable={true} 
-                    onChange={showLanguageVersion} 
-                    onEdit={newLanguageVersion} 
-                />
-            }           
-           {editable &&  <Button color = "primary" onClick={sendQuery}>{submit}</Button>}
+            <Row className={TOOLBAR_CSS.containerRow} >
+                <Col md={12} className={TOOLBAR_CSS.row}>
+                    <Row>
+                        <Col md={10}/>
+                        <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
+                            {languages &&
+                                <LanguageSwitcher
+                                    active={!error}
+                                    baseLanguage={baseLanguage}
+                                    showLanguage={showLanguage}
+                                    languages={languages}
+                                    editable={true}
+                                    onChange={showLanguageVersion}
+                                    onEdit={newLanguageVersion}
+                                />
+                            }
+                        </Col>
+                        <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
+                            {editable &&  <Button className={TOOLBAR_CSS.runQuery} color = "primary" onClick={sendQuery}>{submit}</Button>}
+                        </Col>
+                    </Row>
+                </Col>
+           </Row>
         </div>
 
-        {(!showLanguage && editable) && 
+        {(!showLanguage && editable) &&
             <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
         }
 
-        {!editable && !showLanguage &&  
+        {!editable && !showLanguage &&
             <CodeViewer text={content} language={baseLanguage}/>
         }
 
-        {showLanguage && 
+        {showLanguage &&
             <CodeViewer text={showContent} language={showLanguage}/>
         }
 
         {children}
-       
-        {(editable) && 
+
+        {(editable) &&
             <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
                 {commitMsg}
             </textarea>
-        }   
+        }
 
-        {(editable && error) &&  
+        {(editable && error) &&
             <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
-        }      
+        }
         </Container>
     )
 }
-
-
-

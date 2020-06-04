@@ -68,7 +68,7 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
         if(p == SCHEMA_GRAPHS_ROUTE){
             return (
                 <Row className={TOOLBAR_CSS.container} >
-                    <Col md={12} className={TOOLBAR_CSS.messageCol}>
+                    <Col md={12} className={TOOLBAR_CSS.messageCol}> 
                         {report &&
                             <span className={TOOLBAR_CSS.messageContainer} >
                                 <TerminusDBSpeaks report={report} />
@@ -114,7 +114,7 @@ export const SchemaToolbar = ({editmode, report, page, graph, onChangeGraph, onA
     let mwidth = 12
     if(gf) mwidth = mwidth-3
     if(cr) mwidth = mwidth-2
-    
+
     return (
         <Row className={TOOLBAR_CSS.container} >
             <Col md={mwidth} className={TOOLBAR_CSS.messageCol}>

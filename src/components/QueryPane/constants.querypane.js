@@ -57,6 +57,12 @@ export const QUERY_EDITOR_LABEL ={
     syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
 }
 
-export const QUERY_DROPDOWN = {
-    dropdown:"query-pane-dropdown"
+export const TOOLBAR_CSS = {
+    container: "query-pane-container",
+    containerRow: "query-pane-toolbar",
+    row: "query-pane-toolbar-row",
+    queryPaneControls: "query-pane-controls",
+    runQuery: "run-query-button",
+    dropdown:"query-pane-menu",
+    rowHeight: "query-pane-dropdown-row"
 }
