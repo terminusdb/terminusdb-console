@@ -117,6 +117,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
         setBranch(bid)
         setRef(rid)
         if(rid){
+            //don't trigger update for console time change
             setHeadUpdating(true)
         }
     }
@@ -186,6 +187,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
 
 /**
  * Creates a prebaked context for the terminusdb situation
+ * where we have no commits or meta graph and a pre-ordained set of graphs that cannot be changed
  */
 export const TerminusDBProvider = (woqlClient) => {
     let branches = false
