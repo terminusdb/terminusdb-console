@@ -8,6 +8,7 @@ import { getDBPageRoute } from "../Router/ConsoleRouter"
 import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, SLIDER_CSS, NAV_CSS} from './constants.navbar'
 import { DBContextObj } from "../Query/DBContext"
 import {BranchSelector} from "../History/BranchSelector"
+import { printts } from "../../constants/dates";
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
@@ -37,9 +38,11 @@ export const DBNavbar = (props) => {
         }
 
         let currentTime = (<span className={NAV_CSS.latest}>Latest</span>)
-        if(consoleTime) currentTime = (<span className={NAV_CSS.history}>{consoleTime}</span>)
+        if(consoleTime) currentTime = (<span className={NAV_CSS.latest}>{printts(consoleTime)}</span>)
 
-        let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
+        //let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
+
+        let timeCSS = NAV_CSS.timeContainer
 
         //let bs = (<BranchSelector />) 
 

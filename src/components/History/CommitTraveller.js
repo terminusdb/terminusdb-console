@@ -56,14 +56,14 @@ export const CommitTraveller = (props) => {
 
     function getForwardButton(){
         if(commit && commit.child) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_RIGHT}/>)
-        if(isHead) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
-        if(commit) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={HEAD}/>)
+        if(isHead) return (<FontAwesomeIcon title="This is the head of the branch" className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
+        if(commit) return (<FontAwesomeIcon title="Next is the head of the branch" className={COMMIT_TRAVELLER.className} icon={HEAD}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_RIGHT}/>)
     }
 
     function getBackButton(){
         if(commit && commit.parent) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_LEFT}/>)
-        if(commit) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
+        if(commit) return (<FontAwesomeIcon title="This is the first commit in the record" className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_LEFT}/>)
     }
 
