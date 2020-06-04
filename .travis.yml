@@ -1,0 +1,63 @@
+language: node_js
+sudo: required
+node_js:
+  - lts/*
+cache:
+  npm: false
+
+stages:
+  - name: build_dev
+    if: branch = dev or branch = canary
+  - name: deploy_dev
+    if: branch = dev
+  - name: deploy_canary
+    if: branch = canary
+  - name: build
+    if: branch = master
+
+jobs:
+  include:
+    - stage: build_dev
+      before_install:
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
+      script:
+        - npm run build
+
+    - stage: deploy_dev
+      before_install:
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
+      script:
+        - npm run build
+        - bash .ci/publish_dev.sh
+
+    - stage: deploy_canary
+      before_install:
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
+      script:
+        - npm run build
+        - bash .ci/trigger_canary.sh
+        - bash .ci/publish_canary.sh
+
+    - stage: build
+      script:
+        - npm run build
+
+branches:
+  only:
+    - dev
+    - master
+    - canary
+
+deploy:
+  - provider: npm
+    registry: "https://registry.npmjs.org/"
+    skip_cleanup: true
+    access: public
+    email: "robin@datachemist.com"
+    api_key: $NPM_TOKEN
+    keep_history: true
+    auth_method: "authToken"
+    on:
+      branch : master
+      tags: true
+

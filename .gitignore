@@ -1,8 +1,9 @@
 /node_modules
+.npmrc
 
 package-lock.json
-auth_config.json
-console/auth_config.json
-console/public_pages
-console/dist
 console/.env
+es6
+
+console/dist
+console/public_pages

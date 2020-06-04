@@ -1,13 +1,31 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faLink, faPowerOff, faUser, faHome } from "@fortawesome/free-solid-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faPowerOff, faClock, faCheckCircle, faPenAlt, faUserFriends, faStarOfLife, faInfo,
+    faInfoCircle, faCodeBranch, faBomb, faStamp, faInfinity, faTimesCircle, faHdd, faExclamationCircle, faTools,
+    faPlayCircle, faCaretSquareLeft, faCaretSquareRight, faTrashAlt, faUpload, faDownload, faShareAlt, faStopCircle} from '@fortawesome/free-solid-svg-icons';
 
-function initFontAwesome() {
-    library.add(faLink);
-    library.add(faUser);
-    library.add(faPowerOff);
-    library.add(faHome);
-    return library;
-}
-
-export default initFontAwesome;
+export const initFontLib = library.add(faUser,
+    faPowerOff,
+    faClock,
+    faCheckCircle,
+    faInfoCircle,
+    faExclamationCircle,
+    faUserFriends,
+    faStarOfLife,
+    faPenAlt,
+    faInfo,
+    faTimesCircle,
+    faPlayCircle,
+    faCaretSquareLeft,
+    faCaretSquareRight,
+    faHdd,
+    faCodeBranch,
+    faInfinity,
+    faStamp,
+    faTools,
+    faBomb,
+    faTrashAlt,
+    faUpload,
+    faDownload,
+    faShareAlt,
+    faStopCircle
+);

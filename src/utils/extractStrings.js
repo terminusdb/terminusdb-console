@@ -21,5 +21,6 @@ export const formatColumnNames = (v) => {
         formattedStr = v.substring(v.lastIndexOf(':')+1);
     else if(v.includes('@'))
         formattedStr = v.substring(v.lastIndexOf('@')+1);
+    else formattedStr = v;
     return formattedStr.charAt(0).toUpperCase() + formattedStr.slice(1)
 }

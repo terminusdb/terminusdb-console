@@ -1,2 +1,0 @@
-export const GET_SCHEMA = 'GET_SCHEMA'
-export const CREATE_DATABASE = 'CREATE_DATABASE'

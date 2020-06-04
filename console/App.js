@@ -1,53 +1,20 @@
-import React from "react";
-import { Router, Route, Switch } from "react-router-dom";
-import { Container } from "reactstrap";
+import React  from "react";
+import {LoginPage,ConsoleRouter, ConsoleHistory, LoadingAppPage, ConnectionErrorPage, WOQLClientObj} from '@terminusdb/terminusdb-console';
 
-import {Row,Grid} from "react-bootstrap"
-
-import * as consoleLib from '@terminusdb/terminusdb-console';
-
-consoleLib.initFontAwesome();
-
+/**
+ * Loads the client and connects to the server before doing anything else
+ * @param {*} props 
+ */
 const App = (props) => {
-  const { user, loading,isAuthenticated } = consoleLib.useAuth0();
+  const { showLogin, loadingServer, clientError, woqlClient} = WOQLClientObj();
 
-  const userMETADATA= user || {};
-
-  console.log("___SONO IN APPCONSOLE__",window.location.pathname);
-
-  console.log("__HISTORY__",consoleLib.history)
-
-  if(user && user['https://terminushub/afterSignUp']){
-      consoleLib.history.replace('/download')
-  }
-
-  if (loading) {
-    return <consoleLib.Loading />;
-  }
-
-  const fluid =  !isAuthenticated ? {} : {fluid:true}
-
-  const pathName = window.location.pathname;
-  const terminusClient = consoleLib.setTerminusClient(consoleLib.localSettings);
-
+  if (showLogin) return  <LoginPage/>
+  if (clientError) return <ConnectionErrorPage/>;
+  if (loadingServer) return <LoadingAppPage/>;
+  
   return (
-    <div>
-    <Router history={consoleLib.history}>
-        <Switch>
-          <Route path = "/" exact component = {consoleLib.ServerHome} />
-          <Route path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-          <consoleLib.PrivateRoute path = {consoleLib.PROFILE_PAGE.page} component = {consoleLib.Profile} />
-          <consoleLib.PrivateRoute path = {consoleLib.NEW_DB_PAGE.page} component = {consoleLib.CreateDatabase} />
-          <consoleLib.PrivateRoute path = {consoleLib.NEW_TEAM_PAGE.page} component = {consoleLib.CreateTeam} />
-          <consoleLib.PrivateRoute path = {consoleLib.DB_HOME_PAGE.page} component = {consoleLib.DatabaseHome} />
-          <consoleLib.PrivateRoute path = {consoleLib.SCHEMA_PAGE.page} component = {consoleLib.Schema} />
-          <consoleLib.PrivateRoute path = "/" component = {consoleLib.MainPage} />
-        </Switch>
-      
-    </Router>
-      <Grid/>
-    </div>
-  );
-};
+      <ConsoleRouter history={ConsoleHistory}/>
+  )
+}
 
 export default App;

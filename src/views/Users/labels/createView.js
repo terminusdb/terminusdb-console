@@ -1,0 +1,17 @@
+export const CREATE_VIEW = 'Create Database'
+export const CREATE_OPTIONS = 'Local or Remote'
+export const COPY_OPTIONS = 'Copy Local or Remote'
+export const COPY_TYPES = 'Fork or Clone'
+export const COPY = 'Details'
+export const CREATE_REMOTE = 'terminusdb.com'
+export const CREATE_LOCAL = 'New Database Details'
+export const CLONE_LOCAL = 'Clone Local Database'
+export const CLONE_REMOTE = 'Clone Remote Database'
+
+
+export const CREATE_DB = 'Create Database'
+export const COPY_DB = 'Copy Database'
+export const LOCAL = 'Local'
+export const REMOTE = 'Remote'
+export const CLONE = 'Clone'
+export const FORK = 'Fork'

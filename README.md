@@ -1,14 +1,16 @@
-# terminus-dashboard
+# terminusdb-console
 
 Management Dashboard for TerminusDB
 
 The Terminus Dashboard is a simple react javascript client application that provides users with an interface for managing and querying TerminusDB. It ships with TerminusDB and is available at http://localhost:3005/
 
+
 The dashboard requires terminusdb-client, terminusdb-react-table and terminusdb-react-graph to be available.
 
 As of to install terminusdb-console locally for development, follow the below steps:-
 
-* Clone terminus-client from https://github.com/terminusdb/terminusdb-client, then cd into the root dir and run: 
+* Clone terminus-client from https://github.com/terminusdb/terminusdb-client, 
+then cd into the root dir and run: 
 `npm install`
 
 And all of the dependencies should be automatically installed
