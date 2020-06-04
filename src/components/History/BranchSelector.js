@@ -2,7 +2,7 @@ import React , {useState} from 'react';
 import Select from "react-select";
 import {BRANCH_SELECTOR} from "./constants.history"
 import { DBContextObj } from "../Query/DBContext"
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
 
 /**
  * Simple Dropdown for switching between branches
@@ -10,7 +10,7 @@ import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reac
 
 export const BranchSelector = ({ onChange, hideSingle, className }) => {
 
-    hideSingle = hideSingle || true
+    hideSingle = false
 
     const {branches, branch, setHead} = DBContextObj();
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -27,7 +27,7 @@ export const BranchSelector = ({ onChange, hideSingle, className }) => {
     }
 
 
-    if(branch && branches) {
+    if(branch && branches && Object.keys(branches).length > 1 ) {
         let bopts = Object.values(branches).map( (item) => {
             return {label: item.id, value: item.id}
         })
@@ -58,7 +58,7 @@ export const BranchSelector = ({ onChange, hideSingle, className }) => {
         )*/
 
     }
-    else if(branch && branches && branches.length == 1 && !hideSingle){
+    else if(branch && branches && Object.keys(branches).length == 1 && !hideSingle){
         return (
             <span className={BRANCH_SELECTOR.singleBranchClassName}>
                 <label className={BRANCH_SELECTOR.singleBranchLabelClassName}>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Col, Row } from "reactstrap"
 import { CommitView } from "./CommitView"
-import { GO_RIGHT, GO_LEFT } from "../../constants/faicons"
+import { GO_RIGHT, GO_LEFT, HEAD } from "../../constants/faicons"
 import { COMMIT_TRAVELLER } from "./constants.history"
 import TerminusClient from '@terminusdb/terminusdb-client';
 import { DBContextObj} from "../Query/DBContext"
@@ -13,9 +13,11 @@ import { TERMINUS_ERROR } from "../../constants/identifiers";
 export const CommitTraveller = (props) => {
     const [commit, setCommit] = useState()
     const {woqlClient} = WOQLClientObj();
-    const {branch, ref, setHead, consoleTime} = DBContextObj();
+    const {branch, branches} = DBContextObj();
 
     let mb = props.branch || branch
+
+    let isHead = (commit && branches && branch && branches[branch].head == commit.id)
 
     //retrieves details of the commit with id ref
     useEffect(() => {
@@ -44,21 +46,27 @@ export const CommitTraveller = (props) => {
 
     function handleNextCommit(){
         props.setRef(commit.child)
+        setCommit()
     }
 
     function handlePreviousCommit(){
         props.setRef(commit.parent)
+        setCommit()
     } 
 
     function getForwardButton(){
         if(commit && commit.child) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_RIGHT}/>)
+        if(isHead) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_RIGHT}/>)
     }
 
     function getBackButton(){
         if(commit && commit.parent) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_LEFT}/>)
+        if(commit) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_LEFT}/>)
     }
+
+
 
     function getBackNavigation(){
         if(commit && commit.parent){

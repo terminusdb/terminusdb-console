@@ -3,7 +3,20 @@ import {printts, DATETIME_FULL} from "../../constants/dates"
 import {COMMIT_VIEW} from "./constants.history"
 
 export const CommitView = (props) => {
-    if(!props.commit) return <div/>
+    function getEmpty(){
+        return(
+            <div>
+                <div className={COMMIT_VIEW.headerClassName}>
+                    ...
+                </div>
+                <div className={COMMIT_VIEW.messageClassName}>
+                    Searching Commit Log
+                </div>
+            </div>
+        )
+    }
+
+    if(!props.commit) return getEmpty()
     let cmsg = ""
     if(props.commit.message) cmsg = (props.commit.message.length > COMMIT_VIEW.maxlen ? props.commit.message.substring(0, COMMIT_VIEW.maxlen-4) + " ..." : props.commit.message)
     let cauth = ""
