@@ -789,7 +789,7 @@ div.css-yk16xz-control{
     font-weight: 600;
     text-align: center;
     padding: 10px;
-    border-radius: 3px;
+    border-radius: 3px !important;
     margin-left: -40px;
 }
 
@@ -800,6 +800,7 @@ div.css-yk16xz-control{
     width: 120px  !important;
     margin-left: -80px;
     padding: 7px;
+    border-radius: 3px !important;
     border: 2px solid  #888  !important;
 }
 
@@ -807,6 +808,7 @@ div.css-yk16xz-control{
 .dropdown-toggle:hover {
     background-color:#666 !important;
     color: white  !important;
+    border-radius: 3px !important;
     border: 2px solid #041433 !important;
 }
 
@@ -818,6 +820,7 @@ div.css-yk16xz-control{
 }
 
 .run-query-button:hover {
+    border-radius: 3px !important;
     background-color: #00C08B !important;
     color: white  !important;
     border: 2px solid #041433 !important;
