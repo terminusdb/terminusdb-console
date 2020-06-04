@@ -13,7 +13,6 @@ stages:
   - name: deploy_canary
     if: branch = canary
   - name: build
-    if: branch = master
 
 jobs:
   include:
