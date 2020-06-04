@@ -779,6 +779,59 @@ div.css-yk16xz-control{
   color: #041433
 }
 
+.run-query-button:visited,
+.run-query-button:active{
+    border: 0 !important;
+}
+
+.run-query-button {
+    font-size: 0.9em;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    border-radius: 3px;
+    margin-left: -40px;
+}
+
+
+.query-pane-container
+.dropdown-toggle {
+    background-color:#888 !important;
+    color: #eee !important;
+    width: 120px  !important;
+    margin-left: -80px;
+    padding: 7px;
+    border: 2px solid  #888  !important;
+}
+
+.query-pane-container
+.dropdown-toggle:hover {
+    background-color:#666 !important;
+    color: white  !important;
+    border: 2px solid white !important;
+}
+
+.run-query-button {
+    background-color: #00C08B !important;
+    color: #eee !important;
+    width: 120px  !important;
+    border: 2px solid #00C08B  !important;
+}
+
+.run-query-button:hover {
+    background-color: #00C08B !important;
+    color: white  !important;
+    border: 2px solid white !important;
+}
+
+.query-pane-toolbar {
+    height: 60px;
+    background-color: rgba(0, 102, 253, 0.1);
+    margin: 5px 0px 5px 0px;
+    padding: 2px;
+    width: 100%;
+}
+
 .query-pane-dropdown{
     float: right;
     margin: 0px -30px 0px 0px;
@@ -1808,10 +1861,8 @@ span.qr-v{
     }
 }
 
-.terminus-query-editor
-.dropdown-toggle {
-  border-top: none;
-  border-radius: 0 !important;
+.query-pane-dropdown-row {
+    height: 50px
 }
 
 .inactive-checkbox-button,
@@ -2625,7 +2676,7 @@ h4.prefix-section-header {
 
 }
 
-.schema-toolbar-messages {
+.schema-toolbar-messages, .query-pane-toolbar-row {
     padding: 5px;
     text-align: center;
     width: 100%;
@@ -2650,7 +2701,7 @@ h4.prefix-section-header {
     text-align: right;
 }
 
-.schema-toolbar-submits {
+.schema-toolbar-submits  {
     text-align: right;
     padding-top: 6px;
 }

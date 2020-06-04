@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN} from './constants.querypane'
+import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN, TOOLBAR_CSS} from './constants.querypane'
 import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 
 export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages, editable, onChange, onEdit}) => {
@@ -37,7 +37,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
     return (
         <>
         {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        <Dropdown  isOpen={dropdownOpen} toggle={toggle}>
+        <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
             <DropdownToggle caret>
                 {currentLabel}
             </DropdownToggle>

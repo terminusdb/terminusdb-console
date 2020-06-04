@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col } from "reactstrap";
-import { TABLE_VIEW, GRAPH_VIEW, QUERY_DROPDOWN } from "./constants.querypane"
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "reactstrap";
+import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS } from "./constants.querypane"
 
 export const ViewChooser = ({view, views, updateView}) => {
 
@@ -19,18 +19,23 @@ export const ViewChooser = ({view, views, updateView}) => {
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     return (
-    <Container>
-        <Dropdown isOpen={dropdownOpen} toggle={toggle} className={QUERY_DROPDOWN.dropdown}>
-            <Col md={1}>
-                <DropdownToggle caret>
-                    {currentLabel}
-                </DropdownToggle>
-                <DropdownMenu>
-                    {entries}
-                </DropdownMenu>
+        <Row className={TOOLBAR_CSS.containerRow} >
+            <Col md={12} className={TOOLBAR_CSS.row}>
+                <Row>
+                    <Col md={11}/>
+                    <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
+                        <Dropdown isOpen={dropdownOpen} toggle={toggle} className={TOOLBAR_CSS.dropdown}>
+                            <DropdownToggle caret>
+                                {currentLabel}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                {entries}
+                            </DropdownMenu>
+                        </Dropdown>
+                    </Col>
+                </Row>
             </Col>
-        </Dropdown>
-    </Container>
+        </Row>
     )
 
 }
