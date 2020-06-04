@@ -58,15 +58,20 @@ export const BranchSelector = ({ onChange, hideSingle, className }) => {
     }
     else if(branch && branches && Object.keys(branches).length == 1 && !hideSingle){
         return (
-            <span className={BRANCH_SELECTOR.singleBranchClassName}>
+            <span className="nav-link">
+                    {BRANCH_SELECTOR.label + " " + branch}
+            </span>
+        )
+    }
+    return (<span className={BRANCH_SELECTOR.emptyBranchClassName}/>)
+}
+
+/*
+<span className={BRANCH_SELECTOR.singleBranchClassName}>
                 <label className={BRANCH_SELECTOR.singleBranchLabelClassName}>
                     {BRANCH_SELECTOR.label}
                 </label>
                 <span className={BRANCH_SELECTOR.branchIDClassName}>
                     {branch}
                 </span>
-            </span>
-        )
-    }
-    return (<span className={BRANCH_SELECTOR.emptyBranchClassName}/>)
-}
+            </span>*/
