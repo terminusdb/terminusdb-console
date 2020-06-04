@@ -33,7 +33,7 @@ export const SUMMARY_SECTION = {
     openButtonCSS: "ros-open-page",
     iconCSS: "ros-icon",
     deleteCSS: "ros-delete",
-    deletebuttonCSS: "ros-delete-button",
+    deletebuttonCSS: "ros-delete-button"
 }
 
 
