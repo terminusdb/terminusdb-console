@@ -44,7 +44,8 @@ export const CommitTraveller = (props) => {
     }
 
     function handleNextCommit(){
-        props.setRef(commit.child)
+        let next = (commit && commit.child ? commit.child : (branches && branch && branches[branch] ?  branches[branch].head : false))
+        props.setRef(next)
         setCommit()
     }
 
@@ -56,6 +57,7 @@ export const CommitTraveller = (props) => {
     function getForwardButton(){
         if(commit && commit.child) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={GO_RIGHT}/>)
         if(isHead) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={HEAD}/>)
+        if(commit) return (<FontAwesomeIcon className={COMMIT_TRAVELLER.className} icon={HEAD}/>)
         return (<FontAwesomeIcon className={COMMIT_TRAVELLER.inactiveHistoryClassName} icon={GO_RIGHT}/>)
     }
 
@@ -90,6 +92,15 @@ export const CommitTraveller = (props) => {
 
     function getForwardNavigation(){
         if(commit && commit.child){
+            return (
+                <Col onClick={handleNextCommit} className={COMMIT_TRAVELLER.navColClassName} md={1}>
+                    <span className={COMMIT_TRAVELLER.navClassName}>
+                        {getForwardButton()}
+                    </span>
+                </Col>
+            )
+        }
+        else if(commit && !isHead){
             return (
                 <Col onClick={handleNextCommit} className={COMMIT_TRAVELLER.navColClassName} md={1}>
                     <span className={COMMIT_TRAVELLER.navClassName}>
