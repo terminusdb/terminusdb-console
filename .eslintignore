@@ -1,1 +1,4 @@
 node_modules
+.ci
+package-lock.json
+package.json
