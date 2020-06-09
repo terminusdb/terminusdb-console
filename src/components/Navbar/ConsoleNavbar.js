@@ -20,6 +20,7 @@ export const ConsoleNavbar = (props) => {
     const toggleNavBar = () => setIsOpen(!isOpen);
     const collapseIsOpen= () => setCollapseIsOpen(!isCollapseOpen)
 
+
     return (
         <div className={NAV_CSS.container} >
             <Navbar expand="md" dark fixed="top" navbar>
@@ -31,7 +32,7 @@ export const ConsoleNavbar = (props) => {
                     <Collapse isOpen={isCollapseOpen} navbar md={10}>                      
                         <Col md={8} className={NAV_CSS.dbCol} >
                             
-                                { woqlClient.db() &&
+                                { (woqlClient.db() )&&
                                     <DBNavbar isOpen = {isOpen} page={props.page} toggleTimeTravel={toggleNavBar}/>
                                 }
                            
@@ -47,7 +48,7 @@ export const ConsoleNavbar = (props) => {
                     </Collapse>            
                 </Row>
             </Navbar>
-            {isOpen && 
+            {(isOpen && woqlClient.db() )&& 
                 <div className={NAV_CSS.historyContainer}>
                     <Row className={NAV_CSS.historyRow}>
                         <HistoryNavigator />

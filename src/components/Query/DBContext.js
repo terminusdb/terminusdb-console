@@ -83,7 +83,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
             })
             setHeadUpdating(false)
         }
-        else if(consoleTime && branches ){
+        else if(consoleTime && branches && branch && branches[branch]){
             setLoading(loading+1)
             if(consoleTime < branches[branch].updated){
                 TerminusClient.WOQL.lib().loadCommitAtTime(woqlClient, String(consoleTime)).execute(woqlClient)

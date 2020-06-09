@@ -13,7 +13,6 @@ stages:
   - name: deploy_canary
     if: branch = canary
   - name: build
-    if: branch = master
 
 jobs:
   include:
@@ -42,12 +41,6 @@ jobs:
       script:
         - npm run build
 
-branches:
-  only:
-    - dev
-    - master
-    - canary
-
 deploy:
   - provider: npm
     registry: "https://registry.npmjs.org/"
@@ -58,6 +51,6 @@ deploy:
     keep_history: true
     auth_method: "authToken"
     on:
-      branch : master
+      branch: master
       tags: true
 

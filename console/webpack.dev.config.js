@@ -21,7 +21,7 @@ module.exports = (env, argv) => ({
   plugins: [
     new Dotenv({path: path.resolve(__dirname, './.env')}),
     new HtmlWebPackPlugin({
-        inject: false,
+        inject: true,
         template: path.resolve(__dirname, './index.html'),
         bundleFileName:"terminusdb-console.min.js"
       }),
