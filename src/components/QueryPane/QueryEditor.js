@@ -131,12 +131,6 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
         }
 
-        {(editable) &&
-            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
-                {commitMsg}
-            </textarea>
-        }
-
         {(!showLanguage && editable) &&
             <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
         }
@@ -150,6 +144,12 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         }
 
         {children}
+
+        {(editable) &&
+            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
+                {commitMsg}
+            </textarea>
+        }
 
         </Container>
     )
