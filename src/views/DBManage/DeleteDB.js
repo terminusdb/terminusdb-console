@@ -33,8 +33,9 @@ export const DeleteDB = (props) => {
             })
         }
         else {
-            setModal(false)
+            //setModal(false)
             alert(DELETE_DB_MODAL.error)
+            setDisabled(false)
         }
     }
 
@@ -47,11 +48,12 @@ export const DeleteDB = (props) => {
                         <TerminusDBSpeaks report={rep} />
                     }
                     <div className="del-mod">
+                        <p className="del-message"> {DELETE_DB_MODAL.message} {woqlClient.db()}</p>
                         <img src={DELETE_ICON} className="center"/>
                         <form onSubmit={ handleSubmit(onDelete) }>
-                            <input 
-                                type="text" 
-                                name="dbId" 
+                            <input
+                                type="text"
+                                name="dbId"
                                 id="dbId"
                                 ref = { register({ validate: value => value.length > 0}) }
                             />
@@ -66,4 +68,3 @@ export const DeleteDB = (props) => {
        </Modal>
     );
 }
-
