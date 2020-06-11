@@ -1,33 +1,33 @@
 export const MANAGE_SECTIONS = [
-   /* { 
+   /* {
         id: "metadata",
         title: "Update Database Metadata",
         icon: "stamp",
         button: "Metadata",
         blurb: "Change the name of the database, its description and other metadata"
     },*/
-    { 
+    {
         id: "branch",
         title: "Create a new Branch",
         icon: "code-branch",
         button: "Branch",
         blurb: "Creating a new branch allows you to have multiple different live versions of the database at the same time which can be merged back together when desired",
     },
-    { 
+    {
         id: "merge",
         title: "Merge Branches",
         icon: "infinity",
         button: "Merge",
         blurb: "Merging branches together creates a unified copy of the database from different branches which may have converged."
     },
-    { 
+    {
         id: "backup",
         title: "Backup and Restore",
         icon: "hdd",
         button: "Backup",
         blurb: "Backup your data either to disk or to the cloud, or restore it from backups"
     },
-    { 
+    {
         id: "delete",
         title: "Delete Database",
         icon: "trash-alt",
@@ -37,7 +37,8 @@ export const MANAGE_SECTIONS = [
 ]
 
 export const DELETE_DB_MODAL = {
-    prompt: "Enter the ID of the database you wish to delete",
+    prompt: "Enter the ID of the database you wish to delete.",
+    message: "ID of chosen database is",
     confirm: "Confirm Database Delete",
     error:  "The Database ID entered was incorrect",
     deleted: "Database Deleted",
@@ -105,7 +106,7 @@ export const BRANCH_SOURCE_FORM = {
     ],
     infoMessage: "Start Branch From : the new branch will be started from your current database state - you can change this with the time traveller or branch selector component in the top navigation bar"
 }
- 
+
 
 export const MERGE_BRANCH_FORM = {
     fields: [
@@ -205,6 +206,3 @@ export const BACKUP_FORM = {
         submitText: "Backup Database"
     }
 }
-
-
-

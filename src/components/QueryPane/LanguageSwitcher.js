@@ -10,7 +10,6 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
-
     const showedit = (editable && showLanguage && ["js", "json"].indexOf(showLanguage) !== -1)
     const setEditLanguage = () => {onEdit(currentLanguage)}
 
@@ -36,15 +35,15 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
    //origin disabled={disabled}
     return (
         <>
-        {showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
+        {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
+        {!showedit && <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
             <DropdownToggle caret>
                 {currentLabel}
             </DropdownToggle>
             <DropdownMenu>
                 {entries}
             </DropdownMenu>
-        </Dropdown>
+        </Dropdown>}
         </>
     )
 }

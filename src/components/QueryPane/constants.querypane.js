@@ -60,6 +60,7 @@ export const QUERY_EDITOR_LABEL ={
 export const TOOLBAR_CSS = {
     container: "query-pane-container",
     containerRow: "query-pane-toolbar",
+    edit: "query-pane-edit",
     row: "query-pane-toolbar-row",
     queryPaneControls: "query-pane-controls",
     runQuery: "run-query-button",

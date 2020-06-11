@@ -127,6 +127,10 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
            </Row>
         </div>
 
+        {(editable && error) &&
+            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
+        }
+
         {(!showLanguage && editable) &&
             <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
         }
@@ -147,9 +151,6 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             </textarea>
         }
 
-        {(editable && error) &&
-            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
-        }
         </Container>
     )
 }
