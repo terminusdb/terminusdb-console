@@ -3,7 +3,7 @@
 
 This is the TerminusDB console, TerminusDB server references this
 from the index page served when you access the console from the
-built in webserver, on http://localhost:6363/console by default.
+built in webserver, on http://127.0.0.1:6363/console by default.
 
 The URL TerminusDB server expects the console code to be available at is set by
 way of the environment variable `TERMINUSDB_CONSOLE_BASE_URL`
@@ -41,19 +41,24 @@ npm install
 npm run serve
 ```
 
-Now the console should be running on `http://localhost:3005`
+Now the console should be running on `http://127.0.0.1:3005`
 
 `TERMINUSDB_CONSOLE_BASE_URL` can be set to that, and TerminusDB Server will load from here.
 
 ```
-TERMINUSDB_CONSOLE_BASE_URL=http://localhost:3005
+TERMINUSDB_CONSOLE_BASE_URL=http://127.0.0.1:3005
 ```
 
 ## Working with local versions of dependencies
 
-If you also want to have local versions of the dependencies of console, such as `@terminusdb/terminusdb-client`, then you should clone those repos locally and use `npm link` to make npm use the local version.
+If you also want to have local versions of the dependencies of
+console, such as `@terminusdb/terminusdb-client`, then you should
+clone those repos locally and use `npm link` to make npm use the
+local version.
 
-**Do not edit `package.json` or the webpack config with file paths** Use `npm link` if you want to use local packages, or set `.npmrc` if you want to use our dev packages.
+**Do not edit `package.json` or the webpack config with file paths** Use `npm
+link` if you want to use local packages, or set `.npmrc` if you want to use our
+dev packages.
 
 ### Rebuild Dependencies
 
