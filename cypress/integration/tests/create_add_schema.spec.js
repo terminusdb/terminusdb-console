@@ -1,5 +1,5 @@
 import { createLocalDB, removeLocalDB, addSchema } from "./utils/dbLifeCircle"
-import { flickThroughSchemaTabs } from "./utils/definedActions"
+import { flickThroughSchemaTabs, getQueryDisplaySchemaElements } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 
 context('Create database and add schema locally', () => {
@@ -40,6 +40,17 @@ context('Create database and add schema locally', () => {
         .click({force: true}).then(() => {
 			cy.wait(1000)
             flickThroughSchemaTabs()
+        })
+    })
+
+	it('Query All Schema Elements', () => {
+        cy.wait(5000);
+        cy.get('#terminus-console-page')
+        .find('a')
+        .contains('Query')
+        .click().then(() => {
+			cy.wait(1000)
+            getQueryDisplaySchemaElements(dbid)
         })
     })
 
