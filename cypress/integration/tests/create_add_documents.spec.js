@@ -1,12 +1,10 @@
-import { createLocalDB, removeLocalDB, addSchema } from "./utils/dbLifeCircle"
-import { flickThroughSchemaTabs, getQueryDisplaySchemaElements } from "./utils/definedActions"
+import { createLocalDB, removeLocalDB, addSchema, addDocuments } from "./utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 
 /*
 *	1.	Create a new db
-*	2.	Loads Bikes Schema
-*	3.	Views provides schema views - Classes| Properties | OWL | URL Prefixes| Graphs
-*	4.	Query to view all schema elements in Table | Graph view
+*	2.	Load Bikes Schema
+*	3.	Load Bikes Documents
 */
 
 context('Create database and add schema locally', () => {
@@ -39,25 +37,24 @@ context('Create database and add schema locally', () => {
         })
     })
 
-	it('View Schema tabs', () => {
-        cy.wait(2000);
+	it('Add Documents', () => {
+        cy.wait(5000);
         cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Schema')
-        .click({force: true}).then(() => {
+        .find('button')
+        .contains('Add New Query Pane')
+        .click().then(() => {
 			cy.wait(1000)
-            flickThroughSchemaTabs()
+            addDocuments(dbid)
         })
     })
 
-	it('Query All Schema Elements', () => {
-        cy.wait(5000);
+	it('View Documents', () => {
+        cy.wait(2000);
         cy.get('#terminus-console-page')
         .find('a')
-        .contains('Query')
-        .click().then(() => {
+        .contains('Documents')
+        .click({force: true}).then(() => {
 			cy.wait(1000)
-            getQueryDisplaySchemaElements(dbid)
         })
     })
 

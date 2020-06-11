@@ -1,4 +1,4 @@
-
+import { loadCSVs } from "./loadDocuments"
 
 /*
 creates bikes schema
@@ -19,3 +19,5 @@ export const CREATE_SCHEMA = 'WOQL.when(true).and(' + '\n' +
 	    '.property("journey_bicycle", "Bicycle").label("Bicycle Used"))'
 
 export const SHOW_ALL_SCHEMA_ELEMENTS = 'WOQL.lib().elementMetadata()'
+
+export const LOAD_DOCUMENTS = loadCSVs()

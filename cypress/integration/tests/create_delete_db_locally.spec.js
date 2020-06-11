@@ -1,6 +1,11 @@
 import {createLocalDB,removeLocalDB} from "./utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 
+/*
+*	1.	Create a new db
+*	2.	Deletes the db
+*/
+
 context('Create and delete a database locally', () => {
    let dbid;
 
