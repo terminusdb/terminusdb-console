@@ -31,7 +31,9 @@ export const DBContextProvider = ({children,woqlClient}) => {
     //load branch structure
     useEffect(() => {
         setLoading(loading+1)
-        TerminusClient.WOQL.lib().loadBranchDetails(woqlClient).execute(woqlClient)
+        let q = TerminusClient.WOQL.lib().branches() 
+        woqlClient.query()
+        TerminusClient.WOQL.lib().loadBranchDetails(woqlClient.checkout()).execute(woqlClient)
         .then((res) => {
             let binds = (res && res.bindings ? branchStructureFromBindings(res.bindings) : [])
             setBranches(binds)

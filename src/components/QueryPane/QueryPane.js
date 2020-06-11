@@ -20,7 +20,6 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
 
     const {woqlClient} = WOQLClientObj();
     const {ref,branch} = DBContextObj()
-    TerminusClient.WOQL.setContextFromClient(woqlClient)//sets constants in WOQL to use for forming resource strings (COMMITS, DB, META, REF, BRANCH, HEAD)
     const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, query, branch, ref);
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || "js");
     const [content, setContent] = useState(initcontent); 

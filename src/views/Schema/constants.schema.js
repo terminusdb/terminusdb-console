@@ -52,11 +52,6 @@ export const INFERENCE_GRAPH = "Inference Graph"
 export const TERMINUS_GRAPHS_BLURB = "TerminusDB databases are divided internally into one or more named graphs. This gives you greater control over data-integration but comes at the cost of complexity."
 export const TERMINUS_GRAPHS_TITLE = "Graph Management"
 
-export const TERMINUS_PREFIXES_BLURB = "TerminusDB stores all data as RDF which uses URLs (IRIs more accurately) to give data global addressability and namespace protection. You can choose what URLs the data in your database will use."
-export const TERMINUS_PREFIXES_TITLE = "URI Prefix Management"
-
-
-
 export const CREATE_GRAPH_FORM = {
     graphDeletedLocation: "(Console, Graph Delete)",
     graphCreatedLocation: "(Console, Graph Create)",
@@ -144,3 +139,54 @@ export const UPDATE_TURTLE_ERROR = "Failed to update OWL"
 export const DEFAULT_TURTLE_UPDATE_MSG = "Console update triples interface updated "
 
 export const CREATE_GRAPH_BUTTON = "Create New Graph"
+
+export const PREFIXES = {
+    createInfo: "", 
+    info: "",
+    builtinSectionCSS: "",
+    builtinHeaderCSS: ""
+}
+
+
+export const TERMINUS_PREFIXES_BLURB = "TerminusDB stores all data as RDF which uses URLs (IRIs more accurately) to give data global addressability and namespace protection. You can choose what URLs the data in your database will use."
+export const TERMINUS_PREFIXES_TITLE = "URI Prefix Management"
+
+export const CREATE_PREFIX_FORM = {
+    prefixCreatedLocation: "(Console, Graph Create)",
+    createSuccess: "Prefix Successfully Added",
+    createFailure: "Failed to add prefix",
+    fields: [
+        {
+            id: "prefix",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter Prefix"
+            },
+            label: 'Prefix',
+        },
+        {
+            id: "uri",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter Full URL",
+            },
+            label: 'URI',
+        },
+        {
+            id: "commit",
+            label: "Commit Message",
+            inputElement: {
+                type: "textarea",
+                placeholder: "A short description of the reason for your changes",
+            }
+        }
+    ],
+    buttons: {
+        cancelText: "Cancel",
+        submitText: "Create New Prefix"
+    }
+}

@@ -10,7 +10,7 @@ export const CommitView = (props) => {
                     ...
                 </div>
                 <div className={COMMIT_VIEW.messageClassName}>
-                    Searching Commit Log
+                    {COMMIT_VIEW.searching}
                 </div>
             </div>
         )
