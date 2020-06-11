@@ -14,7 +14,7 @@ const ConnectionErrorPage = () => {
 
     return (
     	<DialogueBox message = { CONNECTION_FAILURE_ADVICE} header = {CONNECTION_FAILURE}>
-    		<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Enter your passwod</button>
+    		<button className="btn btn-lg btn-block btn btn-primary" onClick={setKeyUpdate}>Enter your password</button>
     	</DialogueBox>
     )
 }

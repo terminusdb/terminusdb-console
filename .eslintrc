@@ -2,8 +2,7 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es6": true,
-    "node": true
+    "es6": true
   },
   "plugins": [
     "react",
@@ -22,6 +21,16 @@
   "rules": {
     "linebreak-style": ["error", "unix"],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "prettier/prettier": [
+      "error", 
+      {
+        "printWidth": 100,
+        "semi": false,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "bracketSpacing": false
+      }
+    ]
   }
 }
