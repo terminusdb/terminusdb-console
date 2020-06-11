@@ -3,7 +3,7 @@
 /*
 creates bikes schema
 */
-export const CREATE_SCHEMA =' WOQL.when(true).and(' + '\n' +
+export const CREATE_SCHEMA = 'WOQL.when(true).and(' + '\n' +
 	'WOQL.doctype("Station")' + '\n' +
 	    '.label("Bike Station")' + '\n' +
 	    '.description("A station where municipal bicycles are deposited"),' + '\n' +
@@ -17,3 +17,5 @@ export const CREATE_SCHEMA =' WOQL.when(true).and(' + '\n' +
 	    '.property("start_time", "dateTime").label("Time Started")' + '\n' +
 	    '.property("end_time", "dateTime").label("Time Ended")' + '\n' +
 	    '.property("journey_bicycle", "Bicycle").label("Bicycle Used"))'
+
+export const SHOW_ALL_SCHEMA_ELEMENTS = 'WOQL.lib().elementMetadata()'
