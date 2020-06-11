@@ -311,6 +311,7 @@ export const TCFormInput = ({field_id, value, disabled, onChange, placeholder, c
             value={val}
             onChange={vchange}
             name = {field_id}
+            id= {field_id}
         />
     )
 }
@@ -333,6 +334,7 @@ export const TCFormTextarea = ({field_id, value, disabled, onChange, placeholder
             placeholder = { placeholder }
             onChange ={vchange}
             value={val}
+            id={field_id}
         />
     )
 }

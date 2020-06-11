@@ -33,11 +33,13 @@ const copyRemoteImg = TERMINUS_IMAGE_BASE + "copy-remote.png"
 
 export const CREATE_OR_COPY_CARD = {
     create:{
+        id : 'create_db',
         title: 'Create New Database',
         text: 'Create a brand-new, empty database',
         image: createImg
     },
     copy:{
+        id : 'copy_db',
         title: 'Copy Existing Database',
         text: 'Copy an existing database',
         image: copyImg
@@ -46,11 +48,13 @@ export const CREATE_OR_COPY_CARD = {
 
 export const CREATE_CARD = {
     local:{
+        id : 'create_db_local',
         title: 'Create Local Database',
         text: 'The database will be created on this server and only locally accessible',
         image: createLocallyImg
     },
     remote:{
+        id : 'create_db_remote',
         title: 'Create on TerminusDB.com',
         text: 'Host your database on terminusdb.com and share with collaborators through our secure sharing hub',
         image: createRemoteImg
@@ -59,11 +63,13 @@ export const CREATE_CARD = {
 
 export const COPY_CARD = {
     local:{
+        id: 'copy_db_local',
         title: 'Copy from this Server',
         text: 'Rapidly copy any database from this terminusdb server',
         image: copyLocallyImg
     },
     remote:{
+        id: 'copy_db_remote',
         title: 'Copy from Remote Server',
         text: 'You can copy a database from any terminusdb server - you may have to provide security credentials',
         image: copyRemoteImg

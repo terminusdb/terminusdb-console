@@ -41,7 +41,7 @@ const ServerHome = (props) => {
     let sections = [{id: SERVER_ROUTE, label: DBLIST_TITLE}, {id: CREATE_DB_ROUTE, label: CREATEDB_TITLE}]
     let active = props.page
     return (
-        <TabbedPageView active={active} sections={sections}>
+        <TabbedPageView id="home" active={active} sections={sections}>
             <DBList key="dbl" list={dblist}/>
             <div key="create" className = "container-fluid">
                 <hr className = "my-space-15"/>
