@@ -8,13 +8,13 @@ export const CopyOptions = (props) => {
     return (
         <Row className={OPTIONS_PANE_CSS} >
             <Col className={OPTIONS_PANE_COL_CSS}>
-                <div onClick={props.setLocal} className={CARD_CONTAINER_CSS}>
+                <div id={COPY_CARD.local.id} onClick={props.setLocal} className={CARD_CONTAINER_CSS}>
                     <DatabaseCard card = {COPY_CARD.local}/>
                 </div>
             </Col>
 
             <Col className={OPTIONS_PANE_COL_CSS}>
-                <div onClick={props.setRemote} className={CARD_CONTAINER_CSS}>                           
+                <div id={COPY_CARD.remote.id} onClick={props.setRemote} className={CARD_CONTAINER_CSS}>                           
                     <DatabaseCard card = {COPY_CARD.remote}/>
                 </div>
             </Col>

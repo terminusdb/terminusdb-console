@@ -257,6 +257,10 @@ div.del-mod{
     margin-top: 40px;
 }
 
+p.del-message{
+    word-wrap: break-word;
+}
+
 button.man-btn{
     margin-top: -40px;
 }
@@ -806,11 +810,21 @@ div.css-yk16xz-control{
 }
 
 .query-pane-container
-.dropdown-toggle:hover {
+.dropdown-toggle:hover:hover, button.query-pane-edit:hover {
     background-color:#666 !important;
     color: white  !important;
     border-radius: 3px !important;
     border: 2px solid #041433 !important;
+}
+
+button.query-pane-edit {
+    background-color:#888 !important;
+    color: #eee !important;
+    min-width: 120px  !important;
+    margin-left: -80px;
+    padding: 7px;
+    border-radius: 3px !important;
+    border: 2px solid  #888  !important;
 }
 
 .run-query-button {
@@ -1329,19 +1343,22 @@ p.dscr{
 
 @media (min-width:576px) {
   .container {
-    max-width: inherit
+    max-width: inherit;
+    word-wrap: break-word;
   }
 }
 
 @media (min-width:992px) {
   .container {
-    max-width: 960px
+    max-width: 960px;
+    word-wrap: break-word;
   }
 }
 
 @media (min-width:1200px) {
   .container {
-    max-width: 1440px
+    max-width: 1440px;
+    word-wrap: break-word;
   }
 }
 
@@ -2353,6 +2370,7 @@ h4.prefix-section-header {
 
 .terminus-console-page {
     margin-bottom: 350px;
+    /*padding-top: 100px;*/
 }
 
 .terminus-console-content {
