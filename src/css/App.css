@@ -2370,6 +2370,7 @@ h4.prefix-section-header {
 
 .terminus-console-page {
     margin-bottom: 350px;
+    /*padding-top: 100px;*/
 }
 
 .terminus-console-content {

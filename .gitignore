@@ -7,3 +7,5 @@ es6
 
 console/dist
 console/public_pages
+
+cypress/integration/examples

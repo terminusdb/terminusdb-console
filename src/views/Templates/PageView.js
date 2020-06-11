@@ -15,7 +15,7 @@ import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 
 export const PageView = (props) => {
     return (
-        <Container className={PAGEVIEW.containerCSS} id="terminus-console-page">
+        <Container id={props.id} className={PAGEVIEW.containerCSS} id="terminus-console-page">
             <Container fluid className={PAGEVIEW.navbarContainerCSS}>
                 <ConsoleNavbar onHeadChange={props.onHeadChange} />
             </Container>
