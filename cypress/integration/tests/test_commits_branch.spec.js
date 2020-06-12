@@ -1,15 +1,14 @@
-import { createLocalDB, removeLocalDB, addSchema } from "./utils/dbLifeCircle"
-import { flickThroughSchemaTabs, getSchemaElements } from "./utils/definedActions"
+import { createLocalDB, removeLocalDB, addSchema, addDocuments } from "./utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
+import { getDocumentsMetaData } from "./utils/definedActions"
 
 /*
 *	1.	Create a new db
-*	2.	Loads Bikes Schema
-*	3.	Views provides schema views - Classes| Properties | OWL | URL Prefixes| Graphs
-*	4.	Query to view all schema elements in Table | Graph view
+*	2.	Load Bikes Schema
+* 	6. 	Delete database
 */
 
-context('Create database and add schema locally', () => {
+context('Test commits and branching', () => {
    let dbid;
 
    before(() => {
@@ -39,29 +38,7 @@ context('Create database and add schema locally', () => {
         })
     })
 
-	it('View Schema tabs', () => {
-        cy.wait(2000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Schema')
-        .click({force: true}).then(() => {
-			cy.wait(1000)
-            flickThroughSchemaTabs()
-        })
-    })
-
-	it('Query All Schema Elements', () => {
-        cy.wait(5000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-            getSchemaElements()
-        })
-    })
-
-    it('Go to database home page', () => {
+	it('Go to database home page', () => {
         cy.wait(2000);
         const dbHomeRef = "#/db/admin/" + dbid + "/"
         cy.get('#terminus-console-page')

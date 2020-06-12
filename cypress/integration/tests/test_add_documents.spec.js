@@ -6,9 +6,12 @@ import { getDocumentsMetaData } from "./utils/definedActions"
 *	1.	Create a new db
 *	2.	Load Bikes Schema
 *	3.	Load Bikes Documents
+*	4.	View Documents
+* 	5. 	Query Documents Meta Data
+* 	6. 	Delete database
 */
 
-context('Create database and add schema locally', () => {
+context('Create database and add documents', () => {
    let dbid;
 
    before(() => {
