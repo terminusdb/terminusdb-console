@@ -23,7 +23,7 @@ export const DBNavbar = (props) => {
         return getDBPageRoute(woqlClient.db(), aid, page)
     }
 
-    let dbClass = (!props.isOpen ? SLIDER_CSS.openButton : SLIDER_CSS.closedButton) 
+    let dbClass = (!props.isOpen ? SLIDER_CSS.openButton : SLIDER_CSS.closedButton)
 
     const handleToggle = (toggleTime) => {
         setToggleTime(!toggleTime)
@@ -44,7 +44,7 @@ export const DBNavbar = (props) => {
 
         let timeCSS = NAV_CSS.timeContainer
 
-        //let bs = (<BranchSelector />) 
+        //let bs = (<BranchSelector />)
 
         let toggler = (
             <ToggleButton value={ toggleTime || false }
@@ -64,13 +64,13 @@ export const DBNavbar = (props) => {
                             base: branchStatus,
                             hover: 'rgb(177, 191, 215)',
                         }
-                    } 
+                    }
                 }
-                onToggle={ (value) => handleToggle(value) } 
+                onToggle={ (value) => handleToggle(value) }
             />
         )
         return (
-        
+
                 <Row className={NAV_CSS.dbDetails} >
                     <Col className={timeCSS}>
                         {currentTime}
@@ -82,7 +82,7 @@ export const DBNavbar = (props) => {
 
     /*
     <Row className={NAV_CSS.dbDetails} >
-                {bs && 
+                {bs &&
                     <Col className={NAV_CSS.branchContainer}>{bs}</Col>
                 }
                 <Col className={timeCSS}>
@@ -109,8 +109,8 @@ export const DBNavbar = (props) => {
                     <BranchSelector />
                 </div>
             </NavItem>
-            <NavItem className="d-none d-md-block" >               
-                    {getDBHomeDetails()}               
+            <NavItem className="d-none d-md-block" >
+                    {getDBHomeDetails()}
             </NavItem>
             <NavItem>
                 <NavLink tag = {RouterNavLink}
