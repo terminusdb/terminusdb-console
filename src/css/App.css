@@ -1776,9 +1776,10 @@ span.qr-v{
     font-size: 18px;
 }
 
-@media (min-width: 768px)
-.navbar-expand-md .navbar-nav .nav-link {
-     padding-right: 0 !important
+@media (min-width: 768px){
+  .navbar-expand-md .navbar-nav .nav-link {
+       padding-right: 0 !important
+  }
 }
 
 

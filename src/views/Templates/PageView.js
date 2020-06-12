@@ -8,18 +8,17 @@ import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 import { Container } from "reactstrap";
 import Footer  from "./Footer"
 import Loading from "../../components/Reports/Loading"
-import { PAGEVIEW } from "./constants.templates"
+//import { PAGEVIEW } from "./constants.templates"
 import { TERMINUS_PAGE } from "../../constants/identifiers"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 
 
 export const PageView = (props) => {
     return (
-        <Container id={props.id} className={PAGEVIEW.containerCSS} id="terminus-console-page">
-            <Container fluid className={PAGEVIEW.navbarContainerCSS}>
-                <ConsoleNavbar onHeadChange={props.onHeadChange} />
-            </Container>
-            <Container className={PAGEVIEW.pageContentCSS}>      
+        <div id={props.id} className="console__page" id="terminus-console-page">           
+            <ConsoleNavbar onHeadChange={props.onHeadChange} />
+            <main >
+                <div className="console__page__container">     
                 {props.report && 
                     <TerminusDBSpeaks report={props.report} />
                 }
@@ -27,7 +26,8 @@ export const PageView = (props) => {
                     <Loading type={TERMINUS_PAGE} />
                 }
                 { props.children }
-            </Container>
-        </Container>
+                </div>
+            </main>
+        </div>
     )
 }
