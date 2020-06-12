@@ -37,7 +37,7 @@ export const ConsoleNavbar = (props) => {
                                 }
                            
                         </Col>                    
-                        <Col md={4} className={NAV_CSS.loginCol} > 
+                        <Col md={4} className={NAV_CSS.loginCol} >
                             {!(isAuthenticated || loading) &&
                                 <Login/>
                             }

@@ -4,14 +4,17 @@ import {LOGIN_LABEL, LOGIN_BUTTON_CSS} from './constants.navbar'
 import { useAuth0 } from "../../react-auth0-spa";
 
 export const Login = (props) => {
-    const { loginWithRedirect } = useAuth0();
+    const { loginWithRedirect, authError} = useAuth0();
+
+    const disabled= authError===true ? {disabled:true} : {onClick : () => loginWithRedirect()} 
+//onClick = {() => {loginWithRedirect({})}}>
     return (
         <Nav className = "mr-auto"  navbar>
             <NavItem>
-                <Button id = "qsLoginBtn"
+                <Button id = "qsLoginBtn" 
                     color = "primary"
                     className = {LOGIN_BUTTON_CSS}
-                    onClick = {() => {loginWithRedirect({})}}>
+                    {...disabled}>                   
                     {LOGIN_LABEL}
                 </Button>
             </NavItem>

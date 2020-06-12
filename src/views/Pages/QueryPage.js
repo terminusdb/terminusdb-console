@@ -14,7 +14,7 @@ const QueryPage = () => {
     const QueryPaneBox = (props) => {
         const {qp, setQp} = props.pstate;        
         return (
-            <div className={QUERY_BOX_CSS}>
+            <div className={QUERY_BOX_CSS} id={props.id}>
                 <QueryPane type="editor"/>
                 <Row className={NEW_QUERY_ROW_CSS} style={{justifyContent:"flex-end"}}> 
                     <button 
@@ -31,7 +31,7 @@ const QueryPage = () => {
 
     const NewQueryPane = (props) => {
         const [qp, setQp] = useState([0]);
-        return qp.map(m => <QueryPaneBox key={m}
+        return qp.map(m => <QueryPaneBox key={m} id={`queryPane_${m}`}
             qpNumber={m}
             pstate={{qp, setQp}}/>
         );

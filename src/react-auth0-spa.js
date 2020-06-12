@@ -17,26 +17,34 @@ export const Auth0Provider = ({
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [authError, setAuthError] = useState(false);
+
+//WOQL.triple("v:DBID", "terminus:resource_name", "v:DB_NAME").eq("v:DB_NAME", "admin|TEST01")
 
   useEffect(() => {
     const initAuth0 = async () => {
-        const auth0FromHook = await createAuth0Client(initOptions);
-        setAuth0(auth0FromHook);
-        if (window.location.search.includes("code=")) {
-            const { appState } = await auth0FromHook.handleRedirectCallback();
-            onRedirectCallback(appState);
+        try{
+            setAuthError(false);
+            const auth0FromHook = await createAuth0Client(initOptions);
+            setAuth0(auth0FromHook);
+            if (window.location.search.includes("code=")) {
+                const { appState } = await auth0FromHook.handleRedirectCallback();
+                onRedirectCallback(appState);
+            }
+
+            const isAuthenticated = await auth0FromHook.isAuthenticated();
+            setIsAuthenticated(isAuthenticated);
+
+            if (isAuthenticated) {
+                const user = await auth0FromHook.getUser();
+                setUser(user);
+            }
+
+            setLoading(false);
+        }catch(err){
+          setAuthError(true);
+          setLoading(false);
         }
-
-        const isAuthenticated = await auth0FromHook.isAuthenticated();
-
-        setIsAuthenticated(isAuthenticated);
-
-        if (isAuthenticated) {
-            const user = await auth0FromHook.getUser();
-            setUser(user);
-        }
-
-        setLoading(false);
     };
     initAuth0();
     // eslint-disable-next-line
@@ -69,6 +77,7 @@ export const Auth0Provider = ({
   return (
     <Auth0Context.Provider
       value={{
+        authError,
         isAuthenticated,
         user,
         loading,

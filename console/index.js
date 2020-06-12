@@ -14,7 +14,7 @@ const onRedirectCallback = appState => {
 * Wraps the entire application in a auth0 domain
 * initializes woqlClient and passes it off to the app to connect
 */
-
+console.log("PATH_NAME",window.location.origin + window.location.pathname);
 ReactDOM.render(
     <Auth0Provider
       domain={config.domain}

@@ -2,6 +2,10 @@
   min-height: 70px!important;
 }
 
+.btn-primary.disabled, .btn-primary:disabled{
+  background-color: #00C08B !important;
+}
+
 .select-nav-bar{
     margin-top: 10px;
     height: 40px;
