@@ -41,3 +41,11 @@ export const addDocuments = async (dbId) => {
     await cy.get('.query-pane-container').find('button').contains('Run Query').click()
     cy.wait(2000);
 }
+
+export const createBranch = async (bid, msg) => {
+    await cy.get('#terminus-console-page').find('button').contains('Branch').click()
+    cy.get('input[id="bid"]').focus().type(bid);
+    cy.get('textarea[id="commit"]').focus().type(msg);
+    await cy.get('.tcf-form').find('button').contains('Create New Branch').click()
+    cy.wait(2000);
+}
