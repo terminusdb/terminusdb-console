@@ -1,5 +1,5 @@
 import { createLocalDB, removeLocalDB, addSchema } from "./utils/dbLifeCircle"
-import { flickThroughSchemaTabs, getQueryDisplaySchemaElements } from "./utils/definedActions"
+import { flickThroughSchemaTabs, getSchemaElements } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 
 /*
@@ -57,7 +57,28 @@ context('Create database and add schema locally', () => {
         .contains('Query')
         .click().then(() => {
 			cy.wait(1000)
-            getQueryDisplaySchemaElements(dbid)
+            getSchemaElements()
+        })
+    })
+
+    it('Go to database home page', () => {
+        cy.wait(2000);
+        const dbHomeRef = "#/db/admin/" + dbid + "/"
+        cy.get('#terminus-console-page')
+        .find('a[href="'+ dbHomeRef +'"]')
+        .click().then(() => {
+            cy.wait(1000);
+        })
+    })
+
+    it('Delete database', () => {
+        cy.wait(2000);
+        cy.get('#terminus-console-page')
+        .find('a')
+        .contains(tabs.MANAGE_TAB)
+        .click().then(() => {
+            cy.wait(1000);
+            removeLocalDB(dbid)
         })
     })
 

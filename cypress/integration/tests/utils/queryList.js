@@ -20,4 +20,6 @@ export const CREATE_SCHEMA = 'WOQL.when(true).and(' + '\n' +
 
 export const SHOW_ALL_SCHEMA_ELEMENTS = 'WOQL.lib().elementMetadata()'
 
+export const DOCUMENT_META_DATA = 'WOQL.lib().documentMetadata()'
+
 export const LOAD_DOCUMENTS = loadCSVs()
