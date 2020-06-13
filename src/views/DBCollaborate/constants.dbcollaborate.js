@@ -16,17 +16,10 @@ export const COLLABORATE_SECTIONS = [
     },
     { 
         id: "pull",
-        title: "Pull Updates",
+        title: "Synchronise Updates",
         icon: "download",
-        button: "Pull",
-        blurb: "If your database is tracking one or more remote servers, you can pull changes from your collaborators and merge them with your local version",
-    },
-    { 
-        id: "push",
-        title: "Push Updates",
-        icon: "upload",
-        button: "Push",
-        blurb: "If your database is tracking one or more remote servers, you can push changes to your collaborators so that they can see your latest work and merge it with their own changes",
+        button: "Pull & Push",
+        blurb: "Pull changes from your collaborators and Push your changes to them to synchronise versions",
     },
     { 
         id: "share",

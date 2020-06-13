@@ -25,4 +25,8 @@ export const MANAGE_COMPONENTS = {
     }
 }
 
-
+export const LATEST_UPDATES_LENGTH = 20
+export const SUB_TITLE_LIMIT = 24
+export const MAIN_LIMIT = 12
+export const TITLE_LIMIT = 14 
+export const INFO_LIMIT = 100

@@ -142,9 +142,10 @@ export const CREATE_GRAPH_BUTTON = "Create New Graph"
 
 export const PREFIXES = {
     createInfo: "", 
-    info: "",
+    info: "All data and schema elements are named with IRIs which can use prefixes. doc and scm are the default IRIs used for storing data and schema elements",
     builtinSectionCSS: "",
-    builtinHeaderCSS: ""
+    builtinHeaderCSS: "",
+    builtinHeader: "Built In Namespaces (Language Basics and Internal Data-structures)"
 }
 
 

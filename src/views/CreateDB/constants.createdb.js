@@ -231,16 +231,16 @@ export const COPY_REMOTE_FORM = {
         {
             id: "newid",
             value: "",
+            mandatory: true,
             label: 'New ID',
             inputElement: {
                 type: "input",
-                placeholder: "enter id of new db",
+                placeholder: "Enter id of new db",
             }
         },
         {
             id: "name",
             value: "",
-            mandatory: true,
             label: 'New DB Name',
             inputElement: {
                 type: "input",
@@ -250,10 +250,10 @@ export const COPY_REMOTE_FORM = {
         {
             id: "user",
             value: "",
-            label: 'User Name',
+            label: 'Remote User Name',
             inputElement: {
                 type: "input",
-                placeholder: "enter username",
+                placeholder: "enter username for remote server",
             }
         },
         {
@@ -262,9 +262,17 @@ export const COPY_REMOTE_FORM = {
             label: 'Password',
             inputElement: {
                 type: "input",
-                placeholder: "enter password",
+                placeholder: "enter password for remote server",
             }
-        }
+        },
+        {
+            id: "description",
+            label: 'Description',
+            inputElement: {
+                type: "textarea",
+                placeholder: "Enter a short text describing the database, its scope and purpose",
+            },
+        },        
     ],
     buttons: {
         submitText: "Copy Remote Database"
@@ -277,26 +285,24 @@ export const COPY_DB_DETAILS_FORM = {
     fields: [
         {   
             id: "dbid",
-            label: 'Database ID',
+            label: 'Original ID',
             inputElement: {
                 type: "input",
-                disabled: true,
+                disabled: true
             }
         },
         {   
             id: "dbname",
-            label: 'Database Name',
+            label: 'New DB Name',
             inputElement: {
                 type: "input",
-                disabled: true,
             }
         },
         {
             id: "description",
-            label: 'Description',
+            label: 'New DB Description',
             inputElement: {
                 type: "textarea",
-                disabled: true
             }
         }
     ]

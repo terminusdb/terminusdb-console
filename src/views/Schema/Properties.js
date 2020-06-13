@@ -32,7 +32,7 @@ export const Properties = (props) => {
 
     function getPropertiesQuery(gfilter){
         let gstr = gfilter.type + "/" + gfilter.id
-        return TerminusClient.WOQL.limit(PROPERTIES_QUERY_LIMIT, TerminusClient.WOQL.lib().propertyMetadata(gstr))
+        return TerminusClient.WOQL.limit(PROPERTIES_QUERY_LIMIT, TerminusClient.WOQL.lib().properties(false, false, gstr))
     }
 
     return (

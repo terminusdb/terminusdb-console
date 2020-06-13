@@ -8,7 +8,6 @@ import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
-import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 import { Container, Row } from "reactstrap";
 
 
@@ -25,6 +24,7 @@ export const CopyLocalForm = () => {
     const [report, setReport] = useState();
     const [sourceID, setSourceID] = useState()
     const [details, setDetails] = useState({})
+    const [newID, setNewID] = useState()
     let update_start = Date.now()
 
     let basicInfo = {}  
@@ -44,6 +44,28 @@ export const CopyLocalForm = () => {
                 label: item.title 
             }
         })        
+    }
+
+    function getStarterTitle(orig){
+        let base = orig + " Clone"
+        let ntry = base
+        let i = 1;
+        while(titleTaken(ntry)){
+            ntry = base + " (" + (i++) + ")" 
+        }
+        return ntry
+    }
+
+    function titleTaken(ntitle){
+        let istaken = false
+        localDBs.map((item) => {
+            if(item.title == ntitle) istaken = true
+        })        
+        return istaken
+    }
+
+    function getStarterDescription(orig){
+        return "(Local Clone) " + orig
     }
 
     function getDBList(){
@@ -70,8 +92,8 @@ export const CopyLocalForm = () => {
     function dbToForm(item){
         return {
             dbid: item.db,
-            dbname: item.title,
-            description: item.description
+            dbname: getStarterTitle(item.title),
+            description: getStarterDescription(item.description)
         }
     }
 
@@ -80,13 +102,21 @@ export const CopyLocalForm = () => {
             setDetails(loadDetailsForDB(value))
             setSourceID(value)
         }
+        else if(field_id == 'newid') {
+            setNewID(value)
+        }
     }
 
-    function onClone(details){
+    function onClone(){
         update_start = Date.now()
         setUpdateLoading(true)
         let accountid = woqlClient.account() || woqlClient.uid()
-        return woqlClient.clonedb(sourceID, details.newid)
+        let sourceURL = woqlClient.server() + accountid + "/" + sourceID
+        let src = {"remote_url": sourceURL, label: details.dbname, comment: details.description }
+        //fake remote auth just use local basic auth
+        let abc = woqlClient.basic_auth()
+        woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        return woqlClient.clonedb(src, newID)
         .then(() => {
             let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (id: ${sourceID})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -110,7 +140,7 @@ export const CopyLocalForm = () => {
         goDBHome(id, acc, rep)        
     }
 
-    let buttons = (user ? COPY_LOCAL_FORM.buttons : false)
+    let buttons = COPY_LOCAL_FORM.buttons 
 
     return (<>
         {(loading || updateLoading) && 
@@ -118,12 +148,7 @@ export const CopyLocalForm = () => {
         }
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
-        }
-        {!user && 
-            <TCSubmitWrap>
-                <UnderConstruction action={COPY_LOCAL_FORM.actionText} />
-            </TCSubmitWrap>
-        }
+        }      
         <TCForm 
             onSubmit={onClone} 
             layout = {[2]}

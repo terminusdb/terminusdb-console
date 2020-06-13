@@ -4,39 +4,26 @@ import TerminusClient from "@terminusdb/terminusdb-client"
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { BuiltInPrefixes, CustomPrefixes } from "../Tables/Prefixes"
 import { TAB_SCREEN_CSS, PREFIXES, CREATE_PREFIX_FORM } from './constants.schema';
-import { TERMINUS_INFO } from '../../constants/identifiers';
+import { TERMINUS_INFO, TERMINUS_COMPONENT } from '../../constants/identifiers';
 import { SchemaToolbar } from './SchemaToolbar';
 import Loading from "../../components/Reports/Loading";
 import { SCHEMA_PREFIXES_ROUTE } from '../../constants/routes';
+import { DBContextObj } from "../../components/Query/DBContext"
 
-export const GraphManager = (props) => {
+export const PrefixManager = (props) => {
     const {woqlClient} = WOQLClientObj()
-    //const {graphs} = DBContextObj();
     const [loading, setLoading] = useState(false)
     const [creating, setCreating] = useState(false)
+
+    const {prefixes} = DBContextObj();
+
 
     let initMsg = (PREFIXES.info ? {status: TERMINUS_INFO, message: PREFIXES.info} : null)
     let initCreate = (PREFIXES.createInfo ? {status: TERMINUS_INFO, message: PREFIXES.createInfo} : null)
     const [report, setReport] = useState(initMsg)
-
-    let q = TerminusClient.WOQL.using("_commits")
-        .select("v:Prefix", "v:URI")
-        .triple("ref:default_prefixes", "ref:prefix_pair", "v:PIRI")
-        .triple("v:PIRI", "ref:prefix_uri", "v:URI")
-        .triple("v:PIRI", "ref:prefix", "v:Prefix")
-
-    function newPrefixQuery(pref, uri){
-        let q = TerminusClient.WOQL.using("_commits")
-            .idgen("doc:PrefixPair", pref, "v:PID")
-            .add_triple("ref:default_prefixes", "ref:prefix_pair", "v:PID")
-            .insert("v:PID", "ref:PrefixPair")
-            .property("ref:prefix", prefix)
-            .property("ref:prefix_uri", uri)
-        return q
-    }
-
-    const [updateQuery, qreport, prefixes, woql, qloading] = WOQLQueryContainerHook(woqlClient, q)
-       
+    
+    let builtins = Object.keys(TerminusClient.UTILS.standard_urls);
+    let builtin_rows = []
     let ctxt = woqlClient.connection.getJSONContext()
     for(var pr in ctxt){
         if(builtins.indexOf(pr) !== -1)
@@ -96,7 +83,7 @@ export const GraphManager = (props) => {
 
     return (
         <div className = {TAB_SCREEN_CSS}>
-            {!graphs &&
+            {!prefixes &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
             {prefixes &&
@@ -113,7 +100,7 @@ export const GraphManager = (props) => {
             }
             {!creating &&
                 <div className={PREFIXES.builtinSectionCSS}>
-                    <h3 className={PREFIXES.builtinHeaderCSS}>PREFIXES.builtinHeader</h3> 
+                    <h3 className={PREFIXES.builtinHeaderCSS}>{PREFIXES.builtinHeader}</h3> 
                     <BuiltInPrefixes prefixes={builtin_rows}/>
                 </div>
             }

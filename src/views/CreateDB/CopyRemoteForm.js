@@ -8,7 +8,6 @@ import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
-import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 import { Container, Row } from "reactstrap";
 
 
@@ -22,8 +21,6 @@ export const CopyRemoteForm = () => {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [report, setReport] = useState();
     const [sourceURL, setSourceURL] = useState()
-    const [detailsLoaded, setDetailsLoaded] = useState()
-    const [details, setDetails] = useState(COPY_REMOTE_FORM.sample)
 
     let update_start = Date.now()
 
@@ -44,7 +41,6 @@ export const CopyRemoteForm = () => {
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
     function onClone(details){
         update_start = Date.now()
-        setDetailsLoaded(true)
         setUpdateLoading(true)
         woqlClient.account( woqlClient.uid() )
 
@@ -53,7 +49,7 @@ export const CopyRemoteForm = () => {
         }
         let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf("/")+1)
 
-        let src = {"remote_url": sourceURL, label: details.name || newid, comment: " aa"}
+        let src = {"remote_url": sourceURL, label: details.name || newid, comment: details.description }
         return woqlClient.clonedb(src, newid)
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
@@ -78,7 +74,7 @@ export const CopyRemoteForm = () => {
         goDBHome(id, acc, rep)        
     }
 
-    let buttons = (user ? COPY_REMOTE_FORM.buttons : false)
+    let buttons = COPY_REMOTE_FORM.buttons
 
     return (<>
         {(loading || updateLoading) && 
@@ -87,31 +83,13 @@ export const CopyRemoteForm = () => {
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
         }
-        {!user && 
-            <TCSubmitWrap>
-                <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
-            </TCSubmitWrap>
-        }
         <TCForm 
             onSubmit={onClone} 
-            layout = {[1, 2, 2]}
+            layout = {[1, 2, 2, 1]}
             noCowDucks
             onChange={onChangeBasics} 
             fields={fields}
             buttons={buttons} 
         />
-        {detailsLoaded && 
-            <Container className={COPY_REMOTE_FORM.detailsWrapperClassName}>
-                <Row className={COPY_REMOTE_FORM.detailsHeaderClassName}>
-                    {COPY_REMOTE_FORM.detailsHeader}
-                </Row>
-                <TCForm
-                    layout = {[2, 1]}
-                    noCowDucks
-                    fields={COPY_DB_DETAILS_FORM.fields}
-                    values={details} 
-                />
-            </Container>
-        }
     </>)
 }

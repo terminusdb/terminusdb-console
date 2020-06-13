@@ -19,7 +19,7 @@ const DocumentPage = (props) => {
 
 
     const [happiness, setHappiness] = useState(false);
-    const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().documentMetadata())
+    const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(woqlClient,docQuery,branch, ref);
 
     function interpretQueryError(report){
@@ -49,7 +49,7 @@ const DocumentPage = (props) => {
     }*/
 
     function interpretEmptyResult(){
-        const hasClasses = TerminusClient.WOQL.lib().concreteDocumentClasses()
+        const hasClasses = TerminusClient.WOQL.lib().concrete_document_classes()
         woqlClient.query(hasClasses).then((dresults) => {
             if(dresults.bindings && dresults.bindings.length > 1 ){
                 setHappiness(NO_DOCUMENT)

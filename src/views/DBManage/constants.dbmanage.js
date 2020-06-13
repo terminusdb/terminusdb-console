@@ -91,7 +91,7 @@ export const BRANCH_SOURCE_FORM = {
             },
             label: 'Commit ID',
             helpCols: 8,
-            help: "The position in the branch that the new branch will sprout from",
+            help: "New branches can start from any historical commit in the database",
 
         },
         {
@@ -100,8 +100,7 @@ export const BRANCH_SOURCE_FORM = {
                 disabled: true,
                 type: "input",
             },
-            label: 'Time',
-            help: "The time at which the new branch will start",
+            label: 'Time'
         },
     ],
     infoMessage: "Start Branch From : the new branch will be started from your current database state - you can change this with the time traveller or branch selector component in the top navigation bar"
@@ -109,29 +108,32 @@ export const BRANCH_SOURCE_FORM = {
 
 
 export const MERGE_BRANCH_FORM = {
+    mergeSuccessMessage: "Successfully merged ",
+    mergeFailureMessage: "Failed to merge",
     fields: [
-        {
-            id: "source",
-            value: "",
-            mandatory: true,
-            inputElement: {
-                type: "input",
-                placeholder: "ID of commit to branch from",
-            },
-            label: 'Source Commit',
-            help: "You can choose to merge differences from any commit in the database - any branch at any time",
-        },
         {
             id: "target",
             value: "",
             mandatory: true,
             inputElement: {
                 type: "select",
-                placeholder: "Enter ID of new branch",
+                placeholder: "Choose branch to merge into",
                 options: []
             },
-            label: 'Target Branch',
-            help: "The target of a merge must be the head of a branch",
+            label: 'Merge into branch',
+            help: "You can merge into the head of any branch",
+        },
+        {
+            id: "merge_type",
+            value: "rebase",
+            inputElement: {
+                type: "select",
+                disabled: true,
+                placeholder: "Rebase Merge",
+                options: [{label: "Rebase", value: "rebase"}, {label: "Merge", value: "merge"}, {label: "Three Way Merge", value: "3merge"}]
+            },
+            label: 'Merge Type',
+            help: "Currently rebase is the only supported merge type",
         },
         {
             id: "commit",
@@ -147,6 +149,40 @@ export const MERGE_BRANCH_FORM = {
         submitText: "Merge Branches"
     }
 }
+
+export const MERGE_SOURCE_FORM = {
+    fields: [
+        {
+            id: "branch",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Branch',
+        },
+        {
+            id: "ref",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Commit ID',
+            helpCols: 8,
+            help: "Merges can start from any historical commit",
+
+        },
+        {
+            id: "time",
+            inputElement: {
+                disabled: true,
+                type: "input",
+            },
+            label: 'Time'
+        },
+    ],
+    infoMessage: "Merge From: the merge will start from your current state - you can change this with the time traveller or branch selector component in the top navigation bar"
+}
+
 
 
 export const METADATA_FORM = {
