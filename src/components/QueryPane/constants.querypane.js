@@ -40,6 +40,7 @@ export const COMMIT_BOX = {
     input: {
         placeholder: "Enter reason for update here",
         name: "commitMessage",
+        id: "commitMessage",
         className: "form"
     },
     confirm: {

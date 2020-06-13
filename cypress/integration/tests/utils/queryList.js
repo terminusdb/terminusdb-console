@@ -23,3 +23,6 @@ export const SHOW_ALL_SCHEMA_ELEMENTS = 'WOQL.lib().elementMetadata()'
 export const DOCUMENT_META_DATA = 'WOQL.lib().documentMetadata()'
 
 export const LOAD_DOCUMENTS = loadCSVs()
+
+export const ADD_DOCTYPE_TEST = 'WOQL.doctype("scooter")'
+export const ADD_DOCTYPE_SECOND_TEST = 'WOQL.doctype("skates")'
