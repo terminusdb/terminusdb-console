@@ -25,7 +25,7 @@
   "scripts": {
     "build": "webpack --mode production --config console/webpack.config.js",
     "serve": "webpack-dev-server --mode development  --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.config.js --history-api-fallback",
-    "start": "webpack-dev-server --mode development  --open --progress --port 3004 --host localhost --content-base console --inline --config console/webpack.dev.config.js --history-api-fallback",
+    "start": "webpack-dev-server --mode development  --open --progress --port 3005 --host localhost --content-base console --inline --config console/webpack.dev.config.js --history-api-fallback",
     "test": "exit 0",
     "lint": "eslint src",
     "autofix": "eslint src --fix",

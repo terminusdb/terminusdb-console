@@ -37,33 +37,12 @@ export const PULL_FORM = {
             value: "",
             mandatory: true,
             inputElement: {
-                type: "select",
-                placeholder: "Choose Remote",
-                options: [{value: "origin", label: "Origin"}, {value: "backup", label: "HQ"}]
+                type: "input",              
             },
             label: 'Remote Repository'
         }
     ],
     buttons: {
         submitText: "Pull Changes"
-    }
-}
-
-export const PUSH_FORM = {
-    fields: [
-        {
-            id: "remote",
-            value: "",
-            mandatory: true,
-            inputElement: {
-                type: "select",
-                placeholder: "Choose Remote",
-                options: [{value: "origin", label: "Origin"}, {value: "backup", label: "HQ"}]
-            },
-            label: 'Remote Repository'
-        }
-    ],
-    buttons: {
-        submitText: "Push Changes"
     }
 }
