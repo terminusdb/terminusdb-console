@@ -1,5 +1,5 @@
 import React from "react";
-import { Pull } from "./Pull"
+import { Synchronise } from "./Synchronise"
 import { Share } from "./Share"
 import { Users } from "./Users"
 import { DBContextObj } from "../../components/Query/DBContext"
@@ -13,19 +13,18 @@ export const Collaborate = (props) => {
     const {repos} = DBContextObj();
 
     if(!repos) return (<Loading type={TERMINUS_COMPONENT} />)
-    let hasPrinciple = repos.local_clone || repos.remote  
-    let sections = (hasPrinciple ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]] : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]])
+    let hasOrigin = repos.local_clone || repos.remote  
+    let sections = (hasOrigin ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]] : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]])
     return (<>
         <RiverOfSections sections={sections} label={props.label}>
             <Users key="users"/>
-            {hasPrinciple && 
-                <Pull key="pull" />
+            {hasOrigin && 
+                <Synchronise key="synch" />
             }   
-            {!hasPrinciple && 
+            {!hasOrigin && 
                 <Share key="share" />
             }
         </RiverOfSections>                        
-        </>
-    )
+    </>)
 }
 
