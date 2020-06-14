@@ -8,7 +8,6 @@ import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
-import { Container, Row } from "reactstrap";
 
 
 export const CopyRemoteForm = () => {
@@ -21,6 +20,7 @@ export const CopyRemoteForm = () => {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [report, setReport] = useState();
     const [sourceURL, setSourceURL] = useState()
+
 
     let update_start = Date.now()
 
@@ -70,8 +70,9 @@ export const CopyRemoteForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, acc, rep){
-        reconnectServer()
-        goDBHome(id, acc, rep)        
+        woqlClient.connect().then(result=>{
+            goDBHome(id, acc, rep)
+        })
     }
 
     let buttons = COPY_REMOTE_FORM.buttons

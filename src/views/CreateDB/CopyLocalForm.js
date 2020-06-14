@@ -136,8 +136,9 @@ export const CopyLocalForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, acc, rep){
-        reconnectServer()
-        goDBHome(id, acc, rep)        
+        woqlClient.connect().then(result=>{
+            goDBHome(id, acc, rep)
+        })
     }
 
     let buttons = COPY_LOCAL_FORM.buttons 
