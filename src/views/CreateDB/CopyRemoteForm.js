@@ -55,11 +55,15 @@ export const CopyRemoteForm = () => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(sourceURL, accountid, rep)  
+            afterCreate(newid, accountid, rep)  
         })
         .catch((err) => {
-            let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
-            setReport({error: err, status: TERMINUS_ERROR, message: message});
+            let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
+            let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
+            setReport(rep)     
+            afterCreate(newid, accountid, rep)  
+      //      let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
+      //      setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
         .finally(() => {
             setUpdateLoading(false)

@@ -4,11 +4,12 @@
 import React, {useState, useEffect} from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
 import { CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM  } from "./constants.dbmanage"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_INFO } from "../../constants/identifiers";
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_INFO, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
 import { printts } from "../../constants/dates";
+import Loading from "../../components/Reports/Loading"
 
 export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     const {woqlClient} = WOQLClientObj();
@@ -20,8 +21,11 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
         ics[item.id] = item.value || ""
     })
 
+    let update_start = Date.now()
+
     const [values, setValues] = useState(ics)
     const [sourceValues, setSourceValues] = useState()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setSourceValues({
@@ -37,14 +41,22 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
    
 
     function onCreate(){
+        setLoading(true)
+        update_start = Date.now()
         woqlClient.branch(values.bid)
         .then(() => {
-            setReport({ status: TERMINUS_SUCCESS })
+            let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${values.bid}`
+            let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
+            setReport(rep)     
             updateBranches()
         })
-        .catch((e) => {
-            setReport({ status: TERMINUS_ERROR, message: "Failed to create branch", error: e})
+        .catch((err) => {
+            let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${values.bid} `
+            setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
+        .finally(() => {
+            setLoading(false)
+        })        
     }
 
     function onUpdate(key, val){
@@ -53,9 +65,12 @@ export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
     }
 
     if(report && report.status == TERMINUS_SUCCESS){
-        return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Created New Branch"}} />)
+        return (<TerminusDBSpeaks report={report} />)
     }
     return (<>
+        {loading && 
+            <Loading type={TERMINUS_COMPONENT} />
+        }
         <TCForm 
             layout = {[3]}
             fields={BRANCH_SOURCE_FORM.fields}

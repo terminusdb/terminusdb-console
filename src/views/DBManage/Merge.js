@@ -28,6 +28,8 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         return item    
     }) 
 
+    let update_start = Date.now()
+
 
     let ics = {}
     merge_fields.map((item) => {
@@ -58,6 +60,7 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         if(ref) frombase += "commit/" + ref
         else frombase += "branch/" + branch 
         setLoading(true)
+        update_start = Date.now()
 
         woqlClient.account(woqlClient.account() || woqlClient.uid())
         woqlClient.ref(false)
@@ -71,13 +74,13 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         }
         return woqlClient.rebase(rebase_source)
         .then(() => {
-            let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} (id: ${sourceURL})`
+            let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} into branch ${values.target}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
             afterCreate(values.target)  
         })
         .catch((err) => {
-            let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} (id: ${sourceURL}) `
+            let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${values.target} `
             setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
         .finally(() => {
@@ -96,7 +99,7 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
 
     let btns = MERGE_BRANCH_FORM.buttons
     if(report && report.status == TERMINUS_SUCCESS){
-        return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Merged into Branch"}} />)
+        return (<TerminusDBSpeaks report={report} />)
     }
     return (<>
         {loading && 

@@ -20,6 +20,9 @@ export const Synchronise = () => {
     const [isRemote, setIsRemote] = useState()
     const {woqlClient} = WOQLClientObj();
     
+    let update_start = Date.now()
+
+
     useEffect(() => {
         if(repos){          
             let rem = repos.remote || repos.local_clone
@@ -86,6 +89,8 @@ export const Synchronise = () => {
         woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
         woqlClient.checkout(from_branch)
         setLoading(true)
+        update_start = Date.now()
+
         woqlClient.push(push_to)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
@@ -112,6 +117,8 @@ export const Synchronise = () => {
             message: commit
         }
         let abc = woqlClient.basic_auth()
+        update_start = Date.now()
+
         woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
         if(to_branch != woqlClient.checkout()) woqlClient.checkout(to_branch)
         setLoading(true)
@@ -137,7 +144,8 @@ export const Synchronise = () => {
     }
 
     function afterPull(){
-        alert("Push was successful")
+        updateBranches()
+        alert("Pull was successful")
     }
 
 
@@ -150,6 +158,8 @@ export const Synchronise = () => {
             author: woqlClient.uid(),
             message: commit
         }
+        update_start = Date.now()
+
         if(deets.user && deets.password){
             woqlClient.remote_auth({type: "basic", key: deets.password, user: deets.user})
         }
@@ -186,6 +196,7 @@ export const Synchronise = () => {
         }
         if(to_branch != woqlClient.checkout()) woqlClient.checkout(to_branch)
         setLoading(true)
+        update_start = Date.now()
         woqlClient.pull(pull_from)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
@@ -196,6 +207,7 @@ export const Synchronise = () => {
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             setReport({error: err, status: TERMINUS_ERROR, message: message});
+            afterPull()  
         })
         .finally(() => {
             setLoading(false)
@@ -204,7 +216,7 @@ export const Synchronise = () => {
 
 
     if(report && report.status == TERMINUS_SUCCESS){
-        return (<TerminusDBSpeaks report={{status: "success",  message:"Successfully Merged into Branch"}} />)
+        return (<TerminusDBSpeaks report={report} />)
     }
     return (<>
         {loading && 
@@ -254,21 +266,3 @@ export const Synchronise = () => {
         }       
     </>)
 }
-
-
-/* Pull
-
-remote: "origin"
-remote_branch: "name of branch"
-pull_into: local_branch
-
-pull to branch -> pull/admin/foo/local/branch/pull_into 
-
-
-Push push/admin/foo/local/branch/something (source of the push)
-
-Always just a local branch
-
-Target "origin"
-remote: "origin"d
-remote_branch: "name of branch" */

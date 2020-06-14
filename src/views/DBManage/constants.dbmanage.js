@@ -70,7 +70,9 @@ export const CREATE_BRANCH_FORM = {
     ],
     buttons: {
         submitText: "Create New Branch"
-    }
+    },
+    branchSuccessMessage: "Successfully Created New Branch ",
+    branchFailureMessage: "Failed to Create New Branch ",
 }
 
 export const BRANCH_SOURCE_FORM = {

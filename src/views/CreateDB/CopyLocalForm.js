@@ -121,7 +121,7 @@ export const CopyLocalForm = () => {
             let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (id: ${sourceID})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(sourceID, accountid, rep)  
+            afterCreate(newID, accountid, rep)  
         })
         .catch((err) => {
             let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (id: ${sourceID}) `
