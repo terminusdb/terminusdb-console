@@ -30,7 +30,6 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
 
     let update_start = Date.now()
 
-
     let ics = {}
     merge_fields.map((item) => {
         ics[item.id] = item.value || ""
@@ -46,7 +45,6 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         return bopts
     }
 
-    
     useEffect(() => {   
         setSourceValues({
             branch: branch,
@@ -56,23 +54,20 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
     }, [branch, ref, consoleTime])  
 
     function onCreate(){
-        let frombase = (woqlClient.account() || woqlClient.uid()) + "/" + woqlClient.db() + "/" + woqlClient.repo() + "/"
-        if(ref) frombase += "commit/" + ref
-        else frombase += "branch/" + branch 
+        let frombase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch)) 
         setLoading(true)
         update_start = Date.now()
 
-        woqlClient.account(woqlClient.account() || woqlClient.uid())
-        woqlClient.ref(false)
-        woqlClient.checkout(values.target)
-        let abc = woqlClient.basic_auth()
-        woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        let nClient = woqlClient.copy() 
+        nClient.ref(false)
+        nClient.checkout(values.target)
+        let abc = nClient.basic_auth()
+        nClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
         let rebase_source = {
             rebase_from: frombase,
-            author: woqlClient.uid(),
-            message: values.commit 
         }
-        return woqlClient.rebase(rebase_source)
+        if(values.commit) rebase_source.message = values.commit
+        return nClient.rebase(rebase_source)
         .then(() => {
             let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} into branch ${values.target}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -93,7 +88,7 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         setValues(values)
     }
 
-    function afterCreate(bid){
+    function afterCreate(branchid){
         updateBranches()
     }
 

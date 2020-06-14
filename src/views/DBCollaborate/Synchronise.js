@@ -3,7 +3,8 @@
  */
 import React, {useState, useEffect} from "react";
 import {TCForm} from  "../../components/Form/FormComponents"
-import { PUSH_REMOTE_FORM, SYNCHRONISE_FORM, PUSH_LOCAL_FORM, PULL_LOCAL_FORM, PULL_REMOTE_FORM, DEFAULT_LOCAL_PUSH_COMMIT} from "./constants.dbcollaborate"
+import { PUSH_REMOTE_FORM, SYNCHRONISE_FORM, PUSH_LOCAL_FORM, PULL_LOCAL_FORM, PULL_REMOTE_FORM, 
+    DEFAULT_LOCAL_PULL_COMMIT, DEFAULT_LOCAL_PUSH_COMMIT, DEFAULT_REMOTE_PULL_COMMIT, DEFAULT_REMOTE_PUSH_COMMIT} from "./constants.dbcollaborate"
 import { DBContextObj } from "../../components/Query/DBContext"
 import { TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS } from "../../constants/identifiers";
 import { WOQLClientObj } from "../../init/woql-client-instance";
@@ -82,16 +83,17 @@ export const Synchronise = () => {
         let push_to = {
             remote: sourceValues.remote,
             remote_branch: deets.remote_branch || "master",
-            author: woqlClient.uid(),
             message: commit
         }
-        let abc = woqlClient.basic_auth()
-        woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
-        woqlClient.checkout(from_branch)
+        //create copy so we don't change internal state of woqlClient inadvertently
+        let nClient = woqlClient.copy()
+
+        let abc = nClient.basic_auth()
+        nClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        nClient.checkout(from_branch)
         setLoading(true)
         update_start = Date.now()
-
-        woqlClient.push(push_to)
+        nClient.push(push_to)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -113,16 +115,16 @@ export const Synchronise = () => {
         let pull_from = {
             remote: sourceValues.remote,
             remote_branch: deets.remote_branch || "master",
-            author: woqlClient.uid(),
             message: commit
         }
-        let abc = woqlClient.basic_auth()
+        //create copy so we don't change internal state of woqlClient inadvertently
+        let nClient = woqlClient.copy()
+        let abc = nClient.basic_auth()
+        nClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        if(to_branch != nClient.checkout()) nClient.checkout(to_branch)       
         update_start = Date.now()
-
-        woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
-        if(to_branch != woqlClient.checkout()) woqlClient.checkout(to_branch)
         setLoading(true)
-        woqlClient.pull(pull_from)
+        nClient.pull(pull_from)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -140,32 +142,32 @@ export const Synchronise = () => {
 
 
     function afterPush(){     
-        alert("Push was successful")
+        //alert("Push was successful")
     }
 
     function afterPull(){
         updateBranches()
-        alert("Pull was successful")
     }
 
 
     function pushRemote(deets){
         let from_branch = deets.local_branch || "master"
-        let commit = deets.commit || DEFAULT_LOCAL_PUSH_COMMIT
+        let commit = deets.commit || DEFAULT_REMOTE_PUSH_COMMIT
         let push_to = {
             remote: sourceValues.remote,
             remote_branch: deets.remote_branch || "master",
-            author: woqlClient.uid(),
             message: commit
         }
         update_start = Date.now()
 
+        let nClient = woqlClient.copy()
+
         if(deets.user && deets.password){
-            woqlClient.remote_auth({type: "basic", key: deets.password, user: deets.user})
+            nClient.remote_auth({type: "basic", key: deets.password, user: deets.user})
         }
-        woqlClient.checkout(from_branch)
+        nClient.checkout(from_branch)
         setLoading(true)
-        woqlClient.push(push_to)
+        nClient.push(push_to)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -184,20 +186,21 @@ export const Synchronise = () => {
 
     function pullRemote(deets){
         let to_branch = deets.local_branch || "master"
-        let commit = deets.commit || DEFAULT_LOCAL_PULL_COMMIT
+        let commit = deets.commit || DEFAULT_REMOTE_PULL_COMMIT
         let pull_from = {
             remote: sourceValues.remote,
             remote_branch: deets.remote_branch || "master",
-            author: woqlClient.uid(),
             message: commit
         }
+        let nClient = woqlClient.copy()
+
         if(deets.user && deets.password){
-            woqlClient.remote_auth({type: "basic", key: deets.password, user: deets.user})
+            nClient.remote_auth({type: "basic", key: deets.password, user: deets.user})
         }
-        if(to_branch != woqlClient.checkout()) woqlClient.checkout(to_branch)
+        if(to_branch != nClient.checkout()) nClient.checkout(to_branch)
         setLoading(true)
         update_start = Date.now()
-        woqlClient.pull(pull_from)
+        nClient.pull(pull_from)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
@@ -207,7 +210,6 @@ export const Synchronise = () => {
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             setReport({error: err, status: TERMINUS_ERROR, message: message});
-            afterPull()  
         })
         .finally(() => {
             setLoading(false)

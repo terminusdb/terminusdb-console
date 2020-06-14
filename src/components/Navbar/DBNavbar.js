@@ -19,8 +19,7 @@ export const DBNavbar = (props) => {
     const [toggleTime, setToggleTime] = useState(false)
 
     function getNavURL(page){
-        let aid = woqlClient.account() || woqlClient.uid()
-        return getDBPageRoute(woqlClient.db(), aid, page)
+        return getDBPageRoute(woqlClient.db(), woqlClient.account(), page)
     }
 
     let dbClass = (!props.isOpen ? SLIDER_CSS.openButton : SLIDER_CSS.closedButton)

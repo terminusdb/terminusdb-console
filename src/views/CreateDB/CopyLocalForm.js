@@ -40,7 +40,7 @@ export const CopyLocalForm = () => {
     function getDBOptions(dblist){
         return dblist.map((item) => {
             return { 
-                value: item.db,
+                value: `${item.account}/${item.db}`,
                 label: item.title 
             }
         })        
@@ -82,8 +82,9 @@ export const CopyLocalForm = () => {
     }
 
     function loadDetailsForDB(dbid){
+        let parts = dbid.split('/')
         for(var i = 0 ; i<localDBs.length; i++){
-            if(localDBs[i].db == dbid) return dbToForm(localDBs[i])
+            if(localDBs[i].db == parts[1] && localDBs[i].account == parts[0]) return dbToForm(localDBs[i])
         }
         return {}
     }
@@ -91,7 +92,7 @@ export const CopyLocalForm = () => {
     //translate from dblist json to form json
     function dbToForm(item){
         return {
-            dbid: item.db,
+            dbid: `${item.account}/${item.db}`,
             dbname: getStarterTitle(item.title),
             description: getStarterDescription(item.description)
         }
@@ -110,21 +111,21 @@ export const CopyLocalForm = () => {
     function onClone(){
         update_start = Date.now()
         setUpdateLoading(true)
-        let accountid = woqlClient.account() || woqlClient.uid()
-        let sourceURL = woqlClient.server() + accountid + "/" + sourceID
-        let src = {"remote_url": sourceURL, label: details.dbname, comment: details.description }
-        //fake remote auth just use local basic auth
-        let abc = woqlClient.basic_auth()
-        woqlClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
-        return woqlClient.clonedb(src, newID)
+        let sourceURL = woqlClient.server() + sourceID
+        let src = {"remote_url": sourceURL, label: details.dbname}
+        if(details.description ) src.comment = details.description 
+        let cClient = woqlClient.copy()
+        let abc = cClient.basic_auth()
+        cClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        return cClient.clonedb(src, newID)
         .then(() => {
-            let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (id: ${sourceID})`
+            let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (db: ${sourceID})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(newID, accountid, rep)  
+            afterCreate(newID, rep)  
         })
         .catch((err) => {
-            let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (id: ${sourceID}) `
+            let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (db: ${sourceID}) `
             setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
         .finally(() => {
@@ -135,9 +136,9 @@ export const CopyLocalForm = () => {
      /**
      * Reloads database list by reconnecting and goes to the db home
      */
-    function afterCreate(id, acc, rep){
+    function afterCreate(id, rep){
         woqlClient.connect().then(result=>{
-            goDBHome(id, acc, rep)
+            goDBHome(id, woqlClient.user_account(), rep)
         })
     }
 

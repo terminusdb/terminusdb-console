@@ -11,5 +11,5 @@ if(!key){
 	key=window.sessionStorage.getItem("apiKey");
 }
 
-export const localSettings = {server : server, key : key}
+export const localSettings = {server : server, key : key, user: userName}
 

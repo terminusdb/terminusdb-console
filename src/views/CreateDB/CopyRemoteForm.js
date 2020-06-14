@@ -6,12 +6,12 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT 
 import { COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM } from "./constants.createdb"
 import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
-import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
+import { TCForm } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
 
 
 export const CopyRemoteForm = () => {
-    const {woqlClient, reconnectServer} = WOQLClientObj();
+    const { woqlClient } = WOQLClientObj();
     const canCreate =  woqlClient.connection.capabilitiesPermit("create_database")
     if(!canCreate){
         return (<AccessControlErrorPage />)
@@ -40,30 +40,32 @@ export const CopyRemoteForm = () => {
 
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
     function onClone(details){
+        if(!sourceURL) return
         update_start = Date.now()
         setUpdateLoading(true)
-        woqlClient.account( woqlClient.uid() )
+
+        let nClient = woqlClient.copy() 
 
         if(details.user && details.password){
-            woqlClient.remote_auth({type: "basic", key: details.password, user: details.user})
+            nClient.remote_auth({type: "basic", key: details.password, user: details.user})
         }
         let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf("/")+1)
-
-        let src = {"remote_url": sourceURL, label: details.name || newid, comment: details.description }
-        return woqlClient.clonedb(src, newid)
+        let src = {
+            remote_url: sourceURL, 
+            label: details.name || newid, 
+        }
+        if(details.description) src.comment = details.description 
+        nClient.account(woqlClient.user_account())//create new db in current user's account
+        return nClient.clonedb(src, newid)
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(newid, accountid, rep)  
+            afterCreate(newid, rep)  
         })
         .catch((err) => {
-            let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
-            let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterCreate(newid, accountid, rep)  
-      //      let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
-      //      setReport({error: err, status: TERMINUS_ERROR, message: message});
+            let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
+            setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
         .finally(() => {
             setUpdateLoading(false)
@@ -73,9 +75,9 @@ export const CopyRemoteForm = () => {
      /**
      * Reloads database list by reconnecting and goes to the db home
      */
-    function afterCreate(id, acc, rep){
+    function afterCreate(id, rep){
         woqlClient.connect().then(result=>{
-            goDBHome(id, acc, rep)
+            goDBHome(id, woqlClient.user_account(), rep)
         })
     }
 

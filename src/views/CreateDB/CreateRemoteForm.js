@@ -30,12 +30,11 @@ export const CreateRemoteForm = () => {
     function onCreate(doc, schema){
         setReport(false)
         update_start = Date.now()
-        let accountid = woqlClient.account() || woqlClient.uid()
         let e = {data: doc}
         /**
          * This is where we patch in the mini hub-client that creates the database online
          */
-        setReport({error: e, status: TERMINUS_ERROR, message: "Adding Database to account " + accountid + " - Warning - not hooked up to API yet"})
+        setReport({error: e, status: TERMINUS_ERROR, message: "Adding Database - Coming Soon - not hooked up to API yet"})
     }
     let buttons = (user ? CREATE_REMOTE_FORM.buttons : false)
 

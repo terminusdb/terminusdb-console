@@ -15,20 +15,16 @@ import { LATEST_UPDATES_LENGTH } from "./constants.dbhome"
 
 
 export const MonitorDB = (props) => {
-    const { isAuthenticated, user } = useAuth0();
     const {woqlClient} = WOQLClientObj()
     const {graphs, branch, branches,  DBInfo,  ref, consoleTime, repos, scale} = DBContextObj();
     
     const [commitCount, setCommitCount] = useState()
+    const [latest, setLatest] = useState()
 
     let WOQL = TerminusClient.WOQL
     let ts = consoleTime || (Date.now() / 1000)
 
-    function getLatestUpdatesQuery(){
-        let vals = (consoleTime ? WOQL.not().less("v:Time", String(consoleTime)) : false) 
-        let q = WOQL.lib().commits(vals)
-        return WOQL.limit(LATEST_UPDATES_LENGTH).select("v:Time", "v:Author", "v:Message").order_by("v:Time", q)
-    }
+    let latest_woql = false
 
     //load commit Count
     useEffect(() => {
@@ -38,18 +34,28 @@ export const MonitorDB = (props) => {
         })
     }, [])
 
-    let q = getLatestUpdatesQuery()
+    //load commit Count
+    useEffect(() => {
+        let vals = (consoleTime ? WOQL.not().greater("v:Time", String(consoleTime)) : false) 
+        let q = WOQL.lib().commits()
+        if(vals) q.and(vals)
+        latest_woql = WOQL.limit(LATEST_UPDATES_LENGTH).select("v:Time", "v:Author", "v:Message").order_by("v:Time", q)
+        woqlClient.query(latest_woql).then((result) => {
+            if(result.bindings) setLatest(result.bindings)
+        })
+    }, [consoleTime])
 
-    const [updateQuery, report, latests, woql, loading] = WOQLQueryContainerHook(woqlClient, q, branch, ref) 
-	const db_uri = woqlClient.server() + woqlClient.account() + '/' + woqlClient.db()
+
+
+	const db_uri = woqlClient.connectionConfig.cloneableURL()
 
     function getCommitInfo(){
         let str = ""
         if(scale){
             str += "DB Size: " + (formatBytes(scale.size)) + " ~ Triples: " + scale.triple_count 
         }
-        if(latests && latests[0]){
-            let r = latests[0]
+        if(latest && latest[0]){
+            let r = latest[0]
             if(scale){
                 str += "\n ~ "
             }
@@ -74,7 +80,7 @@ export const MonitorDB = (props) => {
             else {
                 info = repos.local
                 info.sub = "Local Database"
-                info.info = "DB Clone Address: " + db_uri
+                info.info = "Clone URL: " + db_uri
             }
         }
         return info
@@ -149,8 +155,8 @@ export const MonitorDB = (props) => {
                         subTitle={ri.sub} />
 				</Col>
 			</Row>
-            {latests && 
-                <LatestUpdates latests={latests} query={woql} updateQuery={updateQuery} />
+            {latest && 
+                <LatestUpdates latests={latest} query={latest_woql} />
             }
 
        </div>
