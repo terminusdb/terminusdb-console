@@ -3,6 +3,8 @@
 
 package-lock.json
 console/.env
+.env
+.ENV
 es6
 
 console/dist
