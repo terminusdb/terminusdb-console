@@ -1,7 +1,7 @@
-import {  Nav,NavItem, NavLink, Row, Col } from "reactstrap";
-import React, { useState, useEffect } from "react";
+//import {  Nav,NavItem, NavLink, Row, Col } from "reactstrap";
+import React, { useState, useEffect,Fragment } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { NavLink as RouterNavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { trimContent } from "../../utils/helperFunctions"
 import ToggleButton from 'react-toggle-button'
 import { getDBPageRoute } from "../Router/ConsoleRouter"
@@ -30,71 +30,73 @@ export const DBNavbar = (props) => {
         if(props.toggleTimeTravel) props.toggleTimeTravel()
     }
 
-    let branchStatus = ( ref  ? "#ffa500" : "#ccc")
-
+    
     function getDBHomeDetails(){
         if(dbmeta.db == "terminus" || !branches ){
-            return null
+            return ""
         }
 
-        let currentTime = (<span className={NAV_CSS.latest}>Latest</span>)
-        if(consoleTime) currentTime = (<span className={NAV_CSS.latest}>{printts(consoleTime)}</span>)
-
-        //let timeCSS = ( consoleTime ? NAV_CSS.Container : NAV_CSS.timeContainer)
-
-        let timeCSS = NAV_CSS.timeContainer
-
-        //let bs = (<BranchSelector />) 
-
-        let toggler = (
-            <ToggleButton value={ toggleTime || false }
-                inactiveLabel={SLIDER_CSS.inactiveText}
-                inactiveLabelStyle={SLIDER_CSS.inactiveLabel}
-                activeLabel={SLIDER_CSS.activeText}
-                activeThumbStyle = {SLIDER_CSS.thumb}
-                activeLabelStyle={SLIDER_CSS.activeLabel}
-                trackStyle={SLIDER_CSS.borderRadius}
-                thumbAnimateRange = {[0, 80]}
-                colors={
-                    {
-                        inactiveThumb: {
-                            base: branchStatus,
-                        },
-                        active: {
-                            base: branchStatus,
-                            hover: 'rgb(177, 191, 215)',
-                        }
-                    } 
-                }
-                onToggle={ (value) => handleToggle(value) } 
-            />
-        )
-        return (
-        
-                <Row className={NAV_CSS.dbDetails} >
-                    <Col className={timeCSS}>
-                        {currentTime}
-                        {toggler}
-                    </Col>
-                </Row>
-        )
+        let currentTime = (<span className="nav__main__commit">Latest</span>)
+        if(consoleTime) currentTime = (<span className="nav__main__commit">{printts(consoleTime)}</span>)
+        return currentTime
     }
 
-    /*
-    <Row className={NAV_CSS.dbDetails} >
-                {bs && 
-                    <Col className={NAV_CSS.branchContainer}>{bs}</Col>
-                }
-                <Col className={timeCSS}>
-                    {currentTime}
-                    {toggler}
-                </Col>
-            </Row>
-    */
+    const isOpen=false;
+    const dropdownContent = isOpen===true ? "dropdown__content  dropdown__content--show" : "dropdown__content dropdown__content--hide"
+    const homeDetails = getDBHomeDetails()
+    return (<Fragment>
+                <li className="nav__main__item ">
+                    <NavLink tag = {NavLink} className="nav__main__link"
+                        to = {getNavURL("")}
+                        activeClassName = "nav__main__link--selected"
+                        exact>
+                        {trimContent(dbmeta.title, 15)}                 
+                    </NavLink>
+                </li>
+                <li className="nav__main__item">
+                    <NavLink tag = {NavLink} 
+                        className="nav__main__link"
+                        activeClassName = "nav__main__link--selected"
+                        to = {getNavURL("document")}
+                        exact>
+                        {DOCUMENT_PAGE_LABEL}
+                    </NavLink>
+                </li>
+                <li className="nav__main__item">
+                    <NavLink tag = {NavLink} 
+                        className="nav__main__link"
+                        to = {getNavURL("query")}
+                        activeClassName = "nav__main__link--selected"
+                        exact>
+                        {QUERY_PAGE_LABEL}
+                    </NavLink>
+                </li>
+                <li className="nav__main__item">
+                    <NavLink 
+                        className="nav__main__link"
+                        tag = {NavLink}
+                        to = {getNavURL("schema")}
+                        activeClassName = "nav__main__link--selected"
+                        exact>
+                        {SCHEMA_PAGE_LABEL}
+                    </NavLink>
+                </li>
+                <li className="nav__main__item nav__main__item--box">   
+                   <BranchSelector />
+                   <label className="switch" title="time travel tools">
+                      <input type="checkbox" className="switch__input" onChange={handleToggle}/>
+                      <span className="switch__slider"></span>
+                    </label>
+                    {homeDetails}
+                </li>                   
+            </Fragment>
+               
+       
+    )//onClick={toggle}
+}
 
-
-    return (
-        <Nav className = {dbClass} navbar>
+/*
+ <Nav className = {dbClass} navbar>
             <NavItem>
                 <NavLink tag = {RouterNavLink}
                     to = {getNavURL("")}
@@ -139,8 +141,6 @@ export const DBNavbar = (props) => {
                     {SCHEMA_PAGE_LABEL}
                 </NavLink>
             </NavItem>
-        </Nav>
-    )
-}
+        </Nav>*/
 
 /*(value) => { setToggleTime(!toggleTime) */

@@ -126,8 +126,7 @@ export const CommitTraveller = (props) => {
 
     //backNavigation
     return (
-        <Container className={COMMIT_TRAVELLER.containerClassName}>
-            <Row>
+        <div className="history__navigator__commit">
                 {backNavigation}
                 <Col  className={COMMIT_TRAVELLER.commitColClassName} md={10}>
                     <span className={COMMIT_TRAVELLER.commitClassName}>
@@ -135,7 +134,10 @@ export const CommitTraveller = (props) => {
                     </span>
                 </Col>
                 {forwardNavigation}
-            </Row>
-        </Container>
+        </div>
     )
 }
+/*
+ <div className="history__navigator__commit">
+                    <CommitTraveller />
+                </div>*/

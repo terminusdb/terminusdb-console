@@ -1,6 +1,6 @@
-//import "./css/index.css"
 //import "./css/main.css"
-//import "./css/App.css"
+import "./css/index.css"
+import "./css/App.css"
 import "./css/less/terminusdb__style.less"; 
 export {Auth0Provider, useAuth0} from "./react-auth0-spa"
 export { ConsoleHistory, ConsoleRouter } from "./components/Router/ConsoleRouter"

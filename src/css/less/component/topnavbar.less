@@ -12,7 +12,26 @@
     margin-bottom:auto;
   }
 
-  &__profile{
+  &__commit{
+    margin-left:10px;
+    color: #ff9800;
+    font-weight: bold;
+  }
+
+  &__profile__button{
+    background:@header-bg;
+    border:0;
+    &:hover{
+      background:@header-bg;
+      border:0;
+    }
+    &:focus{
+      background:@header-bg;
+      border:0;
+    }
+  }
+
+  &__profile__img{
     background-size: 40px 40px;
     background-color: white;
     border: 0;
@@ -148,10 +167,8 @@
     margin: 0 40px 0 0;
     padding-bottom:0px;
     color: @topbar-text-color;
+    letter-spacing: .88px;
 
-    &--selected{
-     color: @brand-color-green
-	  }
 
 	&--box{
 		margin-left: auto;
@@ -174,9 +191,6 @@
   	}
   }
   
-
-
-
   &__link{
   	background-color: transparent;
   	color: inherit;
@@ -189,10 +203,18 @@
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
-    letter-spacing: .88px;
     font-size: inherit;
     text-weight:600;
    	font-family: "Lexend Deca",Arial,sans-serif;
+
+    &--selected{
+     color: @brand-color-green;
+    }
+
+    &:hover{
+      color:@brand-color-green;
+      text-decoration: none;
+    }
   }
 
   &__button{

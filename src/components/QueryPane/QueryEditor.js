@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react"
 import {DropdownToggle, Container, Button, Alert, Navbar , Collapse, Nav, UncontrolledDropdown,DropdownMenu,DropdownItem, NavbarText, Row, Col} from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
-import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR, TOOLBAR_CSS} from './constants.querypane'
+import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.querypane'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
 /**
  * Controls the display of query viewer and editor
  */
-export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, className, submit,updateQuery}) => {
-    const qeclass = className || TOOLBAR_CSS.container
+export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, submit,updateQuery}) => {
+    //const qeclass = className || TOOLBAR_CSS.container
     editable = typeof editable != "undefined" ? editable : true
     submit = submit || QUERY_SUBMIT
     /*
@@ -96,40 +96,33 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         }
     }
 
-
+/*
+ containerRow: "query-pane-toolbar",
+    edit: "query-pane-edit",
+    row: "query-pane-toolbar-row",
+    queryPaneControls: "query-pane-controls",
+    runQuery: "run-query-button",
+    dropdown:"query-pane-menu",
+    rowHeight: "query-pane-dropdown-row"*/
 
 
     if(editable && error) console.log(error)
-    return(<Container className={qeclass} >
-        <div style={{display: "flex", justifyContent:"flex-end"}}>
-            <Row className={TOOLBAR_CSS.containerRow} >
-                <Col md={12} className={TOOLBAR_CSS.row}>
-                    <Row>
-                        <Col md={10}/>
-                        <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
-                            {languages &&
-                                <LanguageSwitcher
-                                    active={!error}
-                                    baseLanguage={baseLanguage}
-                                    showLanguage={showLanguage}
-                                    languages={languages}
-                                    editable={true}
-                                    onChange={showLanguageVersion}
-                                    onEdit={newLanguageVersion}
-                                />
-                            }
-                        </Col>
-                        <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
-                            {editable &&  <Button className={TOOLBAR_CSS.runQuery} color = "primary" onClick={sendQuery}>{submit}</Button>}
-                        </Col>
-                    </Row>
-                </Col>
-           </Row>
-        </div>
-
-        {(editable && error) &&
-            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
-        }
+    return(<div className="query-pane-container" >
+            <div className="tdb__commit__bar" >
+                <input id="commitMessage" type="text" />
+                {languages &&
+                <LanguageSwitcher
+                    active={!error}
+                    baseLanguage={baseLanguage}
+                    showLanguage={showLanguage}
+                    languages={languages}
+                    editable={true}
+                    onChange={showLanguageVersion}
+                    onEdit={newLanguageVersion}
+                />
+                }
+                {editable &&  <Button className="run-query-button" color = "primary" onClick={sendQuery}>{submit}</Button>}
+           </div>
 
         {(!showLanguage && editable) &&
             <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
@@ -142,15 +135,19 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         {showLanguage &&
             <CodeViewer text={showContent} language={showLanguage}/>
         }
+        {(editable && error) &&
+            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
+        }
 
         {children}
 
-        {(editable) &&
+
+        {/*(editable) &&
             <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
                 {commitMsg}
             </textarea>
-        }
+        */}
 
-        </Container>
+        </div>
     )
 }

@@ -4,10 +4,7 @@ import Loading from "./Loading"
 
 const LoadingAppPage = () => {
     return (
-        <div>
-            <span>{CONNECTING_MESSAGE}</span>
-            <Loading />
-        </div>
+            <Loading  loadingMessage={CONNECTING_MESSAGE}/>
     )
 }
 

@@ -19,12 +19,6 @@ export const PageView = (props) => {
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
             <main >
                 <div className="console__page__container">     
-                {props.report && 
-                    <TerminusDBSpeaks report={props.report} />
-                }
-                {props.loading && 
-                    <Loading type={TERMINUS_PAGE} />
-                }
                 { props.children }
                 </div>
             </main>

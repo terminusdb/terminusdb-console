@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Row } from "reactstrap";
 import { QueryPane } from "../../components/QueryPane/QueryPane"
-import { SimplePageView } from '../Templates/SimplePageView'
-import { NEW_QUERY_BUTTON_CSS, NEW_QUERY_BUTTON_TEXT, NEW_QUERY_ROW_CSS, QUERY_BOX_CSS } from "./constants.pages"
+import { PageView } from '../Templates/PageView'
+import { NEW_QUERY_BUTTON_TEXT } from "./constants.pages"
 
 /**
  * The main database query page - just consists of a query pane and
@@ -10,22 +10,19 @@ import { NEW_QUERY_BUTTON_CSS, NEW_QUERY_BUTTON_TEXT, NEW_QUERY_ROW_CSS, QUERY_B
  */
 
 const QueryPage = () => {
-
     const QueryPaneBox = (props) => {
         const {qp, setQp} = props.pstate;        
         return (
-            <div className={QUERY_BOX_CSS} id={props.id}>
-                <QueryPane type="editor"/>
-                <Row className={NEW_QUERY_ROW_CSS} style={{justifyContent:"flex-end"}}> 
+            <div className="tdb__query__pane" id={props.id}>
+                <QueryPane type="editor"/>              
                     <button 
-                        className = { NEW_QUERY_BUTTON_CSS }
+                        className = "tdb__button__base tdb__button__base--green"
                         type =  "submit"
                         onClick={() => { setQp([...qp, qp.length]) }}
                     >
                         {NEW_QUERY_BUTTON_TEXT}
-                    </button>
-                </Row>
-            </div>
+                    </button>               
+          </div>
         );
     }
 
@@ -38,9 +35,9 @@ const QueryPage = () => {
     }
 
     return (
-        <SimplePageView>
+        <PageView>
             <NewQueryPane/>
-        </SimplePageView>    
+        </PageView>    
     )
 }
 

@@ -45,25 +45,30 @@ export const HistoryNavigator = (props) => {
         return null
     }
 
+    /*
+     <div className="history__navigator">
+                <div className={NAV_CSS.historyRow}>
+                    <HistoryNavigator />
+                </div>
+            </div>
+    */
+
+
 
     return (
-        <Container className={HISTORY.containerClassName}>
-            <Row>
-                {DBInfo &&
-                    <Col md={8} className={HISTORY.sliderColClassName}>
-                        <DateTimeSlider start={DBInfo.created}
-                            onChange={userChangesTime}
-                            end={end}
-                            current={current}
-                        />
-                    </Col>
-                }
-                {branches && branches[branch] && 
-                    <Col md={4} className={HISTORY.commitColClassName}>
-                        <CommitTraveller setRef={userChangesCommit} commit={getCommitID()}/>
-                    </Col>
-                }
-            </Row>
-        </Container>
+        <div className="history__navigator">
+            {DBInfo &&
+                <div className="history__navigator__slider">
+                    <DateTimeSlider start={DBInfo.created}
+                        onChange={userChangesTime}
+                        end={end}
+                        current={current}
+                    />
+                </div>
+            }
+            {branches && branches[branch] && 
+                <CommitTraveller setRef={userChangesCommit} commit={getCommitID()}/>
+            }
+        </div>
     )
 }

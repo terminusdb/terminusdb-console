@@ -4,11 +4,13 @@ import { SITE_LOADING, PAGE_LOADING, COMPONENT_LOADING } from "../../constants/c
 import { IS_LOADING } from "../../constants/text"
 import { TERMINUS_COMPONENT, TERMINUS_PAGE,  } from "../../constants/identifiers"
 
-const Loading = ({type}) => {   
+const Loading = ({type,loadingMessage}) => {   
     let css = (type == TERMINUS_COMPONENT ? COMPONENT_LOADING : 
             (type == TERMINUS_PAGE ? PAGE_LOADING : SITE_LOADING))
+    ///
     return (
-        <div className={css}>
+        <div className="tdb__loading">
+            {loadingMessage && <span className="tdb__loading__message">{loadingMessage}</span>}
             <img src={LOADING_SPINNER} alt={IS_LOADING} />
         </div>
     )
