@@ -1,7 +1,7 @@
 /**
  * Controller application for branch creation form
  */
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
 import { MERGE_BRANCH_FORM, MERGE_SOURCE_FORM } from "./constants.dbmanage"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
@@ -11,8 +11,7 @@ import { DBContextObj } from "../../components/Query/DBContext"
 import { printts } from "../../constants/dates";
 import Loading from "../../components/Reports/Loading"
 
-export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
-    visible = visible || false
+export const Merge = () => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
 
@@ -57,7 +56,6 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         let frombase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch)) 
         setLoading(true)
         update_start = Date.now()
-
         let nClient = woqlClient.copy() 
         nClient.ref(false)
         nClient.checkout(values.target)
@@ -88,7 +86,7 @@ export const Merge = ({onCancel, onCreate, onEdit, visible}) => {
         setValues(values)
     }
 
-    function afterCreate(branchid){
+    function afterCreate(new_branchid){
         updateBranches()
     }
 

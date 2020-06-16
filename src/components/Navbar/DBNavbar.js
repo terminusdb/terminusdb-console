@@ -11,6 +11,16 @@ import {BranchSelector} from "../History/BranchSelector"
 import { printts } from "../../constants/dates";
 
 export const DBNavbar = (props) => {
+    //sometimes loaded by back button when not in DB context
+    try {
+        return GuardedDBNavbar(props)
+    }
+    catch(e){
+        return null
+    }
+}
+
+const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
     const {branches, branch, ref, setHead, consoleTime} = DBContextObj();
 
