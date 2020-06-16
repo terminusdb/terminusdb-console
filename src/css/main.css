@@ -112,7 +112,7 @@ button {
 	cursor: pointer;
 	overflow: visible;
 	border: none;
-	border-radius: 25px
+	/*border-radius: 25px*/
 }
 
 button,
@@ -1149,7 +1149,7 @@ a {
 	align-items: center;
 	min-width: 168px;
 	font-size: 14px;
-	border-radius: 25px;
+	/*border-radius: 25px;*/
 	text-transform: capitalize;
 	font-family: "Lexend Deca", Arial, sans-serif
 }

@@ -8,10 +8,7 @@ import {PAGEVIEW} from "./constants.templates"
 export const SimplePageView = ({children, onHeadChange, loading, report}) => {
     return (
         <PageView onHeadChange={onHeadChange} loading={loading} report={report}>
-            <div className = {PAGEVIEW.containerCSS}>
-                <hr className = "my-space-15"/>
                 {children}
-            </div>
         </PageView>
     )
 }

@@ -6,48 +6,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const UnderConstruction = (props) => {
     const { register, handleSubmit, errors } = useForm();
-    //const {woqlClient,reconnectServer} = WOQLClientObj();
-    //const [rep, setReport] = useState();
     const [modal, setModal] = useState(props.modal);
     const toggle = () => setModal(!modal);
     const [disabled, setDisabled] = useState(false);
+
+    const UNDER_CONSTRUCTION_CONST=props.const_obj || UNDER_CONSTRUCTION;
 
     const onSubmit = (data) => {
         setDisabled(true)
         setModal(false)
     }
 
-    let introText = props.action + " " + UNDER_CONSTRUCTION.introText
-    let hdr = props.action + " " + UNDER_CONSTRUCTION.headerText
-    return (<>
-        {!modal &&
-           <Button className={UNDER_CONSTRUCTION.buttonClassName} outline color={UNDER_CONSTRUCTION.color} onClick={toggle}>
-               {UNDER_CONSTRUCTION.buttonText}
+    const buttonClassName=props.buttonClassName || UNDER_CONSTRUCTION_CONST.buttonClassName;
+    const color=props.buttonColor || UNDER_CONSTRUCTION_CONST.color;
+    const buttonText=props.buttonText || UNDER_CONSTRUCTION_CONST.buttonText
+
+    let introText = props.action + " " + UNDER_CONSTRUCTION_CONST.introText
+    let hdr = props.action + " " + UNDER_CONSTRUCTION_CONST.headerText
+    return (<>        
+            <Button className={buttonClassName} outline color={color} onClick={toggle}>
+                {buttonText}
             </Button>
-        }
-        <Modal isOpen={modal} toggle={toggle} centered={true}>
-            <ModalHeader toggle={toggle} className={UNDER_CONSTRUCTION.headerClassName}>
-                <Row>
-                    <Col md={3}>
-                        <FontAwesomeIcon icon={UNDER_CONSTRUCTION.icon} className={UNDER_CONSTRUCTION.iconClassName}/>
+            <Modal isOpen={modal} toggle={toggle} centered={true}>
+                <ModalHeader toggle={toggle} className={UNDER_CONSTRUCTION_CONST.headerClassName}>
+                    <Row>
+                        <Col md={3}>
+                            <FontAwesomeIcon icon={UNDER_CONSTRUCTION_CONST.icon} className={UNDER_CONSTRUCTION_CONST.iconClassName}/>
+                        </Col>
+                        <Col md={9}>
+                            {hdr}
+                        </Col>
+                    </Row>
+                </ModalHeader>
+                <ModalBody>
+                    <Col md={12}>
+                        <div className={UNDER_CONSTRUCTION_CONST.introClassName}>
+                            {introText}
+                        </div>
+                        <div className={UNDER_CONSTRUCTION_CONST.formWrapperClassName}>
+                            <a href="mailto:team@terminusdb.com" className={UNDER_CONSTRUCTION_CONST.submitButtonClassName}>
+                               {UNDER_CONSTRUCTION_CONST.submitText + " " + "team@terminusdb.com"}
+                            </a>
+                        </div>
                     </Col>
-                    <Col md={9}>
-                        {hdr}
-                    </Col>
-                </Row>
-            </ModalHeader>
-            <ModalBody>
-                <Col md={12}>
-                    <div className={UNDER_CONSTRUCTION.introClassName}>
-                        {introText}
-                    </div>
-                    <div className={UNDER_CONSTRUCTION.formWrapperClassName}>
-                        <a href="mailto:team@terminusdb.com" class={UNDER_CONSTRUCTION.submitButtonClassName}>
-                           {UNDER_CONSTRUCTION.submitText + " " + "team@terminusdb.com"}
-                        </a>
-                    </div>
-                </Col>
-            </ModalBody>
-        </Modal>
-    </>)
+                </ModalBody>
+            </Modal>
+        </>)
 }

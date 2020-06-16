@@ -79,10 +79,7 @@ export const GET_COMMITS = 'GET_COMMITS'
 
 
 //Query Page
-export const NEW_QUERY_BUTTON_CSS = "btn btn-secondary secondary lead mt-4 formMrg"
 export const NEW_QUERY_BUTTON_TEXT = "Add New Query Pane"
-export const QUERY_BOX_CSS = "query-box"
-export const NEW_QUERY_ROW_CSS = ""
 
 //Profile Page 
 export const PROFILE_BG_IMAGE = "https://terminusdb.com/img/placeholders/half-background-mobile.png"
@@ -94,11 +91,6 @@ export const PROFILE_CONTENT_CSS = "some-css"
 
 //Login Page
 export const LOGIN_LOGO = "https://terminusdb.com/img/logos/logo.svg"
-export const LOGIN_LOGO_CSS = "mb-4"
 export const LOGIN_PLACEHOLDER = "Enter valid TerminusDB password"
 export const LOGIN_PROMPT = "Please enter your password"
 export const CONNECT_PROMPT = "Connect"
-export const LOGIN_PROMPT_CSS = "mb-4 mt-4"
-export const LOGIN_FORM_CSS = "formSignin"
-export const LOGIN_CONTAINER_CSS = "h-100 containerSignIn"
-export const LOGIN_BUTTON_CSS ="btn btn-lg btn-block btn btn-primary"

@@ -108,22 +108,7 @@ div.db-view-cards {
     text-align: center;
 }
 
-.formSignin{
-    width: 100%;
-    max-width: 330px;
-    padding: 15px;
-    margin: auto;
-}
 
-.containerSignIn{
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    background-color: #002855;
-    text-align: center;
-}
 
 .next-steps .fa-link {
   margin-right: 5px;
@@ -232,20 +217,6 @@ div.branch-selector-box{
     min-width: 180px;
 }
 
-div.history-navigator-Collapsible {
-    /*background-color: #f5f5f5;
-    border-radius: 10px;*/
-    margin: 5px 20px 20px 20px;
-    padding: 0px 25px 25px 25px;
-    position: fixed;
-    top:80px;
-    /*border: 1px solid rgba(0,0,0,.125);
-    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
-    background-color: #fff;
-    z-index: 99!important;
-    box-shadow: 0 1px 10px -1px rgba(0,0,0,.2)!important;
-}
-
 
 img.center {
     margin: auto;
@@ -340,15 +311,6 @@ div.result-pane{
 
 span.result-reports{
     margin: 20px
-}
-
-div.query-box{
-    border-bottom: 1px solid #00C08B;
-    min-height: calc(100% - 250px);
-    /*700px;*/
-    display: flex;
-    flex-direction: column;
-    margin-top:100px;
 }
 
 button.btn-secondary {
@@ -788,80 +750,6 @@ div.css-yk16xz-control{
   color: #041433
 }
 
-.run-query-button:visited,
-.run-query-button:active{
-    border: 0 !important;
-}
-
-.run-query-button {
-    font-size: 0.9em;
-    font-weight: 600;
-    text-align: center;
-    padding: 10px;
-    border-radius: 3px !important;
-    margin-left: -40px;
-}
-
-.query-pane-container
-.dropdown-toggle {
-    background-color:#888 !important;
-    color: #eee !important;
-    width: 120px  !important;
-    margin-left: -80px;
-    padding: 7px;
-    border-radius: 3px !important;
-    border: 2px solid  #888  !important;
-}
-
-.query-pane-container
-.dropdown-toggle:hover:hover, button.query-pane-edit:hover {
-    background-color:#666 !important;
-    color: white  !important;
-    border-radius: 3px !important;
-    border: 2px solid #041433 !important;
-}
-
-button.query-pane-edit {
-    background-color:#888 !important;
-    color: #eee !important;
-    min-width: 120px  !important;
-    margin-left: -80px;
-    padding: 7px;
-    border-radius: 3px !important;
-    border: 2px solid  #888  !important;
-}
-
-.run-query-button {
-    background-color: #00C08B !important;
-    color: #eee !important;
-    width: 120px  !important;
-    border: 2px solid #00C08B  !important;
-}
-
-.run-query-button:hover {
-    border-radius: 3px !important;
-    background-color: #00C08B !important;
-    color: white  !important;
-    border: 2px solid #041433 !important;
-}
-
-.query-pane-toolbar {
-    height: 60px;
-    background-color: rgba(0, 102, 253, 0.1);
-    margin: 5px 0px 5px 0px;
-    padding: 2px;
-    width: 100%;
-}
-
-.query-pane-dropdown{
-    float: right;
-    margin: 0px -30px 0px 0px;
-}
-
-.dropdown-menu{
-  right: 0;
-  left: auto;
-}
 
 img.cms-i{
     width: 10%
@@ -1776,9 +1664,10 @@ span.qr-v{
     font-size: 18px;
 }
 
-@media (min-width: 768px)
-.navbar-expand-md .navbar-nav .nav-link {
-     padding-right: 0 !important
+@media (min-width: 768px){
+  .navbar-expand-md .navbar-nav .nav-link {
+       padding-right: 0 !important
+  }
 }
 
 
@@ -1943,23 +1832,7 @@ label.checkbox-label-create-form {
     margin-right: 1em;
 }
 
-div.terminus-datetime-slider-container {
-    padding-top: 6px;
-    height: 80px;
-}
 
-div.terminus-datetime-slider  {
-    margin: 10px 0px 0px 0px;
-}
-
-div.terminus-datetime-slider-viewing {
-    text-align: center;
-    font-family: "Arial";
-    padding-bottom: 16px;
-    font-size: 14px;
-    color:  #6290c3;
-    font-weight: 600;
-}
 
 .history-branch-col {
     padding: 26px 0 0 0;
@@ -2001,80 +1874,6 @@ div.terminus-datetime-slider-viewing {
     width: 180px;
 }
 
-.history-bar-container {
-    width: 1280px;
-    height: 90px;
-}
-
-.commit-traveller-navigation-col {
-    padding-right: 10px;
-}
-
-span.commit-traveller-navigation {
-    display: inline-block;
-    text-align: left;
-
-}
-
-.commit-traveller-commit {
-    display: inline-block;
-    border: 1px solid #fff;
-    border-radius: 0 0 4px 4px;
-    background-color: #f8f8f8;
-    margin-left: 8px;
-    height: 90px;
-    margin-top: 6px;
-    margin-bottom: -24px;
-    width: 100%;
-}
-
-.history-navigator-icon {
-    font-size: 1.8em;
-    color: #0055bb;
-    margin-top: 40px;
-}
-
-.history-navigator-icon:hover {
-    font-size: 1.8em;
-    color:  #007bff;
-    margin-top: 40px;
-}
-
-.history-navigator-icon-inactive {
-    font-size: 1.8em;
-    color: #888;
-    margin-top: 40px;
-}
-
-.commit-traveller-navigation-col {
-    cursor: pointer;
-}
-
-div.commit-view-header {
-    background-color: #efefef;
-    width: 100%;
-    color: #666;
-    font-weight: bold;
-    font-family: "Arial";
-    padding: 6px 4px 6px 4px;
-}
-
-div.commit-view-id {
-    width: 100%;
-    padding: 2px 4px;
-    display: inline-block;
-    font-size: 0.8rem;
-    color: #666;
-}
-
-div.commit-view-message {
-    padding: 8px 4px 6px 4px;
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.history-navigator-icon-left {
-}
 
 
 /*

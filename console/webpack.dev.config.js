@@ -2,15 +2,15 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const Dotenv = require('dotenv-webpack');
-var PACKAGE = require('../package.json');
-var version = `v${PACKAGE.version}`;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 
 module.exports = (env, argv) => ({
   entry: [
     path.join(__dirname, './index.js'),
   ],
   output: {
-    path: path.resolve(__dirname, `public_pages/${version}/dist`),
+    path: path.resolve(__dirname, 'dist'),
     filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
@@ -24,7 +24,7 @@ module.exports = (env, argv) => ({
         inject: true,
         template: path.resolve(__dirname, './index.html'),
         bundleFileName:"terminusdb-console.min.js"
-      }),
+      })
   ],
   resolve: {
       alias:{"@terminusdb/terminusdb-console": path.join(__dirname, '..', 'src/index.js'),
@@ -50,20 +50,23 @@ module.exports = (env, argv) => ({
         },
       },
       {
-      // Transform our own .css files with PostCSS and CSS-modules
-      test: /\.css$/,
-      exclude: /node_modules/,
-      use: ['style-loader', 'css-loader'],
-    }, {
-      // Do not transform vendor's CSS with CSS-modules
-      // The point is that they remain in global scope.
-      // Since we require these CSS files in our JS or CSS files,
-      // they will be a part of our compilation either way.
-      // So, no need for ExtractTextPlugin here.
-      test: /\.css$/,
-      include: /node_modules/,
-      use: ['style-loader', 'css-loader'],
-    },
+        test: /\.(css|less)$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
       {
         test: /\.(svg|jpg|gif|png)$/,
         use: [

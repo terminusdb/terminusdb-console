@@ -7,7 +7,7 @@ import {LoginPage,ConsoleRouter, ConsoleHistory, LoadingAppPage, ConnectionError
  */
 const App = (props) => {
   const { showLogin, loadingServer, clientError, woqlClient} = WOQLClientObj();
-
+  
   if (showLogin) return  <LoginPage/>
   if (clientError) return <ConnectionErrorPage/>;
   if (loadingServer) return <LoadingAppPage/>;

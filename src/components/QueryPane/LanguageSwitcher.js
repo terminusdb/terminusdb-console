@@ -15,6 +15,9 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
 
     const disabled = active=== true ? true : false;
 
+    const dropdownContent = dropdownOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
+  
+
     let currentLabel='';
     const entries = languages.map((lang, index) => {
         let langname = LANGUAGE_NAMES[lang]
@@ -24,28 +27,43 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
             currentLabel=langname;
         }
 
-        return (<DropdownItem
+        return(<button onClick={function(){onChange(lang)}} {...active}
+                    className="tdb__dropdown__button" key={lang} > {langname}</button>
+                    )
+       /* return (<DropdownItem
                     key={lang}
                     //disabled={disabled}
                     {...active}
                     onClick={function(){onChange(lang)}}>
-                    {langname}</DropdownItem>)
+                    {langname}</DropdownItem>)*/
     })
 
    //origin disabled={disabled}
     return (
         <>
         {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        {!showedit && <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
+        {!showedit && 
+            <div className="tdb__dropdown" >
+                <button className="tdb__dropdown__button tdb__dropdown__button--top nav__main__link" onClick={toggle}>
+                    {currentLabel} <i className="fa fa-caret-down"></i>
+                </button>
+                <div className={dropdownContent}>
+                  {entries}
+                </div>
+            </div>
+
+          }
+        </>
+    )
+}
+
+/*
+  <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
             <DropdownToggle caret>
                 {currentLabel}
             </DropdownToggle>
             <DropdownMenu>
                 {entries}
             </DropdownMenu>
-        </Dropdown>}
-        </>
-    )
-}
-
+        </Dropdown>*/
 //{showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}

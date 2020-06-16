@@ -1,0 +1,111 @@
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	padding: 0
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: 100%;
+	font-weight: normal
+}
+
+ul {
+	list-style: none
+}
+
+button,
+input,
+select,
+textarea {
+	margin: 0
+}
+
+html,
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+*,
+*:before,
+*:after {
+	-webkit-box-sizing: inherit;
+	-moz-box-sizing: inherit;
+	box-sizing: inherit
+}
+
+img,
+embed,
+iframe,
+object,
+audio,
+video {
+	height: auto;
+	max-width: 100%
+}
+
+iframe {
+	border: 0
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0
+}
+
+td, th {
+	padding: 0;
+	text-align: left
+}
+
+html {
+  min-height: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+   width: 100vw
+}
+
+body {
+  position: relative;
+  height: 100%;
+  font-family: @font-family-base;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  color: @text-color;
+  background-color: @body-bg;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}

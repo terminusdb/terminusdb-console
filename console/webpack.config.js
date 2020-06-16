@@ -4,15 +4,13 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyWebPackPlugin= require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
-var PACKAGE = require('../package.json');
-var version = `v${PACKAGE.version}`;
 
 module.exports = (env, argv) => ({
   entry: [
     path.join(__dirname, './index.js'),
   ],
   output: {
-    path: path.resolve(__dirname, `dist`),
+    path: path.resolve(__dirname, 'dist'),
     filename: "terminusdb-console.min.js",
     publicPath: '/'
   },
@@ -57,10 +55,10 @@ module.exports = (env, argv) => ({
         },
       },
       {
-        test: /\.css$/,
+        test: /\.(css|less)$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
+          'css-loader', 'less-loader'
         ],
       },
       {

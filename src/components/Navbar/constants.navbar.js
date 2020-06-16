@@ -9,7 +9,7 @@ export const SCHEMA_PAGE_LABEL = 'Schema'
 export const DOCUMENT_PAGE_LABEL = 'Documents'
 export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
-export const LOGIN_LABEL = 'Login'
+export const LOGIN_LABEL = 'Connect to hub'
 
 //CSS Styles
 export const LOGIN_BUTTON_CSS = "btn-margin"
