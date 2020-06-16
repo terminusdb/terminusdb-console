@@ -29,6 +29,7 @@ export const COMMIT_VIEW = {
     authorLabel: "Author",
     messageLabel: "Message",
     headerClassName: "commit-view-header",
+    searching: "Searching Commit Log",
     messageClassName: "commit-view-message"
 }
 

@@ -20,18 +20,23 @@ export const DBContextProvider = ({children,woqlClient}) => {
     const [graphs, setGraphs] = useState()
     const [DBInfo, setDBInfo] = useState()
     const [branch, setBranch] = useState(woqlClient.checkout())
+    const [prefixes, setPrefixes] = useState()
+    const [repos, setRepos] = useState()
     const [ref, setRef] = useState(woqlClient.ref())
     const [consoleTime, setConsoleTime] = useState()
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
+    const [scale, setScale] = useState()
 
     const [branchesReload, setBranchesReload] = useState(0)
+
+    const WOQL = TerminusClient.WOQL
 
     //load branch structure
     useEffect(() => {
         setLoading(loading+1)
-        TerminusClient.WOQL.lib().loadBranchDetails(woqlClient).execute(woqlClient)
+        WOQL.lib().branches().execute(woqlClient)
         .then((res) => {
             let binds = (res && res.bindings ? branchStructureFromBindings(res.bindings) : [])
             setBranches(binds)
@@ -42,10 +47,31 @@ export const DBContextProvider = ({children,woqlClient}) => {
         .finally(() => setLoading(loading-1))
     }, [branchesReload])
 
+
+    //load dbSize
+    useEffect(() => {
+        setLoading(loading+1)
+        let dbres = woqlClient.resource("db")
+        WOQL.triple_count(dbres, "v:Triple Count" ).size(dbres, "v:Size")
+        .execute(woqlClient)
+        .then((res) => {
+            let nscale = {} 
+            nscale.size = res.bindings[0]['Size']['@value']
+            nscale.triple_count = res.bindings[0]['Triple Count']['@value']
+            setScale(nscale)
+        })
+        .catch((e) => {
+            setReport({error:e, status: TERMINUS_ERROR});
+        })
+        .finally(() => setLoading(loading-1))
+    }, [branchesReload])
+    
+
+
     //load db info
     useEffect(() => {
         setLoading(loading+1)
-        TerminusClient.WOQL.lib().loadFirstCommit(woqlClient).execute(woqlClient)
+        WOQL.lib().first_commit().execute(woqlClient)
         .then((res) => {
             let binds = (res && res.bindings ? dbStructureFromBindings(res.bindings) : [])
             setDBInfo(binds)
@@ -55,12 +81,33 @@ export const DBContextProvider = ({children,woqlClient}) => {
         })
         .finally(() => setLoading(loading-1))
     }, [])
-    
+
+    //load Prefixes
+    useEffect(() => {
+        setLoading(loading+1)
+        WOQL.lib().prefixes().execute(woqlClient)
+        .then((res) => {
+            let binds = (res && res.bindings ? prefixesFromBindings(res.bindings) : [])
+            setPrefixes(binds)
+        })
+        .catch((e) => {
+            setReport({error:e, status: TERMINUS_ERROR});
+        })
+        .finally(() => setLoading(loading-1))
+    }, [])
+
 
     //load graph structure
     useEffect(() => {
         setLoading(loading+1)
-        TerminusClient.WOQL.lib().loadGraphStructure(woqlClient).execute(woqlClient)
+        let constraint = WOQL.query()
+        if(woqlClient.ref()){
+            constraint.eq('v:Commit ID', woqlClient.ref())
+        }
+        else {
+            constraint.eq('v:Branch ID', woqlClient.checkout())
+        }
+        WOQL.lib().graphs(constraint).execute(woqlClient)
         .then((res) => {
             let binds = (res && res.bindings ? graphStructureFromBindings(res.bindings) : [])
             setGraphs(binds)
@@ -71,10 +118,28 @@ export const DBContextProvider = ({children,woqlClient}) => {
         .finally(() => setLoading(loading-1))
     }, [branch, ref])
 
+
+
+    //load Repo
+    useEffect(() => {
+        setLoading(loading+1)
+        let cresource = woqlClient.resource("meta")
+        WOQL.lib().repos(false, false, cresource).execute(woqlClient)
+        .then((res) => {
+            let binds = (res && res.bindings ? ReposFromBindings(res.bindings) : [])
+            setRepos(binds)
+        })
+        .catch((e) => {
+            setReport({error:e, status: TERMINUS_ERROR});
+        })
+        .finally(() => setLoading(loading-1))
+    }, [])
+
+
     //load head ref when consoleTime is set
     useEffect(() => {
         if(headUpdating && ref){
-            TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, ref).execute(woqlClient)
+            WOQL.lib().commits(ref).execute(woqlClient)
             .then((res) => {
                 if(res.bindings && res.bindings[0] && res.bindings[0]["Time"]){
                     let ts = res.bindings[0]["Time"]["@value"]
@@ -86,7 +151,7 @@ export const DBContextProvider = ({children,woqlClient}) => {
         else if(consoleTime && branches && branch && branches[branch]){
             setLoading(loading+1)
             if(consoleTime < branches[branch].updated){
-                TerminusClient.WOQL.lib().loadCommitAtTime(woqlClient, String(consoleTime)).execute(woqlClient)
+                WOQL.limit(1).lib().commits(WOQL.not().greater("v:Time", String(consoleTime))).execute(woqlClient)
                 .then((res) => {
                     if(res.bindings && res.bindings[0] && res.bindings[0]["CommitID"]){
                         let cid = res.bindings[0]["CommitID"]["@value"]
@@ -100,7 +165,6 @@ export const DBContextProvider = ({children,woqlClient}) => {
                     setReport({error:e, status: TERMINUS_ERROR});
                 })
                 .finally(() => setLoading(loading-1))
-    
             }
             else {
                 if(ref) setRef(false)
@@ -126,20 +190,6 @@ export const DBContextProvider = ({children,woqlClient}) => {
         setBranchesReload(branchesReload+1)
     }
 
-
-    function graphStructureFromBindings(bindings){
-        let gs = {};
-        for(var i = 0; i<bindings.length; i++){
-            let fid = `${bindings[i]["GraphType"]["@value"]}/${bindings[i]["GraphID"]["@value"]}`
-            gs[fid] ={
-                id: bindings[i]["GraphID"]["@value"], 
-                type: bindings[i]["GraphType"]["@value"], 
-                head: bindings[i]["Head"]["@value"], 
-                updated: bindings[i]["Time"]["@value"]}
-        }
-        return gs;
-    } 
-
     function dbStructureFromBindings(bindings){
         let info = {};
         if(bindings && bindings[0] && bindings[0]["Time"]){
@@ -148,21 +198,84 @@ export const DBContextProvider = ({children,woqlClient}) => {
         else {
             info.created = 0
         }
+        info.author = (bindings[0] && bindings[0]["Author"] ?  bindings[0]["Author"]["@value"]  : "") 
         return info;
     } 
 
+    function isLocalClone(url){
+        if(woqlClient.server() == url.substring(0, woqlClient.server().length)) return true
+        return false
+    }
+
+    function ReposFromBindings(bindings){
+        let repos = {}
+        for(var i = 0; i<bindings.length; i++){
+            let b = bindings[i]
+            if(b["Remote URL"] && b["Remote URL"]["@value"]){
+                if(isLocalClone(b["Remote URL"]["@value"])){
+                    repos.local_clone = {
+                        url: b["Remote URL"]["@value"],
+                        title: b["Repository Name"]["@value"],
+                        type: "Local Clone"
+                    }
+                }
+                else {
+                    repos.remote = {
+                        url: b["Remote URL"]["@value"],
+                        title: b["Repository Name"]["@value"],
+                        type: "Remote"
+                    }
+                }
+            }
+            else {
+                repos.local = {
+                    type: "Local",
+                    title: b["Repository Name"]["@value"]
+                }
+            }
+        }
+        return repos
+    }
 
     function branchStructureFromBindings(bindings){
         let brans = {};
         for(var i = 0; i<bindings.length; i++){
-            brans[bindings[i]["Branch"]["@value"]] = {
-                id: bindings[i]["Branch"]["@value"], 
-                head: bindings[i]["Head"]["@value"], 
+            brans[bindings[i]["Branch ID"]["@value"]] = {
+                id: bindings[i]["Branch ID"]["@value"], 
+                head: bindings[i]["Commit ID"]["@value"], 
                 updated: bindings[i]["Time"]["@value"]
             }
         }
         return brans;
     } 
+
+    function prefixesFromBindings(bindings){        
+        let ctxt = {}
+        for(var i = 0; i<bindings.length; i++){
+            let iri = (bindings[i]['URI'] && bindings[i]['URI']['@value'] ?  bindings[i]['URI']['@value'] : false)
+            let prefix = (bindings[i]['Prefix'] && bindings[i]['Prefix']['@value'] ?  bindings[i]['Prefix']['@value'] : false)
+            ctxt[prefix] = iri
+        }
+        for(var k in TerminusClient.UTILS.standard_urls){
+            ctxt[k] = TerminusClient.UTILS.standard_urls[k]
+        }
+        woqlClient.connection.setJSONContext(ctxt)
+        let x = woqlClient.connection.getJSONContext()
+        return bindings
+    }
+    
+    function graphStructureFromBindings(bindings){
+        let gs = {};
+        for(var i = 0; i<bindings.length; i++){
+            let fid = `${bindings[i]["Graph Type"]["@value"]}/${bindings[i]["Graph ID"]["@value"]}`
+            gs[fid] ={
+                id: bindings[i]["Graph ID"]["@value"], 
+                type: bindings[i]["Graph Type"]["@value"]
+            }
+        }
+        return gs;
+    } 
+
 
     return (
         <DBContext.Provider
@@ -177,6 +290,9 @@ export const DBContextProvider = ({children,woqlClient}) => {
                 report,
                 branch,
                 ref,
+                repos,
+                scale,
+                prefixes,
                 loading
             }}
         >
@@ -204,12 +320,14 @@ export const TerminusDBProvider = (woqlClient) => {
     let ref = false
     let loading = false
     let consoleTime = false
+    let prefixes = []
     return {
         setConsoleTime,
         setHead,
         consoleTime,
         DBInfo,
         branches,
+        prefixes,
         graphs,
         report,
         branch,

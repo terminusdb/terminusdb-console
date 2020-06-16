@@ -146,7 +146,8 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         {children}
 
         {(editable) &&
-            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} placeholder = { COMMIT_BOX.input.placeholder }>
+            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} id={COMMIT_BOX.input.id}
+                placeholder = { COMMIT_BOX.input.placeholder }>
                 {commitMsg}
             </textarea>
         }

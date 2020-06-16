@@ -8,7 +8,6 @@ import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
-import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 import { Container, Row } from "reactstrap";
 
 
@@ -25,6 +24,7 @@ export const CopyLocalForm = () => {
     const [report, setReport] = useState();
     const [sourceID, setSourceID] = useState()
     const [details, setDetails] = useState({})
+    const [newID, setNewID] = useState()
     let update_start = Date.now()
 
     let basicInfo = {}  
@@ -40,10 +40,32 @@ export const CopyLocalForm = () => {
     function getDBOptions(dblist){
         return dblist.map((item) => {
             return { 
-                value: item.db,
+                value: `${item.account}/${item.db}`,
                 label: item.title 
             }
         })        
+    }
+
+    function getStarterTitle(orig){
+        let base = orig + " Clone"
+        let ntry = base
+        let i = 1;
+        while(titleTaken(ntry)){
+            ntry = base + " (" + (i++) + ")" 
+        }
+        return ntry
+    }
+
+    function titleTaken(ntitle){
+        let istaken = false
+        localDBs.map((item) => {
+            if(item.title == ntitle) istaken = true
+        })        
+        return istaken
+    }
+
+    function getStarterDescription(orig){
+        return "(Local Clone) " + orig
     }
 
     function getDBList(){
@@ -60,8 +82,9 @@ export const CopyLocalForm = () => {
     }
 
     function loadDetailsForDB(dbid){
+        let parts = dbid.split('/')
         for(var i = 0 ; i<localDBs.length; i++){
-            if(localDBs[i].db == dbid) return dbToForm(localDBs[i])
+            if(localDBs[i].db == parts[1] && localDBs[i].account == parts[0]) return dbToForm(localDBs[i])
         }
         return {}
     }
@@ -69,9 +92,9 @@ export const CopyLocalForm = () => {
     //translate from dblist json to form json
     function dbToForm(item){
         return {
-            dbid: item.db,
-            dbname: item.title,
-            description: item.description
+            dbid: `${item.account}/${item.db}`,
+            dbname: getStarterTitle(item.title),
+            description: getStarterDescription(item.description)
         }
     }
 
@@ -80,21 +103,29 @@ export const CopyLocalForm = () => {
             setDetails(loadDetailsForDB(value))
             setSourceID(value)
         }
+        else if(field_id == 'newid') {
+            setNewID(value)
+        }
     }
 
-    function onClone(details){
+    function onClone(){
         update_start = Date.now()
         setUpdateLoading(true)
-        let accountid = woqlClient.account() || woqlClient.uid()
-        return woqlClient.clonedb(sourceID, details.newid)
+        let sourceURL = woqlClient.server() + sourceID
+        let src = {"remote_url": sourceURL, label: details.dbname}
+        if(details.description ) src.comment = details.description 
+        let cClient = woqlClient.copy()
+        let abc = cClient.basic_auth()
+        cClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        return cClient.clonedb(src, newID)
         .then(() => {
-            let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (id: ${sourceID})`
+            let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (db: ${sourceID})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(sourceID, accountid, rep)  
+            afterCreate(newID, rep)  
         })
         .catch((err) => {
-            let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (id: ${sourceID}) `
+            let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (db: ${sourceID}) `
             setReport({error: err, status: TERMINUS_ERROR, message: message});
         })
         .finally(() => {
@@ -105,12 +136,13 @@ export const CopyLocalForm = () => {
      /**
      * Reloads database list by reconnecting and goes to the db home
      */
-    function afterCreate(id, acc, rep){
-        reconnectServer()
-        goDBHome(id, acc, rep)        
+    function afterCreate(id, rep){
+        woqlClient.connect().then(result=>{
+            goDBHome(id, woqlClient.user_account(), rep)
+        })
     }
 
-    let buttons = (user ? COPY_LOCAL_FORM.buttons : false)
+    let buttons = COPY_LOCAL_FORM.buttons 
 
     return (<>
         {(loading || updateLoading) && 
@@ -118,12 +150,7 @@ export const CopyLocalForm = () => {
         }
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
-        }
-        {!user && 
-            <TCSubmitWrap>
-                <UnderConstruction action={COPY_LOCAL_FORM.actionText} />
-            </TCSubmitWrap>
-        }
+        }      
         <TCForm 
             onSubmit={onClone} 
             layout = {[2]}

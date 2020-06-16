@@ -39,12 +39,11 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
         setValues(stuff)
         let data = values;
         Object.keys(advanced).forEach(key => data[key] = advanced[key])
-        let accountid = woqlClient.account() || woqlClient.uid()
         if(!data.data_url || data.data_url.trim() == ""){
-            data.data_url = getDefaultDocURL(accountid, data.dbid)
+            data.data_url = getDefaultDocURL()
         }
         if(!data.schema_url || data.schema_url.trim() == ""){
-            data.schema_url = getDefaultScmURL(accountid, data.dbid)
+            data.schema_url = getDefaultScmURL()
         }
         let doc = {
             id: data.dbid,

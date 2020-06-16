@@ -21,7 +21,7 @@ export const CommitTraveller = (props) => {
     //retrieves details of the commit with id ref
     useEffect(() => {
         if(props.commit){
-            TerminusClient.WOQL.lib().loadCommitBranchDetails(woqlClient, props.commit, mb).execute(woqlClient)
+            TerminusClient.WOQL.lib().commits({'Commit ID': props.commit}).execute(woqlClient)
            .then((res) => {
                 let commie = (res && res.bindings ? extractCommitData(res.bindings[0]) : [])
                 setCommit(commie)
@@ -33,12 +33,14 @@ export const CommitTraveller = (props) => {
     const extractCommitData = (res)=>{
         let commie = {}
         if(res){
-            if(res['CommitID'] && res['CommitID']['@value']) commie.id = res['CommitID']["@value"]
+            if(res['Commit ID'] && res['Commit ID']['@value']) commie.id = res['Commit ID']["@value"]
             if(res['Time'] && res['Time']["@value"]) commie.time = parseFloat(res['Time']["@value"])
             if(res['Author'] && res['Author']["@value"]) commie.author = res['Author']["@value"]
             if(res['Message'] && res['Message']["@value"]) commie.message = res['Message']["@value"]
-            if(res['Parent'] && res['Parent']["@value"]) commie.parent = res['Parent']["@value"]
-            if(res['Child'] && res['Child']["@value"]) commie.child = res['Child']["@value"]
+            if(res['Parent ID'] && res['Parent ID']["@value"]) commie.parent = res['Parent ID']["@value"]
+            if(res['Children'] && res['Children'][0]){
+                commie.child = res['Children'][0][0]['@value']
+            }
         }
         return commie
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Col } from "reactstrap";
-import { getCurrentDBID, getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
+import { getCurrentDBName, getCurrentDbDescr } from "../../utils/helperFunctions"
 import { DetailsCard } from "./DetailsCard"
 import * as icons from "../../constants/faicons"
 import TerminusClient from '@terminusdb/terminusdb-client';
@@ -10,42 +10,111 @@ import { WOQLQueryContainerHook } from "../../components/Query/WOQLQueryContaine
 
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { DBContextObj } from "../../components/Query/DBContext"
-import { printts, DATETIME_FULL, DATETIME_COMPLETE } from "../../constants/dates";
-
+import { printts, DATETIME_DATE, DATETIME_COMPLETE } from "../../constants/dates";
+import { LATEST_UPDATES_LENGTH } from "./constants.dbhome"
 
 
 export const MonitorDB = (props) => {
-    const { isAuthenticated, user } = useAuth0();
     const {woqlClient} = WOQLClientObj()
-    const {graphs, branch, branches,  DBInfo,  ref, consoleTime} = DBContextObj();
+    const {graphs, branch, branches,  DBInfo,  ref, consoleTime, repos, scale} = DBContextObj();
     
+    const [commitCount, setCommitCount] = useState()
+    const [latest, setLatest] = useState()
+
+    let WOQL = TerminusClient.WOQL
     let ts = consoleTime || (Date.now() / 1000)
 
-    let q = TerminusClient.WOQL.lib().getCommitBefore("v:BranchName", String(ts), woqlClient.resource("commits"))
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(woqlClient, q, branch, ref)
-    
-	let q2 = TerminusClient.WOQL.using(woqlClient.resource("commits"), TerminusClient.WOQL.triple("v:X", "ref:commit_timestamp", "v:Time"))
-    
+    let latest_woql = false
 
-    const [uq, report2, binds2, woql2] = WOQLQueryContainerHook(woqlClient, q2, branch, ref)
+    //load commit Count
+    useEffect(() => {
+        let w = WOQL.using("_commits").triple("v:A", "type", "ref:ValidCommit")
+        woqlClient.query(w).then((result) => {
+            if(result.bindings) setCommitCount(result.bindings.length)
+        })
+    }, [])
+
+    //load commit Count
+    useEffect(() => {
+        let vals = (consoleTime ? WOQL.not().greater("v:Time", String(consoleTime)) : false) 
+        let q = WOQL.lib().commits()
+        if(vals) q.and(vals)
+        latest_woql = WOQL.limit(LATEST_UPDATES_LENGTH).select("v:Time", "v:Author", "v:Message").order_by("v:Time", q)
+        woqlClient.query(latest_woql).then((result) => {
+            if(result.bindings) setLatest(result.bindings)
+        })
+    }, [consoleTime])
 
 
-    let latestUpdates = TerminusClient.WOQL.limit(50).select("v:Time", "v:Author", "v:Message").order_by("v:Time", TerminusClient.WOQL.lib().loadCommitDetails(woqlClient, "v:ANYCOMMIT"))
 
-    const [uq3, report3, latests, woql3] = WOQLQueryContainerHook(woqlClient, latestUpdates, branch, ref)
-
-
-	const db_uri = woqlClient.server() + woqlClient.account() + '/' + woqlClient.db()
+	const db_uri = woqlClient.connectionConfig.cloneableURL()
 
     function getCommitInfo(){
         let str = ""
-        if(bindings && bindings[0]){
-            let r = bindings[0]
-            let ubranch = r["BranchName"]["@value"]
-            str += "Last Update (" + ubranch + "): " + printts(r["Time"]["@value"]) + " "
+        if(scale){
+            str += "DB Size: " + (formatBytes(scale.size)) + " ~ Triples: " + scale.triple_count 
+        }
+        if(latest && latest[0]){
+            let r = latest[0]
+            if(scale){
+                str += "\n ~ "
+            }
+            str += "Last Update (" + r["Author"]["@value"] + "): " + printts(r["Time"]["@value"]) + " "
         }
         return str         
     }
+
+    function getRepoInfo(){
+        let info = {title: "Origin", type: "", sub: "", info: "" }
+        if(repos){
+            if(repos.remote) {
+                info = repos.remote
+                info.sub = "Distributed Database"
+                info.info = "Cloned from " + info.url 
+            }
+            else if(repos.local_clone) {
+                info = repos.local_clone
+                info.sub = "Clone of Local Database"
+                info.info = "Cloned from " + info.url 
+            }
+            else {
+                info = repos.local
+                info.sub = "Local Database"
+                info.info = "Clone URL: " + db_uri
+            }
+        }
+        return info
+    }
+
+    function showCreateTime(cre, author){
+        if(cre > 0) return "Created " + printts(cre, DATETIME_DATE) + " by " + author
+        else if(cre == 0) return "DB Not Initialised"
+        else return ""
+    }
+
+    function getBranchGraphCount(branches, graphs){
+        let str = ""
+        if(branches) str += Object.keys(branches).length + (Object.keys(branches).length > 1 ? " Branches " : " Branch ")
+        if(graphs) {
+            if(branches) str += " ~ "
+            str += Object.keys(graphs).length + (Object.keys(graphs).length > 1 ? " Graphs" : " Graph")
+        }
+        return str
+    }
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+    
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    let ri = getRepoInfo()
 
     return (
         <div>
@@ -58,15 +127,15 @@ export const MonitorDB = (props) => {
 					<DetailsCard 
 						title = {woqlClient.db()}
 						main = {getCurrentDBName(woqlClient)}
-						subTitle = {"Created " + (DBInfo ? printts(DBInfo.created, DATETIME_COMPLETE) : "...")}
+						subTitle = {" " + (DBInfo ? showCreateTime(DBInfo.created, DBInfo.author) : "...")}
 						info = {getCurrentDbDescr(woqlClient)}/>
 				</Col>
 
 				<Col md={3} className="mb-3 dd-c">
 	               <DetailsCard icon={icons.COMMIT}
 	                    title = "Commits"
-	                    main = {binds2 ? binds2.length : ""}
-	                    subTitle = {(branches ? Object.keys(branches).length + (Object.keys(branches).length > 1 ? " Branches" : " Branch") : "...")}
+	                    main = {commitCount}
+	                    subTitle = {(branches || graphs ? getBranchGraphCount(branches, graphs) : "...")}
 	                    info = {getCommitInfo()}/>
 	            </Col>
 
@@ -80,14 +149,14 @@ export const MonitorDB = (props) => {
 
 				<Col md={3} className="mb-3 dd-c">
 					<DetailsCard icon={icons.ORIGIN}
-						title = "Origin"
-						main="Local"
-                        info= {db_uri}
-                        subTitle={(graphs? Object.keys(graphs).length : 0) + " Graphs"} />
+						title = {ri.title }
+						main={ri.type }
+                        info= {ri.info }
+                        subTitle={ri.sub} />
 				</Col>
 			</Row>
-            {latests && 
-                <LatestUpdates latests={latests} query={woql3} updateQuery={uq3} />
+            {latest && 
+                <LatestUpdates latests={latest} query={latest_woql} />
             }
 
        </div>

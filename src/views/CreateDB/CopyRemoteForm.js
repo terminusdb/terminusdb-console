@@ -6,14 +6,12 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT 
 import { COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM } from "./constants.createdb"
 import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
-import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
+import { TCForm } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
-import { UnderConstruction } from "../../components/Reports/UnderConstruction"
-import { Container, Row } from "reactstrap";
 
 
 export const CopyRemoteForm = () => {
-    const {woqlClient, reconnectServer} = WOQLClientObj();
+    const { woqlClient } = WOQLClientObj();
     const canCreate =  woqlClient.connection.capabilitiesPermit("create_database")
     if(!canCreate){
         return (<AccessControlErrorPage />)
@@ -22,8 +20,7 @@ export const CopyRemoteForm = () => {
     const [updateLoading, setUpdateLoading] = useState(false);
     const [report, setReport] = useState();
     const [sourceURL, setSourceURL] = useState()
-    const [detailsLoaded, setDetailsLoaded] = useState()
-    const [details, setDetails] = useState(COPY_REMOTE_FORM.sample)
+
 
     let update_start = Date.now()
 
@@ -43,23 +40,28 @@ export const CopyRemoteForm = () => {
 
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
     function onClone(details){
+        if(!sourceURL) return
         update_start = Date.now()
-        setDetailsLoaded(true)
         setUpdateLoading(true)
-        woqlClient.account( woqlClient.uid() )
+
+        let nClient = woqlClient.copy() 
 
         if(details.user && details.password){
-            woqlClient.remote_auth({type: "basic", key: details.password, user: details.user})
+            nClient.remote_auth({type: "basic", key: details.password, user: details.user})
         }
         let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf("/")+1)
-
-        let src = {"remote_url": sourceURL, label: details.name || newid, comment: " aa"}
-        return woqlClient.clonedb(src, newid)
+        let src = {
+            remote_url: sourceURL, 
+            label: details.name || newid, 
+        }
+        if(details.description) src.comment = details.description 
+        nClient.account(woqlClient.user_account())//create new db in current user's account
+        return nClient.clonedb(src, newid)
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
             setReport(rep)     
-            afterCreate(sourceURL, accountid, rep)  
+            afterCreate(newid, rep)  
         })
         .catch((err) => {
             let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
@@ -73,12 +75,13 @@ export const CopyRemoteForm = () => {
      /**
      * Reloads database list by reconnecting and goes to the db home
      */
-    function afterCreate(id, acc, rep){
-        reconnectServer()
-        goDBHome(id, acc, rep)        
+    function afterCreate(id, rep){
+        woqlClient.connect().then(result=>{
+            goDBHome(id, woqlClient.user_account(), rep)
+        })
     }
 
-    let buttons = (user ? COPY_REMOTE_FORM.buttons : false)
+    let buttons = COPY_REMOTE_FORM.buttons
 
     return (<>
         {(loading || updateLoading) && 
@@ -87,31 +90,13 @@ export const CopyRemoteForm = () => {
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
         }
-        {!user && 
-            <TCSubmitWrap>
-                <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
-            </TCSubmitWrap>
-        }
         <TCForm 
             onSubmit={onClone} 
-            layout = {[1, 2, 2]}
+            layout = {[1, 2, 2, 1]}
             noCowDucks
             onChange={onChangeBasics} 
             fields={fields}
             buttons={buttons} 
         />
-        {detailsLoaded && 
-            <Container className={COPY_REMOTE_FORM.detailsWrapperClassName}>
-                <Row className={COPY_REMOTE_FORM.detailsHeaderClassName}>
-                    {COPY_REMOTE_FORM.detailsHeader}
-                </Row>
-                <TCForm
-                    layout = {[2, 1]}
-                    noCowDucks
-                    fields={COPY_DB_DETAILS_FORM.fields}
-                    values={details} 
-                />
-            </Container>
-        }
     </>)
 }

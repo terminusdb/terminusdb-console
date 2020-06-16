@@ -9,7 +9,6 @@ import { DBContextObj } from "../../components/Query/DBContext"
 import { SCHEMA_GRAPHS_ROUTE } from '../../constants/routes';
 import { SchemaToolbar } from './SchemaToolbar';
 
-
 export const GraphManager = (props) => {
     const {woqlClient} = WOQLClientObj()
     const {graphs} = DBContextObj();

@@ -34,7 +34,7 @@ export const Classes = (props) => {
 
     function getClassQuery(gfilter){
         let gstr = gfilter.type + "/" + gfilter.id
-        return TerminusClient.WOQL.limit(CLASSES_QUERY_LIMIT, TerminusClient.WOQL.lib().classList(gstr))
+        return TerminusClient.WOQL.limit(CLASSES_QUERY_LIMIT, TerminusClient.WOQL.lib().classes(null, null, gstr))
     }
 
     return (

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Row, Col  } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const SUB_TITLE_LIMIT = 24, MAIN_LIMIT = 10, TITLE_LIMIT = 12, INFO_LIMIT = 100;
 import { trimContent } from "../../utils/helperFunctions"
+import {SUB_TITLE_LIMIT,MAIN_LIMIT, TITLE_LIMIT,  INFO_LIMIT} from "./constants.dbhome"
 
 export const DetailsCard = (props) => {
 

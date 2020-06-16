@@ -1176,7 +1176,7 @@ p.dscr{
 }
 
 .under-construction-intro-icon {
-    font-size: 17px;
+    font-size: large;
 }
 
 .under-construction-input {
@@ -2749,3 +2749,4 @@ h4.prefix-section-header {
 .owl-editor-write {
     border: 1px solid #002856;
 }
+
