@@ -61,12 +61,12 @@ const ServerHome = (props) => {
     let user = woqlClient.user()
     //If the user is logged in as init admin user and there are no real user accounts, we get them to set one up...
     useEffect(() => {
-        if(false && user.id == "admin" && !user.author){
+        if(user.id == "admin" && !user.author){
             setLoading(true)
             let tClient = woqlClient.copy()//do not change internal client state
             tClient.db("terminus")
             TerminusClient.WOQL.lib().users().execute(tClient).then((result) => {
-                if(!result || !result.bindings || result.bindings.length < 2){
+                if(true || !result || !result.bindings || result.bindings.length < 2){
                     setModal(true)
                 }
             })
