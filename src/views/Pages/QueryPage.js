@@ -13,10 +13,10 @@ const QueryPage = () => {
     const QueryPaneBox = (props) => {
         const {qp, setQp} = props.pstate;        
         return (
-            <div className="tdb__query__pane" id={props.id}>
+            <div className="tdb__qpane" id={props.id}>
                 <QueryPane type="editor"/>              
                     <button 
-                        className = "tdb__button__base tdb__button__base--green"
+                        className = "tdb__button__base tdb__button__base--green tdb__qpane__button__new__panel"
                         type =  "submit"
                         onClick={() => { setQp([...qp, qp.length]) }}
                     >

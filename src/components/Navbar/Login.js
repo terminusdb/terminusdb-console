@@ -17,7 +17,7 @@ export const Login = (props) => {
     return (
         <div className="nav__main__right">
             {!isAuthenticated && !user && 
-                <button className="button__base button__base--green" {...disabled}>
+                <button className="tdb__button__base tdb__button__base--green" {...disabled}>
                     Login
                 </button>
             }

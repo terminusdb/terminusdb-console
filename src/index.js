@@ -1,4 +1,4 @@
-//import "./css/main.css"
+import "./css/main.css"
 import "./css/index.css"
 import "./css/App.css"
 import "./css/less/terminusdb__style.less"; 
