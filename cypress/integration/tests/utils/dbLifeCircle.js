@@ -29,8 +29,8 @@ export const removeLocalDB = async (dbId) =>{
     cy.wait(2000);
 }
 
-export const addSchema = async (dbId) => {
-    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(CREATE_SCHEMA)
+export const addSchema = async (database) => {
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.schemaQuery)
     await cy.get('.query-pane-container').find('button').contains('Run Query').click()
     cy.wait(2000);
 }

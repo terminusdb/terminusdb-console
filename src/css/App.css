@@ -804,6 +804,7 @@ div.css-yk16xz-control{
     color: #eee !important;
     width: 120px  !important;
     margin-left: -80px;
+    margin-right: -100px;
     padding: 7px;
     border-radius: 3px !important;
     border: 2px solid  #888  !important;
@@ -821,7 +822,8 @@ button.query-pane-edit {
     background-color:#888 !important;
     color: #eee !important;
     min-width: 120px  !important;
-    margin-left: -80px;
+    margin-left: -200px;
+    margin-right: 70px;
     padding: 7px;
     border-radius: 3px !important;
     border: 2px solid  #888  !important;
@@ -2745,4 +2747,3 @@ h4.prefix-section-header {
 .owl-editor-write {
     border: 1px solid #002856;
 }
-
