@@ -11,10 +11,9 @@ import { DBContextObj } from "../../components/Query/DBContext"
 import { printts } from "../../constants/dates";
 import Loading from "../../components/Reports/Loading"
 
-export const Branch = ({onCancel, onCreate, onEdit, visible}) => {
+export const Branch = () => {
     const {woqlClient} = WOQLClientObj();
     const {branch, ref, consoleTime, updateBranches} = DBContextObj();
-    visible = visible || false
     
     let ics = {}
     CREATE_BRANCH_FORM.fields.map((item) => {

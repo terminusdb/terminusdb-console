@@ -4,6 +4,19 @@ export const DBLIST_TITLE  = "My Databases"
 export const CREATE_FIRSTDB_CSS = "color-primary alert"
 export const CREATE_FIRSTDB = ""
 export const DBLIST_HEADER_CSS = "some-old-header-css"
+export const CREATE_FIRSTUSER = "Set up"
+export const CREATE_FIRSTUSER_CSS = ""
+export const FAILED_LOADING_USERS = "Failed to load list of users on server"
+export const ADD_COMMIT_ID_CSS = ""
+export const ADD_COMMIT_ID_TITLE = "Set Commit Log ID"
+export const TUTORIALS_CSS = ""
+export const TUTORIALS_TITLE = "Tutorials"
+export const MANAGE_USERS_CSS = ""
+export const MANAGE_USERS_TITLE = "User Accounts"
+export const MANAGE_SERVER_TITLE = "Server Configuration"
+export const MANAGE_SERVER_CSS = ""
+
+
 
 
 //Terminus DB Home Page
@@ -59,13 +72,6 @@ export const PROPERTIES_TAB = "Properties"
 export const OWL_TAB = "OWL"
 export const GRAPHS_TAB = "Graphs"
 export const PREFIXES_TAB = "URL Prefixes"
-
-
-// library queries
-export const SHOW_ALL_SCHEMA_ELEMENTS = 'Show All Schema Elements'
-export const SHOW_ALL_CLASSES = 'Show All Classes'
-export const SHOW_DOCUMENT_CLASSES = 'Show Document Classes'
-export const SHOW_ALL_PROPERTIES = 'Show All Properties'
 
 // commit queries
 export const GET_COMMITS = 'GET_COMMITS'

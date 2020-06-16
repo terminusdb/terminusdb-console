@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import { TCForm } from  "../../components/Form/FormComponents"
 import { SHARE_FORM } from "./constants.dbcollaborate"
 
-export const Users = ({onCancel, onCreate, onEdit, report}) => {
-    return (<span>Users - coming next</span>)
+export const Users = () => {
+//if the db is hosted on hub -> we show super cool stuff
+//otherwise we show a very boring and low-level capabilities management screen
 }
