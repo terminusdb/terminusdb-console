@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
-import {DropdownToggle, Container, Button, Alert, Navbar , Collapse, Nav, UncontrolledDropdown,DropdownMenu,DropdownItem, NavbarText, Row, Col} from 'reactstrap'
 import { CodeEditor, CodeViewer } from './Editor'
 import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.querypane'
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
+import {Alert} from "reactstrap";
 /**
  * Controls the display of query viewer and editor
  */
@@ -107,21 +107,25 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
 
 
     if(editable && error) console.log(error)
-    return(<div className="query-pane-container" >
+    return(<div className="tdb__qpane__editor" >
             <div className="tdb__commit__bar" >
-                <input id="commitMessage" type="text" />
-                {languages &&
-                <LanguageSwitcher
-                    active={!error}
-                    baseLanguage={baseLanguage}
-                    showLanguage={showLanguage}
-                    languages={languages}
-                    editable={true}
-                    onChange={showLanguageVersion}
-                    onEdit={newLanguageVersion}
-                />
-                }
-                {editable &&  <Button className="run-query-button" color = "primary" onClick={sendQuery}>{submit}</Button>}
+                <div className="tdb__commit__bar__input">
+                    <input id="commitMessage" type="text"/>
+                </div>
+                <div className="tdb__commit__bar__tools">
+                    {languages &&
+                    <LanguageSwitcher
+                        active={!error}
+                        baseLanguage={baseLanguage}
+                        showLanguage={showLanguage}
+                        languages={languages}
+                        editable={true}
+                        onChange={showLanguageVersion}
+                        onEdit={newLanguageVersion}
+                    />
+                    }
+                    {editable &&  <button className="tdb__button__base tdb__button__base--green tdb__commit__bar--button" onClick={sendQuery}>{submit}</button>}
+                </div>
            </div>
 
         {(!showLanguage && editable) &&
@@ -135,7 +139,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         {showLanguage &&
             <CodeViewer text={showContent} language={showLanguage}/>
         }
-        
+
         {(editable && error) &&
             <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
         }

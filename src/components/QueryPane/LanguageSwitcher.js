@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN, TOOLBAR_CSS} from './constants.querypane'
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 
 export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages, editable, onChange, onEdit}) => {
     if(!languages) return null
@@ -15,8 +14,12 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
 
     const disabled = active=== true ? true : false;
 
-    const dropdownContent = dropdownOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
-  
+    const dropdownContent = dropdownOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content  tdb__dropdown__content--hide"
+    const buttonClass=showedit===true ? "tdb__button__base tdb__commit__bar--button" : "tdb__button__base tdb__commit__bar--button tdb__commit__bar__vis--hidden"
+    const changeLanguage = (lang) =>{
+        toggle()
+        onChange(lang)
+    }
 
     let currentLabel='';
     const entries = languages.map((lang, index) => {
@@ -24,35 +27,25 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
         let active= {}
         if(lang===currentLanguage){
             active={active:true}
-            currentLabel=langname;
+            currentLabel=`${langname} `;
         }
 
-        return(<button onClick={function(){onChange(lang)}} {...active}
+        return(<button onClick={function(){changeLanguage(lang)}} {...active}
                     className="tdb__dropdown__button" key={lang} > {langname}</button>
-                    )
-       /* return (<DropdownItem
-                    key={lang}
-                    //disabled={disabled}
-                    {...active}
-                    onClick={function(){onChange(lang)}}>
-                    {langname}</DropdownItem>)*/
-    })
+                    )})
 
-   //origin disabled={disabled}
     return (
-        <>
-        {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        {!showedit && 
-            <div className="tdb__dropdown" >
-                <button className="tdb__dropdown__button tdb__dropdown__button--top nav__main__link" onClick={toggle}>
-                    {currentLabel} <i className="fa fa-caret-down"></i>
-                </button>
-                <div className={dropdownContent}>
-                  {entries}
-                </div>
+        <>       
+         <button className={buttonClass} onClick={setEditLanguage}>{EDIT_THIS_VERSION}
+         </button>
+         <div className="tdb__dropdown" >
+            <button className="tdb__dropdown__button tdb__commit__bar--drop" onClick={toggle}>
+                {currentLabel } <i className="fa fa-caret-down"></i>
+            </button>
+            <div className={dropdownContent}>
+              {entries}
             </div>
-
-          }
+        </div>
         </>
     )
 }
