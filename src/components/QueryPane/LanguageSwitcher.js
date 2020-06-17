@@ -52,11 +52,20 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
 
 /*
   <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
+        <Row>
+        {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
+        <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
             <DropdownToggle caret>
                 {currentLabel}
             </DropdownToggle>
             <DropdownMenu>
                 {entries}
             </DropdownMenu>
-        </Dropdown>*/
+
+        </Dropdown>
+        
+        </Row>
+    )
+}*/
+
 //{showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
