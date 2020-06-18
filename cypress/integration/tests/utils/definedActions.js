@@ -1,5 +1,5 @@
 import * as tabs from "../../../../src/views/Pages/constants.pages"
-import { CREATE_SCHEMA, SHOW_ALL_SCHEMA_ELEMENTS, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST } from "./queryList"
+import { CREATE_SCHEMA, SHOW_CLASSES_PROPERTIES, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST } from "./queryList"
 
 export const flickThroughSchemaTabs = async () => {
 	await cy.get('#terminus-console-page').find('a').contains(tabs.PROPERTIES_TAB).click()
@@ -13,7 +13,7 @@ export const flickThroughSchemaTabs = async () => {
 }
 
 export const getSchemaElements = async () => {
-	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(SHOW_ALL_SCHEMA_ELEMENTS)
+	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(SHOW_CLASSES_PROPERTIES)
     await cy.get('.query-pane-container').find('button').contains('Run Query').click()
     cy.wait(2000);
 	await cy.get('.dropdown').find('button').contains('Graph').click({force:true})

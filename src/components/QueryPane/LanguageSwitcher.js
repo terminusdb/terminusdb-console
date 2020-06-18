@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN, TOOLBAR_CSS} from './constants.querypane'
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row} from "reactstrap";
 
 export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages, editable, onChange, onEdit}) => {
     if(!languages) return null
@@ -34,17 +34,17 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
 
    //origin disabled={disabled}
     return (
-        <>
+        <Row>
         {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        {!showedit && <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
+        <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
             <DropdownToggle caret>
                 {currentLabel}
             </DropdownToggle>
             <DropdownMenu>
                 {entries}
             </DropdownMenu>
-        </Dropdown>}
-        </>
+        </Dropdown>
+        </Row>
     )
 }
 
