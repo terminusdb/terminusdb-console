@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {EDIT_THIS_VERSION, LANGUAGE_NAMES, LANGUAGE_DROPDOWN, TOOLBAR_CSS} from './constants.querypane'
+import {Dropdown} from '../Form/Dropdown'; 
 
 export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages, editable, onChange, onEdit}) => {
     if(!languages) return null
@@ -38,7 +39,15 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
         <>       
          <button className={buttonClass} onClick={setEditLanguage}>{EDIT_THIS_VERSION}
          </button>
-         <div className="tdb__dropdown" >
+        <Dropdown toggle={toggle} isOpen={dropdownOpen} title={currentLabel } className="nav__main__link tdb__commit__bar--drop" >                   
+           {entries}
+        </Dropdown>           
+        </>
+    )
+}
+
+/*
+ <div className="tdb__dropdown" >
             <button className="tdb__dropdown__button tdb__commit__bar--drop" onClick={toggle}>
                 {currentLabel } <i className="fa fa-caret-down"></i>
             </button>
@@ -46,11 +55,6 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
               {entries}
             </div>
         </div>
-        </>
-    )
-}
-
-/*
   <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
         <Row>
         {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}

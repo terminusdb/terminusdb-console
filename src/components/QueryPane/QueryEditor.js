@@ -106,11 +106,14 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     rowHeight: "query-pane-dropdown-row"*/
 
 
-    if(editable && error) console.log(error)
+
+    //if(editable && error) console.log(error)
     return(<div className="tdb__qpane__editor" >
             <div className="tdb__commit__bar" >
                 <div className="tdb__commit__bar__input">
-                    <input id="commitMessage" type="text"/>
+                    {editable && 
+                        <input onBlur={(evt) => {setCommitMsg(evt.target.value)}} id={COMMIT_BOX.input.id} type="text" placeholder = { COMMIT_BOX.input.placeholder }/>
+                    }
                 </div>
                 <div className="tdb__commit__bar__tools">
                     {languages &&
@@ -147,7 +150,8 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         {children}
 
         {/*(editable) &&
-            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} id={COMMIT_BOX.input.id}
+            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} 
+                id={COMMIT_BOX.input.id}
                 placeholder = { COMMIT_BOX.input.placeholder }>
         */}
 
