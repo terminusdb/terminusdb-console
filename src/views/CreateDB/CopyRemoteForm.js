@@ -6,8 +6,9 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT 
 import { COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM } from "./constants.createdb"
 import { goDBHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
-import { TCForm } from  "../../components/Form/FormComponents"
+import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
+import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 
 
 export const CopyRemoteForm = () => {
@@ -81,7 +82,7 @@ export const CopyRemoteForm = () => {
         })
     }
 
-    let buttons = COPY_REMOTE_FORM.buttons
+    let buttons = (user ? COPY_REMOTE_FORM.buttons : false)
 
     return (<>
         {(loading || updateLoading) && 
@@ -89,6 +90,11 @@ export const CopyRemoteForm = () => {
         }
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
+        }
+        {!user && 
+            <TCSubmitWrap>
+                <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
+            </TCSubmitWrap>
         }
         <TCForm 
             onSubmit={onClone} 

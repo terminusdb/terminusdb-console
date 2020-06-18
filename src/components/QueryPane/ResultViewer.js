@@ -8,7 +8,6 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) => {
 
     const [currentView, setView] = useState(viewConfig)
-
     /*
     to be review  I have to move from here
     */
@@ -22,13 +21,14 @@ export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) =
     const myviewer=viewer;
 
 
-    return (<>{bindings && type==="table" &&
-                <WOQLTable bindings={bindings} view={currentView} query={query} updateQuery={updateQuery} />
-              }
-              {bindings && type==="graph" &&
-                <WOQLGraph config={myviewer.config} dataProvider={myviewer} query={query} updateQuery={updateQuery}/>
-              }
-            </>
+    return (<>
+        {bindings && type==="table" &&
+            <WOQLTable bindings={bindings} view={currentView} query={query} updateQuery={updateQuery} />
+        }
+        {bindings && type==="graph" &&
+            <WOQLGraph config={myviewer.config} dataProvider={myviewer} query={query} updateQuery={updateQuery}/>
+        }
+    </>
     )
 }
 //{JSON.stringify(bindingsMy, null, 4)}

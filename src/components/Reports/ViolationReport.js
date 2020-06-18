@@ -55,6 +55,7 @@ const ViolationProperty = ({property, value}) => {
 }
 
 export const hasViolations = (err) => {
+    if(!err) return false
     if(!err.data && err.response && err.response.data) err.data = err.response.data
     if(err.data && err.data['terminus:witnesses']){
         return true

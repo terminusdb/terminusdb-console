@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useAuth0 } from "../../react-auth0-spa";
 import Loading from "../../components/Reports/Loading";
 import { WOQLClientObj } from "../../init/woql-client-instance";
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT } from "../../constants/identifiers"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_INFO, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import { COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM } from "./constants.createdb"
-import { goDBHome } from "../../components/Router/ConsoleRouter"
+import { goDBHome, goServerHome } from "../../components/Router/ConsoleRouter"
 import { APIUpdateReport } from "../../components/Reports/APIUpdateReport";
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { AccessControlErrorPage } from "../../components/Reports/AccessControlErrorPage"
 import { Container, Row } from "reactstrap";
-
+import { UnstableWarning } from "../../components/Reports/UnstableWarning"
 
 export const CopyLocalForm = () => {
     const {woqlClient, reconnectServer} = WOQLClientObj();
@@ -21,7 +21,10 @@ export const CopyLocalForm = () => {
     const { loading, user } = useAuth0();
     const [localDBs, setLocalDBs] = useState(dbl)
     const [updateLoading, setUpdateLoading] = useState(false);
-    const [report, setReport] = useState();
+    const [report, setReport] = useState({
+        status: TERMINUS_INFO, 
+        message: COPY_LOCAL_FORM.intro
+    })
     const [sourceID, setSourceID] = useState()
     const [details, setDetails] = useState({})
     const [newID, setNewID] = useState()
@@ -117,6 +120,7 @@ export const CopyLocalForm = () => {
         let cClient = woqlClient.copy()
         let abc = cClient.basic_auth()
         cClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
+        cClient.account(woqlClient.user_account())
         return cClient.clonedb(src, newID)
         .then(() => {
             let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (db: ${sourceID})`
@@ -148,6 +152,7 @@ export const CopyLocalForm = () => {
         {(loading || updateLoading) && 
             <Loading type={TERMINUS_COMPONENT} />
         }
+        <UnstableWarning feature="Cloning Databases" />
         {(report && report.error) && 
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
         }      
@@ -156,6 +161,7 @@ export const CopyLocalForm = () => {
             layout = {[2]}
             noCowDucks
             onChange={onChangeBasics} 
+            report={report}
             fields={fields}
             buttons={buttons} 
         />

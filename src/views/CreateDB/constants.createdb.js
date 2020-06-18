@@ -172,6 +172,7 @@ export const COPY_LOCAL_FORM = {
     detailsWrapperClassName: "copy-db-details-form",
     detailsHeaderClassName: "copy-db-details-header",
     detailsHeader: "",
+    intro: "TerminusDB allows you to clone whole databases, to create a brand new database with all the structure, history and contents intact.  Cloned databases are entirely new databases, a complete, independent copy, but they remain linked to the original - you can push and pull updates to the original version",
     cloneFailureMessage: "Failed to clone ",
     cloneSuccessMessage: "Successfully cloned ",
     actionText: "Copy Local Database",
