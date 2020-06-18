@@ -55,7 +55,6 @@ const APIUpdateSuccess  = ({message, time}) => {
 
 const APIUpdateWarning = ({message, error, time}) => {
     let txt = message + queryTimeDisplay(time)
-
     let vios = hasViolations(error)
     return (
         <Alert color="warning">

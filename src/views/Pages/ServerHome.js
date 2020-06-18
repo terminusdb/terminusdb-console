@@ -49,9 +49,9 @@ const ServerHome = (props) => {
         return (<TerminusDBSpeaks failure={ACCESS_FAILURE} />)
     }
 
-    let hasTutorials = true
-    let canManageUsers = true
-    let canManageServer = true
+    let hasTutorials = false
+    let canManageUsers = false
+    let canManageServer = false
     let sections = []
     let tabs = []
 
@@ -61,7 +61,7 @@ const ServerHome = (props) => {
     let user = woqlClient.user()
     //If the user is logged in as init admin user and there are no real user accounts, we get them to set one up...
     useEffect(() => {
-        if(user.id == "admin" && !user.author){
+        if(false && user.id == "admin" && !user.author){
             setLoading(true)
             let tClient = woqlClient.copy()//do not change internal client state
             tClient.db("terminus")
@@ -78,7 +78,7 @@ const ServerHome = (props) => {
         }
     }, [])
 
-    if(!user.author){
+    if(false && !user.author){
         sections.push({ className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE })
         tabs.push(<AddUserCommitLogID key="addcommitid" />)
     }
@@ -121,7 +121,7 @@ const ServerHome = (props) => {
     if(sections.length == 1) return (
         <SimplePageView >
             <div className={sections[0].className}>{sections[0].title}</div>
-            {sections[0].content}
+            {tabs}
         </SimplePageView>
     )
     let active = props.page
