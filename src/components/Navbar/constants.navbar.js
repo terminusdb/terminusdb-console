@@ -11,29 +11,6 @@ export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
 export const LOGIN_LABEL = 'Connect to hub'
 
-//CSS Styles
-export const LOGIN_BUTTON_CSS = "btn-margin"
-export const DROPDOWN_PROFILE_CSS = "dropdown-profile"
-
-export const NAV_CSS = {
-    dbDetails: "navbar-dbetails",
-    branchContainer: "navbar-branch",
-    timeContainer: "navbar-time",
-    historyContainer: "history-navigator-Collapsible",
-    historyRow: "nav-container",
-    homeCol: "navbar-home-col mb-2",
-    dbCol: "navbar-db-col",
-    loginCol: "mb-1 navbar-login-col",
-    toprow: "justify-content-start container-fluid navbar-toprow",
-    container: "nav-container",
-    profileImage: "nav-user-profile rounded-circle",
-    profileButton: "navbar-user-icon",
-    latest: "navbar-time-latest",
-    history: "navbar-time-history",
-    oldTimeContainer: "navbar-old-time",
-}
-
-
 export const SLIDER_CSS = {
     closedButton: "ml-auto",
     activeText: "Hide",

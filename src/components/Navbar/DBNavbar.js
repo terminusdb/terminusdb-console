@@ -1,11 +1,10 @@
-//import {  Nav,NavItem, NavLink, Row, Col } from "reactstrap";
 import React, { useState, useEffect,Fragment } from "react";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { NavLink } from "react-router-dom";
 import { trimContent } from "../../utils/helperFunctions"
 import ToggleButton from 'react-toggle-button'
 import { getDBPageRoute } from "../Router/ConsoleRouter"
-import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, SLIDER_CSS, NAV_CSS} from './constants.navbar'
+import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, SLIDER_CSS} from './constants.navbar'
 import { DBContextObj } from "../Query/DBContext"
 import {BranchSelector} from "../History/BranchSelector"
 import { printts } from "../../constants/dates";
