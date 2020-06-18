@@ -1,6 +1,6 @@
 import React from "react"
 import { WOQLClientObj } from "../../init/woql-client-instance"
-import { NavLink as RouterNavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { SERVER_ROUTE} from "../../constants/routes"
 
 export const ServerNavbar = (props) => {
@@ -13,9 +13,9 @@ export const ServerNavbar = (props) => {
 
     return (
         <div className="nav__main__left">
-            <RouterNavLink to={SERVER_ROUTE} className="nav__main__logo" onClick = {handleClick}>
+            <NavLink to={SERVER_ROUTE} className="nav__main__logo" onClick = {handleClick}>
                  <img src="https://terminusdb.com/img/logos/logo.svg" alt="Terminus DB logo"/>
-            </RouterNavLink>         
+            </NavLink>         
         </div>      
       )
 }
