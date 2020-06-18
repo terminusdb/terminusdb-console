@@ -9,9 +9,7 @@ export const Dropdown = ({className, children, title, isOpen, toggle }) => {
     }
 
     const extrClass= className || ''
-
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
-  
 
     return( <OutsideClickHandler onOutsideClick={onOutsideClick}>   
                 <div className="tdb__dropdown" >

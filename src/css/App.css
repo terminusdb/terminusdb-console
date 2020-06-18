@@ -59,6 +59,9 @@ div.db-view-cards {
     border: 2px #00C08B solid;
     border-radius: 25px
 }
+.commit-traveller-commit-col{
+  max-width: 350px;
+}
 
 .square {
   position: relative;
@@ -72,6 +75,8 @@ div.db-view-cards {
 }
 
 .contentSquare {
+  font-size: 20px;
+  font-weight: 600;
   position: absolute;
   width: 100%;
   height: 100%;

@@ -29,10 +29,10 @@ ${COMMIT_VIEW.messageLabel}: ${cmsg}`
     return (
         <div title={title}>
             <div className={COMMIT_VIEW.headerClassName}>
-                { ts + " - " + props.commit.author}
+                <p className="commit__header__test">{ ts + " - " + props.commit.author}</p>
             </div>
             <div className={COMMIT_VIEW.messageClassName}>
-                {cmsg}
+                <p className="commit__body__test"> {cmsg}</p>
             </div>
         </div>
     )
