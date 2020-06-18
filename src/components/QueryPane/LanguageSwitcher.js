@@ -45,31 +45,3 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
         </>
     )
 }
-
-/*
- <div className="tdb__dropdown" >
-            <button className="tdb__dropdown__button tdb__commit__bar--drop" onClick={toggle}>
-                {currentLabel } <i className="fa fa-caret-down"></i>
-            </button>
-            <div className={dropdownContent}>
-              {entries}
-            </div>
-        </div>
-  <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
-        <Row>
-        {showedit  && <Button className={TOOLBAR_CSS.edit} onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
-        <Dropdown  isOpen={dropdownOpen} toggle={toggle} className = { TOOLBAR_CSS.dropdown }>
-            <DropdownToggle caret>
-                {currentLabel}
-            </DropdownToggle>
-            <DropdownMenu>
-                {entries}
-            </DropdownMenu>
-
-        </Dropdown>
-        
-        </Row>
-    )
-}*/
-
-//{showedit  && <Button onClick={setEditLanguage}>{EDIT_THIS_VERSION}</Button>}
