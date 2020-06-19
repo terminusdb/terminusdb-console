@@ -1,4 +1,4 @@
-import { createLocalDB, addSchema, removeLocalDB, addDocuments } from "./utils/dbLifeCircle"
+import { createLocalDB, addSchema, removeLocalDB, addDocuments,runQueries } from "./utils/dbLifeCircle"
 import { flickThroughSchemaTabs, getSchemaElements, getDocumentsMetaData } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { config } from "./utils/config"
@@ -100,7 +100,8 @@ context('Create and delete a database locally', () => {
             .contains('Query')
             .click().then(() => {
     			cy.wait(1000)
-    			getDocumentsMetaData()
+    			//getDocumentsMetaData()
+                runQueries(database)
             })
         })
 

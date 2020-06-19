@@ -30,7 +30,7 @@ export const BIKES_CSV = 'WOQL.get(' + '\n' +
 	'.as("End station number", "v:End_ID")' + '\n' +
 	'.as("Bike number", "v:Bike")' + '\n' +
 	'.as("Member type", "v:Member_Type")' + '\n' +
-').remote("https://terminusdb.com/t/data/bikeshare/2011-capitalbikeshare-tripdata.csv")'
+').remote("https://terminusdb.com/t/data/bike_tutorial.csv")'
 
 /**
  * Wrangling the imported data to make it line up nicely
@@ -66,3 +66,12 @@ export const BIKES_INSERTS = 'WOQL.and(' + '\n' +
         '.label("v:End_Station_Label"),' + '\n' +
     'WOQL.insert("v:Bike_URL", "Bicycle")' + '\n' +
         '.label("v:Bike_Label"))'
+
+
+export const BIKES_SELECT_DOCUMENTS = 'WOQL.select("v:Start", "v:Start_Label", "v:End", "v:End_Label").and(' + '\n' +
+	'WOQL.triple("v:Journey", "type", "scm:Journey"),' + '\n' +
+	'WOQL.triple("v:Journey", "start_station", "v:Start"),' + '\n' +
+	'WOQL.opt().triple("v:Start", "label", "v:Start_Label"),' + '\n' +
+	'WOQL.triple("v:Journey", "end_station", "v:End"),' + '\n' +
+	'WOQL.opt().triple("v:End", "label", "v:End_Label"),' + '\n' +
+	'WOQL.triple("v:Journey", "journey_bicycle", "v:Bike"))' 

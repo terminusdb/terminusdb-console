@@ -31,7 +31,17 @@ export const addDocuments = async (database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(2000);
+    cy.wait(10000);
+}
+
+export const runQueries = async(database) => {
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
+    cy.wait(1000);
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
+    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
+    cy.wait(1000);
+    await cy.get('.dropdown').find('button').contains('Graph').click({force:true})
+	cy.wait(3000)
 }
 
 export const createBranch = async (bid, msg) => {
@@ -40,8 +50,4 @@ export const createBranch = async (bid, msg) => {
     cy.get('textarea[id="commit"]').focus().type(msg);
     await cy.get('.tcf-form').find('button').contains('Create New Branch').click()
     cy.wait(2000);
-}
-
-export const loadCSVs = () => {
-
 }
