@@ -7,7 +7,7 @@ import { WOQLClientObj } from "../../init/woql-client-instance";
 import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {ResultQueryPane} from './ResultQueryPane';
 import TerminusClient from '@terminusdb/terminusdb-client';
-import {QUERY_PANEL_TITLE} from "./constants.querypane"
+import {QUERY_PANEL_TITLE,QUERY_EDITOR_LABEL} from "./constants.querypane"
 import {DBContextObj} from "..//Query/DBContext";
 
 /*
@@ -27,6 +27,7 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
     const [showLanguage, setShowLanguage] = useState(false);   
     const [showContent, setShowContent] = useState("");
     const [selectedTab, changeTab] = useState(0);
+    const [error, setError] = useState(false);
     /*
     *onChange will be update
     */
@@ -42,14 +43,18 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
     const onSelect=(k)=>{
         changeTab(k)
     }
-    //const disabled = bindings ? {} : {disabled:true};
 
+    //
+    const errorObj=error===false ? {currentReport:report} : {type:"warning" , message:`${QUERY_EDITOR_LABEL.syntaxErrorMessage} ${error.message}`}
+    const errorChild=error===false ? "" : <>{QUERY_EDITOR_LABEL.syntaxErrorMessage} <span className="report__text--bold">{error.message}</span></>
     return(
         <>
-            <ReportWrapper currentReport={report} />          
+            <ReportWrapper {...errorObj}>{errorChild}</ReportWrapper>         
             <Tabs selected={selectedTab}  onSelect={onSelect} id="query_tabs">
                 <Tab label={QUERY_PANEL_TITLE}>
-                    <QueryEditor 
+                    <QueryEditor
+                        setMainError={setError}
+                        mainError={error}
                         baseLanguage={baseLanguage}
                         setBaseLanguage={setBaseLanguage}
                         content={content}

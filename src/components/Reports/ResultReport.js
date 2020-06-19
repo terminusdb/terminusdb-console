@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect,Fragment } from "react"
 import { Alert, Container } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
@@ -42,7 +42,7 @@ export const ResultReport = ({report}) => {
 
     if(!currentReport) return null
     return (
-        <Container>
+        <Fragment>
             {currentReport.busy &&
                 <Loading />
             }
@@ -52,10 +52,11 @@ export const ResultReport = ({report}) => {
             {!(currentReport.busy || currentReport.error) &&
                 getSuccessReport()
             }
-        </Container>
+        </Fragment>
     )
 }
 
+//<Container>
 const ImpotentQuery = ({report, time}) => {
     let txt = (time ? " (" + time + ")" : "")
 

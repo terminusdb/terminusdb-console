@@ -8,7 +8,7 @@ import {Alert} from "reactstrap";
 /**
  * Controls the display of query viewer and editor
  */
-export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, submit,updateQuery}) => {
+export const QueryEditor = ({query, setMainError, mainError, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, submit,updateQuery}) => {
     //const qeclass = className || TOOLBAR_CSS.container
     editable = typeof editable != "undefined" ? editable : true
     submit = submit || QUERY_SUBMIT
@@ -17,16 +17,22 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     */
     const [containsUpdate, setContainsUpdate] = useState(false);
 
-    const [error, setError] = useState(false);
+    //const [error, setCurrentError] = useState(mainError);
 
     const [commitMsg, setCommitMsg] = useState();
+
+    const setError =(err)=>{
+        console.log(err)
+        //setCurrentError(err)
+        setMainError(err);
+    }
 
     function onBlur(value){
         //const value=editor.doc.getValue();
         saveContent(value);
-        return checkContent()
+        checkContent();
+        //sendMainError();
     }
-
 
     /*
     * onBlur
@@ -35,37 +41,34 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
         //sets errors internally if doesn't work
         setError(false)
         if(content){
-            let woql = makeWOQLFromString(content, baseLanguage, setError)
-            if(woql) {
+            try{
+                const woql = makeWOQLFromString(content, baseLanguage)
                 /*
                 * check if the query is an update query and need a commitSMS
                 */
                 setContainsUpdate(woql.containsUpdate())
+                return woql
+            }catch(err){
+                console.log(err)
+                setError(err)
+                return false;
             }
-            return woql
+            
         }
         return false
     }
 
-    function sendQuery(){
+    const sendQuery=()=>{
         let woql = checkContent()
         if(woql){
             if(updateQuery) updateQuery(woql, commitMsg)
         }
     }
 
-    //let currentCont=''
-
-    /*function updateContent(cont){
-        //setContent(cont)
-        //currentCont=cont;
-        setError(false)
-    }*/
-
     /*
     * change the current editable language
     */
-    function newLanguageVersion(lang){
+    const newLanguageVersion=(lang)=>{
         /*
         * change the edit language and set the content like editable
         */
@@ -78,7 +81,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
     /*
     * the current language visualized
     */
-    function showLanguageVersion(lang){
+    const showLanguageVersion=(lang)=>{
         if(lang == baseLanguage){
             setShowLanguage(false)
             setShowContent("")
@@ -87,27 +90,20 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
                 setShowLanguage(lang)
                 setShowContent("")
             }else{
-                let woql = makeWOQLFromString(content, baseLanguage)
-                if(woql){
-                    setShowLanguage(lang)
-                    setShowContent(makeWOQLIntoString(woql, lang))
-               }
+                try{
+                    let woql = makeWOQLFromString(content, baseLanguage)
+                    if(woql){
+                        setShowLanguage(lang)
+                        setShowContent(makeWOQLIntoString(woql, lang))
+                    }
+                }catch(err){
+                    console.log(err)
+                    setError(err)
+                }
             }
         }
     }
 
-/*
- containerRow: "query-pane-toolbar",
-    edit: "query-pane-edit",
-    row: "query-pane-toolbar-row",
-    queryPaneControls: "query-pane-controls",
-    runQuery: "run-query-button",
-    dropdown:"query-pane-menu",
-    rowHeight: "query-pane-dropdown-row"*/
-
-
-
-    //if(editable && error) console.log(error)
     return(<div className="tdb__qpane__editor" >
             <div className="tdb__commit__bar" >
                 <div className="tdb__commit__bar__input">
@@ -118,7 +114,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
                 <div className="tdb__commit__bar__tools">
                     {languages &&
                     <LanguageSwitcher
-                        active={!error}
+                        active={!mainError}
                         baseLanguage={baseLanguage}
                         showLanguage={showLanguage}
                         languages={languages}
@@ -143,18 +139,7 @@ export const QueryEditor = ({query, baseLanguage, setBaseLanguage, content, save
             <CodeViewer text={showContent} language={showLanguage}/>
         }
 
-        {(editable && error) &&
-            <Alert color="warning">{QUERY_EDITOR_LABEL.syntaxErrorMessage}</Alert>
-        }
-
         {children}
-
-        {/*(editable) &&
-            <textarea onChange={(editor, data, value) => {setCommitMsg(editor.target.value)}} 
-                id={COMMIT_BOX.input.id}
-                placeholder = { COMMIT_BOX.input.placeholder }>
-        */}
-
         </div>
     )
 }

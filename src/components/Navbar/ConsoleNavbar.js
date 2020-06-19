@@ -14,11 +14,10 @@ export const ConsoleNavbar = (props) => {
 
     const toggleNavBar = () => setIsOpen(!isOpen);
     const [isTopOpen,setTopDropdownOpen] =useState(false);
-
     const toggleTop = () => setTopDropdownOpen(prevState => !prevState);
-  
     const topmenu = isTopOpen===true ? "nav__main__center  nav__main__center--show" : "nav__main__center nav__main__center--hide"
 
+    const showUnderCostruction= process.env.TERMINUSDB_ENV==="dev" ? false : true;
     return (
         <Fragment>
         <header className="console__page__header">
@@ -37,11 +36,16 @@ export const ConsoleNavbar = (props) => {
                     }
                 </ul>
                 <div className="nav__main__right">
-                   <UnderConstruction 
-                        buttonClassName="tdb__button__base nav__main__login" 
-                        buttonColor={'white'} 
-                        buttonText={LOGIN_LABEL}
-                        action="Login in HUB"/>
+                    {showUnderCostruction &&
+                       <UnderConstruction 
+                            buttonClassName="tdb__button__base nav__main__login" 
+                            buttonColor={'white'} 
+                            buttonText={LOGIN_LABEL}
+                            action="Login in HUB"/>
+                    }
+                    {showUnderCostruction===false &&
+                      <Login/>
+                    }
                 </div>
           </nav>        
         </header>

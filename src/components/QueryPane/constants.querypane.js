@@ -55,7 +55,7 @@ export const COMMIT_BOX = {
 
 
 export const QUERY_EDITOR_LABEL ={
-    syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
+    syntaxErrorMessage:"Parse error: Syntax error "
 }
 
 export const TOOLBAR_CSS = {
