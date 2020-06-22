@@ -2,7 +2,7 @@ import { BIKES_CREATE_SCHEMA_QUERY, BIKES_CSV, BIKES_WRANGLES, BIKES_INSERTS, BI
 import { POLITICAL_DATA_SCHEMA_QUERY, POLITICAL_DATA_CSV, POLITICAL_DATA_WRANGLES, POLITICAL_DATA_INSERTS } from "../constants/political-data-constants"
 
 
-export const config = [/*{
+export const config = [{
 		"name": "bikes-tutorial",
 		"addSchema": BIKES_CREATE_SCHEMA_QUERY,
 		"loadDocuments": {
@@ -13,7 +13,7 @@ export const config = [/*{
 		"queries": {
 			"selectDocuments": BIKES_SELECT_DOCUMENTS
 		}
-	}, */
+	}, 
 	{
 		"name": "political-tutorial",
 		"addSchema": POLITICAL_DATA_SCHEMA_QUERY,

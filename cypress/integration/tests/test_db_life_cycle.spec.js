@@ -9,7 +9,12 @@ import { config } from "./utils/config"
 *   3.	Views provides schema views - Classes| Properties | OWL | URL Prefixes| Graphs
 *   4.	Query to view all schema elements in Table | Graph view
 *   5.  Load documents
-*   6.	Delete Database
+*   6.	View Documents
+*   7.  Query all documents
+*   8.  Query to select
+*   9.  Swap between table| Graph View
+*   10. Delete Database
+*   11. Perform the above 10 steps for political-data 
 */
 
 context('Create and delete a database locally', () => {

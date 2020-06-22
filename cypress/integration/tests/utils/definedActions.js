@@ -29,20 +29,21 @@ export const getDocumentsMetaData = async () => {
 }
 
 export const clickOnBranch = async(bid) => {
-	await cy.get('#terminus-console-page').find('button').contains(bid).click()
+	cy.wait(1000)
+	await cy.get('.tdb__dropdown__content').find('button').contains(bid).click()
 	cy.wait(1000)
 }
 
 export const addNewDocTypes = async() => {
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(ADD_DOCTYPE_TEST)
-    cy.get('.tdb__qpane__editor').find('textarea[id="commitMessage"]').focus().type('Adding new doctype scooter to test branching ...')
+    cy.get('.tdb__commit__bar__input').find('input[id="commitMessage"]').focus().type('Adding new doctype scooter to test branching ...')
 	await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
 }
 
 export const addSecondNewDocTypes = async () => {
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(ADD_DOCTYPE_SECOND_TEST)
-	cy.get('.tdb__qpane__editor').find('textarea[id="commitMessage"]').focus().type('Adding a second doctype skates to test branching ...')
+	cy.get('.tdb__commit__bar__input').find('input[id="commitMessage"]').focus().type('Adding a second doctype skates to test branching ...')
 	await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
 }

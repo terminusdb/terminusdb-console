@@ -1,6 +1,7 @@
 import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "./utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "./utils/definedActions"
+import { config } from "./utils/config"
 
 /*
 *	1.	Create a new db
@@ -14,11 +15,12 @@ import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTyp
 */
 
 context('Test commits and branching', () => {
-   let dbid, bid, commit_msg, masterBranchId='master';
+   let bid, commit_msg, masterBranchId='master';
+   let database = config[0]
+   let dbid = config[0].name + Date.now();
 
    before(() => {
        cy.visit('http://localhost:3005');
-       dbid=`mydb_${Date.now()}`
    })
 
    it('Create database', () => {
@@ -39,7 +41,7 @@ context('Test commits and branching', () => {
         .contains('Query')
         .click().then(() => {
 			cy.wait(1000)
-            addSchema(dbid)
+            addSchema(database)
         })
     })
 
@@ -79,14 +81,14 @@ context('Test commits and branching', () => {
 
 	it('View Branch List', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(bid)
         })
     })
 
-	it('Query to perform a commits in new branch', () => {
+	it('Query to perform a commit in new branch', () => {
         cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
@@ -97,7 +99,7 @@ context('Test commits and branching', () => {
         })
     })
 
-	it('Query to perform a second commits in new branch', () => {
+	it('Query to perform a second commit in new branch', () => {
         cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
@@ -121,7 +123,7 @@ context('Test commits and branching', () => {
 
 	it('View Master Branch', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(masterBranchId)
@@ -130,7 +132,7 @@ context('Test commits and branching', () => {
 
 	it('View New Branch', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(bid)
