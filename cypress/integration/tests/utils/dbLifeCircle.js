@@ -32,6 +32,13 @@ export const addDocuments = async (database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(10000);
+    cy.wait(2000);
+    cy.get('#terminus-console-page')
+    .find('a')
+    .contains('Documents')
+    .click({force: true}).then(() => {
+        cy.wait(1000)
+    })
 }
 
 export const runQueries = async(database) => {

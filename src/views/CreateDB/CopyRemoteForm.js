@@ -25,13 +25,13 @@ export const CopyRemoteForm = () => {
 
     let update_start = Date.now()
 
-    let basicInfo = {}  
-    let fields = COPY_REMOTE_FORM.fields 
+    let basicInfo = {}
+    let fields = COPY_REMOTE_FORM.fields
 
     //build values and options from database options
     COPY_REMOTE_FORM.fields.map((item, index) => {
         basicInfo[item.id] = item.value || ""
-    })   
+    })
 
     function onChangeBasics(field_id, value){
         if(field_id == "dbsource"){
@@ -45,24 +45,24 @@ export const CopyRemoteForm = () => {
         update_start = Date.now()
         setUpdateLoading(true)
 
-        let nClient = woqlClient.copy() 
+        let nClient = woqlClient.copy()
 
         if(details.user && details.password){
             nClient.remote_auth({type: "basic", key: details.password, user: details.user})
         }
         let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf("/")+1)
         let src = {
-            remote_url: sourceURL, 
-            label: details.name || newid, 
+            remote_url: sourceURL,
+            label: details.name || newid,
         }
-        if(details.description) src.comment = details.description 
+        if(details.description) src.comment = details.description
         nClient.account(woqlClient.user_account())//create new db in current user's account
         return nClient.clonedb(src, newid)
         .then(() => {
             let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterCreate(newid, rep)  
+            setReport(rep)
+            afterCreate(newid, rep)
         })
         .catch((err) => {
             let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
@@ -82,27 +82,28 @@ export const CopyRemoteForm = () => {
         })
     }
 
-    let buttons = (user ? COPY_REMOTE_FORM.buttons : false)
+    //let buttons = (user ? COPY_REMOTE_FORM.buttons : true)
+    let buttons = COPY_REMOTE_FORM.buttons
 
     return (<>
-        {(loading || updateLoading) && 
+        {(loading || updateLoading) &&
             <Loading type={TERMINUS_COMPONENT} />
         }
-        {(report && report.error) && 
+        {(report && report.error) &&
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
         }
-        {!user && 
+        {/*!user &&
             <TCSubmitWrap>
                 <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
             </TCSubmitWrap>
-        }
-        <TCForm 
-            onSubmit={onClone} 
+        */}
+        <TCForm
+            onSubmit={onClone}
             layout = {[1, 2, 2, 1]}
             noCowDucks
-            onChange={onChangeBasics} 
+            onChange={onChangeBasics}
             fields={fields}
-            buttons={buttons} 
+            buttons={buttons}
         />
     </>)
 }
