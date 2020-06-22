@@ -27,8 +27,8 @@ export const Merge = () => {
 
     let merge_fields = MERGE_BRANCH_FORM.fields.map((item) => {
         if(item.id == "target") item.inputElement.options = getBranchOptions()
-        return item    
-    }) 
+        return item
+    })
 
     let update_start = Date.now()
 
@@ -47,19 +47,19 @@ export const Merge = () => {
         return bopts
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         setSourceValues({
             branch: branch,
             ref: ref || "head",
             time: (consoleTime ? printts(consoleTime) : "now")
         })
-    }, [branch, ref, consoleTime])  
+    }, [branch, ref, consoleTime])
 
     function onCreate(){
-        let frombase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch)) 
+        let frombase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch))
         setLoading(true)
         update_start = Date.now()
-        let nClient = woqlClient.copy() 
+        let nClient = woqlClient.copy()
         nClient.ref(false)
         nClient.checkout(values.target)
         let abc = nClient.basic_auth()
@@ -72,8 +72,8 @@ export const Merge = () => {
         .then(() => {
             let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} into branch ${values.target}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterCreate(values.target)  
+            setReport(rep)
+            afterCreate(values.target)
         })
         .catch((err) => {
             let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${values.target} `
@@ -81,7 +81,7 @@ export const Merge = () => {
         })
         .finally(() => {
             setLoading(false)
-        })        
+        })
     }
 
     function onUpdate(key, val){
@@ -93,36 +93,36 @@ export const Merge = () => {
         updateBranches()
     }
 
-    //let btns = MERGE_BRANCH_FORM.buttons
-    let btns = (user ? MERGE_BRANCH_FORM.buttons : false)
+    let btns = MERGE_BRANCH_FORM.buttons
+    // let btns = (user ? MERGE_BRANCH_FORM.buttons : false)
 
     if(report && report.status == TERMINUS_SUCCESS){
         return (<TerminusDBSpeaks report={report} />)
     }
+
     return (<>
-        {loading && 
+        {loading &&
             <Loading type={TERMINUS_COMPONENT} />
         }
-        {!user && 
+        {/*!user &&
             <TCSubmitWrap>
                 <UnderConstruction action={MERGE_BRANCH_FORM.actionText} />
             </TCSubmitWrap>
-        }
-        <TCForm 
+        */}
+        <TCForm
             layout = {[3]}
             fields={MERGE_SOURCE_FORM.fields}
             values={sourceValues}
             report={{status: TERMINUS_INFO, message: MERGE_SOURCE_FORM.infoMessage } }
         />
-        <TCForm 
-            onSubmit={onCreate} 
-            report={report} 
+        <TCForm
+            onSubmit={onCreate}
+            report={report}
             layout = {[2, 1]}
             onChange={onUpdate}
             fields={merge_fields}
             values={values}
-            buttons={btns} 
+            buttons={btns}
         />
     </>)
 }
-
