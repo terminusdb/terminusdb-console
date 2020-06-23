@@ -20,7 +20,8 @@ export const getSchemaElements = async () => {
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(SHOW_CLASSES_PROPERTIES)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
-	await cy.get('.tdb__dropdown').find('button').contains('Graph').click({force:true})
+	await cy.get('.tdb__dropdown').find('button').find('span').contains('Table').click({force:true})
+    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click({force:true})
 	cy.wait(1000)
 }
 
@@ -28,7 +29,8 @@ export const getDocumentsMetaData = async () => {
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(DOCUMENT_META_DATA)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
-	await cy.get('.tdb__dropdown').find('button').contains('Graph').click({force:true})
+	await cy.get('.tdb__dropdown').find('button').find('span').contains('Table').click({force:true})
+    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click({force:true})
 	cy.wait(1000)
 }
 

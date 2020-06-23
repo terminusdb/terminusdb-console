@@ -38,6 +38,7 @@ context('Create and delete a database locally', () => {
             })
         })
 
+
         /***** Add schema ****/
         it('Add Schema', async () => {
             cy.server()
@@ -46,12 +47,11 @@ context('Create and delete a database locally', () => {
             await cy.get('#nav_query').click();
             cy.wait(1000)
             await addSchema(database);
-            //console.log("AFTER AWAIT")
         })
 
 
         /***** View schema ****/
-        it('View Schema tabs', () => {
+        /*it('View Schema tabs', () => {
             cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -60,7 +60,8 @@ context('Create and delete a database locally', () => {
     			cy.wait(1000)
                 flickThroughSchemaTabs()
             })
-        })
+        })*/
+
 
         /***** Query Schema Elements  ****/
         it('Query All Schema Elements', () => {

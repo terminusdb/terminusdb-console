@@ -1,4 +1,9 @@
+import { flickThroughSchemaTabs } from "./definedActions"
+
 export const createLocalDB = async (dbId) =>{
+    cy.server().route("POST", `**/db/admin/${dbId}`).as('createDB');
+    cy.server().route("POST", `**/graph/admin/${dbId}/local/branch/master/schema/main`).as('createGraph');
+
     await cy.get("#create_db").click()
     await cy.get("#create_db_local").click()
 
@@ -7,6 +12,9 @@ export const createLocalDB = async (dbId) =>{
     cy.get("#description").focus().type(dbId);
 
     await cy.get('form').find("button").contains('Create New Database').click()
+    
+    await cy.wait("@createDB").its('status').should('eq', 200);
+    await cy.wait("@createGraph").its('status').should('eq', 200);
 
     await cy.get('#loading').should('not.exist')
 }
@@ -21,7 +29,14 @@ export const removeLocalDB = async (dbId) =>{
 export const addSchema = async (database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.addSchema)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(2000);
+    cy.wait(5000);
+    await cy.get('#terminus-console-page')
+    .find('a')
+    .contains('Schema')
+    .click().then(() => {
+        cy.wait(1000)
+        flickThroughSchemaTabs()
+    })
 }
 
 export const addDocuments = async (database) => {
@@ -32,7 +47,6 @@ export const addDocuments = async (database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(10000);
-    cy.wait(2000);
     cy.get('#terminus-console-page')
     .find('a')
     .contains('Documents')
@@ -47,8 +61,8 @@ export const runQueries = async(database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(1000);
-    await cy.get('.tdb__dropdown').find('button').contains('Table').click({force:true})
-    await cy.get('.tdb__dropdown__button').find('button').contains('Graph').click({force:true})
+    await cy.get('.tdb__dropdown').find('button').find('span').contains('Table').click({force:true})
+    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click({force:true})
 	cy.wait(3000)
 }
 
