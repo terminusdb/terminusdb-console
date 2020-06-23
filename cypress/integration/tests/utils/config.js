@@ -13,7 +13,7 @@ export const config = [{
 		"queries": {
 			"selectDocuments": BIKES_SELECT_DOCUMENTS
 		}
-	}, 
+	}/*,
 	{
 		"name": "political-tutorial",
 		"addSchema": POLITICAL_DATA_SCHEMA_QUERY,
@@ -22,4 +22,4 @@ export const config = [{
 			"wrangles": POLITICAL_DATA_WRANGLES,
 			"inserts": POLITICAL_DATA_INSERTS
 		}
-	}]
+	}*/]

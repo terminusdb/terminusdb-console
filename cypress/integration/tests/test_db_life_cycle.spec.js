@@ -14,7 +14,7 @@ import { config } from "./utils/config"
 *   8.  Query to select
 *   9.  Swap between table| Graph View
 *   10. Delete Database
-*   11. Perform the above 10 steps for political-data 
+*   11. Perform the above 10 steps for political-data
 */
 
 context('Create and delete a database locally', () => {
@@ -40,16 +40,17 @@ context('Create and delete a database locally', () => {
         })
 
         /***** Add schema ****/
-        it('Add Schema', () => {
-            cy.wait(5000);
+        it('Add Schema', async () => {
             cy.get('#terminus-console-page')
             .find('a')
-            .contains('Query')
-            .click().then(() => {
-    			cy.wait(1000)
-                addSchema(database)
+            .contains('Query').should('be.visible').then(($button) => {
+                $button.click().then(() => {
+                    cy.wait(1000)
+                    addSchema(dbid)
+                })
             })
         })
+
 
         /***** View schema ****/
         it('View Schema tabs', () => {
