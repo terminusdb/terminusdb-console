@@ -7,7 +7,7 @@ import { HistoryNavigator } from "../History/HistoryNavigator"
 import { Login } from "./Login"
 import { UnderConstruction } from "../Reports/UnderConstruction"; 
 import {LOGIN_LABEL} from './constants.navbar';
-
+//import {TimeTraveler} from '../History/TimeTraveler'
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj();
     const [isOpen, setIsOpen] = useState(false);
@@ -50,7 +50,7 @@ export const ConsoleNavbar = (props) => {
           </nav>        
         </header>
          {(isOpen && woqlClient.db() )&& 
-            <HistoryNavigator/>                                        
+            <HistoryNavigator/>                                    
         }
         </Fragment>      
     )

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row } from "reactstrap";
 import { ResultViewer } from "./ResultViewer"
 import { TOOLBAR_CSS } from './constants.querypane'
 import { ViewChooser } from "./ViewChooser";
@@ -15,10 +14,10 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {
     }
 
 	return(
-		<Container className={qeclass}>
+		<div className="tdb__qpane__editor" >
             <ViewChooser updateView={updateView} view={currentView}/>
             <ResultViewer type={currentView} bindings={bindings} query={query}/>
-        </Container>
+        </div>
 	)
 }
 

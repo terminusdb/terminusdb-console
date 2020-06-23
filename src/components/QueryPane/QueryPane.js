@@ -49,9 +49,20 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
     const errorChild=error===false ? "" : <>{QUERY_EDITOR_LABEL.syntaxErrorMessage} <span className="report__text--bold">{error.message}</span></>
     return(
         <>
-            <ReportWrapper {...errorObj}>{errorChild}</ReportWrapper>         
-            <Tabs selected={selectedTab}  onSelect={onSelect} id="query_tabs">
-                <Tab label={QUERY_PANEL_TITLE}>
+           {/* <nav className="nav__main">
+                <ul className="nav__main__center">
+                    <li className="nav__main__item">
+                        <button className="nav__main__link">Query</button>
+                    </li>
+                    <li className="nav__main__item">
+                        <button className="nav__main__link">Result</button>
+                    </li>
+                </ul>
+            </nav> */}
+            <ReportWrapper {...errorObj}>{errorChild}</ReportWrapper>
+             
+          <Tabs selected={selectedTab}  onSelect={onSelect} id="query_tabs"> 
+                <Tab label={QUERY_PANEL_TITLE}> 
                     <QueryEditor
                         setMainError={setError}
                         mainError={error}
@@ -69,14 +80,14 @@ export const QueryPane = ({query,className,resultView, startLanguage, queryText}
                         languages={["js", "json", "python"]}>
                         <QueryLibrary library="editor"/>
                     </QueryEditor>
-                </Tab>
-                <Tab label="Result Viewer" {...disabled}>
+              </Tab> 
+              <Tab label="Result Viewer" {...disabled}> 
                     <ResultQueryPane 
                         resultView={resultView} 
                         bindings={bindings || []} 
                         query={woql} 
                         updateQuery={updateQuery}/>
-                    </Tab>
+                 </Tab>
             </Tabs>
         </>
     )

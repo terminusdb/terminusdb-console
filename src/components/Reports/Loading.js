@@ -9,7 +9,7 @@ const Loading = ({type,loadingMessage}) => {
             (type == TERMINUS_PAGE ? PAGE_LOADING : SITE_LOADING))
     ///
     return (
-        <div className="tdb__loading">
+        <div className="tdb__loading" id="loading">
             {loadingMessage && <span className="tdb__loading__message">{loadingMessage}</span>}
             <img src={LOADING_SPINNER} alt={IS_LOADING} />
         </div>

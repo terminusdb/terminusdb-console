@@ -15,6 +15,11 @@ export const Login = (props) => {
     const disabled= authError===true  ? {disabled:true} : {onClick : () => loginWithRedirect()} 
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
     
+    const onOutsideClick=()=>{
+        if(isOpen===true){
+            toggle(false)
+        }
+    }
     const logoutWithRedirect = () =>
         logout({
             returnTo: window.location.origin
@@ -26,7 +31,7 @@ export const Login = (props) => {
                 </button>
             }
             {isAuthenticated && user &&
-                <OutsideClickHandler>
+                <OutsideClickHandler onOutsideClick={onOutsideClick}>
                     <div className="tdb__dropdown" >
                         <button onClick={toggle} className="nav__main__profile__button"  aria-expanded="false">
                             <img src={user.picture}

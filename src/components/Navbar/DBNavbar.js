@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { trimContent } from "../../utils/helperFunctions"
 import ToggleButton from 'react-toggle-button'
 import { getDBPageRoute } from "../Router/ConsoleRouter"
-import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, SLIDER_CSS} from './constants.navbar'
+import {DOCUMENT_PAGE_LABEL, SCHEMA_PAGE_LABEL, QUERY_PAGE_LABEL, PAGES_ID} from './constants.navbar'
 import { DBContextObj } from "../Query/DBContext"
 import {BranchSelector} from "../History/BranchSelector"
 import { printts } from "../../constants/dates";
@@ -30,8 +30,6 @@ const GuardedDBNavbar = (props) => {
         return getDBPageRoute(woqlClient.db(), woqlClient.account(), page)
     }
 
-    let dbClass = (!props.isOpen ? SLIDER_CSS.openButton : SLIDER_CSS.closedButton)
-
     const handleToggle = (toggleTime) => {
         setToggleTime(!toggleTime)
         if(props.toggleTimeTravel) props.toggleTimeTravel()
@@ -56,8 +54,9 @@ const GuardedDBNavbar = (props) => {
                     <NavLink tag = {NavLink} className="nav__main__link"
                         to = {getNavURL("")}
                         activeClassName = "nav__main__link--selected"
-                        exact>
-                        {trimContent(dbmeta.title, 15)}                 
+                        exact
+                        id={PAGES_ID.NAV_DB_HOME}>
+                        {trimContent(dbmeta.title, 15)}                
                     </NavLink>
                 </li>
                 <li className="nav__main__item">
@@ -65,7 +64,8 @@ const GuardedDBNavbar = (props) => {
                         className="nav__main__link"
                         activeClassName = "nav__main__link--selected"
                         to = {getNavURL("document")}
-                        exact>
+                        exact
+                        id={PAGES_ID.NAV_DOCUMENTS}>
                         {DOCUMENT_PAGE_LABEL}
                     </NavLink>
                 </li>
@@ -74,7 +74,8 @@ const GuardedDBNavbar = (props) => {
                         className="nav__main__link"
                         to = {getNavURL("query")}
                         activeClassName = "nav__main__link--selected"
-                        exact>
+                        exact
+                        id={PAGES_ID.NAV_QUERY}>
                         {QUERY_PAGE_LABEL}
                     </NavLink>
                 </li>
@@ -84,7 +85,8 @@ const GuardedDBNavbar = (props) => {
                         tag = {NavLink}
                         to = {getNavURL("schema")}
                         activeClassName = "nav__main__link--selected"
-                        exact>
+                        exact
+                        id={PAGES_ID.NAV_SCHEMA}>
                         {SCHEMA_PAGE_LABEL}
                     </NavLink>
                 </li>

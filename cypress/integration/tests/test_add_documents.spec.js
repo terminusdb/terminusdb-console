@@ -21,27 +21,25 @@ context('Create database and add documents', () => {
 
    it('Create database', () => {
         cy.wait(2000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains(tabs.CREATEDB_TITLE)
-        .click().then(() => {
-            cy.wait(1000);
-            createLocalDB(dbid)
+        cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click().then(
+            async() => {       
+                cy.wait(1000);
+                await createLocalDB(dbid)
         })
     })
 
-    it('Add Schema', () => {
-        cy.wait(5000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-            addSchema(dbid)
-        })
+    it('Add Schema', async () => {
+        cy.server()
+        cy.route('/#/db/admin/**').as('newDB');
+        await cy.wait("@newDB");
+        await cy.get('#nav_query').click()
+        //.find('a').contains('Query').click().then(() => {
+        cy.wait(1000)
+        addSchema(dbid)
+              
     })
 
-	it('Add Documents', () => {
+	/*it('Add Documents', () => {
         cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('button')
@@ -92,6 +90,6 @@ context('Create database and add documents', () => {
             cy.wait(1000);
             removeLocalDB(dbid)
         })
-    })
+    })*/
 
 })

@@ -11,8 +11,8 @@ export const createLocalDB = async (dbId) =>{
      cy.get("#description").focus().type(dbId);
 
      await cy.get('form').find("button").contains('Create New Database').click()
-
      cy.wait(2000);
+     await cy.get('#loading').should('not.exist')
      /*
      query the termunus db ...
      */
