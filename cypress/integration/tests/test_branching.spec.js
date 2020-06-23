@@ -19,10 +19,6 @@ context('Test commits and branching', () => {
    let database = config[0]
    let dbid = config[0].name + Date.now();
 
-   before(() => {
-       cy.visit('http://localhost:3005');
-   })
-
    it('Create database', () => {
         cy.wait(2000);
         cy.get('#terminus-console-page')
