@@ -16,7 +16,7 @@ const QueryPage = () => {
             <div className="tdb__qpane" id={props.id}>
                 <QueryPane type="editor"/>              
                     <button 
-                        className = "tdb__button__base tdb__button__base--green tdb__qpane__button__new__panel"
+                        className = "tdb__button__base tdb__button__base--bgreen tdb__qpane__button__new__panel"
                         type =  "submit"
                         onClick={() => { setQp([...qp, qp.length]) }}
                     >

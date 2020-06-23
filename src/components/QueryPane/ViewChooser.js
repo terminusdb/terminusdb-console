@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "reactstrap";
-import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS } from "./constants.querypane"
+//import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "reactstrap";
+import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS,ELEMENTS_ID } from "./constants.querypane"
+import {Dropdown} from '../Form/Dropdown'; 
 
 export const ViewChooser = ({view, views, updateView}) => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggle = () => setDropdownOpen(prevState => !prevState);
+
+    const changeView=(view)=>{
+        updateView(view)
+        toggle(false)
+    }
 
     views = views || [{id: "table", label: TABLE_VIEW}, {id: "graph", label: GRAPH_VIEW}]
 
@@ -11,31 +19,20 @@ export const ViewChooser = ({view, views, updateView}) => {
 
     const entries = views.map((v) => {
         if(v.id === currentView) currentLabel=v.label;
-        return (<DropdownItem active={v.id == currentView} key={v.id} onClick={function(){updateView(v.id)}}>{v.label}</DropdownItem>)
+
+        const active=v.id === currentView ? {active:"active"} : {}
+
+        return(<button onClick={function(){changeView(v.id)}} {...active}
+                    className="tdb__dropdown__button" key={v.id} >{v.label}</button>)
     })
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    const toggle = () => setDropdownOpen(prevState => !prevState);
-
+    
     return (
-        <Row className={TOOLBAR_CSS.containerRow} >
-            <Col md={12} className={TOOLBAR_CSS.row}>
-                <Row>
-                    <Col md={11}/>
-                    <Col md={1} className={TOOLBAR_CSS.queryPaneControls}>
-                        <Dropdown isOpen={dropdownOpen} toggle={toggle} className={TOOLBAR_CSS.dropdown}>
-                            <DropdownToggle caret>
-                                {currentLabel}
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                {entries}
-                            </DropdownMenu>
-                        </Dropdown>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
+        <div className="tdb__commit__bar" >
+             <Dropdown id={ELEMENTS_ID.RESULT_DROPDOWN} isOpen={dropdownOpen} toggle={toggle} title={currentLabel } className="nav__main__link tdb__commit__bar--drop">
+                {entries}
+            </Dropdown>              
+        </div>
     )
 
 }

@@ -3,7 +3,10 @@ import { Alert } from 'reactstrap'
 import { ResultReport } from "../Reports/ResultReport"
 import { QUERY_PANE_INTRO } from "./constants.querypane"
 
-export const ReportWrapper = ({currentReport}) => {
+export const ReportWrapper = ({currentReport,type,children}) => {
+    const curMessage=children || QUERY_PANE_INTRO;
+    const curType=type || "info";
+
     if(currentReport && currentReport.busy){
         return (
             <Alert color='warning'>Busy</Alert>
@@ -12,5 +15,5 @@ export const ReportWrapper = ({currentReport}) => {
     else if(currentReport){
         return (<ResultReport report={currentReport} />)
     }
-    return (<Alert color="info" style={{display:'block'}}>{QUERY_PANE_INTRO}</Alert>)
+    return (<Alert color={curType} style={{display:'block'}}>{curMessage}</Alert>)
 }

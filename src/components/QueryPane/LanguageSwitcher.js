@@ -27,7 +27,7 @@ export const LanguageSwitcher = ({active, baseLanguage, showLanguage, languages,
         let langname = LANGUAGE_NAMES[lang]
         let active= {}
         if(lang===currentLanguage){
-            active={active:true}
+            active={active:"active"}
             currentLabel=`${langname} `;
         }
 

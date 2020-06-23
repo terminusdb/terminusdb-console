@@ -1,11 +1,26 @@
 import TerminusClient from '@terminusdb/terminusdb-client';
-export const makeWOQLFromString =(str, lang,setError)=>{
+export const makeWOQLFromString =(str, lang)=>{
+        switch(lang){
+            case "json":
+                 const myj = JSON.parse(str)
+                 return new TerminusClient.WOQL.json(myj)
+            case "js":
+                 const WOQL = TerminusClient.WOQL
+                 var nw = eval(str)
+                 return nw;
+            case "python":
+                throw "Python is not supported for editing queries through the console"; 
+        }
+    }
+        /*
         if(lang === "json"){
-            try {
-                let myj = JSON.parse(str)
-                return new TerminusClient.WOQL.json(myj)
+           const myj = JSON.parse(str)
+                 return new TerminusClient.WOQL.json(myj)
+               
             }catch(e){
+                console.log(e)
                 setError(e)
+                return false;
             }
         }
         if(lang === "js"){
@@ -15,13 +30,16 @@ export const makeWOQLFromString =(str, lang,setError)=>{
                 return nw
             }
             catch(e){
+                console.log(e)
                 setError(e)
+                return false;
             }
         }
         else if(lang == "python"){
             setError({message: "Python is not supported for editing queries through the console"})
-        }
-}
+            return false;
+        }*/
+
 
 export const makeWOQLIntoString = (woql, lang)=>{
     if(lang === "js" || lang === "python" && woql){

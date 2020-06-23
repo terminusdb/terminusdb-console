@@ -11,3 +11,10 @@ console/dist
 console/public_pages
 
 cypress/integration/examples
+cypress/screenshots
+cypress/videos
+
+src/components/History/TimeTraveler.js
+src/css/img/
+src/css/timeTravel.css
+

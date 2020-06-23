@@ -32,23 +32,21 @@ context('Create and delete a database locally', () => {
             cy.get('#terminus-console-page')
             .find('a')
             .contains(tabs.CREATEDB_TITLE)
-            .click().then(() => {
+            .click().then( async() => {
                 cy.wait(1000);
-                createLocalDB(dbid)
-                cy.wait(3000);
+                await createLocalDB(dbid)
             })
         })
 
         /***** Add schema ****/
         it('Add Schema', async () => {
-            cy.get('#terminus-console-page')
-            .find('a')
-            .contains('Query').should('be.visible').then(($button) => {
-                $button.click().then(() => {
-                    cy.wait(1000)
-                    addSchema(dbid)
-                })
-            })
+            cy.server()
+            cy.route('/#/db/admin/**').as('newDB');
+            await cy.wait("@newDB");
+            await cy.get('#nav_query').click();
+            cy.wait(1000)
+            await addSchema(database);
+            //console.log("AFTER AWAIT")
         })
 
 

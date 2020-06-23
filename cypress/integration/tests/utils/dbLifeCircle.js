@@ -1,14 +1,14 @@
 export const createLocalDB = async (dbId) =>{
-     await cy.get("#create_db").click()
-     await cy.get("#create_db_local").click()
+    await cy.get("#create_db").click()
+    await cy.get("#create_db_local").click()
 
-     cy.get("#dbid").focus().type(dbId);
-     cy.get("#dbname").focus().type(dbId);
-     cy.get("#description").focus().type(dbId);
+    cy.get("#dbid").focus().type(dbId);
+    cy.get("#dbname").focus().type(dbId);
+    cy.get("#description").focus().type(dbId);
 
-     await cy.get('form').find("button").contains('Create New Database').click()
+    await cy.get('form').find("button").contains('Create New Database').click()
 
-     cy.wait(5000);
+    await cy.get('#loading').should('not.exist')
 }
 
 export const removeLocalDB = async (dbId) =>{
@@ -47,7 +47,8 @@ export const runQueries = async(database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(1000);
-    await cy.get('.dropdown').find('button').contains('Graph').click({force:true})
+    await cy.get('.tdb__dropdown').find('button').contains('Table').click({force:true})
+    await cy.get('.tdb__dropdown__button').find('button').contains('Graph').click({force:true})
 	cy.wait(3000)
 }
 
