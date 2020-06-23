@@ -1,7 +1,3 @@
-import { CREATE_SCHEMA, LOAD_DOCUMENTS } from "./queryList"
-/*
-*from home page
-*/
 export const createLocalDB = async (dbId) =>{
      await cy.get("#create_db").click()
      await cy.get("#create_db_local").click()
@@ -13,15 +9,8 @@ export const createLocalDB = async (dbId) =>{
      await cy.get('form').find("button").contains('Create New Database').click()
      cy.wait(2000);
      await cy.get('#loading').should('not.exist')
-     /*
-     query the termunus db ...
-     */
-    // expect(cy.get('#terminus-console-page').find('legend').contains(dbId)).to.be.exist
 }
 
-/*
-*from db home page
-*/
 export const removeLocalDB = async (dbId) =>{
     await cy.get('#terminus-console-page').find('button').contains('DELETE').click()
     cy.get('#dbId').focus().type(dbId);
@@ -30,16 +19,36 @@ export const removeLocalDB = async (dbId) =>{
 }
 
 export const addSchema = async (database) => {
-    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.schemaQuery)
-    await cy.get('.query-pane-container').find('button').contains('Run Query').click()
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.addSchema)
+    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
 }
 
-export const addDocuments = async (dbId) => {
+export const addDocuments = async (database) => {
+    const csv = database.loadDocuments.csv;
+    const inputs = 'WOQL.and(' + csv + ', ...' + database.loadDocuments.wrangles + ')'
+    const q = 'WOQL.when(' + inputs + ', ' + database.loadDocuments.inserts + ')'
     await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
-    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(LOAD_DOCUMENTS)
-    await cy.get('.query-pane-container').find('button').contains('Run Query').click()
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
+    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
+    cy.wait(10000);
     cy.wait(2000);
+    cy.get('#terminus-console-page')
+    .find('a')
+    .contains('Documents')
+    .click({force: true}).then(() => {
+        cy.wait(1000)
+    })
+}
+
+export const runQueries = async(database) => {
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
+    cy.wait(1000);
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
+    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
+    cy.wait(1000);
+    await cy.get('#result_dropdown').find('button').contains('Graph').click({force:true})
+	cy.wait(3000)
 }
 
 export const createBranch = async (bid, msg) => {

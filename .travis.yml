@@ -6,21 +6,21 @@ cache:
   npm: false
 
 stages:
-  - name: build_dev
-    if: branch = dev or branch = canary
+  - name: build
   - name: deploy_dev
     if: branch = dev
   - name: deploy_canary
     if: branch = canary
-  - name: build
 
 jobs:
   include:
-    - stage: build_dev
-      before_install:
-        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
+    - stage: build
       script:
+        - bash .ci/run_integration_tests.sh
+        - npx cypress run
         - npm run build
+      before_install:
+        -  if [ "$TRAVIS_BRANCH" = "dev" ] || [ "$TRAVIS_BRANCH" = "canary" ]; then echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc; fi
 
     - stage: deploy_dev
       before_install:
@@ -36,10 +36,6 @@ jobs:
         - npm run build
         - bash .ci/trigger_canary.sh
         - bash .ci/publish_canary.sh
-
-    - stage: build
-      script:
-        - npm run build
 
 deploy:
   - provider: npm

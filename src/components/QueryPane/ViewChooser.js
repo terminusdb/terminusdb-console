@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 //import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "reactstrap";
-import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS } from "./constants.querypane"
+import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS,ELEMENTS_ID } from "./constants.querypane"
 import {Dropdown} from '../Form/Dropdown'; 
 
 export const ViewChooser = ({view, views, updateView}) => {
@@ -29,7 +29,7 @@ export const ViewChooser = ({view, views, updateView}) => {
     
     return (
         <div className="tdb__commit__bar" >
-             <Dropdown isOpen={dropdownOpen} toggle={toggle} title={currentLabel } className="nav__main__link tdb__commit__bar--drop">
+             <Dropdown id={ELEMENTS_ID.RESULT_DROPDOWN} isOpen={dropdownOpen} toggle={toggle} title={currentLabel } className="nav__main__link tdb__commit__bar--drop">
                 {entries}
             </Dropdown>              
         </div>

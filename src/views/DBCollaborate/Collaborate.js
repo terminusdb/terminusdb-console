@@ -16,10 +16,10 @@ export const Collaborate = (props) => {
 	const { user } = useAuth0()
 
     if(!repos) return (<Loading type={TERMINUS_COMPONENT} />)
-    let hasOrigin = repos.local_clone || repos.remote  
+    let hasOrigin = repos.local_clone || repos.remote
     let sections = (hasOrigin ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]] : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]])
     return (<>
-        {!user && 
+        {/*!user &&
             <div>
                 <hr className="my-space-50"/>
                     <Container>
@@ -32,12 +32,12 @@ export const Collaborate = (props) => {
                             <Row className={COLLABORATE_SOON.bottom}><div className={COLLABORATE_SOON.button}>Share</div></Row>
                         </Col>
                         <Col md={2} className={COLLABORATE_SOON.box}>
-                            <Row className={COLLABORATE_SOON.top}>Push updates to your collaborators</Row> 
+                            <Row className={COLLABORATE_SOON.top}>Push updates to your collaborators</Row>
                             <Row className={COLLABORATE_SOON.bottom}><div className={COLLABORATE_SOON.button}>Push</div></Row>
                         </Col>
                         <Col md={2} className={COLLABORATE_SOON.box}>
                             <Row className={COLLABORATE_SOON.top}>Pull updates from collaborators</Row>
-                            <Row className={COLLABORATE_SOON.bottom}><div className={COLLABORATE_SOON.button}>Pull</div></Row> 
+                            <Row className={COLLABORATE_SOON.bottom}><div className={COLLABORATE_SOON.button}>Pull</div></Row>
                         </Col>
                         <Col md={2} className={COLLABORATE_SOON.box}>
                             <Row className={COLLABORATE_SOON.top}>Build data operations pipelines</Row>
@@ -46,18 +46,27 @@ export const Collaborate = (props) => {
                     </Row>
                 </Container>
             </div>
-        }
-        {user && 
+        */}
+        {/*user &&
 
             <RiverOfSections sections={sections} label={props.label}>
                 <Users key="users"/>
-                {hasOrigin && 
+                {hasOrigin &&
                     <Synchronise key="synch" />
-                }   
-                {!hasOrigin && 
+                }
+                {!hasOrigin &&
                     <Share key="share" />
                 }
-            </RiverOfSections>                        
-        }
+            </RiverOfSections>
+        */}
+        <RiverOfSections sections={sections} label={props.label}>
+            <Users key="users"/>
+            {hasOrigin &&
+                <Synchronise key="synch" />
+            }
+            {!hasOrigin &&
+                <Share key="share" />
+            }
+        </RiverOfSections>      
     </>)
 }

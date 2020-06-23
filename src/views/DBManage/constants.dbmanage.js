@@ -130,7 +130,7 @@ export const MERGE_BRANCH_FORM = {
             value: "rebase",
             inputElement: {
                 type: "select",
-                disabled: true,
+                disabled: false,
                 placeholder: "Rebase Merge",
                 options: [{label: "Rebase", value: "rebase"}, {label: "Merge", value: "merge"}, {label: "Three Way Merge", value: "3merge"}]
             },
