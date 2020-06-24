@@ -20,7 +20,7 @@ import { config } from "./utils/config"
 context('Create and delete a database locally', () => {
 
    before(() => {
-       cy.visit('http://localhost:3005');
+       cy.visit('/');
    })
 
     config.forEach((database) => {
@@ -42,7 +42,7 @@ context('Create and delete a database locally', () => {
         it('Add Schema', async () => {
             cy.server()
             cy.route('/#/db/admin/**').as('newDB');
-            await cy.wait("@newDB");
+            await cy.wait("@newDB").its('url').should('include', dbid);
             await cy.get('#nav_query').click();
             cy.wait(1000)
             await addSchema(dbid);

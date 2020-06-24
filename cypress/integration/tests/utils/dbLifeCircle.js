@@ -1,4 +1,8 @@
-export const createLocalDB = async (dbId) =>{
+export const createLocalDB = async (dbId,withGraph=true) =>{
+     cy.server().route("POST", `**/db/admin/${dbId}`).as('createDB');
+     cy.server().route("POST", `**/graph/admin/${dbId}/local/branch/master/schema/main`).as('createGraph');
+
+    
      await cy.get("#create_db").click()
      await cy.get("#create_db_local").click()
 
@@ -7,8 +11,15 @@ export const createLocalDB = async (dbId) =>{
      cy.get("#description").focus().type(dbId);
 
      await cy.get('form').find("button").contains('Create New Database').click()
-     cy.wait(2000);
-     await cy.get('#loading').should('not.exist')
+
+     //await cy.get('#loading').should('exist')
+       
+     await cy.wait("@createDB").its('status').should('eq', 200);
+     
+     if(withGraph)
+        await cy.wait("@createGraph").its('status').should('eq', 200);
+     
+     await cy.get('#loading').should('not.exist');
 }
 
 export const removeLocalDB = async (dbId) =>{

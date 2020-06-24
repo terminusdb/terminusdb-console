@@ -10,7 +10,6 @@ import {Alert} from "reactstrap";
  */
 export const QueryEditor = ({query, setMainError, mainError, baseLanguage, setBaseLanguage, content, saveContent,showLanguage, showContent, setShowContent, setShowLanguage,languages, editable, children, submit,updateQuery}) => {
     //const qeclass = className || TOOLBAR_CSS.container
-    editable = typeof editable != "undefined" ? editable : true
     submit = submit || QUERY_SUBMIT
     /*
     * if is edit mode and the query is an update query
