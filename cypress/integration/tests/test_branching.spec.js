@@ -36,13 +36,17 @@ context('Test commits and branching', () => {
 
 
    /***** Add schema ****/
-   it('Add Schema', async () => {
+   it('Add Schema', () => {
        cy.server()
        cy.route('/#/db/admin/**').as('newDB');
-       await cy.wait("@newDB");
-       await cy.get('#nav_query').click();
-       cy.wait(1000)
-       await addSchema(database)
+
+       cy.wait("@newDB");
+
+       cy.get('#nav_query').click().then(async()=>{
+          cy.wait(1000)
+          await addSchema(database)
+       });
+       
    })
 
 

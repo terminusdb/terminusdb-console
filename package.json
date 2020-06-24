@@ -30,7 +30,8 @@
     "lint": "eslint src",
     "autofix": "eslint src --fix",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run --browser chrome"
+    "cypress:one": "cypress run --browser chrome --spec $1",
+    "cypress:run": "cypress run --browser chrome --spec 'cypress/integration/tests/*.spec.js'"
   },
   "pre-commit": [],
   "pre-push": [

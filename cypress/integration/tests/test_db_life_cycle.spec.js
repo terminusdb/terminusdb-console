@@ -19,14 +19,18 @@ import { config } from "./utils/config"
 
 context('Create and delete a database locally', () => {
 
-   before(() => {
+    before(() => {
        cy.visit('/');
-   })
+    })
+      
 
-    config.forEach((database) => {
+    describe('Database life Circle', () => {
 
+       config.forEach((database) => {
+       //+ database.name, 
         /***** Creating database ****/
-        it('Creating database ' + database.name, () => {
+        it('Creating database', () => {
+            cy.log("___DATABASE__",config)           
             cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -39,14 +43,38 @@ context('Create and delete a database locally', () => {
 
 
         /***** Add schema ****/
-        it('Add Schema', async () => {
-            cy.server()
-            cy.route('/#/db/admin/**').as('newDB');
-            await cy.wait("@newDB").its('url').should('include', dbid);
-            await cy.get('#nav_query').click();
-            cy.wait(1000)
-            await addSchema(database)
+        it('Add Schema', () => {
+            cy.wait(3000);
+            cy.url().then(urlString => {
+                cy.log(urlString)
+                if(urlString!==`http://localhost:3005/#/db/admin/${database.name}`){
+                    cy.visit(`http://localhost:3005/#/db/admin/${database.name}`)
+                }
+            
+                cy.get('#nav_query').click().then( async() => {
+                    cy.wait(1000)
+                    await addSchema(database)
+                })
+            })
         })
+       /* it('Add Schema',  () => {
+            //cy.url();
+            cy.server().route('/#/db/admin/**').as('newDB');
+            cy.server().route(`/#/db/admin/${database.name}/query`).as('queryPage');
+            //cy.wait(1000);
+            cy.url().then(urlString => {
+                cy.log(urlString);
+                cy.wait("@newDB");
+
+                cy.log("AFTER WAIT FOR @newDB");
+                cy.get('#nav_query').click().then( async() => {
+                    cy.wait("@queryPage");
+                    await addSchema(database)
+                })
+
+            })//do whatever)
+                       
+        })*/
 
 
         /***** View schema ****/
@@ -134,4 +162,6 @@ context('Create and delete a database locally', () => {
        })
 
     })
+})
+
 })
