@@ -4,9 +4,12 @@ context('check connection', () => {
     })
 
     it('Login to console', () => {
-        cy.wait(3000)
-        cy.get('#tdbPassword').type("root")
-        cy.get('#tdbSubmit').click()
+        cy.get("body").then($body => {
+            if ($body.find("#tbdPassword").length > 0) {
+                cy.get('#tdbPassword').type("root")
+                cy.get('#tdbSubmit').click()
+            }
+        })
     })
 })
 
