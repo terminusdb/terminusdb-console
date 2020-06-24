@@ -24,7 +24,6 @@ context('Create and delete a database locally', () => {
    })
 
     config.forEach((database) => {
-        let dbid = database.name + Date.now();
 
         /***** Creating database ****/
         it('Creating database ' + database.name, () => {
@@ -34,7 +33,7 @@ context('Create and delete a database locally', () => {
             .contains(tabs.CREATEDB_TITLE)
             .click().then( async() => {
                 cy.wait(1000);
-                await createLocalDB(dbid)
+                await createLocalDB(database.name)
             })
         })
 
@@ -46,21 +45,21 @@ context('Create and delete a database locally', () => {
             await cy.wait("@newDB");
             await cy.get('#nav_query').click();
             cy.wait(1000)
-            await addSchema(database);
+            await addSchema(database)
         })
 
 
         /***** View schema ****/
-        /*it('View Schema tabs', () => {
+        it('View Schema tabs', () => {
             cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Schema')
-            .click({force: true}).then(() => {
+            .click({force: true}).then(async() => {
     			cy.wait(1000)
-                flickThroughSchemaTabs()
+                await flickThroughSchemaTabs(database)
             })
-        })*/
+        })
 
 
         /***** Query Schema Elements  ****/
@@ -69,9 +68,9 @@ context('Create and delete a database locally', () => {
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Query')
-            .click().then(() => {
+            .click().then(async() => {
     			cy.wait(1000)
-                getSchemaElements()
+                await getSchemaElements(database)
             })
         })
 
@@ -114,7 +113,7 @@ context('Create and delete a database locally', () => {
         /***** Go to Home Page  ****/
         it('Go to database home page', () => {
             cy.wait(2000);
-            const dbHomeRef = "#/db/admin/" + dbid + "/"
+            const dbHomeRef = "#/db/admin/" + database.name + "/"
             cy.get('#terminus-console-page')
             .find('a[href="'+ dbHomeRef +'"]')
             .click().then(() => {
@@ -130,7 +129,7 @@ context('Create and delete a database locally', () => {
             .contains(tabs.MANAGE_TAB)
             .click().then(() => {
                 cy.wait(1000);
-                removeLocalDB(dbid)
+                removeLocalDB(database.name)
             })
        })
 
