@@ -50,7 +50,7 @@ context('Create and delete a database locally', () => {
 
 
         /***** View schema ****/
-        it('View Schema tabs', () => {
+        /*it('View Schema tabs', () => {
             cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -63,7 +63,7 @@ context('Create and delete a database locally', () => {
 
 
         /***** Query Schema Elements  ****/
-        it('Query All Schema Elements', () => {
+        /*it('Query All Schema Elements', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -75,7 +75,7 @@ context('Create and delete a database locally', () => {
         })
 
         /***** Go to Document Page  ****/
-        it('Add Documents', () => {
+        /*it('Add Documents', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('button')
@@ -87,7 +87,7 @@ context('Create and delete a database locally', () => {
         })
 
         /***** View Documents  ****/
-        it('View Documents', () => {
+        /*it('View Documents', () => {
             cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -107,7 +107,7 @@ context('Create and delete a database locally', () => {
     			//getDocumentsMetaData()
                 runQueries(database)
             })
-        })
+        })*/
 
 
         /***** Go to Home Page  ****/

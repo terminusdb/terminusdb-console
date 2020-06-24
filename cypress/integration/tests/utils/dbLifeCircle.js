@@ -37,6 +37,7 @@ export const addSchema = async (database) => {
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
 
     await cy.wait("@runQuery").its('status').should('eq', 200);
+    console.log('clickin')
     cy.wait(5000);
 }
 
