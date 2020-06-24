@@ -19,6 +19,10 @@ import { config } from "./utils/config"
 
 context('Create and delete a database locally', () => {
 
+    before(() => {
+        cy.visit('/')
+    })
+
     config.forEach((database) => {
 
         /***** Creating database ****/

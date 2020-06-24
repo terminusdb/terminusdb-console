@@ -18,6 +18,10 @@ context('Test commits and branching', () => {
    let bid, commit_msg, masterBranchId='master';
    let database = config[0]
 
+   before(() => {
+       cy.visit('/')
+   })
+
    /***** Creating database ****/
    it('Creating database ' + database.name, () => {
        cy.wait(2000);
