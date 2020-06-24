@@ -19,7 +19,7 @@ context('Test commits and branching', () => {
    let database = config[0]
 
    before(() => {
-       cy.visit('http://localhost:3005');
+       cy.visit('/')
    })
 
    /***** Creating database ****/

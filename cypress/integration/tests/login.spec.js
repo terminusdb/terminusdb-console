@@ -1,12 +1,16 @@
 context('check connection', () => {
-
     before(() => {
         cy.visit('/')
     })
 
-    it('Login to Auth0', () => {
+    it('Login to console', () => {
+        cy.get("body").then($body => {
+            if ($body.find("#tbdPassword").length > 0) {
+                cy.get('#tdbPassword').type("root")
+                cy.get('#tdbSubmit').click()
+            }
+        })
     })
-
 })
 
 /*
