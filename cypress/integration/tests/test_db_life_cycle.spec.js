@@ -20,7 +20,7 @@ import { config } from "./utils/config"
 context('Create and delete a database locally', () => {
 
     before(() => {
-        cy.visit('http://localhost:3005');
+        cy.visit('/')
     })
 
     config.forEach((database) => {

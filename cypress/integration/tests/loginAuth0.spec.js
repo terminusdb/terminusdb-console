@@ -1,6 +1,11 @@
 context('check connection', () => {
-   	it('Login to Auth0', () => {
-   	})
+
+    before(() => {
+        cy.visit('/')
+    })
+
+    it('Login to Auth0', () => {
+    })
 
 })
 
