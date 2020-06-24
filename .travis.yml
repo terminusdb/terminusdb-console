@@ -16,8 +16,6 @@ jobs:
   include:
     - stage: build
       script:
-        - bash .ci/run_integration_tests.sh
-        - npx cypress run
         - npm run build
       before_install:
         -  if [ "$TRAVIS_BRANCH" = "dev" ] || [ "$TRAVIS_BRANCH" = "canary" ]; then echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc; fi

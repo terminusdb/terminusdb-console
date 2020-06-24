@@ -1,11 +1,5 @@
 context('check connection', () => {
-	before(() => {
-       cy.visit('http://localhost:3005');
-   	})
-
    	it('Login to Auth0', () => {
-
-
    	})
 
 })

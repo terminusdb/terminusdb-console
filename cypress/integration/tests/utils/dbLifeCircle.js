@@ -1,40 +1,48 @@
+import { flickThroughSchemaTabs } from "./definedActions"
+import * as routes from "./routes"
+
+/*
+*   create a local database
+*/
 export const createLocalDB = async (dbId,withGraph=true) =>{
-     cy.server().route("POST", `**/db/admin/${dbId}`).as('createDB');
-     cy.server().route("POST", `**/graph/admin/${dbId}/local/branch/master/schema/main`).as('createGraph');
 
-    
-     await cy.get("#create_db").click()
-     await cy.get("#create_db_local").click()
+    cy.server().route("POST", routes.createDb(dbId)).as('createDB');
+    cy.server().route("POST", routes.createGraph(dbId)).as('createGraph');
 
-     cy.get("#dbid").focus().type(dbId);
-     cy.get("#dbname").focus().type(dbId);
-     cy.get("#description").focus().type(dbId);
+    await cy.get("#create_db").click()
+    await cy.get("#create_db_local").click()
 
-     await cy.get('form').find("button").contains('Create New Database').click()
+    cy.get("#dbid").focus().type(dbId);
+    cy.get("#dbname").focus().type(dbId);
+    cy.get("#description").focus().type(dbId);
 
-     //await cy.get('#loading').should('exist')
-       
-     await cy.wait("@createDB").its('status').should('eq', 200);
-     
-     if(withGraph)
+    await cy.get('form').find("button").contains('Create New Database').click()
+
+    await cy.wait("@createDB").its('status').should('eq', 200);
+
+    if(withGraph)
         await cy.wait("@createGraph").its('status').should('eq', 200);
-     
-     await cy.get('#loading').should('not.exist');
+
+    await cy.get('#loading').should('not.exist')
 }
 
-export const removeLocalDB = async (dbId) =>{
-    await cy.get('#terminus-console-page').find('button').contains('DELETE').click()
-    cy.get('#dbId').focus().type(dbId);
-    await cy.get('.modal-body').find('button').contains('Confirm Database Delete').click()
-    cy.wait(2000);
-}
-
+/*
+*   Add schema
+*/
 export const addSchema = async (database) => {
+
+    cy.server().route("POST", routes.woqlQuery(database.name)).as('runQuery');
+
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.addSchema)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(2000);
+
+    await cy.wait("@runQuery").its('status').should('eq', 200);
+    cy.wait(5000);
 }
 
+/*
+*   Add documents
+*/
 export const addDocuments = async (database) => {
     const csv = database.loadDocuments.csv;
     const inputs = 'WOQL.and(' + csv + ', ...' + database.loadDocuments.wrangles + ')'
@@ -43,7 +51,6 @@ export const addDocuments = async (database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(10000);
-    cy.wait(2000);
     cy.get('#terminus-console-page')
     .find('a')
     .contains('Documents')
@@ -52,20 +59,39 @@ export const addDocuments = async (database) => {
     })
 }
 
+/*
+*   Run queries
+*/
 export const runQueries = async(database) => {
     await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
     cy.wait(1000);
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
+
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(1000);
-    await cy.get('#result_dropdown').find('button').contains('Graph').click({force:true})
+    cy.wait(5000);
+
+    await cy.get('.tdb__dropdown').find('button').find('span').click()
+    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click()
 	cy.wait(3000)
 }
 
+/*
+*   create a new branch
+*/
 export const createBranch = async (bid, msg) => {
     await cy.get('#terminus-console-page').find('button').contains('Branch').click()
     cy.get('input[id="bid"]').focus().type(bid);
     cy.get('textarea[id="commit"]').focus().type(msg);
     await cy.get('.tcf-form').find('button').contains('Create New Branch').click()
+    cy.wait(2000);
+}
+
+/*
+*   delete database
+*/
+export const removeLocalDB = async (dbId) =>{
+    await cy.get('#terminus-console-page').find('button').contains('DELETE').click()
+    cy.get('#dbId').focus().type(dbId);
+    await cy.get('.modal-body').find('button').contains('Confirm Database Delete').click()
     cy.wait(2000);
 }

@@ -1,22 +1,30 @@
 import * as tabs from "../../../../src/views/Pages/constants.pages"
 import { SHOW_CLASSES_PROPERTIES, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST } from "./queries"
+import * as routes from "./routes"
 
-export const flickThroughSchemaTabs = async () => {
+export const flickThroughSchemaTabs = async (database) => {
 	await cy.get('#terminus-console-page').find('a').contains(tabs.PROPERTIES_TAB).click()
 	cy.wait(2000);
+
 	await cy.get('#terminus-console-page').find('a').contains(tabs.OWL_TAB).click()
 	cy.wait(2000);
+
 	await cy.get('#terminus-console-page').find('a').contains(tabs.GRAPHS_TAB).click()
 	cy.wait(2000);
+
 	await cy.get('#terminus-console-page').find('a').contains(tabs.PREFIXES_TAB).click()
 	cy.wait(2000);
 }
 
-export const getSchemaElements = async () => {
+export const getSchemaElements = async (database) => {
+
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(SHOW_CLASSES_PROPERTIES)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(2000);
-	await cy.get('#result_dropdown').find('button').contains('Graph').click({force:true})
+
+    cy.wait(3000);
+
+	//await cy.get('.tdb__dropdown').find('button').find('span').click()
+    //await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click()
 	cy.wait(1000)
 }
 
@@ -24,7 +32,8 @@ export const getDocumentsMetaData = async () => {
 	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(DOCUMENT_META_DATA)
     await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
-	await cy.get('#result_dropdown').find('button').contains('Graph').click({force:true})
+	await cy.get('.tdb__dropdown').find('button').find('span').click()
+    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click()
 	cy.wait(1000)
 }
 

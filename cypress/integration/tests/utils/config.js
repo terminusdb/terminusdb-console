@@ -3,7 +3,7 @@ import { POLITICAL_DATA_SCHEMA_QUERY, POLITICAL_DATA_CSV, POLITICAL_DATA_WRANGLE
 
 
 export const config = [{
-		"name": "bikes-tutorial",
+		"name": "bikes-tutorial" + Date.now(),
 		"addSchema": BIKES_CREATE_SCHEMA_QUERY,
 		"loadDocuments": {
 			"csv": BIKES_CSV,
@@ -13,13 +13,13 @@ export const config = [{
 		"queries": {
 			"selectDocuments": BIKES_SELECT_DOCUMENTS
 		}
-	}, 
+	}/*,
 	{
-		"name": "political-tutorial",
+		"name": "political-tutorial" + Date.now();,
 		"addSchema": POLITICAL_DATA_SCHEMA_QUERY,
 		"loadDocuments": {
 			"csv": POLITICAL_DATA_CSV,
 			"wrangles": POLITICAL_DATA_WRANGLES,
 			"inserts": POLITICAL_DATA_INSERTS
 		}
-	}]
+	}*/]

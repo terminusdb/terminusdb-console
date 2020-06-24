@@ -17,37 +17,38 @@ import { config } from "./utils/config"
 context('Test commits and branching', () => {
    let bid, commit_msg, masterBranchId='master';
    let database = config[0]
-   let dbid = config[0].name + Date.now();
 
    before(() => {
        cy.visit('http://localhost:3005');
    })
 
-   it('Create database', () => {
-        cy.wait(2000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains(tabs.CREATEDB_TITLE)
-        .click().then(() => {
-            cy.wait(1000);
-            createLocalDB(dbid)
-        })
-    })
+   /***** Creating database ****/
+   it('Creating database ' + database.name, () => {
+       cy.wait(2000);
+       cy.get('#terminus-console-page')
+       .find('a')
+       .contains(tabs.CREATEDB_TITLE)
+       .click().then( async() => {
+           cy.wait(1000);
+           await createLocalDB(database.name)
+       })
+   })
 
-    it('Add Schema', () => {
-        cy.wait(5000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-            addSchema(database)
-        })
-    })
+
+   /***** Add schema ****/
+   it('Add Schema', async () => {
+       cy.server()
+       cy.route('/#/db/admin/**').as('newDB');
+       await cy.wait("@newDB");
+       await cy.get('#nav_query').click();
+       cy.wait(1000)
+       await addSchema(database)
+   })
+
 
 	it('Go to database home page', () => {
         cy.wait(2000);
-        const dbHomeRef = "#/db/admin/" + dbid + "/"
+        const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -141,7 +142,7 @@ context('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(2000);
-        const dbHomeRef = "#/db/admin/" + dbid + "/"
+        const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -157,7 +158,7 @@ context('Test commits and branching', () => {
         .contains(tabs.MANAGE_TAB)
         .click().then(() => {
             cy.wait(1000);
-            removeLocalDB(dbid)
+            removeLocalDB(database.name)
         })
     })
 
