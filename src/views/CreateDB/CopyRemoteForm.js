@@ -82,8 +82,8 @@ export const CopyRemoteForm = () => {
         })
     }
 
-    //let buttons = (user ? COPY_REMOTE_FORM.buttons : true)
-    let buttons = COPY_REMOTE_FORM.buttons
+    let buttons = (user ? COPY_REMOTE_FORM.buttons : true)
+    //let buttons = COPY_REMOTE_FORM.buttons
 
     return (<>
         {(loading || updateLoading) &&
@@ -92,11 +92,11 @@ export const CopyRemoteForm = () => {
         {(report && report.error) &&
             <APIUpdateReport status={report.status} error={report.error} message={report.message} time={report.time} />
         }
-        {/*!user &&
+        {!user &&
             <TCSubmitWrap>
                 <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
             </TCSubmitWrap>
-        */}
+        }
         <TCForm
             onSubmit={onClone}
             layout = {[1, 2, 2, 1]}

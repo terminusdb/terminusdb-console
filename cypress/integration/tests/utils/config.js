@@ -13,9 +13,8 @@ export const config = [{
 		"queries": {
 			"selectDocuments": BIKES_SELECT_DOCUMENTS
 		}
-	},
-	
-	/*{
+	},/*
+	{
 		"name": "political-tutorial" + Date.now(),
 		"addSchema": POLITICAL_DATA_SCHEMA_QUERY,
 		"loadDocuments": {
