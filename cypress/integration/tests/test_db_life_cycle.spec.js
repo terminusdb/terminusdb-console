@@ -25,20 +25,31 @@ context('Create and delete a database locally', () => {
       
 
     describe('Database life Circle', () => {
-
-       config.forEach((database) => {
-       //+ database.name, 
-        /***** Creating database ****/
-        it('Creating database', () => {
-            cy.log("___DATABASE__",config)           
-            cy.wait(2000);
-            cy.get('#terminus-console-page')
-            .find('a')
-            .contains(tabs.CREATEDB_TITLE)
-            .click().then( async() => {
-                cy.wait(1000);
-                await createLocalDB(database.name)
+        
+        it('the user need to login', () => { 
+            cy.get("body").then($body => {
+                if ($body.find("#tdbPassword").length > 0) {
+                      cy.get("#tdbPassword").focus().type('root').then(()=>{
+                          cy.get("#tdbSubmit").click();
+                  })
+                }
             })
+        })
+
+       config.forEach((database) => { 
+        /***** Creating database ****/
+        it('Creating database', () => {         
+            cy.wait(2000);
+            cy.get("#terminus-console-page").then(async($consolePage) => {
+                if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
+                    await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
+                    cy.wait(1000);
+                    await createLocalDB(database.name)
+                   // })
+                }else{
+                    await createLocalDB(database.name);
+                }
+            });
         })
 
 
@@ -46,35 +57,17 @@ context('Create and delete a database locally', () => {
         it('Add Schema', () => {
             cy.wait(3000);
             cy.url().then(urlString => {
-                cy.log(urlString)
-                if(urlString!==`http://localhost:3005/#/db/admin/${database.name}`){
-                    cy.visit(`http://localhost:3005/#/db/admin/${database.name}`)
+                const dbUrl = `#/db/admin/${database.name}`
+                if(!urlString.endsWith(dbUrl)){
+                    cy.visit(dbUrl)
                 }
-            
+
                 cy.get('#nav_query').click().then( async() => {
                     cy.wait(1000)
                     await addSchema(database)
-                })
-            })
+                })              
+            })           
         })
-       /* it('Add Schema',  () => {
-            //cy.url();
-            cy.server().route('/#/db/admin/**').as('newDB');
-            cy.server().route(`/#/db/admin/${database.name}/query`).as('queryPage');
-            //cy.wait(1000);
-            cy.url().then(urlString => {
-                cy.log(urlString);
-                cy.wait("@newDB");
-
-                cy.log("AFTER WAIT FOR @newDB");
-                cy.get('#nav_query').click().then( async() => {
-                    cy.wait("@queryPage");
-                    await addSchema(database)
-                })
-
-            })//do whatever)
-                       
-        })*/
 
 
         /***** View schema ****/

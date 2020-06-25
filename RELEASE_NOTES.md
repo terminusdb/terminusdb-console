@@ -20,3 +20,13 @@ Query Page Bug Fixes with changing formats / languages of query
 Bug fixes for graph view
 
 
+# TerminusDB Console v2.0.5 Release Notes
+
+## New
+* Review the error report message in query panel
+* Add End To End tests
+
+## Bug fixes
+
+
+
