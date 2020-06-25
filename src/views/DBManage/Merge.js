@@ -93,8 +93,8 @@ export const Merge = () => {
         updateBranches()
     }
 
-    let btns = MERGE_BRANCH_FORM.buttons
-    // let btns = (user ? MERGE_BRANCH_FORM.buttons : false)
+    //let btns = MERGE_BRANCH_FORM.buttons
+    let btns = (user ? MERGE_BRANCH_FORM.buttons : false)
 
     if(report && report.status == TERMINUS_SUCCESS){
         return (<TerminusDBSpeaks report={report} />)
@@ -104,11 +104,11 @@ export const Merge = () => {
         {loading &&
             <Loading type={TERMINUS_COMPONENT} />
         }
-        {/*!user &&
+        {!user &&
             <TCSubmitWrap>
                 <UnderConstruction action={MERGE_BRANCH_FORM.actionText} />
             </TCSubmitWrap>
-        */}
+        }
         <TCForm
             layout = {[3]}
             fields={MERGE_SOURCE_FORM.fields}

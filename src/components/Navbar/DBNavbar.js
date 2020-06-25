@@ -35,7 +35,7 @@ const GuardedDBNavbar = (props) => {
         if(props.toggleTimeTravel) props.toggleTimeTravel()
     }
 
-    
+
     function getDBHomeDetails(){
         if(dbmeta.db == "terminus" || !branches ){
             return ""
@@ -55,12 +55,13 @@ const GuardedDBNavbar = (props) => {
                         to = {getNavURL("")}
                         activeClassName = "nav__main__link--selected"
                         exact
+                        title={dbmeta.title}
                         id={PAGES_ID.NAV_DB_HOME}>
-                        {trimContent(dbmeta.title, 15)}                
+                        {trimContent(dbmeta.title, 15)}
                     </NavLink>
                 </li>
                 <li className="nav__main__item">
-                    <NavLink tag = {NavLink} 
+                    <NavLink tag = {NavLink}
                         className="nav__main__link"
                         activeClassName = "nav__main__link--selected"
                         to = {getNavURL("document")}
@@ -70,7 +71,7 @@ const GuardedDBNavbar = (props) => {
                     </NavLink>
                 </li>
                 <li className="nav__main__item">
-                    <NavLink tag = {NavLink} 
+                    <NavLink tag = {NavLink}
                         className="nav__main__link"
                         to = {getNavURL("query")}
                         activeClassName = "nav__main__link--selected"
@@ -80,7 +81,7 @@ const GuardedDBNavbar = (props) => {
                     </NavLink>
                 </li>
                 <li className="nav__main__item">
-                    <NavLink 
+                    <NavLink
                         className="nav__main__link"
                         tag = {NavLink}
                         to = {getNavURL("schema")}
@@ -90,17 +91,17 @@ const GuardedDBNavbar = (props) => {
                         {SCHEMA_PAGE_LABEL}
                     </NavLink>
                 </li>
-                <li className="nav__main__item nav__main__item--box">   
+                <li className="nav__main__item nav__main__item--box">
                    <BranchSelector />
                    <label className="switch" title="time travel tools">
                       <input type="checkbox" className="switch__input" onChange={handleToggle}/>
                       <span className="switch__slider"></span>
                     </label>
                     {homeDetails}
-                </li>                   
+                </li>
             </Fragment>
-               
-       
+
+
     )//onClick={toggle}
 }
 
