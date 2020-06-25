@@ -16,7 +16,7 @@ export const Share = ({onCancel, onCreate, onEdit, report}) => {
     return (<>
         {!user &&
             <TCSubmitWrap>
-                <UnderConstruction/>
+                <UnderConstruction action={CREATE_REMOTE_FORM.shareText}/>
             </TCSubmitWrap>
         }
         <TCForm

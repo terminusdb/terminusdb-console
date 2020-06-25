@@ -2,30 +2,34 @@
  * Controller application for branch creation form
  */
 import React, {useState, useEffect} from "react";
-import {TCForm} from  "../../components/Form/FormComponents"
-import { PUSH_REMOTE_FORM, SYNCHRONISE_FORM, PUSH_LOCAL_FORM, PULL_LOCAL_FORM, PULL_REMOTE_FORM, 
+import { useAuth0 } from "../../react-auth0-spa";
+import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
+import { PUSH_REMOTE_FORM, SYNCHRONISE_FORM, PUSH_LOCAL_FORM, PULL_LOCAL_FORM, PULL_REMOTE_FORM,
     DEFAULT_LOCAL_PULL_COMMIT, DEFAULT_LOCAL_PUSH_COMMIT, DEFAULT_REMOTE_PULL_COMMIT, DEFAULT_REMOTE_PUSH_COMMIT} from "./constants.dbcollaborate"
 import { DBContextObj } from "../../components/Query/DBContext"
 import { TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS } from "../../constants/identifiers";
 import { WOQLClientObj } from "../../init/woql-client-instance";
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import Loading from "../../components/Reports/Loading"
+import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 
 export const Synchronise = () => {
     const {repos, branches, updateBranches} = DBContextObj();
 
+    const { loading, user } = useAuth0();
+
     const [sourceValues, setSourceValues] = useState()
-    const [loading, setLoading] = useState()
+    const [setLoading] = useState()
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [isRemote, setIsRemote] = useState()
     const {woqlClient} = WOQLClientObj();
-    
+
     let update_start = Date.now()
 
 
     useEffect(() => {
-        if(repos){          
+        if(repos){
             let rem = repos.remote || repos.local_clone
             setSourceValues({
                 remote_url: rem.url,
@@ -35,7 +39,7 @@ export const Synchronise = () => {
             if(repos.remote) setIsRemote(true)
             else setIsRemote(false)
         }
-    }, [repos])  
+    }, [repos])
 
     function updateOperation(field, val){
         let s = {}
@@ -59,23 +63,23 @@ export const Synchronise = () => {
 
     let remote_push_fields = PUSH_REMOTE_FORM.fields.map((item) => {
         if(item.id == "local_branch") item.inputElement.options = getBranchOptions()
-        return item    
-    }) 
+        return item
+    })
 
     let local_push_fields = PUSH_LOCAL_FORM.fields.map((item) => {
         if(item.id == "local_branch") item.inputElement.options = getBranchOptions()
-        return item    
-    }) 
+        return item
+    })
 
     let remote_pull_fields = PULL_REMOTE_FORM.fields.map((item) => {
         if(item.id == "local_branch") item.inputElement.options = getBranchOptions()
-        return item    
-    }) 
+        return item
+    })
 
     let local_pull_fields = PULL_LOCAL_FORM.fields.map((item) => {
         if(item.id == "local_branch") item.inputElement.options = getBranchOptions()
-        return item    
-    }) 
+        return item
+    })
 
     function pushLocal(deets){
         let from_branch = deets.local_branch || "master"
@@ -97,8 +101,8 @@ export const Synchronise = () => {
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterPush()  
+            setReport(rep)
+            afterPush()
         })
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pushFailureMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
@@ -106,7 +110,7 @@ export const Synchronise = () => {
         })
         .finally(() => {
             setLoading(false)
-        })    
+        })
     }
 
     function pullLocal(deets){
@@ -121,15 +125,15 @@ export const Synchronise = () => {
         let nClient = woqlClient.copy()
         let abc = nClient.basic_auth()
         nClient.remote_auth({type: "basic", key: abc.split(":")[1], user: abc.split(":")[0]})
-        if(to_branch != nClient.checkout()) nClient.checkout(to_branch)       
+        if(to_branch != nClient.checkout()) nClient.checkout(to_branch)
         update_start = Date.now()
         setLoading(true)
         nClient.pull(pull_from)
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterPull()  
+            setReport(rep)
+            afterPull()
         })
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
@@ -137,11 +141,11 @@ export const Synchronise = () => {
         })
         .finally(() => {
             setLoading(false)
-        })    
+        })
     }
 
 
-    function afterPush(){     
+    function afterPush(){
         //alert("Push was successful")
     }
 
@@ -171,8 +175,8 @@ export const Synchronise = () => {
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterPush()  
+            setReport(rep)
+            afterPush()
         })
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pushFailureMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
@@ -180,7 +184,7 @@ export const Synchronise = () => {
         })
         .finally(() => {
             setLoading(false)
-        })    
+        })
     }
 
 
@@ -204,8 +208,8 @@ export const Synchronise = () => {
         .then((res) => {
             let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
             let rep = {message: message, status: TERMINUS_SUCCESS, time: (Date.now() - update_start)}
-            setReport(rep)     
-            afterPull()  
+            setReport(rep)
+            afterPull()
         })
         .catch((err) => {
             let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
@@ -213,58 +217,72 @@ export const Synchronise = () => {
         })
         .finally(() => {
             setLoading(false)
-        })    
+        })
     }
 
 
     if(report && report.status == TERMINUS_SUCCESS){
         return (<TerminusDBSpeaks report={report} />)
     }
+
+    let pushButtons = (user ? PUSH_REMOTE_FORM.buttons : false)
+    let pullButtons = (user ? PULL_REMOTE_FORM.buttons : false)
+
     return (<>
-        {loading && 
+        {loading &&
             <Loading type={TERMINUS_COMPONENT} />
         }
-        <TCForm 
+        <TCForm
             onChange={updateOperation}
-            values={sourceValues} 
+            values={sourceValues}
             layout = {[3]}
             fields={SYNCHRONISE_FORM.fields}
         />
-        {(operation && operation == 'push' && isRemote) && 
-            <TCForm 
+        {!user && (operation && operation == 'push') &&
+            <TCSubmitWrap>
+                <UnderConstruction action={PUSH_REMOTE_FORM.buttons.submitText}/>
+            </TCSubmitWrap>
+        }
+        {(operation && operation == 'push' && isRemote) &&
+            <TCForm
                 fields={remote_push_fields}
                 layout = {[2,2,1]}
-                report={report} 
+                report={report}
                 onSubmit = {pushRemote}
-                buttons = {PUSH_REMOTE_FORM.buttons}
+                buttons = {pushButtons}
             />
-        }       
-        {(operation && operation == 'push' && !isRemote) && 
-            <TCForm 
+        }
+        {(operation && operation == 'push' && !isRemote) &&
+            <TCForm
                 fields={local_push_fields}
                 layout = {[2,1]}
-                report={report} 
+                report={report}
                 onSubmit = {pushLocal}
-                buttons = {PUSH_LOCAL_FORM.buttons}
+                buttons = {pushButtons}
             />
-        }       
-        {(operation && isRemote && operation == 'pull') && 
-            <TCForm 
+        }
+        {!user && (operation && operation == 'pull') &&
+            <TCSubmitWrap>
+                <UnderConstruction action={PULL_REMOTE_FORM.buttons.submitText}/>
+            </TCSubmitWrap>
+        }
+        {(operation && isRemote && operation == 'pull') &&
+            <TCForm
                 fields={remote_pull_fields}
-                report={report} 
+                report={report}
                 layout = {[2,2,1]}
                 onSubmit = {pullRemote}
-                buttons = {PULL_REMOTE_FORM.buttons}
+                buttons = {pullButtons}
             />
-        }       
-        {(operation && !isRemote && operation == 'pull') && 
-            <TCForm 
+        }
+        {(operation && !isRemote && operation == 'pull') &&
+            <TCForm
                 fields={local_pull_fields}
-                report={report} 
+                report={report}
                 layout = {[2,1]}
                 onSubmit = {pullLocal}
-                buttons = {PULL_LOCAL_FORM.buttons}
+                buttons = {pullButtons}
             />
-        }       
+        }
     </>)
 }

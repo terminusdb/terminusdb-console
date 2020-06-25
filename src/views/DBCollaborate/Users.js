@@ -3,7 +3,7 @@
  */
 import React, {useState} from "react";
 import { useAuth0 } from "../../react-auth0-spa";
-import { SHARE_FORM } from "./constants.dbcollaborate"
+import { MANAGE_COLLABORATORS } from "./constants.dbcollaborate"
 import { TCForm, TCSubmitWrap } from  "../../components/Form/FormComponents"
 import { UnderConstruction } from "../../components/Reports/UnderConstruction"
 
@@ -17,7 +17,7 @@ export const Users = () => {
         {/*<span>Users .. coming soon</span>*/}
         {!user &&
             <TCSubmitWrap>
-                <UnderConstruction/>
+                <UnderConstruction action={MANAGE_COLLABORATORS.actionText}/>
             </TCSubmitWrap>
         }</>
     )
