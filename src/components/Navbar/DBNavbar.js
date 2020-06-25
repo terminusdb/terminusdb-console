@@ -55,8 +55,8 @@ const GuardedDBNavbar = (props) => {
                         to = {getNavURL("")}
                         activeClassName = "nav__main__link--selected"
                         exact
-                        title={dbmeta.title}
-                        id={PAGES_ID.NAV_DB_HOME}>
+                        id={PAGES_ID.NAV_DB_HOME}
+                        title={dbmeta.title}>
                         {trimContent(dbmeta.title, 15)}
                     </NavLink>
                 </li>
