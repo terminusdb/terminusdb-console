@@ -1,5 +1,5 @@
 .tdb__button__base{
-	border-color: transparent;
+	border: 1px solid #808080;
 	color: white;
 	padding: 12px 30px;
     border-radius: 3px;
@@ -9,8 +9,48 @@
     letter-spacing: .88px;
     background-color: #808080;
 
+    &--bgreen{
+    	background-color: white;
+    	border:1px solid @brand-color-green;
+    	color: @brand-color-green;
+    	&:hover{
+    		border:1px solid @brand-color-green;
+    		background-color: @brand-color-green;
+    		color: white;
+    	}
+    	&:focus{
+    		border:1px solid @brand-color-green;
+    		background-color: @brand-color-green;
+    		color: white;
+    	}
+    }
+
+     &--bblue{
+    	background-color: white;
+    	border:1px solid @brand-color-blu;
+    	color: @brand-color-blu;
+    	&:hover{
+    		border:1px solid @brand-color-blu;
+    		background-color: @brand-color-blu;
+    		color: white;
+    	}
+    	&:focus{
+    		border:1px solid @brand-color-blu;
+    		background-color: @brand-color-blu;
+    		color: white;
+    	}
+    }
+
     &--green{
-		background-color: rgb(0, 192, 139);
+		background-color: @brand-color-green;
+		&:hover{
+			background-color: @brand-color-green;
+    		border:1px solid @brand-color-green;
+    	}
+    	&:focus{
+    		background-color: @brand-color-green;
+    		border:1px solid @brand-color-green;
+    	}
 	}
 
 	&--red{

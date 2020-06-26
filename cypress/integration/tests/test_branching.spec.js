@@ -1,6 +1,7 @@
 import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "./utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "./utils/definedActions"
+import { config } from "./utils/config"
 
 /*
 *	1.	Create a new db
@@ -14,38 +15,59 @@ import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTyp
 */
 
 context('Test commits and branching', () => {
-   let dbid, bid, commit_msg, masterBranchId='master';
+   let bid, commit_msg, masterBranchId='master';
+   let database = config[0]
 
    before(() => {
-       cy.visit('http://localhost:3005');
-       dbid=`mydb_${Date.now()}`
+       cy.visit('/')
    })
 
-   it('Create database', () => {
+  it('the user need to login', () => { 
+    cy.get("body").then($body => {
+        if ($body.find("#tdbPassword").length > 0) {
+              cy.get("#tdbPassword").focus().type('root').then(()=>{
+                  cy.get("#tdbSubmit").click();
+          })
+        }
+    })
+  })
+
+   /***** Creating database ****/
+   it('Creating database', () => {         
         cy.wait(2000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains(tabs.CREATEDB_TITLE)
-        .click().then(() => {
-            cy.wait(1000);
-            createLocalDB(dbid)
-        })
+        cy.get("#terminus-console-page").then(async($consolePage) => {
+            if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
+                await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
+                cy.wait(1000);
+                await createLocalDB(database.name)
+            }else{
+                /*if we don't have db and the add db tab if not present*/
+                await createLocalDB(database.name);
+            }
+        });
     })
 
-    it('Add Schema', () => {
-        cy.wait(5000);
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-            addSchema(dbid)
-        })
-    })
+
+   /***** Add schema ****/
+   it('Add Schema', () => {
+      cy.wait(3000);
+      cy.url().then(urlString => {
+          const dbUrl = `#/db/admin/${database.name}`
+          if(!urlString.endsWith(dbUrl)){
+              cy.visit(dbUrl)
+          }
+
+          cy.get('#nav_query').click().then( async() => {
+              cy.wait(1000)
+              await addSchema(database)
+          })              
+      })           
+  })
+
 
 	it('Go to database home page', () => {
         cy.wait(2000);
-        const dbHomeRef = "#/db/admin/" + dbid + "/"
+        const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -79,14 +101,14 @@ context('Test commits and branching', () => {
 
 	it('View Branch List', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(bid)
         })
     })
 
-	it('Query to perform a commits in new branch', () => {
+	it('Query to perform a commit in new branch', () => {
         cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
@@ -97,7 +119,7 @@ context('Test commits and branching', () => {
         })
     })
 
-	it('Query to perform a second commits in new branch', () => {
+	it('Query to perform a second commit in new branch', () => {
         cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
@@ -121,7 +143,7 @@ context('Test commits and branching', () => {
 
 	it('View Master Branch', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(masterBranchId)
@@ -130,7 +152,7 @@ context('Test commits and branching', () => {
 
 	it('View New Branch', () => {
         cy.wait(2000);
-        cy.get('.select-nav-bar')
+        cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
 			clickOnBranch(bid)
@@ -139,7 +161,7 @@ context('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(2000);
-        const dbHomeRef = "#/db/admin/" + dbid + "/"
+        const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -155,7 +177,7 @@ context('Test commits and branching', () => {
         .contains(tabs.MANAGE_TAB)
         .click().then(() => {
             cy.wait(1000);
-            removeLocalDB(dbid)
+            removeLocalDB(database.name)
         })
     })
 

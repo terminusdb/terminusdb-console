@@ -13,3 +13,7 @@ console/public_pages
 cypress/integration/examples
 cypress/videos
 cypress/screenshots
+
+src/components/History/TimeTraveler.js
+src/css/img/
+src/css/timeTravel.css

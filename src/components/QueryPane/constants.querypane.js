@@ -9,6 +9,11 @@ export const EDIT_THIS_VERSION = "Edit this version"
 export const LANGUAGE_NAMES = {js: "WOQL.js", python: "WOQL.py", json: "JSON-LD"}
 export const LANGUAGE_DROPDOWN = "Language Views"
 
+export const ELEMENTS_ID={
+    RESULT_DROPDOWN:'result_dropdown'
+
+}
+
 export const EDITOR_READ_OPTIONS = {
     noHScroll: false,
     readOnly: true,
@@ -55,7 +60,7 @@ export const COMMIT_BOX = {
 
 
 export const QUERY_EDITOR_LABEL ={
-    syntaxErrorMessage:"Parse error: syntax error. Please check your woql query"
+    syntaxErrorMessage:"Parse error: Syntax error "
 }
 
 export const TOOLBAR_CSS = {

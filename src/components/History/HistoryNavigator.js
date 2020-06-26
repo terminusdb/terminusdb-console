@@ -12,9 +12,6 @@ import TerminusClient from '@terminusdb/terminusdb-client';
 import {HISTORY} from "./constants.history"
 import { DBContextObj} from "../Query/DBContext"
 
-//import {HistoryNavigatorHook} from "./HistoryNavigatorHook"
-//import {HistoryNavigatorObj } from "../../init/history-navigator-instance";
-
 export const HistoryNavigator = (props) => {
     const { setConsoleTime, consoleTime, setHead, branch, ref, DBInfo, branches} = DBContextObj();
 
