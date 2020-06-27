@@ -27,7 +27,7 @@ export const trimContent = (str, limit) => {
 
 export const getCurrentDBName = (client) => {
     if (isObject(client)){
-        const dbRec = client.connection.getDBMetadata(client.db(), client.account())
+        const dbRec = client.connection.getDBMetadata(client.db(), client.organization())
         if (isObject(dbRec)) return dbRec.title
         else return false;
     }
@@ -36,7 +36,7 @@ export const getCurrentDBName = (client) => {
 
 export const getCurrentDbDescr = (client) => {
     if (isObject(client)){
-        const dbRec = client.connection.getDBMetadata(client.db(), client.account())
+        const dbRec = client.connection.getDBMetadata(client.db(), client.organization())
         if (isObject(dbRec)) return dbRec.description
         else return false;
     }

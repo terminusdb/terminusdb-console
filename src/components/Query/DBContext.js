@@ -7,11 +7,12 @@ export const DBContext = React.createContext()
 export const DBContextObj = () => useContext(DBContext)
 
 export const DBContextProvider = ({children, woqlClient}) => {
-  if (woqlClient.db() == 'terminus') {
-    return (
-      <DBContext.Provider value={TerminusDBProvider(woqlClient)}>{children}</DBContext.Provider>
-    )
-  }
+    alert(woqlClient.db())
+    if (woqlClient.db() == 'system') {
+        return (
+        <DBContext.Provider value={TerminusDBProvider(woqlClient)}>{children}</DBContext.Provider>
+        )
+    }
   const [branches, setBranches] = useState()
   const [graphs, setGraphs] = useState()
   const [DBInfo, setDBInfo] = useState()

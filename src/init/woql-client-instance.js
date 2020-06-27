@@ -15,7 +15,7 @@ export const WOQLClientProvider = ({children, params}) => {
     const [refId, setRef] = useState(0)
 
     let database = false
-    let account = false
+    let organization = false
     //let key;
 
     /*
@@ -44,7 +44,7 @@ export const WOQLClientProvider = ({children, params}) => {
                      * if we have already set this variable we can unpdate woqlClient
                      */
                     if (database) setDatabase(database)
-                    if (account) setAccount(account)
+                    if (organization) setOrganization(organization)
                 } catch (err) {
                     setError(err)
                 }
@@ -63,15 +63,15 @@ export const WOQLClientProvider = ({children, params}) => {
     /*
      * you can change the woqlCLient settings
      */
-    const setAccount = (accountName) => {
+    const setOrganization = (organizationName) => {
         if (woqlClient) {
-            woqlClient.account(accountName)
-            account = woqlClient.account()
+            woqlClient.organization(organizationName)
+            organization = woqlClient.organization()
         } else {
             /*
              * I'm save the value in the variable in any case
              */
-            account = accountName
+            organization = organizationName
         }
     }
 
@@ -105,7 +105,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 loadingServer,
                 woqlClient,
                 clientError,
-                setAccount,
+                setOrganization,
                 setDatabase,
                 setKey,
                 refId,

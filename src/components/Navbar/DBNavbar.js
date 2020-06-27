@@ -26,7 +26,8 @@ const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
     const {branches, branch, ref, setHead, consoleTime} = DBContextObj()
 
-    let dbmeta = woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.organization()) || {}
+    let dbmeta =
+        woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.organization()) || {}
 
     const [toggleTime, setToggleTime] = useState(false)
 
@@ -40,7 +41,7 @@ const GuardedDBNavbar = (props) => {
     }
 
     function getDBHomeDetails() {
-        if (dbmeta.db == 'terminus' || !branches) {
+        if (dbmeta.db == 'system' || !branches) {
             return ''
         }
 
@@ -66,6 +67,7 @@ const GuardedDBNavbar = (props) => {
                     activeClassName="nav__main__link--selected"
                     exact
                     id={PAGES_ID.NAV_DB_HOME}
+                    title={dbmeta.title}
                 >
                     {trimContent(dbmeta.title, 15)}
                 </NavLink>

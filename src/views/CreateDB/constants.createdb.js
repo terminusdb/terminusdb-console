@@ -8,7 +8,7 @@ export const CREATE_LOCAL = "New Database Details"
 export const COPY_LOCAL = "Database Details"
 export const LOCAL_OR_REMOTE = "Local or Remote"
 
-export const OPTIONS_PANE_CSS = "col-md-12 justify-content-center" 
+export const OPTIONS_PANE_CSS = "col-md-12 justify-content-center"
 export const OPTIONS_PANE_COL_CSS = "col-md-5"
 export const CARD_CONTAINER_CSS = "square db-view-cards"
 
@@ -90,7 +90,7 @@ export const CREATE_DB_FORM = {
 
 export const DB_DETAILS_FORM = {
     fields: [
-        {   
+        {
             id: "dbid",
             maxLength:200,
             value: "",
@@ -103,7 +103,7 @@ export const DB_DETAILS_FORM = {
                 placeholder: "Enter ID of new database"
             }
         },
-        {   
+        {
             id: "dbname",
             label: 'Database Name',
             value: "",
@@ -130,7 +130,7 @@ export const DB_ADVANCED_FORM = {
     advancedButtonClassName: "advanced-button btn-minor lead mt-4 btn",
     advancedSectionClassName: "advanced-section-create-form",
     hideAdvanced: "Hide Advanced Settings",
-    showAdvanced: "Show Advanced Settings",    
+    showAdvanced: "Show Advanced Settings",
     fields: [
         {
             id: "schema",
@@ -154,7 +154,7 @@ export const DB_ADVANCED_FORM = {
             },
             help: "All data in TerminusDB is addressable by URL - you can choose the default URL prefix that you want to use for your internal data. This can be useful, for example, if you want to create a linked data application where all data is dereferencable",
         },
-        {   
+        {
             id: "schema_url",
             label: 'Base URL for schema elements',
             value: "",
@@ -227,7 +227,7 @@ export const COPY_REMOTE_FORM = {
                 type: "input",
                 placeholder: "Enter URL of TerminusDB Database",
             },
-            help: "The URL of the database is normally of the form: https://my.host.com/db/<account_id>/<database_id>"
+            help: "The URL of the database is normally of the form: https://my.host.com/db/<organization_id>/<database_id>"
         },
         {
             id: "newid",
@@ -273,7 +273,7 @@ export const COPY_REMOTE_FORM = {
                 type: "textarea",
                 placeholder: "Enter a short text describing the database, its scope and purpose",
             },
-        },        
+        },
     ],
     buttons: {
         submitText: "Copy Remote Database"
@@ -284,7 +284,7 @@ export const COPY_REMOTE_FORM = {
 
 export const COPY_DB_DETAILS_FORM = {
     fields: [
-        {   
+        {
             id: "dbid",
             label: 'Original ID',
             inputElement: {
@@ -292,7 +292,7 @@ export const COPY_DB_DETAILS_FORM = {
                 disabled: true
             }
         },
-        {   
+        {
             id: "dbname",
             label: 'New DB Name',
             inputElement: {
@@ -313,10 +313,11 @@ export const COPY_DB_DETAILS_FORM = {
 export const CREATE_REMOTE_FORM = {
     createButtonText: "Create New Database",
     actionText: "Creating Databases on TerminusDB.com",
+    shareText: "Share",
     createFailureMessage: "Failed to Create Database",
     createSuccessMessage: "Successfully Created Database: ",
     fields: [
-        {   
+        {
             id: "dbid",
             label: 'Database ID',
             inputElement: {
@@ -325,7 +326,7 @@ export const CREATE_REMOTE_FORM = {
             },
             help: "Help on how to choose a good id"
         },
-        {   
+        {
             id: "dbname",
             label: 'Database Name',
             inputElement: {
@@ -393,7 +394,7 @@ export const CREATE_REMOTE_FORM = {
             label: 'Agreement',
             inputElement: {
                 type: "textarea",
-                disabled: true,                
+                disabled: true,
             }
         },
         {

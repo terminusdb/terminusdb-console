@@ -7,21 +7,21 @@ export const COLLABORATE_SOON = {
 }
 
 export const COLLABORATE_SECTIONS = [
-    { 
+    {
         id: "users",
         title: "Manage Collaborators",
         icon: "user-friends",
         button: "Collaborators",
         blurb: "Add collaborators to your databases and manage the access rights of existing collaborators"
     },
-    { 
+    {
         id: "pull",
         title: "Synchronise Updates",
         icon: "download",
         button: "Pull & Push",
         blurb: "Your database is connected to a remote origin repository - this allows you to synchronise between them by pushing and pulling updates",
     },
-    { 
+    {
         id: "share",
         title: "Share",
         icon: "share-alt",
@@ -37,7 +37,7 @@ export const SYNCHRONISE_FORM = {
             value: "",
             inputElement: {
                 disabled: true,
-                type: "input",              
+                type: "input",
             },
             label: 'Remote Repository Name'
         },
@@ -46,7 +46,7 @@ export const SYNCHRONISE_FORM = {
             value: "",
             inputElement: {
                 disabled: true,
-                type: "input",              
+                type: "input",
             },
             label: 'Origin URL'
         },
@@ -56,10 +56,10 @@ export const SYNCHRONISE_FORM = {
             inputElement: {
                 placeholder: "choose operation",
                 type: "select",
-                options: [{value: "pull", label: "Pull Changes from Remote"}, {value: 'push', label: "Push Changes to Remote"}]              
+                options: [{value: "pull", label: "Pull Changes from Remote"}, {value: 'push', label: "Push Changes to Remote"}]
             },
             label: 'Synchronise Operation'
-        }        
+        }
     ],
     pushSuccessMessage: "Successfully pushed updates ",
     pushFailureMessage: "Failed to push updates ",
@@ -75,7 +75,7 @@ export const PULL_REMOTE_FORM = {
             value: "",
             inputElement: {
                 placeholder: "defaults to master",
-                type: "input",              
+                type: "input",
             },
             label: 'Pull from Remote Branch'
         },
@@ -85,7 +85,7 @@ export const PULL_REMOTE_FORM = {
             inputElement: {
                 placeholder: "select local branch",
                 type: "select",
-                options: []              
+                options: []
             },
             label: 'Pull to Local Branch'
         },
@@ -106,7 +106,7 @@ export const PULL_REMOTE_FORM = {
                 type: "input",
                 placeholder: "enter password for remote server",
             }
-        }, 
+        },
         {
             id: "commit",
             label: "Commit Message",
@@ -114,7 +114,7 @@ export const PULL_REMOTE_FORM = {
                 type: "textarea",
                 placeholder: "A short description of the reason for synchronising",
             }
-        }               
+        }
     ],
     buttons: {
         submitText: "Pull Updates",
@@ -129,7 +129,7 @@ export const PULL_LOCAL_FORM = {
             value: "",
             inputElement: {
                 placeholder: "defaults to master",
-                type: "input",              
+                type: "input",
             },
             label: 'Pull from Origin Branch'
         },
@@ -139,10 +139,10 @@ export const PULL_LOCAL_FORM = {
             inputElement: {
                 placeholder: "select local branch",
                 type: "select",
-                options: []              
+                options: []
             },
             label: 'Pull to Local Branch'
-        }, 
+        },
         {
             id: "commit",
             label: "Commit Message",
@@ -150,7 +150,7 @@ export const PULL_LOCAL_FORM = {
                 type: "textarea",
                 placeholder: "A short description of the reason for synchronising",
             }
-        }                 
+        }
     ],
     buttons: {
         submitText: "Pull Updates"
@@ -165,7 +165,7 @@ export const PUSH_REMOTE_FORM = {
             inputElement: {
                 placeholder: "select local branch",
                 type: "select",
-                options: []              
+                options: []
             },
             label: 'Push From Local Branch'
         },
@@ -174,7 +174,7 @@ export const PUSH_REMOTE_FORM = {
             value: "",
             inputElement: {
                 placeholder: "defaults to master",
-                type: "input",              
+                type: "input",
             },
             label: 'Push to Remote Branch'
         },
@@ -203,13 +203,16 @@ export const PUSH_REMOTE_FORM = {
                 type: "textarea",
                 placeholder: "A short description of the reason for synchronising",
             }
-        }                 
+        }
     ],
     buttons: {
         submitText: "Push Updates"
     }
 }
 
+export const MANAGE_COLLABORATORS = {
+    actionText: "Collaborate Users"
+}
 
 export const PUSH_LOCAL_FORM = {
     fields: [
@@ -219,16 +222,16 @@ export const PUSH_LOCAL_FORM = {
             inputElement: {
                 placeholder: "select local branch",
                 type: "select",
-                options: []              
+                options: []
             },
             label: 'Push From Local Branch'
-        }, 
+        },
         {
             id: "remote_branch",
             value: "",
             inputElement: {
                 placeholder: "defaults to master",
-                type: "input",              
+                type: "input",
             },
             label: 'Push to Origin Branch'
         },
@@ -239,12 +242,13 @@ export const PUSH_LOCAL_FORM = {
                 type: "textarea",
                 placeholder: "A short description of the reason for synchronising",
             }
-        } 
+        }
     ],
     buttons: {
         submitText: "Push Updates"
     }
 }
+
 
 export const DEFAULT_LOCAL_PUSH_COMMIT = "Pushed commit to local db with console"
 export const DEFAULT_LOCAL_PULL_COMMIT = "Pulled commit from local db with console"
