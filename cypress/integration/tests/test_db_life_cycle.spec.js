@@ -25,11 +25,11 @@ context('Create and delete a database locally', () => {
       
 
     describe('Database life Circle', () => {
-        
+        const password = Cypress.env('password');
         it('the user need to login', () => { 
             cy.get("body").then($body => {
                 if ($body.find("#tdbPassword").length > 0) {
-                      cy.get("#tdbPassword").focus().type('root').then(()=>{
+                      cy.get("#tdbPassword").focus().type(password).then(()=>{
                           cy.get("#tdbSubmit").click();
                   })
                 }

@@ -22,10 +22,11 @@ context('Test commits and branching', () => {
        cy.visit('/')
    })
 
-  it('the user need to login', () => { 
+  it('the user need to login', () => {
+    const password = Cypress.env('password');
     cy.get("body").then($body => {
         if ($body.find("#tdbPassword").length > 0) {
-              cy.get("#tdbPassword").focus().type('root').then(()=>{
+              cy.get("#tdbPassword").focus().type(password).then(()=>{
                   cy.get("#tdbSubmit").click();
           })
         }
