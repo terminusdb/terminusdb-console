@@ -17,16 +17,16 @@ import { config } from "./utils/config"
 *   11. Perform the above 10 steps for political-data
 */
 
-context('Create and delete a database locally', () => {
+context('Run the entire life cycle of a database', () => {
 
     before(() => {
        cy.visit('/');
     })
-      
+
 
     describe('Database life Circle', () => {
-        
-        it('the user need to login', () => { 
+
+        it('the user need to login', () => {
             cy.get("body").then($body => {
                 if ($body.find("#tdbPassword").length > 0) {
                       cy.get("#tdbPassword").focus().type('root').then(()=>{
@@ -36,10 +36,10 @@ context('Create and delete a database locally', () => {
             })
         })
 
-       config.forEach((database) => { 
+       config.forEach((database) => {
         /***** Creating database ****/
-        it('Creating database', () => {         
-            cy.wait(2000);
+        it('Creating database', () => {
+            cy.wait(5000);
             cy.get("#terminus-console-page").then(async($consolePage) => {
                 if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                     await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
@@ -55,24 +55,25 @@ context('Create and delete a database locally', () => {
 
         /***** Add schema ****/
         it('Add Schema', () => {
-            cy.wait(3000);
+            cy.wait(5000);
             cy.url().then(urlString => {
                 const dbUrl = `#/db/admin/${database.name}`
                 if(!urlString.endsWith(dbUrl)){
+                    cy.log("URL",urlString);
                     cy.visit(dbUrl)
                 }
 
                 cy.get('#nav_query').click().then( async() => {
                     cy.wait(1000)
                     await addSchema(database)
-                })              
-            })           
+                })
+            })
         })
 
 
         /***** View schema ****/
         it('View Schema tabs', () => {
-            cy.wait(2000);
+            cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Schema')
@@ -109,7 +110,7 @@ context('Create and delete a database locally', () => {
 
         /***** View Documents  ****/
         it('View Documents', () => {
-            cy.wait(2000);
+            cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Documents')
@@ -133,7 +134,7 @@ context('Create and delete a database locally', () => {
 
         /***** Go to Home Page  ****/
         it('Go to database home page', () => {
-            cy.wait(2000);
+            cy.wait(5000);
             const dbHomeRef = "#/db/admin/" + database.name + "/"
             cy.get('#terminus-console-page')
             .find('a[href="'+ dbHomeRef +'"]')
@@ -144,7 +145,7 @@ context('Create and delete a database locally', () => {
 
         /***** Deleting database ****/
         it('Delete database', () => {
-            cy.wait(2000);
+            cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains(tabs.MANAGE_TAB)

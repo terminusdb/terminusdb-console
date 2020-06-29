@@ -22,7 +22,7 @@ context('Test commits and branching', () => {
        cy.visit('/')
    })
 
-  it('the user need to login', () => { 
+  it('the user need to login', () => {
     cy.get("body").then($body => {
         if ($body.find("#tdbPassword").length > 0) {
               cy.get("#tdbPassword").focus().type('root').then(()=>{
@@ -33,8 +33,15 @@ context('Test commits and branching', () => {
   })
 
    /***** Creating database ****/
-   it('Creating database', () => {         
-        cy.wait(2000);
+   it('Creating database', () => {
+        cy.wait(5000);
+
+        cy.get("body").then(async ($body)=>{
+                if ($body.find('#loading').length > 0){
+                    await cy.get('#loading').should('not.exist');
+                }
+            })
+
         cy.get("#terminus-console-page").then(async($consolePage) => {
             if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                 await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
@@ -50,7 +57,14 @@ context('Test commits and branching', () => {
 
    /***** Add schema ****/
    it('Add Schema', () => {
-      cy.wait(3000);
+      cy.wait(5000);
+
+      cy.get("body").then(async ($body)=>{
+            if ($body.find('#loading').length > 0){
+                await cy.get('#loading').should('not.exist');
+            }
+        })
+
       cy.url().then(urlString => {
           const dbUrl = `#/db/admin/${database.name}`
           if(!urlString.endsWith(dbUrl)){
@@ -60,13 +74,13 @@ context('Test commits and branching', () => {
           cy.get('#nav_query').click().then( async() => {
               cy.wait(1000)
               await addSchema(database)
-          })              
-      })           
+          })
+      })
   })
 
 
 	it('Go to database home page', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
@@ -76,7 +90,7 @@ context('Test commits and branching', () => {
     })
 
 	it('Create Branch', () => {
-        cy.wait(2000);
+        cy.wait(5000);
 		bid = 'New_Branch'
 		commit_msg = 'Creating new test branch'
         cy.get('#terminus-console-page')
@@ -89,7 +103,7 @@ context('Test commits and branching', () => {
     })
 
 	it('View Schema Classes', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
         .contains('Schema')
@@ -100,7 +114,7 @@ context('Test commits and branching', () => {
 
 
 	it('View Branch List', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
@@ -131,7 +145,7 @@ context('Test commits and branching', () => {
     })
 
 	it('View Schema Classes', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
         .contains('Schema')
@@ -142,7 +156,7 @@ context('Test commits and branching', () => {
 
 
 	it('View Master Branch', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
@@ -151,7 +165,7 @@ context('Test commits and branching', () => {
     })
 
 	it('View New Branch', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('.tdb__dropdown')
         .click().then(() => {
             cy.wait(1000);
@@ -160,7 +174,7 @@ context('Test commits and branching', () => {
     })
 
 	it('Go to database home page', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         const dbHomeRef = "#/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
@@ -171,7 +185,7 @@ context('Test commits and branching', () => {
 
 
     it('Delete database', () => {
-        cy.wait(2000);
+        cy.wait(5000);
         cy.get('#terminus-console-page')
         .find('a')
         .contains(tabs.MANAGE_TAB)
