@@ -30,14 +30,12 @@ export const createLocalDB = async (dbId,withGraph=true) =>{
 *   Add schema
 */
 export const addSchema = (database) => {
-
     cy.server().route("POST", routes.woqlQuery(database.name)).as('runQuery');
-
     cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.addSchema)
-    cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-
-    cy.wait("@runQuery").its('status').should('eq', 200);
-    cy.wait(5000);
+    cy.get('#runQuery').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })   
 }
 
 /*

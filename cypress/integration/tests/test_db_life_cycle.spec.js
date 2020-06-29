@@ -1,5 +1,5 @@
 import { createLocalDB, addSchema, removeLocalDB, addDocuments,runQueries } from "./utils/dbLifeCircle"
-import { flickThroughSchemaTabs, getSchemaElements, getDocumentsMetaData } from "./utils/definedActions"
+import {  flickThroughSchemaTabs, getSchemaElements, getDocumentsMetaData } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { config } from "./utils/config"
 
@@ -25,11 +25,11 @@ context('Run the entire life cycle of a database', () => {
 
 
     describe('Database life Circle', () => {
-
+        const password = Cypress.env('password');
         it('the user need to login', () => {
             cy.get("body").then($body => {
                 if ($body.find("#tdbPassword").length > 0) {
-                      cy.get("#tdbPassword").focus().type('root').then(()=>{
+                      cy.get("#tdbPassword").focus().type(password).then(()=>{
                           cy.get("#tdbSubmit").click();
                   })
                 }
@@ -38,9 +38,11 @@ context('Run the entire life cycle of a database', () => {
 
        config.forEach((database) => {
         /***** Creating database ****/
-        it('Creating database', () => {
+        it('Creating database',() => {
             cy.wait(5000);
-            cy.get("#terminus-console-page").then(async($consolePage) => {
+
+            cy.get("#terminus-console-page").then(async($consolePage)=>{
+
                 if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                     await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
                     cy.wait(1000);
@@ -49,7 +51,7 @@ context('Run the entire life cycle of a database', () => {
                 }else{
                     await createLocalDB(database.name);
                 }
-            });
+            })
         })
 
 
@@ -59,7 +61,8 @@ context('Run the entire life cycle of a database', () => {
             cy.url().then(urlString => {
                 const dbUrl = `#/db/admin/${database.name}`
                 if(!urlString.endsWith(dbUrl)){
-                    cy.log("URL",urlString);
+                    cy.log("___URL___",urlString);
+
                     cy.visit(dbUrl)
                 }
 
@@ -85,7 +88,7 @@ context('Run the entire life cycle of a database', () => {
 
 
         /***** Query Schema Elements  ****/
-        it('Query All Schema Elements', () => {
+       it('Query All Schema Elements', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
@@ -97,43 +100,44 @@ context('Run the entire life cycle of a database', () => {
         })
 
         /***** Go to Document Page  ****/
-        it('Add Documents', () => {
+       it('Add Documents', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('button')
             .contains('Add New Query Pane')
-            .click().then(() => {
+            .click().then(async() => {
     			cy.wait(1000)
-                addDocuments(database)
+                await addDocuments(database)
             })
         })
 
         /***** View Documents  ****/
-        it('View Documents', () => {
-            cy.wait(5000);
+        it('View Documents Page', () => {
+            cy.wait(2000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Documents')
             .click({force: true}).then(() => {
-    			cy.wait(1000)
+    			cy.wait(2000)
+                cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
             })
         })
 
-    	it('Query All Document', () => {
+     	it('Query All Document', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Query')
-            .click().then(() => {
-    			cy.wait(1000)
+            .click().then(async() => {
+    			cy.wait(2000)
     			//getDocumentsMetaData()
-                runQueries(database)
+                await runQueries(database)
             })
         })
 
 
         /***** Go to Home Page  ****/
-        it('Go to database home page', () => {
+       it('Go to database home page', () => {
             cy.wait(5000);
             const dbHomeRef = "#/db/admin/" + database.name + "/"
             cy.get('#terminus-console-page')
@@ -149,9 +153,9 @@ context('Run the entire life cycle of a database', () => {
             cy.get('#terminus-console-page')
             .find('a')
             .contains(tabs.MANAGE_TAB)
-            .click().then(() => {
+            .click().then(async () => {
                 cy.wait(1000);
-                removeLocalDB(database.name)
+                await removeLocalDB(database.name)
             })
        })
 

@@ -23,9 +23,10 @@ context('Test commits and branching', () => {
    })
 
   it('the user need to login', () => {
+    const password = Cypress.env('password');
     cy.get("body").then($body => {
         if ($body.find("#tdbPassword").length > 0) {
-              cy.get("#tdbPassword").focus().type('root').then(()=>{
+              cy.get("#tdbPassword").focus().type(password).then(()=>{
                   cy.get("#tdbSubmit").click();
           })
         }
@@ -35,13 +36,6 @@ context('Test commits and branching', () => {
    /***** Creating database ****/
    it('Creating database', () => {
         cy.wait(5000);
-
-        cy.get("body").then(async ($body)=>{
-                if ($body.find('#loading').length > 0){
-                    await cy.get('#loading').should('not.exist');
-                }
-            })
-
         cy.get("#terminus-console-page").then(async($consolePage) => {
             if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                 await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
@@ -90,15 +84,15 @@ context('Test commits and branching', () => {
     })
 
 	it('Create Branch', () => {
-        cy.wait(5000);
-		bid = 'New_Branch'
-		commit_msg = 'Creating new test branch'
-        cy.get('#terminus-console-page')
-        .find('a')
-        .contains(tabs.MANAGE_TAB)
-        .click().then(() => {
-            cy.wait(1000);
-            createBranch(bid, commit_msg)
+        cy.wait(2000);
+		    bid = 'New_Branch'
+		    commit_msg = 'Creating new test branch'
+            cy.get('#terminus-console-page')
+            .find('a')
+            .contains(tabs.MANAGE_TAB)
+            .click().then( async() => {
+              cy.wait(1000);
+              await createBranch(bid, commit_msg)
         })
     })
 
@@ -108,17 +102,17 @@ context('Test commits and branching', () => {
         .find('a')
         .contains('Schema')
         .click({force: true}).then(() => {
-			cy.wait(1000)
+			     cy.wait(1000)
         })
     })
 
 
-	it('View Branch List', () => {
-        cy.wait(5000);
+	it('View Branch List',() => {
+        cy.wait(2000);
         cy.get('.tdb__dropdown')
-        .click().then(() => {
+        .click().then( async() => {
             cy.wait(1000);
-			clickOnBranch(bid)
+			      await clickOnBranch(bid)
         })
     })
 
@@ -127,9 +121,9 @@ context('Test commits and branching', () => {
         cy.get('#terminus-console-page')
         .find('a')
         .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-			addNewDocTypes()
+        .click().then(async() => {
+			     cy.wait(1000)
+			     await addNewDocTypes()
         })
     })
 
@@ -138,9 +132,9 @@ context('Test commits and branching', () => {
         cy.get('#terminus-console-page')
         .find('a')
         .contains('Query')
-        .click().then(() => {
-			cy.wait(1000)
-			addSecondNewDocTypes()
+        .click().then(async () => {
+			     cy.wait(1000)
+			     await addSecondNewDocTypes()
         })
     })
 
@@ -150,7 +144,7 @@ context('Test commits and branching', () => {
         .find('a')
         .contains('Schema')
         .click({force: true}).then(() => {
-			cy.wait(1000)
+			       cy.wait(1000)
         })
     })
 
@@ -158,18 +152,18 @@ context('Test commits and branching', () => {
 	it('View Master Branch', () => {
         cy.wait(5000);
         cy.get('.tdb__dropdown')
-        .click().then(() => {
+        .click().then(async() => {
             cy.wait(1000);
-			clickOnBranch(masterBranchId)
+			      await clickOnBranch(masterBranchId)
         })
     })
 
 	it('View New Branch', () => {
         cy.wait(5000);
         cy.get('.tdb__dropdown')
-        .click().then(() => {
+        .click().then(async() => {
             cy.wait(1000);
-			clickOnBranch(bid)
+			      await clickOnBranch(bid)
         })
     })
 
@@ -189,9 +183,9 @@ context('Test commits and branching', () => {
         cy.get('#terminus-console-page')
         .find('a')
         .contains(tabs.MANAGE_TAB)
-        .click().then(() => {
+        .click().then(async() => {
             cy.wait(1000);
-            removeLocalDB(database.name)
+            await removeLocalDB(database.name)
         })
     })
 
