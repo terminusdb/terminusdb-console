@@ -1,6 +1,6 @@
 {
   "name": "@terminusdb/terminusdb-console",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "homepage": "./",
   "description": "console for terminusdb",
   "main": "src/index",
