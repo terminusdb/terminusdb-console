@@ -22,7 +22,6 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {SimplePageView} from '../Templates/SimplePageView'
 import {TabbedPageView} from '../Templates/TabbedPageView'
 import {CreateDatabase} from '../CreateDB/CreateDatabase'
-import {CREATE_DB_ROUTE, SERVER_ROUTE} from '../../constants/routes'
 import {DBList} from '../Tables/DBList'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
@@ -32,6 +31,7 @@ import {SetUpFirstUser} from '../Server/SetUpFirstUser'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {ManageServer} from '../Server/ManageServer'
 import {ManageUsers} from '../Server/ManageUsers'
+import { useAuth0 } from "../../react-auth0-spa";
 
 /**
  * Server home is the launch screen to the local experience
@@ -49,46 +49,45 @@ const ServerHome = (props) => {
     //if we have some super user permission, we can view the users tab
     //if we are in unitialised step, show the add commit log message
     //if we
-    const {woqlClient} = WOQLClientObj()
-    const dblist = woqlClient.connection.getServerDBMetadata() || []
-    const canCreate = woqlClient.connection.capabilitiesPermit('create_database')
-    if (dblist.length == 0 && !canCreate) {
-        return <TerminusDBSpeaks failure={ACCESS_FAILURE} />
-    }
 
-    let hasTutorials = false
-    let canManageUsers = false
-    let canManageServer = false
-    let sections = []
-    let tabs = []
+    const { loading, user } = useAuth0();
 
-    const [loading, setLoading] = useState()
     let [modal, setModal] = useState(false)
     let [error, setError] = useState(false)
-    let user = woqlClient.user()
-    //If the user is logged in as init admin user and there are no real user accounts, we get them to set one up...
-    useEffect(() => {
-        if (false && user.id == 'admin' && !user.author) {
-            setLoading(true)
-            let tClient = woqlClient.copy() //do not change internal client state
-            tClient.db('terminus')
-            TerminusClient.WOQL.lib()
-                .users()
-                .execute(tClient)
-                .then((result) => {
-                    if (true || !result || !result.bindings || result.bindings.length < 2) {
-                        setModal(true)
-                    }
-                })
-                .catch((err) => {
-                    setError({message: FAILED_LOADING_USERS, status: TERMINUS_ERROR, error: err})
-                    setModal(true)
-                })
-                .finally(() => setLoading(false))
-        }
-    }, [])
 
-    if (false && !user.author) {
+    const {woqlClient} = WOQLClientObj()
+    const localdbs = woqlClient.user_databases()
+    const dblist = addLocalDBs(localdbs) 
+    const canCreate = woqlClient.action_permitted('create_database', woqlClient.user_organization())
+
+    function addLocalDBs(dbs) {
+        return dbs
+    }
+
+    function getUserAuthor(){
+        if(user){
+            return user.name
+        }
+        let luser = woqlClient.getUser()
+        return luser.author
+    }
+
+    useEffect(() => {
+        if (user) {
+            //add remote databases   
+        }
+        else if(!loading) {
+
+        }
+    }, [user, loading])
+
+    let hasTutorials = true
+    let canManageUsers = true
+    let canManageServer = true
+    let sections = []
+    let tabs = []
+    let author = getUserAuthor()
+    if (!author) {
         sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
         tabs.push(<AddUserCommitLogID key="addcommitid" />)
     }

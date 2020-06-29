@@ -20,32 +20,24 @@ export const DBRoutes = () => {
 
     const {path} = useRouteMatch()
     return (
-        <DBContextProvider woqlClient={woqlClient}>
-            <Switch>
-                <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
-                    <MasterDBRoute />
-                </Route>
-                <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
-                    <DBRoute />
-                </Route>
-            </Switch>
-        </DBContextProvider>
+        <Switch>
+            <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
+                <MasterDBRoute />
+            </Route>
+            <Route key="specificdb" path={`${path}${SPECIFIC_DB_ROUTE}`}>
+                <DBRoute />
+            </Route>
+        </Switch>
     )
 }
-
-/*
-<HistoryNavigatorProvider>
-    <DBRoute/>
-</HistoryNavigatorProvider>
-*/
 
 /**
  * Routes specific to Terminus (master) DB
  */
 const MasterDBRoute = () => {
     const {path} = useRouteMatch()
-    const {setDatabase, setOrganization} = WOQLClientObj()
-    setDatabase('system')
+    const {setDatabase, setOrganization, woqlClient} = WOQLClientObj()
+    setDatabase('_system')
     setOrganization(false)
     const routes = []
     routes.push(
@@ -68,7 +60,7 @@ const MasterDBRoute = () => {
             <TerminusHome key="terminushome" />
         </Route>,
     )
-    return <Switch>{routes}</Switch>
+    return <DBContextProvider woqlClient={woqlClient}><Switch>{routes}</Switch></DBContextProvider>
 }
 
 /**
@@ -78,7 +70,7 @@ const DBRoute = () => {
     const {path} = useRouteMatch()
 
     const {aid, dbid} = useParams()
-    const {setDatabase, setOrganization} = WOQLClientObj()
+    const {setDatabase, setOrganization, woqlClient} = WOQLClientObj()
     setDatabase(dbid)
     setOrganization(aid)
     const routes = []
@@ -102,5 +94,5 @@ const DBRoute = () => {
             <DBHomeRoutes key="dbhome" />
         </Route>,
     )
-    return <Switch>{routes}</Switch>
+    return <DBContextProvider woqlClient={woqlClient}><Switch>{routes}</Switch></DBContextProvider>
 }

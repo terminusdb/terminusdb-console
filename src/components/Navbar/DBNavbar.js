@@ -14,20 +14,23 @@ import {BranchSelector} from '../History/BranchSelector'
 import {printts} from '../../constants/dates'
 
 export const DBNavbar = (props) => {
-    //sometimes loaded by back button when not in DB context
-    try {
-        return GuardedDBNavbar(props)
-    } catch (e) {
-        return null
+    const {woqlClient} = WOQLClientObj()
+    if (woqlClient.db()) {
+        //sometimes loaded by back button when not in DB context
+        try {
+            return GuardedDBNavbar(props)
+        } catch (e) {
+            return null
+        }
     }
+    return null
 }
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches, branch, ref, setHead, consoleTime} = DBContextObj()
+    const {branches, consoleTime} = DBContextObj()
 
-    let dbmeta =
-        woqlClient.connection.getDBMetadata(woqlClient.db(), woqlClient.organization()) || {}
+    let dbmeta = woqlClient.get_database() || {}
 
     const [toggleTime, setToggleTime] = useState(false)
 
@@ -41,7 +44,7 @@ const GuardedDBNavbar = (props) => {
     }
 
     function getDBHomeDetails() {
-        if (dbmeta.db == 'system' || !branches) {
+        if (dbmeta.id == '_system' || !branches) {
             return ''
         }
 
@@ -67,9 +70,9 @@ const GuardedDBNavbar = (props) => {
                     activeClassName="nav__main__link--selected"
                     exact
                     id={PAGES_ID.NAV_DB_HOME}
-                    title={dbmeta.title}
+                    title={dbmeta.label}
                 >
-                    {trimContent(dbmeta.title, 15)}
+                    {trimContent(dbmeta.label, 15)}
                 </NavLink>
             </li>
             <li className="nav__main__item">

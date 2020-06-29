@@ -28,7 +28,7 @@ const RenderTable = (props) => {
         (state) => {
             switch (props.fromPage) {
                 case 'home':
-                    var dbId = state['db']
+                    var dbId = state['id']
                     var organization = state['organization']
                     goDBHome(dbId, organization)
                     break

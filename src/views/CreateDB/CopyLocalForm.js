@@ -12,17 +12,13 @@ import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from './constants.createdb'
 import {goDBHome, goServerHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
-import {AccessControlErrorPage} from '../../components/Reports/AccessControlErrorPage'
 import {Container, Row} from 'reactstrap'
 import {UnstableWarning} from '../../components/Reports/UnstableWarning'
 
 export const CopyLocalForm = () => {
     const {woqlClient, reconnectServer} = WOQLClientObj()
     let dbl = getDBList()
-    const canCreate = woqlClient.connection.capabilitiesPermit('create_database')
-    if (dbl.length == 0 || !canCreate) {
-        return <AccessControlErrorPage />
-    }
+
     const {loading, user} = useAuth0()
     const [localDBs, setLocalDBs] = useState(dbl)
     const [updateLoading, setUpdateLoading] = useState(false)
@@ -47,8 +43,8 @@ export const CopyLocalForm = () => {
     function getDBOptions(dblist) {
         return dblist.map((item) => {
             return {
-                value: `${item.organization}/${item.db}`,
-                label: item.title,
+                value: `${item.organization}/${item.id}`,
+                label: item.label,
             }
         })
     }
@@ -66,7 +62,7 @@ export const CopyLocalForm = () => {
     function titleTaken(ntitle) {
         let istaken = false
         localDBs.map((item) => {
-            if (item.title == ntitle) istaken = true
+            if (item.label == ntitle) istaken = true
         })
         return istaken
     }
@@ -76,22 +72,13 @@ export const CopyLocalForm = () => {
     }
 
     function getDBList() {
-        const records = woqlClient.connection.getServerDBMetadata() || []
-        if (!records || records.length == 0) {
-            return false
-        }
-        const dblist = records.filter((meta) => meta.db != 'terminus')
-        const canCreate = woqlClient.connection.capabilitiesPermit('create_database')
-        if (dblist.length == 0 && !canCreate) {
-            return false
-        }
-        return dblist
+        return woqlClient.user_databases()
     }
 
     function loadDetailsForDB(dbid) {
         let parts = dbid.split('/')
         for (var i = 0; i < localDBs.length; i++) {
-            if (localDBs[i].db == parts[1] && localDBs[i].organization == parts[0])
+            if (localDBs[i].id == parts[1] && localDBs[i].organization == parts[0])
                 return dbToForm(localDBs[i])
         }
         return {}
@@ -100,8 +87,8 @@ export const CopyLocalForm = () => {
     //translate from dblist json to form json
     function dbToForm(item) {
         return {
-            dbid: `${item.organization}/${item.db}`,
-            dbname: getStarterTitle(item.title),
+            dbid: `${item.organization}/${item.id}`,
+            dbname: getStarterTitle(item.label),
             description: getStarterDescription(item.description),
         }
     }
@@ -160,15 +147,7 @@ export const CopyLocalForm = () => {
     return (
         <>
             {(loading || updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
-            <UnstableWarning feature="Cloning Databases" />
-            {report && report.error && (
-                <APIUpdateReport
-                    status={report.status}
-                    error={report.error}
-                    message={report.message}
-                    time={report.time}
-                />
-            )}
+            <UnstableWarning feature="Cloning Databases" />           
             <TCForm
                 onSubmit={onClone}
                 layout={[2]}

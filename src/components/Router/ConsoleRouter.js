@@ -28,7 +28,7 @@ export const ConsoleRouter = (props) => {
 }
 
 export const getDBRoute = (db, aid) => {
-    if (db == 'system') return DB_ROUTE + TERMINUS_ROUTE
+    if (db == '_system') return DB_ROUTE + TERMINUS_ROUTE
     return `${DB_ROUTE}/${aid}/${db}`
 }
 

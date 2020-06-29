@@ -5,7 +5,7 @@ export const SERVER_ROUTE = '/'
 export const CREATE_DB_ROUTE = '/newDB'
 
 //Route To Terminus (Master) DB
-export const TERMINUS_ROUTE = '/system'
+export const TERMINUS_ROUTE = '/_system'
 
 //Specific DB Route
 export const SPECIFIC_DB_ROUTE = '/:aid/:dbid'

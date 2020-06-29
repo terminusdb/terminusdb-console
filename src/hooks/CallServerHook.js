@@ -1,100 +1,95 @@
-import { useState, useEffect } from "react";
-import   axios  from "axios" ; 
-import { useAuth0 } from "../react-auth0-spa";
+import {useState, useEffect} from 'react'
+import axios from 'axios'
+import {useAuth0} from '../react-auth0-spa'
 
-export const CREATE_DB_END_POINT="db"
-export const UPDATE_CAPABILITIES_END_POINT="capabilities"
+export const CREATE_DB_END_POINT = 'db'
+export const UPDATE_CAPABILITIES_END_POINT = 'capabilities'
 
-const axiosHub=axios.create();
-const baseUrl=process.env.TERMINUSDB_HUB_BASE_URL || ''
+const axiosHub = axios.create()
+const baseUrl = process.env.TERMINUSDB_HUB_BASE_URL || ''
 
 const dbJson = {
-        dbid: req.body.dbid,
-        label: req.body.label,
-        comment: req.body.comment,
-        ispublic: req.body.ispublic,
-      }
+    dbid: req.body.dbid,
+    label: req.body.label,
+    comment: req.body.comment,
+    ispublic: req.body.ispublic,
+}
 
 //remoteServer
-const hubServerCall = (url,payload,getTokenSilently)=>{
-	/*
-	* return the headers or throw an error
-	*/
-	const getHeader = async()=>{
-		const options = {
-			mode: 'cors', // no-cors, cors, *same-origin
-			redirect: 'follow', // manual, *follow, error
-			referrer: 'client',
-			};
-		const token = await getTokenSilently();
-	 	options.headers = { Authorization: `Bearer ${token}` };
-	 	return options;
-	}
-
-	/*
-	* return the dataprovider or throw an error
-	*/
-    const postCall = async ()=>{
-	 	const options = await getHeader();
-		const result = await axiosHub.post(`${baseUrl}/${url}`,payload, options)
-		return result;
+const hubServerCall = (url, payload, getTokenSilently) => {
+    /*
+     * return the headers or throw an error
+     */
+    const getHeader = async () => {
+        const options = {
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'client',
+        }
+        const token = await getTokenSilently()
+        options.headers = {Authorization: `Bearer ${token}`}
+        return options
     }
 
     /*
-    * for get information about a specific db /db/dbname
-    * for get capabilities /capabilities
-    */
-    const getCall = async ()=>{
-	 	const options = await getHeader();
-		const result = await axiosHub.get(`${baseUrl}/${url}`, options)
+     * return the dataprovider or throw an error
+     */
+    const postCall = async () => {
+        const options = await getHeader()
+        const result = await axiosHub.post(`${baseUrl}/${url}`, payload, options)
+        return result
     }
 
+    /*
+     * for get information about a specific db /db/dbname
+     * for get capabilities /capabilities
+     */
+    const getCall = async () => {
+        const options = await getHeader()
+        const result = await axiosHub.get(`${baseUrl}/${url}`, options)
+    }
 }
 
 function CallServerHook() {
+    //create database
 
-	//create database
-	
-	const { user, isAuthenticated, getTokenSilently } = useAuth0();
-	const [dataProvider, setDataprovider] = useState([])
+    const {user, isAuthenticated, getTokenSilently} = useAuth0()
+    const [dataProvider, setDataprovider] = useState([])
     const [loadingProfile, setLoading] = useState(true)
     const [profileError, setError] = useState(true)
 
-   
-  
     const options = {
-		mode: 'cors', // no-cors, cors, *same-origin
-		redirect: 'follow', // manual, *follow, error
-		referrer: 'client',
-	};
-	//create db and updatecapabilities
-	useEffect(() => {
-		 async function callHubServer() {
-		 	try{
-		 		setLoading(true)
-		 		const token = await getTokenSilently();
-		 		options.headers = { Authorization: `Bearer ${token}` };
+        mode: 'cors', // no-cors, cors, *same-origin
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'client',
+    }
+    //create db and updatecapabilities
+    useEffect(() => {
+        async function callHubServer() {
+            try {
+                setLoading(true)
+                const token = await getTokenSilently()
+                options.headers = {Authorization: `Bearer ${token}`}
 
-			 	const result = await axiosHub.get(`${baseUrl}/profile`, options)
+                const result = await axiosHub.get(`${baseUrl}/profile`, options)
 
-			 	setDataprovider(result)
-			 	setLoading(false)
-			}catch(err){
-				setError(err);
-				console.error(err);
-			}
-		 }
-//REACT_APP_BASE_URL
-	     callHubServer();
-     }, []);
+                setDataprovider(result)
+                setLoading(false)
+            } catch (err) {
+                setError(err)
+                console.error(err)
+            }
+        }
+        //REACT_APP_BASE_URL
+        callHubServer()
+    }, [])
 
-    return [dataProvider, loadingProfile,profileError];
+    return [dataProvider, loadingProfile, profileError]
 }
 
-export { CallServerHook };
+export {CallServerHook}
 
-	
-		/*async function test(){
+/*async function test(){
 			const accessToken = await getTokenSilently();
   			console.log("____TOKEN____",accessToken);
   			console.log()
@@ -170,5 +165,3 @@ export { CallServerHook };
 	}
 
 */
-
-	

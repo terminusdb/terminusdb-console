@@ -41,7 +41,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     setLoading(false)
                     /*
                      * we can't know when the server response will be arrive
-                     * if we have already set this variable we can unpdate woqlClient
+                     * if we have already set this variable we can update woqlClient
                      */
                     if (database) setDatabase(database)
                     if (organization) setOrganization(organization)
@@ -64,7 +64,7 @@ export const WOQLClientProvider = ({children, params}) => {
      * you can change the woqlCLient settings
      */
     const setOrganization = (organizationName) => {
-        if (woqlClient) {
+        if (woqlClient) {        
             woqlClient.organization(organizationName)
             organization = woqlClient.organization()
         } else {

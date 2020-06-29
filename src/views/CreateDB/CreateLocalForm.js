@@ -11,18 +11,12 @@ import {CREATE_DB_FORM} from './constants.createdb'
 import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {DBDetailsForm} from './DBDetails'
-import {AccessControlErrorPage} from '../../components/Reports/AccessControlErrorPage'
 
 export const DBCreateForm = () => {
     const [loading, setLoading] = useState(false)
     const [report, setReport] = useState()
     let update_start = Date.now()
-    const {woqlClient, reconnectServer} = WOQLClientObj()
-    const canCreate = woqlClient.connection.capabilitiesPermit('create_database')
-    if (!canCreate) {
-        return <AccessControlErrorPage />
-    }
-
+    const {woqlClient} = WOQLClientObj()
     /**
      * Creates the database and, if a schema graph is set, creates the main schema graph
      * On success, it fires up the home page of the database and rebuilds the list of databases
@@ -93,7 +87,7 @@ export const DBCreateForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, mreport) {
-        woqlClient.connect().then((result) => {
+        woqlClient.connect().then(() => {
             goDBHome(id, woqlClient.user_organization(), mreport)
         })
     }

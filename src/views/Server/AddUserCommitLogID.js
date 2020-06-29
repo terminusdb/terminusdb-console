@@ -38,13 +38,15 @@ export const AddUserCommitLogID = () => {
     function addCommitLogID(deets) {
         if (deets.commitlog) {
             let q = WOQL.when(
-                WOQL.triple('v:User IRI', 'terminus:agent_name', woqlClient.user_organization()),
-            ).add_triple('v:User IRI', 'terminus:commit_log_id', deets.commitlog)
+                WOQL.triple('v:User IRI', 'type', 'system:User')
+                    .triple('v:User IRI', 'system:agent_name', woqlClient.uid()), 
+                WOQL.add_triple('v:User IRI', 'system:user_identifier', deets.commitlog)
+            )
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.db('system')
+            tClient.set_system_db()
             q.execute(tClient)
-                .then((result) => {
+                .then(() => {
                     let rep = {status: TERMINUS_SUCCESS, message: CREATED_ADMIN_MESSAGE}
                     afterCreate(deets.adminid, deets.password, rep)
                 })
@@ -69,7 +71,7 @@ export const AddUserCommitLogID = () => {
             <div className={COMMIT_LOG_EXPLANATION_CSS}>{JUST_COMMIT_LOG_EXPLANATION}</div>
             <TCForm
                 onSubmit={addCommitLogID}
-                layout={[3, 1]}
+                layout={[1]}
                 fields={COMMIT_LOG_FORM.fields}
                 values={values}
                 buttons={buttons}

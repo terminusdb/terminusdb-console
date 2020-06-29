@@ -12,15 +12,10 @@ import {COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM} from './constants.createdb'
 import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
-import {AccessControlErrorPage} from '../../components/Reports/AccessControlErrorPage'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 
 export const CopyRemoteForm = () => {
     const {woqlClient} = WOQLClientObj()
-    const canCreate = woqlClient.connection.capabilitiesPermit('create_database')
-    if (!canCreate) {
-        return <AccessControlErrorPage />
-    }
     const {loading, user} = useAuth0()
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState()
