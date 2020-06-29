@@ -1,25 +1,29 @@
-import React from "react"
-import { Button, ButtonGroup } from 'reactstrap'
-import TerminusClient from '@terminusdb/terminusdb-client';
-
+import React from 'react'
+import {Button, ButtonGroup} from 'reactstrap'
+import TerminusClient from '@terminusdb/terminusdb-client'
 
 export const QueryLibrary = (props) => {
-    const libs = props.libs || [];
-    const setWoql = props.setWoql;
-    const libButtons = [];
+    const libs = props.libs || []
+    const setWoql = props.setWoql
+    const libButtons = []
 
     libs.map((items) => {
         libButtons.push(
-          <Button key = { items } onClick = { () => {
-              const q = getQuery(items);
-              setWoql(q)
-          }}>{ items } </Button>
+            <Button
+                key={items}
+                onClick={() => {
+                    const q = getQuery(items)
+                    setWoql(q)
+                }}
+            >
+                {items}{' '}
+            </Button>,
         )
     })
 
-    return(
+    return (
         <div className="lib-pane">
-            <ButtonGroup> { libButtons } </ButtonGroup>
+            <ButtonGroup> {libButtons} </ButtonGroup>
         </div>
     )
 }

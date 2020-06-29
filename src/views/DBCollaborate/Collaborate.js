@@ -1,25 +1,28 @@
-import React from "react";
-import { Synchronise } from "./Synchronise"
-import { Share } from "./Share"
-import { Users } from "./Users"
-import { DBContextObj } from "../../components/Query/DBContext"
-import Loading from "../../components/Reports/Loading"
-import { useAuth0 } from "../../react-auth0-spa";
-import {Container, Row, Col } from "reactstrap"
-import {COLLABORATE_SECTIONS, COLLABORATE_SOON} from "./constants.dbcollaborate"
-import {RiverOfSections} from "../Templates/RiverOfSections"
-import { TERMINUS_COMPONENT } from "../../constants/identifiers";
-import {ComingSoon} from "../../components/Reports/ComingSoon"
+import React from 'react'
+import {Synchronise} from './Synchronise'
+import {Share} from './Share'
+import {Collaborators} from './Collaborators'
+import {DBContextObj} from '../../components/Query/DBContext'
+import Loading from '../../components/Reports/Loading'
+import {useAuth0} from '../../react-auth0-spa'
+import {Container, Row, Col} from 'reactstrap'
+import {COLLABORATE_SECTIONS, COLLABORATE_SOON} from './constants.dbcollaborate'
+import {RiverOfSections} from '../Templates/RiverOfSections'
+import {TERMINUS_COMPONENT} from '../../constants/identifiers'
+import {ComingSoon} from '../../components/Reports/ComingSoon'
 
 export const Collaborate = (props) => {
-    const {repos} = DBContextObj();
-	const { user } = useAuth0()
+    const {repos} = DBContextObj()
+    const {user} = useAuth0()
 
-    if(!repos) return (<Loading type={TERMINUS_COMPONENT} />)
+    if (!repos) return (<Loading type={TERMINUS_COMPONENT} />)
     let hasOrigin = repos.local_clone || repos.remote
-    let sections = (hasOrigin ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]] : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]])
-    return (<>
-        {/*!user &&
+    let sections = hasOrigin
+        ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]]
+        : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]]
+    return (
+        <>
+            {/*!user &&
             <div>
                 <hr className="my-space-50"/>
                     <Container>
@@ -47,7 +50,7 @@ export const Collaborate = (props) => {
                 </Container>
             </div>
         */}
-        {/*user &&
+            {/*user &&
 
             <RiverOfSections sections={sections} label={props.label}>
                 <Users key="users"/>
@@ -59,14 +62,11 @@ export const Collaborate = (props) => {
                 }
             </RiverOfSections>
         */}
-        <RiverOfSections sections={sections} label={props.label}>
-            <Users key="users"/>
-            {hasOrigin &&
-                <Synchronise key="synch" />
-            }
-            {!hasOrigin &&
-                <Share key="share" />
-            }
-        </RiverOfSections>      
-    </>)
+            <RiverOfSections sections={sections} label={props.label}>
+                <Collaborators key="users" />
+                {hasOrigin && <Synchronise key="synch" />}
+                {!hasOrigin && <Share key="share" />}
+            </RiverOfSections>
+        </>
+    )
 }
