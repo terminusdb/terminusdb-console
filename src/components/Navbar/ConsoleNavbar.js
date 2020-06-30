@@ -20,7 +20,7 @@ export const ConsoleNavbar = (props) => {
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
 
-    const showUnderCostruction = process.env.TERMINUSDB_ENV === 'dev' ? false : false
+    const showUnderCostruction = process.env.TERMINUSDB_ENV === 'dev' ? false : true
     return (
         <Fragment>
             <header className="console__page__header">
