@@ -29,13 +29,18 @@ export const AddUser = () => {
     const [loading, setLoading] = useState()
 
     function _form_document(deets) {
-        let doc = {}
-        doc['@type'] = 'system:User'
-        doc['system:agent_name'] = { "@type": "xsd:string", "@value": deets.uid}
-        if(deets.password) doc['system:password'] = { "@type": "xsd:string", "@value": deets.password}
-        if(deets.display) doc['rdfs:label'] = { "@type": "xsd:string", "@value": deets.display}
-        if(deets.notes) doc['rdfs:comment'] = { "@type": "xsd:string", "@value": deets.notes}
-        if(deets.commitlog) doc['system:user_identifier'] = { "@type": "xsd:string", "@value": deets.commitlog} 
+        let doc = {
+            "agent_name" : deets.uid,
+            "password" : deets.password,
+            "user_identifier" : deets.commitlog,
+            "comment" : deets.notes 
+         }
+        //doc['@type'] = 'system:User'
+        //doc['system:agent_name'] = { "@type": "xsd:string", "@value": deets.uid}
+        //if(deets.password) doc['system:password'] = { "@type": "xsd:string", "@value": deets.password}
+        //if(deets.display) doc['rdfs:label'] = { "@type": "xsd:string", "@value": deets.display}
+        //if(deets.notes) doc['rdfs:comment'] = { "@type": "xsd:string", "@value": deets.notes}
+        //if(deets.commitlog) doc['system:user_identifier'] = { "@type": "xsd:string", "@value": deets.commitlog} 
         return doc
     }
 
