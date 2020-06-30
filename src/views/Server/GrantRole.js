@@ -2,7 +2,7 @@
  * Controller application for metadata update form
  */
 import React, {useState} from 'react'
-import {GRANT_CAP_FORM} from './constants.server'
+import {GRANT_FORM} from './constants.server'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,
@@ -15,33 +15,32 @@ import {TCForm} from '../../components/Form/FormComponents'
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 
-export const GrantCapability = () => {
+export const GrantRole = () => {
     const {woqlClient} = WOQLClientObj()
     const [report, setReport] = useState()
     let values = {
-        capid: '',
+        uiri: '',
         roleid: '',
     }
 
     const [loading, setLoading] = useState()
 
     function grant(deets) {
-        if (deets.roleid && deets.capid) {
+        if (deets.uiri && deets.roleid) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
             tClient.set_system_db()
-            let capid = ( (deets.capid.indexOf(":") == -1) ? "doc:" + deets.capid : deets.capid )
-            let roleid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
-
+            let rid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
+            let uid = ( (deets.uiri.indexOf(":") == -1) ? "doc:" + deets.uiri : deets.uiri )
             TerminusClient.WOQL.lib()
-                .grant_capability(roleid, capid)
+                .grant_role(uid, rid)
                 .execute(tClient)
                 .then((result) => {
-                    setReport({status: TERMINUS_SUCCESS, message: 'Successfully Granted Access'})
+                    setReport({status: TERMINUS_SUCCESS, message: 'Successfully Granted'})
                 })
                 .catch((err) => {
                     setReport({
-                        message: 'Failed to Grant Access',
+                        message: 'Failed to Grant Capability',
                         status: TERMINUS_ERROR,
                         error: err,
                     })
@@ -50,7 +49,7 @@ export const GrantCapability = () => {
         }
     }
 
-    let buttons = GRANT_CAP_FORM.buttons
+    let buttons = GRANT_FORM.buttons
     if (loading) return <Loading />
     return (
         <>
@@ -58,7 +57,7 @@ export const GrantCapability = () => {
             <TCForm
                 onSubmit={grant}
                 layout={[2]}
-                fields={GRANT_CAP_FORM.fields}
+                fields={GRANT_FORM.fields}
                 values={values}
                 buttons={buttons}
             />

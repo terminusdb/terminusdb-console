@@ -19,8 +19,6 @@ export const Auth0Provider = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [authError, setAuthError] = useState(false);
 
-//WOQL.triple("v:DBID", "terminus:resource_name", "v:DB_NAME").eq("v:DB_NAME", "admin|TEST01")
-
   useEffect(() => {
     const initAuth0 = async () => {
         try{
@@ -47,9 +45,7 @@ export const Auth0Provider = ({
         }
     };
     initAuth0();
-    // eslint-disable-next-line
   }, []);
-  //
 
 
   const loginWithPopup = async (params = {}) => {

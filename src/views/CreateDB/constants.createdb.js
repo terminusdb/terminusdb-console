@@ -227,7 +227,7 @@ export const COPY_REMOTE_FORM = {
                 type: "input",
                 placeholder: "Enter URL of TerminusDB Database",
             },
-            help: "The URL of the database is normally of the form: https://my.host.com/db/<account_id>/<database_id>"
+            help: "The URL of the database is normally of the form: https://my.host.com/db/<organization_id>/<database_id>"
         },
         {
             id: "newid",

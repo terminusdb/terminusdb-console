@@ -2,7 +2,7 @@
  * Controller application for metadata update form
  */
 import React, {useState} from 'react'
-import {GRANT_CAP_FORM} from './constants.server'
+import {REVOKE_FORM} from './constants.server'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,
@@ -15,33 +15,32 @@ import {TCForm} from '../../components/Form/FormComponents'
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 
-export const GrantCapability = () => {
+export const RevokeRole = () => {
     const {woqlClient} = WOQLClientObj()
     const [report, setReport] = useState()
     let values = {
-        capid: '',
+        uid: '',
         roleid: '',
     }
 
     const [loading, setLoading] = useState()
 
-    function grant(deets) {
-        if (deets.roleid && deets.capid) {
+    function revoke(deets) {
+        if (deets.uid && deets.roleid) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
             tClient.set_system_db()
-            let capid = ( (deets.capid.indexOf(":") == -1) ? "doc:" + deets.capid : deets.capid )
-            let roleid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
-
+            let rid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
+            let uid = ( (deets.uid.indexOf(":") == -1) ? "doc:" + deets.uid : deets.uid )
             TerminusClient.WOQL.lib()
-                .grant_capability(roleid, capid)
+                .revoke_role(uid, rid)
                 .execute(tClient)
                 .then((result) => {
-                    setReport({status: TERMINUS_SUCCESS, message: 'Successfully Granted Access'})
+                    setReport({status: TERMINUS_SUCCESS, message: 'Successfully Revoked'})
                 })
                 .catch((err) => {
                     setReport({
-                        message: 'Failed to Grant Access',
+                        message: 'Failed to Revoke Capability',
                         status: TERMINUS_ERROR,
                         error: err,
                     })
@@ -50,15 +49,15 @@ export const GrantCapability = () => {
         }
     }
 
-    let buttons = GRANT_CAP_FORM.buttons
+    let buttons = REVOKE_FORM.buttons
     if (loading) return <Loading />
     return (
         <>
             {report && <TerminusDBSpeaks report={report} />}
             <TCForm
-                onSubmit={grant}
+                onSubmit={revoke}
                 layout={[2]}
-                fields={GRANT_CAP_FORM.fields}
+                fields={REVOKE_FORM.fields}
                 values={values}
                 buttons={buttons}
             />

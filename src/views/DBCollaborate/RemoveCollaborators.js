@@ -2,7 +2,7 @@
  * Controller application for metadata update form
  */
 import React, {useState} from 'react'
-import {ADD_USER_FORM} from './constants.server'
+import {REMOVE_COLLABORATORS_FORM} from './constants.dbcollaborate'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,
@@ -15,37 +15,36 @@ import {TCForm} from '../../components/Form/FormComponents'
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 
-export const AddUser = () => {
+export const RemoveCollaborators = (props) => {
     const {woqlClient} = WOQLClientObj()
     const [report, setReport] = useState()
     let values = {
-        uid: '',
-        password: '',
-        commitlog: '',
-        display: '',
-        notes: '',
+        users: '',
     }
 
     const [loading, setLoading] = useState()
 
-    function _form_document(deets) {
-        let doc = {}
-        doc['@type'] = 'system:User'
-        doc['system:agent_name'] = { "@type": "xsd:string", "@value": deets.uid}
-        if(deets.password) doc['system:password'] = { "@type": "xsd:string", "@value": deets.password}
-        if(deets.display) doc['rdfs:label'] = { "@type": "xsd:string", "@value": deets.display}
-        if(deets.notes) doc['rdfs:comment'] = { "@type": "xsd:string", "@value": deets.notes}
-        if(deets.commitlog) doc['system:user_identifier'] = { "@type": "xsd:string", "@value": deets.commitlog} 
-        return doc
+    function parseBox(ip) {
+        let bits = ip.split(',')
+        let cleaned = []
+        bits.map((item) => {
+            let str = item.trim()
+            if (str.length > 1) cleaned.push(str)
+        })
+        return cleaned
     }
 
-    function createUser(deets) {
-        if (deets.uid && deets.password && deets.commitlog) {
+    function removeCollaborators(deets) {
+        let users = parseBox(deets.users)
+        if (users) {
+            if(users.length == 1) users = users[0]
             setLoading(true)
-            let udoc = _form_document(deets)
             let tClient = woqlClient.copy() //do not change internal client state
             tClient.set_system_db()
-            tClient.createUser(deets.uid, udoc)
+            if(props.client){
+                tClient = props.client
+            }
+            tClient.updateRoles(users, woqlClient.db(), [], woqlClient.organization())
             .then((result) => {
                 setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created New User'})
             })
@@ -60,15 +59,17 @@ export const AddUser = () => {
         }
     }
 
-    let buttons = ADD_USER_FORM.buttons
+    let buttons = REMOVE_COLLABORATORS_FORM.buttons
+    buttons.onCancel = props.onCancel
+
     if (loading) return <Loading />
     return (
         <>
             {report && <TerminusDBSpeaks report={report} />}
             <TCForm
-                onSubmit={createUser}
-                layout={[2, 2, 1]}
-                fields={ADD_USER_FORM.fields}
+                onSubmit={removeCollaborators}
+                layout={[1]}
+                fields={REMOVE_COLLABORATORS_FORM.fields}
                 values={values}
                 buttons={buttons}
             />
