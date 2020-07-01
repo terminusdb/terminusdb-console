@@ -109,8 +109,8 @@ export const CopyLocalForm = () => {
         let src = {remote_url: sourceURL, label: details.dbname}
         if (details.description) src.comment = details.description
         let cClient = woqlClient.copy()
-        let abc = cClient.basic_auth()
-        cClient.remote_auth({type: 'basic', key: abc.split(':')[1], user: abc.split(':')[0]})
+        let abc = cClient.local_auth()
+        cClient.remote_auth(abc)
         cClient.organization(woqlClient.user_organization())
         return cClient
             .clonedb(src, newID)

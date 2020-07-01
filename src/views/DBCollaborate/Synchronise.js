@@ -100,8 +100,7 @@ export const Synchronise = () => {
         //create copy so we don't change internal state of woqlClient inadvertently
         let nClient = woqlClient.copy()
 
-        let abc = nClient.basic_auth()
-        nClient.remote_auth({type: 'basic', key: abc.split(':')[1], user: abc.split(':')[0]})
+        nClient.remote_auth( nClient.local_auth() )
         nClient.checkout(from_branch)
         setLoading(true)
         update_start = Date.now()
@@ -136,8 +135,7 @@ export const Synchronise = () => {
         }
         //create copy so we don't change internal state of woqlClient inadvertently
         let nClient = woqlClient.copy()
-        let abc = nClient.basic_auth()
-        nClient.remote_auth({type: 'basic', key: abc.split(':')[1], user: abc.split(':')[0]})
+        nClient.remote_auth(nClient.local_auth())
         if (to_branch != nClient.checkout()) nClient.checkout(to_branch)
         update_start = Date.now()
         setLoading(true)

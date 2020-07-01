@@ -67,8 +67,7 @@ export const Merge = () => {
         let nClient = woqlClient.copy()
         nClient.ref(false)
         nClient.checkout(values.target)
-        let abc = nClient.basic_auth()
-        nClient.remote_auth({type: 'basic', key: abc.split(':')[1], user: abc.split(':')[0]})
+        nClient.remote_auth(nClient.local_auth())
         let rebase_source = {
             rebase_from: frombase,
         }
