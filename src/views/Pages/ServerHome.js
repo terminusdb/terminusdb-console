@@ -117,8 +117,8 @@ const ServerHome = (props) => {
             fixCommitLog(user.id, user.author)
         }
         else {
-            sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
-            tabs.push(<AddUserCommitLogID key="addcommitid" />)
+          //  sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
+          //  tabs.push(<AddUserCommitLogID key="addcommitid" />)
         }
     }
 
