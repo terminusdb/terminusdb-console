@@ -10,7 +10,7 @@ import {DELETE_DB_MODAL} from './constants.dbmanage'
 
 export const DeleteDB = (props) => {
     const {register, handleSubmit, errors} = useForm()
-    const {woqlClient, reconnectServer} = WOQLClientObj()
+    const {woqlClient, reconnectToServer} = WOQLClientObj()
     const [rep, setReport] = useState()
     const [modal, setModal] = useState(props.modal)
     const toggle = () => setModal(!modal)
@@ -21,15 +21,15 @@ export const DeleteDB = (props) => {
         if (data.dbId && data.dbId == woqlClient.db()) {
             let st = Date.now()
             woqlClient
-                .deleteDatabase(data.dbId)
+                .deleteDatabase(data.dbId,  woqlClient.organization())
                 .then(() => {
                     setReport({
                         message: DELETE_DB_MODAL.deleted + ' ' + data.dbId,
                         status: TERMINUS_SUCCESS,
                         time: Date.now() - st,
                     })
-                    reconnectServer()
-                    goServerHome()
+                    reconnectToServer()
+                    .then(() => goServerHome())
                     setDisabled(false)
                 })
                 .catch((err) => {

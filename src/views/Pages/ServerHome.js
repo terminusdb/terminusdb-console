@@ -154,7 +154,6 @@ const ServerHome = (props) => {
         return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
     }
     else if (sections.length == 0){
-        alert("wtf")
         return <TerminusDBSpeaks failure={ACCESS_FAILURE} />
     }
 
