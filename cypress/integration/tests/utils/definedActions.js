@@ -14,14 +14,14 @@ export const flickThroughSchemaTabs = async (database) => {
 	*/
 	cy.server().route("GET", routes.triplesGraph(database.name)).as('tripleQuery');
 	cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
-	
+
 	/*
 	* check table exists in the properties tab
 	*/
 	await cy.get('#terminus-console-page').find('a').contains(tabs.PROPERTIES_TAB).click()
 	cy.wait(2000);
 	cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
-	
+
 	/*
 	* check that I call get schema
 	*/
@@ -32,11 +32,11 @@ export const flickThroughSchemaTabs = async (database) => {
 	await cy.get('#terminus-console-page').find('a').contains(tabs.GRAPHS_TAB).click()
 	cy.wait(2000);
 	cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
-	
+
 	await cy.get('#terminus-console-page').find('a').contains(tabs.PREFIXES_TAB).click()
 	cy.wait(2000);
 	cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
-	
+
 }
 
 export const getSchemaElements = async (database) => {
@@ -81,4 +81,23 @@ export const addSecondNewDocTypes = async () => {
 	cy.get('.tdb__commit__bar__input').find('input[id="commitMessage"]').focus().type('Adding a second doctype skates to test branching ...')
 	await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
     cy.wait(2000);
+}
+
+//(clonedDatabase, database.name)
+export const cloneLocalDatabase = async(newDbId, cloneFromDb) => {
+	cy.server().route("POST", routes.clone(newDbId)).as('cloneDB');
+
+    cy.get("#copy_db").click()
+    cy.get("#copy_db_local").click()
+
+	const inpCloneId = cloneFromDb + '{enter}';
+	cy.get(".tcf-select").click().find("input").first().focus().type(inpCloneId);
+
+    cy.get("#newid").focus().type(newDbId);
+
+    cy.get('form').find("button").contains('Create Copy').click()
+
+    cy.wait("@cloneDB").its('status').should('eq', 200);
+
+    await cy.get('#loading').should('not.exist')
 }
