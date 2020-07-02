@@ -153,11 +153,14 @@ const ServerHome = (props) => {
     if (error) {
         return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
     }
+    else if (sections.length == 0){
+        return <TerminusDBSpeaks failure={ACCESS_FAILURE} report={error} />
+    }
 
     if (sections.length == 1)
         return (
             <SimplePageView>
-                <div className={sections[0].className}>{sections[0].title}</div>
+                <div key ='y' className={sections[0].className}>{sections[0].title}</div>
                 {tabs}
             </SimplePageView>
         )
