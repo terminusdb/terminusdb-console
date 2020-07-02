@@ -65,10 +65,15 @@ context('Test commits and branching', () => {
               cy.visit(dbUrl)
           }
 
-          cy.get('#nav_query').click().then( async() => {
+          cy.get('.nav__main__item').find('a').contains('Query').click().then( async() => {
               cy.wait(1000)
               await addSchema(database)
           })
+
+          /*cy.get('#nav_query').click().then( async() => {
+              cy.wait(1000)
+              await addSchema(database)
+          })*/
       })
   })
 
