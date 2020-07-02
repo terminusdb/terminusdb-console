@@ -4,7 +4,6 @@ import {ACCESS_FAILURE, CONNECTION_FAILURE} from '../../constants/identifiers'
 import {AccessControlErrorPage} from './AccessControlErrorPage'
 
 export const PageFailure = ({failure, report}) => {
-    alert(failure)
     if (failure == ACCESS_FAILURE) {
         return <AccessControlErrorPage />
     } else if (failure == CONNECTION_FAILURE) {

@@ -17,16 +17,16 @@ import { config } from "./utils/config"
 *   11. Perform the above 10 steps for political-data
 */
 
-context('Create and delete a database locally', () => {
+context('Run the entire life cycle of a database', () => {
 
     before(() => {
        cy.visit('/');
     })
-      
+
 
     describe('Database life Circle', () => {
         const password = Cypress.env('password');
-        it('the user need to login', () => { 
+        it('the user need to login', () => {
             cy.get("body").then($body => {
                 if ($body.find("#tdbPassword").length > 0) {
                       cy.get("#tdbPassword").focus().type(password).then(()=>{
@@ -36,9 +36,9 @@ context('Create and delete a database locally', () => {
             })
         })
 
-       config.forEach((database) => { 
+       config.forEach((database) => {
         /***** Creating database ****/
-        it('Creating database',() => {         
+        it('Creating database',() => {
             cy.wait(5000);
 
             cy.get("#terminus-console-page").then(async($consolePage)=>{
@@ -69,8 +69,8 @@ context('Create and delete a database locally', () => {
                 cy.get('#nav_query').click().then( async() => {
                     cy.wait(1000)
                     await addSchema(database)
-                })              
-            })           
+                })
+            })
         })
 
 

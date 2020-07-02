@@ -18,3 +18,7 @@ export const  woqlQuery = (dbId, bid) => {
 	if(!bid) bid = 'master'
 	return `**/woql/admin/${dbId}/local/branch/${bid}`
 }
+
+export const clone = (dbId) => {
+	return `**/clone/admin/${dbId}`
+}
