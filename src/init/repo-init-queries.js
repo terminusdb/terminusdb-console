@@ -8,7 +8,6 @@ export function enrich_local_db_listing(woqlClient){
     let dbs = woqlClient.user_databases()
     let WOQL = TerminusClient.WOQL
     let p = WOQL.and()
-    let q = WOQL.and()
     dbs.map((item, index) => {
         let using_str = '/' + item.organization + '/' + item.id + '/_meta'
         let varlist = [

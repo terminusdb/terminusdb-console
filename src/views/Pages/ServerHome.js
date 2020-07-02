@@ -108,6 +108,8 @@ const ServerHome = (props) => {
     }
 
     const canCreate = true //woqlClient.action_permitted('create_database', woqlClient.user_organization())
+    let sections = []
+    let tabs = []
 
     let user = woqlClient.user()
     if(user.problem && user.problem == "missing"){
@@ -124,8 +126,6 @@ const ServerHome = (props) => {
     let hasTutorials = user.logged_in
     let canManageUsers = user.logged_in
     let canManageServer = user.logged_in
-    let sections = []
-    let tabs = []
 
     if (myDBs.length > 0) {
         sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})

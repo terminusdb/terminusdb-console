@@ -78,10 +78,13 @@ export const WOQLClientProvider = ({children, params}) => {
      }, [connecting, loading, woqlClient, remoteClient])    
 
      useEffect(() => {
-        if(woqlClient){
-            enrich_local_db_listing(woqlClient)
-            .then(() => setContextEnriched(contextEnriched + 1))
-            .finally(() => setLocalEnriched(true))
+        if(woqlClient){  
+            if(woqlClient.user_databases().length) {         
+                enrich_local_db_listing(woqlClient)
+                .then(() => setContextEnriched(contextEnriched + 1))
+                .finally(() => setLocalEnriched(true))
+            }
+            else setLocalEnriched(true)
         }
      }, [woqlClient])
 
