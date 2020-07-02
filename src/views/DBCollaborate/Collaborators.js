@@ -88,7 +88,7 @@ export const Collaborators = () => {
         const dbClient = new TerminusClient.WOQLClient(url)
         if(user){
             alert(JSON.stringify(user))
-            dbClient.remote_auth({type: "jwt", key: user.token})
+            dbClient.local_auth({type: "jwt", key: user.token})
             getRemoteUsers(dbClient)
         }
         setRemoteClient(dbClient)

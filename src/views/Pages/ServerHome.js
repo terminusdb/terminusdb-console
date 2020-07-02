@@ -31,7 +31,7 @@ import {SetUpFirstUser} from '../Server/SetUpFirstUser'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {ManageServer} from '../Server/ManageServer'
 import {ManageUsers} from '../Server/ManageUsers'
-import { useAuth0 } from "../../react-auth0-spa";
+import { printts } from '../../constants/dates'
 
 /**
  * Server home is the launch screen to the local experience
@@ -50,50 +50,86 @@ const ServerHome = (props) => {
     //if we are in unitialised step, show the add commit log message
     //if we
 
-    const { loading, user } = useAuth0();
-
-    let [modal, setModal] = useState(false)
     let [error, setError] = useState(false)
+    let [myDBs, setMyDBs] = useState(false)
 
-    const {woqlClient} = WOQLClientObj()
-    const localdbs = woqlClient.user_databases()
-    const dblist = addLocalDBs(localdbs) 
-    const canCreate = woqlClient.action_permitted('create_database', woqlClient.user_organization())
-
-    function addLocalDBs(dbs) {
-        return dbs
-    }
-
-    function getUserAuthor(){
-        if(user){
-            return user.name
-        }
-        let luser = woqlClient.getUser()
-        return luser.author
-    }
+    const {woqlClient, contextEnriched } = WOQLClientObj()
 
     useEffect(() => {
-        if (user) {
-            //add remote databases   
+        if(woqlClient){
+            setMyDBs(getDBList())
         }
-        else if(!loading) {
+    }, [woqlClient, contextEnriched])
 
+    function fixCommitLog(id, email){
+        let WOQL = TerminusClient.WOQL 
+        let q = WOQL.when( WOQL.triple("v:UIRI", "system:agent_name", id))
+            .add_triple("v:UIRI", "system:user_identifier", email) 
+        let fixer = woqlClient.copy()
+        fixer.set_system_db()
+        fixer.query(q).then(() => {
+        })
+    }
+
+    function getDBList(){
+        const localdbs = woqlClient.user_databases()
+        let rows = {}
+        for(var i = 0; i < localdbs.length; i++){
+            let index = localdbs[i].organization + "_" + localdbs[i].id 
+            rows[index] = {
+                "Database ID": localdbs[i].id, 
+                "Name": localdbs[i].label,
+                "Organization": localdbs[i].organization
+            }
         }
-    }, [user, loading])
+        if(woqlClient.connection.repos){
+            for(var i = 0; i < woqlClient.connection.repos.length; i++){
+                let repo = woqlClient.connection.repos[i]
+                let ind2 = repo.organization + "_" + repo.database
+                if(!rows[ind2]) rows[ind2] = {
+                    "Database ID": "", 
+                    "Name": "",
+                    "Organization": ""
+                }
+                let rt = repo['Repo Type']
+                rows[ind2]['Type'] = rt.substring(rt.lastIndexOf('#')+1)
+                let url = repo['Remote URL']
+                if(url['@value']) rows[ind2]['URL'] = url['@value'] 
+                else rows[ind2]['URL'] = ""
+                let ut = repo['UpdatedTime']
+                if(ut && ut['@value']){
+                    rows[ind2]['Updated'] = printts( ut['@value'])
+                } 
+                else rows[ind2]['Updated'] = ""
 
-    let hasTutorials = true
-    let canManageUsers = true
-    let canManageServer = true
+            }
+        }
+        return Object.values(rows)
+    }
+
+    const canCreate = true //woqlClient.action_permitted('create_database', woqlClient.user_organization())
+
+    let user = woqlClient.user()
+    if(user.problem && user.problem == "missing"){
+        if(user.logged_in){
+            fixCommitLog(user.id, user.author)
+        }
+        else {
+            sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
+            tabs.push(<AddUserCommitLogID key="addcommitid" />)
+        }
+    }
+
+
+    let hasTutorials = user.logged_in
+    let canManageUsers = user.logged_in
+    let canManageServer = user.logged_in
     let sections = []
     let tabs = []
-    let author = getUserAuthor()
-    if (!author) {
-        sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
-        tabs.push(<AddUserCommitLogID key="addcommitid" />)
-    }
-    if (dblist.length > 0) {
+
+    if (myDBs.length > 0) {
         sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
-        tabs.push(<DBList key="dbl" list={dblist} />)
+        tabs.push(<DBList key="dbl" list={myDBs} />)
     }
     if (canCreate) {
         sections.push({className: CREATE_FIRSTDB_CSS, label: CREATEDB_TITLE})
@@ -104,7 +140,7 @@ const ServerHome = (props) => {
         tabs.push(<ConsoleTutorials key="tutorials" />)
     }
     //turn off regular admin until user adds first db... we want them to do that...
-    if (dblist.length > 0) {
+    if (myDBs.length > 0) {
         if (canManageUsers) {
             sections.push({className: MANAGE_USERS_CSS, label: MANAGE_USERS_TITLE})
             tabs.push(<ManageUsers key="manageusers" />)
@@ -113,15 +149,6 @@ const ServerHome = (props) => {
             sections.push({className: MANAGE_SERVER_CSS, label: MANAGE_SERVER_TITLE})
             tabs.push(<ManageServer key="manageserver" />)
         }
-    }
-    if (loading) return <Loading />
-    if (modal) {
-        return (
-            <SimplePageView>
-                <div className={MANAGE_SERVER_CSS}>{CREATE_FIRSTUSER}</div>
-                <SetUpFirstUser />
-            </SimplePageView>
-        )
     }
     if (error) {
         return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
