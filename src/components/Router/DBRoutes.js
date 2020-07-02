@@ -36,9 +36,8 @@ export const DBRoutes = () => {
  */
 const MasterDBRoute = () => {
     const {path} = useRouteMatch()
-    const {setDatabase, setOrganization, woqlClient} = WOQLClientObj()
-    setDatabase('_system')
-    setOrganization(false)
+    const {woqlClient} = WOQLClientObj()
+    woqlClient.set_system_db()
     const routes = []
     routes.push(
         <Route key="query" path={`${path}${DB_QUERY_ROUTE}`}>
@@ -70,9 +69,9 @@ const DBRoute = () => {
     const {path} = useRouteMatch()
 
     const {aid, dbid} = useParams()
-    const {setDatabase, setOrganization, woqlClient} = WOQLClientObj()
-    setDatabase(dbid)
-    setOrganization(aid)
+    const { woqlClient } = WOQLClientObj()
+    woqlClient.db(dbid)
+    woqlClient.organization(aid)
     const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>

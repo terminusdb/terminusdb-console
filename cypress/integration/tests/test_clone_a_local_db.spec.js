@@ -3,6 +3,16 @@ import * as tabs from "../../../src/views/Pages/constants.pages"
 import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes, cloneLocalDatabase } from "./utils/definedActions"
 import { config } from "./utils/config"
 
+
+/*
+*   1.	Creates a new db
+*   2.	Load Bikes Schema
+*   3.	Create a new Database as Clone of local Bikes Database
+*   4.	Enter respective field entries
+*   5.	Go to schema page and confirm if cloned database has the schema copied from original database
+*   6.	Delete cloned as well as origin database
+*/
+
 context('Test cloning a local database', () => {
    let bid, commit_msg, masterBranchId='master';
    let database = config[0]
@@ -62,10 +72,15 @@ context('Test cloning a local database', () => {
 		      cy.visit(dbUrl)
 		  }
 
-		  cy.get('#nav_query').click().then( async() => {
+          cy.get('.nav__main__item').find('a').contains('Query').click().then( async() => {
+              cy.wait(1000)
+              await addSchema(database)
+          })
+
+		  /*cy.get('#nav_query').click().then( async() => {
 		      cy.wait(1000)
 		      await addSchema(database)
-		  })
+		  })*/
 		})
 	})
 

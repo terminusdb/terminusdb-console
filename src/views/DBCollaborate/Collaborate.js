@@ -10,16 +10,25 @@ import {COLLABORATE_SECTIONS, COLLABORATE_SOON} from './constants.dbcollaborate'
 import {RiverOfSections} from '../Templates/RiverOfSections'
 import {TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {ComingSoon} from '../../components/Reports/ComingSoon'
+import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const Collaborate = (props) => {
     const {repos} = DBContextObj()
-    const {user} = useAuth0()
+    const {woqlClient} = WOQLClientObj()
+    let u = woqlClient.user()
 
     if (!repos) return (<Loading type={TERMINUS_COMPONENT} />)
-    let hasOrigin = repos.local_clone || repos.remote
-    let sections = hasOrigin
-        ? [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[1]]
-        : [COLLABORATE_SECTIONS[0], COLLABORATE_SECTIONS[2]]
+    let hasOrigin = (repos.local_clone || repos.remote)
+    let sections = []
+    if(u.logged_in){
+        sections.push(COLLABORATE_SECTIONS[0])
+    }
+    if(hasOrigin){
+        sections.push(COLLABORATE_SECTIONS[1])
+    }
+    else {
+        sections.push(COLLABORATE_SECTIONS[2])
+    }
     return (
         <>
             {/*!user &&
@@ -63,7 +72,7 @@ export const Collaborate = (props) => {
             </RiverOfSections>
         */}
             <RiverOfSections sections={sections} label={props.label}>
-                <Collaborators key="users" />
+                {u.logged_in && <Collaborators key="users" />}
                 {hasOrigin && <Synchronise key="synch" />}
                 {!hasOrigin && <Share key="share" />}
             </RiverOfSections>
