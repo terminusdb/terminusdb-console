@@ -16,7 +16,7 @@ import {Container, Row} from 'reactstrap'
 import {UnstableWarning} from '../../components/Reports/UnstableWarning'
 
 export const CopyLocalForm = () => {
-    const {woqlClient, reconnectServer} = WOQLClientObj()
+    const {woqlClient, reconnectToServer} = WOQLClientObj()
     let dbl = getDBList()
 
     const {loading, user} = useAuth0()
@@ -137,7 +137,7 @@ export const CopyLocalForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, rep) {
-        woqlClient.connect().then((result) => {
+        reconnectToServer().then((result) => {
             goDBHome(id, woqlClient.user_organization(), rep)
         })
     }

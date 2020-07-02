@@ -15,7 +15,7 @@ import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 
 export const CopyRemoteForm = () => {
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient, reconnectToServer} = WOQLClientObj()
     const {loading, user} = useAuth0()
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState()
@@ -80,7 +80,7 @@ export const CopyRemoteForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, rep) {
-        woqlClient.connect().then((result) => {
+        reconnectToServer().then((result) => {
             goDBHome(id, woqlClient.user_organization(), rep)
         })
     }
