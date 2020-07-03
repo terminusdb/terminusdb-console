@@ -11,6 +11,7 @@ export const WOQLClientProvider = ({children, params}) => {
     const [connecting, setConnecting] = useState(true)
     const [woqlClient, setWoqlClient] = useState(null)
     const [remoteClient, setRemoteClient] = useState(null)
+    const [bffClient, setBffClient] = useState(null)
     const [clientError, setError] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [newKeyValue, setNewKeyValue] = useState()
@@ -41,13 +42,20 @@ export const WOQLClientProvider = ({children, params}) => {
         async function setUpRemoteConnection() {
             if (user && woqlClient) {
                 const jwtoken = await getTokenSilently()
-                let hubcreds = {type: "jwt", key: jwtoken, user: user.nickname}
+                let hubcreds = {type: "jwt", key: jwtoken}
                 woqlClient.remote_auth(hubcreds)
                 const hubClient = new TerminusClient.WOQLClient(params.remote)
                 hubClient.local_auth(hubcreds)
+                hubClient.organization(user.nickname) 
                 hubClient.connection.user.id = user.nickname
-                hubClient.author(user.email)
+                hubClient.connection.user.author = user.email
                 setRemoteClient(hubClient)
+                const bClient = new TerminusClient.WOQLClient(params.bff)
+                bClient.local_auth(hubcreds)
+                bClient.organization(user.nickname) 
+                bClient.connection.user.id = user.nickname
+                bClient.connection.user.author = user.email
+                setBffClient(bClient)            
             }
         }
         setUpRemoteConnection()
@@ -88,13 +96,22 @@ export const WOQLClientProvider = ({children, params}) => {
         }
      }, [woqlClient])
 
+
+     useEffect(() => {
+        if(bffClient){
+            enrich_remote_listing(bffClient, woqlClient)
+            .then(() => setRemoteEnriched(true))
+        } 
+    }, [bffClient])
+
+     /*
      useEffect(() => {
         if(remoteClient){
             enrich_remote_listing(remoteClient, woqlClient)
             .then(() => setRemoteEnriched(true))
         } 
     }, [remoteClient])
-   
+    */
 
      useEffect(() => {
         if(remoteEnriched && localEnriched){
@@ -154,6 +171,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 woqlClient,
                 clientError,
                 setKey,
+                bffClient,
                 showLogin,
                 reconnectToServer,
                 remoteClient,

@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import {useAuth0} from '../../react-auth0-spa'
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
@@ -14,9 +13,8 @@ import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 
-export const CopyRemoteForm = () => {
-    const {woqlClient} = WOQLClientObj()
-    const {loading, user} = useAuth0()
+export const CloneDatabase = () => {
+    const { woqlClient, reconnectToServer, remoteClient } = WOQLClientObj()
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState()
     const [sourceURL, setSourceURL] = useState()
@@ -37,25 +35,26 @@ export const CopyRemoteForm = () => {
         }
     }
 
+    let user = woqlClient.user()
+
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
     function onClone(details) {
         if (!sourceURL) return
         update_start = Date.now()
         setUpdateLoading(true)
 
-        let nClient = woqlClient.copy()
+        //let nClient = woqlClient.copy()
 
-        if (details.user && details.password) {
-            nClient.remote_auth({type: 'basic', key: details.password, user: details.user})
-        }
-        let newid = details.newid || sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
+        //if (details.user && details.password) {
+        //    nClient.remote_auth({type: 'basic', key: details.password, user: details.user})
+        //}
+        let newid = sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
         let src = {
             remote_url: sourceURL,
             label: details.name || newid,
         }
         if (details.description) src.comment = details.description
-        nClient.organization(woqlClient.user_organization()) //create new db in current user's organization
-        return nClient
+        return remoteClient
             .clonedb(src, newid)
             .then(() => {
                 let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
@@ -80,7 +79,7 @@ export const CopyRemoteForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, rep) {
-        woqlClient.connect().then((result) => {
+        reconnectToServer().then((result) => {
             goDBHome(id, woqlClient.user_organization(), rep)
         })
     }
@@ -90,7 +89,7 @@ export const CopyRemoteForm = () => {
 
     return (
         <>
-            {(loading || updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
+            {(updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -99,14 +98,9 @@ export const CopyRemoteForm = () => {
                     time={report.time}
                 />
             )}
-            {!user && (
-                <TCSubmitWrap>
-                    <UnderConstruction action={COPY_REMOTE_FORM.actionText} />
-                </TCSubmitWrap>
-            )}
             <TCForm
                 onSubmit={onClone}
-                layout={[1, 2, 2, 1]}
+                layout={[2]}
                 noCowDucks
                 onChange={onChangeBasics}
                 fields={fields}

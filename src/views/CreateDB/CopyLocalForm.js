@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import {useAuth0} from '../../react-auth0-spa'
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
@@ -10,16 +9,14 @@ import {
 } from '../../constants/identifiers'
 import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from './constants.createdb'
 import {goDBHome, goServerHome} from '../../components/Router/ConsoleRouter'
-import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
-import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
+import { TCForm } from '../../components/Form/FormComponents'
 import {Container, Row} from 'reactstrap'
 import {UnstableWarning} from '../../components/Reports/UnstableWarning'
 
 export const CopyLocalForm = () => {
-    const {woqlClient, reconnectServer} = WOQLClientObj()
+    const {woqlClient, remoteClient, reconnectToServer} = WOQLClientObj()
     let dbl = getDBList()
 
-    const {loading, user} = useAuth0()
     const [localDBs, setLocalDBs] = useState(dbl)
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState({
@@ -109,8 +106,7 @@ export const CopyLocalForm = () => {
         let src = {remote_url: sourceURL, label: details.dbname}
         if (details.description) src.comment = details.description
         let cClient = woqlClient.copy()
-        let abc = cClient.local_auth()
-        cClient.remote_auth(abc)
+        cClient.remote_auth(cClient.local_auth())
         cClient.organization(woqlClient.user_organization())
         return cClient
             .clonedb(src, newID)
@@ -137,7 +133,7 @@ export const CopyLocalForm = () => {
      * Reloads database list by reconnecting and goes to the db home
      */
     function afterCreate(id, rep) {
-        woqlClient.connect().then((result) => {
+        reconnectToServer().then((result) => {
             goDBHome(id, woqlClient.user_organization(), rep)
         })
     }
@@ -146,7 +142,7 @@ export const CopyLocalForm = () => {
 
     return (
         <>
-            {(loading || updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
+            {(updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
             <UnstableWarning feature="Cloning Databases" />           
             <TCForm
                 onSubmit={onClone}

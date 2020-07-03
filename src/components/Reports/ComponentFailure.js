@@ -8,8 +8,8 @@ import {SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS, HIDE_ERROR_DETAILS, COMPONEN
 export const ComponentFailure = ({error}) => {
     const [showFull, setFull] = useState(false) 
     let detmsg = ""
-    if(error.data && error.data["terminus:message"]){
-        detmsg = (error.data["terminus:message"]["@value"] ? error.data["terminus:message"]["@value"] : error.data["terminus:message"])
+    if(error.data && error.data["system:message"]){
+        detmsg = (error.data["system:message"]["@value"] ? error.data["system:message"]["@value"] : error.data["system:message"])
     }
 
     function toggleFull(){

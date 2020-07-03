@@ -1,164 +1,154 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {Container} from 'reactstrap'
-import {CreateOptions} from './CreateOptions'
-import {CopyOptions} from './CopyOptions'
-import {CreateOrCopy} from './CreateOrCopy'
-import {DBCreateForm} from './CreateLocalForm'
-import {CopyLocalForm} from './CopyLocalForm'
-import {CopyRemoteForm} from './CopyRemoteForm'
-import {CreateRemoteForm} from './CreateRemoteForm'
-import {Crumbs} from '../Templates/BreadCrumbs'
-import {AccessControlErrorPage} from '../../components/Reports/AccessControlErrorPage'
-
 import {
-    CREATE_BREADCRUMB,
-    COPY_BREADCRUMB,
-    LOCAL_BREADCRUMB,
-    REMOTE_BREADCRUMB,
-    CREATE_REMOTE,
-    COPY_REMOTE,
-    CREATE_LOCAL,
-    COPY_LOCAL,
-    LOCAL_OR_REMOTE,
-} from './constants.createdb'
+    TERMINUS_SUCCESS,
+    TERMINUS_ERROR,
+    TERMINUS_WARNING,
+    TERMINUS_COMPONENT,
+} from '../../constants/identifiers'
+import { CREATE_DB_FORM } from './constants.createdb'
+import { goDBHome } from '../../components/Router/ConsoleRouter'
+import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
+import { DBDetailsForm } from './DBDetails'
 
-/**
- * Manages the user journey for creating database
- */
-
-export const CreateDatabase = (props) => {
-    const [page, setPage] = useState()
-    const [btns, setBtns] = useState()
-    const {woqlClient} = WOQLClientObj()
-    const canCreate = woqlClient.action_permitted('create_database', woqlClient.user_organization())
-    if (!canCreate) {
-        return <AccessControlErrorPage />
-    }
-
-    useEffect(() => {
-        if (!page) setBtns([])
-        else {
-            let buts = page.split('_')
-            setBtns(getButtons(buts))
+export const CreateDatabase = () => {
+    const [loading, setLoading] = useState(false)
+    const [report, setReport] = useState()
+    let update_start = Date.now()
+    const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
+    /**
+     * Creates a database and, if a schema graph is set, creates the main schema graph
+     * On success, it fires up the home page of the database and rebuilds the list of databases
+     */
+    function onCreate(doc, schema) {
+        update_start = Date.now()
+        setLoading(true)
+        if(doc.sharing != "local"){
+            if(doc.sharing == 'public') doc.public = true
+            delete(doc['sharing'])
+            return createRemote(doc, update_start, schema)
         }
-    }, [page])
-
-    function setCreate() {
-        setPage('create')
+        return createLocal(doc, update_start, schema)
     }
 
-    function setCreateLocal() {
-        setPage('create_local')
+    function createLocal(doc, update_start, schema){
+        return woqlClient.createDatabase(doc.id, doc)
+        .then(() => {
+            after_create_db(schema, update_start, get_remote_create_message(doc.label, doc.id), doc.id)
+        })
+        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, doc.id)))
+        .finally(() => setLoading(false))            
     }
 
-    function setCreateRemote() {
-        setPage('create_remote')
-    }
-
-    function setCopy() {
-        const dblist = woqlClient.user_databases()
-        if (dblist.length) setPage('copy')
-        else setCopyRemote()
-    }
-
-    function setCopyRemote() {
-        setPage('copy_remote')
-    }
-
-    function setCopyLocal() {
-        setPage('copy_local')
-    }
-
-    function getButtons(btns) {
-        let nbts = []
-        let but = {}
-        if (btns[0] == 'create') {
-            but.page = false
-            but.text = CREATE_BREADCRUMB
-        } else if (btns[0] == 'copy') {
-            but.page = false
-            but.text = COPY_BREADCRUMB
-        }
-        nbts.push(but)
-        if (btns[1]) {
-            if (btns[1] == 'local') {
-                nbts.push({page: btns[0], text: LOCAL_BREADCRUMB})
-                if (btns[0] == 'create') {
-                    nbts.push({text: CREATE_LOCAL})
-                } else {
-                    nbts.push({text: COPY_LOCAL})
-                }
-            } else if (btns[1] == 'remote') {
-                const dblist = woqlClient.user_databases()
-                if (dblist.length) nbts.push({page: btns[0], text: REMOTE_BREADCRUMB})
-                if (btns[0] == 'create') {
-                    nbts.push({text: CREATE_REMOTE})
-                } else {
-                    nbts.push({text: COPY_REMOTE})
-                }
+    function createRemote(doc, update_start, schema) {
+        let remote_org = remoteClient.user_organization()
+        bffClient.createDatabase(doc.id, doc, remote_org)
+        .then(() => {
+            let sourceURL = remoteClient.server() + remote_org + "/" + doc.id
+            let src = {
+                remote_url: sourceURL,
+                label: doc.label,
             }
-        } else {
-            nbts.push({text: LOCAL_OR_REMOTE})
+            return woqlClient.clonedb(src, doc.id)
+            .then(() => {
+                after_create_db(schema, update_start, get_local_create_message(doc.label, doc.id), doc.id)                    
+            })
+            .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
+        })
+        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
+        .finally(() => setLoading(false))            
+    }
+
+    function after_create_db(schema, update_start, message, id){
+        if (schema) {
+            return createStarterGraph(update_start, message, id)
+        } 
+        message += CREATE_DB_FORM.noSchemaGraphMessage
+        let rep = {
+            message: message,
+            status: TERMINUS_SUCCESS,
+            time: Date.now() - update_start
         }
-        return nbts
+        setReport(rep)
+        afterCreate(id, rep)
+    }
+
+    /**
+     * Creates default main schema graph when chosen
+     */
+    function createStarterGraph(update_start, message, id) {
+        return woqlClient.createGraph('schema', 'main', CREATE_DB_FORM.schemaGraphCommitMessage)
+        .then(() => {
+            let rep = {
+                status: TERMINUS_SUCCESS,
+                message: message,
+                time: Date.now() - update_start,
+            }
+            setReport(rep)
+            afterCreate(id, rep)
+        })
+        .catch((e) => {
+            message += CREATE_DB_FORM.schemaFailedMessage
+            let wrep = {
+                message: message,
+                error: e,
+                status: TERMINUS_WARNING,
+                time: Date.now() - update_start,
+            }
+            setReport(wrep)
+            afterCreate(id, wrep)
+        })
+    }
+
+    /**
+     * Reloads database list by reconnecting and goes to the db home
+     */
+    function afterCreate(id, mreport) {
+        reconnectToServer().then(() => goDBHome(id, woqlClient.user_organization(), mreport))
+    }
+
+    function get_local_create_message(label, id){
+        return `${CREATE_DB_FORM.createSuccessMessage} ${label}, (id: ${id}) `
+    }
+
+    function get_remote_create_message(label, id){
+        return `${CREATE_DB_FORM.createRemoteSuccessMessage} ${label}, (id: ${id}) `
+    }
+
+    function create_local_failure(label, id){
+        return`${CREATE_DB_FORM.createFailureMessage} ${label}, (id: ${id}) `
+    }
+
+    function clone_remote_failure(label, id){
+        return `${CREATE_DB_FORM.cloneRemoteFailureMessage} ${label}, (id: ${id}) ` 
+    }
+
+    function create_remote_failure(label, id){
+        return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
+    }
+
+    function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
     }
 
     return (
-        <Container fluid className="h-100 pl-0 pr-0">
-            <Container className="flex-grow-1">
-                <hr className="my-space-50" />
-                {!page && (
-                    <>
-                        <Crumbs />
-                        <hr className="my-space-50" />
-                        <CreateOrCopy setCreate={setCreate} setCopy={setCopy} />
-                    </>
-                )}
-
-                {page == 'create' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <CreateOptions setRemote={setCreateRemote} setLocal={setCreateLocal} />
-                    </>
-                )}
-                {page == 'copy' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <CopyOptions setRemote={setCopyRemote} setLocal={setCopyLocal} />
-                    </>
-                )}
-                {page == 'create_local' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <DBCreateForm />
-                    </>
-                )}
-                {page == 'create_remote' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <CreateRemoteForm />
-                    </>
-                )}
-                {page == 'copy_local' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <CopyLocalForm />
-                    </>
-                )}
-                {page == 'copy_remote' && (
-                    <>
-                        <Crumbs buttons={btns} setPage={setPage} />
-                        <hr className="my-space-50" />
-                        <CopyRemoteForm />
-                    </>
-                )}
-            </Container>
-        </Container>
+        <>
+            {loading && <Loading type={TERMINUS_COMPONENT} />}
+            {report && report.error && (
+                <APIUpdateReport
+                    status={report.status}
+                    error={report.error}
+                    message={report.message}
+                    time={report.time}
+                />
+            )}
+            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} />
+        </>
     )
 }

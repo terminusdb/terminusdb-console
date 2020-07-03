@@ -120,55 +120,5 @@ const GuardedDBNavbar = (props) => {
                 {homeDetails}
             </li>
         </Fragment>
-    ) //onClick={toggle}
+    ) 
 }
-
-/*
- <Nav className = {dbClass} navbar>
-            <NavItem>
-                <NavLink tag = {RouterNavLink}
-                    to = {getNavURL("")}
-                    activeClassName = "router-link-exact-active"
-                    onClick = {props.onClick}
-                    exact>
-                    {trimContent(dbmeta.title, 15)}
-                </NavLink>
-            </NavItem>
-            <NavItem className="d-none d-md-block" >
-                <div className="select-nav-bar">
-                    <BranchSelector />
-                </div>
-            </NavItem>
-            <NavItem className="d-none d-md-block" >
-                    {getDBHomeDetails()}
-            </NavItem>
-            <NavItem>
-                <NavLink tag = {RouterNavLink}
-                    to = {getNavURL("document")}
-                    activeClassName = "router-link-exact-active"
-                    onClick = {props.onClick}
-                    exact>
-                    {DOCUMENT_PAGE_LABEL}
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag = {RouterNavLink}
-                    to = {getNavURL("query")}
-                    activeClassName = "router-link-exact-active"
-                    onClick = {props.onClick}
-                    exact>
-                    {QUERY_PAGE_LABEL}
-                </NavLink>
-            </NavItem>
-            <NavItem>
-                <NavLink tag = {RouterNavLink}
-                    to = {getNavURL("schema")}
-                    activeClassName = "router-link-exact-active"
-                    onClick = {props.onClick}
-                    exact>
-                    {SCHEMA_PAGE_LABEL}
-                </NavLink>
-            </NavItem>
-        </Nav>*/
-
-/*(value) => { setToggleTime(!toggleTime) */

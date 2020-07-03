@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
     CREATEDB_TITLE,
     DBLIST_TITLE,
+    CLONEDB_TITLE,
     CREATE_FIRSTDB_CSS,
     CREATE_FIRSTDB,
     DBLIST_HEADER_CSS,
@@ -19,15 +20,13 @@ import {
 } from './constants.pages'
 import {CONNECTION_FAILURE, ACCESS_FAILURE, TERMINUS_ERROR} from '../../constants/identifiers'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {SimplePageView} from '../Templates/SimplePageView'
 import {TabbedPageView} from '../Templates/TabbedPageView'
 import {CreateDatabase} from '../CreateDB/CreateDatabase'
+import {CloneDatabase} from '../CreateDB/CloneDatabase'
 import {DBList} from '../Tables/DBList'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {AddUserCommitLogID} from '../Server/AddUserCommitLogID'
-import {SetUpFirstUser} from '../Server/SetUpFirstUser'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {ManageServer} from '../Server/ManageServer'
 import {ManageUsers} from '../Server/ManageUsers'
@@ -55,6 +54,9 @@ const ServerHome = (props) => {
 
     const {woqlClient, contextEnriched } = WOQLClientObj()
 
+    let showlist = woqlClient.user_databases().length
+
+
     useEffect(() => {
         if(woqlClient){
             setMyDBs(getDBList())
@@ -67,8 +69,7 @@ const ServerHome = (props) => {
             .add_triple("v:UIRI", "system:user_identifier", email) 
         let fixer = woqlClient.copy()
         fixer.set_system_db()
-        fixer.query(q).then(() => {
-        })
+        fixer.query(q)
     }
 
     function getDBList(){
@@ -107,7 +108,6 @@ const ServerHome = (props) => {
         return Object.values(rows)
     }
 
-    const canCreate = true //woqlClient.action_permitted('create_database', woqlClient.user_organization())
     let sections = []
     let tabs = []
 
@@ -123,49 +123,41 @@ const ServerHome = (props) => {
     }
 
 
-    let hasTutorials = user.logged_in
-    let canManageUsers = user.logged_in
-    let canManageServer = user.logged_in
+    let hasTutorials = false;//user.logged_in
+    let canManageUsers = false;//user.logged_in
+    let canManageServer = false;//user.logged_in
 
-    if (myDBs.length > 0) {
+    if (showlist) {
         sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
         tabs.push(<DBList key="dbl" list={myDBs} />)
     }
-    if (canCreate) {
-        sections.push({className: CREATE_FIRSTDB_CSS, label: CREATEDB_TITLE})
+    if(user.logged_in){
+        sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
+        tabs.push(<CloneDatabase key="clone" />)
+        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
+    }
+    else {
+        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
+        tabs.push(<CreateDatabase key="createpage" />)
+        sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
+        tabs.push(<CloneDatabase key="clone" />)
     }
     if (hasTutorials) {
         sections.push({className: TUTORIALS_CSS, label: TUTORIALS_TITLE})
         tabs.push(<ConsoleTutorials key="tutorials" />)
     }
-    //turn off regular admin until user adds first db... we want them to do that...
-    if (myDBs.length > 0) {
-        if (canManageUsers) {
-            sections.push({className: MANAGE_USERS_CSS, label: MANAGE_USERS_TITLE})
-            tabs.push(<ManageUsers key="manageusers" />)
-        }
-        if (canManageServer) {
-            sections.push({className: MANAGE_SERVER_CSS, label: MANAGE_SERVER_TITLE})
-            tabs.push(<ManageServer key="manageserver" />)
-        }
+    if (canManageUsers) {
+        sections.push({className: MANAGE_USERS_CSS, label: MANAGE_USERS_TITLE})
+        tabs.push(<ManageUsers key="manageusers" />)
+    }
+    if (canManageServer) {
+        sections.push({className: MANAGE_SERVER_CSS, label: MANAGE_SERVER_TITLE})
+        tabs.push(<ManageServer key="manageserver" />)
     }
     if (error) {
         return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
     }
-    else if (sections.length == 0){
-        alert("wtf")
-        return <TerminusDBSpeaks failure={ACCESS_FAILURE} />
-    }
-
-
-    if (sections.length == 1)
-        return (
-            <SimplePageView>
-                <div key ='y' className={sections[0].className}>{sections[0].title}</div>
-                {tabs}
-            </SimplePageView>
-        )
     let active = props.page
     return (
         <TabbedPageView id="home" active={active} sections={sections}>

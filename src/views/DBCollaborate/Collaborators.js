@@ -2,7 +2,6 @@
  * Controller application for collaboration management
  */
 import React, {useState, useEffect} from 'react'
-import {useAuth0} from '../../react-auth0-spa'
 import {MANAGE_COLLABORATORS} from './constants.dbcollaborate'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
@@ -20,24 +19,22 @@ export const Collaborators = () => {
     //if the db is hosted on hub -> we show super cool stuff
     //otherwise we show a very boring and low-level capabilities management screen
 
-    const {loading, user} = useAuth0()
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient, remoteClient, bffClient} = WOQLClientObj()
     const {repos} = DBContextObj()
     const [localLoading, setLocalLoading] = useState(true)
     const [remoteLoading, setRemoteLoading] = useState()
-    const [remoteClient, setRemoteClient] = useState()
     const [userList, setUserList] = useState()
     const [report, setReport] = useState()
 
     const [view, setView] = useState('list')
 
     useEffect(() => {
-        if (repos && !loading) {
+        if (repos) {
             if(repos.remote){
-                createRemoteClient(repos.remote.url)
+                getRemoteUsers(repos.remote.url)
             }
         }
-    }, [repos, loading])
+    }, [repos])
 
     useEffect(() => {
         getLocalUsers()
@@ -83,17 +80,6 @@ export const Collaborators = () => {
         alert("remote users: " + JSON.stringify(results))
     }
 
-    function createRemoteClient(url){
-        alert("remote client is " + url)
-        const dbClient = new TerminusClient.WOQLClient(url)
-        if(user){
-            alert(JSON.stringify(user))
-            dbClient.local_auth({type: "jwt", key: user.token})
-            getRemoteUsers(dbClient)
-        }
-        setRemoteClient(dbClient)
-    }
-
     function getLocalUsers(){
         setLocalLoading(true)
         woqlClient.getRoles(false, woqlClient.db(),  woqlClient.organization())
@@ -106,9 +92,12 @@ export const Collaborators = () => {
         .finally(() => setLocalLoading(false))
     }
 
-    function getRemoteUsers(dbClient){
+    function getRemoteUsers(url){
+        let pieces = url.split("/")
+        let db = pieces[pieces.length -1]
+        let org = pieces[pieces.length -2]
         setRemoteLoading(true)
-        dbClient.getRoles(false, woqlClient.db(), woqlClient.organization())
+        bffClient.getRoles(false, db, org)
         .then((results) => {
             addRemoteUsers(results)
         })
