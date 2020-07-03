@@ -1,6 +1,5 @@
 import React, {useState, Fragment} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {useAuth0} from '../../react-auth0-spa'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
 import {HistoryNavigator} from '../History/HistoryNavigator'
@@ -20,7 +19,7 @@ export const ConsoleNavbar = (props) => {
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
 
-    const showUnderCostruction = process.env.TERMINUSDB_ENV === 'dev' ? false : true
+    const showUnderCostruction = false//process.env.TERMINUSDB_ENV === 'dev' ? false : true
     return (
         <Fragment>
             <header className="console__page__header">

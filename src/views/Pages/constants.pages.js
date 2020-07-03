@@ -1,5 +1,5 @@
 //Server Home Page
-export const CREATEDB_TITLE = "New Database"
+export const CREATEDB_TITLE = "Create"
 export const DBLIST_TITLE  = "My Databases"
 export const CREATE_FIRSTDB_CSS = "color-primary alert"
 export const CREATE_FIRSTDB = ""
@@ -15,6 +15,7 @@ export const MANAGE_USERS_CSS = ""
 export const MANAGE_USERS_TITLE = "User Accounts"
 export const MANAGE_SERVER_TITLE = "Server Configuration"
 export const MANAGE_SERVER_CSS = ""
+export const CLONEDB_TITLE = "Clone"
 
 
 

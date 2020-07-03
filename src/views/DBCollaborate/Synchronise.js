@@ -32,7 +32,7 @@ export const Synchronise = () => {
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [isRemote, setIsRemote] = useState()
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient, remoteClient} = WOQLClientObj()
 
     let update_start = Date.now()
 
@@ -180,9 +180,9 @@ export const Synchronise = () => {
 
         let nClient = woqlClient.copy()
 
-        if (deets.user && deets.password) {
-            nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
-        }
+        //if (deets.user && deets.password) {
+        //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
+        //}
         nClient.checkout(from_branch)
         setLoading(true)
         nClient
@@ -216,9 +216,9 @@ export const Synchronise = () => {
         }
         let nClient = woqlClient.copy()
 
-        if (deets.user && deets.password) {
-            nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
-        }
+        //if (deets.user && deets.password) {
+        //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
+        //}
         if (to_branch != nClient.checkout()) nClient.checkout(to_branch)
         setLoading(true)
         update_start = Date.now()

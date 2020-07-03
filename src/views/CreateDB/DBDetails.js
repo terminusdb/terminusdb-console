@@ -39,6 +39,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
             id: extract.dbid,
             label: extract.dbname,
             comment: extract.description,
+            sharing: extract.sharing,
         }
         if (
             (advanced['data_url'] && advanced['data_url'].trim()) ||
@@ -55,7 +56,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
         <>
             <TCForm
                 onSubmit={onExtract}
-                layout={[2, 1]}
+                layout={[3, 1]}
                 fields={DB_DETAILS_FORM.fields}
                 values={values}
                 buttons={buttons}

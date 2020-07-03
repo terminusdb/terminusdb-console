@@ -154,24 +154,6 @@ export const PULL_REMOTE_FORM = {
             label: 'Pull to Local Branch'
         },
         {
-            id: "user",
-            value: "",
-            label: 'Remote User Name',
-            inputElement: {
-                type: "input",
-                placeholder: "enter username for remote server",
-            }
-        },
-        {
-            id: "password",
-            value: "",
-            label: 'Password',
-            inputElement: {
-                type: "input",
-                placeholder: "enter password for remote server",
-            }
-        },
-        {
             id: "commit",
             label: "Commit Message",
             inputElement: {
@@ -241,25 +223,7 @@ export const PUSH_REMOTE_FORM = {
                 type: "input",
             },
             label: 'Push to Remote Branch'
-        },
-        {
-            id: "user",
-            value: "",
-            label: 'Remote User Name',
-            inputElement: {
-                type: "input",
-                placeholder: "enter username for remote server",
-            }
-        },
-        {
-            id: "password",
-            value: "",
-            label: 'Password',
-            inputElement: {
-                type: "input",
-                placeholder: "enter password for remote server",
-            }
-        },
+        },      
         {
             id: "commit",
             label: "Commit Message",
