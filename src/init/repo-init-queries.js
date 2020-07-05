@@ -35,7 +35,7 @@ export function enrich_local_db_listing(woqlClient){
     })
 }
 
-export function enrich_remote_listing(remoteClient, localClient){
+export async function enrich_remote_listing(remoteClient, localClient){
     return remoteClient.getRoles(remoteClient.uid())
     .then((roledata) => {
         return roledata

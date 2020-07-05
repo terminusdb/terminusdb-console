@@ -11,10 +11,12 @@ import { CREATE_DB_FORM } from './constants.createdb'
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
+import {useAuth0} from '../../react-auth0-spa'
 
 export const CreateDatabase = () => {
     const [loading, setLoading] = useState(false)
     const [report, setReport] = useState()
+    const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
     const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
     /**
@@ -41,7 +43,12 @@ export const CreateDatabase = () => {
         .finally(() => setLoading(false))            
     }
 
-    function createRemote(doc, update_start, schema) {
+    async function createRemote(doc, update_start, schema) {
+        //remoteClient = await setUpJWT(remoteClient)
+        const jwtoken = await getTokenSilently()
+        let hubcreds = {type: "jwt", key: jwtoken}
+        bffClient.local_auth(hubcreds)
+        remoteClient.local_auth(hubcreds)
         let remote_org = remoteClient.user_organization()
         bffClient.createDatabase(doc.id, doc, remote_org)
         .then(() => {
@@ -49,6 +56,7 @@ export const CreateDatabase = () => {
             let src = {
                 remote_url: sourceURL,
                 label: doc.label,
+                comment: ""
             }
             return woqlClient.clonedb(src, doc.id)
             .then(() => {

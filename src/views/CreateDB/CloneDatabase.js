@@ -12,12 +12,14 @@ import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
+import {useAuth0} from '../../react-auth0-spa'
 
 export const CloneDatabase = () => {
     const { woqlClient, reconnectToServer, remoteClient } = WOQLClientObj()
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState()
     const [sourceURL, setSourceURL] = useState()
+    const { getTokenSilently } = useAuth0();
 
     let update_start = Date.now()
 
@@ -38,22 +40,19 @@ export const CloneDatabase = () => {
     let user = woqlClient.user()
 
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
-    function onClone(details) {
+    async function onClone(details) {
         if (!sourceURL) return
         update_start = Date.now()
         setUpdateLoading(true)
-
-        //let nClient = woqlClient.copy()
-
-        //if (details.user && details.password) {
-        //    nClient.remote_auth({type: 'basic', key: details.password, user: details.user})
-        //}
         let newid = sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
         let src = {
             remote_url: sourceURL,
             label: details.name || newid,
         }
         if (details.description) src.comment = details.description
+        const jwtoken = await getTokenSilently()
+        remoteClient.local_auth({type: "jwt", key: jwtoken})
+       
         return remoteClient
             .clonedb(src, newid)
             .then(() => {

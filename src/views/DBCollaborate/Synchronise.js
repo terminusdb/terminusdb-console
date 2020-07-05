@@ -25,14 +25,14 @@ import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 export const Synchronise = () => {
     const {repos, branches, updateBranches} = DBContextObj()
 
-    const {loading, user} = useAuth0()
+    const { getTokenSilently } = useAuth0();
 
     const [sourceValues, setSourceValues] = useState()
     const [setLoading] = useState()
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [isRemote, setIsRemote] = useState()
-    const {woqlClient, remoteClient} = WOQLClientObj()
+    const { woqlClient } = WOQLClientObj()
 
     let update_start = Date.now()
 
@@ -168,7 +168,7 @@ export const Synchronise = () => {
         updateBranches()
     }
 
-    function pushRemote(deets) {
+    async function pushRemote(deets) {
         let from_branch = deets.local_branch || 'master'
         let commit = deets.commit || DEFAULT_REMOTE_PUSH_COMMIT
         let push_to = {
@@ -179,6 +179,9 @@ export const Synchronise = () => {
         update_start = Date.now()
 
         let nClient = woqlClient.copy()
+        const jwtoken = await getTokenSilently()
+        nClient.local_auth({type: "jwt", key: jwtoken})
+       
 
         //if (deets.user && deets.password) {
         //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
@@ -206,7 +209,7 @@ export const Synchronise = () => {
             })
     }
 
-    function pullRemote(deets) {
+    async function pullRemote(deets) {
         let to_branch = deets.local_branch || 'master'
         let commit = deets.commit || DEFAULT_REMOTE_PULL_COMMIT
         let pull_from = {
@@ -215,7 +218,9 @@ export const Synchronise = () => {
             message: commit,
         }
         let nClient = woqlClient.copy()
-
+        const jwtoken = await getTokenSilently()
+        nClient.local_auth({type: "jwt", key: jwtoken})
+ 
         //if (deets.user && deets.password) {
         //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
         //}

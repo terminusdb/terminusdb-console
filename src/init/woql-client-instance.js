@@ -7,6 +7,7 @@ export const WOQLContext = React.createContext()
 export const WOQLClientObj = () => useContext(WOQLContext)
 
 export const WOQLClientProvider = ({children, params}) => {
+    if (window.location.search.includes("code=")) return null
     const [loadingServer, setLoading] = useState(true)
     const [connecting, setConnecting] = useState(true)
     const [woqlClient, setWoqlClient] = useState(null)
@@ -42,18 +43,19 @@ export const WOQLClientProvider = ({children, params}) => {
         async function setUpRemoteConnection() {
             if (user && woqlClient) {
                 const jwtoken = await getTokenSilently()
+                let hub_org = user['http://terminusdb.com/schema/system#agent_name']
                 let hubcreds = {type: "jwt", key: jwtoken}
                 woqlClient.remote_auth(hubcreds)
                 const hubClient = new TerminusClient.WOQLClient(params.remote)
                 hubClient.local_auth(hubcreds)
-                hubClient.organization(user.nickname) 
-                hubClient.connection.user.id = user.nickname
+                hubClient.organization(hub_org) 
+                hubClient.connection.user.id = hub_org
                 hubClient.connection.user.author = user.email
                 setRemoteClient(hubClient)
                 const bClient = new TerminusClient.WOQLClient(params.bff)
                 bClient.local_auth(hubcreds)
-                bClient.organization(user.nickname) 
-                bClient.connection.user.id = user.nickname
+                bClient.organization(hub_org) 
+                bClient.connection.user.id = hub_org
                 bClient.connection.user.author = user.email
                 setBffClient(bClient)            
             }
@@ -98,10 +100,15 @@ export const WOQLClientProvider = ({children, params}) => {
 
 
      useEffect(() => {
-        if(bffClient){
-            enrich_remote_listing(bffClient, woqlClient)
-            .then(() => setRemoteEnriched(true))
-        } 
+        async function getRemoteListings() {
+            if (bffClient) {
+                const jwtoken = await getTokenSilently()
+                bffClient.local_auth({type: "jwt", key: jwtoken})
+                enrich_remote_listing(bffClient, woqlClient)
+                .then(() => setRemoteEnriched(true))
+            }
+        }
+        getRemoteListings()
     }, [bffClient])
 
      /*
