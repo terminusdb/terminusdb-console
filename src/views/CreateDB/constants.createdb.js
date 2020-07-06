@@ -250,6 +250,32 @@ export const COPY_REMOTE_FORM = {
 
 export const COPY_DB_DETAILS_FORM = {
     fields: [
+        /*{
+            id: "dbid",
+            label: 'Original ID',
+            inputElement: {
+                type: "input",
+                disabled: true
+            }
+        },*/
+        {
+            id: "copy",
+            label: 'Copy From',
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [{value: "remote", label: "TerminusDB"}, {value: "local", label: "Local Database"}],
+                placeholder: "TerminusDB"
+            }
+        }
+    ],
+    buttons: {
+        submitText: "Copy Database"
+    }
+}
+
+/*export const COPY_DB_DETAILS_FORM = {
+    fields: [
         {
             id: "dbid",
             label: 'Original ID',
@@ -274,7 +300,7 @@ export const COPY_DB_DETAILS_FORM = {
         }
     ]
 }
-
+*/
 
 export const CREATE_REMOTE_FORM = {
     createButtonText: "Create New Database",

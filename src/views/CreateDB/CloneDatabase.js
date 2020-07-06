@@ -7,7 +7,7 @@ import {
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import {COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM} from './constants.createdb'
+import {COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM, COPY_DB_DETAILS} from './constants.createdb'
 import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
@@ -22,7 +22,8 @@ export const CloneDatabase = () => {
     let update_start = Date.now()
 
     let basicInfo = {}
-    let fields = COPY_REMOTE_FORM.fields
+    //let fields = COPY_REMOTE_FORM.fields
+    let fields = COPY_DB_DETAILS_FORM.fields
 
     //build values and options from database options
     COPY_REMOTE_FORM.fields.map((item, index) => {
@@ -100,7 +101,7 @@ export const CloneDatabase = () => {
             )}
             <TCForm
                 onSubmit={onClone}
-                layout={[2]}
+                layout={[3, 1]}
                 noCowDucks
                 onChange={onChangeBasics}
                 fields={fields}
