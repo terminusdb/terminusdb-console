@@ -9,12 +9,15 @@ export const createLocalDB = async (dbId,withGraph=true) =>{
     cy.server().route("POST", routes.createDb(dbId)).as('createDB');
     cy.server().route("POST", routes.createGraph(dbId)).as('createGraph');
 
-    cy.get("#create_db").click()
-    cy.get("#create_db_local").click()
+    //cy.get("#create_db").click()
+    //cy.get("#create_db_local").click()
 
     cy.get("#dbid").focus().type(dbId);
     cy.get("#dbname").focus().type(dbId);
     cy.get("#description").focus().type(dbId);
+
+    const createType = 'Local Only - No Sharing{enter}';
+	cy.get(".tcf-select").click().find("input").first().focus().type(createType);
 
     cy.get('form').find("button").contains('Create New Database').click()
 

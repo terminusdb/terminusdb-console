@@ -8,7 +8,7 @@ import { POLITICAL_DATA_SCHEMA_QUERY,
 	POLITICAL_DATA_INSERTS,
 	POLITICAL_SHOW_DOCUMENTS } from "../constants/political-data-constants"
 import { DUBLIN_COUNCIL_DATA_SCHEMA_QUERY,
-	DUBLIN_COUNCIL_DATA_CSV, 
+	DUBLIN_COUNCIL_DATA_CSV,
 	DUBLIN_COUNCIL_DATA_WRANGLES,
 	DUBLIN_COUNCIL_DATA_INSERTS,
 	DUBLIN_COUNCIL_SHOW_DOCUMENTS } from "../constants/dublin-council-data-constants"
@@ -50,3 +50,7 @@ export const config = [{
 			"selectDocuments": DUBLIN_COUNCIL_SHOW_DOCUMENTS
 		}
 	}]
+
+export const episode_1_database = {
+	"name": "episode_1_database_" + Date.now(),
+}

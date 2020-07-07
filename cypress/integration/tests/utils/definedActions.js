@@ -1,5 +1,5 @@
 import * as tabs from "../../../../src/views/Pages/constants.pages"
-import { SHOW_CLASSES_PROPERTIES, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST } from "./queries"
+import { SHOW_CLASSES_PROPERTIES, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST, IMPORT_AND_EXPORT_CSV } from "./queries"
 import * as routes from "./routes"
 
 /*
@@ -100,4 +100,20 @@ export const cloneLocalDatabase = async(newDbId, cloneFromDb) => {
     cy.wait("@cloneDB").its('status').should('eq', 200);
 
     await cy.get('#loading').should('not.exist')
+}
+
+
+export const importAndExportCSV = async(dbId) => {
+	cy.server().route("POST", routes.woqlQuery(dbId)).as('runQuery');
+
+	await cy.get('.CodeMirror').find('div').find('textarea').focus().type(IMPORT_AND_EXPORT_CSV)
+    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
+
+    cy.wait("@runQuery").its('status').should('eq', 200);
+
+	cy.wait(2000)
+	/*
+	* check that I have a query result
+	*/
+	cy.get('#terminus-console-page').find('tr').its('length').should('greaterThan', 1);
 }
