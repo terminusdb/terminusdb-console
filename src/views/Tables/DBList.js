@@ -8,7 +8,6 @@ import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
     SHARE_ICON, PUSH_ICON, PULL_ICON, CLONE_ICON, ALL_GOOD_ICON, NO_CAN_DO_ICON, CLONED_ICON } from "../../constants/faicons"
 import { printts } from "../../constants/dates"
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
-import {DBCloner} from "./DBCloner"
 
 export const DBList = ({list, className, user, onClone}) => {
     className = className || "database-listing-table"
