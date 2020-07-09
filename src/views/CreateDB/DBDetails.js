@@ -14,6 +14,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
     DB_DETAILS_FORM.fields.map((item) => {
         dbInfo[item.id] = item.value || ''
     })
+
     DB_ADVANCED_FORM.fields.map((item) => {
         advancedInfo[item.id] = item.value || ''
     })
