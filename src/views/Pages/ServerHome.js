@@ -73,39 +73,7 @@ const ServerHome = (props) => {
     }
 
     function getDBList(){
-        const localdbs = woqlClient.user_databases()
-        let rows = {}
-        for(var i = 0; i < localdbs.length; i++){
-            let index = localdbs[i].organization + "_" + localdbs[i].id 
-            rows[index] = {
-                "Database ID": localdbs[i].id, 
-                "Name": localdbs[i].label,
-                "Organization": localdbs[i].organization
-            }
-        }
-        if(woqlClient.connection.repos){
-            for(var i = 0; i < woqlClient.connection.repos.length; i++){
-                let repo = woqlClient.connection.repos[i]
-                let ind2 = repo.organization + "_" + repo.database
-                if(!rows[ind2]) rows[ind2] = {
-                    "Database ID": "", 
-                    "Name": "",
-                    "Organization": ""
-                }
-                let rt = repo['Repo Type']
-                rows[ind2]['Type'] = rt.substring(rt.lastIndexOf('#')+1)
-                let url = repo['Remote URL']
-                if(url['@value']) rows[ind2]['URL'] = url['@value'] 
-                else rows[ind2]['URL'] = ""
-                let ut = repo['UpdatedTime']
-                if(ut && ut['@value']){
-                    rows[ind2]['Updated'] = printts( ut['@value'])
-                } 
-                else rows[ind2]['Updated'] = ""
-
-            }
-        }
-        return Object.values(rows)
+        return woqlClient.databases()
     }
 
     let sections = []
@@ -129,7 +97,7 @@ const ServerHome = (props) => {
 
     if (showlist) {
         sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
-        tabs.push(<DBList key="dbl" list={myDBs} />)
+        tabs.push(<DBList key="dbl" list={myDBs} user={user} />)
     }
     if(user.logged_in){
         sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
@@ -140,8 +108,6 @@ const ServerHome = (props) => {
     else {
         sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
-        sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
-        tabs.push(<CloneDatabase key="clone" />)
     }
     if (hasTutorials) {
         sections.push({className: TUTORIALS_CSS, label: TUTORIALS_TITLE})

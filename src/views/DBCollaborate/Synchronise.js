@@ -28,7 +28,7 @@ export const Synchronise = () => {
     const { getTokenSilently } = useAuth0();
 
     const [sourceValues, setSourceValues] = useState()
-    const [setLoading] = useState()
+    const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [isRemote, setIsRemote] = useState()
@@ -180,7 +180,7 @@ export const Synchronise = () => {
 
         let nClient = woqlClient.copy()
         const jwtoken = await getTokenSilently()
-        nClient.local_auth({type: "jwt", key: jwtoken})
+        nClient.remote_auth({type: "jwt", key: jwtoken})
        
 
         //if (deets.user && deets.password) {
@@ -219,7 +219,7 @@ export const Synchronise = () => {
         }
         let nClient = woqlClient.copy()
         const jwtoken = await getTokenSilently()
-        nClient.local_auth({type: "jwt", key: jwtoken})
+        nClient.remote_auth({type: "jwt", key: jwtoken})
  
         //if (deets.user && deets.password) {
         //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
@@ -252,8 +252,9 @@ export const Synchronise = () => {
         return <TerminusDBSpeaks report={report} />
     }
 
-    let pushButtons = user ? PUSH_REMOTE_FORM.buttons : false
-    let pullButtons = user ? PULL_REMOTE_FORM.buttons : false
+    let user = woqlClient.user()
+    let pushButtons = user.logged_in ? PUSH_REMOTE_FORM.buttons : false
+    let pullButtons = user.logged_in ? PULL_REMOTE_FORM.buttons : false
 
     return (
         <>

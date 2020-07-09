@@ -25,12 +25,22 @@ export const CreateDatabase = () => {
      */
     function onCreate(doc, schema) {
         update_start = Date.now()
-        setLoading(true)
         if(doc.sharing != "local"){
-            if(doc.sharing == 'public') doc.public = true
-            delete(doc['sharing'])
-            return createRemote(doc, update_start, schema)
+            let user = woqlClient.user()
+            if(!user.logged_in){
+                setReport({status: TERMINUS_WARNING, message: "If you are not logged in to terminusHub, you can only create local databases"})
+                return false;
+                //return Promise.reject(new URIError("Not Logged In"))
+
+            }
+            else {
+                if(doc.sharing == 'public') doc.public = true
+                delete(doc['sharing'])
+                setLoading(true)
+                return createRemote(doc, update_start, schema)
+            }
         }
+        setLoading(true)
         return createLocal(doc, update_start, schema)
     }
 
@@ -44,11 +54,10 @@ export const CreateDatabase = () => {
     }
 
     async function createRemote(doc, update_start, schema) {
-        //remoteClient = await setUpJWT(remoteClient)
         const jwtoken = await getTokenSilently()
         let hubcreds = {type: "jwt", key: jwtoken}
         bffClient.local_auth(hubcreds)
-        remoteClient.local_auth(hubcreds)
+        woqlClient.remote_auth(hubcreds)
         let remote_org = remoteClient.user_organization()
         bffClient.createDatabase(doc.id, doc, remote_org)
         .then(() => {
@@ -69,6 +78,7 @@ export const CreateDatabase = () => {
     }
 
     function after_create_db(schema, update_start, message, id){
+        woqlClient.db(id)
         if (schema) {
             return createStarterGraph(update_start, message, id)
         } 
@@ -154,6 +164,12 @@ export const CreateDatabase = () => {
                     error={report.error}
                     message={report.message}
                     time={report.time}
+                />
+            )}
+            {report && !report.error && (
+                <APIUpdateReport
+                    status={report.status}
+                    message={report.message}
                 />
             )}
             <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} />
