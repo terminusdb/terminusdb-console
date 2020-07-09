@@ -15,10 +15,12 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import {AddCollaborators} from './AddCollaborators'
 import {RemoveCollaborators} from './RemoveCollaborators'
 import {CollaborateToolbar} from './CollaborateToolbar'
+import {useAuth0} from '../../react-auth0-spa'
+
 export const Collaborators = () => {
     //if the db is hosted on hub -> we show super cool stuff
     //otherwise we show a very boring and low-level capabilities management screen
-
+    const { getTokenSilently } = useAuth0();
     const {woqlClient, remoteClient, bffClient} = WOQLClientObj()
     const {repos} = DBContextObj()
     const [localLoading, setLocalLoading] = useState(true)
@@ -92,11 +94,13 @@ export const Collaborators = () => {
         .finally(() => setLocalLoading(false))
     }
 
-    function getRemoteUsers(url){
+    async function getRemoteUsers(url){
         let pieces = url.split("/")
         let db = pieces[pieces.length -1]
         let org = pieces[pieces.length -2]
         setRemoteLoading(true)
+        const jwtoken = await getTokenSilently()
+        bffClient.local_auth({type: "jwt", key: jwtoken})
         bffClient.getRoles(false, db, org)
         .then((results) => {
             addRemoteUsers(results)
@@ -140,10 +144,10 @@ export const Collaborators = () => {
             <CollaboratorList users={userList} />
         }
         {(view == 'add') && 
-            <AddCollaborators users={userList} onCancel={setList} client={remoteClient}/>
+            <AddCollaborators users={userList} onCancel={setList} client={bffClient}/>
         }
         {(view == 'remove') && 
-            <RemoveCollaborators users={userList} onCancel={setList} client={remoteClient}/>
+            <RemoveCollaborators users={userList} onCancel={setList} client={bffClient}/>
         }
     </>)
 }

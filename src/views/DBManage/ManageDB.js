@@ -9,7 +9,7 @@ import { RiverOfSections } from "../Templates/RiverOfSections"
 
 export const ManageDB = (props) => {
     return (
-        <RiverOfSections sections={MANAGE_SECTIONS} label={props.label}>
+        <RiverOfSections key='a' sections={MANAGE_SECTIONS} label={props.label}>
             <Branch key="branch" />
             <Merge key="merge" />
             <Backup key="backup" />

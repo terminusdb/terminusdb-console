@@ -2631,3 +2631,106 @@ h4.prefix-section-header {
 .owl-editor-write {
     border: 1px solid #002856;
 }
+
+.database-summary-listing {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.database-left-column {
+    width: 180px
+}
+
+.database-control-panel {
+    display: inline-block;
+}
+
+.database-listing-icon {
+    height: 120px;
+    text-align: center;
+    margin: 8px auto;
+}
+
+.database-controls {
+}
+.major-database-controls {
+    color: #00C08B;
+    text-align: center;
+    font-size: 1.6em; 
+}
+
+.time-control{
+}
+.query-control{}
+.minor-database-controls{
+}
+.minor-control{
+    margin-top: 4px;
+    text-align: center;
+}
+
+.database-main-content {
+}
+
+.database-listing-title-row {
+}
+
+.database-listing-title {
+    font-size: 40px;
+}
+.database-listing-id {
+    font-size: 10px;
+    margin-left: 6px;   
+}
+
+.database-credits {
+}
+.database-listing-description-row {
+}
+
+
+
+.database-listing-description {
+}
+.database-production-credits {
+    width: 120px;
+}
+.database-role-credits {
+    width: 120px;
+}
+.database-contribution-credits {
+    width: 120px;
+}
+
+.database-size-credits {
+    width: 120px;
+}
+
+.database-created-credits {
+    width: 120px;
+}
+
+.database-action-column {
+    width: 160px;
+    margin-top: 10px;
+    height: 180px;
+}
+
+.database-action-option {
+    height: 100px;
+    font-size: 6em;
+    text-align: center;
+}
+.database-update-status {
+    height: 50px;
+}
+.database-secondary-option {
+    height: 30px;
+
+}
+
+.database-listing-nocando,
+.database-listing-cloned {
+    color: #dee
+}

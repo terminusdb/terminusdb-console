@@ -12,12 +12,14 @@ import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
+import {useAuth0} from '../../react-auth0-spa'
 
 export const CloneDatabase = () => {
     const { woqlClient, reconnectToServer, remoteClient } = WOQLClientObj()
     const [updateLoading, setUpdateLoading] = useState(false)
     const [report, setReport] = useState()
     const [sourceURL, setSourceURL] = useState()
+    const { getTokenSilently } = useAuth0();
 
     let update_start = Date.now()
 
@@ -39,67 +41,38 @@ export const CloneDatabase = () => {
     let user = woqlClient.user()
 
     //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
-    function onClone(details) {
-        //if (!sourceURL) return
+    async function onClone(details) {
+        if (!sourceURL) return
         update_start = Date.now()
         setUpdateLoading(true)
+        let newid = sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
+        let src = {
+            remote_url: sourceURL,
+            label: details.name || newid,
+        }
+        if (details.description) src.comment = details.description
+        const jwtoken = await getTokenSilently()
+        remoteClient.local_auth({type: "jwt", key: jwtoken})
 
-        if(details.copy != 'remote'){
-            let sourceID = details.sourceId;
-            let sourceURL = woqlClient.server() + woqlClient.user_organization() + '/' + sourceID
-            let src = {remote_url: sourceURL, label: details.dbId + "Clone"}
-            let newID = details.dbId
-            //if (details.description) src.comment = details.description
-            let cClient = woqlClient.copy()
-            cClient.remote_auth(cClient.local_auth())
-            cClient.organization(woqlClient.user_organization())
-            return cClient
-                .clonedb(src, newID, woqlClient.user_organization())
-                .then(() => {
-                    let message = `${COPY_LOCAL_FORM.cloneSuccessMessage} (db: ${sourceID})`
-                    let rep = {
-                        message: message,
-                        status: TERMINUS_SUCCESS,
-                        time: Date.now() - update_start,
-                    }
-                    setReport(rep)
-                    afterCreate(newID, rep)
-                })
-                .catch((err) => {
-                    let message = `${COPY_LOCAL_FORM.cloneFailureMessage} (db: ${sourceID}) `
-                    setReport({error: err, status: TERMINUS_ERROR, message: message})
-                })
-                .finally(() => {
-                    setUpdateLoading(false)
-                })
-        }
-        else {
-            let newid = sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
-            let src = {
-                remote_url: sourceURL,
-                label: details.name || newid,
-            }
-            if (details.description) src.comment = details.description
-            return remoteClient
-                .clonedb(src, newid)
-                .then(() => {
-                    let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
-                    let rep = {
-                        message: message,
-                        status: TERMINUS_SUCCESS,
-                        time: Date.now() - update_start,
-                    }
-                    setReport(rep)
-                    afterCreate(newid, rep)
-                })
-                .catch((err) => {
-                    let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
-                    setReport({error: err, status: TERMINUS_ERROR, message: message})
-                })
-                .finally(() => {
-                    setUpdateLoading(false)
-                })
-        }
+        return remoteClient
+            .clonedb(src, newid)
+            .then(() => {
+                let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
+                let rep = {
+                    message: message,
+                    status: TERMINUS_SUCCESS,
+                    time: Date.now() - update_start,
+                }
+                setReport(rep)
+                afterCreate(newid, rep)
+            })
+            .catch((err) => {
+                let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
+                setReport({error: err, status: TERMINUS_ERROR, message: message})
+            })
+            .finally(() => {
+                setUpdateLoading(false)
+            })
     }
 
     /**

@@ -7,7 +7,7 @@ import {localSettings} from './localSettings'
 import {WOQLClientProvider} from '@terminusdb/terminusdb-console'
 
 const onRedirectCallback = (appState) => {
-    ConsoleHistory.go(-2)
+    ConsoleHistory.go(-3)
 }
 
 /*

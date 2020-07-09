@@ -11,10 +11,12 @@ import { CREATE_DB_FORM } from './constants.createdb'
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
+import {useAuth0} from '../../react-auth0-spa'
 
 export const CreateDatabase = () => {
     const [loading, setLoading] = useState(false)
     const [report, setReport] = useState()
+    const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
     const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
     /**
@@ -23,12 +25,22 @@ export const CreateDatabase = () => {
      */
     function onCreate(doc, schema) {
         update_start = Date.now()
-        setLoading(true)
         if(doc.sharing != "local"){
-            if(doc.sharing == 'public') doc.public = true
-            delete(doc['sharing'])
-            return createRemote(doc, update_start, schema)
+            let user = woqlClient.user()
+            if(!user.logged_in){
+                setReport({status: TERMINUS_WARNING, message: "If you are not logged in to terminusHub, you can only create local databases"})
+                return false;
+                //return Promise.reject(new URIError("Not Logged In"))
+
+            }
+            else {
+                if(doc.sharing == 'public') doc.public = true
+                delete(doc['sharing'])
+                setLoading(true)
+                return createRemote(doc, update_start, schema)
+            }
         }
+        setLoading(true)
         return createLocal(doc, update_start, schema)
     }
 
@@ -41,7 +53,11 @@ export const CreateDatabase = () => {
         .finally(() => setLoading(false))            
     }
 
-    function createRemote(doc, update_start, schema) {
+    async function createRemote(doc, update_start, schema) {
+        const jwtoken = await getTokenSilently()
+        let hubcreds = {type: "jwt", key: jwtoken}
+        bffClient.local_auth(hubcreds)
+        woqlClient.remote_auth(hubcreds)
         let remote_org = remoteClient.user_organization()
         bffClient.createDatabase(doc.id, doc, remote_org)
         .then(() => {
@@ -49,6 +65,7 @@ export const CreateDatabase = () => {
             let src = {
                 remote_url: sourceURL,
                 label: doc.label,
+                comment: ""
             }
             return woqlClient.clonedb(src, doc.id)
             .then(() => {
@@ -61,6 +78,7 @@ export const CreateDatabase = () => {
     }
 
     function after_create_db(schema, update_start, message, id){
+        woqlClient.db(id)
         if (schema) {
             return createStarterGraph(update_start, message, id)
         } 
@@ -146,6 +164,12 @@ export const CreateDatabase = () => {
                     error={report.error}
                     message={report.message}
                     time={report.time}
+                />
+            )}
+            {report && !report.error && (
+                <APIUpdateReport
+                    status={report.status}
+                    message={report.message}
                 />
             )}
             <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} />
