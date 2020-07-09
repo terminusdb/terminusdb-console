@@ -8,8 +8,9 @@ import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
     SHARE_ICON, PUSH_ICON, PULL_ICON, CLONE_ICON, ALL_GOOD_ICON, NO_CAN_DO_ICON, CLONED_ICON } from "../../constants/faicons"
 import { printts } from "../../constants/dates"
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
+import {DBCloner} from "./DBCloner"
 
-export const DBList = ({list, className, user}) => {
+export const DBList = ({list, className, user, onClone}) => {
     className = className || "database-listing-table"
     if(!list.length){
         return null
@@ -17,13 +18,13 @@ export const DBList = ({list, className, user}) => {
     return (
         <Container fluid>
             {list.map((value) => {
-                return (<DBSummary meta={value} user={user}/>)
+                return (<DBSummary meta={value} user={user} onClone={onClone}/>)
             })}
         </Container> 
     )
 } 
 
-export const DBSummary = ({meta, user}) => {
+export const DBSummary = ({meta, user, onClone}) => {
     return (
         <Row className='database-summary-listing'>
             <Col md={2} className='database-control-panel'>
@@ -41,7 +42,7 @@ export const DBSummary = ({meta, user}) => {
                 </Row>
             </Col>
             <Col md={2} className='database-main-actions'>
-                <DBStatus meta={meta}  user={user} />
+                <DBStatus meta={meta}  user={user}  onClone={onClone}/>
             </Col>
         </Row>
     )
@@ -260,27 +261,19 @@ export const DBControls = ({meta, user}) => {
     return (
         <Container className='database-controls'>
             <Row className='major-database-controls'>
-                <Col className='time-control' onClick={function(){goToPage('commits')}}>
+                <Col className='time-control' onClick={function(){if(show_tt) goToPage('commits')}}>
                     {controls[0]}
                 </Col>
-                <Col className='query-control' onClick={function(){goToPage('query')}}>
+                <Col className='query-control' onClick={function(){if(show_q) goToPage('query')}}>
                     {controls[1]}
                 </Col>
             </Row>
             <Row className='minor-database-controls'>
-                <Col className='minor-control' onClick={function(){goToPage('schema')}}>
+                <Col className='minor-control' onClick={function(){if(show_schema) goToPage('schema')}}>
                     {controls[2]}
                 </Col>
-                <Col className='minor-control' onClick={function(){goToPage('document')}}>
+                <Col className='minor-control' onClick={function(){if(show_schema) goToPage('document')}}>
                     {controls[3]}
-                </Col>
-            </Row>
-            <Row className='minor-database-controls'>
-                <Col className='minor-control' onClick={showDelete} >
-                    {controls[4]}
-                </Col>
-                <Col className='minor-control' onClick={function(){goToPage('document')}}>
-                    {controls[5]}
                 </Col>
             </Row>
         </Container>
@@ -309,11 +302,17 @@ export const QueryControl = ({meta}) => {
 }
 
 
-export const DBStatus = ({meta, user}) => {
+export const DBStatus = ({meta, user, onClone}) => {
     function doMainAction(){
         if(user.logged_in && !meta.remote){
             if(meta.remote_record){
-                alert("cloning database ")
+                if(meta.testing){
+                    if(onClone){
+                        alert("got there")
+                        onClone(meta)
+                    }
+                }
+                //alert("cloning database ")
             }
             else {
                 alert("sharing database db admin/" + meta.id )
@@ -349,6 +348,9 @@ export const DBStatus = ({meta, user}) => {
 }
 
 export const RemoteUpdated = ({meta, user}) => {
+    if(meta.testing){
+        return (<span>Clone Database</span>) 
+    }
     if(user.logged_in && user.has_remote_roles){
         if(!meta.remote){
             if(meta.remote_record){
@@ -404,7 +406,7 @@ export const DBMainAction = ({meta, user}) => {
     }
 
 
-    if(user.logged_in && user.has_remote_roles){
+    if(user.logged_in && user.has_remote_roles || meta.testing){
         if(meta.remote){
             if(meta.type == 'missing'){
                 return (<NoCanControl meta={meta} user={user} />)            

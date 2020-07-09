@@ -12,6 +12,7 @@ import {
     ADD_COMMIT_ID_CSS,
     ADD_COMMIT_ID_TITLE,
     TUTORIALS_CSS,
+    CLONEDBS,
     TUTORIALS_TITLE,
     MANAGE_USERS_CSS,
     MANAGE_USERS_TITLE,
@@ -31,6 +32,7 @@ import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {ManageServer} from '../Server/ManageServer'
 import {ManageUsers} from '../Server/ManageUsers'
 import { printts } from '../../constants/dates'
+import {useAuth0} from '../../react-auth0-spa'
 
 /**
  * Server home is the launch screen to the local experience
@@ -52,9 +54,35 @@ const ServerHome = (props) => {
     let [error, setError] = useState(false)
     let [myDBs, setMyDBs] = useState(false)
 
-    const {woqlClient, contextEnriched } = WOQLClientObj()
+    const {woqlClient, contextEnriched, reconnectToServer } = WOQLClientObj()
+    const { getTokenSilently } = useAuth0()
 
     let showlist = woqlClient.user_databases().length
+
+    async function Cloner(meta){
+        let dbs = woqlClient.databases()
+        let url = meta.remote_record.url 
+        let newid = new_local_id(url.substring(url.lastIndexOf('/')+ 1), dbs)
+        let lab = new_local_label(meta.label, dbs)
+        let cmt = meta.comment
+        let src = {
+            remote_url: url,
+            label: lab,
+            comment: cmt
+        }
+        const jwtoken = await getTokenSilently()
+        woqlClient.remote_auth({type: "jwt", key: jwtoken})
+        return woqlClient.clonedb(src, newid)
+        .then(() => {
+            reconnectToServer().then((result) => {
+                goDBHome(newid, woqlClient.user_organization())
+            })
+        })
+        .catch((err) => {
+            console.log(err)
+        })    
+    }
+    
 
 
     useEffect(() => {
@@ -101,7 +129,7 @@ const ServerHome = (props) => {
     }
     if(user.logged_in){
         sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
-        tabs.push(<CloneDatabase key="clone" />)
+        tabs.push(<DBList key="dbl2" list={CLONEDBS} user={user} onClone={Cloner}/>)
         sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
     }
@@ -131,5 +159,31 @@ const ServerHome = (props) => {
         </TabbedPageView>
     )
 }
+
+
+
+
+function new_local_id(starter, dbl){
+    let ind = 0;
+    let base = starter
+    let ids = dbl.map((item) => item.id)
+    while(ids.indexOf(base) != -1){
+        base = starter + "_" + (++ind)
+    }
+    return base
+}
+
+function new_local_label(starter, dbl){
+    let ind = 0;
+    let base = starter
+    let labs = dbl.map((item) => item.label)
+    while(labs.indexOf(base) != -1){
+        base = starter + " (" + (++ind) + ")"
+    }
+    return base
+}
+
+
+
 
 export default ServerHome
