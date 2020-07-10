@@ -7,16 +7,22 @@ import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 /**
  * Form for viewing and editing database meta data
  */
-export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
+export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in}) => {
     //first load form configuration
     let dbInfo = {}
     let advancedInfo = {}
+    let detfields = []
     DB_DETAILS_FORM.fields.map((item) => {
         dbInfo[item.id] = item.value || ''
+        if(logged_in || item.id != "sharing"){
+            detfields.push(item)
+        }
     })
     DB_ADVANCED_FORM.fields.map((item) => {
         advancedInfo[item.id] = item.value || ''
     })
+
+    let layout = (logged_in ? [3,1]  : [2, 1])
 
     //set up state variables configuration
     const [values, setValues] = useState(dbInfo)
@@ -39,7 +45,12 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
             id: extract.dbid,
             label: extract.dbname,
             comment: extract.description,
-            sharing: extract.sharing,
+        }
+        if(logged_in){
+            dbdoc.sharing = extract.sharing
+        }
+        else {
+            dbdoc.sharing = "local"
         }
         if (
             (advanced['data_url'] && advanced['data_url'].trim()) ||
@@ -56,8 +67,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid}) => {
         <>
             <TCForm
                 onSubmit={onExtract}
-                layout={[3, 1]}
-                fields={DB_DETAILS_FORM.fields}
+                layout={layout}
+                fields={detfields}
                 values={values}
                 buttons={buttons}
             />

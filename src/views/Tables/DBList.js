@@ -9,39 +9,39 @@ import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
 import { printts } from "../../constants/dates"
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
 
-export const DBList = ({list, className, user, onClone}) => {
+export const DBList = ({list, className, user, onAction}) => {
     className = className || "database-listing-table"
     if(!list.length){
         return null
     }
     return (
         <Container fluid>
-            {list.map((value) => {
-                return (<DBSummary meta={value} user={user} onClone={onClone}/>)
+            {list.map((value, index) => {
+                return (<DBSummary key={"sum_" + index} meta={value} user={user} onAction={onAction}/>)
             })}
         </Container> 
     )
 } 
 
-export const DBSummary = ({meta, user, onClone}) => {
+export const DBSummary = ({meta, user, onAction}) => {
     return (
-        <Row className='database-summary-listing'>
-            <Col md={2} className='database-control-panel'>
+        <Row key='r7' className='database-summary-listing'>
+            <Col key='r5' md={2} className='database-control-panel'>
                 <DBControlPanel meta={meta} user={user} />
             </Col>
             <Col md={8} className='database-main-content'>
-                <Row>
-                    <DBTitle meta={meta} user={user} />
+                <Row key='r3'>
+                    <DBTitle meta={meta} user={user} onAction={onAction}/>
                 </Row>
-                <Row>
+                <Row key='r4'>
                     <DBCredits meta={meta}  user={user} />
                 </Row>
-                <Row>
+                <Row key='r8'>
                     <DBDescription meta={meta}  user={user} />
                 </Row>
             </Col>
-            <Col md={2} className='database-main-actions'>
-                <DBStatus meta={meta}  user={user}  onClone={onClone}/>
+            <Col key='r6' md={2} className='database-main-actions'>
+                <DBStatus meta={meta}  user={user}  onAction={onAction}/>
             </Col>
         </Row>
     )
@@ -49,9 +49,10 @@ export const DBSummary = ({meta, user, onClone}) => {
 
 
 
-export const DBTitle = ({meta, user}) => {
+export const DBTitle = ({meta, user, onAction}) => {
     function goDB(){
-        goDBHome(meta.id, meta.organization)
+        if(meta.id) goDBHome(meta.id, meta.organization)
+        else onAction('clone', meta)
     }
     if(meta.label && meta.label.length > 40){
         var str =  meta.label.substring(36) + " ..."
@@ -60,8 +61,8 @@ export const DBTitle = ({meta, user}) => {
 
     return (
         <Container onClick={goDB} className='database-listing-title-row'>
-            <span className="database-listing-title">{str}</span>
-            <span className="database-listing-id">{meta.url}</span>
+            <span key='a' className="database-listing-title">{str}</span>
+            <span key='b' className="database-listing-id">{meta.url}</span>
         </Container>
     )
 }
@@ -75,14 +76,13 @@ export const DBCredits = ({meta, user}) => {
     )
 }
 
-
 export const DBDescription = ({meta, user}) => {
-    if(meta.comment && meta.comment.length > 80){
+    if(meta.comment && meta.comment.length > 80 && !meta.testing){
         var str =  meta.comment.substring(76) + " ..."
     }
     else str = meta.comment || ""
     return (
-        <Row className='database-listing-description-row'>
+        <Row key='z' className='database-listing-description-row'>
             <span className="database-listing-description">{str}</span>
         </Row>
     )
@@ -106,41 +106,48 @@ export const DBCreated = ({meta, user}) => {
         if(meta.author) ct += "by " + meta.author + " at " 
         ct += printts(meta.updated)
     }
-    return (<Badge color="secondary">{ct}</Badge>)
+    return (<Badge color="light">{ct}</Badge>)
 }
 
 export const RemoteDBCredits = (meta, user) => {
     let res = []
     if(meta.created){
         res.push(
-            <Col className="database-created-credits">
+            <Col key='x1' className="database-created-credits">
                 <DBCreated meta={meta}  user={user}/>
             </Col>
         )
     }
     res.push(
-        <Col className="database-size-credits">
+        <Col key='x2' className="database-size-credits">
             <DBSize meta={meta} user={user} />
         </Col>
     )
     if(user.logged_in && user.has_remote_roles && meta.remote){
         if(meta.type == "remote"){
             res.push(
-                <Col className="database-production-credits">
+                <Col key='c1' className="database-production-credits">
                     <DBProductionCredits meta={meta} user={user} />
                 </Col>
             )
             res.push(
-                <Col className="database-role-credits">
+                <Col key='c3' className="database-role-credits">
                     <DBRoleCredits meta={meta} user={user} />
                 </Col>
             )
             res.push(
-                <Col className="database-contribution-credits">
+                <Col key='c2' className="database-contribution-credits">
                     <DBContributionCredits meta={meta}  user={user}/>
                 </Col>        
             )
         }
+    }
+    else if(user.logged_in && meta.remote_record){
+        res.push(
+            <Col key='c1' className="database-production-credits">
+                <DBProductionCredits meta={meta} user={user} />
+            </Col>
+        )
     }
     return res
 }
@@ -195,7 +202,8 @@ export const DBRoleCredits = ({meta, user}) => {
 }
 
 export const DBContributionCredits = ({meta}) => {
-    return (<Badge color="success">Your Contributions</Badge>)
+    return null
+    //return (<Badge color="success">Your Contributions</Badge>)
 }
 
 
@@ -228,8 +236,6 @@ export const DBControls = ({meta, user}) => {
     function showDelete(){
         alert("we have to write the delete dialogs")
     }
-
-
     if(show_tt){
         controls.push( <TimeControl meta={meta} user={user} /> )
     }
@@ -277,58 +283,55 @@ export const DBControls = ({meta, user}) => {
             </Row>
         </Container>
     )
-
 }
 
-export const SchemaControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-listing-schema' icon={SCHEMA_ICON} title="View the schema"/>
+function _user_db_action(meta, user){
+    if(user.logged_in && !meta.remote){
+        if(meta.remote_record){
+            return 'clone'
+        }
+        return false;//return 'share'
+    }
+    else if(user.logged_in && meta.type == 'remote' && meta.remote_record){
+        let remote_commit = meta.remote_record.latest
+        let rts = remote_commit.updated || 0
+        let lts = meta.updated || 0
+        if(rts > lts && canPull(meta)){
+            return 'pull'
+        }
+        if(lts > rts && canPush(meta)){
+            return 'push'
+        }
+    }
+    return false
 }
 
-export const DocumentsControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-listing-schema' icon={DOCUMENTS_ICON} title="View Documents"/>
+function canPull(meta){
+    if(meta.public) return true
+    if(meta.remote_record){
+        let allroles = meta.remote_record.roles || []
+        allroles = allroles.concat(meta.remote_record.organization_roles || [])
+        if(allroles.indexOf('create') == -1 && allroles.indexOf('write') == -1 && allroles.indexOf('read') == -1 && allroles.indexOf('manage') == -1) return false
+        return true
+    }
+    return false        
 }
 
-export const DeleteControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-listing-schema' icon={DELETE_ICON} title="Delete Database"/>
+function canPush(meta){
+    if(meta.remote_record){
+        let allroles = meta.roles || []
+        allroles = allroles.concat(meta.remote_record.organization_roles || [])
+        if(allroles.indexOf('create') == -1 && allroles.indexOf('write') == -1) return false
+        return true
+    }
+    return false
 }
 
-export const TimeControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-listing-schema' icon={COMMITS_ICON} title="View the commit history"/>
-}
+export const DBStatus = ({meta, user, onAction}) => {
 
-export const QueryControl = ({meta}) => {    
-    return <FontAwesomeIcon className='database-listing-query' icon={QUERY_ICON} title="Query this database now"/>
-}
-
-
-export const DBStatus = ({meta, user, onClone}) => {
     function doMainAction(){
-        if(user.logged_in && !meta.remote){
-            if(meta.remote_record){
-                if(meta.testing){
-                    if(onClone){
-                        alert("got there")
-                        onClone(meta)
-                    }
-                }
-                //alert("cloning database ")
-            }
-            else {
-                alert("sharing database db admin/" + meta.id )
-            }
-        }
-        else if(user.logged_in && meta.type == 'remote' && meta.remote_record){
-            let remote_commit = meta.remote_record.latest
-            let rts = remote_commit.updated || 0
-            let lts = meta.updated || 0
-            if(rts > lts){
-                alert("Pulling " + meta.remote)
-            }
-            if(lts > rts){
-                alert("Pushing " + meta.remote)
-            }
-            return null
-        }
+        let act = _user_db_action(meta, user)
+        if(act) onAction(act, meta)
     }
 
     return (
@@ -347,99 +350,34 @@ export const DBStatus = ({meta, user, onClone}) => {
 }
 
 export const RemoteUpdated = ({meta, user}) => {
-    if(meta.testing){
-        return (<span>Clone Database</span>) 
+    let act = _user_db_action(meta, user)
+    if(act == 'share') act = "save to hub"
+    if(act == 'pull' || act == 'push') act = "needs synchronise"
+    if(act){
+        return (<span>{act}</span>) 
     }
-    if(user.logged_in && user.has_remote_roles){
-        if(!meta.remote){
-            if(meta.remote_record){
-                return (<span>Download Now</span>) 
-            }
-            return (<span>Save to Hub</span>)
-        }
-        else if(meta.type == 'remote' && meta.remote_record){
-            let remote_commit = meta.remote_record.latest
-            let rts = remote_commit.updated || 0
-            let lts = meta.updated || 0
-            if(rts > lts){
-                return (<span>New Updates</span>)
-            }
-            if(lts > rts){
-                return (<span>Unsaved Changes</span>)
-            }
-            return null
-        }
-    }
-    if(user.logged_in && meta.remote){
-        return null
-    }
-    if(!user.logged_in && meta.remote){
-        //return (<span>Clone</span>)
-    }
-    return null    
+    return null
 }
 
 export const DBMainAction = ({meta, user}) => {
-
-
-    function canPull(){
-        if(meta.public) return true
-        if(meta.remote_record){
-            let allroles = meta.remote_record.roles || []
-            allroles = allroles.concat(meta.remote_record.organization_roles || [])
-            if(allroles.indexOf('create') == -1 && allroles.indexOf('write') == -1 && allroles.indexOf('read') == -1 && allroles.indexOf('manage') == -1) return false
-            return true
-        }
-        return false        
+    let act = _user_db_action(meta, user)
+    if(act == 'pull'){
+        return (<PullControl meta={meta} user={user} />)            
     }
-
-
-    function canPush(){
-        if(meta.remote_record){
-            let allroles = meta.roles || []
-            allroles = allroles.concat(meta.remote_record.organization_roles || [])
-            if(allroles.indexOf('create') == -1 && allroles.indexOf('write') == -1) return false
-            return true
-        }
-        return false
+    else if(act == 'push'){
+        return (<PushControl meta={meta} user={user} />)            
     }
-
-
-    if(user.logged_in && user.has_remote_roles || meta.testing){
-        if(meta.remote){
-            if(meta.type == 'missing'){
-                return (<NoCanControl meta={meta} user={user} />)            
-            }
-            else if(meta.type == 'local'){
-                return (<ClonedControl meta={meta} user={user} />)            
-            }
-            else if(meta.type == 'remote' && meta.remote_record && canPull()){
-                let remote_commit = meta.remote_record.latest
-                let rts = remote_commit.updated || 0
-                let lts = meta.updated || 0
-                if(lts < rts){
-                    return (<PullControl meta={meta} user={user} />)            
-                }
-                if(lts == rts){
-                    return (<AllGoodControl meta={meta} user={user} />)            
-                }
-                if(lts > rts && canPush()){
-                    return (<PushControl meta={meta} user={user} />)            
-                }
-            }
-            else return null
-        }
-        else {
-            if(meta.remote_record){
-                return (<CloneControl meta={meta} user={user}/>)                
-            }
-            return (<ShareControl meta={meta} user={user}/>)
-        }
+    else if(act == 'clone'){
+        return (<CloneControl meta={meta} user={user}/>)                
     }
-    else {
-        if(meta.remote){
-            return (<ClonedControl meta={meta} user={user} />)
+    else if(act == 'share'){
+        return (<ShareControl meta={meta} user={user}/>)
+    }
+    else if(!act && meta.remote){        
+        if(meta.remote_record && canPull(meta) && meta.remote_record.latest && meta.remote_record.latest.updated == meta.updated){
+            return (<AllGoodControl meta={meta} user={user} />)            
         }
+        return (<ClonedControl meta={meta} user={user} />)            
     }
     return null
 }
@@ -452,36 +390,52 @@ export const DBSecondaryAction = ({meta, user}) => {
 
 function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes'
-
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
+function describe_unsynch(meta){
+    let remote_commit = meta.remote_record.latest
+    let rts = remote_commit.updated || 0
+    let lts = meta.updated || 0
+    if(lts == 0){
+        return "Local DB is uninitiallized"
+    }
+    if(rts == 0){
+        return "Remote DB is uninitiallized"
+    }
+    if(rts > lts){
+        return "Remote DB was updated at " + printts(rts) + " more recently than local " + printts(lts) 
+    }
+    else {
+        return "Local DB was updated at " + printts(lts) + " more recently than remote at " + printts(rts) 
+    }    
+}
+
+
+
 export const ShareControl = ({meta, user}) => {    
-    return <FontAwesomeIcon className='database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
+    return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
 }
 
 export const PushControl = ({meta, user}) => {    
-    return <FontAwesomeIcon className='database-listing-push' icon={PUSH_ICON} title="Push your updates to hub"/>
+    return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {    
-    return <FontAwesomeIcon className='database-listing-pull' icon={PULL_ICON} title="Pull your updates to hub"/>
+    return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const CloneControl = ({meta, user}) => {    
-    return <FontAwesomeIcon className='database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
+    return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
 }
 
 export const ClonedControl = ({meta, user}) => {    
-    return <FontAwesomeIcon className='database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote}/>
+    return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote}/>
 }
-
 
 export const NoCanControl = ({meta, user}) => {    
     return <FontAwesomeIcon className='database-listing-nocando' icon={NO_CAN_DO_ICON} title="This Database cannot be shared on hub"/>
@@ -489,4 +443,24 @@ export const NoCanControl = ({meta, user}) => {
 
 export const AllGoodControl = ({meta, user}) => {    
     return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title="Everything is up to date and good to go"/>
+}
+
+export const SchemaControl = ({meta}) => {
+    return <FontAwesomeIcon className='database-action database-listing-schema' icon={SCHEMA_ICON} title="View the schema"/>
+}
+
+export const DocumentsControl = ({meta}) => {
+    return <FontAwesomeIcon className='database-listing-documents' icon={DOCUMENTS_ICON} title="View Documents"/>
+}
+
+export const DeleteControl = ({meta}) => {
+    return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
+}
+
+export const TimeControl = ({meta}) => {
+    return <FontAwesomeIcon className='database-action database-listing-time' icon={COMMITS_ICON} title="View the commit history"/>
+}
+
+export const QueryControl = ({meta}) => {    
+    return <FontAwesomeIcon className='database-action database-listing-query' icon={QUERY_ICON} title="Query this database now"/>
 }
