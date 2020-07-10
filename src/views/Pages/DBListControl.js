@@ -11,11 +11,18 @@ import {TCForm} from '../../components/Form/FormComponents'
 
 
 export const DBListControl = ({list, className, user, type}) => {
-    const { woqlClient, reconnectServer } = WOQLClientObj()
+    const { woqlClient, reconnectToServer } = WOQLClientObj()
     const { getTokenSilently } = useAuth0();
     
     let [special, setSpecial] = useState(false)
-
+    let message = ""
+    if(type == 'clone'){
+        message = CLONE
+    }
+    else {
+        message = user.logged_in ?  LIST_REMOTE : LIST_LOCAL 
+    }
+    let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     function setAction(act, db){
         if(act == 'pull' || act == 'push'){
             goDBPage(db.id, woqlClient.user_organization(), "synchronise")
@@ -44,23 +51,13 @@ export const DBListControl = ({list, className, user, type}) => {
         }
         if(act == 'clone'){
             CloneDB(db, woqlClient, getTokenSilently)
-            .then(() => {
+            .then((id) => {
+                setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                reconnectServer().then(() => goSeverHome()) 
+                reconnectToServer().then(() => goDBHome(id, woqlClient.user_organization())) 
             })
         }
     }
-
-    let message = ""
-    if(type == 'clone'){
-        message = CLONE
-    }
-    else {
-        message = user.logged_in ?  LIST_REMOTE : LIST_LOCAL 
-    }
-
-    let report = {status: TERMINUS_INFO,  message: message}
-
     if(!list) return null
     return (<>
             <span className="database-list-intro">

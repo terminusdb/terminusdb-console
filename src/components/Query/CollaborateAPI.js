@@ -31,7 +31,7 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
         const jwtoken = await getTokenSilently()
         client.remote_auth({type: "jwt", key: jwtoken})
     }
-    return client.clonedb(meta, newid)
+    return client.clonedb(meta, newid).then(() => newid)
 }
 
 /**
