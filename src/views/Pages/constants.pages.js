@@ -106,7 +106,7 @@ export const CLONEDBS = [{
     testing: true,
     icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
     remote_record: {
-        url: "https://hub-dev-server.dcm.ist/force/gwwqw",
+        url: "https://hub-dev-server.dcm.ist/haaaadas/bbbaaa",
         organization_record: {
             label: "TerminusDB Tutorials",
             type: "Terminators",
