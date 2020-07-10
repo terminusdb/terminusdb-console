@@ -5,13 +5,13 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {useAuth0} from '../../react-auth0-spa'
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
-import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING } from "../../constants/identifiers";
+import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_SUCCESS } from "../../constants/identifiers";
 import { CLONE_URL_FORM, LIST_LOCAL, LIST_REMOTE, CLONE} from "./constants.pages"
 import {TCForm} from '../../components/Form/FormComponents'
 
 
 export const DBListControl = ({list, className, user, type}) => {
-    const { woqlClient, contextEnriched } = WOQLClientObj()
+    const { woqlClient, reconnectServer } = WOQLClientObj()
     const { getTokenSilently } = useAuth0();
     
     let [special, setSpecial] = useState(false)
@@ -28,7 +28,6 @@ export const DBListControl = ({list, className, user, type}) => {
                 db.id = db.remote_url.substring(db.remote_url.lastIndexOf("/")+1)
                 if(woqlClient.server() == db.remote_url.substring(0, woqlClient.server().length)){
                     let edb = woqlClient.get_database(db.id, woqlClient.user_organization())
-                    alert(db.id)
                     db.label = edb.label
                     db.comment = edb.comment   
                 }
@@ -44,9 +43,11 @@ export const DBListControl = ({list, className, user, type}) => {
             db.remote_url = db.remote_record.url
         }
         if(act == 'clone'){
-            alert(JSON.stringify(db))
             CloneDB(db, woqlClient, getTokenSilently)
-            .then(() => alert("yo"))
+            .then(() => {
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
+                reconnectServer().then(() => goSeverHome()) 
+            })
         }
     }
 
