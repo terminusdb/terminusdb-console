@@ -431,3 +431,6 @@ export const CREATE_REMOTE_FORM = {
         submitText: "Create Database"
     }
 }
+
+export const CREATE_LOCAL_INTRO = "Create a new database on your local TerminusDB server"
+export const CREATE_REMOTE_INTRO = "You can choose to create a new database on your local server, or save it directly to your TerminusHub account for sharing with others"

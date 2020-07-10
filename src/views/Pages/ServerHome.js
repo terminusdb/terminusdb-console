@@ -3,35 +3,18 @@ import {
     CREATEDB_TITLE,
     DBLIST_TITLE,
     CLONEDB_TITLE,
-    CREATE_FIRSTDB_CSS,
-    CREATE_FIRSTDB,
     DBLIST_HEADER_CSS,
-    CREATE_FIRSTUSER,
-    CREATE_FIRSTUSER_CSS,
-    FAILED_LOADING_USERS,
-    ADD_COMMIT_ID_CSS,
-    ADD_COMMIT_ID_TITLE,
     TUTORIALS_CSS,
+    CLONEDBS,
     TUTORIALS_TITLE,
-    MANAGE_USERS_CSS,
-    MANAGE_USERS_TITLE,
-    MANAGE_SERVER_TITLE,
-    MANAGE_SERVER_CSS,
 } from './constants.pages'
-import {CONNECTION_FAILURE, ACCESS_FAILURE, TERMINUS_ERROR} from '../../constants/identifiers'
+
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TabbedPageView} from '../Templates/TabbedPageView'
 import {CreateDatabase} from '../CreateDB/CreateDatabase'
-import {CloneDatabase} from '../CreateDB/CloneDatabase'
-import {DBList} from '../Tables/DBList'
-import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {AddUserCommitLogID} from '../Server/AddUserCommitLogID'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
-import {ManageServer} from '../Server/ManageServer'
-import {ManageUsers} from '../Server/ManageUsers'
-import { printts } from '../../constants/dates'
-
+import {DBListControl} from "./DBListControl"
 /**
  * Server home is the launch screen to the local experience
  *
@@ -49,17 +32,17 @@ const ServerHome = (props) => {
     //if we are in unitialised step, show the add commit log message
     //if we
 
-    let [error, setError] = useState(false)
     let [myDBs, setMyDBs] = useState(false)
 
-    const {woqlClient, contextEnriched } = WOQLClientObj()
+    let active = props.page
+
+    const { woqlClient, contextEnriched } = WOQLClientObj()
 
     let showlist = woqlClient.user_databases().length
 
-
     useEffect(() => {
         if(woqlClient){
-            setMyDBs(getDBList())
+            setMyDBs(woqlClient.databases())
         }
     }, [woqlClient, contextEnriched])
 
@@ -72,10 +55,6 @@ const ServerHome = (props) => {
         fixer.query(q)
     }
 
-    function getDBList(){
-        return woqlClient.databases()
-    }
-
     let sections = []
     let tabs = []
 
@@ -84,52 +63,38 @@ const ServerHome = (props) => {
         if(user.logged_in){
             fixCommitLog(user.id, user.author)
         }
-        else {
-          //  sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
-          //  tabs.push(<AddUserCommitLogID key="addcommitid" />)
-        }
     }
-
 
     let hasTutorials = false;//user.logged_in
-    let canManageUsers = false;//user.logged_in
-    let canManageServer = false;//user.logged_in
-
     if (showlist) {
-        sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
-        tabs.push(<DBList key="dbl" list={myDBs} user={user} />)
+        sections.push({id: "mydbs", className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
+        tabs.push(<DBListControl key="dbl" type='my' list={myDBs} user={user} />)
     }
     if(user.logged_in){
-        sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
-        tabs.push(<CloneDatabase key="clone" />)
-        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
+        sections.push({id: "clonedb", className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
+        tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} />)
+        sections.push({id: "createdb", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
     }
     else {
-        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
+        sections.push({id: "createpage", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
     }
     if (hasTutorials) {
-        sections.push({className: TUTORIALS_CSS, label: TUTORIALS_TITLE})
+        sections.push({id: "tutorials",  className: TUTORIALS_CSS, label: TUTORIALS_TITLE})
         tabs.push(<ConsoleTutorials key="tutorials" />)
     }
-    if (canManageUsers) {
-        sections.push({className: MANAGE_USERS_CSS, label: MANAGE_USERS_TITLE})
-        tabs.push(<ManageUsers key="manageusers" />)
-    }
-    if (canManageServer) {
-        sections.push({className: MANAGE_SERVER_CSS, label: MANAGE_SERVER_TITLE})
-        tabs.push(<ManageServer key="manageserver" />)
-    }
-    if (error) {
-        return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
-    }
-    let active = props.page
     return (
-        <TabbedPageView id="home" active={active} sections={sections}>
+        <TabbedPageView type='major' id="home" active={active} sections={sections}>
             {tabs}
         </TabbedPageView>
     )
 }
+
+
+
+
+
+
 
 export default ServerHome

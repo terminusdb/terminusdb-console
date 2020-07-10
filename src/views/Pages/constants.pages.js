@@ -64,7 +64,7 @@ export const GRAPHS_LOAD_ERROR = {
 
 /* database home tabs */
 export const DETAILS_TAB = 'Monitor'
-export const COLLABORATE_TAB = 'Collaborate'
+export const SYNCHRONISE_TAB = 'Synchronise'
 export const MANAGE_TAB = 'Manage'
 
 /* schema tabs */
@@ -95,3 +95,45 @@ export const LOGIN_LOGO = "https://terminusdb.com/img/logos/logo.svg"
 export const LOGIN_PLACEHOLDER = "Enter valid TerminusDB password"
 export const LOGIN_PROMPT = "Please enter your password"
 export const CONNECT_PROMPT = "Connect"
+
+export const CLONEDBS = [{
+    id: "",
+    organization: "terminators",
+    label: "TerminusDB Bike Tutorial",
+    comment: "This is a web-hosted version of the bike tutorial which is commonly used as our first introduction to knowledge graphs. This is a version of the tutorial pre-loaded into TerminusDB that you can clone to your own database and  ",
+    size: 20000,
+    public: true,
+    testing: true,
+    icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
+    remote_record: {
+        url: "https://hub-dev-server.dcm.ist/force/gwwqw",
+        organization_record: {
+            label: "TerminusDB Tutorials",
+            type: "Terminators",
+            id: "terminators",
+        },
+    }
+}]
+
+
+export const LIST_LOCAL = "Showing all of the databases currently installed on your local Terminusdb server"
+export const LIST_REMOTE = "Showing all of the combined databases from your Terminus Hub account and your local Terminusdb server combined"
+export const CLONE = "Recommended for you: public databases that you can clone directly from Terminus Hub. Choose from the list below, or enter the URL of the database you wish to clone in the form below"
+
+
+export const CLONE_URL_FORM = {
+    fields: [
+        {
+            id: "url",
+            label: 'Clone URL',
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter URL of TerminusHub Database to Clone"
+            }
+        }
+    ],
+    buttons: {
+        submitText: "Clone From URL"
+    }
+}

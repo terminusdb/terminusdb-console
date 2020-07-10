@@ -3,11 +3,12 @@ import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
     TERMINUS_SUCCESS,
+    TERMINUS_INFO,
     TERMINUS_ERROR,
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import { CREATE_DB_FORM } from './constants.createdb'
+import { CREATE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO } from './constants.createdb'
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
@@ -15,10 +16,12 @@ import {useAuth0} from '../../react-auth0-spa'
 
 export const CreateDatabase = () => {
     const [loading, setLoading] = useState(false)
-    const [report, setReport] = useState()
+    const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
+    let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
-    const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
+    let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO 
+    const [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     /**
      * Creates a database and, if a schema graph is set, creates the main schema graph
      * On success, it fires up the home page of the database and rebuilds the list of databases
@@ -26,7 +29,6 @@ export const CreateDatabase = () => {
     function onCreate(doc, schema) {
         update_start = Date.now()
         if(doc.sharing != "local"){
-            let user = woqlClient.user()
             if(!user.logged_in){
                 setReport({status: TERMINUS_WARNING, message: "If you are not logged in to terminusHub, you can only create local databases"})
                 return false;
@@ -154,6 +156,7 @@ export const CreateDatabase = () => {
             time: Date.now() - update_start,
         })
     }
+    
 
     return (
         <>
@@ -167,12 +170,14 @@ export const CreateDatabase = () => {
                 />
             )}
             {report && !report.error && (
-                <APIUpdateReport
-                    status={report.status}
-                    message={report.message}
-                />
+                <span className="database-list-intro">
+                    <APIUpdateReport
+                        status={report.status}
+                        message={report.message}
+                    />
+                </span>
             )}
-            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} />
+            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={user.logged_in} />
         </>
     )
 }

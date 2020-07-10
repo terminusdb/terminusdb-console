@@ -11,8 +11,6 @@ import {COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM, COPY_DB_DETAILS, COPY_LOCAL_FORM
 import {goDBHome} from '../../components/Router/ConsoleRouter'
 import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
 import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
-import {UnderConstruction} from '../../components/Reports/UnderConstruction'
-import {useAuth0} from '../../react-auth0-spa'
 
 export const CloneDatabase = () => {
     const { woqlClient, reconnectToServer, remoteClient } = WOQLClientObj()
