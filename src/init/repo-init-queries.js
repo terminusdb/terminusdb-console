@@ -20,12 +20,26 @@ export async function enrich_local_db_listing(woqlClient){
                 for(var k in res[i]){
                     item[k] = res[i][k]
                 }
+                if(item.remote_url){
+                    if(_categorise_remote(woqlClient, item.remote_url) == 'local'){
+                        item.type = 'local_clone'
+                    }
+                    else {
+                        item.type = 'clone'
+                    }
+                }
+                else {
+                    item.type = 'local'
+                }            
             }
         }
         return item
     })
     if(res) woqlClient.databases(ndbs)
-    //alert(((Date.now() - micro)/1000) + " seconds")
 }
 
 
+
+function _categorise_remote(woqlClient, rem){
+    if(woqlClient.server() == rem.substring(woqlClient.server().length)) return "local"
+}

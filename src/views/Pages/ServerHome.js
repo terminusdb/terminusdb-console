@@ -14,7 +14,7 @@ import {TabbedPageView} from '../Templates/TabbedPageView'
 import {CreateDatabase} from '../CreateDB/CreateDatabase'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
-import {DBListControl} from "./DBListControl"
+import {DBListControl} from "../Server/DBListControl"
 /**
  * Server home is the launch screen to the local experience
  *
@@ -90,11 +90,5 @@ const ServerHome = (props) => {
         </TabbedPageView>
     )
 }
-
-
-
-
-
-
 
 export default ServerHome

@@ -89,7 +89,6 @@ export const MonitorDB = (props) => {
             } else {
                 info = repos.local
                 info.sub = 'Local Database'
-                info.info = 'Clone URL: ' + db_uri
             }
         }
         return info

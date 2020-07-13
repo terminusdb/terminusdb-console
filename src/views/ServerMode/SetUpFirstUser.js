@@ -3,14 +3,13 @@
  */
 import React, {useState} from 'react'
 import {
-    COMMIT_LOG_FORM,
     SETUP_FORM,
     COMMIT_LOG_EXPLANATION_CSS,
-    JUST_COMMIT_LOG_EXPLANATION,
-    ADMIN_organization_NOTES,
+    COMMIT_LOG_EXPLANATION,
+    ADMIN_ACCOUNT_NOTES,
     FAILED_CREATING_ADMIN,
     CREATED_ADMIN_MESSAGE,
-} from './constants.server'
+} from '../Server/constants.server'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,
@@ -24,29 +23,29 @@ import {goServerHome} from '../../components/Router/ConsoleRouter'
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 
-export const AddUserCommitLogID = () => {
+export const SetUpFirstUser = () => {
     const {woqlClient} = WOQLClientObj()
     const [report, setReport] = useState()
     let values = {
+        adminid: '',
+        password: '',
+        display: '',
         commitlog: '',
     }
 
     const [loading, setLoading] = useState()
 
-    let WOQL = TerminusClient.WOQL
-
-    function addCommitLogID(deets) {
-        if (deets.commitlog) {
-            let q = WOQL.when(
-                WOQL.triple('v:User IRI', 'type', 'system:User')
-                    .triple('v:User IRI', 'system:agent_name', woqlClient.uid()), 
-                WOQL.add_triple('v:User IRI', 'system:user_identifier', deets.commitlog)
-            )
+    function createAdminUser(deets) {
+        if (deets.adminid && deets.password && deets.commitlog) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
-            q.execute(tClient)
-                .then(() => {
+            tClient.db('terminus')
+
+            let note = ADMIN_ACCOUNT_NOTES + Date.now()
+            TerminusClient.WOQL.lib()
+                .add_user(deets.adminid, [deets.commitlog, note, deets.password])
+                .execute(tClient)
+                .then((result) => {
                     let rep = {status: TERMINUS_SUCCESS, message: CREATED_ADMIN_MESSAGE}
                     afterCreate(deets.adminid, deets.password, rep)
                 })
@@ -57,22 +56,22 @@ export const AddUserCommitLogID = () => {
         }
     }
 
-    function afterCreate(rep) {
-        woqlClient.connect().then((result) => {
+    function afterCreate(id, key, rep) {
+        woqlClient.connect({user: id, key: key}).then((result) => {
             goServerHome(rep)
         })
     }
 
-    let buttons = COMMIT_LOG_FORM.buttons
+    let buttons = SETUP_FORM.buttons
     if (loading) return <Loading />
     return (
         <>
             {report && report.error && <TerminusDBSpeaks report={report} />}
-            <div className={COMMIT_LOG_EXPLANATION_CSS}>{JUST_COMMIT_LOG_EXPLANATION}</div>
+            <div className={COMMIT_LOG_EXPLANATION_CSS}>{COMMIT_LOG_EXPLANATION}</div>
             <TCForm
-                onSubmit={addCommitLogID}
-                layout={[1]}
-                fields={COMMIT_LOG_FORM.fields}
+                onSubmit={createAdminUser}
+                layout={[3, 1]}
+                fields={SETUP_FORM.fields}
                 values={values}
                 buttons={buttons}
             />

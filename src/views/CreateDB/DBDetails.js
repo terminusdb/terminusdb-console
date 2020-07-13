@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TCForm} from '../../components/Form/FormComponents'
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
@@ -14,7 +13,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in}) => {
     let detfields = []
     DB_DETAILS_FORM.fields.map((item) => {
         dbInfo[item.id] = item.value || ''
-        if(logged_in || item.id != "sharing"){
+        if(logged_in || (item.id != "sharing" && item.id != "icon")){
             detfields.push(item)
         }
     })
@@ -22,7 +21,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in}) => {
         advancedInfo[item.id] = item.value || ''
     })
 
-    let layout = (logged_in ? [3,1]  : [2, 1])
+    let layout = (logged_in ? [3,1,1]  : [2, 1])
 
     //set up state variables configuration
     const [values, setValues] = useState(dbInfo)

@@ -42,7 +42,7 @@ export const Synchronise = () => {
             let rem = repos.remote || repos.local_clone
             if(!rem){
                 let db = woqlClient.get_database()
-                rem = {url: db.remote, remote: ""}
+                rem = {url: db.remote_url, remote: ""}
             }
             setSourceValues({
                 remote_url: rem.url,

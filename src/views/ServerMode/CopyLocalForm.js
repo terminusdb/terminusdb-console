@@ -7,7 +7,7 @@ import {
     TERMINUS_INFO,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from './constants.createdb'
+import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from '../CreateDB/constants.createdb'
 import {goDBHome, goServerHome} from '../../components/Router/ConsoleRouter'
 import { TCForm } from '../../components/Form/FormComponents'
 import {Container, Row} from 'reactstrap'

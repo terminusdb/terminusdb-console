@@ -2,7 +2,7 @@
  * Controller application for metadata update form
  */
 import React, {useState} from 'react'
-import {CREATE_ROLE_FORM} from './constants.server'
+import {CREATE_ROLE_FORM} from '../Server/constants.server'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,

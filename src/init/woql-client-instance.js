@@ -2,7 +2,8 @@ import React, {useState, useEffect, useContext} from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {useAuth0} from '../react-auth0-spa'
 import {enrich_local_db_listing} from "./repo-init-queries"
-
+import { BranchSelector } from '../components/History/BranchSelector'
+import {goServerHome } from "../components/Router/ConsoleRouter"
 export const WOQLContext = React.createContext()
 export const WOQLClientObj = () => useContext(WOQLContext)
 
@@ -29,6 +30,7 @@ export const WOQLClientProvider = ({children, params}) => {
         if(woqlClient.connection.author()){
             if(woqlClient.connection.author() != remote_user.email){
                 woqlClient.connection.user.local_author = woqlClient.connection.author()
+                woqlClient.connection.user.remote_id = remote_user['http://terminusdb.com/schema/system#agent_name']
                 woqlClient.connection.user.problem = "mismatch"
                 woqlClient.author(remote_user.email)
             }
@@ -63,69 +65,96 @@ export const WOQLClientProvider = ({children, params}) => {
         setUpRemoteConnection()
     }, [user, woqlClient])
 
-    function _categorise_remote(rem){
-        if(woqlClient.server() == rem.substring(woqlClient.server().length)) return "local"
-        if(remoteClient.server() == rem.substring(remoteClient.server().length)) return "hub"
-        return "missing"
-    }
 
     function _matches_hub_url(rem, rem_url){
         let huburl = remoteClient.server() + rem.organization + "/" + rem.id
         return huburl == rem_url
     }
 
+    function _branches_match(a, b){
+        if((!a && b) || (!b && a)) return false
+        if(!a && !b) return true
+        if(a.length != b.length) return false
+        for(var i = 0; i<a.length; i++){
+            let found = false
+            for(var j = 0; j<b.length; j++){
+                if(b[j].branch == a[i].branch){
+                    found = true
+                    continue
+                }
+            }
+            if(!found) return false
+        }
+        return true
+    }
 
     function consolidate_database_views(remote_riches){
-        woqlClient.connection.user.has_remote_roles = true
-        woqlClient.connection.user.remote_roles = remote_riches.roles || false
+        woqlClient.connection.user.remote_assets = true
         let locals = woqlClient.databases()
         let locals_taken = []
         let updated = []
         let remdbs = bffClient.databases();
-        let remorgs = bffClient.organizations();
         if(remdbs){
             for(var j = 0; j < remdbs.length; j++){
                 let found = false
                 let remote = remdbs[j]
                 for(var i = 0; i < locals.length; i++){
                     let local = locals[i]
-                    if(local.remote && _matches_hub_url(remote, local.remote)){
+                    if(local.remote_url && _matches_hub_url(remote, local.remote_url)){
                         locals_taken.push(local.id)
-                        local.type = 'remote'
-                        if(!local.label && remote.label) local.label = remote.label
-                        if(!local.comment && remote.comment) local.comment = remote.comment
-                        local.remote_record = remote
+                        local = _append_remote(local, remote)
                         updated.push(local)
                         found = true
                         continue                        
                     }
                 }
                 if(!found){
-                    let nlocal = {id: "", "organization": woqlClient.user_organization(), label: remote.label + " [*]", "comment": "Missing from local"}
+                    let nlocal = {id: "", "organization": woqlClient.user_organization(), label: remote.label, "comment": remote.comment }
                     nlocal.type = "missing"
                     nlocal.remote_record = remote
+                    nlocal.remote_url = remoteClient.server() + remote.organization + "/" + remote.id
+                    nlocal.actions = ['clone']
                     updated.push(nlocal)
                 }
             }
         }
+        
         for(var i = 0; i<locals.length; i++){
-            if(locals_taken.indexOf(locals[i].id) == -1){
-                if(locals[i].remote){
-                    if(_categorise_remote(locals[i].remote) == 'local'){
-                        locals[i].type = 'clone'
-                    }
-                    else {
-                        locals[i].type = 'missing'
-                    }
-                }
-                else {
-                    locals[i].type = 'local'
-                }
+            if(locals_taken.indexOf(locals[i].id) == -1){                                
                 updated.push(locals[i])
             }
         }
-        woqlClient.connection.user.has_remote_roles = true
         woqlClient.databases(updated)
+    }
+
+    function _append_remote(local, remote){       
+        local.type = 'remote'
+        if(!local.label && remote.label) local.label = remote.label
+        if(!local.comment && remote.comment) local.comment = remote.comment
+        //calculated fields
+        let diff = (local.updated - remote.updated)
+        local.ahead = (diff > 0 ? diff : false)
+        local.behind = (diff < 0 ? diff : false)
+        //local.structure_mismatch = !_branches_match(local.branches, remote.branches)
+        let actions = []
+        if(remote.public) actions.push('pull')
+        let roles = remote.roles || []
+        roles = roles.concat(remote.organization_roles || [])
+        if(roles.indexOf('create') == -1){
+            actions.push('delete')                                
+            if(actions.indexOf('pull') == -1) actions.push('pull')                                
+            actions.push('push')                                
+        }
+        else if(roles.indexOf('write') == -1){
+            if(actions.indexOf('pull') == -1) actions.push('pull')                                
+            actions.push('push')                                
+        }
+        else if(roles.indexOf('read') == -1){
+            if(actions.indexOf('pull') == -1) actions.push('pull')                                
+        }
+        remote.actions = actions
+        local.remote_record = remote
+        return local
     }
 
     function launch_local_view(){
@@ -149,7 +178,8 @@ export const WOQLClientProvider = ({children, params}) => {
 
      useEffect(() => {
         if(woqlClient){  
-            if(woqlClient.user_databases().length) {         
+            if(woqlClient.user_databases().length) {    
+                woqlClient.user.local_assets = true     
                 enrich_local_db_listing(woqlClient)
                 .then(() => setContextEnriched(contextEnriched + 1))
                 .finally(() => setLocalEnriched(true))
@@ -211,16 +241,36 @@ export const WOQLClientProvider = ({children, params}) => {
         setReloadTime(Date.now())
     }
 
-    const reconnectToServer = () => {
-        setLocalEnriched(false)
-        return woqlClient.connect()
-        .then(() => {
-            if(user) {
-                consolidate_user_state(user)
+    const refreshDBRecord = (id, org, action, meta) => {
+        let usings = ["/" + org + "/" + id]
+        let sysClient = woqlClient.copy()
+        sysClient.set_system_db()
+        return TerminusClient.WOQL.lib().assets_overview(usings, sysClient)
+        .then((res) =>{
+            if(res[0]){
+                let local = res[0]
+                local.id = id
+                local.organization = org
+                if(meta) local = _append_remote(local, meta)
+                let dbs = woqlClient.databases()
+                dbs.push(local)
+                setContextEnriched(contextEnriched + 1)
             }
-            return enrich_local_db_listing(woqlClient)
-            .then(() => setLocalEnriched(true))
         })
+    }
+
+    const reconnectToServer = () => {
+        setContextEnriched(contextEnriched + 1)
+        //setLocalEnriched(false)
+        //woqlClient.user.local_assets = false     
+        //return woqlClient.connect()
+        //.then(() => {
+        //    if(user) {
+        //        consolidate_user_state(user)
+        //    }
+        //    return enrich_local_db_listing(woqlClient)
+        //    .then(() => setLocalEnriched(true))
+        //})
     }
 
     return (
@@ -231,6 +281,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 clientError,
                 setKey,
                 bffClient,
+                refreshDBRecord,
                 showLogin,
                 reconnectToServer,
                 remoteClient,
