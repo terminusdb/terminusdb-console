@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import {useAuth0} from '../react-auth0-spa'
+import {useAuth0} from '../../react-auth0-spa'
 
 export const CREATE_DB_END_POINT = 'db'
 export const UPDATE_CAPABILITIES_END_POINT = 'capabilities'

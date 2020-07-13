@@ -1,16 +1,16 @@
 import React from 'react'
-import {Users} from './Users'
-import {Organizations} from './Organizations'
+import {Users} from '../Server/Users'
+import {Organizations} from '../Server/Organizations'
 import {AddOrganization} from './AddOrganization'
-import {Roles} from './Roles'
-import {UserRoles} from './UserRoles'
+import {Roles} from '../Server/Roles'
+import {UserRoles} from '../Server/UserRoles'
 import {AddUser} from './AddUser'
 import {TabbedSections} from '../Templates/TabbedSections'
 import {CreateRole} from './CreateRole'
 import {GrantRole} from './GrantRole'
 import {GrantCapability} from './GrantCapability'
 import {CreateCapability} from './CreateCapability'
-import {RevokeRole} from './RevokeRole'
+import {RevokeRole} from '../Server/RevokeRole'
 
 export const ManageUsers = (props) => {
     let sections = [

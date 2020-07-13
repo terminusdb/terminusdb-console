@@ -125,6 +125,14 @@ export const DB_DETAILS_FORM = {
             }
         },
         {
+            id: "icon",
+            label: 'Icon',
+            inputElement: {
+                type: "input",
+                placeholder: "Enter URL of an icon to use for your database"
+            }
+        },
+        {
             id: "description",
             label: 'Description',
             value: "",

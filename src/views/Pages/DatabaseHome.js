@@ -14,7 +14,7 @@ const DatabaseHome = (props) => {
     let db = woqlClient.get_database()
     var sections = []
     var tabs = []
-    if(props.page == DB_SYNCHRONISE && db.remote){
+    if(props.page == DB_SYNCHRONISE && db.remote_url){
         sections = [ 
             {id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB },
             {id: "/" , label: DETAILS_TAB}, 
@@ -31,7 +31,7 @@ const DatabaseHome = (props) => {
         ]
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
-        if(db.remote){
+        if(db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
             tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
         }
@@ -43,7 +43,7 @@ const DatabaseHome = (props) => {
         ]
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
-        if(db.remote){
+        if(db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
             tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
         }

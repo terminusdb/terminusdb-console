@@ -2655,7 +2655,6 @@ h4.prefix-section-header {
 .database-controls {
 }
 .major-database-controls {
-    color: #00C08B;
     text-align: center;
     font-size: 1.6em; 
 }
@@ -2666,7 +2665,17 @@ h4.prefix-section-header {
 .minor-control{
     margin-top: 4px;
     text-align: center;
+}
+
+.database-listing-schema,
+.database-listing-time,
+.database-listing-query {
     color: #00C08B;
+}
+
+.database-inactive-action {
+    font-size: 0.9em;
+    color: #ccc;
 }
 
 .database-main-content {
@@ -2716,6 +2725,7 @@ h4.prefix-section-header {
     height: 180px;
 }
 
+.database-listing-icon:hover,
 .database-listing-title:hover,
 .minor-control:hover,
 .database-action:hover {
@@ -2727,6 +2737,7 @@ h4.prefix-section-header {
     font-size: 6em;
     text-align: center;
 }
+
 .database-update-status {
     text-align: center;
     font-size: 0.9em;
@@ -2759,3 +2770,4 @@ h4.prefix-section-header {
     margin-top: 16px;
     margin-bottom: 24px;
 }
+

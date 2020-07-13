@@ -101,24 +101,43 @@ export const CLONEDBS = [{
     organization: "terminators",
     label: "TerminusDB Bike Tutorial",
     comment: "This is a web-hosted version of the bike tutorial which is commonly used as our first introduction to knowledge graphs. This is a version of the tutorial pre-loaded into TerminusDB that you can clone to your own database and  ",
+    updated: Date.now(),
     size: 20000,
     public: true,
     testing: true,
     icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
+    remote_url: "https://hub-dev-server.dcm.ist/abcdefg/bikes",
     remote_record: {
-        url: "https://hub-dev-server.dcm.ist/haaaadas/bbbaaa",
-        organization_record: {
-            label: "TerminusDB Tutorials",
-            type: "Terminators",
-            id: "terminators",
-        },
+        id: 'bikes',
+        organization: 'abcdefg',
+        label: "TerminusDB Bike Tutorial",
+        organization_type: "Terminators",
+        organization_label: "TerminusDB Tutorials",
+    }
+},
+{
+    id: "",
+    organization: "terminators",
+    label: "TerminusDB Politicians Tutorial",
+    comment: "This is a web-hosted version of the politicians tutorial which is commonly used as one of our first introduction to knowledge graphs. This is a version of the tutorial pre-loaded into TerminusDB that you can clone to your own database",
+    size: 20000,
+    public: true,
+    testing: true,
+    icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
+    remote_url: "https://hub-dev-server.dcm.ist/abcdefg/politicians",
+    remote_record: {
+        id: 'politicians',
+        organization: 'abcdefg',
+        label: "TerminusDB Politicians Tutorial",
+        organization_type: "Terminators",
+        organization_label: "TerminusDB Politicians Tutorials",
     }
 }]
 
 
 export const LIST_LOCAL = "Showing all of the databases currently installed on your local Terminusdb server"
 export const LIST_REMOTE = "Showing all of the combined databases from your Terminus Hub account and your local Terminusdb server combined"
-export const CLONE = "Recommended for you: public databases that you can clone directly from Terminus Hub. Choose from the list below, or enter the URL of the database you wish to clone in the form below"
+export const CLONE = "Recommended for you: public databases that you can clone directly from Terminus Hub. Choose from the list below"
 
 
 export const CLONE_URL_FORM = {

@@ -1,5 +1,5 @@
 import React from 'react'
-import {SERVER_SECTIONS} from './constants.server'
+import {SERVER_SECTIONS} from '../Server/constants.server'
 import {RiverOfSections} from '../Templates/RiverOfSections'
 import {goDBHome} from '../../components/Router/ConsoleRouter'
 
