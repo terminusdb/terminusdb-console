@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {useAuth0} from '../react-auth0-spa'
-import {enrich_local_db_listing} from "./repo-init-queries"
-import { BranchSelector } from '../components/History/BranchSelector'
-import {goServerHome } from "../components/Router/ConsoleRouter"
+import {enrich_local_db_listing, append_remote_record} from "./repo-init-queries"
 export const WOQLContext = React.createContext()
 export const WOQLClientObj = () => useContext(WOQLContext)
 
@@ -71,22 +69,6 @@ export const WOQLClientProvider = ({children, params}) => {
         return huburl == rem_url
     }
 
-    function _branches_match(a, b){
-        if((!a && b) || (!b && a)) return false
-        if(!a && !b) return true
-        if(a.length != b.length) return false
-        for(var i = 0; i<a.length; i++){
-            let found = false
-            for(var j = 0; j<b.length; j++){
-                if(b[j].branch == a[i].branch){
-                    found = true
-                    continue
-                }
-            }
-            if(!found) return false
-        }
-        return true
-    }
 
     function consolidate_database_views(remote_riches){
         woqlClient.connection.user.remote_assets = true
@@ -102,7 +84,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     let local = locals[i]
                     if(local.remote_url && _matches_hub_url(remote, local.remote_url)){
                         locals_taken.push(local.id)
-                        local = _append_remote(local, remote)
+                        local = append_remote_record(local, remote)
                         updated.push(local)
                         found = true
                         continue                        
@@ -127,35 +109,6 @@ export const WOQLClientProvider = ({children, params}) => {
         woqlClient.databases(updated)
     }
 
-    function _append_remote(local, remote){       
-        local.type = 'remote'
-        if(!local.label && remote.label) local.label = remote.label
-        if(!local.comment && remote.comment) local.comment = remote.comment
-        //calculated fields
-        let diff = (local.updated - remote.updated)
-        local.ahead = (diff > 0 ? diff : false)
-        local.behind = (diff < 0 ? diff : false)
-        //local.structure_mismatch = !_branches_match(local.branches, remote.branches)
-        let actions = []
-        if(remote.public) actions.push('pull')
-        let roles = remote.roles || []
-        roles = roles.concat(remote.organization_roles || [])
-        if(roles.indexOf('create') == -1){
-            actions.push('delete')                                
-            if(actions.indexOf('pull') == -1) actions.push('pull')                                
-            actions.push('push')                                
-        }
-        else if(roles.indexOf('write') == -1){
-            if(actions.indexOf('pull') == -1) actions.push('pull')                                
-            actions.push('push')                                
-        }
-        else if(roles.indexOf('read') == -1){
-            if(actions.indexOf('pull') == -1) actions.push('pull')                                
-        }
-        remote.actions = actions
-        local.remote_record = remote
-        return local
-    }
 
     function launch_local_view(){
         woqlClient.connection.user.logged_in = false
@@ -172,7 +125,6 @@ export const WOQLClientProvider = ({children, params}) => {
             else {
                 launch_local_view()
             }
-            setLoading(false)
         }
      }, [connecting, loading, woqlClient, remoteClient])    
 
@@ -181,7 +133,10 @@ export const WOQLClientProvider = ({children, params}) => {
             if(woqlClient.user_databases().length) {    
                 woqlClient.user.local_assets = true     
                 enrich_local_db_listing(woqlClient)
-                .then(() => setContextEnriched(contextEnriched + 1))
+                .then(() => {
+                    setLoading(false)
+                    setContextEnriched(contextEnriched + 1)
+                })
                 .finally(() => setLocalEnriched(true))
             }
             else setLocalEnriched(true)
@@ -241,6 +196,9 @@ export const WOQLClientProvider = ({children, params}) => {
         setReloadTime(Date.now())
     }
 
+    /**
+     * Called after clone / create to create the db card for the new db and associate it with its remote
+     */
     const refreshDBRecord = (id, org, action, meta) => {
         let usings = ["/" + org + "/" + id]
         let sysClient = woqlClient.copy()
@@ -251,7 +209,13 @@ export const WOQLClientProvider = ({children, params}) => {
                 let local = res[0]
                 local.id = id
                 local.organization = org
-                if(meta) local = _append_remote(local, meta)
+                if(action == 'clone' && meta ){
+                    local = append_remote_record(local, meta)
+                }
+                else if (action == 'create' && meta){
+                    local.label = meta.label
+                    local.comment = meta.comment
+                } 
                 let dbs = woqlClient.databases()
                 dbs.push(local)
                 setContextEnriched(contextEnriched + 1)

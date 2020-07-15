@@ -91,6 +91,13 @@ export const CREATE_DB_FORM = {
     }
 }
 
+
+export const SHARE_DB_FORM = {
+    buttons: {
+        submitText: "Share on Terminus Hub"
+    }
+}
+
 export const DB_DETAILS_FORM = {
     fields: [
         {

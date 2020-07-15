@@ -285,3 +285,4 @@ export const DEFAULT_REMOTE_PULL_COMMIT = "Pulled commit from remote db with con
 
 export const ADD_COLLABORATORS_BUTTON = "Add New Collaborators"
 export const REMOVE_COLLABORATORS_BUTTON = "Remove Collaborators"
+

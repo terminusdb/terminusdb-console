@@ -47,7 +47,7 @@ function _user_db_action(meta, user){
             if(meta.type == 'local_clone'){
                 return 'synchronise'
             }
-            return []
+            return false
         }    
     }
     else {
@@ -62,7 +62,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
 
-    meta.action = _user_db_action(meta, user)
+    meta.action = (onAction ? _user_db_action(meta, user) : false)
 
     function noGo(report){
         setLoading(false)
@@ -70,13 +70,16 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     }
 
     function onGo(){
-        setReport(false)
-        let uerr = onAction(meta, noGo)
-        if(uerr){
-            setReport({status: TERMINUS_ERROR, message: uerr, error: {}})
-        }
-        else {
-            setLoading(true)
+        if(onAction){
+            setReport(false)
+            if(!meta.action) return
+            let uerr = onAction(meta, noGo)
+            if(uerr){
+                setReport({status: TERMINUS_ERROR, message: uerr, error: {}})
+            }
+            else {
+                setLoading(true)
+            }
         }
     }
 
@@ -114,6 +117,7 @@ export const DBTitle = ({meta, user, onAction, max}) => {
     let maxtitle = max || 40
 
     function goDB(){
+
         if(meta.id) goDBHome(meta.id, meta.organization)
         //else onAction('clone', meta)
     }
@@ -151,7 +155,7 @@ export const DBCredits = ({meta, user}) => {
             <DBSize meta={meta} user={user} />
         </Col>
     )
-    if(meta.remote_record){
+    if(meta.remote_record && user.logged_in && meta.type != "local_clone"){
         res.push(
             <Col key='c1' className="database-production-credits">
                 <DBProductionCredits meta={meta} user={user} />
@@ -215,7 +219,7 @@ export const DBRoleCredits = ({meta, user}) => {
                 rs.push(_get_role_title(dbrec.roles[i]))
             }
         }
-        if(meta.public){
+        if(meta.public || (meta.remote_record && meta.remote_record.public)){
             if(rs.length == 0) rs.push("Public")            
             return (<Badge color="info" title="Public Database">{rs}</Badge>)                
         }
@@ -272,7 +276,9 @@ export const DBControlPanel = ({meta, user}) => {
         if(meta.id) goDBHome(meta.id, meta.organization)
     }
 
-    let icon = meta.icon || GRAPHDB
+    let icon = meta.icon 
+    if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon 
+    if(!icon) icon = GRAPHDB
     let title = "Database " + meta.id
     return (
         <Col className='database-left-column'>
@@ -341,7 +347,7 @@ export const DBStatus = ({meta, user, onAction}) => {
                 <DBMainAction meta={meta} user={user} />
             </Row>
             <Row className='database-secondary-option'>
-                <DBSecondaryAction meta={meta} user={user} />
+                <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
             </Row>
         </Col>
     )
@@ -349,7 +355,7 @@ export const DBStatus = ({meta, user, onAction}) => {
 
 export const RemoteUpdated = ({meta, user}) => {
     let act = meta.action
-    if(act == 'share') act = "save to hub"
+    if(act == 'share') act = "upload to hub"
     if(act == 'synchronise') {
         if(meta.structure_mismatch || meta.ahead || meta.behind){
             act = "needs synchronise"
@@ -364,10 +370,10 @@ export const RemoteUpdated = ({meta, user}) => {
 
 export const DBMainAction = ({meta, user}) => {
     let act = meta.action
-    if(act == 'synchronise' && meta.remote_record && meta.remote_record.actions && meta.remote_record.actions.indexOf('pull') != -1){
-        if(meta.structure_mismatch || meta.ahead || meta.behind)
+    if(act == 'synchronise' && meta.remote_record && (meta.type=='local_clone' || (meta.remote_record.actions && meta.remote_record.actions.indexOf('pull') != -1))){
+        if(meta.structure_mismatch || meta.ahead || meta.behind){
             return (<PullControl meta={meta} user={user} />)
-        else {
+        } else {
             return (<AllGoodControl meta={meta} user={user} />)            
         }            
     }
@@ -377,15 +383,21 @@ export const DBMainAction = ({meta, user}) => {
     else if(act == 'share'){
         return (<ShareControl meta={meta} user={user}/>)
     }
-    else if(!act && meta.remote_url){ 
+    else if(meta.remote_url){ 
         return (<ClonedControl meta={meta} user={user} />)            
     }
     return null
 }
 
-export const DBSecondaryAction = ({meta, user}) => {
+export const DBSecondaryAction = ({meta, user, onAction}) => {
+    if(meta.action == 'clone'){
+        function myClick(){
+            meta.action = 'fork'
+            if(onAction) onAction(meta)
+        }
+        return (<span onClick={myClick}>or Fork <ForkControl meta={meta} user={user} /></span>)
+    }
     return null
-    //return (<span>second action</span>)
 }
 
 
@@ -408,11 +420,15 @@ function describe_unsynch(meta){
     if(rts == 0){
         problems.push("Remote DB is uninitiallized")
     }
-    if(rts > lts){
-        problems.push("Remote DB was updated at " + printts(rts, DATETIME_COMPLETE) + " more recently than local at " + printts(lts, DATETIME_COMPLETE)) 
+    if(rts > 0 && rts > lts){
+        let str = "Remote DB was updated at " + printts(rts, DATETIME_COMPLETE)
+        if(lts > 0) str += " more recently than local at " + printts(lts, DATETIME_COMPLETE)
+        problems.push( str )
     }
-    if(lts > rts){
-        problems.push("Local DB was updated at " + printts(lts, DATETIME_COMPLETE) + " more recently than remote at " + printts(rts, DATETIME_COMPLETE)) 
+    if(lts > 0 && lts > rts){
+        let str = "Local DB was updated at " + printts(lts, DATETIME_COMPLETE)
+        if(rts > 0) str += " more recently than remote at " + printts(rts, DATETIME_COMPLETE)
+        problems.push( str )
     }    
     if(meta.structure_mismatch){
         let brlen = (meta.branches ?meta.branches.length : 0)
@@ -440,6 +456,10 @@ export const CloneControl = ({meta, user}) => {
 
 export const ClonedControl = ({meta, user}) => {    
     return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
+}
+
+export const ForkControl = ({meta, user}) => {    
+    return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
 }
 
 export const NoCanControl = ({meta, user}) => {    

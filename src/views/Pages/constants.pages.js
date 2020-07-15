@@ -106,10 +106,10 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
-    remote_url: "https://hub-dev-server.dcm.ist/abcdefg/bikes",
+    remote_url: "https://hub-dev-server.dcm.ist/og/bikes",
     remote_record: {
         id: 'bikes',
-        organization: 'abcdefg',
+        organization: 'og',
         label: "TerminusDB Bike Tutorial",
         organization_type: "Terminators",
         organization_label: "TerminusDB Tutorials",
@@ -124,14 +124,14 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
-    remote_url: "https://hub-dev-server.dcm.ist/abcdefg/politicians",
+    remote_url: "https://hub-dev-server.dcm.ist/og/politicians",
     remote_record: {
         id: 'politicians',
-        organization: 'abcdefg',
+        organization: 'og',
         label: "TerminusDB Politicians Tutorial",
         organization_type: "Terminators",
         organization_label: "TerminusDB Politicians Tutorials",
-    }
+    } 
 }]
 
 
@@ -156,3 +156,5 @@ export const CLONE_URL_FORM = {
         submitText: "Clone From URL"
     }
 }
+
+export const COLLABORATE_TITLE = "Collaborate"
