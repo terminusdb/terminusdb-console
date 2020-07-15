@@ -16,7 +16,7 @@ import {CreateDatabase} from '../CreateDB/CreateDatabase'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {DBListControl} from "../Server/DBListControl"
-import {Collaborators} from "../Server/Collaborators"
+//import {Collaborators} from "../Server/Collaborators"
 
 /**
  * Server home is the launch screen to the local experience
