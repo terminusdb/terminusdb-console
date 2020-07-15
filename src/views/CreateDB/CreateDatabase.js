@@ -133,7 +133,7 @@ export const CreateDatabase = ({from_local}) => {
     }
     
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
-
+//{loading && <Loading type={TERMINUS_COMPONENT} />}
     return (
         <>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
