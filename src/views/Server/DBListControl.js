@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
-import { CloneDB } from '../../components/Query/CollaborateAPI'
-import {DBList} from './DBList'
+import { CloneDB, ForkDB } from '../../components/Query/CollaborateAPI'
+import {DBList, DBSummaryCard} from './DBList'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {useAuth0} from '../../react-auth0-spa'
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
@@ -10,11 +10,12 @@ import { LIST_LOCAL, LIST_REMOTE, CLONE } from "../Pages/constants.pages"
 import {CloneURL} from './CloneURL'
 import Select from "react-select";
 import {Row, Col} from "reactstrap"
+import {CreateDatabase} from "../CreateDB/CreateDatabase"
 
 
 export const DBListControl = ({list, className, user, type, sort, filter}) => {
     if(!list || !user ) return null
-    const { woqlClient,  refreshDBRecord } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()    
     let [special, setSpecial] = useState(false)
     const [listSort, setSort] = useState(sort || "updated")
@@ -42,18 +43,40 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
             goDBPage(db.id, woqlClient.user_organization(), "synchronise")
         }
         if(db.action == 'share'){
-            setSpecial({action:act, meta: db})
+            setSpecial({action:db.action, meta: db})
         }
-        if(db.action == 'clone'){
+        else if(db.action == 'clone'){
             //db.remote_url = db.remote_record.url
             CloneDB(db, woqlClient, getTokenSilently)
             .then((id) => {
                 setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
-                .then(() => goDBHome(id, woqlClient.user_organization())) 
+                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
             })
         }
+        else if(db.action == 'fork'){
+            //db.remote_url = db.remote_record.url
+            let nuid = db.remote_url.substring(db.remote_url.lastIndexOf("/") + 1)
+            db.id = get_fork_id(nuid, bffClient, bffClient.user_organization())
+            db.organization = user.remote_id 
+            ForkDB(db, woqlClient, bffClient, getTokenSilently)
+            .then((id) => {
+                setSpecial(false)
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully Forked Database"})
+                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+            })
+        }
+    }
+
+    function get_fork_id(nid, client, orgid){
+        let add = 0
+        let ext = nid
+        while(client.get_database(ext, orgid)){
+            ext = nid + "_" + (++add)
+        }
+        return ext
     }
 
     function import_db_card(db, id){
@@ -78,6 +101,7 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
                 db.label = db.id
                 db.comment = ""
             }
+            db.remote_url = url
             setAction(db)
         }
         else return "You must supply a valid URL"
@@ -95,41 +119,46 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
 
     if(!sorted) return null
     return (<>
-            <span className="database-list-intro">
-                <TerminusDBSpeaks report={report} />
-            </span>
-            <Row>
-                <Col></Col>
-                <Col></Col>
-                <Col>
-                {type == 'clone' && 
-                    <ShareFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-                }
-                {type != 'clone' && 
-                    <ListFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-                }
-                </Col>
-                <Col>
-                    <ListSorter sort={listSort} logged_in={user.logged_in} onChange={callSort} />
-                </Col>
-            </Row>
-            {special && 
-                <DBList list={[special.meta]} className={className} user={user}/>
-            }
-            {!special &&
-                <DBList list={sorted} className={className} user={user} onAction={setAction}/>            
-            }
-            {type == 'clone' && <>
-                <span className="database-list-intro">
-                    <TerminusDBSpeaks report={{status: TERMINUS_INFO, message: "You can also clone a database directly from a URL"}} />
+            {special && <>
+                <span className="database-list-intro" onClick={function(){setSpecial(false)}}>
+                    back to database list
                 </span>
-                <CloneURL onClone={cloneURL} />
+                <DBSummaryCard meta={special.meta} user={user} />
+                <CreateDatabase from_local={special.meta} className={className}/>
+            </>}
+            {!special && <>
+                <span className="database-list-intro">
+                    <TerminusDBSpeaks report={report} />
+                </span>
+                <Row>
+                    <Col></Col>
+                    <Col></Col>
+                    <Col>
+                    {type == 'clone' && 
+                        <ShareFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
+                    }
+                    {type != 'clone' && 
+                        <ListFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
+                    }
+                    </Col>
+                    <Col>
+                        <ListSorter sort={listSort} logged_in={user.logged_in} onChange={callSort} />
+                    </Col>
+                </Row>
+                <DBList list={sorted} className={className} user={user} onAction={setAction}/>            
+                {type == 'clone' && <>
+                    <span className="database-list-intro">
+                        <TerminusDBSpeaks report={{status: TERMINUS_INFO, message: "You can also clone a database directly from a URL"}} />
+                    </span>
+                    <CloneURL onClone={cloneURL} />
+                </>}
             </>}
         </>
     )
 }
 
-export const ListFilter = ({filter, onChange}) => {
+export const ListFilter = ({filter, onChange, logged_in}) => {
+    if(!logged_in) return null
     let filters = [
         {value: "", label: "Show all"},
         {value: "remote", label: "Hub Databases"},
@@ -242,6 +271,7 @@ function _filter_list(unfiltered, filter){
     if(filter == "public"){
         filtf = function(dbrec){
             if(dbrec.public) return true
+            if(dbrec.remote_record && dbrec.remote_record.public) return true
             return false
         }
     }
@@ -253,8 +283,6 @@ function _filter_list(unfiltered, filter){
     }
 }
 
-
-
 function _sort_list(unsorted, listSort){
     let sortf
     if(listSort == 'updated'){
@@ -263,7 +291,11 @@ function _sort_list(unsorted, listSort){
             var rts = b.updated || 0
             if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated 
             if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated 
-            return rts - lts
+            if(rts == lts){
+                lts = a.updated || 0
+                rts = b.updated || 0
+            }
+            return (rts - lts)
         }
     }
     else if(listSort == 'oldest'){
@@ -298,16 +330,11 @@ function _sort_list(unsorted, listSort){
             return lts - rts
         }
     }
-    else if(listSort == 'name'){
-        sortf = function(a, b){
-            return b.label - a.label
-        }
-    }
     else if(listSort == 'size'){
         sortf = function(a, b){
             var lts = a.size || 0
             var rts = b.size || 0
-            return lts - rts
+            return rts - lts
         }
     }
     else if(listSort == 'organization'){
@@ -318,6 +345,9 @@ function _sort_list(unsorted, listSort){
         }
     }
     if(sortf){
+        return unsorted.sort(sortf)
+    }
+    else if(listSort == 'name'){
         return unsorted.sort(sortf)
     }
     else {

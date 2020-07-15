@@ -6,7 +6,7 @@ export const TERMINUS_ERROR = 'error'
 export const TERMINUS_WARNING = 'warning'
 export const TERMINUS_INFO = 'info'
 export const TERMINUS_FAILURE = 'failure'
-export const TERMINUS_PROTOCOL = 'terminusdb://'
+export const TERMINUS_PROTOCOL = 'terminusdb:///'
 export const TERMINUS_USER_DATA = 'http://hub.terminusdb.com/users/'
 export const TERMINUS_USER_SCHEMA = 'http://hub.terminusdb.com/users/'
 
