@@ -133,10 +133,8 @@ export const CreateDatabase = ({from_local}) => {
     }
     
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
-//{loading && <Loading type={TERMINUS_COMPONENT} />}
     return (
-        <>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
+        <>           
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -153,7 +151,10 @@ export const CreateDatabase = ({from_local}) => {
                     />
                 </span>
             )}
-            <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
+            <div className="tdb__loading__parent">
+                <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
+               {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            </div>
         </>
     )
 }
