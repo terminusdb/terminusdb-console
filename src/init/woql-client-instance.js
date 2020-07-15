@@ -137,9 +137,14 @@ export const WOQLClientProvider = ({children, params}) => {
                     setLoading(false)
                     setContextEnriched(contextEnriched + 1)
                 })
-                .finally(() => setLocalEnriched(true))
+                .finally(() => {
+                    setLoading(false)
+                    setLocalEnriched(true)}
+                    )
+            }else {
+                setLoading(false)
+                setLocalEnriched(true)
             }
-            else setLocalEnriched(true)
         }
      }, [woqlClient])
 
