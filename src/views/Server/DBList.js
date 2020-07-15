@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB } from "../../constants/images"
 import {Row, Col, Badge, Container} from "reactstrap"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -139,7 +139,7 @@ export const DBTitle = ({meta, user, onAction, max}) => {
 
 export const DBCredits = ({meta, user}) => {
     let res = []
-    if(meta.created){
+    if(meta && meta.created){
         res.push(
             <Col key='x1' className="database-created-credits">
                 <DBCreated meta={meta}  user={user}/>
@@ -151,7 +151,7 @@ export const DBCredits = ({meta, user}) => {
             <DBSize meta={meta} user={user} />
         </Col>
     )
-    if(meta.remote_record){
+    if(meta && meta.remote_record){
         res.push(
             <Col key='c1' className="database-production-credits">
                 <DBProductionCredits meta={meta} user={user} />
@@ -399,8 +399,8 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 function describe_unsynch(meta){
-    let rts = meta.remote_record.updated || 0
-    let lts = meta.updated || 0
+    let rts = meta && meta.remoterecord ? meta.remote_record.updated : 0
+    let lts = meta && meta.updated ? meta.updated : 0
     let problems = []
     if(lts == 0){
         problems.push("Local DB is uninitiallized")
@@ -414,7 +414,7 @@ function describe_unsynch(meta){
     if(lts > rts){
         problems.push("Local DB was updated at " + printts(lts, DATETIME_COMPLETE) + " more recently than remote at " + printts(rts, DATETIME_COMPLETE)) 
     }    
-    if(meta.structure_mismatch){
+    if(meta && meta.structure_mismatch){
         let brlen = (meta.branches ?meta.branches.length : 0)
         let rbrlen = (meta.remote_record && meta.remote_record.branches ? meta.remote_record.branches.length : 0)
         problems.push("Branch Structure out of synch: local DB has " + brlen + " branches, remote has " + rbrlen) 
