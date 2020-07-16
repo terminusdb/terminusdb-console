@@ -1,3 +1,7 @@
+# TerminusDB Console v2.0.6 Release Notes
+
+* Minor fixes
+
 # TerminusDB Console v2.0.5 Release Notes
 
 ## New
