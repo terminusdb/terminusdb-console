@@ -160,10 +160,10 @@ export const SETUP_FORM = {
     },
 }
 
-export const ADD_ORGANIZATION_FORM = {
+export const ORGANIZATION_FORM = {
     fields: [
         {
-            id: 'oid',
+            id: 'id',
             value: '',
             helpCols: 7,
             label: 'Organization ID',
@@ -174,9 +174,8 @@ export const ADD_ORGANIZATION_FORM = {
                 placeholder: 'Enter ID of new organization',
             },
         },
-
         {
-            id: 'display',
+            id: 'label',
             label: 'Display Name',
             value: '',
             inputElement: {
@@ -185,28 +184,36 @@ export const ADD_ORGANIZATION_FORM = {
             },
         },
         {
-            id: 'databases',
-            label: 'Databases',
-            value: '',
+            id: "icon",
+            label: 'Icon',
             inputElement: {
-                type: 'textarea',
-            },
-        },
+                type: "input",
+                placeholder: "Enter URL of an icon to use for your database"
+            }
+        },  
         {
-            id: 'children',
-            label: 'Children',
-            value: '',
+            id: "type",
+            label: 'Organization Type',
+            mandatory: true,
             inputElement: {
-                type: 'textarea',
-            },
-        },
+                type: "select",
+                options: [
+                    {value: "Personal", label: "Personal"}, 
+                    {value: "Professional", label: "Professional"},
+                    {value: "Team", label: "Team"},
+                    {value: "Enterprise", label: "Enterprise"},
+                    {value: "Public", label: "Public Interest"}
+                ],
+                placeholder: "Select Organization Type"
+            }
+        },      
         {
-            id: 'notes',
-            label: 'Notes',
+            id: 'comment',
+            label: 'Description',
             value: '',
             inputElement: {
                 type: 'textarea',
-                placeholder: 'You can attach notes to organizations to aid administration',
+                placeholder: 'Enter basic description of organization, its purpose, etc',
             },
         },
     ],

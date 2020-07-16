@@ -113,15 +113,47 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
         }       
         let q = WOQL.query()
         q.using("/" + client.organization() + "/" + client.db() + "/_meta")
-            .add_triple("doc:Remote_origin", "type", "repo:Remote")
-            .add_triple("doc:Remote_origin", "repo:repository_name", "origin")
-            .add_triple("doc:Remote_origin", "repo:remote_url", push_to.remote)
+        .when(
+            WOQL.triple("v:Layer", "repo:repository_head", "v:Something")
+                .idgen("doc:repository/Remote", ["origin"], "v:Remote"),
+            WOQL.add_triple("v:Layer", "repo:repository_head", "v:Remote")
+                .add_triple("v:Remote", "type", "repo:Remote")
+                .add_triple("v:Remote", "repo:repository_name", "origin")
+                .add_triple("v:Remote", "repo:remote_url", push_to.remote)
+        )
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => client.push(push_to))
     })
 }
 
 
+export const UpdateOrganization = async (meta, client, remoteClient, getTokenSilently) => {  
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    client.remote_auth(creds)
+    return remoteClient.createOrganization(meta.id, meta)
+    .then((resp) => { 
+        let rem = resp.url || meta.remote_url
+        let push_to = {
+            remote: rem,
+            remote_branch: "master",
+            message: "publishing db content to hub via console",
+        }       
+        let q = WOQL.query()
+        q.using("/" + client.organization() + "/" + client.db() + "/_meta")
+        .when(
+            WOQL.triple("v:Layer", "repo:repository_head", "v:Something")
+                .idgen("doc:repository/Remote", ["origin"], "v:Remote"),
+            WOQL.add_triple("v:Layer", "repo:repository_head", "v:Remote")
+                .add_triple("v:Remote", "type", "repo:Remote")
+                .add_triple("v:Remote", "repo:repository_name", "origin")
+                .add_triple("v:Remote", "repo:remote_url", push_to.remote)
+        )
+        return client.query(q, "Setting remote for sharing database on Terminus Hub")
+        .then(() => client.push(push_to))
+    })
+}
 
 
 /*

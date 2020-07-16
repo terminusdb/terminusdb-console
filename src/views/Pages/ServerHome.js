@@ -16,7 +16,7 @@ import {CreateDatabase} from '../CreateDB/CreateDatabase'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {DBListControl} from "../Server/DBListControl"
-//import {Collaborators} from "../Server/Collaborators"
+import {Collaborators} from "../Server/Collaborators"
 
 /**
  * Server home is the launch screen to the local experience
@@ -78,8 +78,8 @@ const ServerHome = (props) => {
         tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} />)
         sections.push({id: "createdb", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
-      // sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
-       // tabs.push(<Collaborate key="collaboratepage" />)
+        sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
+        tabs.push(<Collaborators key="collaboratepage" />)
     }
     else {
         sections.push({id: "createpage", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
