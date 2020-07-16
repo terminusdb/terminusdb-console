@@ -8,124 +8,99 @@ import {
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import { CREATE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO } from './constants.createdb'
+import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO } from './constants.createdb'
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
+import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
 
-export const CreateDatabase = () => {
+
+export const CreateDatabase = ({from_local}) => {
     const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, reconnectToServer } = WOQLClientObj()
+    const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
     let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
     let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO 
+    if(from_local) message = "Share your local databases on terminus hub"
     const [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     /**
      * Creates a database and, if a schema graph is set, creates the main schema graph
      * On success, it fires up the home page of the database and rebuilds the list of databases
      */
-    function onCreate(doc, schema) {
+    function onCreate(doc) {
         update_start = Date.now()
         if(doc.sharing != "local"){
             if(!user.logged_in){
                 setReport({status: TERMINUS_WARNING, message: "If you are not logged in to terminusHub, you can only create local databases"})
                 return false;
-                //return Promise.reject(new URIError("Not Logged In"))
-
             }
             else {
                 if(doc.sharing == 'public') doc.public = true
                 delete(doc['sharing'])
                 setLoading(true)
-                return createRemote(doc, update_start, schema)
+                if(from_local) return shareLocal(doc, from_local, update_start)
+                return createRemote(doc, update_start)
             }
         }
         setLoading(true)
-        return createLocal(doc, update_start, schema)
+        return createLocal(doc, update_start)
     }
 
-    function createLocal(doc, update_start, schema){
-        return woqlClient.createDatabase(doc.id, doc)
-        .then(() => {
-            after_create_db(schema, update_start, get_remote_create_message(doc.label, doc.id), doc.id)
+    async function createLocal(doc, update_start){
+        doc.organization = woqlClient.user_organization()
+        return CreateLocal(doc, woqlClient)
+        .then((local_id) => {
+            after_create_db(update_start, get_remote_create_message(doc.label, doc.id), local_id, "create", doc)
         })
-        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, doc.id)))
+        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
         .finally(() => setLoading(false))            
     }
 
-    async function createRemote(doc, update_start, schema) {
-        const jwtoken = await getTokenSilently()
-        let hubcreds = {type: "jwt", key: jwtoken}
-        bffClient.local_auth(hubcreds)
-        woqlClient.remote_auth(hubcreds)
-        let remote_org = remoteClient.user_organization()
-        bffClient.createDatabase(doc.id, doc, remote_org)
+    async function shareLocal(doc, local, update_start) {
+        //should really come from form
+        doc.organization = bffClient.user_organization()    
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id   
+        let sclient = woqlClient.copy()
+        sclient.organization(local.organization)
+        sclient.db(local.id)  
+        ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
-            let sourceURL = remoteClient.server() + remote_org + "/" + doc.id
-            let src = {
-                remote_url: sourceURL,
-                label: doc.label,
-                comment: ""
-            }
-            return woqlClient.clonedb(src, doc.id)
-            .then(() => {
-                after_create_db(schema, update_start, get_local_create_message(doc.label, doc.id), doc.id)                    
-            })
-            .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
+            after_create_db(update_start, get_local_create_message(doc.label, local.id), local.id, "share", doc)                    
         })
-        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
+        .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, local.id)))
         .finally(() => setLoading(false))            
     }
 
-    function after_create_db(schema, update_start, message, id){
+
+    async function createRemote(doc, update_start) {
+        //should really come from form
+        doc.organization = bffClient.user_organization()    
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id     
+        CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
+        .then((local_id) => {
+            after_create_db(update_start, get_local_create_message(doc.label, local_id), local_id, "clone", doc)                    
+        })
+        .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
+        .finally(() => setLoading(false))            
+    }
+
+    function after_create_db(update_start, message, id, create_or_clone, remote_record){
         woqlClient.db(id)
-        if (schema) {
-            return createStarterGraph(update_start, message, id)
-        } 
-        message += CREATE_DB_FORM.noSchemaGraphMessage
         let rep = {
-            message: message,
             status: TERMINUS_SUCCESS,
-            time: Date.now() - update_start
+            message: message,
+            time: Date.now() - update_start,
         }
         setReport(rep)
-        afterCreate(id, rep)
-    }
-
-    /**
-     * Creates default main schema graph when chosen
-     */
-    function createStarterGraph(update_start, message, id) {
-        return woqlClient.createGraph('schema', 'main', CREATE_DB_FORM.schemaGraphCommitMessage)
-        .then(() => {
-            let rep = {
-                status: TERMINUS_SUCCESS,
-                message: message,
-                time: Date.now() - update_start,
-            }
-            setReport(rep)
-            afterCreate(id, rep)
-        })
-        .catch((e) => {
-            message += CREATE_DB_FORM.schemaFailedMessage
-            let wrep = {
-                message: message,
-                error: e,
-                status: TERMINUS_WARNING,
-                time: Date.now() - update_start,
-            }
-            setReport(wrep)
-            afterCreate(id, wrep)
-        })
-    }
-
-    /**
-     * Reloads database list by reconnecting and goes to the db home
-     */
-    function afterCreate(id, mreport) {
-        reconnectToServer().then(() => goDBHome(id, woqlClient.user_organization(), mreport))
+        if(create_or_clone == 'share'){
+            alert("shared")
+        }
+        else {
+            refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
+            .then(() => goDBHome(id, woqlClient.user_organization(), report))         
+        }
     }
 
     function get_local_create_message(label, id){
@@ -157,10 +132,9 @@ export const CreateDatabase = () => {
         })
     }
     
-
+    let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     return (
-        <>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
+        <>           
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -177,7 +151,10 @@ export const CreateDatabase = () => {
                     />
                 </span>
             )}
-            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={user.logged_in} />
+            <div className="tdb__loading__parent">
+                <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
+               {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            </div>
         </>
     )
 }
