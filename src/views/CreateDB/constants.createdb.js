@@ -91,6 +91,13 @@ export const CREATE_DB_FORM = {
     }
 }
 
+
+export const SHARE_DB_FORM = {
+    buttons: {
+        submitText: "Share on Terminus Hub"
+    }
+}
+
 export const DB_DETAILS_FORM = {
     fields: [
         {
@@ -122,6 +129,14 @@ export const DB_DETAILS_FORM = {
                 type: "select",
                 options: [{value: "public", label: "Public"}, {value: "private", label: "Private"}, {value: "local", label: "Local Only - No Sharing"}],
                 placeholder: "Public"
+            }
+        },
+        {
+            id: "icon",
+            label: 'Icon',
+            inputElement: {
+                type: "input",
+                placeholder: "Enter URL of an icon to use for your database"
             }
         },
         {
@@ -406,3 +421,5 @@ export const CREATE_REMOTE_FORM = {
     }
 }
 
+export const CREATE_LOCAL_INTRO = "Create a new database on your local TerminusDB server"
+export const CREATE_REMOTE_INTRO = "You can choose to create a new database on your local server, or save it directly to your TerminusHub account for sharing with others"

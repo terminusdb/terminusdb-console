@@ -2655,7 +2655,6 @@ h4.prefix-section-header {
 .database-controls {
 }
 .major-database-controls {
-    color: #00C08B;
     text-align: center;
     font-size: 1.6em; 
 }
@@ -2663,11 +2662,20 @@ h4.prefix-section-header {
 .time-control{
 }
 .query-control{}
-.minor-database-controls{
-}
 .minor-control{
     margin-top: 4px;
     text-align: center;
+}
+
+.database-listing-schema,
+.database-listing-time,
+.database-listing-query {
+    color: #00C08B;
+}
+
+.database-inactive-action {
+    font-size: 0.9em;
+    color: #ccc;
 }
 
 .database-main-content {
@@ -2717,20 +2725,49 @@ h4.prefix-section-header {
     height: 180px;
 }
 
+.database-listing-icon:hover,
+.database-listing-title:hover,
+.minor-control:hover,
+.database-action:hover {
+    cursor: pointer
+}
+
 .database-action-option {
-    height: 100px;
+    height: 120px;
     font-size: 6em;
     text-align: center;
 }
+
 .database-update-status {
-    height: 50px;
+    text-align: center;
+    font-size: 0.9em;
+    height: 30px;
+    color: #00C08B;
 }
 .database-secondary-option {
     height: 30px;
 
 }
 
+.database-listing-pull,
+.database-listing-push,
+.database-listing-clone,
+.database-listing-share {
+    color: #00C08B;
+}
+
 .database-listing-nocando,
 .database-listing-cloned {
     color: #dee
 }
+
+.database-listing-allgood {
+    color: #cfd
+}
+
+.database-list-intro {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+

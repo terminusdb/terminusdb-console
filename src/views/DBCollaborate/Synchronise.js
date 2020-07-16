@@ -24,6 +24,7 @@ import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 
 export const Synchronise = () => {
     const {repos, branches, updateBranches} = DBContextObj()
+    if (!repos) return null
 
     const { getTokenSilently } = useAuth0();
 
@@ -39,6 +40,10 @@ export const Synchronise = () => {
     useEffect(() => {
         if (repos) {
             let rem = repos.remote || repos.local_clone
+            if(!rem){
+                let db = woqlClient.get_database()
+                rem = {url: db.remote_url, remote: ""}
+            }
             setSourceValues({
                 remote_url: rem.url,
                 remote: rem.title,

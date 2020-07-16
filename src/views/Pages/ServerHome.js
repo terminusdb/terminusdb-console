@@ -3,36 +3,20 @@ import {
     CREATEDB_TITLE,
     DBLIST_TITLE,
     CLONEDB_TITLE,
-    CREATE_FIRSTDB_CSS,
-    CREATE_FIRSTDB,
     DBLIST_HEADER_CSS,
-    CREATE_FIRSTUSER,
-    CREATE_FIRSTUSER_CSS,
-    FAILED_LOADING_USERS,
-    ADD_COMMIT_ID_CSS,
-    ADD_COMMIT_ID_TITLE,
     TUTORIALS_CSS,
     CLONEDBS,
     TUTORIALS_TITLE,
-    MANAGE_USERS_CSS,
-    MANAGE_USERS_TITLE,
-    MANAGE_SERVER_TITLE,
-    MANAGE_SERVER_CSS,
+    COLLABORATE_TITLE
 } from './constants.pages'
-import {CONNECTION_FAILURE, ACCESS_FAILURE, TERMINUS_ERROR} from '../../constants/identifiers'
+
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TabbedPageView} from '../Templates/TabbedPageView'
 import {CreateDatabase} from '../CreateDB/CreateDatabase'
-import {CloneDatabase} from '../CreateDB/CloneDatabase'
-import {DBList} from '../Tables/DBList'
-import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {AddUserCommitLogID} from '../Server/AddUserCommitLogID'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
-import {ManageServer} from '../Server/ManageServer'
-import {ManageUsers} from '../Server/ManageUsers'
-import { printts } from '../../constants/dates'
-import {useAuth0} from '../../react-auth0-spa'
+import {DBListControl} from "../Server/DBListControl"
+//import {Collaborators} from "../Server/Collaborators"
 
 /**
  * Server home is the launch screen to the local experience
@@ -51,43 +35,17 @@ const ServerHome = (props) => {
     //if we are in unitialised step, show the add commit log message
     //if we
 
-    let [error, setError] = useState(false)
     let [myDBs, setMyDBs] = useState(false)
 
-    const {woqlClient, contextEnriched, reconnectToServer } = WOQLClientObj()
-    const { getTokenSilently } = useAuth0()
+    let active = props.page
+
+    const { woqlClient, contextEnriched } = WOQLClientObj()
 
     let showlist = woqlClient.user_databases().length
 
-    async function Cloner(meta){
-        let dbs = woqlClient.databases()
-        let url = meta.remote_record.url 
-        let newid = new_local_id(url.substring(url.lastIndexOf('/')+ 1), dbs)
-        let lab = new_local_label(meta.label, dbs)
-        let cmt = meta.comment
-        let src = {
-            remote_url: url,
-            label: lab,
-            comment: cmt
-        }
-        const jwtoken = await getTokenSilently()
-        woqlClient.remote_auth({type: "jwt", key: jwtoken})
-        return woqlClient.clonedb(src, newid)
-        .then(() => {
-            reconnectToServer().then((result) => {
-                goDBHome(newid, woqlClient.user_organization())
-            })
-        })
-        .catch((err) => {
-            console.log(err)
-        })    
-    }
-    
-
-
     useEffect(() => {
         if(woqlClient){
-            setMyDBs(getDBList())
+            setMyDBs(woqlClient.databases())
         }
     }, [woqlClient, contextEnriched])
 
@@ -100,10 +58,6 @@ const ServerHome = (props) => {
         fixer.query(q)
     }
 
-    function getDBList(){
-        return woqlClient.databases()
-    }
-
     let sections = []
     let tabs = []
 
@@ -112,78 +66,34 @@ const ServerHome = (props) => {
         if(user.logged_in){
             fixCommitLog(user.id, user.author)
         }
-        else {
-          //  sections.push({className: ADD_COMMIT_ID_CSS, label: ADD_COMMIT_ID_TITLE})
-          //  tabs.push(<AddUserCommitLogID key="addcommitid" />)
-        }
     }
-
 
     let hasTutorials = false;//user.logged_in
-    let canManageUsers = false;//user.logged_in
-    let canManageServer = false;//user.logged_in
-
     if (showlist) {
-        sections.push({className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
-        tabs.push(<DBList key="dbl" list={myDBs} user={user} />)
+        sections.push({id: "mydbs", className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
+        tabs.push(<DBListControl key="dbl" type='my' list={myDBs} user={user} />)
     }
     if(user.logged_in){
-        sections.push({className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
-        tabs.push(<DBList key="dbl2" list={CLONEDBS} user={user} onClone={Cloner}/>)
-        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
+        sections.push({id: "clonedb", className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
+        tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} />)
+        sections.push({id: "createdb", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
+      // sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
+       // tabs.push(<Collaborate key="collaboratepage" />)
     }
     else {
-        sections.push({className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
+        sections.push({id: "createpage", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
     }
     if (hasTutorials) {
-        sections.push({className: TUTORIALS_CSS, label: TUTORIALS_TITLE})
+        sections.push({id: "tutorials",  className: TUTORIALS_CSS, label: TUTORIALS_TITLE})
         tabs.push(<ConsoleTutorials key="tutorials" />)
     }
-    if (canManageUsers) {
-        sections.push({className: MANAGE_USERS_CSS, label: MANAGE_USERS_TITLE})
-        tabs.push(<ManageUsers key="manageusers" />)
-    }
-    if (canManageServer) {
-        sections.push({className: MANAGE_SERVER_CSS, label: MANAGE_SERVER_TITLE})
-        tabs.push(<ManageServer key="manageserver" />)
-    }
-    if (error) {
-        return <TerminusDBSpeaks failure={CONNECTION_FAILURE} report={error} />
-    }
-    let active = props.page
     return (
-        <TabbedPageView id="home" active={active} sections={sections}>
+        <TabbedPageView type='major' id="home" active={active} sections={sections}>
             {tabs}
         </TabbedPageView>
     )
 }
-
-
-
-
-function new_local_id(starter, dbl){
-    let ind = 0;
-    let base = starter
-    let ids = dbl.map((item) => item.id)
-    while(ids.indexOf(base) != -1){
-        base = starter + "_" + (++ind)
-    }
-    return base
-}
-
-function new_local_label(starter, dbl){
-    let ind = 0;
-    let base = starter
-    let labs = dbl.map((item) => item.label)
-    while(labs.indexOf(base) != -1){
-        base = starter + " (" + (++ind) + ")"
-    }
-    return base
-}
-
-
-
 
 export default ServerHome

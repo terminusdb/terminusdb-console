@@ -366,6 +366,25 @@ export const CREATE_ROLE_FORM = {
     },
 }
 
+
+export const CLONE_URL_FORM = {
+    fields: [
+        {
+            id: 'url',
+            label: 'URL',
+            value: '',
+            mandatory: true,
+            inputElement: {
+                type: 'input',
+                placeholder: 'Enter the URL of the TerminusDB database you wish to clone',
+            },
+        }
+    ],
+    buttons: {
+        submitText: 'Clone from URL',
+    },
+}
+
 export const GRANT_CAP_FORM = {
     fields: [
         {
@@ -489,3 +508,4 @@ export const JUST_COMMIT_LOG_EXPLANATION = (
 export const ADMIN_ACCOUNT_NOTES = 'Administrator Account set up with TerminusDB console at '
 export const CREATED_ADMIN_MESSAGE = 'Administrator account set up successfully'
 export const FAILED_CREATING_ADMIN = 'Failed to create admin account'
+

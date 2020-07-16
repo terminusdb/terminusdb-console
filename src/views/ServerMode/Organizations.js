@@ -4,23 +4,23 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {FAILED_LOADING_USERS} from './constants.server'
 import {TERMINUS_COMPONENT, TERMINUS_ERROR} from '../../constants/identifiers'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {UserCapabilityList} from '../Tables/UserCapabilityList'
+import {CapabilityList} from './CapabilityList'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 
-export const UserRoles = (props) => {
+export const Organizations = (props) => {
     const {woqlClient} = WOQLClientObj()
 
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [bindings, setBindings] = useState()
 
-    const woql = TerminusClient.WOQL.lib().user_roles()
+    const woql = TerminusClient.WOQL.lib().organizations()
     woql.context(woqlClient.connection.getSystemContext())
 
     useEffect(() => {
         setLoading(true)
         let tClient = woqlClient.copy() //do not change internal client state
-        tClient.set_system_db()
+        tClient.db('_system')
         woql.execute(tClient)
             .then((result) => {
                 if (result && result.bindings) setBindings(result.bindings)
@@ -35,7 +35,7 @@ export const UserRoles = (props) => {
         <div className="">
             {loading && <Loading type={TERMINUS_COMPONENT} />}
             {report && <TerminusDBSpeaks report={report} />}
-            {bindings && <UserCapabilityList query={woql} capabilities={bindings} />}
+            {bindings && <CapabilityList query={woql} capabilities={bindings} />}
         </div>
     )
 }
