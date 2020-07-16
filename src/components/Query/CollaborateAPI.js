@@ -52,6 +52,7 @@ export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
     let rmeta = meta
+    meta.fork = true
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {
         if(resp.url) rmeta.remote_url = resp.url
