@@ -2656,7 +2656,7 @@ h4.prefix-section-header {
 }
 .major-database-controls {
     text-align: center;
-    font-size: 1.6em; 
+    font-size: 1.6em;
 }
 
 .time-control{
@@ -2681,7 +2681,8 @@ h4.prefix-section-header {
 .database-main-content {
 }
 
-.database-listing-title-row {
+.database-listing-title-row {;
+    margin: 10px 0px 0px 0px;
 }
 
 .database-listing-title {
@@ -2689,12 +2690,15 @@ h4.prefix-section-header {
 }
 .database-listing-id {
     font-size: 10px;
-    margin-left: 6px;   
+    margin-left: 6px;
 }
 
 .database-credits {
 }
 .database-listing-description-row {
+    margin: 10px 10px 0px 15px;
+    font-size: 18px;
+    font-weight: 400;
 }
 
 
@@ -2738,6 +2742,21 @@ h4.prefix-section-header {
     text-align: center;
 }
 
+.db_created_icon{
+    margin: 0px 5px 0px 20px;
+    color: #0055bb;
+}
+
+.db_info_icon_spacing {
+    margin: 0px 5px 0px 40px;
+    color: #0055bb;
+}
+
+
+.db_info{
+    font-size: 16px;
+}
+
 .database-update-status {
     text-align: center;
     font-size: 0.9em;
@@ -2770,4 +2789,3 @@ h4.prefix-section-header {
     margin-top: 16px;
     margin-bottom: 24px;
 }
-
