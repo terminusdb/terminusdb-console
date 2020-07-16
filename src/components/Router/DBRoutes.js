@@ -18,7 +18,12 @@ import {DBContextProvider} from '../Query/DBContext'
 export const DBRoutes = () => {
     const {woqlClient} = WOQLClientObj()
 
+    /*
+    * base path db/
+    */
     const {path} = useRouteMatch()
+    console.log("__PATH___DBRoutes",path);
+
     return (
         <Switch>
             <Route key="terminus" path={`${path}${TERMINUS_ROUTE}`}>
@@ -35,10 +40,12 @@ export const DBRoutes = () => {
  * Routes specific to Terminus (master) DB
  */
 const MasterDBRoute = () => {
+
     const {path} = useRouteMatch()
     const {woqlClient} = WOQLClientObj()
     woqlClient.set_system_db()
     const routes = []
+
     routes.push(
         <Route key="query" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />
@@ -67,9 +74,11 @@ const MasterDBRoute = () => {
  */
 const DBRoute = () => {
     const {path} = useRouteMatch()
-
     const {aid, dbid} = useParams()
     const { woqlClient } = WOQLClientObj()
+
+    console.log("___DBRoute____PATH", path, aid, dbid);
+
     woqlClient.db(dbid)
     woqlClient.organization(aid)
     const routes = []

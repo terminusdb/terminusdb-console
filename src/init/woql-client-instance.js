@@ -6,7 +6,7 @@ export const WOQLContext = React.createContext()
 export const WOQLClientObj = () => useContext(WOQLContext)
 
 export const WOQLClientProvider = ({children, params}) => {
-    if (window.location.search.includes("code=")) return null
+    //if (window.location.search.includes("code=")) return null
     const [loadingServer, setLoading] = useState(true)
     const [connecting, setConnecting] = useState(true)
     const [woqlClient, setWoqlClient] = useState(null)

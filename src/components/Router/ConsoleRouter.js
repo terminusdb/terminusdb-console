@@ -1,12 +1,36 @@
 import React from 'react'
 import {createHashHistory} from 'history'
 import {DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
-import {HashRouter, Switch, Route} from 'react-router-dom'
+import {HashRouter,Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
 import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
 
-export const ConsoleHistory = createHashHistory()
+import { createBrowserHistory } from "history";
+export const ConsoleHistory= createBrowserHistory({basename: process.env.REACT_APP_BASE_ROUTER || '/console'});
+//http://localhost:6363/console/#/
+
+//export const ConsoleHistory = createHashHistory()
+
+/*export const ConsoleRouter = (props) => {
+    function getSwitch() {
+        return (
+            <Switch>
+                <Route path={DB_ROUTE}>
+                    <DBRoutes />
+                </Route>
+                <Route path={PROFILE_ROUTE}>
+                    <ProfileRoutes />
+                </Route>
+                <Route path={SERVER_ROUTE}>
+                    <ServerRoutes />
+                </Route>
+            </Switch>
+        )
+    }
+    return <HashRouter history={props.history}>{getSwitch()}</HashRouter>
+}*/
+
 
 export const ConsoleRouter = (props) => {
     function getSwitch() {
@@ -24,9 +48,12 @@ export const ConsoleRouter = (props) => {
             </Switch>
         )
     }
-    return <HashRouter history={props.history}>{getSwitch()}</HashRouter>
+    return <Router history={props.history}>{getSwitch()}</Router>
 }
 
+/*
+* for page navigation, create dinamically the /db/username/dbname 
+*/
 export const getDBRoute = (db, aid) => {
     if (db == '_system') return DB_ROUTE + TERMINUS_ROUTE
     return `${DB_ROUTE}/${aid}/${db}`

@@ -13,7 +13,6 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE } from "../../constants/dates"
 
-
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
     if(!list.length){
