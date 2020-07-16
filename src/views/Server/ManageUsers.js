@@ -1,42 +1,50 @@
-import React from "react";
-import { Users } from './Users'
-import { Capabilities } from './Capabilities'
-import { UserCapabilities } from './UserCapabilities'
-import { AddUser } from './AddUser'
-import { TabbedPageView } from '../Templates/TabbedPageView'
-import { CreateCapability } from './CreateCapability'
-import { GrantCapability } from './GrantCapability'
-import { GrantAccess } from './GrantAccess'
-import { CreateAccess } from './CreateAccess'
-import { RevokeCapability } from './RevokeCapability'
+import React from 'react'
+import {Users} from './Users'
+import {Organizations} from './Organizations'
+import {AddOrganization} from './AddOrganization'
+import {Roles} from './Roles'
+import {UserRoles} from './UserRoles'
+import {AddUser} from './AddUser'
+import {TabbedSections} from '../Templates/TabbedSections'
+import {CreateRole} from './CreateRole'
+import {GrantRole} from './GrantRole'
+import {GrantCapability} from './GrantCapability'
+import {CreateCapability} from './CreateCapability'
+import {RevokeRole} from './RevokeRole'
 
 export const ManageUsers = (props) => {
     let sections = [
-        {id: "users" , label: "Users"}, 
-        {id: "capabilities", label: "Capabilities" },
-        {id: "usercapabilities", label: "User Capabilities" }, 
-        {id: "adduser", label: "Add User" }, 
-        {id: "createcap", label: "Create Capability" }, 
-        {id: "createaccess", label: "Create Access Token" }, 
-        {id: "grantaccess", label: "Grant Access Token" }, 
-        {id: "grantcapability", label: "Grant Capability" }, 
-        {id: "revokegrant", label: "Revoke Capability" }, 
+        {id: 'users', label: 'Users'},
+        {id: 'organizations', label: 'Organizations'},
+        {id: 'roles', label: 'Roles'},
+        {id: 'userroles', label: 'User Roles'},
+        {id: 'adduser', label: 'Add User'},
+        {id: 'addorg', label: 'Add Organization'},
+        {id: 'createrole', label: 'Create Role'},
+        {id: 'createcap', label: 'Create Capability'},
+        {id: 'grantaccess', label: 'Grant Capability'},
+        {id: 'grantcapability', label: 'Grant Role'},
+        {id: 'revokegrant', label: 'Revoke Role'},
     ]
 
     let report = null
 
-    return (  
-        <TabbedPageView sections={sections} active={props.page} report={report}>            
-            <Users key="users" label="Users" />
-            <Capabilities key="caps" label="Capabilities" />
-            <UserCapabilities key="ucaps" label="User Capabilities" />
-            <AddUser key="addu" label="Add User" />
-            <CreateCapability key="createcap" label="Create Capability" />
-            <CreateAccess key="createacc" label="Create Access Token" />
-            <GrantAccess key="grantacc" label="Grant Access Token" />
-            <GrantCapability key="grant" label="Grant Capability" />
-            <RevokeCapability key="revoke" label="Revoke Capability" />
-        </TabbedPageView>        
-	)
+    return (
+        <div className='manage-users-temp'>
+            <hr className="my-space-50" />
+            <TabbedSections sections={sections} active={props.page} report={report}>
+                <Users key="users" label="Users" />
+                <Organizations key="orgs" label="Roles" />
+                <Roles key="caps" label="Roles" />
+                <UserRoles key="ucaps" label="User Roles" />
+                <AddUser key="addu" label="Add User" />
+                <AddOrganization key="createorg" label="Create Organization" />
+                <CreateRole key="createcap" label="Create Role" />
+                <CreateCapability key="createacc" label="Create Capability" />
+                <GrantCapability key="grantacc" label="Grant Capability" />
+                <GrantRole key="grant" label="Grant Role" />
+                <RevokeRole key="revoke" label="Revoke Role" />
+            </TabbedSections>
+        </div>
+    )
 }
-

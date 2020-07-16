@@ -1,5 +1,5 @@
 
-# Contributing 
+# Contributing
 
 This is the TerminusDB Console, TerminusDB Server references this
 from the index page served when you access the Console from the
@@ -30,7 +30,7 @@ It you are running TerminusDB via [TerminusDB Quickstart], then you can set this
 
 Most likely, if you are running console locally, it's because you are
 a developer, and thus will be working with the `dev` branch of console, so you
-probably want to want to point npm to our dev repository by adding this line to
+probably want to point npm to our dev repository by adding this line to
 your .npmrc
 
 ```

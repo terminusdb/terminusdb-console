@@ -2,5 +2,8 @@
   "viewportWidth": 1440,
   "viewportHeight": 900,
   "baseUrl":"http://localhost:3005",
-  "responseTimeout":120000
+  "responseTimeout":120000,
+  "env": {
+    "password": "root"
+  }
 }

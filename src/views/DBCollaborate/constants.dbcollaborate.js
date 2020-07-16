@@ -67,6 +67,70 @@ export const SYNCHRONISE_FORM = {
     pullFailureMessage: "Failed to pull updates ",
 }
 
+export const REMOVE_COLLABORATORS_FORM = {
+    fields: [
+        {
+            id: "users",
+            value: "",
+            inputElement: {
+                placeholder: "comma seperated list of user ids",
+                type: "textarea",
+            },
+            label: 'Collaborator IDs'
+        }
+    ],
+    buttons: {
+        submitText: "Remove Collaborators",
+        cancelText: "Cancel Removal",
+    }
+}
+
+
+export const ADD_COLLABORATORS_FORM = {
+    fields: [
+        {
+            id: "manage",
+            value: false,
+            inputElement: {
+                label: "allows adding collaborators",
+                type: "checkbox",
+            },
+            label: 'Manage Database Role'
+        },
+        {
+            id: "write",
+            value: false,
+            inputElement: {
+                label: "allows updating",
+                type: "checkbox",
+            },
+            label: 'Database Editor Role'
+        },
+        {
+            id: "read",
+            value: false,
+            inputElement: {
+                label: "allows cloning",
+                type: "checkbox",
+            },
+            label: 'Data Consumer Role'
+        },
+        {
+            id: "users",
+            value: "",
+            inputElement: {
+                placeholder: "comma seperated list of user ids",
+                type: "textarea",
+            },
+            label: 'Collaborator IDs'
+        }
+    ],
+    buttons: {
+        submitText: "Add Collaborators",
+        cancelText: "Cancel",
+    }
+}
+
 
 export const PULL_REMOTE_FORM = {
     fields: [
@@ -88,24 +152,6 @@ export const PULL_REMOTE_FORM = {
                 options: []
             },
             label: 'Pull to Local Branch'
-        },
-        {
-            id: "user",
-            value: "",
-            label: 'Remote User Name',
-            inputElement: {
-                type: "input",
-                placeholder: "enter username for remote server",
-            }
-        },
-        {
-            id: "password",
-            value: "",
-            label: 'Password',
-            inputElement: {
-                type: "input",
-                placeholder: "enter password for remote server",
-            }
         },
         {
             id: "commit",
@@ -177,25 +223,7 @@ export const PUSH_REMOTE_FORM = {
                 type: "input",
             },
             label: 'Push to Remote Branch'
-        },
-        {
-            id: "user",
-            value: "",
-            label: 'Remote User Name',
-            inputElement: {
-                type: "input",
-                placeholder: "enter username for remote server",
-            }
-        },
-        {
-            id: "password",
-            value: "",
-            label: 'Password',
-            inputElement: {
-                type: "input",
-                placeholder: "enter password for remote server",
-            }
-        },
+        },      
         {
             id: "commit",
             label: "Commit Message",
@@ -254,3 +282,6 @@ export const DEFAULT_LOCAL_PUSH_COMMIT = "Pushed commit to local db with console
 export const DEFAULT_LOCAL_PULL_COMMIT = "Pulled commit from local db with console"
 export const DEFAULT_REMOTE_PUSH_COMMIT = "Pushed commit to remote db with console"
 export const DEFAULT_REMOTE_PULL_COMMIT = "Pulled commit from remote db with console"
+
+export const ADD_COLLABORATORS_BUTTON = "Add New Collaborators"
+export const REMOVE_COLLABORATORS_BUTTON = "Remove Collaborators"

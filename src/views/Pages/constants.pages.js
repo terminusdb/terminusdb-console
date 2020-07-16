@@ -1,5 +1,5 @@
 //Server Home Page
-export const CREATEDB_TITLE = "New Database"
+export const CREATEDB_TITLE = "Create"
 export const DBLIST_TITLE  = "My Databases"
 export const CREATE_FIRSTDB_CSS = "color-primary alert"
 export const CREATE_FIRSTDB = ""
@@ -15,6 +15,7 @@ export const MANAGE_USERS_CSS = ""
 export const MANAGE_USERS_TITLE = "User Accounts"
 export const MANAGE_SERVER_TITLE = "Server Configuration"
 export const MANAGE_SERVER_CSS = ""
+export const CLONEDB_TITLE = "Clone"
 
 
 
@@ -94,3 +95,16 @@ export const LOGIN_LOGO = "https://terminusdb.com/img/logos/logo.svg"
 export const LOGIN_PLACEHOLDER = "Enter valid TerminusDB password"
 export const LOGIN_PROMPT = "Please enter your password"
 export const CONNECT_PROMPT = "Connect"
+
+export const CLONEDBS = [{
+    id: "",
+    organization: "terminators",
+    label: "TerminusDB Bike Tutorial",
+    comment: "This is a web-hosted version of the bike tutorial which is commonly used as our first introduction to knowledge graphs. This is a version of the tutorial pre-loaded into TerminusDB that you can clone to your own database and  ",
+    size: 20000,
+    public: true,
+    testing: true,
+    remote_record: {
+        url: "https://hub-dev-server.dcm.ist/brand/anewb"
+    }
+}]

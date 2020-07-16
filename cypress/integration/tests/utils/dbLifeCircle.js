@@ -9,12 +9,15 @@ export const createLocalDB = async (dbId,withGraph=true) =>{
     cy.server().route("POST", routes.createDb(dbId)).as('createDB');
     cy.server().route("POST", routes.createGraph(dbId)).as('createGraph');
 
-    cy.get("#create_db").click()
-    cy.get("#create_db_local").click()
+    //cy.get("#create_db").click()
+    //cy.get("#create_db_local").click()
 
     cy.get("#dbid").focus().type(dbId);
     cy.get("#dbname").focus().type(dbId);
     cy.get("#description").focus().type(dbId);
+
+    const createType = 'Local Only - No Sharing{enter}';
+	cy.get(".tcf-select").click().find("input").first().focus().type(createType);
 
     cy.get('form').find("button").contains('Create New Database').click()
 
@@ -30,14 +33,16 @@ export const createLocalDB = async (dbId,withGraph=true) =>{
 *   Add schema
 */
 export const addSchema = (database) => {
-
     cy.server().route("POST", routes.woqlQuery(database.name)).as('runQuery');
-
     cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.addSchema)
-    cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-
-    cy.wait("@runQuery").its('status').should('eq', 200);
-    cy.wait(5000);
+    cy.get('.tdb__commit__bar__tools').find('button').contains('Run Query').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })
+    /*cy.get('#runQuery').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })    */
 }
 
 /*
@@ -51,9 +56,15 @@ export const addDocuments = async (database) => {
     const q = 'WOQL.when(' + inputs + ', ' + database.loadDocuments.inserts + ')'
     await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(q)
-    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
 
-    cy.wait("@runQuery").its('status').should('eq', 200);
+    cy.get('.tdb__commit__bar__tools').find('button').contains('Run Query').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })
+
+    //await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
+
+    //cy.wait("@runQuery").its('status').should('eq', 200);
 
     //cy.wait("@runQuery",{responseTimeout:120000}).its('status').should('eq', 200);
 
@@ -71,17 +82,24 @@ export const addDocuments = async (database) => {
 *   Run queries
 */
 export const runQueries = async(database) => {
+    cy.server().route("POST", routes.woqlQuery(database.name)).as('runQuery');
+
     await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
     cy.wait(1000);
     await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.queries.selectDocuments)
 
-    await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
-    cy.wait(5000);
+    cy.get('.tdb__commit__bar__tools').find('button').contains('Run Query').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })
+
+    //await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
 
     await cy.get('.tdb__dropdown').find('button').find('span').click()
     await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click()
 	cy.wait(3000)
 }
+
 
 /*
 *   create a new branch

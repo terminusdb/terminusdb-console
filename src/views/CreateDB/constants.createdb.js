@@ -82,7 +82,10 @@ export const CREATE_DB_FORM = {
     schemaFailedMessage: " but failed to create main schema graph",
     noSchemaGraphMessage: " Database is schema free. If you want to enable quality control and advanced WOQL features, you must add a schema to this database",
     createFailureMessage: "Failed to Create Database",
-    createSuccessMessage: "Successfully Created Database: ",
+    createSuccessMessage: "Successfully Created Database",
+    createRemoteSuccessMessage: "Successfully Created Database",
+    cloneRemoteFailureMessage: "Failed to create local clone after create",
+    createRemoteFailureMessage: "Creation of database failed",
     buttons: {
         submitText: "Create New Database"
     }
@@ -92,9 +95,7 @@ export const DB_DETAILS_FORM = {
     fields: [
         {
             id: "dbid",
-            maxLength:200,
             value: "",
-            helpCols: 9,
             label: 'Database ID',
             help: "The database ID forms part of the URL - spaces are not allowed",
             mandatory: true,
@@ -111,6 +112,16 @@ export const DB_DETAILS_FORM = {
             inputElement: {
                 type: "input",
                 placeholder: "Enter name of new database"
+            }
+        },
+        {
+            id: "sharing",
+            label: 'Sharing',
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [{value: "public", label: "Public"}, {value: "private", label: "Private"}, {value: "local", label: "Local Only - No Sharing"}],
+                placeholder: "Public"
             }
         },
         {
@@ -227,53 +238,8 @@ export const COPY_REMOTE_FORM = {
                 type: "input",
                 placeholder: "Enter URL of TerminusDB Database",
             },
-            help: "The URL of the database is normally of the form: https://my.host.com/db/<account_id>/<database_id>"
-        },
-        {
-            id: "newid",
-            value: "",
-            mandatory: true,
-            label: 'New ID',
-            inputElement: {
-                type: "input",
-                placeholder: "Enter id of new db",
-            }
-        },
-        {
-            id: "name",
-            value: "",
-            label: 'New DB Name',
-            inputElement: {
-                type: "input",
-                placeholder: "Enter name of new db",
-            }
-        },
-        {
-            id: "user",
-            value: "",
-            label: 'Remote User Name',
-            inputElement: {
-                type: "input",
-                placeholder: "enter username for remote server",
-            }
-        },
-        {
-            id: "password",
-            value: "",
-            label: 'Password',
-            inputElement: {
-                type: "input",
-                placeholder: "enter password for remote server",
-            }
-        },
-        {
-            id: "description",
-            label: 'Description',
-            inputElement: {
-                type: "textarea",
-                placeholder: "Enter a short text describing the database, its scope and purpose",
-            },
-        },
+            help: "The URL of the database is normally of the form: https://my.host.com/db/<organization_id>/<database_id>"
+        }
     ],
     buttons: {
         submitText: "Copy Remote Database"
@@ -283,6 +249,32 @@ export const COPY_REMOTE_FORM = {
 
 
 export const COPY_DB_DETAILS_FORM = {
+    fields: [
+        /*{
+            id: "dbid",
+            label: 'Original ID',
+            inputElement: {
+                type: "input",
+                disabled: true
+            }
+        },*/
+        {
+            id: "copy",
+            label: 'Copy From',
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [{value: "remote", label: "TerminusDB"}, {value: "local", label: "Local Database"}],
+                placeholder: "TerminusDB"
+            }
+        }
+    ],
+    buttons: {
+        submitText: "Copy Database"
+    }
+}
+
+/*export const COPY_DB_DETAILS_FORM = {
     fields: [
         {
             id: "dbid",
@@ -308,7 +300,7 @@ export const COPY_DB_DETAILS_FORM = {
         }
     ]
 }
-
+*/
 
 export const CREATE_REMOTE_FORM = {
     createButtonText: "Create New Database",
@@ -413,3 +405,4 @@ export const CREATE_REMOTE_FORM = {
         submitText: "Create Database"
     }
 }
+

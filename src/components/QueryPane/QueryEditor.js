@@ -123,7 +123,7 @@ export const QueryEditor = ({query, setMainError, mainError, baseLanguage, setBa
                         onEdit={newLanguageVersion}
                     />
                     }
-                    {editable &&  <button className="tdb__button__base tdb__button__base--green tdb__commit__bar--button" onClick={sendQuery}>{submit}</button>}
+                    {editable &&  <button id="runQuery" className="tdb__button__base tdb__button__base--green tdb__commit__bar--button" onClick={sendQuery}>{submit}</button>}
                 </div>
            </div>
 

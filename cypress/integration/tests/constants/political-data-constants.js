@@ -52,3 +52,14 @@ export const POLITICAL_DATA_INSERTS = 'WOQL.and(' + '\n' +
         '.property("similar_to", "v:Rep_A_ID")' + '\n' +
         '.property("similar_to", "v:Rep_B_ID")' + '\n' +
         '.property("similarity", "v:Similarity"))'
+
+
+export const POLITICAL_SHOW_DOCUMENTS = 'WOQL.limit(300).and(' + '\n' +
+        'WOQL.triple("v:Subject","similar_to","v:Value"),' + '\n' +
+        'WOQL.triple("v:Subject","similar_to","v:Value2"),' + '\n' +
+        'WOQL.triple("v:Subject","similarity","v:Similarity"),' + '\n' +
+        'WOQL.triple("v:Value","member_of","v:Party"),' + '\n' +
+        'WOQL.triple("v:Value2","member_of","v:Party2"),' + '\n' +
+        'WOQL.not().eq("v:Value","v:Value2"),' + '\n' +
+        'WOQL.opt().triple("v:Value2","label","v:Lab2"),' + '\n' +
+        'WOQL.opt().triple("v:Value","label","v:Lab1"))'  // eval dosent work
