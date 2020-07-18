@@ -101,7 +101,6 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
-    //client.set_system_db()
     if(meta.schema) delete meta['schema']
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => { 
@@ -110,49 +109,19 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
             remote: rem,
             remote_branch: "master",
             message: "publishing db content to hub via console",
-        }       
-        let q = WOQL.query()
-        q.using("/" + client.organization() + "/" + client.db() + "/_meta")
-        .when(
-            WOQL.triple("v:Layer", "repo:repository_head", "v:Something")
-                .idgen("doc:repository/Remote", ["origin"], "v:Remote"),
-            WOQL.add_triple("v:Layer", "repo:repository_head", "v:Remote")
-                .add_triple("v:Remote", "type", "repo:Remote")
-                .add_triple("v:Remote", "repo:repository_name", "origin")
-                .add_triple("v:Remote", "repo:remote_url", push_to.remote)
-        )
+        }
+        let using = "/" + client.organization() + "/" + client.db() + "/_meta"
+        let q = WOQL.lib().add_remote(using, push_to.remote)       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => client.push(push_to))
     })
 }
 
-
-export const UpdateOrganization = async (meta, client, remoteClient, getTokenSilently) => {  
+export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) => {  
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    client.remote_auth(creds)
-    return remoteClient.createOrganization(meta.id, meta)
-    .then((resp) => { 
-        let rem = resp.url || meta.remote_url
-        let push_to = {
-            remote: rem,
-            remote_branch: "master",
-            message: "publishing db content to hub via console",
-        }       
-        let q = WOQL.query()
-        q.using("/" + client.organization() + "/" + client.db() + "/_meta")
-        .when(
-            WOQL.triple("v:Layer", "repo:repository_head", "v:Something")
-                .idgen("doc:repository/Remote", ["origin"], "v:Remote"),
-            WOQL.add_triple("v:Layer", "repo:repository_head", "v:Remote")
-                .add_triple("v:Remote", "type", "repo:Remote")
-                .add_triple("v:Remote", "repo:repository_name", "origin")
-                .add_triple("v:Remote", "repo:remote_url", push_to.remote)
-        )
-        return client.query(q, "Setting remote for sharing database on Terminus Hub")
-        .then(() => client.push(push_to))
-    })
+    return remoteClient.updateOrganization(meta.id, meta)    
 }
 
 
