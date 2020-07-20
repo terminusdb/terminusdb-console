@@ -14,7 +14,7 @@ import { config } from "./utils/config"
 */
 
 context('Test cloning a local database', () => {
-   let bid, commit_msg, masterBranchId='master';
+   let bid, commit_msg, masterBranchId='main';
    let database = config[0]
    let clonedDatabase = config[0].name + '__Clone'
 

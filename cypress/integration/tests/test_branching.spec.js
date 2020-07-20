@@ -15,7 +15,7 @@ import { config } from "./utils/config"
 */
 
 context('Test commits and branching', () => {
-   let bid, commit_msg, masterBranchId='master';
+   let bid, commit_msg, masterBranchId='main';
    let database = config[0]
 
    before(() => {
