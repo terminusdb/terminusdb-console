@@ -104,6 +104,7 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
 
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
+    let remote_name = "origin"
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
@@ -113,12 +114,12 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     .then((resp) => { 
         let rem = resp.url || meta.remote_url
         let push_to = {
-            remote: rem,
+            remote: remote_name,
             remote_branch: "master",
             message: "publishing db content to hub via console",
         }
         let using = client.organization() + "/" + client.db() + "/_meta"
-        let q = WOQL.lib().add_remote(using, push_to.remote)       
+        let q = WOQL.lib().add_remote(using, rem, "origin")       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => client.push(push_to))
     })
