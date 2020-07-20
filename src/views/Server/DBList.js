@@ -14,9 +14,12 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiOutlineDesktop,
-    AiOutlineCheck, AiOutlineCloudSync, AiOutlineDisconnect, AiOutlineCloudDownload,
+    AiOutlineCloudSync, AiOutlineCloudDownload,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
-    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches} from 'react-icons/ai';
+    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
+import { BsBook } from 'react-icons/bs';
+import { GiOpenBook } from 'react-icons/gi';
+
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
@@ -105,9 +108,6 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r4'>
                         <DBCredits meta={meta}  user={user} />
                     </Row>
-                    <Row key='rr'>
-                        <DBControls meta={meta}  user={user}/>
-                    </Row>
                     <Row key='r8'>
                         {decr}
                     </Row>
@@ -182,6 +182,9 @@ export const DBCredits = ({meta, user}) => {
         )
         res.push(
             <DBContributionCredits  key='ae' meta={meta}  user={user}/>
+        )
+        res.push(
+            <DBSchemaStatus key='as' meta={meta}  user={user}/>
         )
     }
     return (
@@ -264,6 +267,10 @@ export const DBRoleCredits = ({meta, user}) => {
     return null
 }
 
+export const DBSchemaStatus =  ({meta, user}) => {
+    return <SchemaControl meta={meta} user={user}  />
+}
+
 export const DBDescription = ({meta, user}) => {
     if(meta.comment && meta.comment.length > 80 && !meta.testing){
         var str =  meta.comment.substring(76) + " ..."
@@ -315,7 +322,9 @@ export const DBCreated = ({display, ts, author}) => {
 export const DBUpdated = ({display, ts, author}) => {
     let ct = "Updated at " + printts(ts, DATETIME_COMPLETE)
     if(author) ct += " by " + author
-    return (<span className="db_info" title={ct} key="xxd"><i key="xxt" className="fa fa-bookmark-o db_info_icon_spacing"></i>{display}</span>)
+    return <span title={ct}><AiOutlineBook className="db_info_icon_spacing"/>
+        <span className="db_info">{display}</span></span>
+    //return (<span className="db_info" title={ct} key="xxd"><i key="xxt" className="fa fa-bookmark-o db_info_icon_spacing"></i>{display}</span>)
 }
 
 
@@ -347,11 +356,12 @@ export const DBControlPanel = ({meta, user}) => {
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon) icon = GRAPHDB
     let title = "Database " + meta.id
+    console.log('icon',icon)
     return (
         <Col className='database-left-column'>
             {<Row onClick={goDB}>
-                <AiOutlineDesktop color={"lightgrey"} title={title} size={'10em'}/>
-                {/*<img className='database-listing-icon' src={icon} title={title} />*/}
+                {/*<AiOutlineDesktop color={"lightgrey"} title={title} size={'10em'}/>*/}
+                {<img className='database-listing-icon' src={icon} title={title} />}
             </Row>}
             {/*<Row>
                 <DBControls meta={meta}  user={user}/>
@@ -563,12 +573,12 @@ export const ShareControl = ({meta, user}) => {
 }
 
 export const PushControl = ({meta, user}) => {
-    return <AiOutlineCloudSync title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {
-    return <AiOutlineCloudSync title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
@@ -600,13 +610,9 @@ export const SchemaControl = ({meta, type}) => {
     let tit = (type == "inactive" ? 'Database has no schema' : 'Click to view the database schema')
     //return <FontAwesomeIcon className={css} icon={SCHEMA_ICON} title={tit}/>
     if(type == "inactive"){
-        return <span><AiOutlineDisconnect title={tit} size={"0.8em"} color={"grey"}/>
-            <span className="schema-control-msg">No Schema</span>
-        </span>
+        return <BsBook className="db_info_icon_spacing" title={tit}  size={"1em"} color={"grey"}/>
     }
-    return (<span><AiOutlineCheck title={tit} size={"0.8em"} color={"green"}/>
-        <span className="schema-control-msg">Schema</span>
-    </span>)
+    else return <GiOpenBook title={tit}  className="db_info_icon_spacing" size={"1em"} color={"#00C08B"}/>
 }
 
 export const DocumentsControl = ({meta}) => {
@@ -614,7 +620,8 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
+    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database"/>
+    //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 
 export const TimeControl = ({meta, type}) => {
