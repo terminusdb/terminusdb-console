@@ -16,7 +16,7 @@ import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constan
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiOutlineDesktop,
     AiOutlineCheck, AiOutlineCloudSync, AiOutlineDisconnect, AiOutlineCloudDownload,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
-    AiOutlineGlobal, AiOutlineInbox} from 'react-icons/ai';
+    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches} from 'react-icons/ai';
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
@@ -193,7 +193,9 @@ export const DBCredits = ({meta, user}) => {
 
 export const DBBranches = ({meta, user}) => {
     if(meta.branches && meta.branches.length > 1) {
-        return (<span className="db_info" title={meta.branches.length + " branches"}><i className="fa fa-code-fork db_info_icon_spacing"></i>{meta.branches.length}</span>)
+        return <span title={meta.branches.length + " branches"}><AiOutlineBranches className="db_info_icon_spacing"/>
+            <span className="db_info">{meta.branches.length}</span></span>
+        //return (<span className="db_info" title={meta.branches.length + " branches"}><i className="fa fa-code-fork db_info_icon_spacing"></i>{meta.branches.length}</span>)
     }
     return false
 }
