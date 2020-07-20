@@ -219,8 +219,56 @@ export const ORGANIZATION_FORM = {
     ],
     buttons: {
         submitText: 'Create Organization',
-    },
+    }
+}
 
+export const ADD_COLLABORATORS_FORM = {
+    fields: [{
+            id: "database",
+            value: "",
+            label: "Database",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [],
+                placeholder: "Select Database"
+            },
+        },
+        {
+            id: "permission",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [
+                    {value: "read", label: "Read"}, 
+                    {value: "write", label: "Write"},
+                    {value: "manage", label: "Manage"}
+                ],
+                placeholder: "Select Permission to Grant"
+            },
+            label: 'Permission'
+        },
+        {
+            id: "users",
+            inputElement: {
+                placeholder: "comma seperated list of user ids or email addresses",
+                type: "textarea",
+            },
+            label: 'Collaborator IDs'
+        },
+        {
+            id: "invitation",
+            inputElement: {
+                placeholder: "Introductory note to send to user",
+                type: "textarea",
+            },
+            label: 'Introduction Note'
+        }
+    ],
+    buttons: {
+        submitText: "Add Collaborators",
+    }
 }
 
 export const ADD_USER_FORM = {

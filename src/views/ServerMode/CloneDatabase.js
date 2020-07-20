@@ -51,7 +51,7 @@ export const CloneDatabase = () => {
         if (details.description) src.comment = details.description
         const jwtoken = await getTokenSilently()
         remoteClient.local_auth({type: "jwt", key: jwtoken})
-       
+
         return remoteClient
             .clonedb(src, newid)
             .then(() => {
@@ -82,8 +82,34 @@ export const CloneDatabase = () => {
         })
     }
 
-    let buttons = user ? COPY_REMOTE_FORM.buttons : true
+
+    function onUpdate(key, val) {
+        values[key] = val
+        setValues(values)
+    }
+
+
+    //let buttons = user ? COPY_DB_DETAILS_FORM.buttons.submitText : true
     //let buttons = COPY_REMOTE_FORM.buttons
+    let buttons = COPY_DB_DETAILS_FORM.buttons
+
+    let copy_fields = COPY_DB_DETAILS_FORM.fields.map((item) => {
+        if (item.id == 'sourceId'){
+            let dbs = woqlClient.user_databases();
+            let opts = []
+            dbs.map((item) => {
+                opts.push({value: item.id, label: item.label})
+            })
+            item.inputElement.options = opts
+        }
+        return item
+    })
+
+    let ics = {}
+    copy_fields.map((item) => {
+        ics[item.id] = item.value || ''
+    })
+    const [values, setValues] = useState(ics)
 
     return (
         <>
@@ -98,10 +124,10 @@ export const CloneDatabase = () => {
             )}
             <TCForm
                 onSubmit={onClone}
-                layout={[3, 1]}
-                noCowDucks
-                onChange={onChangeBasics}
-                fields={fields}
+                layout={[2, 1]}
+                onChange={onUpdate}
+                fields={copy_fields}
+                values={values}
                 buttons={buttons}
             />
         </>

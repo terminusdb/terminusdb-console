@@ -62,6 +62,13 @@ export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
 }
 
 
+export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {  
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    return remoteClient.deleteDatabase(meta.remote_record.id, meta.remote_record.organization)
+}
+
 
 /*
 * remote_url 
@@ -110,7 +117,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
             remote_branch: "master",
             message: "publishing db content to hub via console",
         }
-        let using = "/" + client.organization() + "/" + client.db() + "/_meta"
+        let using = client.organization() + "/" + client.db() + "/_meta"
         let q = WOQL.lib().add_remote(using, push_to.remote)       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => client.push(push_to))

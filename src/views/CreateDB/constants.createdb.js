@@ -265,24 +265,50 @@ export const COPY_REMOTE_FORM = {
 
 export const COPY_DB_DETAILS_FORM = {
     fields: [
-        /*{
-            id: "dbid",
-            label: 'Original ID',
-            inputElement: {
-                type: "input",
-                disabled: true
-            }
-        },*/
         {
             id: "copy",
+            value: "TerminusDB",
             label: 'Copy From',
             mandatory: true,
             inputElement: {
                 type: "select",
+                disabled: false,
                 options: [{value: "remote", label: "TerminusDB"}, {value: "local", label: "Local Database"}],
                 placeholder: "TerminusDB"
             }
-        }
+        },
+        {
+            id: "sourceId",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose local database to copy from",
+                options: []
+            },
+            label: 'Source'
+        },
+        {
+            id: "dbId",
+            value: "",
+            label: 'New Database Id',
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter new database Id to clone"
+            }
+        },
+        /*{
+            id: "sourceID",
+            label: 'Source',
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose database URL from which you would want to copy from",
+                options: []
+            }
+        }*/
     ],
     buttons: {
         submitText: "Copy Database"

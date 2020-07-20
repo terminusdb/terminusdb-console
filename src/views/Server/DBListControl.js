@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { CloneDB, ForkDB } from '../../components/Query/CollaborateAPI'
+import { CloneDB, ForkDB, DeleteDB } from '../../components/Query/CollaborateAPI'
 import {DBList, DBSummaryCard} from './DBList'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {useAuth0} from '../../react-auth0-spa'
@@ -15,7 +15,7 @@ import {CreateDatabase} from "../CreateDB/CreateDatabase"
 
 export const DBListControl = ({list, className, user, type, sort, filter}) => {
     if(!list || !user ) return null
-    const { woqlClient,  refreshDBRecord, bffClient } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, refreshDBListing, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()    
     let [special, setSpecial] = useState(false)
     const [listSort, setSort] = useState(sort || "updated")
@@ -68,7 +68,29 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
                 .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
             })
         }
+        else if(db.action == 'delete'){
+            DeleteDB(db, woqlClient, bffClient, getTokenSilently)
+            .then((id) => {
+                setSpecial(false)
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully Removed Database"})
+                removeDeletedRemoteDB(db)
+                refreshDBListing() 
+            })            
+        }
     }
+
+    function removeDeletedRemoteDB(dbrec){
+        let dbs = woqlClient.databases()
+        let ndbs = []
+        for(var i = 0; i<dbs.length; i++){
+            if(!(dbs[i].remote_record && (dbs[i].remote_record.id == dbrec.remote_record.id) && 
+                (dbs[i].remote_record.organization == dbrec.remote_record.organization))){
+                ndbs.push(dbs[i])
+            }
+        }
+        woqlClient.databases(ndbs)
+    }
+
 
     function get_fork_id(nid, client, orgid){
         let add = 0
@@ -107,7 +129,6 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
         else return "You must supply a valid URL"
     }
 
-
     function callSort(nsort){
         setSort(nsort.value)
     }
@@ -115,7 +136,6 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
     function callFilter(nfilt){
         setFilter(nfilt.value)
     }
-
 
     if(!sorted) return null
     return (<>

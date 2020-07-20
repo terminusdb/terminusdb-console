@@ -2,7 +2,7 @@
  * Controller application for metadata update form
  */
 import React, {useState} from 'react'
-import {ADD_COLLABORATORS_FORM} from './constants.dbcollaborate'
+import {ADD_COLLABORATORS_FORM} from './constants.server'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
     ACCESS_FAILURE,
@@ -16,8 +16,8 @@ import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import { DB_DETAILS_FORM } from '../CreateDB/constants.createdb'
 
-export const AddCollaborators = (props) => {
-    const {woqlClient} = WOQLClientObj()
+export const AddCollaborators = ({db, organization, dblist }) => {
+    const {bffClient} = WOQLClientObj()
     const [report, setReport] = useState()
     let values = {
         manage: '',
@@ -28,6 +28,25 @@ export const AddCollaborators = (props) => {
 
     const [loading, setLoading] = useState()
 
+    let nfields = []
+    ADD_COLLABORATORS_FORM.fields.map((item) => {
+        if(item.id == "data base"){
+            item.inputElement.options = getDBOptions()
+        }
+        nfields.push(item)
+    })
+
+    function getDBOptions(){
+        let opts = []
+        for(var i = 0; i<dblist.length; i++){
+            let ent = {
+                value: dblist[i].organization + "/" + dblist[i].id,
+                label: dblist[i].label + " (" + dblist[i].organization + "/" + dblist[i].id + ")"
+            }
+            opts.push(ent)
+        }
+        return opts
+    }
 
     function parseBox(ip) {
         let bits = ip.split(',')
@@ -40,30 +59,13 @@ export const AddCollaborators = (props) => {
     }
 
     function _form_document(deets) {
-        let actions = []
-        let roles = {}
-        if(deets.read){
-            actions.push('system:clone')
-            actions.push('system:fetch')
-            actions.push('system:pull')
-        }
-        if(deets.write){
-            actions.push('system:clone')
-            actions.push('system:push')
-        }
-        if(deets.manage){
-            actions.push('system:manage_capabilities')
-        }
-        
-        roles['@type'] = 'system:Role'
-        roles['system:capability'] = {
-            '@type': 'system:Capability',
-            'system:action': actions,
-            'system:capability_scope': {'@type': 'xsd:string', '@value': woqlClient.db()}
-        }
         let users = parseBox(deets.users)
+        let resource = deets.database
+        let db = resource.split("/")[1]
+        let org = resource.split("/")[0]
+        let invitation = deets.invitation
         if(users.length == 1) users = users[0]
-        let doc = {users: users, roles: roles}
+        let doc = {users: users, database: db, organization: org, invitation: invitation}
         return doc
     }
 
@@ -71,12 +73,7 @@ export const AddCollaborators = (props) => {
         if (deets.users) {
             setLoading(true)
             let udoc = _form_document(deets)
-            let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
-            if(props.client){
-                tClient = props.client
-            }
-            tClient.updateRoles(udoc.users, woqlClient.db(), udoc.roles, woqlClient.organization())
+            bffClient.updateRoles(udoc.users, udoc.db, udoc.organization, udoc.permission)
             .then((result) => {
                 setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created Collaborators'})
             })
@@ -92,15 +89,14 @@ export const AddCollaborators = (props) => {
     }
 
     let buttons = ADD_COLLABORATORS_FORM.buttons
-    buttons.onCancel = props.onCancel
     if (loading) return <Loading />
     return (
         <>
             {report && <TerminusDBSpeaks report={report} />}
             <TCForm
                 onSubmit={createCollaborators}
-                layout={[3, 1]}
-                fields={ADD_COLLABORATORS_FORM.fields}
+                layout={[2, 1, 1]}
+                fields={nfields}
                 values={values}
                 buttons={buttons}
             />

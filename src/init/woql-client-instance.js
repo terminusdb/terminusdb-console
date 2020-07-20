@@ -19,23 +19,23 @@ export const WOQLClientProvider = ({children, params}) => {
     const [contextEnriched, setContextEnriched ] = useState(0)
     const [localEnriched, setLocalEnriched] = useState(false)
     const [remoteEnriched, setRemoteEnriched] = useState(false)
+    const [initComplete, setInitComplete] = useState(false)
     const { user, loading, getTokenSilently } = useAuth0();
     
     //makes the user state (id, email, etc) line up between remote and local user objects
     //this happens before the console is drawn 
     function consolidate_user_state(remote_user){
-        woqlClient.connection.user.logged_in = true
+        woqlClient.connection.user.logging_in = remote_user['http://terminusdb.com/schema/system#agent_name']
         if(woqlClient.connection.author()){
             if(woqlClient.connection.author() != remote_user.email){
                 woqlClient.connection.user.local_author = woqlClient.connection.author()
-                woqlClient.connection.user.remote_id = remote_user['http://terminusdb.com/schema/system#agent_name']
                 woqlClient.connection.user.problem = "mismatch"
                 woqlClient.author(remote_user.email)
             }
         }
         else {
             woqlClient.connection.user.problem = "missing"
-            woqlClient.author(remote_user.email)
+            woqlClient.author(woqlClient.connection.user.logging_in)
         }
     }
 
@@ -166,8 +166,20 @@ export const WOQLClientProvider = ({children, params}) => {
         if(remoteEnriched && localEnriched){
             consolidate_database_views(remoteEnriched)
             setContextEnriched(contextEnriched + 1)
+            setInitComplete(true)
         }
      }, [remoteEnriched, localEnriched])
+
+     useEffect(() => {
+        if(initComplete){
+            consolidate_database_views(remoteEnriched)
+            setContextEnriched(contextEnriched + 1)
+            woqlClient.connection.user.logged_in = woqlClient.connection.user.logging_in  
+            setInitComplete(true)
+        }
+     }, [initComplete])
+
+
 
      useEffect(() => {
         const initWoqlClient = async () => {
@@ -242,6 +254,12 @@ export const WOQLClientProvider = ({children, params}) => {
         //})
     }
 
+    const refreshDBListing = () => {
+        setContextEnriched(contextEnriched + 1)
+    }
+
+
+
     return (
         <WOQLContext.Provider
             value={{
@@ -251,6 +269,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 setKey,
                 bffClient,
                 refreshDBRecord,
+                refreshDBListing, 
                 showLogin,
                 reconnectToServer,
                 remoteClient,

@@ -73,13 +73,13 @@ const ServerHome = (props) => {
         sections.push({id: "mydbs", className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
         tabs.push(<DBListControl key="dbl" type='my' list={myDBs} user={user} />)
     }
-    if(user.logged_in){
+    if(user.logged_in ){
         sections.push({id: "clonedb", className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
         tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} />)
         sections.push({id: "createdb", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
         sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
-        tabs.push(<Collaborators key="collaboratepage" />)
+        tabs.push(<Collaborators key="collaboratepage" user={user} />)
     }
     else {
         sections.push({id: "createpage", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
