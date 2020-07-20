@@ -2733,7 +2733,7 @@ h4.prefix-section-header {
 }
 
 .synchronise-color {
-    color: #00C08B;
+    color: #856404;
 }
 
 
@@ -2817,7 +2817,7 @@ h4.prefix-section-header {
 }
 .database-secondary-option {
     height: 30px;
-
+    float: right;
 }
 
 .database-listing-pull,
