@@ -241,7 +241,7 @@ export const COPY_REMOTE_FORM = {
     sample: {
         dbid: "sales-marketing-01",
         dbname: "Marketing Statistics (imported)",
-        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to master as it is live!"
+        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to main as it is live!"
     },
     fields: [
         {

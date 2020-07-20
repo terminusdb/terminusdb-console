@@ -115,7 +115,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
         let rem = resp.url || meta.remote_url
         let push_to = {
             remote: remote_name,
-            remote_branch: "master",
+            remote_branch: "main",
             message: "publishing db content to hub via console",
         }
         let using = client.organization() + "/" + client.db() + "/_meta"
@@ -137,8 +137,8 @@ export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) =
 * meta has : local_branch / remote_branch / url / commit 
 */
 export const Push = async (meta, client, getTokenSilently) => {  
-    let from_branch = meta.local_branch || 'master'
-    let to_branch = meta.remote_branch || 'master'
+    let from_branch = meta.local_branch || 'main'
+    let to_branch = meta.remote_branch || 'main'
     let commit = meta.commit || "Push Generated from TerminusDB Console"
     let push_to = {
         remote: meta.url,
@@ -161,8 +161,8 @@ export const Push = async (meta, client, getTokenSilently) => {
 * meta has : local_branch / remote_branch / url / commit 
 */
 export const Pull = async (meta, client, getTokenSilently) => {  
-    let to_branch = meta.local_branch || 'master'
-    let from_branch = meta.remote_branch || 'master'
+    let to_branch = meta.local_branch || 'main'
+    let from_branch = meta.remote_branch || 'main'
     let commit = meta.commit || "Pull Generated from TerminusDB Console"
     let pull_from = {
         remote: meta.url,
