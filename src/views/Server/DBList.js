@@ -13,7 +13,10 @@ import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
-
+import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiOutlineDesktop,
+    AiOutlineCheck, AiOutlineCloudSync, AiOutlineDisconnect, AiOutlineCloudDownload,
+    AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
+    AiOutlineGlobal, AiOutlineInbox} from 'react-icons/ai';
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
@@ -102,6 +105,9 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r4'>
                         <DBCredits meta={meta}  user={user} />
                     </Row>
+                    <Row key='rr'>
+                        <DBControls meta={meta}  user={user}/>
+                    </Row>
                     <Row key='r8'>
                         {decr}
                     </Row>
@@ -115,7 +121,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 }
 
 export const DBTitle = ({meta, user, onAction, max}) => {
-    let maxtitle = max || 40
+    let maxtitle = max || 40, author = false
 
     function goDB(){
 
@@ -135,16 +141,25 @@ export const DBTitle = ({meta, user, onAction, max}) => {
         var str =  meta.label.substring(maxtitle -4) + " ..."
     }
     else str = meta.label || ""
+
+    if(meta.remote_record && meta.author){
+        author = meta.author
+    }
+
     return (
-        <Container onClick={goDB} title={title_html} className='database-listing-title-row'>
-            <span key='a' className={title_css + " database-listing-title"}>{str}</span>
-        </Container>
+        <span>
+            <span onClick={goDB} title={title_html} className='database-listing-title-row'>
+                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
+            </span>
+            {author && <span className="author_info">{author}</span>}
+        </span>
+
     )
 }
 
 export const DBCredits = ({meta, user}) => {
     let res = []
-    
+
     if(meta && (meta.created || meta.updated)) {
         res.push(<DBTimings key='dbt' meta={meta} user={user} />)
     }
@@ -187,10 +202,14 @@ export const DBSize = ({meta, user}) => {
     if(meta.size){
         let bytes = formatBytes(meta.size)
         let tit = meta.size + " bytes";
-        return (<span className="db_info" title={tit}><i className="fa fa-anchor db_info_icon_spacing"></i>{bytes}</span>)
+        return <span title={tit}><AiFillBuild className="db_info_icon_spacing"/>
+            <span className="db_info">{bytes}</span></span>
+        //return (<span className="db_info" title={tit}><i className="fa fa-anchor db_info_icon_spacing"></i>{bytes}</span>)
     }
     else {
-        return (<span className="db_info" title="This is an empty database"><i className="fa fa-anchor db_info_icon_spacing"></i>empty</span>)
+        return <span title={"This is an empty database"}><AiOutlineInbox className="db_info_icon_spacing"/>
+            <span className="db_info">empty</span></span>
+        //return (<span className="db_info" title="This is an empty database"><i className="fa fa-anchor db_info_icon_spacing"></i>empty</span>)
     }
 }
 
@@ -205,7 +224,9 @@ export const DBProductionCredits = ({meta, user}) => {
         }
         let txt = (meta.remote_record.organization_label ? meta.remote_record.organization_label  : meta.remote_record.organization)
         let icon = (meta.remote_record.organization_icon ? (<img className="database-listing-organization-icon" src={meta.remote_record.organization_icon}></img>) : "")
-        return (<span className="db_info" title={tit}><i className="fa fa-user-circle-o db_info_icon_spacing"></i> Published by: {icon} {txt}</span>)
+        return <span title={tit}><AiOutlineUser className="db_info_icon_spacing"/>
+            <span className="db_info">Published by: {icon} {txt}</span></span>
+        //return (<span className="db_info" title={tit}><i className="fa fa-user-circle-o db_info_icon_spacing"></i> Published by: {icon} {txt}</span>)
         //return (<Badge color="light" title={tit}>Published by: {icon} {txt}</Badge>)
     }
     return null
@@ -227,11 +248,15 @@ export const DBRoleCredits = ({meta, user}) => {
         }
         if(meta.public || (meta.remote_record && meta.remote_record.public)){
             if(rs.length == 0) rs.push("Public")
-            return (<span className="db_info" title="Public Database"><i className="fa fa-black-tie db_info_icon_spacing"></i> {rs}</span>)
+                return <span><AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
+                    <span className="db_info">{rs}</span></span>
+            //return (<span className="db_info" title="Public Database"><i className="fa fa-black-tie db_info_icon_spacing"></i> {rs}</span>)
             //return (<Badge color="info" title="Public Database">{rs}</Badge>)
         }
         if(rs.length == 0) rs.push("Intruder")
-        return (<span className="db_info" title="Private Database"><i className="fa fa-lock db_info_icon_spacing"></i> {rs}</span>)
+            return <span><AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+                <span className="db_info">{rs}</span></span>
+        //return (<span className="db_info" title="Private Database"><i className="fa fa-lock db_info_icon_spacing"></i> {rs}</span>)
         //return (<Badge color="warning" title="Private Database">{rs}</Badge>)
     }
     return null
@@ -251,27 +276,27 @@ export const DBDescription = ({meta, user}) => {
 
 export const DBTimings = ({meta, user}) => {
     let parts = []
-    
+
     function updateStamp(ts, author_game){
         let lab = moment(ts*1000).startOf('hour').fromNow()
-        if(author_game && meta.remote_record && meta.author){
+        /*if(author_game && meta.remote_record && meta.author){
             lab += " (" + meta.author + ")"
-        }
+        }*/
         return lab
     }
 
     if(meta.created && meta.updated && (meta.created == meta.updated)){
         let cts = updateStamp(meta.created, true)
-        parts.push(<DBCreated key='xss' display={cts} ts={meta.created} author={meta.author}/>) 
+        parts.push(<DBCreated key='xss' display={cts} ts={meta.created} author={meta.author}/>)
     }
     else {
         if(meta.created){
             let cats = updateStamp(meta.created, !meta.updated)
-            parts.push(<DBCreated key='ds' display={cats} ts={meta.created} />) 
+            parts.push(<DBCreated key='ds' display={cats} ts={meta.created} />)
         }
         if(meta.updated){
             let uts = updateStamp(meta.updated, true)
-            parts.push(<DBUpdated key='dbu' display={uts} ts={meta.updated} author={meta.author}/>) 
+            parts.push(<DBUpdated key='dbu' display={uts} ts={meta.updated} author={meta.author}/>)
         }
     }
     return parts
@@ -280,7 +305,9 @@ export const DBTimings = ({meta, user}) => {
 export const DBCreated = ({display, ts, author}) => {
     let ct = "Created at " + printts(ts, DATETIME_COMPLETE)
     if(author) ct += " by " + author
-    return (<span className="db_info" title={ct} key={ts + "_x"} ><i key={ts + "_i"} className="fa fa-circle-o db_created_icon"></i>{display}</span>)
+    return <span title={ct}><AiFillInfoCircle className="db_info_icon_spacing"/>
+        <span className="db_info">{display}</span></span>
+    //return (<span className="db_info" title={ct} key={ts + "_x"} ><i key={ts + "_i"} className="fa fa-circle-o db_created_icon"></i>{display}</span>)
 }
 
 export const DBUpdated = ({display, ts, author}) => {
@@ -321,11 +348,12 @@ export const DBControlPanel = ({meta, user}) => {
     return (
         <Col className='database-left-column'>
             {<Row onClick={goDB}>
-                <img className='database-listing-icon' src={icon} title={title} />
+                <AiOutlineDesktop color={"lightgrey"} title={title} size={'10em'}/>
+                {/*<img className='database-listing-icon' src={icon} title={title} />*/}
             </Row>}
-            <Row>
+            {/*<Row>
                 <DBControls meta={meta}  user={user}/>
-            </Row>
+            </Row>*/}
         </Col>
     )
 }
@@ -359,17 +387,17 @@ export const DBControls = ({meta, user}) => {
     }
     if(!meta.id) return null
     return (
-        <Container className='database-controls'>
+        <Container className='database-controls database-listing-title-row'>
             <Row className='major-database-controls'>
-                <Col className='time-control' onClick={function(){if(show_tt) goToPage('commits')}}>
+                {/*<Col className='time-control' onClick={function(){if(show_tt) goToPage('commits')}}>
                     {controls[0]}
-                </Col>
+                </Col>*/}
                 <Col className='schema-control' onClick={function(){if(show_schema) goToPage('schema')}}>
                     {controls[2]}
                 </Col>
-                <Col className='query-control' onClick={function(){if(show_q) goToPage('query')}}>
+               {/* <Col className='query-control' onClick={function(){if(show_q) goToPage('query')}}>
                     {controls[1]}
-                </Col>
+                </Col>*/}
             </Row>
         </Container>
     )
@@ -392,16 +420,47 @@ export const DBStatus = ({meta, user, onAction}) => {
 }
 
 export const RemoteUpdated = ({meta, user}) => {
-    let act = meta.action
-    if(act == 'share') act = "upload to hub"
+    let act = meta.action, css = "database-main-action-message";
+    switch(act){
+        case 'share':
+            act = "upload to hub"
+            css = css + " share-color"
+            break;
+        case 'synchronise':
+            if(meta.structure_mismatch || meta.ahead || meta.behind){
+                act = "needs synchronise"
+                css = css + " synchronise-color"
+            }
+            else{
+                act = "synchronised"
+                css = css + " synchronised-color"
+            }
+            break;
+        case 'clone':
+            css = css+ " clone-color"
+            break;
+        default:
+            act = "Cloned"
+            css = css+ " cloned-color"
+            break;
+
+    }
+    /*if(act == 'share'){
+        act = "upload to hub"
+        css = css + " share-control"
+    }
     if(act == 'synchronise') {
         if(meta.structure_mismatch || meta.ahead || meta.behind){
             act = "needs synchronise"
+            css = css + " synchronise-control"
         }
-        else act = "synchronised"
-    }
+        else{
+            act = "synchronised"
+            css = css + " synchronised-control"
+        }
+    }*/
     if(act){
-        return (<span>{act}</span>)
+        return (<span className={css}>{act}</span>)
     }
     return null
 }
@@ -428,7 +487,7 @@ export const DBMainAction = ({meta, user}) => {
 }
 
 export const DBSecondaryAction = ({meta, user, onAction}) => {
-    
+
     function userCanDelete(meta, user){
         if(meta.remote_record && meta.remote_record.organization_roles){
             let roles = meta.remote_record.organization_roles
@@ -497,23 +556,28 @@ function describe_unsynch(meta){
 }
 
 export const ShareControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
+    return <AiOutlineCloudUpload color="#0055bb " title="Save this database to your hub account"/>
+    //return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
 }
 
 export const PushControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
+    return <AiOutlineCloudSync title={describe_unsynch(meta)}/>
+    //return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
+    return <AiOutlineCloudSync title={describe_unsynch(meta)}/>
+    //return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const CloneControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
+    //return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
+    return <AiOutlineCloudDownload color={"#4984c9"} title="Clone this database now"/>
 }
 
 export const ClonedControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
+    //return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
+    return <AiOutlineBlock color={"#d1ecf1"} title={'Cloned from: ' + meta.remote_url}/>
 }
 
 export const ForkControl = ({meta, user}) => {
@@ -525,13 +589,22 @@ export const NoCanControl = ({meta, user}) => {
 }
 
 export const AllGoodControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
+    //return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
+    return <AiOutlineCheckCircle color={"#00C08B"} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
 }
 
 export const SchemaControl = ({meta, type}) => {
     let css = (type == "inactive" ? 'database-inactive-action' : 'database-action database-listing-schema')
     let tit = (type == "inactive" ? 'Database has no schema' : 'Click to view the database schema')
-    return <FontAwesomeIcon className={css} icon={SCHEMA_ICON} title={tit}/>
+    //return <FontAwesomeIcon className={css} icon={SCHEMA_ICON} title={tit}/>
+    if(type == "inactive"){
+        return <span><AiOutlineDisconnect title={tit} size={"0.8em"} color={"grey"}/>
+            <span className="schema-control-msg">No Schema</span>
+        </span>
+    }
+    return (<span><AiOutlineCheck title={tit} size={"0.8em"} color={"green"}/>
+        <span className="schema-control-msg">Schema</span>
+    </span>)
 }
 
 export const DocumentsControl = ({meta}) => {
