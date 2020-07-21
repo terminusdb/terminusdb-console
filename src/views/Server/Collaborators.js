@@ -22,26 +22,25 @@ export const Collaborators = ({}) => {
     const [dbFilter, setDBFilter] = useState("")
     const [collabAction, setCollabAction] = useState("my")
     const allDBs = bffClient.databases()
+    if(allDBs.length == 0) return null
     const [dbs, setDBList] = useState(allDBs)
     const [subscreen, setSubscreen] = useState()
 
 
     function createOrg(doc) {
         //should really come from form
-        /*let d = {
+        let d = {
             organization_name: "xxx23",
-            organization_database: [],
-            organization_child: []
         }
-        woqlClient.createOrganization("xxx23", d)*/
-        doc.status = "active"
+        return woqlClient.createOrganization("xxx23", d)
+        /*doc.status = "active"
         doc.create = true
         UpdateOrganization(doc, bffClient, getTokenSilently)
         .then((bla) => {
             alert(JSON.stringify(bla))
         })
         .catch((err) => console.log(err))
-        .finally(() => setLoading(false))            
+        .finally(() => setLoading(false))*/            
     }
     
     function callOrgFilter(f){

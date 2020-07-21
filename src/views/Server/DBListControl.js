@@ -13,7 +13,7 @@ import {Row, Col} from "reactstrap"
 import {CreateDatabase} from "../CreateDB/CreateDatabase"
 
 
-export const DBListControl = ({list, className, user, type, sort, filter}) => {
+export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
     if(!list || !user ) return null
     const { woqlClient,  refreshDBRecord, refreshDBListing, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()    
@@ -22,12 +22,24 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
 
+
     useEffect(() => {
         if(listSort){
             let filt = _filter_list(list, listFilter)
             setSorted(_sort_list(filt, listSort))
         }
     }, [listSort, listFilter])
+
+    useEffect(() => {
+        let filt = _filter_list(list, listFilter)
+        if(listSort){
+            setSorted(_sort_list(filt, listSort))
+        }
+        else {
+            setSorted(list)
+        }
+    }, [list])
+
 
     let message = ""
     if(type == 'clone'){
@@ -39,8 +51,8 @@ export const DBListControl = ({list, className, user, type, sort, filter}) => {
     let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     
     function setAction(db){
-        if(db.action == 'synchronise'){
-            goDBPage(db.id, woqlClient.user_organization(), "synchronise")
+        if(db.action == 'synchronize'){
+            goDBPage(db.id, woqlClient.user_organization(), "synchronize")
         }
         if(db.action == 'share'){
             setSpecial({action:db.action, meta: db})

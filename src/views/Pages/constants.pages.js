@@ -64,7 +64,7 @@ export const GRAPHS_LOAD_ERROR = {
 
 /* database home tabs */
 export const DETAILS_TAB = 'Monitor'
-export const SYNCHRONISE_TAB = 'Synchronise'
+export const SYNCHRONISE_TAB = 'Synchronize'
 export const MANAGE_TAB = 'Manage'
 
 /* schema tabs */

@@ -30,7 +30,7 @@ export const AddCollaborators = ({db, organization, dblist }) => {
 
     let nfields = []
     ADD_COLLABORATORS_FORM.fields.map((item) => {
-        if(item.id == "data base"){
+        if(item.id == "database"){
             item.inputElement.options = getDBOptions()
         }
         nfields.push(item)
@@ -65,7 +65,7 @@ export const AddCollaborators = ({db, organization, dblist }) => {
         let org = resource.split("/")[0]
         let invitation = deets.invitation
         if(users.length == 1) users = users[0]
-        let doc = {users: users, database: db, organization: org, invitation: invitation}
+        let doc = {agent_names: users, database_name: db, organization_name: org, actions: [deets.permission], invitation: invitation}
         return doc
     }
 
@@ -73,7 +73,7 @@ export const AddCollaborators = ({db, organization, dblist }) => {
         if (deets.users) {
             setLoading(true)
             let udoc = _form_document(deets)
-            bffClient.updateRoles(udoc.users, udoc.db, udoc.organization, udoc.permission)
+            bffClient.updateRoles(udoc)
             .then((result) => {
                 setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created Collaborators'})
             })

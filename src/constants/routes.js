@@ -24,4 +24,5 @@ export const SCHEMA_CLASSES_ROUTE = '/'
 
 //sub routes of db home
 export const DB_MANAGE = '/manage'
-export const DB_SYNCHRONISE = '/synchronise'
+export const DB_SYNCHRONISE = '/synchronize'
+   
