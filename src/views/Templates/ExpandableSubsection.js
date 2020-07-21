@@ -4,6 +4,7 @@ import { RIVER_OF_SECTIONS, SUMMARY_SECTION, SECTION_HEADER } from "./constants.
 import { CHECK } from "../../constants/faicons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+
 export const ExpandableSubsection = ({section, index, active, onClose, onOpen, children}) => {
 
     function openSubsection(){

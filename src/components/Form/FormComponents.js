@@ -13,10 +13,7 @@ import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
 import {APIUpdateReport} from '../Reports/APIUpdateReport'
 import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
-import '@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.react.css';
-import '@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
-
 
 export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children, noCowDucks}) => {
 
@@ -334,7 +331,9 @@ export const TCFormIcon = ({field_id, value, disabled, onChange, placeholder, cl
     return <FontIconPicker icons={ICONS_PICKER}
         onChange={value => vchange(value)}
 		appendTo="body"
+        showSearch={true}
         closeOnSelect={true}
+        renderUsing='class'
 		value={val}
     />
 }

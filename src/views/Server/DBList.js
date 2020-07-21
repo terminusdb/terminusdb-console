@@ -18,7 +18,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
-import { GiOpenBook } from 'react-icons/gi';
+import { GiMeshBall } from 'react-icons/gi';
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
@@ -242,7 +242,7 @@ export const DBProductionCredits = ({meta, user}) => {
                 <AiOutlineUser className="db_info_icon_spacing"/>
                 <span className="db_info">Publisher: {icon} {txt}</span>
             </span>
-        )      
+        )
     }
     return null
 }
@@ -268,7 +268,7 @@ export const DBRoleCredits = ({meta, user}) => {
                     <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
                     <span className="db_info">{rs}</span>
                 </span>
-            )           
+            )
         }
         if(rs.length == 0) rs.push("No Access")
         return (
@@ -444,7 +444,7 @@ export const DBControls = ({meta, user}) => {
 
 export const DBStatus = ({meta, user, onAction}) => {
     return (
-        <Col className='database-action-column'>
+        <div className='database-action-column'>
             <Row className='database-update-status'>
                 <RemoteUpdated meta={meta}  user={user}/>
             </Row>
@@ -454,7 +454,7 @@ export const DBStatus = ({meta, user, onAction}) => {
             <Row className='database-secondary-option'>
                 <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
             </Row>
-        </Col>
+        </div>
     )
 }
 
@@ -634,12 +634,12 @@ export const AllGoodControl = ({meta, user}) => {
 
 export const SchemaControl = ({meta, type}) => {
     let css = (type == "inactive" ? 'database-inactive-action' : 'database-action database-listing-schema')
-    let tit = (type == "inactive" ? 'Database has no schema' : 'Click to view the database schema')
+    let tit = (type == "inactive" ? 'Database has no schema' : 'Database has schema')
     //return <FontAwesomeIcon className={css} icon={SCHEMA_ICON} title={tit}/>
     if(type == "inactive"){
         return <BsBook className="db_info_icon_spacing" title={tit}  size={"1em"} color={"grey"}/>
     }
-    else return <GiOpenBook title={tit}  className="db_info_icon_spacing" size={"1em"} color={"#00C08B"}/>
+    else return <GiMeshBall title={tit}  className="db_info_icon_spacing" size={"1em"} />
 }
 
 export const DocumentsControl = ({meta}) => {
