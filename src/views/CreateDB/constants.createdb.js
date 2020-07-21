@@ -124,7 +124,6 @@ export const DB_DETAILS_FORM = {
         {
             id: "sharing",
             label: 'Sharing',
-            mandatory: true,
             inputElement: {
                 type: "select",
                 options: [{value: "public", label: "Public"}, {value: "private", label: "Private"}, {value: "local", label: "Local Only - No Sharing"}],

@@ -35,7 +35,7 @@ export const WOQLClientProvider = ({children, params}) => {
         }
         else {
             woqlClient.connection.user.problem = "missing"
-            woqlClient.author(woqlClient.connection.user.logging_in)
+            woqlClient.author(remote_user.email)
         }
     }
 

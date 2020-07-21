@@ -37,7 +37,7 @@ export const CreateDatabase = ({from_local}) => {
                 return false;
             }
             else {
-                if(doc.sharing == 'public') doc.public = true
+                if(doc.sharing == 'public' || doc.sharing == "") doc.public = true
                 delete(doc['sharing'])
                 setLoading(true)
                 if(from_local) return shareLocal(doc, from_local, update_start)

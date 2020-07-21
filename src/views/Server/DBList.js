@@ -151,7 +151,7 @@ export const DBTitle = ({meta, user, onAction, max}) => {
             <span onClick={goDB} title={title_html} className='database-listing-title-row'>
                 <span key='a' className={title_css + " database-listing-title"}>{str}</span>
             </span>
-            {author && <span className="author_info">{author}</span>}
+            {false && <span className="author_info">{author}</span>}
         </span>
 
     )
@@ -196,9 +196,12 @@ export const DBCredits = ({meta, user}) => {
 
 export const DBBranches = ({meta, user}) => {
     if(meta.branches && meta.branches.length > 1) {
-        return <span title={meta.branches.length + " branches"}><AiOutlineBranches className="db_info_icon_spacing"/>
-            <span className="db_info">{meta.branches.length}</span></span>
-        //return (<span className="db_info" title={meta.branches.length + " branches"}><i className="fa fa-code-fork db_info_icon_spacing"></i>{meta.branches.length}</span>)
+        return (
+            <span title={meta.branches.length + " branches"}>
+                <AiOutlineBranches className="db_info_icon_spacing"/>
+                <span className="db_info">{meta.branches.length}</span>
+            </span>
+        )
     }
     return false
 }
@@ -207,14 +210,20 @@ export const DBSize = ({meta, user}) => {
     if(meta.size){
         let bytes = formatBytes(meta.size)
         let tit = meta.size + " bytes";
-        return <span title={tit}><AiFillBuild className="db_info_icon_spacing"/>
-            <span className="db_info">{bytes}</span></span>
-        //return (<span className="db_info" title={tit}><i className="fa fa-anchor db_info_icon_spacing"></i>{bytes}</span>)
+        return (
+            <span title={tit}>
+                <AiFillBuild className="db_info_icon_spacing"/>
+                <span className="db_info">{bytes}</span>
+            </span>
+        )
     }
     else {
-        return <span title={"This is an empty database"}><AiOutlineInbox className="db_info_icon_spacing"/>
-            <span className="db_info">empty</span></span>
-        //return (<span className="db_info" title="This is an empty database"><i className="fa fa-anchor db_info_icon_spacing"></i>empty</span>)
+        return (
+            <span title={"This is an empty database"}>
+                <AiOutlineInbox className="db_info_icon_spacing"/>
+                <span className="db_info">empty</span>
+            </span>
+        )
     }
 }
 
@@ -229,10 +238,12 @@ export const DBProductionCredits = ({meta, user}) => {
         }
         let txt = (meta.remote_record.organization_label ? meta.remote_record.organization_label  : meta.remote_record.organization)
         let icon = (meta.remote_record.organization_icon ? (<img className="database-listing-organization-icon" src={meta.remote_record.organization_icon}></img>) : "")
-        return <span title={tit}><AiOutlineUser className="db_info_icon_spacing"/>
-            <span className="db_info">Published by: {icon} {txt}</span></span>
-        //return (<span className="db_info" title={tit}><i className="fa fa-user-circle-o db_info_icon_spacing"></i> Published by: {icon} {txt}</span>)
-        //return (<Badge color="light" title={tit}>Published by: {icon} {txt}</Badge>)
+        return (
+            <span title={tit}>
+                <AiOutlineUser className="db_info_icon_spacing"/>
+                <span className="db_info">Publisher: {icon} {txt}</span>
+            </span>
+        )      
     }
     return null
 }
@@ -253,16 +264,20 @@ export const DBRoleCredits = ({meta, user}) => {
         }
         if(meta.public || (meta.remote_record && meta.remote_record.public)){
             if(rs.length == 0) rs.push("Public")
-                return <span><AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
-                    <span className="db_info">{rs}</span></span>
-            //return (<span className="db_info" title="Public Database"><i className="fa fa-black-tie db_info_icon_spacing"></i> {rs}</span>)
-            //return (<Badge color="info" title="Public Database">{rs}</Badge>)
+            return (
+                <span>
+                    <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
+                    <span className="db_info">{rs}</span>
+                </span>
+            )           
         }
-        if(rs.length == 0) rs.push("Intruder")
-            return <span><AiFillLock title="Private Database" className="db_info_icon_spacing"/>
-                <span className="db_info">{rs}</span></span>
-        //return (<span className="db_info" title="Private Database"><i className="fa fa-lock db_info_icon_spacing"></i> {rs}</span>)
-        //return (<Badge color="warning" title="Private Database">{rs}</Badge>)
+        if(rs.length == 0) rs.push("No Access")
+        return (
+            <span>
+                <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+                <span className="db_info">{rs}</span>
+            </span>
+        )
     }
     return null
 }
@@ -288,9 +303,9 @@ export const DBTimings = ({meta, user}) => {
 
     function updateStamp(ts, author_game){
         let lab = moment(ts*1000).startOf('hour').fromNow()
-        /*if(author_game && meta.remote_record && meta.author){
+        if(author_game && meta.remote_record && meta.author){
             lab += " (" + meta.author + ")"
-        }*/
+        }
         return lab
     }
 
@@ -314,17 +329,23 @@ export const DBTimings = ({meta, user}) => {
 export const DBCreated = ({display, ts, author}) => {
     let ct = "Created at " + printts(ts, DATETIME_COMPLETE)
     if(author) ct += " by " + author
-    return <span title={ct}><AiFillInfoCircle className="db_info_icon_spacing"/>
-        <span className="db_info">{display}</span></span>
-    //return (<span className="db_info" title={ct} key={ts + "_x"} ><i key={ts + "_i"} className="fa fa-circle-o db_created_icon"></i>{display}</span>)
+    return (
+        <span title={ct}>
+            <AiFillInfoCircle className="db_info_icon_spacing"/>
+            <span className="db_info">{display}</span>
+        </span>
+    )
 }
 
 export const DBUpdated = ({display, ts, author}) => {
     let ct = "Updated at " + printts(ts, DATETIME_COMPLETE)
     if(author) ct += " by " + author
-    return <span title={ct}><AiOutlineBook className="db_info_icon_spacing"/>
-        <span className="db_info">{display}</span></span>
-    //return (<span className="db_info" title={ct} key="xxd"><i key="xxt" className="fa fa-bookmark-o db_info_icon_spacing"></i>{display}</span>)
+    return (
+        <span title={ct}>
+            <AiOutlineBook className="db_info_icon_spacing"/>
+            <span className="db_info">{display}</span>
+        </span>
+    )
 }
 
 
@@ -447,11 +468,11 @@ export const RemoteUpdated = ({meta, user}) => {
             break;
         case 'synchronise':
             if(meta.structure_mismatch || meta.ahead || meta.behind){
-                act = "needs synchronise"
+                act = "needs synchronize"
                 css = css + " synchronise-color"
             }
             else{
-                act = "synchronised"
+                act = "synchronized"
                 css = css + " synchronised-color"
             }
             break;

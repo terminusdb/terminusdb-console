@@ -64,7 +64,7 @@ export const GRAPHS_LOAD_ERROR = {
 
 /* database home tabs */
 export const DETAILS_TAB = 'Monitor'
-export const SYNCHRONISE_TAB = 'Synchronise'
+export const SYNCHRONISE_TAB = 'Synchronize'
 export const MANAGE_TAB = 'Manage'
 
 /* schema tabs */
@@ -123,9 +123,9 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
-    remote_url: "https://hub-dev-server.dcm.ist/kevin/poli",
+    remote_url: "https://hub-dev-server.dcm.ist/kevin/pol",
     remote_record: {
-        id: 'poli',
+        id: 'pol',
         organization: 'kevin',
         label: "TerminusDB Politicians Tutorial",
         organization_type: "Terminators",
