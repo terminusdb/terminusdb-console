@@ -13,7 +13,7 @@ import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
-import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiOutlineDesktop,
+import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineCloudSync, AiOutlineCloudDownload,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
@@ -367,25 +367,32 @@ export const DBContributionCredits = ({meta, user}) => {
 
 
 export const DBControlPanel = ({meta, user}) => {
-
+    const [isImage, setImage] = useState(false);
+    const [isIcon, setIcon] = useState(false);
+    let disp = []
     function goDB(){
         if(meta.id) goDBHome(meta.id, meta.organization)
     }
 
     let icon = meta.icon
+
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon) icon = GRAPHDB
     let title = "Database " + meta.id
-    console.log('icon',icon)
+
+    if(icon){
+        var imageExtensions = ["jpg", "jpeg", "bmp", "gif", "png"];
+        const [extension, ...nameParts] = icon.split('.').reverse();
+        if(imageExtensions.includes(extension))
+            disp.push(<img className='database-listing-image' src={icon} title={title} />)
+        else disp.push(<i className={'database-listing-icon ' + icon} title={title}/>)
+    }
+
     return (
         <Col className='database-left-column'>
             {<Row onClick={goDB}>
-                {/*<AiOutlineDesktop color={"lightgrey"} title={title} size={'10em'}/>*/}
-                {<img className='database-listing-icon' src={icon} title={title} />}
+                {disp}
             </Row>}
-            {/*<Row>
-                <DBControls meta={meta}  user={user}/>
-            </Row>*/}
         </Col>
     )
 }

@@ -22,7 +22,7 @@ export const CreateDatabase = ({from_local}) => {
     let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
-    let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO 
+    let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO
     if(from_local) message = "Share your local databases on terminus hub"
     const [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     /**
@@ -55,35 +55,35 @@ export const CreateDatabase = ({from_local}) => {
             after_create_db(update_start, get_remote_create_message(doc.label, doc.id), local_id, "create", doc)
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
-        .finally(() => setLoading(false))            
+        .finally(() => setLoading(false))
     }
 
     async function shareLocal(doc, local, update_start) {
         //should really come from form
-        doc.organization = bffClient.user_organization()    
-        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id   
+        doc.organization = bffClient.user_organization()
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
         let sclient = woqlClient.copy()
         sclient.organization(local.organization)
-        sclient.db(local.id)  
+        sclient.db(local.id)
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
-            after_create_db(update_start, get_local_create_message(doc.label, local.id), local.id, "share", doc)                    
+            after_create_db(update_start, get_local_create_message(doc.label, local.id), local.id, "share", doc)
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, local.id)))
-        .finally(() => setLoading(false))            
+        .finally(() => setLoading(false))
     }
 
 
     async function createRemote(doc, update_start) {
         //should really come from form
-        doc.organization = bffClient.user_organization()    
-        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id     
+        doc.organization = bffClient.user_organization()
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
         CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
         .then((local_id) => {
-            after_create_db(update_start, get_local_create_message(doc.label, local_id), local_id, "clone", doc)                    
+            after_create_db(update_start, get_local_create_message(doc.label, local_id), local_id, "clone", doc)
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
-        .finally(() => setLoading(false))            
+        .finally(() => setLoading(false))
     }
 
     function after_create_db(update_start, message, id, create_or_clone, remote_record){
@@ -99,7 +99,7 @@ export const CreateDatabase = ({from_local}) => {
         }
         else {
             refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
-            .then(() => goDBHome(id, woqlClient.user_organization(), report))         
+            .then(() => goDBHome(id, woqlClient.user_organization(), report))
         }
     }
 
@@ -116,7 +116,7 @@ export const CreateDatabase = ({from_local}) => {
     }
 
     function clone_remote_failure(label, id){
-        return `${CREATE_DB_FORM.cloneRemoteFailureMessage} ${label}, (id: ${id}) ` 
+        return `${CREATE_DB_FORM.cloneRemoteFailureMessage} ${label}, (id: ${id}) `
     }
 
     function create_remote_failure(label, id){
@@ -134,7 +134,7 @@ export const CreateDatabase = ({from_local}) => {
     
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     return (
-        <>           
+        <>
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
