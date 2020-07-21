@@ -39,7 +39,7 @@ export const MonitorDB = (props) => {
         if (vals) q.and(vals)
         latest_woql = WOQL.limit(LATEST_UPDATES_LENGTH)
             .select('v:Time', 'v:Author', 'v:Message')
-            .order_by('v:Time', q)
+            .order_by('v:Time desc', q)
         woqlClient.query(latest_woql).then((result) => {
             if (result.bindings) setLatest(result.bindings)
         })
