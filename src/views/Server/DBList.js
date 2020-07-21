@@ -14,7 +14,7 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
@@ -621,7 +621,8 @@ export const ClonedControl = ({meta, user}) => {
 }
 
 export const ForkControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
+    return <AiOutlineFork  color={"#0055bb"} title={'Fork: ' + meta.remote_url}/>
+    //return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
 }
 
 export const NoCanControl = ({meta, user}) => {
