@@ -2719,7 +2719,7 @@ h4.prefix-section-header {
 .database-main-action-message {
     font-style: oblique;
     font-size: inherit;
-    margin: auto;
+    /*margin: auto;*/
     padding: 10px;
 }
 
