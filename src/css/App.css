@@ -2646,10 +2646,16 @@ h4.prefix-section-header {
     display: inline-block;
 }
 
-.database-listing-icon {
+.database-listing-image {
     height: 120px;
     text-align: center;
     margin: 8px auto;
+}
+
+.database-listing-icon{
+    text-align: center;
+    font-size: 70px;
+    margin: 35px 60px 0px 60px;
 }
 
 .database-controls {
