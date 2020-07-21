@@ -1,5 +1,5 @@
 /**
- * These are date time format patterns that are sent to format 
+ * These are date time format patterns that are sent to format
  * function of date-fns package, to assist common date formats
  * used throughout the console
  */
@@ -19,9 +19,9 @@ export const DATETIME_HHMM = "hh:mm"
 export const DATETIME_HH_DD = "haaaaa'm' d/M"
 export const DATETIME_SS = "ss \s"
 export const DATETIME_SSS = "sss \s"
+export const DATE_REGULAR = "yyyy-MM-dd"
 
 export const printts = (ts, f) => {
     f = f || DATETIME_REGULAR
     return format(new Date(ts * 1000), f)
 }
-

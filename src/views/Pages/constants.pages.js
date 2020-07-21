@@ -64,7 +64,7 @@ export const GRAPHS_LOAD_ERROR = {
 
 /* database home tabs */
 export const DETAILS_TAB = 'Monitor'
-export const SYNCHRONISE_TAB = 'Synchronise'
+export const SYNCHRONISE_TAB = 'Synchronize'
 export const MANAGE_TAB = 'Manage'
 
 /* schema tabs */
@@ -101,15 +101,14 @@ export const CLONEDBS = [{
     organization: "terminators",
     label: "TerminusDB Bike Tutorial",
     comment: "This is a web-hosted version of the bike tutorial which is commonly used as our first introduction to knowledge graphs. This is a version of the tutorial pre-loaded into TerminusDB that you can clone to your own database and  ",
-    updated: Date.now(),
     size: 20000,
     public: true,
     testing: true,
     icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
-    remote_url: "https://hub-dev-server.dcm.ist/og/bikes",
+    remote_url: "https://hub-dev-server.dcm.ist/kevin/bikes",
     remote_record: {
         id: 'bikes',
-        organization: 'og',
+        organization: 'kevin',
         label: "TerminusDB Bike Tutorial",
         organization_type: "Terminators",
         organization_label: "TerminusDB Tutorials",
@@ -124,10 +123,10 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
-    remote_url: "https://hub-dev-server.dcm.ist/og/politicians",
+    remote_url: "https://hub-dev-server.dcm.ist/kevin/pol",
     remote_record: {
-        id: 'politicians',
-        organization: 'og',
+        id: 'pol',
+        organization: 'kevin',
         label: "TerminusDB Politicians Tutorial",
         organization_type: "Terminators",
         organization_label: "TerminusDB Politicians Tutorials",

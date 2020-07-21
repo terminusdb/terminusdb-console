@@ -29,6 +29,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
             detfields.push(item)
         }
     })
+
     DB_ADVANCED_FORM.fields.map((item) => {
         advancedInfo[item.id] = item.value || ''
     })

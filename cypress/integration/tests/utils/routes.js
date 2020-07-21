@@ -3,19 +3,19 @@ export const createDb = (dbId) => {
 }
 
 export const createGraph = (dbId, bid) => {
-	if(!bid) bid = 'master'
+	if(!bid) bid = 'main'
 	return `**/graph/admin/${dbId}/local/branch/${bid}/schema/main`
 }
 
 
 export const triplesGraph = (dbId, bid) => {
-	if(!bid) bid = 'master'
+	if(!bid) bid = 'main'
 	return `**/triples/admin/${dbId}/local/branch/${bid}/schema/main`
 }
 
 
 export const  woqlQuery = (dbId, bid) => {
-	if(!bid) bid = 'master'
+	if(!bid) bid = 'main'
 	return `**/woql/admin/${dbId}/local/branch/${bid}`
 }
 

@@ -16,7 +16,7 @@ import {CreateDatabase} from '../CreateDB/CreateDatabase'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {ConsoleTutorials} from '../Server/ConsoleTutorials'
 import {DBListControl} from "../Server/DBListControl"
-//import {Collaborators} from "../Server/Collaborators"
+import {Collaborators} from "../Server/Collaborators"
 
 /**
  * Server home is the launch screen to the local experience
@@ -41,11 +41,14 @@ const ServerHome = (props) => {
 
     const { woqlClient, contextEnriched } = WOQLClientObj()
 
-    let showlist = woqlClient.user_databases().length
+    let showlist = woqlClient.databases().length || false
 
     useEffect(() => {
         if(woqlClient){
-            setMyDBs(woqlClient.databases())
+            let mdbs = []
+            mdbs = woqlClient.databases().map((item) => item)
+            setMyDBs(mdbs)
+            showlist = mdbs.length || false
         }
     }, [woqlClient, contextEnriched])
 
@@ -71,15 +74,15 @@ const ServerHome = (props) => {
     let hasTutorials = false;//user.logged_in
     if (showlist) {
         sections.push({id: "mydbs", className: DBLIST_HEADER_CSS, label: DBLIST_TITLE})
-        tabs.push(<DBListControl key="dbl" type='my' list={myDBs} user={user} />)
+        tabs.push(<DBListControl key="dbl" type='my' list={myDBs} user={user} count={myDBs.length} />)
     }
-    if(user.logged_in){
+    if(user.logged_in ){
         sections.push({id: "clonedb", className: DBLIST_HEADER_CSS, label: CLONEDB_TITLE})
-        tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} />)
+        tabs.push(<DBListControl key="dbl2" list={CLONEDBS} type='clone' user={user} count={CLONEDBS.length}/>)
         sections.push({id: "createdb", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})
         tabs.push(<CreateDatabase key="createpage" />)
-      // sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
-       // tabs.push(<Collaborate key="collaboratepage" />)
+        sections.push({id: "collaborate", className: DBLIST_HEADER_CSS, label: COLLABORATE_TITLE})
+        tabs.push(<Collaborators key="collaboratepage" user={user} />)
     }
     else {
         sections.push({id: "createpage", className: DBLIST_HEADER_CSS, label: CREATEDB_TITLE})

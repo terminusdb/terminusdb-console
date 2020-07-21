@@ -80,7 +80,6 @@ export const BRANCH_SOURCE_FORM = {
         {
             id: "branch",
             inputElement: {
-                disabled: true,
                 type: "input",
             },
             label: 'Branch',

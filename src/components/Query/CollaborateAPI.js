@@ -62,6 +62,13 @@ export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
 }
 
 
+export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {  
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    return remoteClient.deleteDatabase(meta.remote_record.id, meta.remote_record.organization)
+}
+
 
 /*
 * remote_url 
@@ -97,39 +104,41 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
 
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
+    let remote_name = "origin"
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
-    //client.set_system_db()
     if(meta.schema) delete meta['schema']
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => { 
         let rem = resp.url || meta.remote_url
         let push_to = {
-            remote: rem,
-            remote_branch: "master",
+            remote: remote_name,
+            remote_branch: "main",
             message: "publishing db content to hub via console",
-        }       
-        let q = WOQL.query()
-        q.using("/" + client.organization() + "/" + client.db() + "/_meta")
-            .add_triple("doc:Remote_origin", "type", "repo:Remote")
-            .add_triple("doc:Remote_origin", "repo:repository_name", "origin")
-            .add_triple("doc:Remote_origin", "repo:remote_url", push_to.remote)
+        }
+        let using = client.organization() + "/" + client.db() + "/_meta"
+        let q = WOQL.lib().add_remote(using, rem, "origin")       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => client.push(push_to))
     })
 }
 
-
+export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) => {  
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    return remoteClient.updateOrganization(meta.id, meta)    
+}
 
 
 /*
 * meta has : local_branch / remote_branch / url / commit 
 */
 export const Push = async (meta, client, getTokenSilently) => {  
-    let from_branch = meta.local_branch || 'master'
-    let to_branch = meta.remote_branch || 'master'
+    let from_branch = meta.local_branch || 'main'
+    let to_branch = meta.remote_branch || 'main'
     let commit = meta.commit || "Push Generated from TerminusDB Console"
     let push_to = {
         remote: meta.url,
@@ -152,8 +161,8 @@ export const Push = async (meta, client, getTokenSilently) => {
 * meta has : local_branch / remote_branch / url / commit 
 */
 export const Pull = async (meta, client, getTokenSilently) => {  
-    let to_branch = meta.local_branch || 'master'
-    let from_branch = meta.remote_branch || 'master'
+    let to_branch = meta.local_branch || 'main'
+    let from_branch = meta.remote_branch || 'main'
     let commit = meta.commit || "Pull Generated from TerminusDB Console"
     let pull_from = {
         remote: meta.url,

@@ -2653,10 +2653,12 @@ h4.prefix-section-header {
 }
 
 .database-controls {
+    width: auto;
 }
+
 .major-database-controls {
     text-align: center;
-    font-size: 1.6em; 
+    font-size: 1.6em;
 }
 
 .time-control{
@@ -2681,7 +2683,8 @@ h4.prefix-section-header {
 .database-main-content {
 }
 
-.database-listing-title-row {
+.database-listing-title-row {;
+    margin: 10px 0px 0px 0px;
 }
 
 .database-listing-title {
@@ -2689,12 +2692,48 @@ h4.prefix-section-header {
 }
 .database-listing-id {
     font-size: 10px;
-    margin-left: 6px;   
+    margin-left: 6px;
+}
+
+.schema-control-msg{
+    font-size: 14px;
+    padding-left: 5px;
+    color: #586069;
 }
 
 .database-credits {
 }
 .database-listing-description-row {
+    margin: 10px 10px 0px 15px;
+    font-size: 18px;
+    font-weight: 400;
+    color: #586069;
+}
+
+.database-main-action-message {
+    font-style: oblique;
+    font-size: inherit;
+    margin: auto;
+    padding: 10px;
+}
+
+.clone-color{
+    color: #4984c9;
+}
+.cloned-color{
+    color: #0c5460;
+}
+
+.share-color {
+    color: #0055bb;
+}
+
+.synchronised-color {
+    color: #00C08B;
+}
+
+.synchronise-color {
+    color: #856404;
 }
 
 
@@ -2720,8 +2759,9 @@ h4.prefix-section-header {
 }
 
 .database-action-column {
-    width: 160px;
+    width: auto;
     margin-top: 10px;
+    float: right;
     height: 180px;
 }
 
@@ -2738,6 +2778,37 @@ h4.prefix-section-header {
     text-align: center;
 }
 
+.db_created_icon{
+    margin: 0px 5px 0px 20px;
+    color: #0055bb;
+}
+
+.db_info_icon_spacing {
+    margin: 0px 0px 0px 15px;
+    color: #0055bb;
+}
+
+.author_info{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    border: 1px solid transparent;
+    border-radius: 2em;
+    padding: 0 10px;
+    line-height: 22px;
+    color: #0366d6;
+    white-space: nowrap;
+    background-color: #f1f8ff;
+    margin-left: 30px;
+}
+
+.db_info{
+    font-size: 14px;
+    color: #586069;
+    margin: 0px 30px 0px 5px;
+}
+
 .database-update-status {
     text-align: center;
     font-size: 0.9em;
@@ -2746,7 +2817,7 @@ h4.prefix-section-header {
 }
 .database-secondary-option {
     height: 30px;
-
+    float: right;
 }
 
 .database-listing-pull,
@@ -2770,4 +2841,3 @@ h4.prefix-section-header {
     margin-top: 16px;
     margin-bottom: 24px;
 }
-
