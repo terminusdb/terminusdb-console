@@ -13,7 +13,7 @@ import { config } from "./utils/config"
 *   6.	Delete cloned as well as origin database
 */
 
-context('Test cloning a local database', () => {
+context.skip('Test cloning a local database', () => {
    let bid, commit_msg, masterBranchId='main';
    let database = config[0]
    let clonedDatabase = config[0].name + '__Clone'

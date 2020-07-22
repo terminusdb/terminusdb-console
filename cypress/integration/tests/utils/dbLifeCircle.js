@@ -4,7 +4,7 @@ import * as routes from "./routes"
 /*
 *   create a local database
 */
-export const createLocalDB = async (dbId,withGraph=true) =>{
+export const createLocalDB = async (dbId,withGraph=true, version) =>{
 
     cy.server().route("POST", routes.createDb(dbId)).as('createDB');
     cy.server().route("POST", routes.createGraph(dbId)).as('createGraph');
@@ -16,8 +16,10 @@ export const createLocalDB = async (dbId,withGraph=true) =>{
     cy.get("#dbname").focus().type(dbId);
     cy.get("#description").focus().type(dbId);
 
-    const createType = 'Local Only - No Sharing{enter}';
-	cy.get(".tcf-select").click().find("input").first().focus().type(createType);
+    if(version == 'canary'){
+        const createType = 'Local Only - No Sharing{enter}';
+    	cy.get(".tcf-select").click().find("input").first().focus().type(createType);
+    }
 
     cy.get('form').find("button").contains('Create New Database').click()
 
