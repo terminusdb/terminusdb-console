@@ -121,7 +121,11 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
         let using = client.organization() + "/" + client.db() + "/_meta"
         let q = WOQL.lib().add_remote(using, rem, "origin")       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
-        .then(() => client.push(push_to))
+        .then(() => {
+            return client.fetch(push_to).then(() => {
+                client.push(push_to)
+            })
+        })
     })
 }
 
