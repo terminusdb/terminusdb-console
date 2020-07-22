@@ -14,11 +14,12 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
-import { GiOpenBook } from 'react-icons/gi';
+import { GiMeshBall } from 'react-icons/gi';
+import { validURL } from '../../utils/helperFunctions'
 
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
@@ -243,7 +244,7 @@ export const DBProductionCredits = ({meta, user}) => {
                 <AiOutlineUser className="db_info_icon_spacing"/>
                 <span className="db_info">Publisher: {icon} {txt}</span>
             </span>
-        )      
+        )
     }
     return null
 }
@@ -269,7 +270,7 @@ export const DBRoleCredits = ({meta, user}) => {
                     <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
                     <span className="db_info">{rs}</span>
                 </span>
-            )           
+            )
         }
         if(rs.length == 0) rs.push("No Access")
         return (
@@ -382,10 +383,7 @@ export const DBControlPanel = ({meta, user}) => {
     let title = "Database " + meta.id
 
     if(icon){
-        var imageExtensions = ["jpg", "jpeg", "bmp", "gif", "png"];
-        const [extension, ...nameParts] = icon.split('.').reverse();
-        if(imageExtensions.includes(extension))
-            disp.push(<img className='database-listing-image' src={icon} title={title} />)
+        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} />)
         else disp.push(<i className={'database-listing-icon ' + icon} title={title}/>)
     }
 
@@ -445,7 +443,7 @@ export const DBControls = ({meta, user}) => {
 
 export const DBStatus = ({meta, user, onAction}) => {
     return (
-        <Col className='database-action-column'>
+        <div className='database-action-column'>
             <Row className='database-update-status'>
                 <RemoteUpdated meta={meta}  user={user}/>
             </Row>
@@ -455,7 +453,7 @@ export const DBStatus = ({meta, user, onAction}) => {
             <Row className='database-secondary-option'>
                 <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
             </Row>
-        </Col>
+        </div>
     )
 }
 
@@ -551,7 +549,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
             return (<span onClick={myDelete}><DeleteControl meta={meta} user={user} /></span>)
         }
         else {
-            return (<span onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
+            return (<span className="fork-action" onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
         }
     }
     return null
@@ -621,7 +619,8 @@ export const ClonedControl = ({meta, user}) => {
 }
 
 export const ForkControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
+    return <AiOutlineFork  color={"#0055bb"} title={'Fork: ' + meta.remote_url}/>
+    //return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
 }
 
 export const NoCanControl = ({meta, user}) => {
@@ -635,12 +634,12 @@ export const AllGoodControl = ({meta, user}) => {
 
 export const SchemaControl = ({meta, type}) => {
     let css = (type == "inactive" ? 'database-inactive-action' : 'database-action database-listing-schema')
-    let tit = (type == "inactive" ? 'Database has no schema' : 'Click to view the database schema')
+    let tit = (type == "inactive" ? 'Database has no schema' : 'Database has schema')
     //return <FontAwesomeIcon className={css} icon={SCHEMA_ICON} title={tit}/>
     if(type == "inactive"){
         return <BsBook className="db_info_icon_spacing" title={tit}  size={"1em"} color={"grey"}/>
     }
-    else return <GiOpenBook title={tit}  className="db_info_icon_spacing" size={"1em"} color={"#00C08B"}/>
+    else return <GiMeshBall title={tit}  className="db_info_icon_spacing" size={"1em"} />
 }
 
 export const DocumentsControl = ({meta}) => {
@@ -648,7 +647,7 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database"/>
+    return <span className="delete-action">Delete <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database from your account"/></span>
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 

@@ -132,15 +132,15 @@ export const DB_DETAILS_FORM = {
         },
         {
             id: "iconUrl",
-            label: 'Icon Url',
+            label: 'Image Url to use for your database',
             inputElement: {
                 type: "input",
-                placeholder: "Enter URL of an icon to use for your database"
+                placeholder: "Enter URL of an image with valid format"
             }
         },
         {
             id: "icon",
-            label: 'Pick an Url',
+            label: 'Pick an icon to use for your database',
             inputElement: {
                 type: "icon",
                 placeholder: "Select icon"
