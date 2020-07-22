@@ -2710,8 +2710,8 @@ h4.prefix-section-header {
 .database-credits {
 }
 .database-listing-description-row {
-    margin: 10px 10px 0px 15px;
-    font-size: 18px;
+    margin: 20px 10px 0px 15px;
+    font-size: 15px;
     font-weight: 400;
     color: #586069;
 }
@@ -2723,26 +2723,9 @@ h4.prefix-section-header {
     padding: 10px;
 }
 
-.clone-color{
-    color: #4984c9;
+.action-text-color{
+    color: #6c757d ;
 }
-.cloned-color{
-    color: #0c5460;
-}
-
-.share-color {
-    color: #0055bb;
-}
-
-.synchronised-color {
-    color: #00C08B;
-}
-
-.synchronise-color {
-    color: #856404;
-}
-
-
 
 .database-listing-description {
 }
@@ -2764,12 +2747,31 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.database-secondary-option {
+    height: 30px;
+    float: right;
+    margin-top: -10px;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: -30px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
 .delete-action{
-    color: #d9534f
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    background-color: #f8d7da;
+    border-radius: 2em;
+    padding: 0 10px;
 }
 
 .fork-action{
-    color: #0055bb
+    color: #0366d6;
+    background-color: #f1f8ff;
+    border: 1px solid #0366d6;
+    border-radius: 2em;
+    padding: 0 10px;
 }
 
 .database-action-column {
@@ -2836,10 +2838,7 @@ h4.prefix-section-header {
     margin: 10px 0px 10px 30px;
 }
 
-.database-secondary-option {
-    height: 30px;
-    float: right;
-}
+
 
 .database-listing-pull,
 .database-listing-push,

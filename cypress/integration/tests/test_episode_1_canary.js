@@ -3,7 +3,7 @@ import { importAndExportCSV } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { createLocalDB, removeLocalDB } from "./utils/dbLifeCircle"
 
-context.skip('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv in Canary', () => {
+context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv', () => {
 
     before(() => {
        cy.visit('/');
@@ -13,6 +13,7 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
 
 		const password = Cypress.env('password');
 		const database = episode_1_database;
+        const version = 'canary'
 
 
 		it('User Login', () => {
@@ -33,10 +34,10 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
                 if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                     await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
                     cy.wait(1000);
-                    await createLocalDB(database.name)
+                    await createLocalDB(database.name, version)
                 }
 				else{
-                    await createLocalDB(database.name);
+                    await createLocalDB(database.name,  version);
                 }
             })
         })
