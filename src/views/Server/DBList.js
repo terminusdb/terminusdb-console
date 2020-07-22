@@ -14,11 +14,12 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
+import { validURL } from '../../utils/helperFunctions'
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
@@ -378,19 +379,16 @@ export const DBControlPanel = ({meta, user}) => {
 
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon) icon = GRAPHDB
-    let title = "Database " + meta.id
+    let title = "Database ID: " + meta.id
 
     if(icon){
-        var imageExtensions = ["jpg", "jpeg", "bmp", "gif", "png"];
-        const [extension, ...nameParts] = icon.split('.').reverse();
-        if(imageExtensions.includes(extension))
-            disp.push(<img className='database-listing-image' src={icon} title={title} />)
-        else disp.push(<i className={'database-listing-icon ' + icon} title={title}/>)
+        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} key="xx1"  />)
+        else disp.push(<i key="xx" className={'database-listing-icon ' + icon} title={title}/>)
     }
 
     return (
         <Col className='database-left-column'>
-            {<Row onClick={goDB}>
+            {<Row key="rr" onClick={goDB}>
                 {disp}
             </Row>}
         </Col>
@@ -459,28 +457,18 @@ export const DBStatus = ({meta, user, onAction}) => {
 }
 
 export const RemoteUpdated = ({meta, user}) => {
-    let act = meta.action, css = "database-main-action-message";
+    let act = meta.action, css = "database-main-action-message action-text-color";
     switch(act){
         case 'share':
             act = "upload to hub"
-            css = css + " share-color"
             break;
         case 'synchronise':
             if(meta.structure_mismatch || meta.ahead || meta.behind){
                 act = "needs synchronize"
-                css = css + " synchronise-color"
             }
             else{
                 act = "synchronized"
-                css = css + " synchronised-color"
             }
-            break;
-        case 'clone':
-            css = css+ " clone-color"
-            break;
-        default:
-            act = "Cloned"
-            css = css+ " cloned-color"
             break;
 
     }
@@ -550,7 +538,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
             return (<span onClick={myDelete}><DeleteControl meta={meta} user={user} /></span>)
         }
         else {
-            return (<span onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
+            return (<span title={'Fork: ' + meta.remote_url} className="fork-action" onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
         }
     }
     return null
@@ -595,32 +583,33 @@ function describe_unsynch(meta){
 }
 
 export const ShareControl = ({meta, user}) => {
-    return <AiOutlineCloudUpload color="#0055bb " title="Save this database to your hub account"/>
+    return <AiOutlineCloudUpload className={"db-main-action"} color="#0055bb " title="Save this database to your hub account"/>
     //return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
 }
 
 export const PushControl = ({meta, user}) => {
-    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {
-    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const CloneControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
-    return <AiOutlineCloudDownload color={"#4984c9"} title="Clone this database now"/>
+    return <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/>
 }
 
 export const ClonedControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
-    return <AiOutlineBlock color={"#d1ecf1"} title={'Cloned from: ' + meta.remote_url}/>
+    return <AiOutlineBlock color={"#d1ecf1"} className={"db-main-action"} title={'Cloned from: ' + meta.remote_url}/>
 }
 
 export const ForkControl = ({meta, user}) => {
-    return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
+    return <AiOutlineFork  color={"#0055bb"}/>
+    //return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
 }
 
 export const NoCanControl = ({meta, user}) => {
@@ -629,7 +618,7 @@ export const NoCanControl = ({meta, user}) => {
 
 export const AllGoodControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
-    return <AiOutlineCheckCircle color={"#00C08B"} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
+    return <AiOutlineCheckCircle className={"db-main-action"} color={"#00C08B"} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
 }
 
 export const SchemaControl = ({meta, type}) => {
@@ -647,7 +636,7 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database"/>
+    return <span className="delete-action"  title="Delete Database">Delete <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 

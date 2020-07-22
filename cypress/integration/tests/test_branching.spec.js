@@ -14,7 +14,7 @@ import { config } from "./utils/config"
 * 	6. 	Delete database
 */
 
-context('Test commits and branching', () => {
+context.skip('Test commits and branching', () => {
    let bid, commit_msg, masterBranchId='main';
    let database = config[0]
 

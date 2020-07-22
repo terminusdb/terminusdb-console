@@ -9,6 +9,7 @@ import { useAuth0 } from '../../react-auth0-spa'
 import Select from "react-select";
 import { CollaboratorList } from '../Tables/CollaboratorList'
 import { AddCollaborators } from './AddCollaborators'
+import { TERMINU_WARNING } from '../../constants/identifiers'
 
 export const Collaborators = ({}) => {
 
@@ -24,23 +25,22 @@ export const Collaborators = ({}) => {
     const allDBs = bffClient.databases()
     if(allDBs.length == 0) return null
     const [dbs, setDBList] = useState(allDBs)
-    const [subscreen, setSubscreen] = useState()
+    const [subscreen, setSubscreen] = useState("my")
+    const [incoming, setIncoming] = useState()
+    const [outgoing, setOutgoing] = useState()
 
 
     function createOrg(doc) {
-        //should really come from form
-        let d = {
-            organization_name: "xxx23",
-        }
-        return woqlClient.createOrganization("xxx23", d)
-        /*doc.status = "active"
-        doc.create = true
+        doc.status = "active"
+        doc.create = true    
+        //doc.user_name = "admin"
+        //woqlClient.createOrganization(doc.organization_name, doc)    
         UpdateOrganization(doc, bffClient, getTokenSilently)
         .then((bla) => {
             alert(JSON.stringify(bla))
         })
         .catch((err) => console.log(err))
-        .finally(() => setLoading(false))*/            
+        .finally(() => setLoading(false))            
     }
     
     function callOrgFilter(f){
@@ -51,15 +51,26 @@ export const Collaborators = ({}) => {
         setDBFilter(f.value)
     }
 
+
     useEffect(() => {
         let ndbs = []
+        let inc = []
+        let outg = []
         for(var i = 0; i<allDBs.length; i++){
             if(!orgFilter || (orgFilter == allDBs[i].organization)){
                 ndbs.push(allDBs[i])
+                if(isMyDB(allDBs[i]) && !dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id)){
+                    inc.push(allDBs[i])
+                }
+                else if(!dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id)) {
+                    outg.push(allDBs[i])    
+                }
             }
         }
+        setIncoming(inc)
+        setOutgoing(outg)
         setDBList(ndbs)
-    }, [orgFilter])
+    }, [orgFilter, dbFilter])
 
     function callActionSelect(f){
         setSubscreen(f.value)
@@ -83,11 +94,12 @@ export const Collaborators = ({}) => {
                 </Col>
             </Row>
             <Row>
-                {subscreen == "my" && 
-                    <MyCollaborators />
+                <Col>
+                {subscreen == "my" && incoming && 
+                    <MyCollaborators  collaborators={incoming} user={user} />
                 }
-                {subscreen == "others" && 
-                    <MyCollaborations />
+                {subscreen == "others" && outgoing &&
+                    <MyCollaborations collaborators={outgoing}  user={user}/>
                 }
                 {(subscreen == "add" && dbs && dbs.length) && 
                     <AddCollaborators db={dbFilter} organization={orgFilter} dblist={dbs} />
@@ -95,27 +107,43 @@ export const Collaborators = ({}) => {
                 {subscreen == "add_organization" && 
                     <Organization onUpdate={createOrg} />
                 }
+                </Col>
             </Row>
-        </Container>
+            </Container>
     </>)
 }
 
 //organization -> database -> action (my roles)
 
-export const MyCollaborators = () => {
-    let collabs = [
-        {database: "db1", organization: "abc", collaborator: "joe@smith.com", role: "read"},
-        {database: "db2", organization: "abc", collaborator: "jill@smith.com", role: "write"}
-    ]
-    return (<CollaboratorList users={collabs} />)
+export const MyCollaborators = ({collaborators, user}) => {
+    let entries = []
+    for(var i = 0; i < collaborators.length; i++){
+        let entry = {}
+        entry.database = collaborators[i].label
+        entry.id = collaborators[i].id
+        entry.sharing = (collaborators[i].public ? "Public" : "Private")
+        entry.organization = collaborators[i].organization_label
+        entry.user = user.author
+        entry.role = getDBRole(collaborators[i])
+        entries.push(entry)
+    }
+    if(entries.length > 0)
+        return (<CollaboratorList users={entries} />)
+        return (
+            <span className="database-list-intro">
+                <TerminusDBSpeaks report={{status: TERMINU_WARNING, "message": "No collaborators have been added to your databases"}} />
+            </span>
+        )
 }
 
-export const MyCollaborations = () => {
-    let mycollabs = [
-        {database: "db1", organization: "abc", collaborator: "joe@smith.com", role: "read"},
-        {database: "db2", organization: "abc", collaborator: "jill@smith.com", role: "write"}
-    ]
-    return (<CollaboratorList users={mycollabs} />)
+export const MyCollaborations = ({collaborators, user}) => {
+    if(collaborators.length > 0)
+        return (<CollaboratorList users={collaborators} />)
+    return (
+        <span className="database-list-intro">
+            <TerminusDBSpeaks report={{status: TERMINU_WARNING, "message": "You have not been added as a collaborator on any databases"}} />
+        </span>
+    )
 }
 
 
@@ -128,7 +156,7 @@ export const OrganizationFilter = ({filter, onChange, dblist}) => {
         {value: "", label: "All Organizations"}
     ].concat(Object.values(filters))
     
-    if(sfilters.length == 1) return null
+    if(sfilters.length <= 2) return null
 
     return (
         <Select 
@@ -161,7 +189,7 @@ export const DatabaseFilter = ({filter, orgFilter, onChange, dblist}) => {
     return (
         <Select 
             options={sfilters}
-            placeholder = "Databases"
+            placeholder = "Filter by Database"
             defaultValue= {filter}
             onChange ={onChange}
         />
@@ -173,7 +201,7 @@ export const CollaborateAction = ({filter, orgFilter, dbFilter, onChange, dblist
         {value: "my", label: "Collaborators on my databases"},
         {value: "others", label: "My Collaborations with others"},
         {value: "add", label: "Add Collaborators"},
-        {value: "add_organization", label: "Add Organization"}
+        //{value: "add_organization", label: "Add Organization"}
     ]
 
     return (
@@ -181,6 +209,7 @@ export const CollaborateAction = ({filter, orgFilter, dbFilter, onChange, dblist
             options = {collaborate_actions}
             defaultValue = {filter}
             onChange = {onChange}
+            placeholder = "Collaboration Actions"
         />)
 }
 
@@ -313,4 +342,31 @@ function _sort_list(unsorted, listSort){
     else {
         return unsorted
     }
+}
+
+
+function isMyDB(db){
+    if(db.organization_roles && db.organization_roles.indexOf('create') != -1 || db.organization_roles.indexOf('manage') != -1){
+        return true;
+    }
+    if(db.roles && db.roles.indexOf('create') != -1 || db.roles.indexOf('manage') != -1) return true
+    return false
+
+}
+
+function getDBRole(db){
+    if(db.organization_roles && db.organization_roles.indexOf('create') != -1 || db.roles && db.roles.indexOf('create') != -1){
+        return "Owner";
+    }
+    if(db.organization_roles && db.organization_roles.indexOf('manage') != -1 || db.roles && db.roles.indexOf('manage') != -1){
+        return "Manager"
+    }
+    if(db.actions && db.actions.indexOf("push") == -1){
+        return "Write"
+    }
+    if(db.actions && db.actions.indexOf("pull") == -1){
+        return "Read"
+    }
+    return false
+
 }
