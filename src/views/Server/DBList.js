@@ -647,7 +647,7 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database from your account"/>
+    return <span className="delete-action">Delete <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database from your account"/></span>
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 

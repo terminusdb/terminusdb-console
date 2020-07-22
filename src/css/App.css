@@ -2764,9 +2764,14 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.delete-action{
+    color: #d9534f
+}
+
 .fork-action{
     color: #0055bb
 }
+
 .database-action-column {
     width: auto;
     margin-top: 10px;
