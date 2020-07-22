@@ -19,6 +19,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
+import { validURL } from '../../utils/helperFunctions'
 
 
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
@@ -382,10 +383,7 @@ export const DBControlPanel = ({meta, user}) => {
     let title = "Database " + meta.id
 
     if(icon){
-        var imageExtensions = ["jpg", "jpeg", "bmp", "gif", "png"];
-        const [extension, ...nameParts] = icon.split('.').reverse();
-        if(imageExtensions.includes(extension))
-            disp.push(<img className='database-listing-image' src={icon} title={title} />)
+        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} />)
         else disp.push(<i className={'database-listing-icon ' + icon} title={title}/>)
     }
 
@@ -551,7 +549,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
             return (<span onClick={myDelete}><DeleteControl meta={meta} user={user} /></span>)
         }
         else {
-            return (<span onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
+            return (<span className="fork-action" onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
         }
     }
     return null
@@ -649,7 +647,7 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database"/>
+    return <AiOutlineDelete color="#d9534f" className='database-action database-listing-delete' title="Delete Database from your account"/>
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 

@@ -2764,11 +2764,17 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.fork-action{
+    color: #0055bb
+}
 .database-action-column {
     width: auto;
     margin-top: 10px;
     float: right;
     height: 180px;
+    margin: auto;
+    width: 50%;
+    /*padding: 10px;*/
 }
 
 .database-listing-icon:hover,
@@ -2782,6 +2788,7 @@ h4.prefix-section-header {
     height: 120px;
     font-size: 6em;
     text-align: center;
+    margin-left: 40px;
 }
 
 .db_created_icon{
@@ -2820,7 +2827,10 @@ h4.prefix-section-header {
     font-size: 0.9em;
     height: 30px;
     color: #00C08B;
+    min-width: 150px;
+    margin: 10px 0px 10px 30px;
 }
+
 .database-secondary-option {
     height: 30px;
     float: right;
