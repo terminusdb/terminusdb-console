@@ -584,28 +584,28 @@ function describe_unsynch(meta){
 }
 
 export const ShareControl = ({meta, user}) => {
-    return <AiOutlineCloudUpload color="#0055bb " title="Save this database to your hub account"/>
+    return <AiOutlineCloudUpload className={"db-main-action"} color="#0055bb " title="Save this database to your hub account"/>
     //return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
 }
 
 export const PushControl = ({meta, user}) => {
-    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {
-    return <AiOutlineCloudSync color={"ffbf00"} title={describe_unsynch(meta)}/>
+    return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
     //return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const CloneControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
-    return <AiOutlineCloudDownload color={"#4984c9"} title="Clone this database now"/>
+    return <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/>
 }
 
 export const ClonedControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
-    return <AiOutlineBlock color={"#d1ecf1"} title={'Cloned from: ' + meta.remote_url}/>
+    return <AiOutlineBlock color={"#d1ecf1"} className={"db-main-action"} title={'Cloned from: ' + meta.remote_url}/>
 }
 
 export const ForkControl = ({meta, user}) => {
@@ -619,7 +619,7 @@ export const NoCanControl = ({meta, user}) => {
 
 export const AllGoodControl = ({meta, user}) => {
     //return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
-    return <AiOutlineCheckCircle color={"#00C08B"} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
+    return <AiOutlineCheckCircle className={"db-main-action"} color={"#00C08B"} title={"Synchronised with original at " + meta.remote_url + " "  + describe_unsynch(meta)}/>
 }
 
 export const SchemaControl = ({meta, type}) => {
