@@ -380,11 +380,11 @@ export const DBControlPanel = ({meta, user}) => {
 
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon) icon = GRAPHDB
-    let title = "Database " + meta.id
+    let title = "Database ID: " + meta.id
 
     if(icon){
-        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} />)
-        else disp.push(<i className={'database-listing-icon ' + icon} title={title}/>)
+        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} key="xx1"  />)
+        else disp.push(<i key="xx" className={'database-listing-icon ' + icon} title={title}/>)
     }
 
     return (

@@ -70,8 +70,8 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         else if(db.action == 'fork'){
             //db.remote_url = db.remote_record.url
             let nuid = db.remote_url.substring(db.remote_url.lastIndexOf("/") + 1)
-            db.id = get_fork_id(nuid, bffClient, bffClient.user_organization())
-            db.organization = user.remote_id 
+            db.id = nuid
+            db.organization = bffClient.user_organization() 
             ForkDB(db, woqlClient, bffClient, getTokenSilently)
             .then((id) => {
                 setSpecial(false)
@@ -101,16 +101,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             }
         }
         woqlClient.databases(ndbs)
-    }
-
-
-    function get_fork_id(nid, client, orgid){
-        let add = 0
-        let ext = nid
-        while(client.get_database(ext, orgid)){
-            ext = nid + "_" + (++add)
-        }
-        return ext
     }
 
     function import_db_card(db, id){

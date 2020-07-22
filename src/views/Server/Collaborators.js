@@ -201,7 +201,7 @@ export const CollaborateAction = ({filter, orgFilter, dbFilter, onChange, dblist
         {value: "my", label: "Collaborators on my databases"},
         {value: "others", label: "My Collaborations with others"},
         {value: "add", label: "Add Collaborators"},
-        {value: "add_organization", label: "Add Organization"}
+        //{value: "add_organization", label: "Add Organization"}
     ]
 
     return (
