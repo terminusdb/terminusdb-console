@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { CloneDB, ForkDB, DeleteDB } from '../../components/Query/CollaborateAPI'
+import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite } from '../../components/Query/CollaborateAPI'
 import {DBList, DBSummaryCard} from './DBList'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {useAuth0} from '../../react-auth0-spa'

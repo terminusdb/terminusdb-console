@@ -95,7 +95,6 @@ export const CreateDatabase = ({from_local}) => {
         }
         setReport(rep)
         if(create_or_clone == 'share'){
-            alert("shared")
         }
         else {
             refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
