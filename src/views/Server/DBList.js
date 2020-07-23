@@ -557,7 +557,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         if(onAction) onAction(meta)
     }
     if(meta.action == 'accept'){
-        return (<span onClick={myReject}><RejectControl meta={meta} user={user} /></span>)
+        return (<span className="secondory-btn-control" onClick={myReject}><RejectControl meta={meta} user={user} /></span>)
     }
 
     if(meta.action == 'clone'){
