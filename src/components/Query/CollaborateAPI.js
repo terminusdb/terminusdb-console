@@ -91,6 +91,30 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
 }
 
 
+export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently) => {
+    let msg = {invitation: {
+        id: meta.remote_record.invitation_id, 
+        action: "accept"
+    }}
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    alert(JSON.stringify(msg))
+    //return remoteClient.updateUser(client.connection.user.logged_in, msg)    
+}  
+
+export const RejectInvite = async (meta, client, remoteClient, getTokenSilently) => {
+    let msg = {invitation: {
+        id: meta.remote_record.invitation_id, 
+        action: "reject"
+    }}
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    //return remoteClient.updateUser(client.connection.user.logged_in, msg)    
+}  
+
+
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
     let remote_name = "origin"

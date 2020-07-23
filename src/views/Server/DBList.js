@@ -14,7 +14,7 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
@@ -41,6 +41,7 @@ function _user_db_action(meta, user){
     if(meta.remote_url){
         if(user.logged_in){
             if(!meta.id){
+                if(meta.type == "invite") return "accept"
                 return 'clone'
             }
             if(meta.type == 'local_clone'){
@@ -91,7 +92,6 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     }
 
     let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
-
     return (
         <Row key='r7' className='database-summary-listing'>
             {loading &&
@@ -111,6 +111,11 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r8'>
                         {decr}
                     </Row>
+                    {meta.type == "invite" &&
+                    <Row key='r9'>
+                        <DBInvite meta={meta}/>
+                    </Row>
+                    }
                 </Col>
                 <Col key='r6' md={2} className='database-main-actions'>
                     <DBStatus meta={meta}  user={user}  onAction={onGo}/>
@@ -119,6 +124,13 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
         </Row>
     )
 }
+
+export const DBInvite = ({meta}) => {
+    return (
+        <span>{meta.remote_record.inviter} has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
+    )
+}
+
 
 export const DBTitle = ({meta, user, onAction, max}) => {
     let maxtitle = max || 40, author = false
@@ -164,9 +176,9 @@ export const DBCredits = ({meta, user}) => {
         res.push(<DBTimings key='dbt' meta={meta} user={user} />)
     }
 
-    res.push(
-        <DBSize  key='ab' meta={meta} user={user} />
-    )
+    //res.push(
+    //    <DBSize  key='ab' meta={meta} user={user} />
+    //)
     if(meta.branches && meta.branches.length > 1) {
         res.push(
             <DBBranches  key='abc' meta={meta} user={user} />
@@ -178,7 +190,7 @@ export const DBCredits = ({meta, user}) => {
             <DBProductionCredits  key='ac' meta={meta} user={user} />
         )
         res.push(
-            <DBRoleCredits  key='ad' meta={meta} user={user} />
+            <DBRoleCredits key='ad' meta={meta} user={user} />
         )
         res.push(
             <DBContributionCredits  key='ae' meta={meta}  user={user}/>
@@ -379,7 +391,7 @@ export const DBControlPanel = ({meta, user}) => {
 
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon) icon = GRAPHDB
-    let title = "Database ID: " + meta.id
+    let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
 
     if(icon){
         if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} key="xx1"  />)
@@ -470,6 +482,9 @@ export const RemoteUpdated = ({meta, user}) => {
                 act = "synchronized"
             }
             break;
+        case 'accept':
+            act = "Accept Invitation?"
+            break;
 
     }
     /*if(act == 'share'){
@@ -504,6 +519,9 @@ export const DBMainAction = ({meta, user}) => {
     else if(act == 'clone'){
         return (<CloneControl meta={meta} user={user}/>)
     }
+    else if(act == 'accept'){
+        return (<AcceptControl meta={meta} user={user}/>)
+    }
     else if(act == 'share'){
         return (<ShareControl meta={meta} user={user}/>)
     }
@@ -528,17 +546,29 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         if(onAction) onAction(meta)
     }
 
+    function myReject(){
+        meta.action = 'reject'
+        if(onAction) onAction(meta)
+    }
+
     function myFork(){
         meta.action = 'fork'
         if(onAction) onAction(meta)
     }
+    if(meta.action == 'accept'){
+        return (<span className="secondory-btn-control" onClick={myReject}><RejectControl meta={meta} user={user} /></span>)
+    }
 
     if(meta.action == 'clone'){
         if(userCanDelete(meta, user)){
-            return (<span onClick={myDelete}><DeleteControl meta={meta} user={user} /></span>)
+            return (<span onClick={myDelete} className="secondory-btn-control"><DeleteControl meta={meta} user={user} /></span>)
         }
         else {
-            return (<span title={'Fork: ' + meta.remote_url} className="fork-action" onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
+            return (<span className="secondory-btn-control"
+                title={'Fork: ' + meta.remote_url}
+                className="fork-action"
+                onClick={myFork}>Fork
+                <ForkControl meta={meta} user={user} /></span>)
         }
     }
     return null
@@ -633,6 +663,16 @@ export const SchemaControl = ({meta, type}) => {
 
 export const DocumentsControl = ({meta}) => {
     return <FontAwesomeIcon className='database-listing-documents' icon={DOCUMENTS_ICON} title="View Documents"/>
+}
+
+export const RejectControl = ({meta}) => {
+    return <span className="delete-action"  title="Reject Invitation">Reject <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
+    //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
+}
+
+export const AcceptControl = ({meta}) => {
+    return <AiFillCheckCircle className={"db-main-action"} color={"#00C08B"} title={"Accept Invitation to collaborate on database"}/>
+    //return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Accept Invitation to collaborate on database"} />
 }
 
 export const DeleteControl = ({meta}) => {

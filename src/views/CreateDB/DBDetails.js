@@ -26,7 +26,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
 
     DB_DETAILS_FORM.fields.map((item) => {
         if(!dbInfo[item.id]) dbInfo[item.id] = item.value || ''
-        if(logged_in || (item.id != "sharing" && item.id != "icon")){
+        if(logged_in || (item.id != "sharing" && item.id != "icon" && item.id != "iconUrl")){
             detfields.push(item)
         }
     })
