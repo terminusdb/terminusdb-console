@@ -41,7 +41,6 @@ export const DeleteDB = (props) => {
                         status: TERMINUS_SUCCESS,
                         time: Date.now() - st,
                     })
-                    //goServerHome()
                     removeDBCard()
                     reconnectToServer()
                     setDisabled(false)
