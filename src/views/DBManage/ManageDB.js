@@ -12,7 +12,6 @@ export const ManageDB = (props) => {
         <RiverOfSections key='a' sections={MANAGE_SECTIONS} label={props.label}>
             <Branch key="branch" />
             <Merge key="merge" />
-            <Backup key="backup" />
             <DeleteDB key="deletedb" modal/>
         </RiverOfSections>
     )
