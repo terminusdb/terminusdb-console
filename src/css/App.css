@@ -2749,13 +2749,16 @@ h4.prefix-section-header {
 
 .database-secondary-option {
     height: 30px;
-    float: right;
-    display: inline-block;
     font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     margin-top: 20px;
+    margin: auto;
+}
+
+.secondory-btn-control{
+    margin: auto;
 }
 
 .delete-action{
@@ -2771,6 +2774,7 @@ h4.prefix-section-header {
     background-color: #f1f8ff;
     border: 1px solid #0366d6;
     border-radius: 2em;
+    margin: auto;
     padding: 0 10px;
 }
 
@@ -2873,7 +2877,7 @@ h4.prefix-section-header {
 }
 
 .database-list-back:hover {
-    cursor: pointer;   
+    cursor: pointer;
 }
 
 .database-list-back::before {
@@ -2882,9 +2886,9 @@ h4.prefix-section-header {
   }
 
 .database-listing-allgood {
-    text-align: center;    
+    text-align: center;
 }
 
 .database-listing-allgood:hover {
-    cursor: pointer;   
+    cursor: pointer;
 }
