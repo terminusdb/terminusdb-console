@@ -10,7 +10,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 
 const DatabaseHome = (props) => {
     const { woqlClient, contextEnriched } = WOQLClientObj()
-    
+    if(!woqlClient) return null
     let db = woqlClient.get_database()
     var sections = []
     var tabs = []
@@ -31,7 +31,7 @@ const DatabaseHome = (props) => {
         ]
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
-        if(db.remote_url){
+        if(db && db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
             tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
         }
@@ -43,7 +43,7 @@ const DatabaseHome = (props) => {
         ]
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
-        if(db.remote_url){
+        if(db && db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
             tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
         }

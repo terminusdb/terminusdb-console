@@ -95,11 +95,11 @@ export const Synchronise = () => {
     })
 
     function pushLocal(deets) {
-        let from_branch = deets.local_branch || 'master'
+        let from_branch = deets.local_branch || 'main'
         let commit = deets.commit || DEFAULT_LOCAL_PUSH_COMMIT
         let push_to = {
             remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'master',
+            remote_branch: deets.remote_branch || 'main',
             message: commit,
         }
         //create copy so we don't change internal state of woqlClient inadvertently
@@ -131,11 +131,11 @@ export const Synchronise = () => {
     }
 
     function pullLocal(deets) {
-        let to_branch = deets.local_branch || 'master'
+        let to_branch = deets.local_branch || 'main'
         let commit = deets.commit || DEFAULT_LOCAL_PULL_COMMIT
         let pull_from = {
             remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'master',
+            remote_branch: deets.remote_branch || 'main',
             message: commit,
         }
         //create copy so we don't change internal state of woqlClient inadvertently
@@ -174,11 +174,11 @@ export const Synchronise = () => {
     }
 
     async function pushRemote(deets) {
-        let from_branch = deets.local_branch || 'master'
+        let from_branch = deets.local_branch || 'main'
         let commit = deets.commit || DEFAULT_REMOTE_PUSH_COMMIT
         let push_to = {
             remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'master',
+            remote_branch: deets.remote_branch || 'main',
             message: commit,
         }
         update_start = Date.now()
@@ -215,11 +215,11 @@ export const Synchronise = () => {
     }
 
     async function pullRemote(deets) {
-        let to_branch = deets.local_branch || 'master'
+        let to_branch = deets.local_branch || 'main'
         let commit = deets.commit || DEFAULT_REMOTE_PULL_COMMIT
         let pull_from = {
             remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'master',
+            remote_branch: deets.remote_branch || 'main',
             message: commit,
         }
         let nClient = woqlClient.copy()

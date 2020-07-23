@@ -13,8 +13,8 @@ export const ServerRoutes = () => {
 
 
 const LoadServerHomePage = () => {
-    if(window.location.search.includes("code=")){
-        return null //reduce flicker by showing nothing on login callbacks
-    }
+    //if(window.location.search.includes("code=")){
+        //return null //reduce flicker by showing nothing on login callbacks
+    //}
     return <ServerHome />
 }

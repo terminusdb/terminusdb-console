@@ -1,6 +1,8 @@
 # TerminusDB Console v2.0.6 Release Notes
 
-* Minor fixes
+## New
+
+* Sortable database listing page with metadata
 
 # TerminusDB Console v2.0.5 Release Notes
 

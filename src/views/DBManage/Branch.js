@@ -46,6 +46,7 @@ export const Branch = () => {
     function onCreate() {
         setLoading(true)
         update_start = Date.now()
+        woqlClient.checkout(sourceValues.branch)
         woqlClient
             .branch(values.bid)
             .then(() => {
@@ -67,6 +68,16 @@ export const Branch = () => {
             })
     }
 
+    function onSourceUpdate(key, val) {
+        if(key == "branch"){
+            let x = {}
+            x.branch = val
+            x.ref = sourceValues.ref
+            x.time = sourceValues.time
+            setSourceValues(x)
+        }
+    }
+
     function onUpdate(key, val) {
         values[key] = val
         setValues(values)
@@ -81,6 +92,7 @@ export const Branch = () => {
             <TCForm
                 layout={[3]}
                 fields={BRANCH_SOURCE_FORM.fields}
+                onChange={onSourceUpdate}
                 values={sourceValues}
                 report={{status: TERMINUS_INFO, message: BRANCH_SOURCE_FORM.infoMessage}}
             />

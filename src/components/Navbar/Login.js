@@ -6,13 +6,13 @@ import { USER, POWER_OFF } from "../../constants/faicons"
 import { PROFILE_ROUTE } from "../../constants/routes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OutsideClickHandler from 'react-outside-click-handler';
+import {redirect_uri} from '../../utils/baseRouter'
 
 export const Login = (props) => {
-    const {isAuthenticated, user, loading, authError,loginWithRedirect,logout } = useAuth0();
+    const {isAuthenticated, user, loading,loginWithRedirect,logout } = useAuth0();
     const [isOpen,setOpen] =useState(false);
 
     const toggle = () => setOpen(prevState => !prevState);
-    const disabled= authError===true  ? {disabled:true} : {onClick : () => loginWithRedirect()} 
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
     
     const onOutsideClick=()=>{
@@ -20,13 +20,19 @@ export const Login = (props) => {
             toggle(false)
         }
     }
+    /*
+    * TO BE REVIEW TO GET FROM HISTORY BASE NAME
+    */
+    //const base_router = process.env.TERMINUSDB_APP_BASE_ROUTER || '/console';
+    //const redirect_uri=`${window.location.origin}${base_router}`
+
     const logoutWithRedirect = () =>
         logout({
-            returnTo: window.location.origin
+            returnTo: redirect_uri//window.location.origin+'/console/'
     });
     return (<Fragment>      
             {!isAuthenticated && !user && 
-                <button className="tdb__button__base nav__main__login" {...disabled}>
+                <button className="tdb__button__base nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}
                 </button>
             }

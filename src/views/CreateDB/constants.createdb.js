@@ -124,7 +124,6 @@ export const DB_DETAILS_FORM = {
         {
             id: "sharing",
             label: 'Sharing',
-            mandatory: true,
             inputElement: {
                 type: "select",
                 options: [{value: "public", label: "Public"}, {value: "private", label: "Private"}, {value: "local", label: "Local Only - No Sharing"}],
@@ -132,11 +131,19 @@ export const DB_DETAILS_FORM = {
             }
         },
         {
-            id: "icon",
-            label: 'Icon',
+            id: "iconUrl",
+            label: 'Image Url to use for your database',
             inputElement: {
                 type: "input",
-                placeholder: "Enter URL of an icon to use for your database"
+                placeholder: "Enter URL of an image with valid format"
+            }
+        },
+        {
+            id: "icon",
+            label: 'Pick an icon to use for your database',
+            inputElement: {
+                type: "icon",
+                placeholder: "Select icon"
             }
         },
         {
@@ -241,7 +248,7 @@ export const COPY_REMOTE_FORM = {
     sample: {
         dbid: "sales-marketing-01",
         dbname: "Marketing Statistics (imported)",
-        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to master as it is live!"
+        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to main as it is live!"
     },
     fields: [
         {
@@ -265,24 +272,50 @@ export const COPY_REMOTE_FORM = {
 
 export const COPY_DB_DETAILS_FORM = {
     fields: [
-        /*{
-            id: "dbid",
-            label: 'Original ID',
-            inputElement: {
-                type: "input",
-                disabled: true
-            }
-        },*/
         {
             id: "copy",
+            value: "TerminusDB",
             label: 'Copy From',
             mandatory: true,
             inputElement: {
                 type: "select",
+                disabled: false,
                 options: [{value: "remote", label: "TerminusDB"}, {value: "local", label: "Local Database"}],
                 placeholder: "TerminusDB"
             }
-        }
+        },
+        {
+            id: "sourceId",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose local database to copy from",
+                options: []
+            },
+            label: 'Source'
+        },
+        {
+            id: "dbId",
+            value: "",
+            label: 'New Database Id',
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter new database Id to clone"
+            }
+        },
+        /*{
+            id: "sourceID",
+            label: 'Source',
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose database URL from which you would want to copy from",
+                options: []
+            }
+        }*/
     ],
     buttons: {
         submitText: "Copy Database"

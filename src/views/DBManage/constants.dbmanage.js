@@ -21,13 +21,6 @@ export const MANAGE_SECTIONS = [
         blurb: "Merging branches together creates a unified copy of the database from different branches which may have converged."
     },
     {
-        id: "backup",
-        title: "Backup and Restore",
-        icon: "hdd",
-        button: "Backup",
-        blurb: "Backup your data either to disk or to the cloud, or restore it from backups"
-    },
-    {
         id: "delete",
         title: "Delete Database",
         icon: "trash-alt",
@@ -80,7 +73,6 @@ export const BRANCH_SOURCE_FORM = {
         {
             id: "branch",
             inputElement: {
-                disabled: true,
                 type: "input",
             },
             label: 'Branch',

@@ -23,19 +23,21 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     }
     let advancedInfo = {}
     let detfields = []
+
     DB_DETAILS_FORM.fields.map((item) => {
         if(!dbInfo[item.id]) dbInfo[item.id] = item.value || ''
-        if(logged_in || (item.id != "sharing" && item.id != "icon")){
+        if(logged_in || (item.id != "sharing" && item.id != "icon" && item.id != "iconUrl")){
             detfields.push(item)
         }
     })
+
     DB_ADVANCED_FORM.fields.map((item) => {
         advancedInfo[item.id] = item.value || ''
     })
 
 
 
-    let layout = (logged_in ? [3,1,1]  : [2, 1])
+    let layout = (logged_in ? [3,2,1]  : [2, 1])
 
     //set up state variables configuration
     const [values, setValues] = useState(dbInfo)
@@ -69,9 +71,9 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         else {
             dbdoc.sharing = "local"
         }
-        if(extract.icon){
-            dbdoc.icon = extract.icon
-        }
+
+        if(extract.iconUrl) dbdoc.icon = extract.iconUrl
+        else dbdoc.icon = extract.icon
         if (
             (advanced['data_url'] && advanced['data_url'].trim()) ||
             (advanced['schema_url'] && advanced['schema_url'].trim())

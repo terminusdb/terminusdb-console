@@ -138,7 +138,7 @@ export const PULL_REMOTE_FORM = {
             id: "remote_branch",
             value: "",
             inputElement: {
-                placeholder: "defaults to master",
+                placeholder: "defaults to main",
                 type: "input",
             },
             label: 'Pull from Remote Branch'
@@ -174,7 +174,7 @@ export const PULL_LOCAL_FORM = {
             id: "remote_branch",
             value: "",
             inputElement: {
-                placeholder: "defaults to master",
+                placeholder: "defaults to main",
                 type: "input",
             },
             label: 'Pull from Origin Branch'
@@ -219,7 +219,7 @@ export const PUSH_REMOTE_FORM = {
             id: "remote_branch",
             value: "",
             inputElement: {
-                placeholder: "defaults to master",
+                placeholder: "defaults to main",
                 type: "input",
             },
             label: 'Push to Remote Branch'
@@ -258,7 +258,7 @@ export const PUSH_LOCAL_FORM = {
             id: "remote_branch",
             value: "",
             inputElement: {
-                placeholder: "defaults to master",
+                placeholder: "defaults to main",
                 type: "input",
             },
             label: 'Push to Origin Branch'

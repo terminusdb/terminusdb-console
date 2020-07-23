@@ -17,7 +17,7 @@ import { config } from "./utils/config"
 *   11. Perform the above 10 steps for political-data
 */
 
-context('Run the entire life cycle of a database', () => {
+context.skip('Run the entire life cycle of a database', () => {
 
     before(() => {
        cy.visit('/');
