@@ -12,7 +12,7 @@ module.exports = (env, argv) => ({
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: "terminusdb-console.min.js",
-    publicPath: './'
+    publicPath: '/'
   },
   devtool:'#inline-source-map',
   devServer: {
