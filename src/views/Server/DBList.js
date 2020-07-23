@@ -14,7 +14,7 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
 import { BsBook } from 'react-icons/bs';
@@ -112,10 +112,10 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r8'>
                         {decr}
                     </Row>
-                    {meta.type == "invite" && 
+                    {meta.type == "invite" &&
                     <Row key='r9'>
                         <DBInvite meta={meta}/>
-                    </Row>                
+                    </Row>
                     }
                 </Col>
                 <Col key='r6' md={2} className='database-main-actions'>
@@ -562,10 +562,14 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
 
     if(meta.action == 'clone'){
         if(userCanDelete(meta, user)){
-            return (<span onClick={myDelete}><DeleteControl meta={meta} user={user} /></span>)
+            return (<span onClick={myDelete} className="secondory-btn-control"><DeleteControl meta={meta} user={user} /></span>)
         }
         else {
-            return (<span title={'Fork: ' + meta.remote_url} className="fork-action" onClick={myFork}>Fork <ForkControl meta={meta} user={user} /></span>)
+            return (<span className="secondory-btn-control"
+                title={'Fork: ' + meta.remote_url}
+                className="fork-action"
+                onClick={myFork}>Fork
+                <ForkControl meta={meta} user={user} /></span>)
         }
     }
     return null
@@ -668,7 +672,8 @@ export const RejectControl = ({meta}) => {
 }
 
 export const AcceptControl = ({meta}) => {
-    return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Accept Invitation to collaborate on database"} />
+    return <AiFillCheckCircle className={"db-main-action"} color={"#00C08B"} title={"Accept Invitation to collaborate on database"}/>
+    //return <FontAwesomeIcon className='database-listing-allgood' icon={ALL_GOOD_ICON} title={"Accept Invitation to collaborate on database"} />
 }
 
 export const DeleteControl = ({meta}) => {
