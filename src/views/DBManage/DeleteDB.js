@@ -16,6 +16,19 @@ export const DeleteDB = (props) => {
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
+    function removeDBCard(dbid, orgid){
+        dbid = dbid ||  woqlClient.db()
+        orgid = orgid || woqlClient.organization()
+        let dbs =  woqlClient.databases()
+        let ndbs = []
+        for(var i = 0; i<dbs.length; i++){
+            if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
+                ndbs.push(dbs[i])
+            }
+        }
+        woqlClient.databases(ndbs)
+    }
+
     const onDelete = (data) => {
         setDisabled(true)
         if (data.dbId && data.dbId == woqlClient.db()) {
@@ -28,9 +41,11 @@ export const DeleteDB = (props) => {
                         status: TERMINUS_SUCCESS,
                         time: Date.now() - st,
                     })
+                    //goServerHome()
+                    removeDBCard()
                     reconnectToServer()
-                    .then(() => goServerHome())
                     setDisabled(false)
+                    goServerHome()
                 })
                 .catch((err) => {
                     setDisabled(false)

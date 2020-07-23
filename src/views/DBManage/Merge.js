@@ -2,7 +2,7 @@
  * Controller application for branch creation form
  */
 import React, {useState, useEffect} from 'react'
-import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
+import {TCForm} from '../../components/Form/FormComponents'
 import {MERGE_BRANCH_FORM, MERGE_SOURCE_FORM} from './constants.dbmanage'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
@@ -15,13 +15,10 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import Loading from '../../components/Reports/Loading'
-import {useAuth0} from '../../react-auth0-spa'
-import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 
 export const Merge = () => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
-    const {user} = useAuth0()
 
     const {woqlClient} = WOQLClientObj()
     const {branch, branches, ref, consoleTime, updateBranches} = DBContextObj()
@@ -103,7 +100,7 @@ export const Merge = () => {
     }
 
     //let btns = MERGE_BRANCH_FORM.buttons
-    let btns = user ? MERGE_BRANCH_FORM.buttons : false
+    let btns = MERGE_BRANCH_FORM.buttons
 
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
@@ -111,12 +108,7 @@ export const Merge = () => {
 
     return (
         <>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
-            {!user && (
-                <TCSubmitWrap>
-                    <UnderConstruction action={MERGE_BRANCH_FORM.actionText} />
-                </TCSubmitWrap>
-            )}
+            {loading && <Loading type={TERMINUS_COMPONENT} />}          
             <TCForm
                 layout={[3]}
                 fields={MERGE_SOURCE_FORM.fields}
