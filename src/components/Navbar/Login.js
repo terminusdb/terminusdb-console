@@ -6,6 +6,7 @@ import { USER, POWER_OFF } from "../../constants/faicons"
 import { PROFILE_ROUTE } from "../../constants/routes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OutsideClickHandler from 'react-outside-click-handler';
+import {redirect_uri} from '../../utils/baseRouter'
 
 export const Login = (props) => {
     const {isAuthenticated, user, loading,loginWithRedirect,logout } = useAuth0();
@@ -22,9 +23,12 @@ export const Login = (props) => {
     /*
     * TO BE REVIEW TO GET FROM HISTORY BASE NAME
     */
+    //const base_router = process.env.TERMINUSDB_APP_BASE_ROUTER || '/console';
+    //const redirect_uri=`${window.location.origin}${base_router}`
+
     const logoutWithRedirect = () =>
         logout({
-            returnTo: window.location.origin+'/console/'
+            returnTo: redirect_uri//window.location.origin+'/console/'
     });
     return (<Fragment>      
             {!isAuthenticated && !user && 

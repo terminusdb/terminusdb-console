@@ -11,3 +11,4 @@ export ConnectionErrorPage from "./components/Reports/ConnectionErrorPage";
 export {initFontLib} from "./init/initFontAwesome";
 export {WOQLClientObj,WOQLClientProvider} from "./init/woql-client-instance";
 export {LoginPage} from "./views/Pages/LoginPage";
+export {redirect_uri, base_router} from './utils/baseRouter'

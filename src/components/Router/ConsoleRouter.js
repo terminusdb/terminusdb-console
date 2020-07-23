@@ -1,13 +1,16 @@
 import React from 'react'
 import {createHashHistory} from 'history'
 import {DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
-import {HashRouter,Router, Switch, Route} from 'react-router-dom'
+import {Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
 import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
+import {base_router} from '../../utils/baseRouter'
 
 import { createBrowserHistory } from "history";
-export const ConsoleHistory= createBrowserHistory({basename: process.env.REACT_APP_BASE_ROUTER || '/console'});
+
+
+export const ConsoleHistory= createBrowserHistory({basename: base_router});
 //http://localhost:6363/console/#/
 
 //export const ConsoleHistory = createHashHistory()
