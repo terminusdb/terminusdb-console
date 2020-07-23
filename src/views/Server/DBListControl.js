@@ -33,23 +33,25 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     }, [listSort, listFilter])
 
     useEffect(() => {
-        if(!shareFilter){
-            let u = bffClient.user()
-            let dbl = []
-            if(u.invites){
-                dbl = _invites_to_cards(u.invites, remoteClient.server())
+        if(bffClient){
+            if(!shareFilter){
+                let u = bffClient.user()
+                let dbl = []
+                if(u.invites){
+                    dbl = _invites_to_cards(u.invites, remoteClient.server())
+                }
+                if(sorted){
+                    dbl = dbl.concat(sorted)           
+                }
+                setShares(dbl)            
             }
-            if(sorted){
-                dbl = dbl.concat(sorted)           
+            else if(shareFilter == "recommendations"){
+                if(sorted) setShares(sorted)
             }
-            setShares(dbl)            
-        }
-        else if(shareFilter == "recommendations"){
-            if(sorted) setShares(sorted)
-        }
-        else if(shareFilter == "invitations"){
-            let u = bffClient.user()           
-            setShares(_invites_to_cards(u.invites))
+            else if(shareFilter == "invitations"){
+                let u = bffClient.user()           
+                setShares(_invites_to_cards(u.invites))
+            }
         }
     }, [shareFilter, shareSort, sorted])
 
