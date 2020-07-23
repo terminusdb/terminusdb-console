@@ -91,6 +91,13 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
 }
 
 
+export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently) => {
+
+}  
+export const RejectInvite = async (meta, client, remoteClient, getTokenSilently) => {
+}  
+
+
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
     let remote_name = "origin"

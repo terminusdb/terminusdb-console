@@ -15,13 +15,15 @@ import {CreateDatabase} from "../CreateDB/CreateDatabase"
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
     if(!list || !user ) return null
-    const { woqlClient,  refreshDBRecord, refreshDBListing, bffClient } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, refreshDBListing, bffClient, remoteClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()    
     let [special, setSpecial] = useState(false)
     const [listSort, setSort] = useState(sort || "updated")
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
-
+    const [shares, setShares] = useState([])
+    const [shareFilter, setShareFilter] = useState(filter || "")
+    const [shareSort, setShareSort] = useState(filter || "")
 
     useEffect(() => {
         if(listSort){
@@ -29,6 +31,27 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             setSorted(_sort_list(filt, listSort))
         }
     }, [listSort, listFilter])
+
+    useEffect(() => {
+        if(!shareFilter){
+            let u = bffClient.user()
+            let dbl = []
+            if(u.invites){
+                dbl = _invites_to_cards(u.invites, remoteClient.server())
+            }
+            if(sorted){
+                dbl = dbl.concat(sorted)           
+            }
+            setShares(dbl)            
+        }
+        else if(shareFilter == "recommendations"){
+            if(sorted) setShares(sorted)
+        }
+        else if(shareFilter == "invitations"){
+            let u = bffClient.user()           
+            setShares(_invites_to_cards(u.invites))
+        }
+    }, [shareFilter, shareSort, sorted])
 
     useEffect(() => {
         let filt = _filter_list(list, listFilter)
@@ -56,6 +79,28 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         }
         if(db.action == 'share'){
             setSpecial({action:db.action, meta: db})
+        }
+        else if(db.action == 'accept'){
+            AcceptInvite(db, woqlClient, bffClient, getTokenSilently)
+            .then(() => {
+                if(db.remote_record.public){
+                    CloneDB(db, woqlClient, getTokenSilently)
+                    .then((id) => {
+                        setSpecial(false)
+                        setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
+                        refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                        .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+                    })
+                }
+            })
+        }
+        else if(db.action == 'reject'){
+            RejectInvite(db, woqlClient, bffClient, getTokenSilently)
+            .then(() => {
+                setReport({status: TERMINUS_SUCCESS, message: "Invitation Rejected"})
+                removeDeletedRemoteDB(db)
+                refreshDBListing() 
+            })
         }
         else if(db.action == 'clone'){
             //db.remote_url = db.remote_record.url
@@ -139,10 +184,18 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         setFilter(nfilt.value)
     }
 
+    function callShareSort(nfilt){
+        alert(nfilt.value)
+    }
+
+    function callShareFilter(nfilt){
+        setShareFilter(nfilt.value)
+    }
+
     if(!sorted) return null
     return (<>
             {special && <>
-                <span className="database-list-intro" onClick={function(){setSpecial(false)}}>
+                <span className="database-list-back database-list-intro" onClick={function(){setSpecial(false)}}>
                     back to database list
                 </span>
                 <DBSummaryCard meta={special.meta} user={user} />
@@ -152,31 +205,41 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 <span className="database-list-intro">
                     <TerminusDBSpeaks report={report} />
                 </span>
-                <Row>
-                    <Col></Col>
-                    <Col></Col>
-                    <Col>
-                    {type == 'clone' && 
-                        <ShareFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-                    }
-                    {type != 'clone' && 
-                        <ListFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-                    }
-                    </Col>
-                    <Col>
-                        <ListSorter sort={listSort} logged_in={user.logged_in} onChange={callSort} />
-                    </Col>
-                </Row>
-                <DBList list={sorted} className={className} user={user} onAction={setAction}/>            
-                {type == 'clone' && <>
-                    <span className="database-list-intro">
-                        <TerminusDBSpeaks report={{status: TERMINUS_INFO, message: "You can also clone a database directly from a URL"}} />
-                    </span>
+                {type == 'clone' && 
+                    <Row>
+                        <Col></Col>
+                        <Col></Col>
+                        <Col>
+                            <ShareSorter filter={listFilter} logged_in={user.logged_in} onChange={callShareSort} />
+                        </Col>
+                        <Col>
+                            <ShareFilter filter={listFilter} logged_in={user.logged_in} onChange={callShareFilter} />
+                        </Col>
+                    </Row>
+                }
+                {type != 'clone' && 
+                    <Row>
+                        <Col></Col>
+                        <Col></Col>
+                        <Col>
+                            <ListFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
+                        </Col>
+                        <Col>
+                            <ListSorter sort={listSort} logged_in={user.logged_in} onChange={callSort} />
+                        </Col>
+                    </Row>
+                }
+                {type == 'clone' && (shareFilter == "clone") &&                   
                     <CloneURL onClone={cloneURL} />
-                </>}
-            </>}
-        </>
-    )
+                }
+                {type != 'clone' && 
+                    <DBList list={sorted} className={className} user={user} onAction={setAction}/>            
+                }
+                {type == 'clone' && (shareFilter != "clone") && shares && shares.length && 
+                    <DBList list={shares} className={className} user={user} onAction={setAction}/>            
+                }
+        </>}
+    </>)
 }
 
 export const ListFilter = ({filter, onChange, logged_in}) => {
@@ -203,7 +266,7 @@ export const ShareFilter = ({filter, onChange}) => {
         {value: "", label: "Show all"},
         {value: "recommended", label: "Recommendations"},
         {value: "invitations", label: "Invitations"},
-        {value: "public", label: "Public Databases"}
+        {value: "clone", label: "Clone URL"}
     ]
     return (
         <Select 
@@ -214,6 +277,9 @@ export const ShareFilter = ({filter, onChange}) => {
         />)
 }
 
+export const ShareSorter = ({sort, logged_in, onChange}) => {
+    return null
+}
 
 
 export const ListSorter = ({sort, logged_in, onChange}) => {
@@ -377,3 +443,20 @@ function _sort_list(unsorted, listSort){
     }
 }
 
+function _invites_to_cards(invites, srvr){
+    let cards = []
+    for(var i = 0; i<invites.length; i++){
+        let oni = _invite_to_card(invites[i], srvr)
+        if(oni) cards.push(oni)
+    }
+    return cards
+}
+
+function _invite_to_card(inv, srvr){
+    let nlocal = {id: "", "organization":"admin", label: inv.label, "comment": inv.comment }
+    nlocal.type = "invite"
+    nlocal.remote_record = inv
+    nlocal.remote_url = srvr + inv.organization + "/" + inv.id
+    nlocal.actions = ['clone']
+    return nlocal
+}    

@@ -9,7 +9,7 @@ import { useAuth0 } from '../../react-auth0-spa'
 import Select from "react-select";
 import { CollaboratorList } from '../Tables/CollaboratorList'
 import { AddCollaborators } from './AddCollaborators'
-import { TERMINU_WARNING } from '../../constants/identifiers'
+import { TERMINUS_WARNING } from '../../constants/identifiers'
 
 export const Collaborators = ({}) => {
 
@@ -58,18 +58,23 @@ export const Collaborators = ({}) => {
         let outg = []
         for(var i = 0; i<allDBs.length; i++){
             if(!orgFilter || (orgFilter == allDBs[i].organization)){
-                ndbs.push(allDBs[i])
-                if(isMyDB(allDBs[i]) && !dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id)){
-                    inc.push(allDBs[i])
-                }
-                else if(!dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id)) {
+                ndbs.push(allDBs[i])                
+                if(!dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id) && !isMyDB(allDBs[i])) {
                     outg.push(allDBs[i])    
                 }
-            }
+            }   
         }
-        setIncoming(inc)
         setOutgoing(outg)
         setDBList(ndbs)
+        let collabs = bffClient.connection.user.collaborators
+        if(collabs && collabs.length){
+            for(var i = 0; i<collabs.length; i++){
+                if(!dbFilter || (dbFilter == collabs[i].organization + "/" + collabs[i].id)) {
+                    inc.push(collabs[i])    
+                }
+            }
+            setIncoming(inc)
+        }
     }, [orgFilter, dbFilter])
 
     function callActionSelect(f){
@@ -84,10 +89,14 @@ export const Collaborators = ({}) => {
             <Row>
                 <Col></Col>
                 <Col>
+                {subscreen != "add" && 
                     <OrganizationFilter dblist={allDBs} filter={orgFilter} onChange={callOrgFilter} />
+                }
                 </Col>
                 <Col>
+                {subscreen != "add" && 
                     <DatabaseFilter dblist={dbs} orgFilter={orgFilter} filter={dbFilter} onChange={callDBFilter} />
+                }
                 </Col>
                 <Col>
                     <CollaborateAction dblist={dbs} filter={collabAction} orgFilter={orgFilter} dbFilter={dbFilter} onChange={callActionSelect} />
@@ -96,7 +105,7 @@ export const Collaborators = ({}) => {
             <Row>
                 <Col>
                 {subscreen == "my" && incoming && 
-                    <MyCollaborators  collaborators={incoming} user={user} />
+                    <MyCollaborators dblist={dbs} collaborators={incoming} user={user} />
                 }
                 {subscreen == "others" && outgoing &&
                     <MyCollaborations collaborators={outgoing}  user={user}/>
@@ -115,33 +124,58 @@ export const Collaborators = ({}) => {
 
 //organization -> database -> action (my roles)
 
-export const MyCollaborators = ({collaborators, user}) => {
+export const MyCollaborators = ({collaborators, user, dblist}) => {
+    function getDBRec(id, org){
+        for(var i = 0; i<dblist.length; i++){
+            if(dblist[i].id == id && dblist[i].organization == org){
+                return dblist[i]
+            }
+        }
+        return false
+    }
+
     let entries = []
     for(var i = 0; i < collaborators.length; i++){
         let entry = {}
-        entry.database = collaborators[i].label
+        let dbrec = getDBRec(collaborators[i].id, collaborators[i].organization)
+        entry.database = (dbrec ? dbrec.label : collaborators[i].id) 
         entry.id = collaborators[i].id
-        entry.sharing = (collaborators[i].public ? "Public" : "Private")
-        entry.organization = collaborators[i].organization_label
-        entry.user = user.author
+        entry.sharing = (dbrec && dbrec.public ? "Public" : "Private")
+        entry.organization = dbrec ? dbrec.organization_label : entry.id
+        entry.user = (collaborators[i].uid) ? collaborators[i].uid : collaborators[i].email 
         entry.role = getDBRole(collaborators[i])
+        if(collaborators[i].type == "invitation"){
+            entry.role += " (invited)"
+        }
         entries.push(entry)
     }
     if(entries.length > 0)
         return (<CollaboratorList users={entries} />)
         return (
             <span className="database-list-intro">
-                <TerminusDBSpeaks report={{status: TERMINU_WARNING, "message": "No collaborators have been added to your databases"}} />
+                <TerminusDBSpeaks report={{status: TERMINUS_WARNING, "message": "No collaborators have been added to your databases"}} />
             </span>
         )
 }
 
 export const MyCollaborations = ({collaborators, user}) => {
-    if(collaborators.length > 0)
-        return (<CollaboratorList users={collaborators} />)
+    let entries = []
+    for(var i = 0; i < collaborators.length; i++){
+        if(!isMyDB(collaborators[i])){
+            let entry = {}
+            entry.database = collaborators[i].label
+            entry.id = collaborators[i].id
+            entry.sharing = (collaborators[i].public ? "Public" : "Private")
+            entry.organization = collaborators[i].organization_label
+            entry["My Role"] = getDBRole(collaborators[i])
+            entries.push(entry)
+        }
+    }
+    if(entries.length > 0)
+        return (<CollaboratorList users={entries} />)
     return (
         <span className="database-list-intro">
-            <TerminusDBSpeaks report={{status: TERMINU_WARNING, "message": "You have not been added as a collaborator on any databases"}} />
+            <TerminusDBSpeaks report={{status: TERMINUS_WARNING, "message": "You have not been added as a collaborator on any databases"}} />
         </span>
     )
 }
@@ -361,8 +395,14 @@ function getDBRole(db){
     if(db.organization_roles && db.organization_roles.indexOf('manage') != -1 || db.roles && db.roles.indexOf('manage') != -1){
         return "Manager"
     }
+    if(db.roles && db.roles.indexOf('write') != -1){
+        return "Write"
+    }
     if(db.actions && db.actions.indexOf("push") == -1){
         return "Write"
+    }
+    if(db.roles && db.roles.indexOf('read') != -1){
+        return "Read"
     }
     if(db.actions && db.actions.indexOf("pull") == -1){
         return "Read"
