@@ -86,7 +86,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                 setReport({status: TERMINUS_ERROR, message: uerr, error: {}})
             }
             else {
-                setLoading(true)
+               // setLoading(true)
             }
         }
     }
@@ -163,7 +163,6 @@ export const DBTitle = ({meta, user, onAction, max}) => {
             </span>
             {false && <span className="author_info">{author}</span>}
         </span>
-
     )
 }
 

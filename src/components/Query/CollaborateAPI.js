@@ -99,8 +99,7 @@ export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently)
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    alert(JSON.stringify(msg))
-    //return remoteClient.updateUser(client.connection.user.logged_in, msg)    
+    return remoteClient.updateUser(client.connection.user.logged_in, msg)    
 }  
 
 export const RejectInvite = async (meta, client, remoteClient, getTokenSilently) => {
@@ -111,7 +110,7 @@ export const RejectInvite = async (meta, client, remoteClient, getTokenSilently)
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    //return remoteClient.updateUser(client.connection.user.logged_in, msg)    
+    return remoteClient.updateUser(client.connection.user.logged_in, msg)    
 }  
 
 

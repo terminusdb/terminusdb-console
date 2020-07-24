@@ -13,7 +13,7 @@ const onRedirectCallback = appState => {
   ConsoleHistory.push(
     appState && appState.targetUrl
       ? appState.targetUrl
-      : '/'
+      : ''
   );
 };
 
@@ -22,6 +22,7 @@ const onRedirectCallback = appState => {
  * initializes woqlClient and passes it off to the app to connect
  */
 console.log("___REDIRECT__CALL__",redirect_uri);
+
 
 ReactDOM.render(
     <Auth0Provider
