@@ -13,7 +13,7 @@ const onRedirectCallback = appState => {
   ConsoleHistory.push(
     appState && appState.targetUrl
       ? appState.targetUrl
-      : '/'
+      : ''
   );
 };
 
