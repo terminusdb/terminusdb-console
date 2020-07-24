@@ -155,7 +155,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 const jwtoken = await getTokenSilently()
                 bffClient.local_auth({type: "jwt", key: jwtoken})
                 let roledata = await bffClient.getRoles(bffClient.uid())
-                bffClient.connection.set_roles(roledata)
+                if(roledata.databases) bffClient.databases(roledata.databases) 
                 if(roledata.invites) bffClient.connection.user.invites = roledata.invites
                 if(roledata.collaborators) bffClient.connection.user.collaborators = roledata.collaborators
                 if(roledata.organizations) bffClient.connection.user.organizations = roledata.organizations

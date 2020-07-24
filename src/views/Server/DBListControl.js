@@ -76,7 +76,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     
     function setAction(db){
-        if(db.action == 'synchronize'){
+        if(db.action == 'synchronise'){
             goDBPage(db.id, woqlClient.user_organization(), "synchronize")
         }
         if(db.action == 'share'){

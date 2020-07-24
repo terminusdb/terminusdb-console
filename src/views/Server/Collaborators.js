@@ -137,13 +137,20 @@ export const MyCollaborators = ({collaborators, user, dblist}) => {
     let entries = []
     for(var i = 0; i < collaborators.length; i++){
         let entry = {}
-        let dbrec = getDBRec(collaborators[i].id, collaborators[i].organization)
-        entry.database = (dbrec ? dbrec.label : collaborators[i].id) 
         entry.id = collaborators[i].id
-        entry.sharing = (dbrec && dbrec.public ? "Public" : "Private")
-        entry.organization = dbrec ? dbrec.organization_label : entry.id
         entry.user = (collaborators[i].uid) ? collaborators[i].uid : collaborators[i].email 
         entry.role = getDBRole(collaborators[i])
+        let dbrec = getDBRec(collaborators[i].id, collaborators[i].organization)
+        if(dbrec){
+            entry.database = dbrec.label
+            entry.organization = dbrec.organization_label || collaborators[i].organization
+            entry.sharing = dbrec.public ? "Public" : "Private"
+        }
+        else {
+            entry.database = entry.id
+            entry.organization = collaborators[i].organization
+            entry.sharing = "?"
+        }
         if(collaborators[i].type == "invitation"){
             entry.role += " (invited)"
         }
@@ -380,7 +387,7 @@ function _sort_list(unsorted, listSort){
 
 
 function isMyDB(db){
-    if(db.organization_roles && db.organization_roles.indexOf('create') != -1 || db.organization_roles.indexOf('manage') != -1){
+    if(db.organization_roles && (db.organization_roles.indexOf('create') != -1 || db.organization_roles.indexOf('manage') != -1)){
         return true;
     }
     if(db.roles && db.roles.indexOf('create') != -1 || db.roles.indexOf('manage') != -1) return true

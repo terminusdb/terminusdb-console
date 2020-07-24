@@ -23,6 +23,7 @@ const onRedirectCallback = appState => {
  */
 console.log("___REDIRECT__CALL__",redirect_uri);
 
+
 ReactDOM.render(
     <Auth0Provider
         domain={config.domain}
