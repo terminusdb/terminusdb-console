@@ -117,7 +117,7 @@ export const Collaborators = () => {
     }
 
     function executeAction(){
-        alert(view)
+        //alert(view)
     }
     
     function setList(){ 

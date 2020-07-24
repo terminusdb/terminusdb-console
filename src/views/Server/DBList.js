@@ -136,9 +136,7 @@ export const DBTitle = ({meta, user, onAction, max}) => {
     let maxtitle = max || 40, author = false
 
     function goDB(){
-
         if(meta.id) goDBHome(meta.id, meta.organization)
-        //else onAction('clone', meta)
     }
 
     let title_css = meta.id ? "database-title-local" : "database-title-missing"
