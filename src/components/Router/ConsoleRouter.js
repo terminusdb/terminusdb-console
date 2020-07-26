@@ -10,7 +10,7 @@ import {base_router} from '../../utils/baseRouter'
 import { createBrowserHistory } from "history";
 
 
-export const ConsoleHistory= createBrowserHistory({basename: base_router});
+export const ConsoleHistory= createBrowserHistory()//{basename: base_router});
 //http://localhost:6363/console/#/
 
 //export const ConsoleHistory = createHashHistory()

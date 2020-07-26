@@ -95,7 +95,7 @@ export const CloneDatabase = () => {
 
     let copy_fields = COPY_DB_DETAILS_FORM.fields.map((item) => {
         if (item.id == 'sourceId'){
-            let dbs = woqlClient.user_databases();
+            let dbs = woqlClient.databases();
             let opts = []
             dbs.map((item) => {
                 opts.push({value: item.id, label: item.label})

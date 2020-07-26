@@ -130,7 +130,7 @@ export const WOQLClientProvider = ({children, params}) => {
 
      useEffect(() => {
         if(woqlClient){  
-            if(woqlClient.user_databases().length) {    
+            if(woqlClient.databases().length) {    
                 woqlClient.user.local_assets = true     
                 enrich_local_db_listing(woqlClient)
                 .then(() => {
