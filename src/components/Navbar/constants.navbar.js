@@ -17,3 +17,8 @@ export const PAGES_ID={
     NAV_QUERY:'nav_query',
     NAV_SCHEMA:'nav_schema',
 }
+
+export const noHttps={
+	title:'You need to run quickstart in HTTPS mode',
+	description:'To be able to connect to hub you have to start terminusdb-quickstart in HTTPS mode'
+}
