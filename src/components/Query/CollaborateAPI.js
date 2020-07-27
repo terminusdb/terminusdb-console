@@ -28,7 +28,7 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     let rmeta = meta
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {
-        if(resp.url) rmeta.remote_url = resp.url
+        //if(resp.url) rmeta.remote_url = resp.url
         if(!rmeta.organization_roles) rmeta.organization_roles = ['create'] 
         return CloneDB(rmeta, client, getTokenSilently)
     })

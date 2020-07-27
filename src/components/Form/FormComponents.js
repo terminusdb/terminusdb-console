@@ -321,7 +321,7 @@ export const TCFormInput = ({field_id, value, disabled, onChange, placeholder, c
 export const TCFormIcon = ({field_id, value, disabled, onChange, placeholder, className}) =>    {
     placeholder = placeholder || ""
     if(typeof className != "string" || !className)  className = INPUT_CSS
-    const [val, setVal] = useState(false)
+    const [val, setVal] = useState("")
     useEffect(() => {setVal(value)}, [value])
     let vchange = function(selval){
         setVal(selval)
