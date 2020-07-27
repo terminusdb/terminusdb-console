@@ -94,8 +94,8 @@ export const runQueries = async(database) => {
 
     //await cy.get('.tdb__qpane__editor').find('button').contains('Run Query').click()
 
-    await cy.get('.tdb__dropdown').find('button').find('span').click()
-    await cy.get('.tdb__dropdown__content').find('button').contains('Graph').click()
+    //await cy.get('.tdb__dropdown').get('.tdb__commit__bar--drop').find('span').click()
+    //await cy.get('.tdb__dropdown').get('.tdb__dropdown__content').find('button').contains('Graph').click()
 	cy.wait(3000)
 }
 
