@@ -43,7 +43,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     await enrich_local_db_listing(dbClient)
                     setConnecting(false)
                 } catch (err) {
-                    setError(err)
+                    setConnecting(false)
                 }
             }
         }
@@ -63,7 +63,6 @@ export const WOQLClientProvider = ({children, params}) => {
         if(remoteEnriched && woqlClient){
             try {
                 consolidateView(remoteEnriched)
-                console.log(woqlClient.databases())
                 setLoading(false)
             }
             catch(e) {
