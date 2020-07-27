@@ -44,6 +44,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     setConnecting(false)
                 } catch (err) {
                     setConnecting(false)
+                    setLoading(false)
                 }
             }
         }
@@ -67,6 +68,7 @@ export const WOQLClientProvider = ({children, params}) => {
             }
             catch(e) {
                 console.log(e)
+                setLoading(false)
             }
         }
      }, [remoteEnriched, woqlClient])    
@@ -89,12 +91,18 @@ export const WOQLClientProvider = ({children, params}) => {
         bClient.connection.user.id = hub_org
         bClient.connection.user.author = remote_user.email
         setBffClient(bClient)
-        let roledata = await bClient.getRoles(bClient.uid())
-        setRemoteEnriched(roledata)
-        if(roledata.databases) bClient.databases(roledata.databases) 
-        if(roledata.invites) bClient.connection.user.invites = roledata.invites
-        if(roledata.collaborators) bClient.connection.user.collaborators = roledata.collaborators
-        if(roledata.organizations) bClient.connection.user.organizations = roledata.organizations
+        try {
+            let roledata = await bClient.getRoles(bClient.uid())
+            setRemoteEnriched(roledata)
+            if(roledata.databases) bClient.databases(roledata.databases) 
+            if(roledata.invites) bClient.connection.user.invites = roledata.invites
+            if(roledata.collaborators) bClient.connection.user.collaborators = roledata.collaborators
+            if(roledata.organizations) bClient.connection.user.organizations = roledata.organizations
+        }
+        catch(e){
+            console.log(e)
+            setLoading(false)
+        }
     }
 
 
@@ -136,7 +144,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     }
                 }
                 if(!found){
-                    let nlocal = remote
+                    let nlocal = _copy_db_card(remote)
                     nlocal.id = ""
                     nlocal.organization = woqlClient.user_organization()
                     nlocal.type = "missing"
@@ -154,6 +162,19 @@ export const WOQLClientProvider = ({children, params}) => {
             }
         }
         woqlClient.databases(updated)
+    }
+
+    function _copy_db_card(card){
+        let ncard = {}
+        for(var k in card){
+            if(typeof card[k] == "object"){
+                ncard[k] = _copy_db_card(card[k])   
+            }
+            else {
+                ncard[k] = card[k]
+            }
+        }
+        return ncard
     }
 
 
