@@ -22,3 +22,7 @@ export const  woqlQuery = (dbId, bid) => {
 export const clone = (dbId) => {
 	return `**/clone/admin/${dbId}`
 }
+
+export const role = () => {
+	return `https://hub-dev.dcm.ist/role`
+}

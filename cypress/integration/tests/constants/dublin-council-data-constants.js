@@ -10,13 +10,13 @@ export const DUBLIN_COUNCIL_DATA_SCHEMA_QUERY = 'WOQL.when(true).and(' + '\n' +
         '.label("Representative")' + '\n' +
         '.description("An elected member of the Dublin city council")' + '\n' +
         '.property("member_of", "Party")' + '\n' +
-            '.label("Member of").cardinality(1),' + '\n' +
+            '.label("Member of").min(1),' + '\n' +
     'WOQL.doctype("Similarity")' + '\n' +
         '.label("Similarity")' + '\n' +
         '.property("similarity", "decimal")' + '\n' +
             '.label("Similarity")' + '\n' +
         '.property("similar_to", "Representative")' + '\n' +
-            '.label("Similar To").cardinality(2))'
+            '.label("Similar To").max(2))'
 
 export const DUBLIN_COUNCIL_DATA_CSV = 'WOQL.get(' + '\n' +
         'WOQL.as("councillor_a","v:Rep_A")' + '\n' +
