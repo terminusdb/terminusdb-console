@@ -52,5 +52,5 @@ export const config = [{
 	}]
 
 export const episode_1_database = {
-	"name": "episode_1_database_" + Date.now(),
+	"name": "episode_1_database"
 }
