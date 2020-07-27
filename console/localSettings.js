@@ -1,4 +1,4 @@
-const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/api/`
+const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/`
 
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
