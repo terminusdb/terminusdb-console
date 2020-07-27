@@ -54,7 +54,7 @@ export const WOQLClientProvider = ({children, params}) => {
         if(!loading && !user && woqlClient){
             setLoading(false)
         }
-        else if(!loading && user && woqlClient) {
+        else if(!loading && user && woqlClient && !remoteEnriched) {
             initRemoteConnection(user)
         }
      }, [loading, user, woqlClient])    
