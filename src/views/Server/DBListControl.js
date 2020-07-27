@@ -347,7 +347,7 @@ function _filter_list(unfiltered, filter){
     if(filter == "recommended"){
         filtf = function(dbrec){
             if(!dbrec.remote_record) return false
-            if(dbrec.recommended) return true
+            if(dbrec.invitation) return false
             return false
         }
     }
@@ -399,16 +399,16 @@ function _sort_list(unsorted, listSort){
     }
     else if(listSort == 'updated local'){
         sortf = function(a, b){
-            var lts = a.updated || 0
-            var rts = b.updated || 0
-            return lts - rts 
+            var lts = (a.id ? (a.updated || 0) : 0)
+            var rts = (b.id ? (b.updated || 0) : 0)
+            return rts - lts 
         }
     }
     else if(listSort == 'updated remote'){
         sortf = function(a, b){
             if(a.remote_record && b.remote_record){
-                var lts = b.remote_record.updated || 0                
-                var rts = a.remote_record.updated || 0                
+                var lts = a.remote_record.updated || 0                
+                var rts = b.remote_record.updated || 0                
                 return rts - lts
             }
         }
@@ -417,7 +417,7 @@ function _sort_list(unsorted, listSort){
         sortf = function(a, b){
             var lts = a.created || 0
             var rts = b.created || 0
-            return lts - rts
+            return rts - lts
         }
     }
     else if(listSort == 'size'){
@@ -434,10 +434,16 @@ function _sort_list(unsorted, listSort){
             }
         }
     }
-    if(sortf){
-        return unsorted.sort(sortf)
-    }
     else if(listSort == 'name'){
+        sortf = function(a, b){
+            if(a.label && b.label){
+                if(a.label.toLowerCase() < b.label.toLowerCase()) { return -1; }
+                if(a.label.toLowerCase() > b.label.toLowerCase()) { return 1; }
+                return 0;
+            }
+        }
+    }
+    if(sortf){
         return unsorted.sort(sortf)
     }
     else {
