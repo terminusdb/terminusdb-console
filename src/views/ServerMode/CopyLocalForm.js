@@ -69,7 +69,7 @@ export const CopyLocalForm = () => {
     }
 
     function getDBList() {
-        return woqlClient.user_databases()
+        return woqlClient.databases()
     }
 
     function loadDetailsForDB(dbid) {

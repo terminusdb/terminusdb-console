@@ -40,7 +40,6 @@ const ServerHome = (props) => {
     let active = props.page
 
     const { woqlClient, contextEnriched } = WOQLClientObj()
-
     let showlist = woqlClient.databases().length || false
 
     useEffect(() => {

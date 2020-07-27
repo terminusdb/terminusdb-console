@@ -31,7 +31,9 @@
     "autofix": "eslint src --fix",
     "cypress:open": "cypress open",
     "cypress:one": "cypress run --browser chrome --spec $1",
-    "cypress:run": "cypress run --browser chrome --spec 'cypress/integration/tests/*.spec.js'"
+    "cypress:run": "cypress run --browser chrome --spec 'cypress/integration/tests/*.spec.js'",
+    "cypress:electron": "cypress run --headed"
+
   },
   "pre-commit": [],
   "pre-push": [

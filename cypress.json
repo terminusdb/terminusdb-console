@@ -1,7 +1,7 @@
 {
   "viewportWidth": 1440,
   "viewportHeight": 900,
-  "baseUrl":"http://127.0.0.1:6363/console/",
+  "baseUrl":"https://127.0.0.1:6363/",
   "responseTimeout":120000,
   "env": {
     "password": "root"

@@ -116,19 +116,7 @@ export const MERGE_BRANCH_FORM = {
             },
             label: 'Merge into branch',
             help: "You can merge into the head of any branch",
-        },
-        {
-            id: "merge_type",
-            value: "rebase",
-            inputElement: {
-                type: "select",
-                disabled: false,
-                placeholder: "Rebase Merge",
-                options: [{label: "Rebase", value: "rebase"}, {label: "Merge", value: "merge"}, {label: "Three Way Merge", value: "3merge"}]
-            },
-            label: 'Merge Type',
-            help: "Currently rebase is the only supported merge type",
-        },
+        },       
         {
             id: "commit",
             label: "Commit Message",

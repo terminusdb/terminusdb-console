@@ -14,7 +14,7 @@ import { config } from "./utils/config"
 * 	6. 	Delete database
 */
 
-context.skip('Test commits and branching', () => {
+context('Test commits and branching', () => {
    let bid, commit_msg, masterBranchId='main';
    let database = config[0]
 
@@ -60,7 +60,7 @@ context.skip('Test commits and branching', () => {
         })
 
       cy.url().then(urlString => {
-          const dbUrl = `#/db/admin/${database.name}`
+          const dbUrl = `/db/admin/${database.name}`
           if(!urlString.endsWith(dbUrl)){
               cy.visit(dbUrl)
           }
@@ -80,7 +80,7 @@ context.skip('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(5000);
-        const dbHomeRef = "#/db/admin/" + database.name + "/"
+        const dbHomeRef = "/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -174,7 +174,7 @@ context.skip('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(5000);
-        const dbHomeRef = "#/db/admin/" + database.name + "/"
+        const dbHomeRef = "/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {

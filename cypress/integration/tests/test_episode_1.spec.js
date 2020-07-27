@@ -3,7 +3,7 @@ import { importAndExportCSV } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { createLocalDB, removeLocalDB } from "./utils/dbLifeCircle"
 
-context.skip('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv in Canary', () => {
+context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv in Canary', () => {
 
     before(() => {
        cy.visit('/');
@@ -13,6 +13,8 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
 
 		const password = Cypress.env('password');
 		const database = episode_1_database;
+        const dbId = database.name
+        const user = false
 
 
 		it('User Login', () => {
@@ -30,17 +32,16 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
             cy.wait(5000);
 
             cy.get("#terminus-console-page").then(async($consolePage)=>{
+
                 if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                     await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
                     cy.wait(1000);
-                    await createLocalDB(database.name)
-                }
-				else{
-                    await createLocalDB(database.name);
+                    await createLocalDB(dbId, user)
+                }else{
+                    await createLocalDB(dbId, user);
                 }
             })
         })
-
 
         /***** Write query to import and export csv  ****/
        it('Run query to import and export csv', () => {
@@ -50,15 +51,15 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
             .contains('Query')
             .click().then(async() => {
     			cy.wait(1000)
-                await importAndExportCSV(database.name)
+                await importAndExportCSV(dbId)
             })
         })
 
         /***** Go to Home Page  ****/
        it('Go to database home page', () => {
             cy.wait(5000);
-            const dbHomeRef = "#/db/admin/" + database.name + "/"
-            cy.get('#terminus-console-page')
+            const dbHomeRef = "/db/admin/" + dbId + "/"
+            cy.get('#terminus-console-page').get('.console__page__header').get('.nav__main').find('ul').find('li')
             .find('a[href="'+ dbHomeRef +'"]')
             .click().then(() => {
                 cy.wait(1000);
@@ -73,7 +74,7 @@ context.skip('Run test for the one where Sarah imports a csv, queries to tidy up
             .contains(tabs.MANAGE_TAB)
             .click().then(async () => {
                 cy.wait(1000);
-                await removeLocalDB(database.name)
+                await removeLocalDB(dbId)
             })
        })
 

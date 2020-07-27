@@ -28,7 +28,7 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     let rmeta = meta
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {
-        if(resp.url) rmeta.remote_url = resp.url
+        //if(resp.url) rmeta.remote_url = resp.url
         if(!rmeta.organization_roles) rmeta.organization_roles = ['create'] 
         return CloneDB(rmeta, client, getTokenSilently)
     })
@@ -135,7 +135,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
         let q = WOQL.lib().add_remote(using, rem, "origin")       
         return client.query(q, "Setting remote for sharing database on Terminus Hub")
         .then(() => {
-            return client.fetch(push_to).then(() => {
+            return client.fetch(push_to.remote).then(() => {
                 client.push(push_to)
             })
         })

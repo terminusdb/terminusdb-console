@@ -172,10 +172,11 @@ export const DBCredits = ({meta, user}) => {
     if(meta && (meta.created || meta.updated)) {
         res.push(<DBTimings key='dbt' meta={meta} user={user} />)
     }
-
-    //res.push(
-    //    <DBSize  key='ab' meta={meta} user={user} />
-    //)
+    if(typeof meta.size != "undefined"){
+        res.push(
+            <DBSize  key='ab' meta={meta} user={user} />
+        )
+    }
     if(meta.branches && meta.branches.length > 1) {
         res.push(
             <DBBranches  key='abc' meta={meta} user={user} />
@@ -260,12 +261,7 @@ export const DBProductionCredits = ({meta, user}) => {
 export const DBRoleCredits = ({meta, user}) => {
     if(meta.remote_record){
         let dbrec = meta.remote_record
-        let rs = [];
-        if(dbrec.organization_roles){
-            for(var i = 0 ; i<dbrec.organization_roles.length; i++){
-                rs.push(_get_role_title(dbrec.organization_roles[i], dbrec.organization_type))
-            }
-        }
+        let rs = [];       
         if(dbrec.roles){
             for(var i = 0 ; i<dbrec.roles.length; i++){
                 rs.push(_get_role_title(dbrec.roles[i]))
@@ -531,8 +527,8 @@ export const DBMainAction = ({meta, user}) => {
 export const DBSecondaryAction = ({meta, user, onAction}) => {
 
     function userCanDelete(meta, user){
-        if(meta.remote_record && meta.remote_record.organization_roles){
-            let roles = meta.remote_record.organization_roles
+        if(meta.remote_record && meta.remote_record.roles){
+            let roles = meta.remote_record.roles
             return (roles.indexOf("create") != -1)
         }
         return false
