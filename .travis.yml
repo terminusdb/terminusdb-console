@@ -11,6 +11,8 @@ stages:
     if: branch = dev
   - name: deploy_canary
     if: branch = canary
+  - name: deploy_rc
+    if: branch = rc
 
 jobs:
   include:
@@ -35,6 +37,13 @@ jobs:
         - npm run build
         - bash .ci/trigger_canary.sh
         - bash .ci/publish_canary.sh
+
+    - stage: deploy_rc
+      before_install:
+        -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-rc" > $TRAVIS_BUILD_DIR/.npmrc
+      script:
+        - npm run build
+        - bash .ci/publish_rc.sh
 
 deploy:
   - provider: npm
