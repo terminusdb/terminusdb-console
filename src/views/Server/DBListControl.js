@@ -75,7 +75,8 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     }
     let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     
-    function setAction(db){
+    function setAction(dbmeta){
+        let db = _copy_db_card(dbmeta)
         if(db.action == 'synchronise'){
             goDBPage(db.id, woqlClient.user_organization(), "synchronize")
         }
@@ -468,3 +469,28 @@ function _invite_to_card(inv, srvr){
     nlocal.actions = ['clone']
     return nlocal
 }    
+
+
+function _copy_db_card(card){
+    let ncard = {}
+    for(var k in card){
+        if(Array.isArray(card[k])){
+            ncard[k] = []
+            for(var i = 0; i<card[k].length; i++){
+                if(typeof card[k][i] == "object"){
+                    ncard[k].push(_copy_db_card(card[k][i]))   
+                }
+                else {
+                    ncard[k].push(card[k][i])
+                }                
+            }
+        }
+        else if(typeof card[k] == "object"){
+            ncard[k] = _copy_db_card(card[k])   
+        }
+        else {
+            ncard[k] = card[k]
+        }
+    }
+    return ncard
+}

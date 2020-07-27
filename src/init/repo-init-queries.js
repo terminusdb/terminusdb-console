@@ -68,7 +68,7 @@ export function append_remote_record(local, remote){
     let actions = []
     if(remote.public) actions.push('pull')
     let roles = remote.roles || []
-    roles = roles.concat(remote.organization_roles || [])
+    if(!Array.isArray(roles)) roles = Object.values(roles)
     if(roles.indexOf('create') == -1){
         actions.push('delete')                                
         if(actions.indexOf('pull') == -1) actions.push('pull')                                

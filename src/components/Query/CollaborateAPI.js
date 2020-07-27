@@ -55,7 +55,6 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    console.log(meta)
     return remoteClient.deleteDatabase(meta.remote_record.id, meta.remote_record.organization)
 }
 
@@ -68,6 +67,7 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 */
 export const CloneDB = async (meta, client, getTokenSilently) => {
     let dbs = client.databases()
+    console.log(dbs)
     let url = meta.remote_url 
     let newid = meta.id
     if(!newid){
@@ -256,8 +256,12 @@ function _new_local_label(starter, dbl){
             starter = start.substring(0, starter.lastIndexOf(" (") - 1)
         }    
     }
+    let ndbl = []
+    for(var i = 0 ; i<dbl.length; i++){
+        if(dbl[i].id) ndbl.push(dbl)
+    }
     let base = starter
-    let labs = dbl.map((item) => item.label)
+    let labs = ndbl.map((item) => item.label)
     while(labs.indexOf(base) != -1){
         base = starter + " (" + (++ind) + ")"
     }

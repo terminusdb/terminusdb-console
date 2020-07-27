@@ -168,7 +168,18 @@ export const WOQLClientProvider = ({children, params}) => {
     function _copy_db_card(card){
         let ncard = {}
         for(var k in card){
-            if(typeof card[k] == "object"){
+            if(Array.isArray(card[k])){
+                ncard[k] = []
+                for(var i = 0; i<card[k].length; i++){
+                    if(typeof card[k][i] == "object"){
+                        ncard[k].push(_copy_db_card(card[k][i]))   
+                    }
+                    else {
+                        ncard[k].push(card[k][i])
+                    }                
+                }
+            }
+            else if(typeof card[k] == "object"){
                 ncard[k] = _copy_db_card(card[k])   
             }
             else {
@@ -194,9 +205,11 @@ export const WOQLClientProvider = ({children, params}) => {
         .then((res) =>{
             if(res[0]){
                 let local = res[0]
+
                 local.id = id
                 local.organization = org
                 if(action == 'clone' && meta ){
+                    console.log(meta, local)
                     local = append_remote_record(local, meta)
                 }
                 else if (action == 'create' && meta){
