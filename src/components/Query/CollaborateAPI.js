@@ -29,7 +29,7 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {
         //if(resp.url) rmeta.remote_url = resp.url
-        if(!rmeta.organization_roles) rmeta.organization_roles = ['create'] 
+        if(!rmeta.roles) rmeta.roles = ['create']
         return CloneDB(rmeta, client, getTokenSilently)
     })
 }
@@ -67,7 +67,7 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 */
 export const CloneDB = async (meta, client, getTokenSilently) => {
     let dbs = client.databases()
-    console.log(dbs)
+    //console.log(dbs)
     let url = meta.remote_url 
     let newid = meta.id
     if(!newid){
@@ -123,7 +123,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
     if(meta.schema) delete meta['schema']
-    meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases())
+    meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => { 
         let rem = resp.url || meta.remote_url
@@ -218,9 +218,9 @@ function _new_local_id(starter, dbl){
     return base
 }
 
-function _new_remote_id(starter, org, dbl){
+function _new_remote_id(starter, org, dbl, preformed){
     let ind = 0;
-    if(starter.lastIndexOf("_") != -1){
+    if(!preformed && starter.lastIndexOf("_") != -1){
         let parts = starter.split("_")
         let v = parts[parts.length-1]
         if(_is_integer(v)){
@@ -229,7 +229,6 @@ function _new_remote_id(starter, org, dbl){
         }    
     }
     let base = starter
-    console.log(starter, org, dbl)
     let ids = dbl.map((item) => item.organization + "/" + item.id)
     while(ids.indexOf(org + "/" + base) != -1){
         base = starter + "_" + (++ind)

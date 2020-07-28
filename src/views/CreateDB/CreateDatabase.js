@@ -67,7 +67,7 @@ export const CreateDatabase = ({from_local}) => {
         sclient.db(local.id)
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
-            after_create_db(update_start, get_local_create_message(doc.label, local.id), local.id, "share", doc)
+            after_create_db(update_start, get_remote_create_message(doc.label, doc.id), local.id, "share", doc)
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, local.id)))
         .finally(() => setLoading(false))
@@ -95,6 +95,7 @@ export const CreateDatabase = ({from_local}) => {
         }
         setReport(rep)
         if(create_or_clone == 'share'){
+            return refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
         }
         else {
             refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
