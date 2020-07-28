@@ -1,4 +1,5 @@
 import * as tabs from "../../../../src/views/Pages/constants.pages"
+import { EDIT_OWL_BUTTON } from "../../../../src/views/Schema/constants.schema"
 import { SHOW_CLASSES_PROPERTIES, DOCUMENT_META_DATA, ADD_DOCTYPE_TEST, ADD_DOCTYPE_SECOND_TEST, IMPORT_AND_EXPORT_CSV } from "./queries"
 import * as routes from "./routes"
 

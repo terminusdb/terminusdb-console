@@ -44,6 +44,23 @@ export const addSchema = (database) => {
     })    */
 }
 
+export const addTriples = async (database) => {
+    cy.server().route("POST", routes.woqlQuery(database.name)).as('runQuery');
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(database.loadDocuments)
+
+    cy.get('.tdb__commit__bar__tools').find('button').contains('Run Query').click().then(()=>{
+        cy.wait("@runQuery").its('status').should('eq', 200);
+        //cy.wait(5000);
+    })
+
+    cy.get('#terminus-console-page')
+        .find('a')
+        .contains('Documents')
+        .click({force: true}).then(() => {
+            cy.wait(1000)
+    })
+}
+
 /*
 *   Add documents
 */
@@ -75,6 +92,17 @@ export const addDocuments = async (database) => {
         .click({force: true}).then(() => {
             cy.wait(1000)
     })
+}
+
+export const runAQuery = async(dbId, query) => {
+    cy.server().route("POST", routes.woqlQuery(dbId)).as('runQuery');
+
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().clear()
+    cy.wait(1000);
+    await cy.get('.CodeMirror').find('div').find('textarea').focus().type(query, { parseSpecialCharSequences: false })
+
+    await cy.get('.tdb__commit__bar__tools').find('button').contains('Run Query').click()//.then(()=>{
+	cy.wait(3000)
 }
 
 /*

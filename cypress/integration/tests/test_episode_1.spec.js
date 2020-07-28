@@ -3,7 +3,7 @@ import { importAndExportCSV } from "./utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
 import { createLocalDB, removeLocalDB } from "./utils/dbLifeCircle"
 
-context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv in Canary', () => {
+context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv', () => {
 
     before(() => {
        cy.visit('/');
