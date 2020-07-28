@@ -46,11 +46,10 @@ export const Login = (props) => {
                                 width="50"/>
                         </button>               
                         <div className={dropdownContent}>
-                            <NavLink tag = {NavLink} className="tdb__dropdown__button"
-                                to = {PROFILE_ROUTE}
-                                exact>
+                            <a  className="tdb__dropdown__button"
+                                href = {PROFILE_ROUTE}>
                                 <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}                 
-                            </NavLink>
+                            </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"
                                 onClick={() => logoutWithRedirect()}
                                 to="#"
