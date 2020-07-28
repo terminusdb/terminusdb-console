@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import {Auth0Provider, ConsoleHistory} from '@terminusdb/terminusdb-console'
-import config from './auth_config.json'
+import {auth0_conf} from './auth_config'
 import {localSettings} from './localSettings'
 import {WOQLClientProvider ,redirect_uri} from '@terminusdb/terminusdb-console'
 
@@ -26,11 +26,11 @@ console.log("___REDIRECT__CALL__",redirect_uri);
 
 ReactDOM.render(
     <Auth0Provider
-        domain={config.domain}
-        client_id={config.clientId}
+        domain={auth0_conf.domain}
+        client_id={auth0_conf.clientId}
         redirect_uri={redirect_uri}
         onRedirectCallback={onRedirectCallback}
-        audience={config.audience}
+        audience={auth0_conf.audience}
     >
       <WOQLClientProvider params={localSettings}>
           <App />

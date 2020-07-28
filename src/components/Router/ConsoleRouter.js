@@ -3,7 +3,7 @@ import {createHashHistory} from 'history'
 import {DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
 import {Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
-import {ProfileRoutes} from './ProfileRoutes'
+//import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
 import {base_router} from '../../utils/baseRouter'
 
@@ -41,9 +41,6 @@ export const ConsoleRouter = (props) => {
             <Switch>
                 <Route path={DB_ROUTE}>
                     <DBRoutes />
-                </Route>
-                <Route path={PROFILE_ROUTE}>
-                    <ProfileRoutes />
                 </Route>
                 <Route path={SERVER_ROUTE}>
                     <ServerRoutes />

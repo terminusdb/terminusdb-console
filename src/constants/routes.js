@@ -1,6 +1,6 @@
 export const DB_ROUTE = '/db'
 //Top-Level (Server) Routes
-export const PROFILE_ROUTE = '/profile'
+export const PROFILE_ROUTE = process.env.TERMINUS_HUB_PROFILE_URL
 export const SERVER_ROUTE = '/'
 export const CREATE_DB_ROUTE = '/newDB'
 
