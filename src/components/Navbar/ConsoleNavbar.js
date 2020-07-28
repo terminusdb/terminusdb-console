@@ -19,7 +19,7 @@ export const ConsoleNavbar = (props) => {
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
 
-    const showUnderCostruction = window.location.protocol === 'https' || window.location.host==="localhost:3005" ? false : true
+    const showUnderCostruction = false//window.location.protocol === 'https' || window.location.host==="localhost:3005" ? false : true
     return (
         <Fragment>
             <header className="console__page__header">
