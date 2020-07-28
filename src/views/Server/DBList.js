@@ -556,7 +556,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
     if(meta.action == 'accept'){
         return (
             <div className="action-centralise">
-                <div className="action-centralise action-divider">Or</div>
+                <div className="action-centralise action-divider">or</div>
                 <div>
                     <span className="secondory-btn-control" onClick={myReject}>
                         <RejectControl meta={meta} user={user} />
@@ -569,7 +569,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         if(userCanDelete(meta, user)){
             return (
                 <div className="action-centralise">
-                    <div className="action-centralise action-divider">Or</div>
+                    <div className="action-centralise action-divider">or</div>
                     <div>
                         <span onClick={myDelete} className="secondory-btn-control">
                             <DeleteControl meta={meta} user={user} />
@@ -580,7 +580,7 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         else {
             return (
                 <div className="action-centralise">
-                    <div className="action-centralise action-divider">Or</div>
+                    <div className="action-centralise action-divider">or</div>
                     <div>
                         <span className="secondory-btn-control"
                             title={'Fork: ' + meta.remote_url}

@@ -41,6 +41,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     await dbClient.connect(opts)
                     setWoqlClient(dbClient)
                     await enrich_local_db_listing(dbClient)
+                    setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
                     setConnecting(false)
@@ -61,7 +62,7 @@ export const WOQLClientProvider = ({children, params}) => {
      }, [loading, user, woqlClient])    
 
      useEffect(() => {
-        if(remoteEnriched && woqlClient){
+        if(remoteEnriched && initComplete){
             try {
                 consolidateView(remoteEnriched)
                 setLoading(false)
@@ -71,7 +72,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 setLoading(false)
             }
         }
-     }, [remoteEnriched, woqlClient])    
+     }, [remoteEnriched, initComplete])    
 
 
 
@@ -205,19 +206,58 @@ export const WOQLClientProvider = ({children, params}) => {
         .then((res) =>{
             if(res[0]){
                 let local = res[0]
-
-                local.id = id
-                local.organization = org
-                if(action == 'clone' && meta ){
-                    console.log(meta, local)
-                    local = append_remote_record(local, meta)
-                }
-                else if (action == 'create' && meta){
+                if (action == 'create' && meta){
+                    let dbs = woqlClient.databases()
                     local.label = meta.label
                     local.comment = meta.comment
+                    dbs.push(local)
                 } 
-                let dbs = woqlClient.databases()
-                dbs.push(local)
+                else if(action == 'clone' && meta){
+                    if(!meta.roles) {
+                        meta.roles = ["read"]
+                        meta.updated = local.updated
+                        meta.branches = local.branches
+                    }
+                    if(!local.label && meta.label) local.label = meta.label
+                    if(!local.comment && meta.comment) local.comment = meta.comment
+                    local = append_remote_record(local, meta)
+                    let dbs = woqlClient.databases()
+                    let nudbs = []
+                    let found = false
+                    for(var i = 0; i<dbs.length; i++){
+                        if(dbs[i] && dbs[i].remote_record && (dbs[i].remote_record.id == meta.id) && (dbs[i].remote_record.organization == meta.organization)){
+                            found = true
+                            nudbs.push(local)
+                        }
+                        else if(dbs[i]) {
+                            nudbs.push(dbs[i])
+                        }
+                    }
+                    if(!found) nudbs.push(local)
+                    woqlClient.databases(nudbs)
+                }
+                else if(action == 'share' && meta){
+                    let dbs = woqlClient.databases()
+                    let nudbs = []
+                    for(var i = 0; i<dbs.length; i++){
+                        if(dbs[i] && (dbs[i].id == id) && (dbs[i].organization == org)){
+                            for(var k in local){
+                                if(k != "organization" && k != "id"){
+                                    meta[k] = local[k]
+                                }
+                            }
+                            meta.roles = ["create"]
+                            local = append_remote_record(local, meta)
+                            local.label = dbs[i].label
+                            local.comment = dbs[i].comment
+                            nudbs.push(local)
+                        }
+                        else if(dbs[i]) {
+                            nudbs.push(dbs[i])
+                        }
+                    }
+                    woqlClient.databases(nudbs)
+                }
                 setContextEnriched(contextEnriched + 1)
             }
         })

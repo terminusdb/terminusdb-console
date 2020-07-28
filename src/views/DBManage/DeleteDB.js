@@ -25,6 +25,11 @@ export const DeleteDB = (props) => {
             if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
                 ndbs.push(dbs[i])
             }
+            else if(dbs[i].remote_record) {
+                dbs[i].id = ""
+                dbs[i].type = "missing"
+                ndbs.push(dbs[i])
+            }
         }
         woqlClient.databases(ndbs)
     }
