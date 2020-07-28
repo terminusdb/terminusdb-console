@@ -3,7 +3,7 @@ const clientId = process.env.AUTH0_CLIENT_ID || 'MJJndGp0zUdM7o3POTQPmRJImY2ho0a
 const audience = process.env.AUDIENCE || 'https://terminushub/registerUser'
 
 
-export auth0_conf={
+export const auth0_conf={
   "domain": domain,
   "clientId": clientId,
   "audience": audience
