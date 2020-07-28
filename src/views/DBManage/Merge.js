@@ -118,7 +118,7 @@ export const Merge = () => {
             <TCForm
                 onSubmit={onCreate}
                 report={report}
-                layout={[2, 1]}
+                layout={[1, 1]}
                 onChange={onUpdate}
                 fields={merge_fields}
                 values={values}
