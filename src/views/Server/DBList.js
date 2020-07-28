@@ -17,7 +17,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
-import { BsBook } from 'react-icons/bs';
+import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
 import { validURL } from '../../utils/helperFunctions'
 
@@ -127,7 +127,12 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 
 export const DBInvite = ({meta}) => {
     return (
-        <span>{meta.remote_record.inviter} has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
+        <div className="database-listing-description-row">
+            <span>
+                <BsFillEnvelopeFill className="invitation_info_icon_spacing"/>
+                <span className="db_info"><span className="invite-user">{meta.remote_record.inviter}</span> has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
+            </span>
+        </div>
     )
 }
 
@@ -261,7 +266,7 @@ export const DBProductionCredits = ({meta, user}) => {
 export const DBRoleCredits = ({meta, user}) => {
     if(meta.remote_record){
         let dbrec = meta.remote_record
-        let rs = [];       
+        let rs = [];
         if(dbrec.roles){
             for(var i = 0 ; i<dbrec.roles.length; i++){
                 rs.push(_get_role_title(dbrec.roles[i]))
@@ -549,19 +554,42 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         if(onAction) onAction(meta)
     }
     if(meta.action == 'accept'){
-        return (<span className="secondory-btn-control" onClick={myReject}><RejectControl meta={meta} user={user} /></span>)
+        return (
+            <div className="action-centralise">
+                <div className="action-centralise action-divider">Or</div>
+                <div>
+                    <span className="secondory-btn-control" onClick={myReject}>
+                        <RejectControl meta={meta} user={user} />
+                    </span>
+                </div>
+            </div>)
     }
 
     if(meta.action == 'clone'){
         if(userCanDelete(meta, user)){
-            return (<span onClick={myDelete} className="secondory-btn-control"><DeleteControl meta={meta} user={user} /></span>)
+            return (
+                <div className="action-centralise">
+                    <div className="action-centralise action-divider">Or</div>
+                    <div>
+                        <span onClick={myDelete} className="secondory-btn-control">
+                            <DeleteControl meta={meta} user={user} />
+                        </span>
+                    </div>
+                </div>)
         }
         else {
-            return (<span className="secondory-btn-control"
-                title={'Fork: ' + meta.remote_url}
-                className="fork-action"
-                onClick={myFork}>Fork
-                <ForkControl meta={meta} user={user} /></span>)
+            return (
+                <div className="action-centralise">
+                    <div className="action-centralise action-divider">Or</div>
+                    <div>
+                        <span className="secondory-btn-control"
+                            title={'Fork: ' + meta.remote_url}
+                            className="fork-action"
+                            onClick={myFork}>Fork
+                            <ForkControl meta={meta} user={user} />
+                        </span>
+                    </div>
+                </div>)
         }
     }
     return null
