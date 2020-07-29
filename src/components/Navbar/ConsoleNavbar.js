@@ -2,11 +2,11 @@ import React, {useState, Fragment} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
-import {HistoryNavigator} from '../History/HistoryNavigator'
 import {Login} from './Login'
 import {UnderConstruction} from '../Reports/UnderConstruction'
 import {LOGIN_LABEL,noHttps} from './constants.navbar'
-//import {TimeTraveler} from '../History/TimeTraveler'
+import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
+ 
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
     const [isOpen, setIsOpen] = useState(false)
@@ -63,7 +63,7 @@ export const ConsoleNavbar = (props) => {
                     </div>
                 </nav>
             </header>
-            {isOpen && woqlClient.db() && <HistoryNavigator />}
+            {isOpen && woqlClient.db() && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
         </Fragment>
     )
 }
