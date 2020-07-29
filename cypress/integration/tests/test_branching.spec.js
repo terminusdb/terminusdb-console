@@ -1,7 +1,7 @@
-import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "./utils/dbLifeCircle"
+import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "../../fixtures/utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
-import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "./utils/definedActions"
-import { config } from "./utils/config"
+import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "../../fixtures/utils/definedActions"
+import { config } from "../../fixtures/utils/config"
 
 /*
 *	1.	Create a new db

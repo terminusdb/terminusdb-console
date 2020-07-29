@@ -1,18 +1,19 @@
-import { episode_1_database } from "../../fixtures/utils/config"
+import { episode_2_database } from "../../fixtures/utils/config"
 import { importAndExportCSV } from "../../fixtures/utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
-import { createLocalDB, removeLocalDB } from "../../fixtures/utils/dbLifeCircle"
+import { createLocalDB, removeLocalDB, addSchema, addTriples, runAQuery } from "../../fixtures/utils/dbLifeCircle"
 
-context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv', () => {
+
+context('Run test for Eposide 2', () => {
 
     before(() => {
        cy.visit('/');
     })
 
-    describe('Test episode 1', () => {
+    describe('Test episode 2', () => {
 
 		const password = Cypress.env('password');
-		const database = episode_1_database;
+		const database = episode_2_database;
         const dbId = database.name
         const user = false
 
@@ -43,17 +44,53 @@ context('Run test for the one where Sarah imports a csv, queries to tidy up data
             })
         })
 
-        /***** Write query to import and export csv  ****/
-       it('Run query to import and export csv', () => {
+	    /***** Add schema ****/
+ 	    it('Add Schema', () => {
+ 		   cy.wait(5000);
+		   cy.get('.nav__main__item').find('a').contains('Query').click().then( async() => {
+			   cy.wait(1000)
+			   await addSchema(database)
+		   })
+ 	    })
+
+		/***** Add data ****/
+		it('Add Documents', () => {
+			cy.wait(5000);
+			cy.get('#terminus-console-page')
+			.find('button')
+			.contains('Add New Query Pane')
+			.click().then(async() => {
+				cy.wait(1000)
+			 await addTriples(database)
+			 cy.wait(2000)
+			})
+        })
+
+		/***** Queries ****/
+		it('Write some edit queries - wrong', () => {
             cy.wait(5000);
             cy.get('#terminus-console-page')
             .find('a')
             .contains('Query')
             .click().then(async() => {
-    			cy.wait(1000)
-                await importAndExportCSV(dbId)
+    			cy.wait(2000)
+                await runAQuery(dbId, database.edit_query_wrong)
             })
         })
+
+		/***** Queries ****/
+		it('Write some edit queries - correct', () => {
+            cy.wait(5000);
+            cy.get('#terminus-console-page')
+            .find('a')
+            .contains('Query')
+            .click().then(async() => {
+    			cy.wait(2000)
+                await runAQuery(dbId, database.edit_query_correct)
+            })
+        })
+
+
 
         /***** Go to Home Page  ****/
        it('Go to database home page', () => {
