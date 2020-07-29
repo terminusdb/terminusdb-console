@@ -15,7 +15,9 @@ import { DUBLIN_COUNCIL_DATA_SCHEMA_QUERY,
 
 import { BANK_BALANACE_SCHEMA, BANK_BALANANCE_DOCUMENTS,
  	QUERY_TO_EDIT_WRONG,
-	QUERY_TO_EDIT_CORRECT} from "../constants/episode-2-constants"
+	QUERY_CREATE_MIKE,
+	QUERY_CREATE_JIM,
+ 	QUERY_CREATE_JANE } from "../constants/episode-2-constants"
 
 
 export const config = [{
@@ -64,6 +66,8 @@ export const episode_2_database = {
 	"addSchema": BANK_BALANACE_SCHEMA,
 	"loadDocuments": BANK_BALANANCE_DOCUMENTS,
 	"edit_query_wrong": QUERY_TO_EDIT_WRONG,
-	"edit_query_correct": QUERY_TO_EDIT_CORRECT
+	"query_create_mike": QUERY_CREATE_MIKE,
+	"query_create_jim": QUERY_CREATE_JIM,
+	"query_create_jane": QUERY_CREATE_JANE
 
 }

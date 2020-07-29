@@ -20,10 +20,22 @@ export const QUERY_TO_EDIT_WRONG = 'let vars = function(sl) {return sl.map( s =>
 		'WOQL.add_triple("doc:mike", "scm:balance", new_balance))'
 
 
-export const QUERY_TO_EDIT_CORRECT = 'let vars = function(sl) {return sl.map( s => "v:" + s)}' + '\n' +
+export const QUERY_CREATE_MIKE = 'let vars = function(sl) {return sl.map( s => "v:" + s)}' + '\n' +
 	'let [balance,new_balance] = vars(["Balance", "New Balance"])' + '\n' +
 	'WOQL.and(' + '\n' +
 	  'WOQL.triple("doc:mike", "scm:balance", balance),' + '\n' +
 	  'WOQL.delete_triple("doc:mike", "scm:balance", balance),' + '\n' +
 	  'WOQL.eval(WOQL.minus(balance, 13), new_balance),' + '\n' +
 	  'WOQL.add_triple("doc:mike", "scm:balance", new_balance))'
+
+
+export const QUERY_CREATE_JIM = 'WOQL.and(' + '\n' +
+    'WOQL.add_triple("doc:jim", "type", "scm:BankAccount"),' + '\n' +
+    'WOQL.add_triple("doc:jim", "owner", "jim"),' + '\n' +
+    'WOQL.add_triple("doc:jim", "balance", 8))'
+
+
+export const QUERY_CREATE_JANE = 'WOQL.and(' + '\n' +
+    'WOQL.add_triple("doc:jane", "type", "scm:BankAccount"),' + '\n' +
+    'WOQL.add_triple("doc:jane", "owner", "jane"),' + '\n' +
+    'WOQL.add_triple("doc:jane", "balance", 887))  '

@@ -117,7 +117,7 @@ context('Test commits and branching', () => {
         cy.get('.tdb__dropdown')
         .click().then( async() => {
             cy.wait(1000);
-			      await clickOnBranch(bid)
+			    await clickOnBranch(bid)
         })
     })
 

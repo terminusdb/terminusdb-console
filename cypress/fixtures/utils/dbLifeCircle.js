@@ -148,3 +148,12 @@ export const removeLocalDB = async (dbId) =>{
     await cy.get('.modal-body').find('button').contains('Confirm Database Delete').click()
     cy.wait(2000);
 }
+
+export const rebase = async (bid, msg) =>{
+    await cy.get('#terminus-console-page').find('button').contains('Merge').click()
+    const mergeTo = bid + '{enter}';
+    cy.get(".tcf-select").click().find("input").first().focus().type(mergeTo);
+    cy.get('textarea[id="commit"]').focus().type(msg);
+    await cy.get('.tcf-form').find('button').contains('Merge Branches').click()
+    cy.wait(2000);
+}
