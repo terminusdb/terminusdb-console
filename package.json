@@ -33,7 +33,6 @@
     "cypress:one": "cypress run --browser chrome --spec $1",
     "cypress:single": "cypress run --browser chrome --spec 'cypress/integration/tests/*.spec.js'",
     "cypress:run": "cypress run"
-
   },
   "pre-commit": [],
   "pre-push": [
