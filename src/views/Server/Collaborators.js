@@ -23,7 +23,11 @@ export const Collaborators = ({}) => {
     const [dbFilter, setDBFilter] = useState("")
     const [collabAction, setCollabAction] = useState("my")
     const allDBs = bffClient.databases()
-    if(allDBs.length == 0) return null
+    if(allDBs.length == 0) return (
+        <span className="database-list-intro">
+            <TerminusDBSpeaks report={{status: TERMINUS_WARNING, message: "You must add a database to your TerminusHub account before you can invite people to collaborate"}} />
+        </span>
+    )
     const [dbs, setDBList] = useState(allDBs)
     const [subscreen, setSubscreen] = useState("my")
     const [incoming, setIncoming] = useState()
