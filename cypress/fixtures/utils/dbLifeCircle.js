@@ -20,10 +20,10 @@ export const createLocalDB = async (dbId,withGraph=true, user=false) =>{
 
     cy.get('form').find("button").contains('Create New Database').click()
 
-    //cy.wait("@createDB").its('status').should('eq', 200);
+    cy.wait("@createDB").its('status').should('eq', 200);
 
-    //if(withGraph)
-    //    cy.wait("@createGraph").its('status').should('eq', 200);
+    if(withGraph)
+        cy.wait("@createGraph").its('status').should('eq', 200);
 
     await cy.get('#loading').should('not.exist')
 }

@@ -28,7 +28,7 @@ config.forEach((db) => {
 
 
         describe('Database life Circle', () => {
-            
+
             const user = false
             /*const password = Cypress.env('password');
             it('the user need to login', () => {
@@ -41,10 +41,10 @@ config.forEach((db) => {
                 })
             })*/
 
-       
+
             /***** Creating database ****/
             it('Creating database',() => {
-                
+
 
                 cy.log("___DATABASE___", database.name)
 
@@ -55,9 +55,9 @@ config.forEach((db) => {
                     if ($consolePage.find(`a:contains('${tabs.CREATEDB_TITLE}')`).length > 0) {   //evaluates as true
                         await cy.get('#terminus-console-page').find('a').contains(tabs.CREATEDB_TITLE).click()//.then(async() => {
                         cy.wait(1000);
-                        await createLocalDB(database.name, user)
+                        await createLocalDB(database.name, false,user)
                     }else{
-                        await createLocalDB(database.name, user);
+                        await createLocalDB(database.name, false,user);
                     }
                 })
             })
