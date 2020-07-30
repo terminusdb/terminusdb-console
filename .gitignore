@@ -3,8 +3,9 @@
 
 package-lock.json
 console/.env
-.env
-.ENV
+.env*
+.ENV*
+.local
 es6
 
 console/dist
@@ -13,6 +14,7 @@ console/public_pages
 cypress/integration/examples
 cypress/screenshots
 cypress/videos
+cypress.env.json
 
 src/components/History/TimeTraveler.js
 src/css/img/

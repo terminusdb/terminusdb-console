@@ -1,9 +1,9 @@
-import { episode_1_database } from "./utils/config"
-import { importAndExportCSV } from "./utils/definedActions"
+import { episode_1_database } from "../../fixtures/utils/config"
+import { importAndExportCSV } from "../../fixtures/utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
-import { createLocalDB, removeLocalDB } from "./utils/dbLifeCircle"
+import { createLocalDB, removeLocalDB } from "../../fixtures/utils/dbLifeCircle"
 
-context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv in Canary', () => {
+context('Run test for the one where Sarah imports a csv, queries to tidy up data and exports the csv', () => {
 
     before(() => {
        cy.visit('/');

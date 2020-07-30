@@ -5,7 +5,7 @@ import {ServerNavbar} from './ServerNavbar'
 import {HistoryNavigator} from '../History/HistoryNavigator'
 import {Login} from './Login'
 import {UnderConstruction} from '../Reports/UnderConstruction'
-import {LOGIN_LABEL} from './constants.navbar'
+import {LOGIN_LABEL,noHttps} from './constants.navbar'
 //import {TimeTraveler} from '../History/TimeTraveler'
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -19,7 +19,7 @@ export const ConsoleNavbar = (props) => {
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
 
-    const showUnderCostruction = false//process.env.TERMINUSDB_ENV === 'dev' ? false : true
+    const showUnderCostruction = false//window.location.protocol === 'https' || window.location.host==="localhost:3005" ? false : true
     return (
         <Fragment>
             <header className="console__page__header">
@@ -53,6 +53,10 @@ export const ConsoleNavbar = (props) => {
                                 buttonColor={'white'}
                                 buttonText={LOGIN_LABEL}
                                 action="Login in HUB"
+                                headerText={noHttps.title}
+                                description={noHttps.description}
+                                noEmail={true}
+                                noIcon={true}
                             />
                         )}
                         {showUnderCostruction === false && <Login />}

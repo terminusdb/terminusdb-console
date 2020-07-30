@@ -5,12 +5,13 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {useAuth0} from '../../react-auth0-spa'
 import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
-import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_SUCCESS } from "../../constants/identifiers";
+import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { LIST_LOCAL, LIST_REMOTE, CLONE } from "../Pages/constants.pages"
 import {CloneURL} from './CloneURL'
 import Select from "react-select";
 import {Row, Col} from "reactstrap"
 import {CreateDatabase} from "../CreateDB/CreateDatabase"
+import Loading from "../../components/Reports/Loading"
 
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
@@ -24,6 +25,8 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     const [shares, setShares] = useState([])
     const [shareFilter, setShareFilter] = useState(filter || "")
     const [shareSort, setShareSort] = useState(filter || "")
+    const [loading, setLoading] = useState()
+    const [bump, setBump] = useState(0)
 
     useEffect(() => {
         if(listSort){
@@ -43,6 +46,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 if(sorted){
                     dbl = dbl.concat(sorted)           
                 }
+
                 setShares(dbl)            
             }
             else if(shareFilter == "recommendations"){
@@ -53,7 +57,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 setShares(_invites_to_cards(u.invites))
             }
         }
-    }, [shareFilter, shareSort, sorted])
+    }, [shareFilter, shareSort, sorted, bump])
 
     useEffect(() => {
         let filt = _filter_list(list, listFilter)
@@ -84,39 +88,44 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             setSpecial({action:db.action, meta: db})
         }
         else if(db.action == 'accept'){
+            setLoading(true)
             AcceptInvite(db, woqlClient, bffClient, getTokenSilently)
             .then(() => {
-                if(db.remote_record.public){
-                    CloneDB(db, woqlClient, getTokenSilently)
-                    .then((id) => {
-                        setSpecial(false)
-                        setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                        refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
-                        .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
-                    })
-                }
+                removeProcessedInvite(db)
+                setBump(bump+1)
+                CloneDB(db, woqlClient, getTokenSilently)
+                .then((id) => {
+                    setSpecial(false)
+                    setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
+                    refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
+                    .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+                })
             })
+            .finally(() => setLoading(false))
         }
         else if(db.action == 'reject'){
+            setLoading(true)
             RejectInvite(db, woqlClient, bffClient, getTokenSilently)
             .then(() => {
                 setReport({status: TERMINUS_SUCCESS, message: "Invitation Rejected"})
-                removeDeletedRemoteDB(db)
-                refreshDBListing() 
+                removeProcessedInvite(db)
+                setBump(bump+1)
             })
+            .finally(() => setLoading(false))
         }
         else if(db.action == 'clone'){
-            //db.remote_url = db.remote_record.url
+            setLoading(true)
             CloneDB(db, woqlClient, getTokenSilently)
             .then((id) => {
                 setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
             })
+            .finally(() => setLoading(false))
         }
         else if(db.action == 'fork'){
-            //db.remote_url = db.remote_record.url
+            setLoading(true)
             let nuid = db.remote_url.substring(db.remote_url.lastIndexOf("/") + 1)
             db.id = nuid
             db.organization = bffClient.user_organization() 
@@ -124,11 +133,13 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             .then((id) => {
                 setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Forked Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
             })
+            .finally(() => setLoading(false))
         }
         else if(db.action == 'delete'){
+            setLoading(true)
             DeleteDB(db, woqlClient, bffClient, getTokenSilently)
             .then((id) => {
                 setSpecial(false)
@@ -136,7 +147,21 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 removeDeletedRemoteDB(db)
                 refreshDBListing() 
             })            
+            .finally(() => setLoading(false))
         }
+    }
+
+    function removeProcessedInvite(dbrec){
+        let ninvites = []
+        let rr = dbrec.remote_record || {}
+        let oinvites = bffClient.connection.user.invites || []
+        for(var i = 0; i<oinvites.length; i++){
+            let or = oinvites[i]
+            if(!(rr.id == or.id && rr.organization == or.organization)){
+                ninvites.push(oinvites[i])
+            }
+        }
+        bffClient.connection.user.invites = ninvites
     }
 
     function removeDeletedRemoteDB(dbrec){
@@ -150,15 +175,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         }
         woqlClient.databases(ndbs)
     }
-
-    function import_db_card(db, id){
-        db.id = id
-        db.organization = woqlClient.user_organization()
-        db.created = Date.now()
-        db.updated = Date.now()
-        db.author = woqlClient.author()
-    }
-
 
     function cloneURL(url){
         if(url.substring(0, 7) == "http://" || url.substring(0, 8) == "https://"){
@@ -196,6 +212,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     }
 
     if(!sorted) return null
+    if(loading) return (<Loading type={TERMINUS_COMPONENT}/>)
     return (<>
             {special && <>
                 <span className="database-list-back database-list-intro" onClick={function(){setSpecial(false)}}>

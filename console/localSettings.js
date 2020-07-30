@@ -1,5 +1,7 @@
 const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/`
 
+//console.log('__CONSOLE____',process.env.TERMINUSDB_SERVER)
+
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
 

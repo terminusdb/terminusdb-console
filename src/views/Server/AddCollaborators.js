@@ -75,7 +75,17 @@ export const AddCollaborators = ({db, organization, dblist }) => {
             let udoc = _form_document(deets)
             bffClient.updateRoles(udoc)
             .then((result) => {
-                setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created Collaborators'})
+                let msg = ""
+                if(result.collaborators && result.collaborators.length || result.invites && result.invites.length){
+                    msg += "Successfully added collaborators:"
+                    msg += result.collaborators ? result.collaborators.length + " Existing Users Added " : ""
+                    msg += result.invites ? result.invites.length + " New Users Invited" : ""
+                    setReport({status: TERMINUS_SUCCESS, message: msg})
+                }
+                else {
+                    msg = "No valid collaborators were supplied - no change"
+                    setReport({status: TERMINUS_WARNING, message: msg})
+                }
             })
             .catch((err) => {
                 setReport({

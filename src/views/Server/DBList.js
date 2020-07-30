@@ -17,7 +17,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
-import { BsBook } from 'react-icons/bs';
+import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
 import { validURL } from '../../utils/helperFunctions'
 
@@ -127,7 +127,12 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 
 export const DBInvite = ({meta}) => {
     return (
-        <span>{meta.remote_record.inviter} has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
+        <div className="database-listing-description-row">
+            <span>
+                <BsFillEnvelopeFill className="invitation_info_icon_spacing"/>
+                <span className="db_info"><span className="invite-user">{meta.remote_record.inviter}</span> has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
+            </span>
+        </div>
     )
 }
 
@@ -261,7 +266,7 @@ export const DBProductionCredits = ({meta, user}) => {
 export const DBRoleCredits = ({meta, user}) => {
     if(meta.remote_record){
         let dbrec = meta.remote_record
-        let rs = [];       
+        let rs = [];
         if(dbrec.roles){
             for(var i = 0 ; i<dbrec.roles.length; i++){
                 rs.push(_get_role_title(dbrec.roles[i]))
@@ -451,7 +456,7 @@ export const DBStatus = ({meta, user, onAction}) => {
             <Row className='database-update-status'>
                 <RemoteUpdated meta={meta}  user={user}/>
             </Row>
-            <Row className='database-action-option' onClick={onAction}>
+            <Row className='database-action-option' onClick={onAction} >
                 <DBMainAction meta={meta} user={user} />
             </Row>
             <Row className='database-secondary-option'>
@@ -549,19 +554,42 @@ export const DBSecondaryAction = ({meta, user, onAction}) => {
         if(onAction) onAction(meta)
     }
     if(meta.action == 'accept'){
-        return (<span className="secondory-btn-control" onClick={myReject}><RejectControl meta={meta} user={user} /></span>)
+        return (
+            <div className="action-centralise">
+                <div className="action-centralise action-divider">or</div>
+                <div>
+                    <span className="secondory-btn-control" onClick={myReject}>
+                        <RejectControl meta={meta} user={user} />
+                    </span>
+                </div>
+            </div>)
     }
 
     if(meta.action == 'clone'){
         if(userCanDelete(meta, user)){
-            return (<span onClick={myDelete} className="secondory-btn-control"><DeleteControl meta={meta} user={user} /></span>)
+            return (
+                <div className="action-centralise">
+                    <div className="action-centralise action-divider">or</div>
+                    <div>
+                        <span onClick={myDelete} className="secondory-btn-control">
+                            <DeleteControl meta={meta} user={user} />
+                        </span>
+                    </div>
+                </div>)
         }
         else {
-            return (<span className="secondory-btn-control"
-                title={'Fork: ' + meta.remote_url}
-                className="fork-action"
-                onClick={myFork}>Fork
-                <ForkControl meta={meta} user={user} /></span>)
+            return (
+                <div className="action-centralise">
+                    <div className="action-centralise action-divider">or</div>
+                    <div>
+                        <span className="secondory-btn-control"
+                            title={'Fork: ' + meta.remote_url}
+                            className="fork-action"
+                            onClick={myFork}>Fork
+                            <ForkControl meta={meta} user={user} />
+                        </span>
+                    </div>
+                </div>)
         }
     }
     return null
@@ -607,32 +635,26 @@ function describe_unsynch(meta){
 
 export const ShareControl = ({meta, user}) => {
     return <AiOutlineCloudUpload className={"db-main-action"} color="#0055bb " title="Save this database to your hub account"/>
-    //return <FontAwesomeIcon className='database-action database-listing-share' icon={SHARE_ICON} title="Save this database to your hub account"/>
 }
 
 export const PushControl = ({meta, user}) => {
     return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
-    //return <FontAwesomeIcon className='database-action database-listing-push' icon={PUSH_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const PullControl = ({meta, user}) => {
     return <AiOutlineCloudSync className={"db-main-action"} color={"ffbf00"} title={describe_unsynch(meta)}/>
-    //return <FontAwesomeIcon className='database-action database-listing-pull' icon={PULL_ICON}  title={describe_unsynch(meta)} />
 }
 
 export const CloneControl = ({meta, user}) => {
-    //return <FontAwesomeIcon className='database-action database-listing-clone' icon={CLONE_ICON} title="Clone this database now"/>
     return <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/>
 }
 
 export const ClonedControl = ({meta, user}) => {
-    //return <FontAwesomeIcon className='database-no-action database-listing-cloned' icon={CLONED_ICON} title={'Cloned from: ' + meta.remote_url}/>
     return <AiOutlineBlock color={"#d1ecf1"} className={"db-main-action"} title={'Cloned from: ' + meta.remote_url}/>
 }
 
 export const ForkControl = ({meta, user}) => {
     return <AiOutlineFork  color={"#0055bb"}/>
-    //return <FontAwesomeIcon className='' icon={CLONED_ICON} title={'Fork: ' + meta.remote_url}/>
 }
 
 export const NoCanControl = ({meta, user}) => {
