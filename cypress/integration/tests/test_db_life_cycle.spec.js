@@ -1,7 +1,7 @@
-import { createLocalDB, addSchema, removeLocalDB, addDocuments,runQueries } from "./utils/dbLifeCircle"
-import {  flickThroughSchemaTabs, getSchemaElements, getDocumentsMetaData } from "./utils/definedActions"
+import { createLocalDB, addSchema, removeLocalDB, addDocuments,runQueries } from "../../fixtures/utils/dbLifeCircle"
+import {  flickThroughSchemaTabs, getSchemaElements, getDocumentsMetaData } from "../../fixtures/utils/definedActions"
 import * as tabs from "../../../src/views/Pages/constants.pages"
-import { config } from "./utils/config"
+import { config } from "../../fixtures/utils/config"
 
 /*    ----- not user is not logged in this test -----
 *   1.	Create a new db

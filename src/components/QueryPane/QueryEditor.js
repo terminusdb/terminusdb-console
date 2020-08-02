@@ -4,6 +4,7 @@ import {QUERY_SUBMIT, HIDE_QUERY_EDITOR, SHOW_QUERY_EDITOR} from './constants.qu
 import {LanguageSwitcher} from "./LanguageSwitcher"
 import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
+import TerminusClient  from "@terminusdb/terminusdb-client"
 import {Alert} from "reactstrap";
 /**
  * Controls the display of query viewer and editor
@@ -22,15 +23,20 @@ export const QueryEditor = ({query, setMainError, mainError, baseLanguage, setBa
     const [commitMsg, setCommitMsg] = useState();
 
     const setError =(err)=>{
-        console.log(err)
         //setCurrentError(err)
         setMainError(err);
     }
 
+    //useEffect(() => {
+        //const WOQL = TerminusClient.WOQL
+        //let prelude = WOQL.emerge()
+        //eval(prelude)
+    //}, [])
+
     function onBlur(value){
         //const value=editor.doc.getValue();
         saveContent(value);
-        checkContent();
+        checkContent();    
         //sendMainError();
     }
 

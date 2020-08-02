@@ -10,6 +10,7 @@ export async function enrich_local_db_listing(woqlClient){
     for(var i = 0; i <dbs.length; i++){
         if( dbs[i].organization &&  dbs[i].id) usings.push(dbs[i].organization + '/' + dbs[i].id) 
     }
+    if(usings.length == 0) return
     let sysClient = woqlClient.copy()
     sysClient.set_system_db()
     //let micro = Date.now()

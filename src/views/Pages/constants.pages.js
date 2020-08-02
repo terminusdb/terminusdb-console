@@ -104,7 +104,7 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
-    remote_url: "https://hub-dev-server.dcm.ist/kevin/bikes",
+    remote_url: "https://hub.terminusdb.com/kevin/bikes",
     remote_record: {
         public: true,
         icon: "https://coynecycles.ie/wp-content/uploads/2020/02/Claud-Butler-Cape-Wrath-web.jpg",
@@ -123,11 +123,11 @@ export const CLONEDBS = [{
     public: true,
     testing: true,
     icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
-    remote_url: "https://hub-dev-server.dcm.ist/kevin/pol",
+    remote_url: "https://hub.terminusdb.com/kevin/politicians",
     remote_record: {
         icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRP9zVENPlG4mT_yqOq6kstuLtq9WkhoZIAHw&usqp=CAU",
         public: true,
-        id: 'pol',
+        id: 'politicians',
         organization: 'kevin',
         label: "TerminusDB Politicians Tutorial",
         organization_type: "Terminators",
