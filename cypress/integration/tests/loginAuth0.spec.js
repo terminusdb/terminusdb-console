@@ -6,7 +6,7 @@ context('check connection', () => {
 
     it('Login to Auth0', () => {
         cy.wait(4000);
-        cy.login();
+        cy.loginAndLogout();
         /*cy.get("body").then($body => {
 
               if ($body.find("button.nav__main__login").length > 0) {
@@ -14,5 +14,6 @@ context('check connection', () => {
               }
          })*/
     })
+
 
 })
