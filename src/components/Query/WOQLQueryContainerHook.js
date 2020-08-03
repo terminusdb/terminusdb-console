@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-//import {TerminusClientInterceptor} from './TerminusClientInterceptor'
+import {TerminusClientInterceptor} from './TerminusClientInterceptor'
 //import TerminusClient from '@terminusdb/terminusdb-client'
 
 function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {

@@ -6,7 +6,7 @@ import {WOQLQueryContainerHook} from '../Query/WOQLQueryContainerHook'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {Tabs, Tab} from 'react-bootstrap-tabs'
 import {ResultQueryPane} from './ResultQueryPane'
-import TerminusClient from '@terminusdb/terminusdb-client'
+import {WOQLEditorControlled} from '@terminusdb/terminusdb-react-components'
 import {QUERY_PANEL_TITLE, QUERY_EDITOR_LABEL} from './constants.querypane'
 import {DBContextObj} from '..//Query/DBContext'
 
@@ -82,9 +82,8 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
             <Tabs selected={selectedTab} onSelect={onSelect} id="query_tabs">
                 <Tab label={QUERY_PANEL_TITLE}>
-                    <QueryEditor
-                        setMainError={setError}
-                        mainError={error}
+                    <WOQLEditorControlled
+                        mainError={setError}
                         baseLanguage={baseLanguage}
                         setBaseLanguage={setBaseLanguage}
                         content={content}
@@ -99,7 +98,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         languages={['js', 'json', 'python']}
                     >
                         <QueryLibrary library="editor" />
-                    </QueryEditor>
+                    </WOQLEditorControlled>
                 </Tab>
                 <Tab label="Result Viewer" {...disabled}>
                     <ResultQueryPane
