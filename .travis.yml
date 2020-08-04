@@ -28,6 +28,7 @@ jobs:
       before_install:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
       script:
+        - mv console/.env-production console/.env
         - npm run build
         - bash .ci/publish_dev.sh
 
@@ -35,6 +36,7 @@ jobs:
       before_install:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-canary" > $TRAVIS_BUILD_DIR/.npmrc
       script:
+        - mv console/.env-production console/.env
         - npm run build
         - bash .ci/trigger_canary.sh
         - bash .ci/publish_canary.sh
@@ -43,6 +45,7 @@ jobs:
       before_install:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-rc" > $TRAVIS_BUILD_DIR/.npmrc
       script:
+        - mv console/.env-production console/.env
         - npm run build
         - bash .ci/publish_rc.sh
 
