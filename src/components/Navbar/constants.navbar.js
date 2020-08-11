@@ -11,11 +11,23 @@ export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
 export const LOGIN_LABEL = 'Connect to hub'
 
+export const CREATEDB_TITLE = "Create"
+export const DBLIST_TITLE  = "My Databases"
+export const TUTORIALS_TITLE = "Tutorials"
+export const CLONEDB_TITLE = "Clone"
+export const COLLABORATE_TITLE = "Collaborate"
+
+
 export const PAGES_ID={
     NAV_DB_HOME:'nav_db_home',
     NAV_DOCUMENTS:'nav_documents',
     NAV_QUERY:'nav_query',
     NAV_SCHEMA:'nav_schema',
+    NAV_CREATE_DB:'createdb',
+    NAV_DB_LIST:'mydbs',
+    NAV_CLONE:'clonedb',
+    NAV_COLL:'collaborate'
+
 }
 
 export const noHttps={

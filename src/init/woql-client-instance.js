@@ -44,6 +44,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
+                    setError(true)
                     setConnecting(false)
                     setLoading(false)
                 }

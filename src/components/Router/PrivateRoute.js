@@ -6,7 +6,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 const PrivateRoute = ({ component: Component, path, ...rest }) => {
     const { isAuthenticated, loginWithRedirect } = useAuth0();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fn = async () => {
             if (!isAuthenticated) {
                 await loginWithRedirect({
@@ -15,10 +15,10 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
             }
         }
         fn()
-    }, [isAuthenticated, loginWithRedirect, path])
+    }, [isAuthenticated, loginWithRedirect, path])*/
 
     const render = props =>
-        isAuthenticated === true ? <Component {...props} /> : null;
+        isAuthenticated === true ? <Component {...props} /> : <div>Please login in hub</div>;
         return <Route path={path} render={render} {...rest} />;
 }
 
