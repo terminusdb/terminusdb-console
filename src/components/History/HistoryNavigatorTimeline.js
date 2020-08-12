@@ -7,8 +7,6 @@ export const HistoryNavigatorTimeline = ({woqlClient}) => {
 	const { consoleTime, setHead, branch, ref, DBInfo, branches} = DBContextObj();
 
 	const setCurrentItem=(item)=>{
-        console.log(item)
-		alert(branch)
         setHead(branch,item.commit)
 	}
     if(!branches || !DBInfo) return null

@@ -14,11 +14,12 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
+import {CommitSelector} from "./CommitSelector"
 import Loading from '../../components/Reports/Loading'
 
 export const Branch = () => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, ref, consoleTime, updateBranches} = DBContextObj()
+    const {branch, ref, branches, consoleTime, updateBranches} = DBContextObj()
 
     let ics = {}
     CREATE_BRANCH_FORM.fields.map((item) => {
@@ -89,6 +90,7 @@ export const Branch = () => {
     return (
         <>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
+            <CommitSelector branch={branch} branches={branches} commit={ref} />
             <TCForm
                 layout={[3]}
                 fields={BRANCH_SOURCE_FORM.fields}

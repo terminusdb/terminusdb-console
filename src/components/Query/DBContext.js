@@ -102,7 +102,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [])
+    }, [branchesReload])
 
     //load graph structure
     useEffect(() => {
@@ -124,7 +124,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [branch, ref])
+    }, [branch, ref, branches])
 
     //load Repo
     useEffect(() => {
@@ -141,7 +141,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [])
+    }, [branches])
 
     //load head ref when consoleTime is set
     useEffect(() => {
@@ -159,7 +159,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
         } else if (consoleTime && branches && branch && branches[branch]) {
             setLoading(loading + 1)
             if (consoleTime < branches[branch].updated) {
-                let woql = getActiveCommitAtTime(branch, String(consoleTime))
+                let woql = WOQL.lib().active_commit(branch, consoleTime)
                 woql.execute(woqlClient)
                     .then((res) => {
                         if (res.bindings && res.bindings[0] && res.bindings[0]['Commit ID']) {
@@ -191,6 +191,10 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     function setHead(bid, rid) {
         woqlClient.checkout(bid)
+        if(branches && branches[bid].head == rid){
+            rid = false
+            setConsoleTime(false)
+        }
         woqlClient.ref(rid)
         setBranch(bid)
         setRef(rid)
@@ -384,41 +388,3 @@ export const NullDBProvider = (woqlClient) => {
 
 }
 
-
-function getActiveCommitAtTime(branch, ts) {
-    const WOQL = TerminusClient.WOQL
-
-    let constraint = WOQL.eq('v:Branch ID', branch)
-    let vars = ['A', 'Head IRI', 'Head Time', 'D', 'E', 'F', 'G', 'H', 'Branch ID']
-    let head = WOQL.lib().commits(constraint, vars)
-    let head_deets = WOQL.limit(1).and(head, WOQL.lib().commit_chain())
-    let bottom = WOQL.less(ts, 'v:Bottom Time')
-    let tail = WOQL.using('_commits')
-        .limit(1)
-        .and(
-            WOQL.path('v:Head IRI', 'ref:commit_parent+', 'v:Bottom IRI', 'v:Paths'),
-            WOQL.lib().commits(false, [
-                'AA',
-                'BB',
-                'Bottom Time',
-                'DD',
-                'EE',
-                'FF',
-                'GG',
-                'HH',
-                'JJ',
-            ]),
-            bottom,
-            WOQL.triple('v:BB', 'ref:commit_parent', 'v:Actual Tail'),
-            WOQL.triple('v:Actual Tail', 'ref:commit_timestamp', 'v:Actual Tail Time'),
-            WOQL.triple('v:Actual Tail', 'ref:commit_id', 'v:Commit ID'),
-            WOQL.not().less(ts, 'v:Actual Tail Time'),
-        )
-
-    let top = WOQL.not().less(ts, 'v:Head Time')
-
-    return WOQL.select('v:Commit ID').and(
-        head_deets,
-        WOQL.or(WOQL.and(top, WOQL.eq('v:Commit ID', 'v:Head ID')), tail),
-    )
-}
