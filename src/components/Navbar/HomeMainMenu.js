@@ -19,12 +19,15 @@ export const HomeMainMenu = (props) => {
             : 'nav__main__center nav__main__center--hide'
 
 
-	return (<nav className="nav__main nav__main--sub">
+	return (
+			<div className="nav__main__wrap">
+            <div className="console__page__container--width" >
+			<nav className="nav__main nav__main--sub">
 			<ul className={topmenu}>
-		        <li className="nav__main__item">
+		        <li className="nav__main__item nav__main__item--sub">
 		            <NavLink
 		                tag={NavLink}
-		                className="nav__main__link"
+		                className="nav__main__link nav__main__link--sub"
 		                to={SERVER_ROUTE}
 		                activeClassName="nav__main__link--subselected"
 		                exact
@@ -34,10 +37,10 @@ export const HomeMainMenu = (props) => {
 		                {DBLIST_TITLE}
 		            </NavLink>
 		        </li>
-		        <li className="nav__main__item">
+		        <li className="nav__main__item nav__main__item--sub">
 		            <NavLink
 		                tag={NavLink}
-		                className="nav__main__link"
+		                className="nav__main__link nav__main__link--sub"
 		                activeClassName="nav__main__link--subselected"
 		                to={CLONE_DB_ROUTE}
 		                exact
@@ -46,10 +49,10 @@ export const HomeMainMenu = (props) => {
 		             {CLONEDB_TITLE}
 		            </NavLink>
 		        </li>
-		        <li className="nav__main__item">
+		        <li className="nav__main__item nav__main__item--sub">
 		            <NavLink
 		                tag={NavLink}
-		                className="nav__main__link"
+		                className="nav__main__link nav__main__link--sub"
 		                activeClassName="nav__main__link--subselected"
 		                to={CREATE_DB_ROUTE}
 		                exact
@@ -58,10 +61,10 @@ export const HomeMainMenu = (props) => {
 		             {CREATEDB_TITLE}
 		            </NavLink>
 		        </li>
-		        <li className="nav__main__item">
+		        <li className="nav__main__item nav__main__item--sub">
 		            <NavLink
 		                tag={NavLink}
-		                className="nav__main__link"
+		                className="nav__main__link nav__main__link--sub"
 		                activeClassName="nav__main__link--subselected"
 		                to={COLLABORATE_DB_ROUTE}
 		                exact
@@ -72,5 +75,7 @@ export const HomeMainMenu = (props) => {
 		        </li>
 		   </ul>
 	    </nav>
+	    </div>
+	    </div>
     )
 }

@@ -3,7 +3,6 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {SimplePageView} from '../Templates/SimplePageView'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {DBListControl} from "../Server/DBListControl"
-import {HomeMainMenu} from "../../components/Navbar/HomeMainMenu"
 
 /**
  * Server home is the launch screen to the local experience
@@ -59,7 +58,6 @@ const ServerHome = (props) => {
 
     return (
         <SimplePageView type='major' id="home" active={active} sections={sections}>
-            <HomeMainMenu/>
             <DBListControl key="dbl" type='my' list={myDBs} user={user} count={myDBs.length} />
         </SimplePageView>
     )

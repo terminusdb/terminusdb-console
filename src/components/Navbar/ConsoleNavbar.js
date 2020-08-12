@@ -6,7 +6,8 @@ import {Login} from './Login'
 import {UnderConstruction} from '../Reports/UnderConstruction'
 import {LOGIN_LABEL,noHttps} from './constants.navbar'
 import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
- 
+import {NavLink} from 'react-router-dom'
+
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
     const [isOpen, setIsOpen] = useState(false)
@@ -38,13 +39,23 @@ export const ConsoleNavbar = (props) => {
                     </div>
                     <ServerNavbar />
                     <ul className={topmenu}>
-                        {woqlClient.db() && (
-                            <DBNavbar
-                                isOpen={isOpen}
-                                page={props.page}
-                                toggleTimeTravel={toggleNavBar}
-                            />
-                        )}
+                        <li className="nav__main__item ">
+                            <a href="https://terminusdb.com/docs/" 
+                                target="_blank" className="nav__main__link" aria-label="Documentation">
+                            Documentation
+                            </a>
+                        </li>
+                        
+                         <li className="nav__main__item ">
+                           <a href="https://terminusdb.com/community/" target="_blank" className="nav__main__link" aria-label="Community">
+                            Community
+                            </a>
+                        </li>
+                         <li className="nav__main__item ">
+                            <a href="https://terminusdb.com/blog/" target="_blank" className="nav__main__link" aria-label="Blog">
+                            Blog
+                            </a>
+                        </li>
                     </ul>
                     <div className="nav__main__right">
                         {showUnderCostruction && (
@@ -67,3 +78,11 @@ export const ConsoleNavbar = (props) => {
         </Fragment>
     )
 }
+/*
+{woqlClient.db() && (
+                            <DBNavbar
+                                isOpen={isOpen}
+                                page={props.page}
+                                toggleTimeTravel={toggleNavBar}
+                            />
+                        )}*/

@@ -16,6 +16,7 @@ export const DBLIST_TITLE  = "My Databases"
 export const TUTORIALS_TITLE = "Tutorials"
 export const CLONEDB_TITLE = "Clone"
 export const COLLABORATE_TITLE = "Collaborate"
+export const MANAGE_TITLE ="Manage"
 
 
 export const PAGES_ID={
@@ -26,7 +27,8 @@ export const PAGES_ID={
     NAV_CREATE_DB:'createdb',
     NAV_DB_LIST:'mydbs',
     NAV_CLONE:'clonedb',
-    NAV_COLL:'collaborate'
+    NAV_COLL:'collaborate',
+    NAV_MANAGE:'manage'
 
 }
 
