@@ -82,8 +82,9 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
             <Tabs selected={selectedTab} onSelect={onSelect} id="query_tabs">
                 <Tab label={QUERY_PANEL_TITLE}>
-                    <WOQLEditorControlled
-                        mainError={setError}
+                    <QueryEditor
+                        setMainError={setError}
+                        mainError={error}
                         baseLanguage={baseLanguage}
                         setBaseLanguage={setBaseLanguage}
                         content={content}
@@ -98,7 +99,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         languages={['js', 'json', 'python']}
                     >
                         <QueryLibrary library="editor" />
-                    </WOQLEditorControlled>
+                    </QueryEditor>
                 </Tab>
                 <Tab label="Result Viewer" {...disabled}>
                     <ResultQueryPane

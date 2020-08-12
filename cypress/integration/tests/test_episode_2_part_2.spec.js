@@ -5,7 +5,7 @@ import { createLocalDB, removeLocalDB, addSchema, addTriples, runAQuery,
     createBranch, rebase } from "../../fixtures/utils/dbLifeCircle"
 
 
-context('Run test for Eposide 2 part 1', () => {
+context.skip('Run test for Eposide 2 part 1', () => {
 
     before(() => {
        cy.visit('/');
@@ -270,6 +270,39 @@ context('Run test for Eposide 2 part 1', () => {
              cy.wait(2000)
          })
      })
+
+
+     /***** Log in to hub ****/
+     it('Connect to hub', () => {
+         cy.wait(4000);
+         cy.login();
+     })
+
+     /***** Go to Home Page  ****/
+    it('Go to database home page', () => {
+         cy.wait(5000);
+         const dbHomeRef = "/db/admin/" + dbId + "/"
+         cy.get('#terminus-console-page').get('.console__page__header').get('.nav__main').find('ul').find('li')
+         .find('a[href="'+ dbHomeRef +'"]')
+         .click().then(() => {
+             cy.wait(1000);
+         })
+     })
+
+     /***** Syncronise database ****/
+     it('Syncronise', () => {
+         cy.wait(5000);
+         cy.get('#terminus-console-page')
+         .find('a')
+         .contains(tabs.SYNCHRONISE_TAB)
+         .click().then(async () => {
+             cy.wait(1000);
+             //await removeLocalDB(dbId)
+         })
+    }) 
+
+
+
 
         /***** Go to Home Page  ****/
        it('Go to database home page', () => {
