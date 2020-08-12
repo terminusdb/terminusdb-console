@@ -128,7 +128,7 @@ export const MonitorDB = (props) => {
 
     let ri = getRepoInfo()
 
-    return (
+    return ( 
         <div>
             <hr className="my-space-50" />
             <hr className="my-space-50" />

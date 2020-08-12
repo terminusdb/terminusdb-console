@@ -143,7 +143,7 @@ const SchemaPage = (props) => {
         return <Loading type={TERMINUS_PAGE} />
     }
     return (
-        <TabbedPageView onHeadChange={headChanged} sections={sections} active={props.page}>
+        <TabbedPageView dbPage={true} onHeadChange={headChanged} sections={sections} active={props.page}>
             {tabs}
         </TabbedPageView>
     )

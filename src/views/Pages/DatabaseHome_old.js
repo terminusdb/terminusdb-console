@@ -7,7 +7,7 @@ import { ManageDB}  from '../DBManage/ManageDB'
 import { TabbedPageView } from '../Templates/TabbedPageView'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBNavbar} from '../../components/Navbar/DBNavbar'
-import {PageView} from '../Templates/PageView'
+import {SimplePageView} from '../Templates/SimplePageView'
 
 
 const DatabaseHome = (props) => {
@@ -51,15 +51,18 @@ const DatabaseHome = (props) => {
         }
     }
 
-    /*
-    * to be review the template SimpleView
-    * move the navbar
-    */
+
+    const [isTopOpen, setIsOpen] = useState(false)
+
+    const topmenu =
+        isTopOpen === true
+            ? 'nav__main__center  nav__main__center--show'
+            : 'nav__main__center nav__main__center--hide'
 
     return (  
-        <PageView report={props.report} dbPage={true}>          
+        <SimplePageView sections={sections} active={props.page} report={props.report}>          
            <MonitorDB key="monitor" label={DETAILS_TAB} />
-        </PageView>        
+        </SimplePageView>        
 	)
 }
 export default DatabaseHome;
