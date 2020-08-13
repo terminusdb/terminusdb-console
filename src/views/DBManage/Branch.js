@@ -2,7 +2,7 @@
  * Controller application for branch creation form
  */
 import React, {useState, useEffect} from 'react'
-import {TCForm} from '../../components/Form/FormComponents'
+import {TCForm, TCRow} from '../../components/Form/FormComponents'
 import {CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM} from './constants.dbmanage'
 import {
     TERMINUS_SUCCESS,
@@ -15,98 +15,143 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
+import {Col, Row, Container, Alert} from "reactstrap"
 import Loading from '../../components/Reports/Loading'
 
 export const Branch = () => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, ref, branches, consoleTime, updateBranches} = DBContextObj()
+    const {branch, ref, branches, consoleTime, DBInfo, updateBranches} = DBContextObj()
 
-    let ics = {}
-    CREATE_BRANCH_FORM.fields.map((item) => {
-        ics[item.id] = item.value || ''
-    })
+    const [loading, setLoading] = useState(false)
+
+    const [sourceCommit, setSourceCommit] = useState()
+    const [newID, setNewID] = useState()
+    const [submissionProblem, setSubmissionProblem] = useState()
 
     let update_start = Date.now()
 
-    const [values, setValues] = useState(ics)
-    const [sourceValues, setSourceValues] = useState()
-    const [loading, setLoading] = useState(false)
-
     useEffect(() => {
-        setSourceValues({
-            branch: branch,
-            ref: ref || 'head',
-            time: consoleTime ? printts(consoleTime) : 'now',
-        })
+        if(ref && !sourceCommit){
+            setSourceCommit(ref)
+        }
+        else if(branch && !sourceCommit){
+            setSourceCommit(branches[branch].head)
+        }
     }, [branch, ref, consoleTime])
 
     const [report, setReport] = useState()
 
-    let btns = CREATE_BRANCH_FORM.buttons
-
     function onCreate() {
         setLoading(true)
         update_start = Date.now()
-        woqlClient.checkout(sourceValues.branch)
-        woqlClient
-            .branch(values.bid)
-            .then(() => {
-                let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${values.bid}`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                updateBranches()
-            })
-            .catch((err) => {
-                let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${values.bid} `
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setLoading(false)
-            })
+        let nc = woqlClient.copy()
+        nc.ref(sourceCommit)
+        nc.branch(newID)
+        .then(() => {
+            let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${values.bid}`
+            let rep = {
+                message: message,
+                status: TERMINUS_SUCCESS,
+                time: Date.now() - update_start,
+            }
+            setReport(rep)
+            updateBranches()
+        })
+        .catch((err) => {
+            let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${values.bid} `
+            setReport({error: err, status: TERMINUS_ERROR, message: message})
+        })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
-    function onSourceUpdate(key, val) {
-        if(key == "branch"){
-            let x = {}
-            x.branch = val
-            x.ref = sourceValues.ref
-            x.time = sourceValues.time
-            setSourceValues(x)
+    function setCommitID(c){
+        if(c && c.target){
+            alert(c.target.value)
+            setSourceCommit(c.target.value)
+        }
+        else {
+            alert("no c")
         }
     }
 
-    function onUpdate(key, val) {
-        values[key] = val
-        setValues(values)
+    function updateID(c){
+        setNewID(c.target.value)
+    }
+
+    function setUserError(field, msg){
+        setSubmissionProblem(msg)
+    }
+
+    function checkSubmission(){
+        if(!sourceCommit){
+            return setUserError("create_branch_source", "You must select a commit to start the new branch from")
+        }
+        else if(sourceCommit.length < 30){
+            return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 32 character string")
+        }                    
+        if(newID && newID.length){
+            if(typeof branches[newID] != "undefined"){
+                return setUserError("create_branch_id", "A branch already exists with the same ID - choose a new ID")
+            }
+            else {
+                return onCreate()
+            }
+        }
+        else {
+            return setUserError("create_branch_id", "You must supply an ID for the new branch")
+        }
     }
 
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
     }
-    return (
-        <>
+    return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
-            <CommitSelector branch={branch} branches={branches} commit={ref} />
-            <TCForm
-                layout={[3]}
-                fields={BRANCH_SOURCE_FORM.fields}
-                onChange={onSourceUpdate}
-                values={sourceValues}
-                report={{status: TERMINUS_INFO, message: BRANCH_SOURCE_FORM.infoMessage}}
-            />
-            <TCForm
-                onSubmit={onCreate}
-                report={report}
-                layout={[1, 1]}
-                onChange={onUpdate}
-                fields={CREATE_BRANCH_FORM.fields}
-                values={values}
-                buttons={btns}
-            />
+            <Container>
+                <Row>
+                    <CommitSelector 
+                        branch={branch} 
+                        commit={ref}
+                        onSelect={setCommitID}
+                        firstCommit={DBInfo.created}
+                        woqlClient={woqlClient} 
+                        actionMessage="Start New Branch From This Commit"
+                    />
+                </Row>
+                <Row>
+                    <Col>
+                        <Row>Start Branch From Commit
+                            <input className = ""
+                                value={sourceCommit}
+                                width="40"
+                                onChange={setCommitID}
+                                id= "create_branch_source"
+                            />
+                        </Row>
+                        <Row>New Branch ID
+                        <input className = ""
+                                value={newID}
+                                width="40"
+                                onChange={updateID}
+                                id= "create_branch_id"
+                            />
+                        </Row>
+                    </Col>
+                    <Col>
+                        {submissionProblem && 
+                            <Alert color='warning'>
+                                {submissionProblem}
+                            </Alert>
+                        }
+                        <button type="submit" onClick={checkSubmission} className="primary">
+                            Create New Branch
+                        </button>
+                    </Col>
+                </Row>
+            </Container>
         </>
     )
 }
+
