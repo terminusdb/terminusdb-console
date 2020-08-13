@@ -14,7 +14,7 @@ import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 
 export const MonitorDB = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {graphs, branch, branches, DBInfo, ref, consoleTime, repos, scale} = DBContextObj()
+    const {graphs, branch, branches, DBInfo, ref, consoleTime, repos} = DBContextObj()
 
     const [commitCount, setCommitCount] = useState()
     const [latest, setLatest] = useState()
@@ -26,29 +26,47 @@ export const MonitorDB = (props) => {
 
     //load commit Count
     useEffect(() => {
+        if(branch){
+            load_commit_log(branch, ref)
+        }
+    }, [branch, ref, branches])
+
+    //load global values
+    /*useEffect(() => {
+        if(branch){
+            load_commit_log(branch, ref)
+            load_scale(branch, ref)
+        }
         let w = WOQL.using('_commits').triple('v:A', 'type', 'ref:ValidCommit')
         woqlClient.query(w).then((result) => {
             if (result.bindings) setCommitCount(result.bindings.length)
         })
-    }, [])
+    }, [branches])*/
 
-    //load commit Count
-    useEffect(() => {
-        let vals = consoleTime ? WOQL.not().greater('v:Time', String(consoleTime)) : false
-        let q = WOQL.lib().commits()
-        if (vals) q.and(vals)
-        latest_woql = WOQL.limit(LATEST_UPDATES_LENGTH)
-            .select('v:Time', 'v:Author', 'v:Message')
-            .order_by('v:Time',  "desc", q)
-        woqlClient.query(latest_woql).then((result) => {
+    function load_commit_log(b, r){
+        let q = WOQL.query()
+        if(r){
+            q = WOQL.lib().commit_history(r, LATEST_UPDATES_LENGTH)
+        }
+        else {
+            q = WOQL.and(
+                    WOQL.lib().active_commit_id(b, false, "Active ID"),
+                    WOQL.lib().commit_history("v:Active ID", LATEST_UPDATES_LENGTH)
+                )
+        }
+        let woql = WOQL.select("v:Author", "v:Commit ID", "v:Message", "v:Time", q)
+        woqlClient.query(woql).then((result) => {
             if (result.bindings) setLatest(result.bindings)
         })
-    }, [consoleTime])
+    }
+
+
 
     const db_uri = woqlClient.connectionConfig.cloneableURL()
 
     function getCommitInfo() {
         let str = ''
+        return str
         if (scale) {
             str += 'DB Size: ' + formatBytes(scale.size) + ' ~ Triples: ' + scale.triple_count
         }
@@ -182,5 +200,11 @@ export const MonitorDB = (props) => {
         </div>
     )
 }
+
+export const GlobalDetails = (props) => {
+
+}
+
+
 
 //<LatestUpdates />

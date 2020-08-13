@@ -64,12 +64,13 @@ export const Merge = () => {
         update_start = Date.now()
         let nClient = woqlClient.copy()
         nClient.ref(false)
-        nClient.checkout(values.target)
+        nClient.checkout(targetBranch)
         nClient.remote_auth(nClient.local_auth())
         let rebase_source = {
             rebase_from: frombase,
         }
-        if (values.commit) rebase_source.message = values.commit
+        if (commitMsg) rebase_source.message = commitMsg
+        else 
         return nClient
             .rebase(rebase_source)
             .then(() => {

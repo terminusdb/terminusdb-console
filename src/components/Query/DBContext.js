@@ -31,7 +31,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
-    const [scale, setScale] = useState()
 
     const [branchesReload, setBranchesReload] = useState(0)
 
@@ -46,25 +45,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
             .then((res) => {
                 let binds = res && res.bindings ? branchStructureFromBindings(res.bindings) : []
                 setBranches(binds)
-            })
-            .catch((e) => {
-                setReport({error: e, status: TERMINUS_ERROR})
-            })
-            .finally(() => setLoading(loading - 1))
-    }, [branchesReload])
-
-    //load dbSize
-    useEffect(() => {
-        setLoading(loading + 1)
-        let dbres = woqlClient.resource('db')
-        WOQL.triple_count(dbres, 'v:Triple Count')
-            .size(dbres, 'v:Size')
-            .execute(woqlClient)
-            .then((res) => {
-                let nscale = {}
-                nscale.size = res.bindings[0]['Size']['@value']
-                nscale.triple_count = res.bindings[0]['Triple Count']['@value']
-                setScale(nscale)
             })
             .catch((e) => {
                 setReport({error: e, status: TERMINUS_ERROR})
@@ -191,7 +171,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     function setHead(bid, rid) {
         woqlClient.checkout(bid)
-        if(branches && branches[bid].head == rid){
+        if(branches && branches[bid] && branches[bid].head == rid){
             rid = false
             setConsoleTime(false)
         }
@@ -204,7 +184,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
         }
     }
 
-    function updateBranches() {
+    function updateBranches(bid) {
         setBranchesReload(branchesReload + 1)
     }
 
@@ -311,7 +291,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 branch,
                 ref,
                 repos,
-                scale,
                 prefixes,
                 loading,
             }}

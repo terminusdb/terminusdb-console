@@ -20,7 +20,7 @@ import Loading from '../../components/Reports/Loading'
 
 export const Branch = () => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, ref, branches, consoleTime, DBInfo, updateBranches} = DBContextObj()
+    const {branch, ref, branches, consoleTime, DBInfo, setHead, updateBranches} = DBContextObj()
 
     const [loading, setLoading] = useState(false)
 
@@ -39,6 +39,12 @@ export const Branch = () => {
             setSourceCommit(branches[branch].head)
         }
     }, [branch, ref, consoleTime])
+
+    useEffect(() => {
+        if(loading && newID){
+            setHead(newID)
+        }
+    }, [branches])
 
     const [report, setReport] = useState()
 
@@ -118,7 +124,7 @@ export const Branch = () => {
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
     }
-    let setHead = manuallyUpdated ? unsetManual : false
+    let setCommit = manuallyUpdated ? unsetManual : false
     return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
             <Container>
@@ -129,7 +135,7 @@ export const Branch = () => {
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
-                        setHead={setHead} 
+                        setHead={setCommit} 
                         actionMessage="Start New Branch From This Commit"
                     />
                 </Row>
