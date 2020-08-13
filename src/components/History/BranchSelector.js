@@ -5,22 +5,32 @@ import {Dropdown} from '../Form/Dropdown';
 /**
  * Simple Dropdown for switching between branches
  */
-export const BranchSelector = ({ onChange, hideSingle, className }) => {
+export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
 
     hideSingle = false
-    const {branches, branch, setHead} = DBContextObj();
+    let {branches, branch, setHead} = DBContextObj();
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     function changeBranch(SelValue){       
         let nub = SelValue
-        if(nub !== branch){
-            setHead(nub)
+        if(nub !== get_branch()){
+            if(onChange){
+                onChange(nub)
+            }
+            else {
+                setHead(nub)
+            }
         } 
         toggle();     
     }
 
+    function get_branch(){
+        if(currentBranch) return currentBranch
+        return branch
+    }
 
     if(branch && branches && Object.keys(branches).length > 1 ) {
         let bopts = Object.values(branches).map( (item) => {
@@ -28,13 +38,16 @@ export const BranchSelector = ({ onChange, hideSingle, className }) => {
         })
 
         const entries = Object.values(branches).map((item, index) => {              
-            return (<button onClick={function(){changeBranch(item.id)}} 
-                        className="tdb__dropdown__button" key={item.id} >{item.id}</button>
+            return (<button onClick={
+                function(){
+                    changeBranch(item.id)
+                }} 
+                className="tdb__dropdown__button" key={item.id} >{item.id}</button>
                       
                 )
         })
 
-        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={BRANCH_SELECTOR.label + " " + branch} className="nav__main__link" >                   
+        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={BRANCH_SELECTOR.label + " " + get_branch()} className="nav__main__link" >                   
                     {entries}                 
                 </Dropdown>
             )

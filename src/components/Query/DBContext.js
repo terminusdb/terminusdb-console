@@ -26,12 +26,8 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [prefixes, setPrefixes] = useState()
     const [repos, setRepos] = useState()
-    
-    const refObj= woqlClient.ref() ? {id:woqlClient.ref()} : {};
-    
-    const [refObject, setRefObject] = useState(refObj)
 
-    const [ref, setRef] = useState(refObj)
+    const [ref, setRef] = useState(woqlClient.ref())
     
     const [consoleTime, setConsoleTime] = useState()
     
@@ -170,7 +166,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
        remove consoleTime and ref and leave only refObject;
        */
         setBranch(branchID)
-        setRefObject(refObject)
+        //setRefObject(refObject)
         setRef(ref);
         setConsoleTime(refTime)
     }
@@ -281,8 +277,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 report,
                 branch,
                 ref,
-                refObject,
-
+              
                 repos,
                 scale,
                 prefixes,
@@ -325,6 +320,7 @@ export const TerminusDBProvider = (woqlClient) => {
         prefixes,
         graphs,
         report,
+        ref,
         branch,
         refObject,
         loading,
@@ -348,14 +344,14 @@ export const NullDBProvider = (woqlClient) => {
         setConsoleTime,
         setHead,
         updateBranches,
-        consoleTime,
         DBInfo,
         branches,
         prefixes,
         graphs,
         report,
         branch,
-        refObject,
+        consoleTime,
+        ref,
         loading,
     }
 

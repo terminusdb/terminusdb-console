@@ -1,8 +1,6 @@
 import React from "react";
 import { Branch } from "./Branch"
 import { Merge } from "./Merge"
-import { Metadata } from "./Metadata"
-import { Backup } from "./Backup"
 import { DeleteDB } from "./DeleteDB"
 import { MANAGE_SECTIONS } from "./constants.dbmanage"
 import { RiverOfSections } from "../Templates/RiverOfSections"
