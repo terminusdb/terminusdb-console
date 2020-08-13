@@ -23,7 +23,7 @@
 
 ## Bug fixes
 
-Upgrade of Navigation Bar and redisgn of widgets 
+Upgrade of Navigation Bar and redesign of widgets 
 
 Changed login to connect button
 
