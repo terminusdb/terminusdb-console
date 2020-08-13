@@ -70,7 +70,7 @@ export const Merge = () => {
             rebase_from: frombase,
         }
         if (commitMsg) rebase_source.message = commitMsg
-        else 
+        else rebase_source.message = MERGE_BRANCH_FORM.mergeSuccessMessage 
         return nClient
             .rebase(rebase_source)
             .then(() => {

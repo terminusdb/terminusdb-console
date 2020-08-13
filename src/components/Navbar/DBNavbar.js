@@ -14,7 +14,7 @@ import {
 } from './constants.navbar'
 import {DBContextObj} from '../Query/DBContext'
 import {BranchSelector} from '../History/BranchSelector'
-import {printts} from '../../constants/dates'
+import {printts,DATETIME_FULL} from '../../constants/dates'
 
 export const DBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -31,7 +31,7 @@ export const DBNavbar = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches, consoleTime} = DBContextObj()
+    const {branches,consoleTime} = DBContextObj()
     const [isOpen, setIsOpen] = useState(false)
 
     let dbmeta = woqlClient.get_database() || {}
@@ -54,7 +54,7 @@ const GuardedDBNavbar = (props) => {
 
         let currentTime = <span className="nav__main__commit">Latest</span>
         if (consoleTime)
-            currentTime = <span className="nav__main__commit">{printts(consoleTime)}</span>
+            currentTime = <span className="nav__main__commit">{printts(consoleTime,DATETIME_FULL)}</span>
         return currentTime
     }
 

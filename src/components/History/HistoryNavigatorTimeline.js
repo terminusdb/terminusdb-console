@@ -4,11 +4,12 @@ import { DBContextObj} from "../Query/DBContext"
 
 export const HistoryNavigatorTimeline = ({woqlClient}) => {
 
-	const { consoleTime, setHead, branch, ref, DBInfo, branches} = DBContextObj();
+	const { setHead, branch, ref, consoleTime, DBInfo, branches} = DBContextObj();
 
 	const setCurrentItem=(item)=>{
-        setHead(branch,item.commit)
+        setHead(branch,item)
 	}
+
     if(!branches || !DBInfo) return null
     
     let firstCommit = DBInfo.created || null
@@ -21,8 +22,8 @@ export const HistoryNavigatorTimeline = ({woqlClient}) => {
             setHead={setCurrentItem}
             headMessage="Set Console Head to this Commit"
             currentCommit={ref}
-            firstCommit={firstCommit}
-            currentStartTime={consoleTime}    
+            currentStartTime={consoleTime}
+            firstCommitTime={firstCommit}    
         />
     </div>
 

@@ -6,57 +6,39 @@ import * as icons from '../../constants/faicons'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {LatestUpdates} from '../Tables/LatestUpdates'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-
+import {DBFullCard} from './DBFullCard'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
+import {CommitLog} from "./CommitLog"
 
 export const MonitorDB = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {graphs, branch, branches, DBInfo, ref, consoleTime, repos} = DBContextObj()
+    const {branch, branches, ref} = DBContextObj()
 
     const [commitCount, setCommitCount] = useState()
     const [latest, setLatest] = useState()
-
+    const [assetRecord, setAssetRecord] = useState({})
+    
     let WOQL = TerminusClient.WOQL
-    let ts = consoleTime || Date.now() / 1000
-
-    let latest_woql = false
 
     //load commit Count
     useEffect(() => {
         if(branch){
-            load_commit_log(branch, ref)
+           // load_context(branch, ref)
         }
     }, [branch, ref, branches])
 
-    //load global values
-    /*useEffect(() => {
-        if(branch){
-            load_commit_log(branch, ref)
-            load_scale(branch, ref)
-        }
-        let w = WOQL.using('_commits').triple('v:A', 'type', 'ref:ValidCommit')
-        woqlClient.query(w).then((result) => {
-            if (result.bindings) setCommitCount(result.bindings.length)
-        })
-    }, [branches])*/
+    useEffect(() => {
+        load_assets()
+    }, [])
 
-    function load_commit_log(b, r){
-        let q = WOQL.query()
-        if(r){
-            q = WOQL.lib().commit_history(r, LATEST_UPDATES_LENGTH)
-        }
-        else {
-            q = WOQL.and(
-                    WOQL.lib().active_commit_id(b, false, "Active ID"),
-                    WOQL.lib().commit_history("v:Active ID", LATEST_UPDATES_LENGTH)
-                )
-        }
-        let woql = WOQL.select("v:Author", "v:Commit ID", "v:Message", "v:Time", q)
-        woqlClient.query(woql).then((result) => {
-            if (result.bindings) setLatest(result.bindings)
+
+    function load_assets(){
+        let x = woqlClient.resource("db").substring(0, woqlClient.resource("db").length-1)
+        WOQL.lib().assets_overview([x], woqlClient).then((res) => {
+            setAssetRecord(res[0])
         })
     }
 
@@ -144,65 +126,74 @@ export const MonitorDB = (props) => {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     }
 
-    let ri = getRepoInfo()
+    //let ri = getRepoInfo()
 
     return ( 
         <div>
-            <hr className="my-space-50" />
-            <hr className="my-space-50" />
-            <hr className="my-space-50" />
-
             <Row>
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        title={woqlClient.db()}
-                        main={getCurrentDBName()}
-                        subTitle={
-                            ' ' + (DBInfo ? showCreateTime(DBInfo.created, DBInfo.author) : '...')
-                        }
-                        info={getCurrentDbDescr()}
-                    />
-                </Col>
 
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.COMMIT}
-                        title="Commits"
-                        main={commitCount}
-                        subTitle={
-                            branches || graphs ? getBranchGraphCount(branches, graphs) : '...'
-                        }
-                        info={getCommitInfo()}
-                    />
-                </Col>
-
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.USERS}
-                        title="User"
-                        main=" 1 "
-                        subTitle="Desktop Client"
-                        info="Desktop users can add collaborators to their databases through TerminusDB hub"
-                    />
-                </Col>
-
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.ORIGIN}
-                        title={ri.title}
-                        main={ri.type}
-                        info={ri.info}
-                        subTitle={ri.sub}
-                    />
-                </Col>
+                <DBFullCard meta={assetRecord}/>               
             </Row>
-            {latest && <LatestUpdates latests={latest} query={latest_woql} />}
+            <Row>
+                <ScopedDetails />               
+            </Row>
+            <Row>
+                <CommitLog />               
+            </Row>            
         </div>
     )
 }
 
-export const GlobalDetails = (props) => {
+export const ScopedDetails = (props) => {
 
+    const {woqlClient} = WOQLClientObj()
+    const {branch, branches, ref} = DBContextObj()
+    const [latest, setLatest] = useState()
+    
+
+    function load_context(b, r){
+        let WOQL = TerminusClient.WOQL
+        let woql = WOQL.query();
+        let commit_id = "v:Active ID"
+        if(r){
+            commit_id = r
+        }
+        let [commit_iri, cpath, tail_iri] = WOQL.vars("ciri", "cpath", "tiri")
+        
+        let q = WOQL.using("_commits").triple(commit_iri, "ref:commit_id", commit_id)
+            .path(commit_iri, "ref:commit_parent+", tail_iri, cpath)
+        if(r){
+            woql = WOQL.count("v:Count", q)
+        }
+        else {
+            woql = WOQL.count("v:Count").and(
+                WOQL.lib().active_commit_id(b, false, "Active ID"),
+                q
+            )
+        }
+        woqlClient.query(woql).then((result) => {
+            console.log(result.bindings)
+            if (result.bindings) setLatest(result.bindings)
+        })
+        .catch((e) => {
+            console.log(e)
+        })
+    }
+
+    //number of commits 
+    //size of graph(s)
+    //number / types of graphs
+    //classes / properties / size
+    //documents / instance data / swan
+    //load commit Count
+    useEffect(() => {
+        if(branch){
+           load_context(branch, ref)
+        }
+    }, [branch, ref, branches])
+    if(!latest) return null
+    console.log(latest)
+    return (<span>yeah</span>)
 }
 
 

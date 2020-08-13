@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Fragment} from 'react'
 import {TCForm} from '../../components/Form/FormComponents'
 import {CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM} from './constants.dbmanage'
 import {
@@ -13,7 +13,7 @@ import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
 import {BranchSelector} from '../../components/History/BranchSelector' 
 
 
-export const CommitSelector = ({branch, setHead, onSelect, commit, woqlClient, firstCommit, time, actionMessage}) => {
+export const CommitSelector = ({branch, setHead=null, onSelect, commit, woqlClient, firstCommit, time, actionMessage}) => {
     function setCurrentItem(item){
         onSelect(item.commit)
     }
@@ -24,18 +24,21 @@ export const CommitSelector = ({branch, setHead, onSelect, commit, woqlClient, f
 
     let [myBranch, setMyBranch] = useState(branch)
 
-    return (<span>
-            <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>             
-            <TimelineCommits 
-            branch={myBranch}
-            woqlClient={woqlClient}
-            onChange={setCurrentItem} 
-            headMessage={actionMessage}
-            setHead={setHead}
-            currentCommit={commit}
-            firstCommit={firstCommit}
-            currentStartTime={time}    
-        />
-        </span>
+    return (<div className="history__nav history__nav--noshadow ">
+                <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>                    
+                    <TimelineCommits 
+                        branch={myBranch}
+                        woqlClient={woqlClient}
+                        onChange={setCurrentItem} 
+                        headMessage={actionMessage}
+                        setHead={setHead}
+                        currentCommit={commit}
+                        firstCommit={firstCommit}
+                        currentStartTime={time} 
+
+                />
+            </div>
     )
 }
+
+//      

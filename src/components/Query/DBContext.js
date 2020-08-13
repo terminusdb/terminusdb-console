@@ -26,8 +26,11 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [prefixes, setPrefixes] = useState()
     const [repos, setRepos] = useState()
+
     const [ref, setRef] = useState(woqlClient.ref())
+    
     const [consoleTime, setConsoleTime] = useState()
+    
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
@@ -36,7 +39,9 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     const WOQL = TerminusClient.WOQL
 
-    //load branch structure
+    /*
+    * I load the branch list, will be update if I add a new branch
+    */
     useEffect(() => {
         setLoading(loading + 1)
         WOQL.lib()
@@ -123,65 +128,26 @@ export const DBContextProvider = ({children, woqlClient}) => {
             .finally(() => setLoading(loading - 1))
     }, [branches])
 
-    //load head ref when consoleTime is set
-    useEffect(() => {
-        if (headUpdating && ref) {
-            WOQL.lib()
-                .commits(ref)
-                .execute(woqlClient)
-                .then((res) => {
-                    if (res.bindings && res.bindings[0] && res.bindings[0]['Time']) {
-                        let ts = res.bindings[0]['Time']['@value']
-                        setConsoleTime(ts)
-                    }
-                })
-            setHeadUpdating(false)
-        } else if (consoleTime && branches && branch && branches[branch]) {
-            setLoading(loading + 1)
-            if (consoleTime < branches[branch].updated) {
-                let woql = WOQL.lib().active_commit(branch, consoleTime)
-                woql.execute(woqlClient)
-                    .then((res) => {
-                        if (res.bindings && res.bindings[0] && res.bindings[0]['Commit ID']) {
-                            let cid = res.bindings[0]['Commit ID']['@value']
-                            if (cid != branches[branch].head) {
-                                woqlClient.ref(cid)
-                                setRef(cid)
-                            } else {
-                                woqlClient.ref(false)
-                                setRef(false)
-                            }
-                        }
-                    })
-                    .catch((e) => {
-                        setReport({error: e, status: TERMINUS_ERROR})
-                    })
-                    .finally(() => setLoading(loading - 1))
-            } else {
-                if (ref) {
-                    woqlClient.ref(false)
-                    setRef(false)
-                }
-                if (consoleTime >= Date.now() / 1000) {
-                    setConsoleTime()
-                }
-            }
-        }
-    }, [consoleTime, ref, branches, branch])
 
-    function setHead(bid, rid) {
-        woqlClient.checkout(bid)
-        if(branches && branches[bid] && branches[bid].head == rid){
-            rid = false
-            setConsoleTime(false)
+
+    function setHead(branchID, refObject={}){// ridConsoleTime=false) {
+        woqlClient.checkout(branchID)
+        let ref=refObject.commit;
+        let refTime=refObject.time;
+
+        if(branches && branches[branchID] && branches[branchID].head == ref){
+            ref = false
+            refTime=false  
         }
-        woqlClient.ref(rid)
-        setBranch(bid)
-        setRef(rid)
-        if (rid) {
-            //don't trigger update for console time change
-            setHeadUpdating(true)
-        }
+
+        woqlClient.ref(ref)
+       /*
+       to be review
+       remove consoleTime and ref and leave only refObject ????;
+       */
+        setBranch(branchID)
+        setRef(ref);
+        setConsoleTime(refTime)
     }
 
     function updateBranches(bid) {
@@ -290,6 +256,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 report,
                 branch,
                 ref,
+              
                 repos,
                 prefixes,
                 loading,
@@ -331,8 +298,9 @@ export const TerminusDBProvider = (woqlClient) => {
         prefixes,
         graphs,
         report,
-        branch,
         ref,
+        branch,
+        refObject,
         loading,
     }
 }
@@ -354,13 +322,13 @@ export const NullDBProvider = (woqlClient) => {
         setConsoleTime,
         setHead,
         updateBranches,
-        consoleTime,
         DBInfo,
         branches,
         prefixes,
         graphs,
         report,
         branch,
+        consoleTime,
         ref,
         loading,
     }

@@ -124,9 +124,27 @@ export const Branch = () => {
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
     }
-    let setCommit = manuallyUpdated ? unsetManual : false
+    let setCommit = manuallyUpdated ? unsetManual : null
     return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
+{/*
+            <TCForm
+                layout={[3]}
+                fields={BRANCH_SOURCE_FORM.fields}
+                onChange={onSourceUpdate}
+                values={sourceValues}
+                report={{status: TERMINUS_INFO, message: BRANCH_SOURCE_FORM.infoMessage}}
+            />
+            <TCForm
+                onSubmit={onCreate}
+                report={report}
+                layout={[1, 1]}
+                onChange={onUpdate}
+                fields={CREATE_BRANCH_FORM.fields}
+                values={values}
+                buttons={btns}
+            />
+*/}
             <Container>
                 <Row>
                     <CommitSelector 
