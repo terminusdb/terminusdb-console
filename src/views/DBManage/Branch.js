@@ -49,7 +49,7 @@ export const Branch = () => {
         nc.ref(sourceCommit)
         nc.branch(newID)
         .then(() => {
-            let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${values.bid}`
+            let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${newID}`
             let rep = {
                 message: message,
                 status: TERMINUS_SUCCESS,
@@ -59,7 +59,7 @@ export const Branch = () => {
             updateBranches()
         })
         .catch((err) => {
-            let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${values.bid} `
+            let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${newID} `
             setReport({error: err, status: TERMINUS_ERROR, message: message})
         })
         .finally(() => {
