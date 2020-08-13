@@ -27,6 +27,7 @@ export const Branch = () => {
     const [sourceCommit, setSourceCommit] = useState()
     const [newID, setNewID] = useState()
     const [submissionProblem, setSubmissionProblem] = useState()
+    const [manuallyUpdated, setManuallyUpdated] = useState(false)
 
     let update_start = Date.now()
 
@@ -68,16 +69,26 @@ export const Branch = () => {
 
     function setCommitID(c){
         if(c && c.target){
-            alert(c.target.value)
+            let update = c.target.value.length > 0
+            setManuallyUpdated(update);
             setSourceCommit(c.target.value)
-        }
-        else {
-            alert("no c")
         }
     }
 
+    function selectCommitID(c){
+        if(c != sourceCommit && (!manuallyUpdated)){
+            setSourceCommit(c)
+        }
+    }
+
+    function unsetManual(){
+        setManuallyUpdated(false)
+    }
+
     function updateID(c){
-        setNewID(c.target.value)
+        if(c && c.target){
+            setNewID(c.target.value)
+        }
     }
 
     function setUserError(field, msg){
@@ -89,7 +100,7 @@ export const Branch = () => {
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
         else if(sourceCommit.length < 30){
-            return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 32 character string")
+            return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
         }                    
         if(newID && newID.length){
             if(typeof branches[newID] != "undefined"){
@@ -107,6 +118,7 @@ export const Branch = () => {
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
     }
+    let setHead = manuallyUpdated ? unsetManual : false
     return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
             <Container>
@@ -114,16 +126,19 @@ export const Branch = () => {
                     <CommitSelector 
                         branch={branch} 
                         commit={ref}
-                        onSelect={setCommitID}
+                        onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
-                        woqlClient={woqlClient} 
+                        woqlClient={woqlClient}
+                        setHead={setHead} 
                         actionMessage="Start New Branch From This Commit"
                     />
                 </Row>
                 <Row>
                     <Col>
                         <Row>Start Branch From Commit
-                            <input className = ""
+                            <input 
+                                className = ""
+                                type="text"
                                 value={sourceCommit}
                                 width="40"
                                 onChange={setCommitID}
@@ -131,12 +146,14 @@ export const Branch = () => {
                             />
                         </Row>
                         <Row>New Branch ID
-                        <input className = ""
-                                value={newID}
-                                width="40"
-                                onChange={updateID}
-                                id= "create_branch_id"
-                            />
+                        <input 
+                            type="text"
+                            className = ""
+                            value={newID}
+                            width="40"
+                            onChange={updateID}
+                            id="create_branch_id"
+                        />
                         </Row>
                     </Col>
                     <Col>

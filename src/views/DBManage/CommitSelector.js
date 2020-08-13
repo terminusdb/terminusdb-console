@@ -13,7 +13,7 @@ import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
 import {BranchSelector} from '../../components/History/BranchSelector' 
 
 
-export const CommitSelector = ({branch, onSelect, commit, woqlClient, firstCommit, time, actionMessage}) => {
+export const CommitSelector = ({branch, setHead, onSelect, commit, woqlClient, firstCommit, time, actionMessage}) => {
     function setCurrentItem(item){
         onSelect(item.commit)
     }
@@ -28,9 +28,10 @@ export const CommitSelector = ({branch, onSelect, commit, woqlClient, firstCommi
             <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>             
             <TimelineCommits 
             branch={myBranch}
-            woqlClient={woqlClient} 
-            setHead={setCurrentItem}
+            woqlClient={woqlClient}
+            onChange={setCurrentItem} 
             headMessage={actionMessage}
+            setHead={setHead}
             currentCommit={commit}
             firstCommit={firstCommit}
             currentStartTime={time}    
