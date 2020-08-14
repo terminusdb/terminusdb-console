@@ -14,9 +14,9 @@ import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
-    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete} from 'react-icons/ai';
+    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
 import { validURL } from '../../utils/helperFunctions'
@@ -63,14 +63,12 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r4'>
                         <DBCredits meta={meta}  user={user} />
                     </Row>
-                    <Row key='r8'>
+                    <Row key='r6'>
                         {decr}
                     </Row>
-                    {meta.type == "invite" &&
-                    <Row key='r9'>
-                        <DBInvite meta={meta}/>
+                    <Row key='r90'>
+                        <RemoteCredits meta={meta}  user={user} />
                     </Row>
-                    }
                 </Col>
                 <Col key='r6' md={2} className='database-main-actions'>
                     <DBStatus meta={meta}  user={user}  onAction={onGo}/>
@@ -80,81 +78,106 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
     )
 }
 
-export const DBInvite = ({meta}) => {
-    return (
-        <div className="database-listing-description-row">
-            <span>
-                <BsFillEnvelopeFill className="invitation_info_icon_spacing"/>
-                <span className="db_info"><span className="invite-user">{meta.remote_record.inviter}</span> has invited you to collaborate on this database: "{meta.remote_record.invitation}"</span>
-            </span>
-        </div>
-    )
-}
-
-
 export const DBTitle = ({meta, user, onAction, max}) => {
     let maxtitle = max || 40, author = false
-
-    function goDB(){
-        if(meta.id) goDBHome(meta.id, meta.organization)
-    }
-
     let title_css = meta.id ? "database-title-local" : "database-title-missing"
-    let title_html = "" //meta.id ? "database id: " + meta.id : "Available to clone from Terminus Hub"
-
-    if(meta.remote_record && meta.remote_record.label){
-        title_css = "database-title-remote"
-        if(meta.remote_record.label != meta.label) title_html += " Cloned from original with title: " + meta.remote_record.label
-    }
-
     if(meta.label && meta.label.length > maxtitle){
         var str =  meta.label.substring(maxtitle -4) + " ..."
     }
     else str = meta.label || ""
 
-    if(meta.remote_record && meta.author){
-        author = meta.author
-    }
-
     return (
-        <span>
-            <span onClick={goDB} title={title_html} className='database-listing-title-row'>
-                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
-            </span>
-            {false && <span className="author_info">{author}</span>}
+        <span className='database-listing-title-row'>
+            <span key='a' className={title_css + " database-listing-title"}>{str}</span>
         </span>
     )
 }
 
 export const DBCredits = ({meta, user}) => {
     let res = []
+    res.push(<DBID key='dbt' meta={meta} user={user} />)
+    res.push(<DBBranches  key='abc' meta={meta} user={user} />)
+    res.push(<DBSize key='ab' meta={meta} user={user} />)
+    res.push(<DBFirstCommit key='dbc' meta={meta} user={user} />)
+    res.push(<DBLastCommit key='dbv' meta={meta} user={user} />)
+    return res
+}
 
-    if(meta && (meta.created || meta.updated)) {
-        res.push(<DBTimings key='dbt' meta={meta} user={user} />)
+
+export const DBID = ({meta, user}) => {
+    let ct = "ID: " + meta.id
+    return (
+        <span>
+            <AiFillInfoCircle className="db_info_icon_spacing"/>
+            <span className="db_info">{ct}</span>
+        </span>
+    )
+}
+
+export const DBDescription = ({meta, user}) => {
+    if(meta.comment && meta.comment.length > 80 && !meta.testing){
+        var str =  meta.comment.substring(76) + " ..."
     }
-    if(typeof meta.size != "undefined"){
-        res.push(
-            <DBSize  key='ab' meta={meta} user={user} />
-        )
+    else str = meta.comment || ""
+    return (
+        <Row key='z' className='database-listing-description-row'>
+            <span className="database-listing-description">{str}</span>
+        </Row>
+    )
+}
+
+export const DBFirstCommit = ({meta, user}) => {
+    let ts = meta.created
+    let ct
+    if(ts){
+        ct = "First Commit: " + printts(ts, DATETIME_COMPLETE)
+        //if(meta.author) ct += " by " + meta.author
     }
-    if(meta.branches && meta.branches.length > 1) {
-        res.push(
-            <DBBranches  key='abc' meta={meta} user={user} />
-        )
+    else {
+        ct = "No commits"
+    }
+    return (
+        <span>
+            <AiFillInfoCircle className="db_info_icon_spacing"/>
+            <span className="db_info">{ct}</span>
+        </span>
+    )
+}
+
+export const DBLastCommit = ({meta, user}) => {
+    let ts = meta.updated
+    if(!ts) return null
+    let ct = "Latest Update: " + printts(ts, DATETIME_COMPLETE)
+    if(meta.branches && meta.branches.length > 1){
+        meta.branches.map((item) => {
+            if(item.updated == meta.updated) ct += " on branch " + item.branch
+        })
     }
 
-    if(meta && meta.remote_record && user.logged_in && meta.type != "local_clone"){
+    if(meta.author) ct += " by " + meta.author
+    return (
+        <span>
+            <AiFillEdit className="db_info_icon_spacing"/>
+            <span className="db_info">{ct}</span>
+        </span>
+    )
+}
+
+export const RemoteCredits = ({meta, user}) => {
+    let res = []
+    res.push(<DBCloneStatus  key='cl' meta={meta} user={user} />)
+    if(meta && meta.remote_record){
+        res.push(<DBRemoteTitle  key='cl' meta={meta.remote_record} user={user} />)
+    }
+    if(meta && meta.remote_record && meta.type != "local_clone"){
         res.push (
-            <DBProductionCredits  key='ac' meta={meta} user={user} />
+            <DBProductionCredits  key='ac' meta={meta.remote_record} user={user} />
         )
         res.push(
-            <DBRoleCredits key='ad' meta={meta} user={user} />
+            <DBRoleCredits key='ad' meta={meta.remote_record} user={user} />
         )
         res.push(
-            <DBContributionCredits  key='ae' meta={meta}  user={user}/>
-        )
-        res.push(
-            <DBSchemaStatus key='as' meta={meta}  user={user}/>
+            <DBLastCommit key='ad' meta={meta.remote_record} user={user} />
         )
     }
     return (
@@ -164,12 +187,47 @@ export const DBCredits = ({meta, user}) => {
     )
 }
 
+export const DBRemoteTitle = ({meta, user}) => {
+    let ct = meta.label ? meta.label : meta.id
+    return(<span>
+        <AiOutlineBook className="db_info_icon_spacing"/>
+        <span className="db_info">Name: {ct}</span>
+    </span>)
+}
+
+export const DBCloneStatus = ({meta, user}) => {
+    let ct = ""
+    if(meta.remote_url) {
+        if(meta.type == "local_clone"){
+            ct = "Clone of local database: " + meta.remote_url.substring(meta.remote_url.lastIndexOf("/")+1)
+        }
+        else {
+            ct = "Cloned from " + meta.remote_url
+        }
+        return (
+            <span>
+                <AiOutlineBlock className="db_info_icon_spacing"/>
+                <span className="db_info">{ct}</span>
+            </span>
+        )    
+    }
+    else {
+        ct = "Local Database"
+    }
+    return (
+        <span>
+            <AiFillDatabase className="db_info_icon_spacing"/>
+            <span className="db_info">{ct}</span>
+        </span>
+    )
+}
+
 export const DBBranches = ({meta, user}) => {
     if(meta.branches && meta.branches.length > 1) {
         return (
             <span title={meta.branches.length + " branches"}>
                 <AiOutlineBranches className="db_info_icon_spacing"/>
-                <span className="db_info">{meta.branches.length}</span>
+                <span className="db_info">{meta.branches.length} Branches</span>
             </span>
         )
     }
@@ -199,15 +257,15 @@ export const DBSize = ({meta, user}) => {
 
 
 export const DBProductionCredits = ({meta, user}) => {
-    if(meta.remote_record){
-        if(user.remote_id == meta.remote_record.organization){
+    if(meta){
+        if(user.remote_id == meta.organization){
             var tit = "Personal Publication"
         }
         else {
-            var tit = (meta.remote_record.organization_type ? meta.remote_record.organization_type + " Organization " + meta.remote_record.organization : "")
+            var tit = (meta.organization_type ? meta.organization_type + " Organization " + meta.organization : "")
         }
-        let txt = (meta.remote_record.organization_label ? meta.remote_record.organization_label  : meta.remote_record.organization)
-        let icon = (meta.remote_record.organization_icon ? (<img className="database-listing-organization-icon" src={meta.remote_record.organization_icon}></img>) : "")
+        let txt = (meta.organization_label ? meta.organization_label  : meta.organization)
+        let icon = (meta.organization_icon ? (<img className="database-listing-organization-icon" src={meta.organization_icon}></img>) : "")
         return (
             <span title={tit}>
                 <AiOutlineUser className="db_info_icon_spacing"/>
@@ -218,101 +276,31 @@ export const DBProductionCredits = ({meta, user}) => {
     return null
 }
 
-export const DBRoleCredits = ({meta, user}) => {
-    if(meta.remote_record){
-        let dbrec = meta.remote_record
-        let rs = [];
-        if(dbrec.roles){
-            for(var i = 0 ; i<dbrec.roles.length; i++){
-                rs.push(_get_role_title(dbrec.roles[i]))
-            }
+export const DBRoleCredits = ({dbrec, user}) => {
+    if(!dbrec) return null
+    let rs = [];
+    if(dbrec.roles){
+        for(var i = 0 ; i<dbrec.roles.length; i++){
+            rs.push(_get_role_title(dbrec.roles[i]))
         }
-        if(meta.public || (meta.remote_record && meta.remote_record.public)){
-            if(rs.length == 0) rs.push("Public")
-            return (
-                <span>
-                    <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
-                    <span className="db_info">{rs}</span>
-                </span>
-            )
-        }
-        if(rs.length == 0) rs.push("No Access")
+    }
+    if(dbrec.public){
+        if(rs.length == 0) rs.push("Public Database")
         return (
             <span>
-                <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+                <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
                 <span className="db_info">{rs}</span>
             </span>
         )
     }
-    return null
-}
-
-export const DBSchemaStatus =  ({meta, user}) => {
-    return <SchemaControl meta={meta} user={user}  />
-}
-
-export const DBDescription = ({meta, user}) => {
-    if(meta.comment && meta.comment.length > 80 && !meta.testing){
-        var str =  meta.comment.substring(76) + " ..."
-    }
-    else str = meta.comment || ""
+    if(rs.length == 0) rs.push("No access to remote database currently")
     return (
-        <Row key='z' className='database-listing-description-row'>
-            <span className="database-listing-description">{str}</span>
-        </Row>
-    )
-}
-
-export const DBTimings = ({meta, user}) => {
-    let parts = []
-
-    function updateStamp(ts, author_game){
-        let lab = moment(ts*1000).startOf('hour').fromNow()
-        if(author_game && meta.remote_record && meta.author){
-            lab += " (" + meta.author + ")"
-        }
-        return lab
-    }
-
-    if(meta.created && meta.updated && (meta.created == meta.updated)){
-        let cts = updateStamp(meta.created, true)
-        parts.push(<DBCreated key='xss' display={cts} ts={meta.created} author={meta.author}/>)
-    }
-    else {
-        if(meta.created){
-            let cats = updateStamp(meta.created, !meta.updated)
-            parts.push(<DBCreated key='ds' display={cats} ts={meta.created} />)
-        }
-        if(meta.updated){
-            let uts = updateStamp(meta.updated, true)
-            parts.push(<DBUpdated key='dbu' display={uts} ts={meta.updated} author={meta.author}/>)
-        }
-    }
-    return parts
-}
-
-export const DBCreated = ({display, ts, author}) => {
-    let ct = "Created at " + printts(ts, DATETIME_COMPLETE)
-    if(author) ct += " by " + author
-    return (
-        <span title={ct}>
-            <AiFillInfoCircle className="db_info_icon_spacing"/>
-            <span className="db_info">{display}</span>
+        <span>
+            <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+            <span className="db_info">{rs}</span>
         </span>
     )
 }
-
-export const DBUpdated = ({display, ts, author}) => {
-    let ct = "Updated at " + printts(ts, DATETIME_COMPLETE)
-    if(author) ct += " by " + author
-    return (
-        <span title={ct}>
-            <AiOutlineBook className="db_info_icon_spacing"/>
-            <span className="db_info">{display}</span>
-        </span>
-    )
-}
-
 
 function _get_role_title(id, orgtype){
     let map = {
@@ -324,13 +312,6 @@ function _get_role_title(id, orgtype){
     }
     return map[id] || "?"
 }
-
-
-export const DBContributionCredits = ({meta, user}) => {
-    return null
-    return (<Badge color="success">Your Contributions</Badge>)
-}
-
 
 export const DBControlPanel = ({meta, user}) => {
     const [isImage, setImage] = useState(false);
@@ -360,59 +341,11 @@ export const DBControlPanel = ({meta, user}) => {
     )
 }
 
-export const DBControls = ({meta, user}) => {
-    let show_schema = meta.schema
-    let show_tt = meta.created
-    let show_q = meta.id
-    let controls = []
-
-    function goToPage(page){
-        goDBPage(meta.id, meta.organization, page)
-    }
-    if(show_tt){
-        controls.push( <TimeControl meta={meta} user={user} /> )
-    }
-    else {
-        controls.push(<TimeControl meta={meta} user={user} type='inactive'/>)
-    }
-    if(show_q){
-        controls.push( <QueryControl meta={meta} user={user} /> )
-    }
-    else {
-        controls.push( <QueryControl meta={meta} user={user} type='inactive'/> )
-    }
-    if(show_schema){
-        controls.push( <SchemaControl meta={meta} user={user}  /> )
-    }
-    else {
-        controls.push( <SchemaControl meta={meta} user={user} type='inactive' /> )
-    }
-    if(!meta.id) return null
-    return (
-        <Container className='database-controls database-listing-title-row'>
-            <Row className='major-database-controls'>
-                {/*<Col className='time-control' onClick={function(){if(show_tt) goToPage('commits')}}>
-                    {controls[0]}
-                </Col>*/}
-                <Col className='schema-control' onClick={function(){if(show_schema) goToPage('schema')}}>
-                    {controls[2]}
-                </Col>
-               {/* <Col className='query-control' onClick={function(){if(show_q) goToPage('query')}}>
-                    {controls[1]}
-                </Col>*/}
-            </Row>
-        </Container>
-    )
-}
-
 export const DBStatus = ({meta, user, onAction}) => {
     return (
         <div className='database-action-column'>
             <Row className='database-update-status'>
-                <RemoteUpdated meta={meta}  user={user}/>
-            </Row>
-            <Row className='database-action-option' onClick={onAction} >
-                <DBMainAction meta={meta} user={user} />
+                <DBMainAction meta={meta} user={user} onAction={onAction}/>
             </Row>
             <Row className='database-secondary-option'>
                 <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
@@ -421,133 +354,36 @@ export const DBStatus = ({meta, user, onAction}) => {
     )
 }
 
-export const RemoteUpdated = ({meta, user}) => {
-    let act = meta.action, css = "database-main-action-message action-text-color";
-    switch(act){
-        case 'share':
-            act = "upload to hub"
-            break;
-        case 'synchronise':
-            if(meta.structure_mismatch || meta.ahead || meta.behind){
-                act = "needs synchronize"
-            }
-            else{
-                act = "synchronized"
-            }
-            break;
-        case 'accept':
-            act = "Accept Invitation?"
-            break;
 
+export const DBMainAction = ({meta, user, onAction}) => {
+    function myClone(){
+        meta.action = 'clone'
+        if(onAction) onAction(meta)
     }
-    /*if(act == 'share'){
-        act = "upload to hub"
-        css = css + " share-control"
-    }
-    if(act == 'synchronise') {
-        if(meta.structure_mismatch || meta.ahead || meta.behind){
-            act = "needs synchronise"
-            css = css + " synchronise-control"
-        }
-        else{
-            act = "synchronised"
-            css = css + " synchronised-control"
-        }
-    }*/
-    if(act){
-        return (<span className={css}>{act}</span>)
-    }
-    return null
-}
-
-export const DBMainAction = ({meta, user}) => {
-    let act = meta.action
-    if(act == 'synchronise' && meta.remote_record && (meta.type=='local_clone' || (meta.remote_record.actions && meta.remote_record.actions.indexOf('pull') != -1))){
-        if(meta.structure_mismatch || meta.ahead || meta.behind){
-            return (<PullControl meta={meta} user={user} />)
-        } else {
-            return (<AllGoodControl meta={meta} user={user} />)
-        }
-    }
-    else if(act == 'clone'){
-        return (<CloneControl meta={meta} user={user}/>)
-    }
-    else if(act == 'accept'){
-        return (<AcceptControl meta={meta} user={user}/>)
-    }
-    else if(act == 'share'){
-        return (<ShareControl meta={meta} user={user}/>)
-    }
-    else if(meta.remote_url){
-        return (<ClonedControl meta={meta} user={user} />)
-    }
-    return null
+    return (<div className="action-centralise">
+        <div>
+            <span onClick={myClone} className="secondory-btn-control">
+                <CloneControl meta={meta} user={user}/>
+            </span>
+        </div>
+    </div>)
 }
 
 export const DBSecondaryAction = ({meta, user, onAction}) => {
-
-    function userCanDelete(meta, user){
-        if(meta.remote_record && meta.remote_record.roles){
-            let roles = meta.remote_record.roles
-            return (roles.indexOf("create") != -1)
-        }
-        return false
-    }
-
     function myDelete(){
         meta.action = 'delete'
         if(onAction) onAction(meta)
     }
-
-    function myReject(){
-        meta.action = 'reject'
-        if(onAction) onAction(meta)
-    }
-
-    function myFork(){
-        meta.action = 'fork'
-        if(onAction) onAction(meta)
-    }
-    if(meta.action == 'accept'){
-        return (
-            <div className="action-centralise">
-                <div className="action-centralise action-divider">or</div>
-                <div>
-                    <span className="secondory-btn-control" onClick={myReject}>
-                        <RejectControl meta={meta} user={user} />
-                    </span>
-                </div>
-            </div>)
-    }
-
-    if(meta.action == 'clone'){
-        if(userCanDelete(meta, user)){
-            return (
-                <div className="action-centralise">
-                    <div className="action-centralise action-divider">or</div>
-                    <div>
-                        <span onClick={myDelete} className="secondory-btn-control">
-                            <DeleteControl meta={meta} user={user} />
-                        </span>
-                    </div>
-                </div>)
-        }
-        else {
-            return (
-                <div className="action-centralise">
-                    <div className="action-centralise action-divider">or</div>
-                    <div>
-                        <span className="secondory-btn-control"
-                            title={'Fork: ' + meta.remote_url}
-                            className="fork-action"
-                            onClick={myFork}>Fork
-                            <ForkControl meta={meta} user={user} />
-                        </span>
-                    </div>
-                </div>)
-        }
-    }
-    return null
+    
+    return (
+        <div className="action-centralise">
+            <div>
+                <span onClick={myDelete} className="secondory-btn-control">
+                    <DeleteControl meta={meta} user={user} />
+                </span>
+            </div>
+        </div>
+    )
 }
 
 
@@ -601,7 +437,7 @@ export const PullControl = ({meta, user}) => {
 }
 
 export const CloneControl = ({meta, user}) => {
-    return <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/>
+    return (<span>Clone <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/></span>)
 }
 
 export const ClonedControl = ({meta, user}) => {
