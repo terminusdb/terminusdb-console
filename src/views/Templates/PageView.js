@@ -10,15 +10,11 @@ import { Container } from "reactstrap";
 import Loading from "../../components/Reports/Loading"
 import { TERMINUS_PAGE } from "../../constants/identifiers"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
-import {DBNavbar} from '../../components/Navbar/DBNavbar'
-import {HomeMainMenu} from '../../components/Navbar/HomeMainMenu'
 
 export const PageView = (props) => {
     return (
         <div id={props.id} className="console__page" id="terminus-console-page">           
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
-            {props.dbPage===true && <DBNavbar/>}
-            {!props.dbPage && <HomeMainMenu/>}
             <main >
                 <div className="console__page__container console__page__container--width">     
                 { props.children }

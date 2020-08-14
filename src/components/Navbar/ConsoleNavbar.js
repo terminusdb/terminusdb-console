@@ -1,5 +1,6 @@
 import React, {useState, Fragment} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
+import {DBNavbarTop} from './DBNavbarTop'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
 import {Login} from './Login'
@@ -7,6 +8,8 @@ import {UnderConstruction} from '../Reports/UnderConstruction'
 import {LOGIN_LABEL,noHttps} from './constants.navbar'
 import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
 import {NavLink} from 'react-router-dom'
+import {HomeMainMenu} from './HomeMainMenu'
+import { useAuth0 } from "../../react-auth0-spa";
 
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -39,23 +42,14 @@ export const ConsoleNavbar = (props) => {
                     </div>
                     <ServerNavbar />
                     <ul className={topmenu}>
-                        <li className="nav__main__item ">
-                            <a href="https://terminusdb.com/docs/" 
-                                target="_blank" className="nav__main__link" aria-label="Documentation">
-                            Documentation
-                            </a>
-                        </li>
-                        
-                         <li className="nav__main__item ">
-                           <a href="https://terminusdb.com/community/" target="_blank" className="nav__main__link" aria-label="Community">
-                            Community
-                            </a>
-                        </li>
-                         <li className="nav__main__item ">
-                            <a href="https://terminusdb.com/blog/" target="_blank" className="nav__main__link" aria-label="Blog">
-                            Blog
-                            </a>
-                        </li>
+                        {!woqlClient.db() && <HomeMainMenu/>}
+                        {woqlClient.db() && (
+                            <DBNavbarTop
+                                isOpen={isOpen}
+                                page={props.page}
+                                toggleTimeTravel={toggleNavBar}
+                            />
+                        )}
                     </ul>
                     <div className="nav__main__right">
                         {showUnderCostruction && (
@@ -74,15 +68,8 @@ export const ConsoleNavbar = (props) => {
                     </div>
                 </nav>
             </header>
+            {woqlClient.db() && <DBNavbar />}
             {isOpen && woqlClient.db() && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
         </Fragment>
     )
 }
-/*
-{woqlClient.db() && (
-                            <DBNavbar
-                                isOpen={isOpen}
-                                page={props.page}
-                                toggleTimeTravel={toggleNavBar}
-                            />
-                        )}*/

@@ -21,8 +21,9 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
+import {PageView} from '../Templates/PageView'
 
-export const Synchronise = () => {
+export const Synchronize = () => {
     const {repos, branches, updateBranches} = DBContextObj()
     if (!repos) return null
 
@@ -262,7 +263,7 @@ export const Synchronise = () => {
     let pullButtons = user.logged_in ? PULL_REMOTE_FORM.buttons : false
 
     return (
-        <>
+        <PageView>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
             <TCForm
                 onChange={updateOperation}
@@ -316,6 +317,6 @@ export const Synchronise = () => {
                     buttons={pullButtons}
                 />
             )}
-        </>
+        </PageView>
     )
 }

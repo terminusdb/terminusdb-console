@@ -2,13 +2,12 @@ import React ,{useState}from "react";
 import { DETAILS_TAB, SYNCHRONISE_TAB, MANAGE_TAB } from "./constants.pages"
 import { DB_SYNCHRONISE, DB_MANAGE } from "../../constants/routes"
 import { MonitorDB } from '../DBHome/MonitorDB'
-import { Synchronise } from '../DBCollaborate/Synchronise'
+import { Synchronize } from '../DBCollaborate/Synchronize'
 import { ManageDB}  from '../DBManage/ManageDB'
 import { TabbedPageView } from '../Templates/TabbedPageView'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBNavbar} from '../../components/Navbar/DBNavbar'
 import {PageView} from '../Templates/PageView'
-
 
 const DatabaseHome = (props) => {
     const { woqlClient, contextEnriched } = WOQLClientObj()
@@ -22,7 +21,7 @@ const DatabaseHome = (props) => {
             {id: "/" , label: DETAILS_TAB}, 
             {id: DB_MANAGE, label: MANAGE_TAB}, 
         ]
-        tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
+        tabs.push(<Synchronize key="synchronise" label={SYNCHRONISE_TAB} />)
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
     }
@@ -35,7 +34,7 @@ const DatabaseHome = (props) => {
         tabs.push(<MonitorDB key="monitor" label={DETAILS_TAB} />)
         if(db && db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
-            tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
+            tabs.push(<Synchronize key="synchronise" label={SYNCHRONISE_TAB} />)
         }
     }
     else {
@@ -47,7 +46,7 @@ const DatabaseHome = (props) => {
         tabs.push(<ManageDB key="manage" label={MANAGE_TAB}/>)
         if(db && db.remote_url){
             sections.push({id: DB_SYNCHRONISE, label: SYNCHRONISE_TAB }) 
-            tabs.push(<Synchronise key="synchronise" label={SYNCHRONISE_TAB} />)
+            tabs.push(<Synchronize key="synchronise" label={SYNCHRONISE_TAB} />)
         }
     }
 
