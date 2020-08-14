@@ -22,7 +22,7 @@ export const DBRoutes = () => {
     * base path db/
     */
     const {path} = useRouteMatch()
-    console.log("__PATH___DBRoutes",path);
+    //console.log("__PATH___DBRoutes",path);
 
     return (
         <Switch>

@@ -132,21 +132,23 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     function setHead(branchID, refObject={}){// ridConsoleTime=false) {
         woqlClient.checkout(branchID)
-        let ref=refObject.commit;
+        let sref=refObject.commit;
         let refTime=refObject.time;
 
-        if(branches && branches[branchID] && branches[branchID].head == ref){
-            ref = false
+        //alert(branch + " => " + branchID + " ref: " + ref + " => " + sref + " " + consoleTime)
+
+        if(branches && branches[branchID] && branches[branchID].head == sref){
+            sref = false
             refTime=false  
         }
-
-        woqlClient.ref(ref)
+        sref = sref || false
+        woqlClient.ref(sref)
        /*
        to be review
        remove consoleTime and ref and leave only refObject ????;
        */
         setBranch(branchID)
-        setRef(ref);
+        setRef(sref);
         setConsoleTime(refTime)
     }
 

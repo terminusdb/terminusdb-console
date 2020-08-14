@@ -16,7 +16,7 @@ export const DBLIST_TITLE  = "My Databases"
 export const TUTORIALS_TITLE = "Tutorials"
 export const CLONEDB_TITLE = "Clone"
 export const COLLABORATE_TITLE = "Collaborate"
-export const MANAGE_TITLE ="Manage"
+export const MANAGE_TITLE ="Branch"
 
 
 export const PAGES_ID={

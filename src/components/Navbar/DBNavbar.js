@@ -99,24 +99,24 @@ const GuardedDBNavbar = (props) => {
                         <NavLink
                             tag={NavLink}
                             className="nav__main__link nav__main__link--sub"
-                            activeClassName="nav__main__link--subselected"
-                            to={getNavURL('document')}
-                            exact
-                            id={PAGES_ID.NAV_DOCUMENTS}
-                        >
-                            {DOCUMENT_PAGE_LABEL}
-                        </NavLink>
-                    </li>
-                    <li className="nav__main__item nav__main__item--sub">
-                        <NavLink
-                            tag={NavLink}
-                            className="nav__main__link nav__main__link--sub"
                             to={getNavURL('query')}
                             activeClassName="nav__main__link--subselected"
                             exact
                             id={PAGES_ID.NAV_QUERY}
                         >
                             {QUERY_PAGE_LABEL}
+                        </NavLink>
+                    </li>                    
+                    <li className="nav__main__item nav__main__item--sub">
+                        <NavLink
+                            tag={NavLink}
+                            className="nav__main__link nav__main__link--sub"
+                            activeClassName="nav__main__link--subselected"
+                            to={getNavURL('document')}
+                            exact
+                            id={PAGES_ID.NAV_DOCUMENTS}
+                        >
+                            {DOCUMENT_PAGE_LABEL}
                         </NavLink>
                     </li>
                     <li className="nav__main__item nav__main__item--sub">

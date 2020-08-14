@@ -128,10 +128,10 @@ export const MonitorDB = (props) => {
 
     //let ri = getRepoInfo()
 
+    if(!branches) return null
     return ( 
         <div>
             <Row>
-
                 <DBFullCard meta={assetRecord}/>               
             </Row>
             <Row>
@@ -144,10 +144,10 @@ export const MonitorDB = (props) => {
     )
 }
 
-export const ScopedDetails = (props) => {
+export const ScopedDetails = () => {
 
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref} = DBContextObj()
+    const {branch, branches, ref, graphs} = DBContextObj()
     const [latest, setLatest] = useState()
     
 
@@ -160,24 +160,60 @@ export const ScopedDetails = (props) => {
         }
         let [commit_iri, cpath, tail_iri] = WOQL.vars("ciri", "cpath", "tiri")
         
+
         let q = WOQL.using("_commits").triple(commit_iri, "ref:commit_id", commit_id)
             .path(commit_iri, "ref:commit_parent+", tail_iri, cpath)
         if(r){
-            woql = WOQL.count("v:Count", q)
+            woql.and(WOQL.count("v:Commits", q))
         }
         else {
-            woql = WOQL.count("v:Count").and(
-                WOQL.lib().active_commit_id(b, false, "Active ID"),
-                q
+            woql.and(
+                WOQL.count("v:Commits").and(
+                    WOQL.lib().active_commit_id(b, false, "Active ID"),
+                    q
+                )
             )
         }
-        woqlClient.query(woql).then((result) => {
-            console.log(result.bindings)
+
+        //no need for graph queries - comes in from graphs / asset_overview
+
+        //schema queries
+        let class_query = WOQL.quad("v:AnyClass", "type", "owl:Class", "schema")
+        let prop_query = WOQL.or(
+            WOQL.quad("v:AnyProperty", "type", "owl:ObjectProperty", "schema"),
+            WOQL.quad("v:AnyProperty", "type", "owl:DatatypeProperty", "schema")
+        )
+
+        let docs_query = WOQL.triple("v:AnyDocument", "type", "v:AnyType")
+            .sub("system:Document", "v:AnyType")
+
+        let nq = WOQL.and(
+            getSizeQuery(),
+            WOQL.opt().count("v:Classes", class_query),
+            WOQL.opt().count("v:Properties", prop_query),
+            WOQL.opt().count("v:Documents", docs_query),
+            WOQL.limit(1).select("Commit ID", "Author", "Message", "Time", WOQL.lib().commits(WOQL.eq("v:Commit ID", commit_id))),
+            woql
+        )
+
+        woqlClient.query(nq).then((result) => {
             if (result.bindings) setLatest(result.bindings)
         })
         .catch((e) => {
+            //alert(ref + " = " + branch + " " + commit_id)
             console.log(e)
         })
+    }
+
+    function getSizeQuery(){
+        let WOQL = TerminusClient.WOQL
+        //let q = WOQL.query()
+        let qbase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch))
+       // alert(qbase)
+        let q = WOQL.opt().and(
+            WOQL.size(qbase, "v:Size").triple_count(qbase, "v:Triples")
+        )
+        return q
     }
 
     //number of commits 
@@ -187,13 +223,13 @@ export const ScopedDetails = (props) => {
     //documents / instance data / swan
     //load commit Count
     useEffect(() => {
-        if(branch){
-           load_context(branch, ref)
+        if(branch && graphs){
+            console.log(graphs)
+            load_context(branch, ref)
         }
-    }, [branch, ref, branches])
+    }, [branch, ref, branches, graphs])
     if(!latest) return null
-    console.log(latest)
-    return (<span>yeah</span>)
+    return (<LatestUpdates latests={latest} title=" "/>)
 }
 
 

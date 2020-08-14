@@ -20,7 +20,7 @@ export const HistoryNavigatorTimeline = ({woqlClient}) => {
             branch={branch}
             woqlClient={woqlClient} 
             setHead={setCurrentItem}
-            headMessage="Set Console Head to this Commit"
+            headMessage="Time Travel to this Commit"
             currentCommit={ref}
             currentStartTime={consoleTime}
             firstCommitTime={firstCommit}    
