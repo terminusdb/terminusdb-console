@@ -2911,3 +2911,8 @@ h4.prefix-section-header {
 .database-listing-allgood:hover {
     cursor: pointer;
 }
+
+.database-context-row {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
