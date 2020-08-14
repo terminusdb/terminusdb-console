@@ -125,6 +125,8 @@ export const Branch = () => {
         return <TerminusDBSpeaks report={report} />
     }
     let setCommit = manuallyUpdated ? unsetManual : null
+
+    let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
     return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
 {/*
@@ -157,11 +159,17 @@ export const Branch = () => {
                         actionMessage="Start New Branch From This Commit"
                     />
                 </Row>
+                <div className='row' {...showAlert}>
+                    <Alert color='warning' className="flex-grow-1">
+                        {submissionProblem || 'noValue'}
+                    </Alert>
+                </div>
                 <Row>
+                   
                     <Col>
-                        <Row>Start Branch From Commit
+                        <Row className="mb-4">Start Branch From Commit
                             <input 
-                                className = ""
+                                className = "mt-2"
                                 type="text"
                                 value={sourceCommit}
                                 width="40"
@@ -172,7 +180,7 @@ export const Branch = () => {
                         <Row>New Branch ID
                         <input 
                             type="text"
-                            className = ""
+                            className = "mt-2"
                             value={newID}
                             width="40"
                             onChange={updateID}
@@ -180,16 +188,11 @@ export const Branch = () => {
                         />
                         </Row>
                     </Col>
-                    <Col>
-                        {submissionProblem && 
-                            <Alert color='warning'>
-                                {submissionProblem}
-                            </Alert>
-                        }
-                        <button type="submit" onClick={checkSubmission} className="primary">
+                    <div className="justify-content-end flex-grow-1 d-flex align-items-baseline">
+                        <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
                             Create New Branch
                         </button>
-                    </Col>
+                    </div>
                 </Row>
             </Container>
         </>

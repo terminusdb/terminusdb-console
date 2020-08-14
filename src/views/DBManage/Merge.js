@@ -151,6 +151,8 @@ export const Merge = () => {
 
     if(!starterBranch || !targetBranch) return null
 
+    const showAlert = submissionProblem ? {} : {style:{visibility:'hidden'}}
+   
     let bopts = ((branches && Object.keys(branches).length) ? Object.values(branches).map( (item) => {
         return {label: item.id, value: item.id}
     }) : [])
@@ -168,9 +170,14 @@ export const Merge = () => {
                         actionMessage="Merge From This Commit"
                     />
                 </Row>
+                <div className='row' {...showAlert}>
+                    <Alert color='warning' className="flex-grow-1">
+                        {submissionProblem || 'noValue'}
+                    </Alert>
+                </div>
                 <Row>
                     <Col>
-                        <Row>Merge From Commit
+                        <Row className="mb-4">Merge From Commit
                             <input 
                                 className = ""
                                 type="text"
@@ -182,7 +189,8 @@ export const Merge = () => {
                         </Row>
                         <Row>Merge Into Branch
                             <Select
-                                className = ""
+
+                                className = "select-branch"
                                 onChange ={changeTarget}
                                 name = "merge_branch_target"
                                 id= "merge_branch_target"
@@ -191,16 +199,12 @@ export const Merge = () => {
                             />
                         </Row>
                     </Col>
-                    <Col>
-                        {submissionProblem && 
-                            <Alert color='warning'>
-                                {submissionProblem}
-                            </Alert>
-                        }
-                        <button type="submit" onClick={checkSubmission} className="primary">
+
+                    <div className="justify-content-end flex-grow-1 d-flex align-items-baseline">                   
+                        <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
                             Merge into {targetBranch} Branch
                         </button>
-                    </Col>
+                    </div>
                 </Row>
             </Container>
         </>

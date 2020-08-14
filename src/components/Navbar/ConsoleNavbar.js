@@ -9,7 +9,6 @@ import {LOGIN_LABEL,noHttps} from './constants.navbar'
 import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
 import {NavLink} from 'react-router-dom'
 import {HomeMainMenu} from './HomeMainMenu'
-import { useAuth0 } from "../../react-auth0-spa";
 
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()

@@ -343,13 +343,9 @@ export const DBControlPanel = ({meta, user}) => {
 
 export const DBStatus = ({meta, user, onAction}) => {
     return (
-        <div className='database-action-column'>
-            <Row className='database-update-status'>
-                <DBMainAction meta={meta} user={user} onAction={onAction}/>
-            </Row>
-            <Row className='database-secondary-option'>
-                <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
-            </Row>
+        <div className='database-action-column column-mod'>
+            <DBMainAction meta={meta} user={user} onAction={onAction}/>
+            <DBSecondaryAction meta={meta} user={user} onAction={onAction}/>
         </div>
     )
 }
@@ -360,30 +356,15 @@ export const DBMainAction = ({meta, user, onAction}) => {
         meta.action = 'clone'
         if(onAction) onAction(meta)
     }
-    return (<div className="action-centralise">
-        <div>
-            <span onClick={myClone} className="secondory-btn-control">
-                <CloneControl meta={meta} user={user}/>
-            </span>
-        </div>
-    </div>)
+    return (<CloneControl meta={meta} user={user} onClick={myClone}/>)
 }
 
 export const DBSecondaryAction = ({meta, user, onAction}) => {
     function myDelete(){
         meta.action = 'delete'
         if(onAction) onAction(meta)
-    }
-    
-    return (
-        <div className="action-centralise">
-            <div>
-                <span onClick={myDelete} className="secondory-btn-control">
-                    <DeleteControl meta={meta} user={user} />
-                </span>
-            </div>
-        </div>
-    )
+    }   
+    return (<DeleteControl meta={meta} user={user} onClick={myDelete}/> )
 }
 
 
@@ -437,7 +418,8 @@ export const PullControl = ({meta, user}) => {
 }
 
 export const CloneControl = ({meta, user}) => {
-    return (<span>Clone <AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/></span>)
+    return (<button  className="tdb__button__base tdb__button__base--bgreen">Clone</button>)
+            //<AiOutlineCloudDownload className={"db-main-action"} color={"#4984c9"} title="Clone this database now"/></span>)
 }
 
 export const ClonedControl = ({meta, user}) => {
@@ -472,7 +454,7 @@ export const DocumentsControl = ({meta}) => {
 }
 
 export const RejectControl = ({meta}) => {
-    return <span className="delete-action"  title="Reject Invitation">Reject <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
+    return <button className="tdb__button__base tdb__button__base--bred"  title="Reject Invitation">Reject <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></button>
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 
@@ -482,7 +464,10 @@ export const AcceptControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <span className="delete-action"  title="Delete Database">Delete <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
+    return <button className="tdb__button__base tdb__button__base--bred"  title="Delete Database">
+                Delete 
+           </button>
+           //<AiOutlineDelete color="#721c24" className='database-action database-listing-delete' />
     //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
 }
 

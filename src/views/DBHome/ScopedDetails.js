@@ -109,14 +109,12 @@ export const ScopedDetails = () => {
     if(!latest) return null
     return (
         <Col>
-            <Row>
+           
                 {getContextTitle(latest)}
-            </Row>
-            <Row>
-                <div className="database-context-row">
-                    <ContextCredits meta={latest[0]} graphs={graphs} branches={branches}/>
-                </div>
-            </Row>           
+            <div className="database-context-row detail-credits">
+                <ContextCredits meta={latest[0]} graphs={graphs} branches={branches}/>
+            </div>
+                      
         </Col>
     )
 }

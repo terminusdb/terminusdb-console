@@ -6,10 +6,8 @@ export const LatestUpdates = ({latests, query, updateQuery, title}) => {
     title = title || "Latest Updates" 
     return (<>
         <Col style={{width: "100%"}}>
-        <Row><h3>{title}</h3></Row>
-        <Row>
+        	<h2 className="mt-4 mb-2">{title}</h2>
             <ResultViewer type ="table" query={query} updateQuery={updateQuery} bindings= {latests}/>
-        </Row>
         </Col>
     </>)
 } 
