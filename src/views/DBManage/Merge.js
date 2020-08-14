@@ -29,6 +29,7 @@ export const Merge = () => {
     const [sourceCommit, setSourceCommit] = useState()
     const [starterBranch, setStarterBranch] = useState()
     const [targetBranch, setTargetBranch] = useState()
+    const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
     const [manuallyUpdated, setManuallyUpdated] = useState(false)
 
@@ -196,6 +197,16 @@ export const Merge = () => {
                                 id= "merge_branch_target"
                                 options = {bopts}
                                 defaultValue= {targetBranch}
+                            />
+                        </Row>
+                        <Row>Commit Log Message
+                            <input 
+                                className = ""
+                                type="text"
+                                value={commitMsg}
+                                width="40"
+                                onChange={setCommitMsg}
+                                id= "merge_branch_source"
                             />
                         </Row>
                     </Col>
