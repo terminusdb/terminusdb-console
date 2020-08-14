@@ -1,23 +1,19 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {Fragment} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {NavLink} from 'react-router-dom'
-import {trimContent} from '../../utils/helperFunctions'
 import {getDBPageRoute} from '../Router/ConsoleRouter'
-import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
-
 import {
     DOCUMENT_PAGE_LABEL,
     SCHEMA_PAGE_LABEL,
     QUERY_PAGE_LABEL,
     PAGES_ID,
-    MANAGE_TITLE
+    MANAGE_TITLE,
+    DB_HOME_PAGE_LABEL,
+    SYNCHRONIZE_TITLE
 } from './constants.navbar'
-import {DBContextObj} from '../Query/DBContext'
-import {BranchSelector} from '../History/BranchSelector'
-import {printts,DATETIME_FULL} from '../../constants/dates'
 
 export const DBNavbar = (props) => {
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient} = WOQLClientObj()   
     if (woqlClient.db()) {
         //sometimes loaded by back button when not in DB context
         try {
@@ -31,39 +27,12 @@ export const DBNavbar = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches,consoleTime} = DBContextObj()
-    const [isOpen, setIsOpen] = useState(false)
-
-    let dbmeta = woqlClient.get_database() || {}
-
-    const [toggleTime, setToggleTime] = useState(false)
+    const databaseInfo = woqlClient.get_database()
 
     function getNavURL(page) {
         return getDBPageRoute(woqlClient.db(), woqlClient.organization(), page)
     }
 
-    const handleToggle = () => {
-        setToggleTime(!toggleTime)
-        //if (props.toggleTimeTravel) props.toggleTimeTravel()
-    }
-
-    function getDBHomeDetails() {
-        if (dbmeta.id == '_system' || !branches) {
-            return ''
-        }
-
-        let currentTime = <span className="nav__main__commit">Latest</span>
-        if (consoleTime)
-            currentTime = <span className="nav__main__commit">{printts(consoleTime,DATETIME_FULL)}</span>
-        return currentTime
-    }
-
-    //const isOpen = false
-    const dropdownContent =
-        isOpen === true
-            ? 'dropdown__content  dropdown__content--show'
-            : 'dropdown__content dropdown__content--hide'
-    const homeDetails = getDBHomeDetails()
     return (
         <Fragment>
             <div className="nav__main__wrap">
@@ -78,9 +47,9 @@ const GuardedDBNavbar = (props) => {
                             activeClassName="nav__main__link--subselected"
                             exact
                             id={PAGES_ID.NAV_DB_HOME}
-                            title={dbmeta.label}
+                            title={DB_HOME_PAGE_LABEL}
                         >
-                            {trimContent(dbmeta.label, 15)}
+                            {DB_HOME_PAGE_LABEL}
                         </NavLink>
                     </li>
                     <li className="nav__main__item nav__main__item--sub">
@@ -95,6 +64,20 @@ const GuardedDBNavbar = (props) => {
                             {MANAGE_TITLE}
                         </NavLink>
                     </li>
+                    { databaseInfo.remote_url && 
+                     <li className="nav__main__item nav__main__item--sub">
+                        <NavLink
+                            tag={NavLink}
+                            className="nav__main__link nav__main__link--sub"
+                            to={getNavURL(PAGES_ID.NAV_SYNCHRONIZE)}
+                            activeClassName="nav__main__link--subselected"
+                            exact
+                            id={PAGES_ID.NAV_SYNCHRONIZE}
+                            title={SYNCHRONIZE_TITLE}
+                        >
+                            {SYNCHRONIZE_TITLE}
+                        </NavLink>
+                    </li>}
                     <li className="nav__main__item nav__main__item--sub">
                         <NavLink
                             tag={NavLink}
@@ -131,19 +114,10 @@ const GuardedDBNavbar = (props) => {
                             {SCHEMA_PAGE_LABEL}
                         </NavLink>
                     </li>
-                    <li className="nav__main__item nav__main__item--box">
-                        <BranchSelector />
-                        <label className="switch" title="time travel tools">
-                            <input type="checkbox" className="switch__input" onChange={handleToggle} />
-                            <span className="switch__slider"></span>
-                        </label>
-                        {homeDetails}
-                    </li>
                     </ul>
                 </nav>
             </div>
-            </div>  
-            {toggleTime && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
+            </div> 
         </Fragment>
     ) 
 }

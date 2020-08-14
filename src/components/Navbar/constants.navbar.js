@@ -17,6 +17,7 @@ export const TUTORIALS_TITLE = "Tutorials"
 export const CLONEDB_TITLE = "Clone"
 export const COLLABORATE_TITLE = "Collaborate"
 export const MANAGE_TITLE ="Branch"
+export const SYNCHRONIZE_TITLE = 'Synchronize'
 
 
 export const PAGES_ID={
@@ -28,8 +29,8 @@ export const PAGES_ID={
     NAV_DB_LIST:'mydbs',
     NAV_CLONE:'clonedb',
     NAV_COLL:'collaborate',
-    NAV_MANAGE:'manage'
-
+    NAV_MANAGE:'manage',
+    NAV_SYNCHRONIZE:'synchronize'
 }
 
 export const noHttps={
