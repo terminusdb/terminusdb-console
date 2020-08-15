@@ -5,9 +5,9 @@ import { PageView } from "./PageView"
 /**
  * Generates a tabbed page view basic structure for all pages on console
  */
-export const TabbedPageView = ({children, onHeadChange, loading, report, active, sections,id}) => {
+export const TabbedPageView = ({children, onHeadChange, loading, report, active, sections,id,dbPage}) => {
     let pv = (
-        <PageView id={id}
+        <PageView id={id} dbPage={dbPage}
             onHeadChange={onHeadChange}
             loading={loading}
             report={report}

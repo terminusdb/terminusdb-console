@@ -11,13 +11,12 @@ import Loading from "../../components/Reports/Loading"
 import { TERMINUS_PAGE } from "../../constants/identifiers"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 
-
 export const PageView = (props) => {
     return (
         <div id={props.id} className="console__page" id="terminus-console-page">           
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
             <main >
-                <div className="console__page__container">     
+                <div className="console__page__container console__page__container--width">     
                 { props.children }
                 </div>
             </main>

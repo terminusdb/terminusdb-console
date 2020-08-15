@@ -32,7 +32,7 @@ export const Login = (props) => {
     });
     return (<Fragment>      
             {!isAuthenticated && !user && 
-                <button className="tdb__button__base nav__main__login" onClick={ () => loginWithRedirect()}>
+                <button id="login_button" className="tdb__button__base nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}
                 </button>
             }

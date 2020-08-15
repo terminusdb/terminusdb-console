@@ -8,32 +8,9 @@ import {ServerRoutes} from './ServerRoutes'
 import {base_router} from '../../utils/baseRouter'
 
 import { createBrowserHistory } from "history";
-
+import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 
 export const ConsoleHistory= createBrowserHistory()//{basename: base_router});
-//http://localhost:6363/console/#/
-
-//export const ConsoleHistory = createHashHistory()
-
-/*export const ConsoleRouter = (props) => {
-    function getSwitch() {
-        return (
-            <Switch>
-                <Route path={DB_ROUTE}>
-                    <DBRoutes />
-                </Route>
-                <Route path={PROFILE_ROUTE}>
-                    <ProfileRoutes />
-                </Route>
-                <Route path={SERVER_ROUTE}>
-                    <ServerRoutes />
-                </Route>
-            </Switch>
-        )
-    }
-    return <HashRouter history={props.history}>{getSwitch()}</HashRouter>
-}*/
-
 
 export const ConsoleRouter = (props) => {
     function getSwitch() {
@@ -42,9 +19,7 @@ export const ConsoleRouter = (props) => {
                 <Route path={DB_ROUTE}>
                     <DBRoutes />
                 </Route>
-                <Route path={SERVER_ROUTE}>
-                    <ServerRoutes />
-                </Route>
+                <ServerRoutes />
             </Switch>
         )
     }

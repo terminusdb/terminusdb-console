@@ -6,7 +6,7 @@ import {WOQLQueryContainerHook} from '../Query/WOQLQueryContainerHook'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {Tabs, Tab} from 'react-bootstrap-tabs'
 import {ResultQueryPane} from './ResultQueryPane'
-import TerminusClient from '@terminusdb/terminusdb-client'
+import {WOQLEditorControlled} from '@terminusdb/terminusdb-react-components'
 import {QUERY_PANEL_TITLE, QUERY_EDITOR_LABEL} from './constants.querypane'
 import {DBContextObj} from '..//Query/DBContext'
 

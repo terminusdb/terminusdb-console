@@ -6,6 +6,25 @@
   background-color: #00C08B !important;
 }
 
+.select-branch{
+  min-width: 200px;
+  margin-left: 20px;
+}
+.column-mod{
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: space-around;
+}
+.detail-credits{
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap-reverse;
+    padding: 0px 20px 0 20px;
+    align-items: center;
+    /* justify-content: center; */
+}
 .select-nav-bar{
     margin-top: 10px;
     height: 40px;
@@ -2910,4 +2929,9 @@ h4.prefix-section-header {
 
 .database-listing-allgood:hover {
     cursor: pointer;
+}
+
+.database-context-row {
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
