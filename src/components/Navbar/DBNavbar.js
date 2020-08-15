@@ -52,18 +52,6 @@ const GuardedDBNavbar = (props) => {
                             {DB_HOME_PAGE_LABEL}
                         </NavLink>
                     </li>
-                    <li className="nav__main__item nav__main__item--sub">
-                        <NavLink
-                            tag={NavLink}
-                            className="nav__main__link nav__main__link--sub"
-                            activeClassName="nav__main__link--subselected"
-                            to={getNavURL('manage')}
-                            exact
-                            id={PAGES_ID.NAV_MANAGE}
-                        >
-                            {MANAGE_TITLE}
-                        </NavLink>
-                    </li>
                     { databaseInfo.remote_url && 
                      <li className="nav__main__item nav__main__item--sub">
                         <NavLink
@@ -78,6 +66,18 @@ const GuardedDBNavbar = (props) => {
                             {SYNCHRONIZE_TITLE}
                         </NavLink>
                     </li>}
+                    <li className="nav__main__item nav__main__item--sub">
+                        <NavLink
+                            tag={NavLink}
+                            className="nav__main__link nav__main__link--sub"
+                            activeClassName="nav__main__link--subselected"
+                            to={getNavURL('manage')}
+                            exact
+                            id={PAGES_ID.NAV_MANAGE}
+                        >
+                            {MANAGE_TITLE}
+                        </NavLink>
+                    </li>
                     <li className="nav__main__item nav__main__item--sub">
                         <NavLink
                             tag={NavLink}

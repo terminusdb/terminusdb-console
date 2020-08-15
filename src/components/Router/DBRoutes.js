@@ -2,6 +2,7 @@ import React from 'react'
 import {Route, useParams, useRouteMatch, Switch} from 'react-router-dom'
 import {
     DB_QUERY_ROUTE,
+    DB_SYNCHRONISE,
     DB_SCHEMA_ROUTE,
     DB_DOCUMENT_ROUTE,
     SPECIFIC_DB_ROUTE,
@@ -10,7 +11,7 @@ import {
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
-import {Synchronize} from '../../views/DBCollaborate/Synchronize'
+import {Synchronize} from '../../views/DBHome/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
@@ -99,13 +100,11 @@ const DBRoute = () => {
             <SchemaRoutes />
         </Route>,
     )
-    if(databaseInfo.remote_url){
-        routes.push(
-            <Route key="dbsynchronize" path={`${path}${DB_SCHEMA_ROUTE}`}>
-                <Synchronize />
-            </Route>,
-        )
-    }
+    routes.push(
+        <Route key="dbsynchronize" path={`${path}${DB_SYNCHRONISE}`}>
+            <Synchronize />
+        </Route>,
+    )
     routes.push(
         <Route key="dbhp" path={`${path}`}>
             <DBHomeRoutes key="dbhome" />

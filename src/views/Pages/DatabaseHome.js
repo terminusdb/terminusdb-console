@@ -2,7 +2,7 @@ import React ,{useState}from "react";
 import { DETAILS_TAB, SYNCHRONISE_TAB, MANAGE_TAB } from "./constants.pages"
 import { DB_SYNCHRONISE, DB_MANAGE } from "../../constants/routes"
 import { MonitorDB } from '../DBHome/MonitorDB'
-import { Synchronize } from '../DBCollaborate/Synchronize'
+import { Synchronize } from '../DBHome/Synchronize'
 import { ManageDB}  from '../DBManage/ManageDB'
 import { TabbedPageView } from '../Templates/TabbedPageView'
 import {WOQLClientObj} from '../../init/woql-client-instance'
