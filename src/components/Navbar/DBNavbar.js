@@ -52,7 +52,6 @@ const GuardedDBNavbar = (props) => {
                             {DB_HOME_PAGE_LABEL}
                         </NavLink>
                     </li>
-                    { databaseInfo.remote_url && 
                      <li className="nav__main__item nav__main__item--sub">
                         <NavLink
                             tag={NavLink}
@@ -65,7 +64,7 @@ const GuardedDBNavbar = (props) => {
                         >
                             {SYNCHRONIZE_TITLE}
                         </NavLink>
-                    </li>}
+                    </li>
                     <li className="nav__main__item nav__main__item--sub">
                         <NavLink
                             tag={NavLink}

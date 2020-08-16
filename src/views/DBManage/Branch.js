@@ -27,7 +27,6 @@ export const Branch = () => {
     const [sourceCommit, setSourceCommit] = useState()
     const [newID, setNewID] = useState()
     const [submissionProblem, setSubmissionProblem] = useState()
-    const [manuallyUpdated, setManuallyUpdated] = useState(false)
 
     let update_start = Date.now()
 
@@ -73,32 +72,29 @@ export const Branch = () => {
         })
     }
 
-    function setCommitID(c){
-        if(c && c.target){
-            let update = c.target.value.length > 0
-            setManuallyUpdated(update);
-            setSourceCommit(c.target.value)
-        }
-    }
-
     function selectCommitID(c){
-        if(c != sourceCommit && (!manuallyUpdated)){
+        if(c != sourceCommit){
             setSourceCommit(c)
+            setSubmissionProblem(false)
         }
-    }
-
-    function unsetManual(){
-        setManuallyUpdated(false)
     }
 
     function updateID(c){
         if(c && c.target){
             setNewID(c.target.value)
+            setSubmissionProblem(false)
         }
     }
 
     function setUserError(field, msg){
         setSubmissionProblem(msg)
+    }
+
+    function containsProblems(newID){
+        if(!newID.match(/^[0-9a-z_]+$/)) {
+            return "failed to match"            
+        }
+        return false
     }
 
     function checkSubmission(){
@@ -109,10 +105,18 @@ export const Branch = () => {
             return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
         }                    
         if(newID && newID.length){
-            if(typeof branches[newID] != "undefined"){
+            let nid = newID.trim()
+            if(typeof branches[nid] != "undefined"){
                 return setUserError("create_branch_id", "A branch already exists with the same ID - choose a new ID")
             }
             else {
+                if(nid.length > 40){
+                    return setUserError("create_branch_id", "Branch IDs should be no more than 40 characters long")
+                }
+                let err = containsProblems(nid) 
+                if(err){
+                    return setUserError("create_branch_id", "Branch IDs should only include lowercase characters, numbers and underscores")
+                }
                 return onCreate()
             }
         }
@@ -121,41 +125,27 @@ export const Branch = () => {
         }
     }
 
+
     if (report && report.status == TERMINUS_SUCCESS) {
-        return <TerminusDBSpeaks report={report} />
+        return (<span className="database-list-intro"><TerminusDBSpeaks report={report} /></span>)
     }
-    let setCommit = manuallyUpdated ? unsetManual : null
+
+    if(!DBInfo) return null
 
     let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
     return (<>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
-{/*
-            <TCForm
-                layout={[3]}
-                fields={BRANCH_SOURCE_FORM.fields}
-                onChange={onSourceUpdate}
-                values={sourceValues}
-                report={{status: TERMINUS_INFO, message: BRANCH_SOURCE_FORM.infoMessage}}
-            />
-            <TCForm
-                onSubmit={onCreate}
-                report={report}
-                layout={[1, 1]}
-                onChange={onUpdate}
-                fields={CREATE_BRANCH_FORM.fields}
-                values={values}
-                buttons={btns}
-            />
-*/}
-            <Container>
+
+            <Container>            
                 <Row>
                     <CommitSelector 
                         branch={branch} 
+                        branches={branches}
+                        contextText={"Start New Branch From "}
                         commit={ref}
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
-                        setHead={setCommit} 
                         actionMessage="Start New Branch From This Commit"
                     />
                 </Row>
@@ -163,30 +153,22 @@ export const Branch = () => {
                     <Alert color='warning' className="flex-grow-1">
                         {submissionProblem || 'noValue'}
                     </Alert>
-                </div>
-                <Row>
-                   
-                    <Col>
-                        <Row className="mb-4">Start Branch From Commit
-                            <input 
-                                className = "mt-2"
-                                type="text"
-                                value={sourceCommit}
-                                width="40"
-                                onChange={setCommitID}
-                                id= "create_branch_source"
-                            />
-                        </Row>
-                        <Row>New Branch ID
+                </div>                    
+                <Row className="new-branch">
+                    <Col className="branch-title-col" md={2}>
+                        <span className="commit-selector-title">
+                            New Branch ID
+                        </span>
+                    </Col>
+                    <Col md={6} className="branch-id-col" >
                         <input 
-                            type="text"
-                            className = "mt-2"
+                            className = "mt-2 branch-id-input"
+                            placeholder = "Enter the id of the new branch"
                             value={newID}
                             width="40"
                             onChange={updateID}
                             id="create_branch_id"
                         />
-                        </Row>
                     </Col>
                     <div className="justify-content-end flex-grow-1 d-flex align-items-baseline">
                         <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
@@ -198,4 +180,3 @@ export const Branch = () => {
         </>
     )
 }
-

@@ -6,7 +6,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {DELETE_ICON} from '../../constants/images'
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {goServerHome} from '../../components/Router/ConsoleRouter'
-import {DELETE_DB_MODAL} from './constants.dbmanage'
+import {DELETE_DB_MODAL} from '../DBManage/constants.dbmanage'
 
 export const DeleteDB = (props) => {
     const {register, handleSubmit, errors} = useForm()

@@ -30,3 +30,13 @@ export const SUB_TITLE_LIMIT = 24
 export const MAIN_LIMIT = 12
 export const TITLE_LIMIT = 14 
 export const INFO_LIMIT = 100
+
+
+export const DELETE_DB_MODAL = {
+    prompt: "Enter the ID of the database you wish to delete.",
+    message: "ID of chosen database is",
+    confirm: "Confirm Database Delete",
+    error:  "The Database ID entered was incorrect",
+    deleted: "Database Deleted",
+    failed: "Failed to Delete Database"
+}

@@ -3,7 +3,6 @@
  */
 import React, {useState, useEffect} from 'react'
 import {useAuth0} from '../../react-auth0-spa'
-import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
 import {
     PUSH_REMOTE_FORM,
     SYNCHRONISE_FORM,
@@ -22,6 +21,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 import {PageView} from '../Templates/PageView'
+import {DBRemotes, DBRemoteSummary} from "./Remote"
 
 export const Synchronize = () => {
     const {repos, branches, updateBranches} = DBContextObj()
@@ -55,24 +55,13 @@ export const Synchronize = () => {
         }
     }, [repos])
 
-    function updateOperation(field, val) {
-        let s = {}
-        s.remote_url = sourceValues.remote_url
-        s.remote = sourceValues.remote
-        s.operation = val
-        setOperation(val)
-        setSourceValues(s)
-    }
 
     function getBranchOptions() {
+        if(!branches) return []
         let bopts = Object.values(branches).map((item) => {
             return {label: item.id, value: item.id}
         })
         return bopts
-    }
-
-    if (!repos || !branches) {
-        return <Loading type={TERMINUS_COMPONENT} />
     }
 
     let remote_push_fields = PUSH_REMOTE_FORM.fields.map((item) => {
@@ -262,61 +251,20 @@ export const Synchronize = () => {
     let pushButtons = user.logged_in ? PUSH_REMOTE_FORM.buttons : false
     let pullButtons = user.logged_in ? PULL_REMOTE_FORM.buttons : false
 
+    function showAddRemote(){
+        alert("show add piece")
+    }
+
+    if (!repos || !branches) {
+        return <Loading type={TERMINUS_COMPONENT} />
+    }
     return (
         <PageView>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
-            <TCForm
-                onChange={updateOperation}
-                values={sourceValues}
-                layout={[3]}
-                fields={SYNCHRONISE_FORM.fields}
-            />
-            {!user && operation && operation == 'push' && (
-                <TCSubmitWrap>
-                    <UnderConstruction action={PUSH_REMOTE_FORM.buttons.submitText} />
-                </TCSubmitWrap>
-            )}
-            {operation && operation == 'push' && isRemote && (
-                <TCForm
-                    fields={remote_push_fields}
-                    layout={[2, 2, 1]}
-                    report={report}
-                    onSubmit={pushRemote}
-                    buttons={pushButtons}
-                />
-            )}
-            {operation && operation == 'push' && !isRemote && (
-                <TCForm
-                    fields={local_push_fields}
-                    layout={[2, 1]}
-                    report={report}
-                    onSubmit={pushLocal}
-                    buttons={pushButtons}
-                />
-            )}
-            {!user && operation && operation == 'pull' && (
-                <TCSubmitWrap>
-                    <UnderConstruction action={PULL_REMOTE_FORM.buttons.submitText} />
-                </TCSubmitWrap>
-            )}
-            {operation && isRemote && operation == 'pull' && (
-                <TCForm
-                    fields={remote_pull_fields}
-                    report={report}
-                    layout={[2, 2, 1]}
-                    onSubmit={pullRemote}
-                    buttons={pullButtons}
-                />
-            )}
-            {operation && !isRemote && operation == 'pull' && (
-                <TCForm
-                    fields={local_pull_fields}
-                    report={report}
-                    layout={[2, 1]}
-                    onSubmit={pullLocal}
-                    buttons={pullButtons}
-                />
-            )}
+            {!loading && <>                
+                <DBRemoteSummary repos={repos} woqlClient={woqlClient} onCreate={showAddRemote} key="dbsum" />
+                <DBRemotes repos={repos} woqlClient={woqlClient} key="dbsumy" />
+            </>}
         </PageView>
     )
 }

@@ -59,7 +59,7 @@ export const ScopedDetails = () => {
             getSizeQuery(),
             WOQL.opt().count("v:Classes", class_query),
             WOQL.opt().count("v:Properties", prop_query),
-            WOQL.opt().count("v:Documents", docs_query),
+            //WOQL.opt().count("v:Documents", docs_query),
             WOQL.limit(1).select("Commit ID", "Author", "Message", "Time", WOQL.lib().commits(WOQL.eq("v:Commit ID", commit_id))),
             woql
         )

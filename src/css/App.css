@@ -2935,3 +2935,97 @@ h4.prefix-section-header {
     margin-top: 10px;
     margin-bottom: 20px;
 }
+
+.commit-selector-header {
+    margin-top: 3em;
+    border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+.commit-title-col {
+    padding-top: 8px;
+    text-align: right;
+}
+
+.commit-id-col {
+    padding-top: 4px
+}
+ 
+
+.new-branch {
+}
+
+.branch-title-col {
+    padding-top: 14px;
+    text-align: right;
+}
+
+.branch-selector-title-col {
+    padding-top: 20px;
+    text-align: right;
+}
+
+.commit-log-title{
+    padding-top: 8px;
+    text-align: right;
+}
+
+
+.branch-id-col {
+
+}
+
+.commit-selector-title {
+    font-weight: 700;
+}
+
+.commit-id-label {
+    padding-right: 1em;
+}
+
+.commit-id-input-box {
+}
+
+.branch-id-input {
+    width: 300px;
+    padding: 6px 12px;
+    border: 1px solid #aaa;
+}
+
+.commit-id-input {
+    width: 250px;
+    padding: 4px 10px;
+    background-color: rgba(0, 102, 253, 0.05);
+    border: 0;
+    color: #666;
+}
+
+
+.commit-branch-context {
+    padding-top: 8px;
+    color: #666;
+}
+
+.commit-branch-selector {
+    text-align: right;    
+}
+
+.commit-log-col {
+    padding-left: 0
+}
+
+.merge-inputs {
+}
+
+.merge-commit{
+    margin-top: 8px;
+}
+
+.branch-selector-col {
+    height: 58px;
+    padding: 1px 0;
+}
+
+.select-branch {
+    margin-left: 0;
+}
+

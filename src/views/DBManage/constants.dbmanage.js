@@ -1,17 +1,10 @@
 export const MANAGE_SECTIONS = [
-   /* {
-        id: "metadata",
-        title: "Update Database Metadata",
-        icon: "stamp",
-        button: "Metadata",
-        blurb: "Change the name of the database, its description and other metadata"
-    },*/
     {
         id: "branch",
         title: "Create a new Branch",
         icon: "code-branch",
         button: "Branch",
-        blurb: "Creating a new branch allows you to have multiple different live versions of the database at the same time which can be merged back together when desired",
+        blurb: "New branches can be started from any commit in the database. They are created with the state of the database exactly as it was when that commit was completed.",
     },
     {
         id: "merge",
@@ -19,24 +12,8 @@ export const MANAGE_SECTIONS = [
         icon: "infinity",
         button: "Merge",
         blurb: "Merging branches together creates a unified copy of the database from different branches which may have converged."
-    },
-    {
-        id: "delete",
-        title: "Delete Database",
-        icon: "trash-alt",
-        button: "DELETE",
-        blurb: "This will permanently remove this database and all its contents from the system - be careful not to delete any data that might be important in the future!"
-    }
+    }   
 ]
-
-export const DELETE_DB_MODAL = {
-    prompt: "Enter the ID of the database you wish to delete.",
-    message: "ID of chosen database is",
-    confirm: "Confirm Database Delete",
-    error:  "The Database ID entered was incorrect",
-    deleted: "Database Deleted",
-    failed: "Failed to Delete Database"
-}
 
 export const CREATE_BRANCH_FORM = {
     fields: [
