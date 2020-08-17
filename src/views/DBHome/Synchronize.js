@@ -22,9 +22,10 @@ import Loading from '../../components/Reports/Loading'
 import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 import {PageView} from '../Templates/PageView'
 import {DBRemotes, DBRemoteSummary} from "./Remote"
+import {RefreshDatabaseRecord, isHubURL, Fetch, Push, Pull, addRemote} from "../../components/Query/CollaborateAPI"
 
 export const Synchronize = () => {
-    const {repos, branches, updateBranches} = DBContextObj()
+    const {repos, branches, updateBranches, branch} = DBContextObj()
     if (!repos) return null
 
     const { getTokenSilently } = useAuth0();
@@ -34,7 +35,7 @@ export const Synchronize = () => {
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [isRemote, setIsRemote] = useState()
-    const { woqlClient } = WOQLClientObj()
+    const {woqlClient, bffClient, refreshDBRecord } = WOQLClientObj()
 
     let update_start = Date.now()
 
@@ -55,34 +56,7 @@ export const Synchronize = () => {
         }
     }, [repos])
 
-
-    function getBranchOptions() {
-        if(!branches) return []
-        let bopts = Object.values(branches).map((item) => {
-            return {label: item.id, value: item.id}
-        })
-        return bopts
-    }
-
-    let remote_push_fields = PUSH_REMOTE_FORM.fields.map((item) => {
-        if (item.id == 'local_branch') item.inputElement.options = getBranchOptions()
-        return item
-    })
-
-    let local_push_fields = PUSH_LOCAL_FORM.fields.map((item) => {
-        if (item.id == 'local_branch') item.inputElement.options = getBranchOptions()
-        return item
-    })
-
-    let remote_pull_fields = PULL_REMOTE_FORM.fields.map((item) => {
-        if (item.id == 'local_branch') item.inputElement.options = getBranchOptions()
-        return item
-    })
-
-    let local_pull_fields = PULL_LOCAL_FORM.fields.map((item) => {
-        if (item.id == 'local_branch') item.inputElement.options = getBranchOptions()
-        return item
-    })
+    /*
 
     function pushLocal(deets) {
         let from_branch = deets.local_branch || 'main'
@@ -242,18 +216,50 @@ export const Synchronize = () => {
                 setLoading(false)
             })
     }
+    */
 
     if (report && report.status == TERMINUS_SUCCESS) {
         return <TerminusDBSpeaks report={report} />
     }
 
-    let user = woqlClient.user()
-    let pushButtons = user.logged_in ? PUSH_REMOTE_FORM.buttons : false
-    let pullButtons = user.logged_in ? PULL_REMOTE_FORM.buttons : false
-
     function showAddRemote(){
         alert("show add piece")
     }
+
+    async function doPull(local_branch, remote_branch, remote){
+        let res = await Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
+    }
+
+    async function doPush(local_branch, remote_branch, remote){
+        let res = await Push(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
+    }
+
+    async function doFetch(remote){
+        let res = await Fetch(remote.title, woqlClient, getTokenSilently)
+        //alert("fetching remote " + remote.title)
+    }
+
+    function doDelete(remote){
+        alert("deleting remote " + remote.title)
+    }
+
+    async function refresh(remote){
+        //if(isHubURL(remote.url)){
+            let bits = remote.url.split("/")
+            let meta = {id: bits[bits.length-1], organization: bits[bits.length-2]}
+            RefreshDatabaseRecord(meta, bffClient, getTokenSilently).then((data) => {
+                console.log("got back data", data)
+                alert("got it")
+            })
+            .catch((e) => console.log("got error", e))
+        //}
+        //else {
+        //    console.log("Cant refresh non hub remotes")
+        //}
+    }
+
+    let meta = woqlClient.get_database()
+
 
     if (!repos || !branches) {
         return <Loading type={TERMINUS_COMPONENT} />
@@ -263,8 +269,19 @@ export const Synchronize = () => {
             {loading && <Loading type={TERMINUS_COMPONENT} />}
             {!loading && <>                
                 <DBRemoteSummary repos={repos} woqlClient={woqlClient} onCreate={showAddRemote} key="dbsum" />
-                <DBRemotes repos={repos} woqlClient={woqlClient} key="dbsumy" />
+                <DBRemotes 
+                    meta={meta}
+                    repos={repos} 
+                    branch={branch} 
+                    onPush={doPush}
+                    onPull={doPull}
+                    onFetch={doFetch}
+                    onDelete={doDelete}
+                    onRefresh={refresh}
+                    key="dbsumy" />
             </>}
         </PageView>
     )
 }
+
+
