@@ -108,7 +108,7 @@ export const ScopedDetails = () => {
 
     if(!latest) return null
     return (
-        <Row className="context-style">
+        <Row className="context-style sub-headings">
 
                 {getContextTitle(latest)}
             <div className="database-context-row detail-credits">
