@@ -1328,7 +1328,9 @@ p.dscr{
     padding: 0;
 }
 
-
+input.rfipicons__cp {
+    width: 50%;
+}
 
 .subNavBar{
     background-color: #fff !important;
@@ -2949,7 +2951,7 @@ h4.prefix-section-header {
 .commit-id-col {
     padding-top: 4px
 }
- 
+
 
 .new-branch {
 }
@@ -3006,7 +3008,7 @@ h4.prefix-section-header {
 }
 
 .commit-branch-selector {
-    text-align: right;    
+    text-align: right;
 }
 
 .commit-log-col {
@@ -3028,4 +3030,3 @@ h4.prefix-section-header {
 .select-branch {
     margin-left: 0;
 }
-
