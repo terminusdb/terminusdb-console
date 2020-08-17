@@ -19,6 +19,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
+import { MdRefresh } from 'react-icons/md';
 import Select from "react-select";
 import { validURL } from '../../utils/helperFunctions'
 import { Push } from '../../components/Query/CollaborateAPI'
@@ -28,7 +29,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate}) => {
 
     function onRefresh(){
         alert("here we have to refresh the local record")
-    } 
+    }
 
     if(!meta || !repos) return null;
     return (
@@ -39,10 +40,10 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate}) => {
             <Col md={3}>
                 <button type="submit" onClick={onRefresh} className="tdb__button__base tdb__button__base--green">
                     Refresh Local State
-                </button>                
-                <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--green">
+                </button>
+                <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--bgreen">
                     Add Remote
-                </button>                
+                </button>
             </Col>
         </Row>
     )
@@ -54,20 +55,20 @@ export const DBRemotes = ({meta, repos, branch, onDelete, onRefresh, onPull, onP
     for(var rem in repos){
         if(rem != "local"){
             remotes.push(
-                <DBRemote 
-                    repo={repos[rem]} 
-                    meta={meta} 
-                    branch={branch} 
+                <DBRemote
+                    repo={repos[rem]}
+                    meta={meta}
+                    branch={branch}
                     onPull={onPull}
                     onPush={onPush}
                     onFetch={onFetch}
-                    repos={repos} 
-                    onDelete={onDelete} 
+                    repos={repos}
+                    onDelete={onDelete}
                     onRefresh={onRefresh} />
             )
         }
     }
-    return (<span>These are the remotes {remotes}</span>)    
+    return (<span>These are the remotes {remotes}</span>)
 }
 
 export const DBRemote = ({repo, meta, repos, branch, onDelete, onRefresh, onPush, onPull, onFetch}) => {
@@ -98,7 +99,7 @@ export const DBRemote = ({repo, meta, repos, branch, onDelete, onRefresh, onPush
                     </Row>
                     <Row key='r6'>
                         <RemoteDescription meta={meta} />
-                    </Row>                
+                    </Row>
                 </Col>
                 <Col key='r16' md={2} className='database-main-actions'>
                     <RemoteStatus meta={meta}   onAction={onGo}/>
@@ -129,14 +130,14 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
             if(branches[0]) return branches[0].branch
         }
         return "main"
-    } 
+    }
 
     function pull(){
         if(onPull) onPull(localBranch, remoteBranch, repo)
     }
 
     function push(){
-        if(onPush) onPush(localBranch, remoteBranch, repo)        
+        if(onPush) onPush(localBranch, remoteBranch, repo)
     }
 
     function fetch(){
@@ -145,11 +146,11 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
 
     function changeLocal(tar){
         setLocalBranch(tar.value)
-    } 
+    }
 
     function changeRemote(tar){
         setRemoteBranch(tar.value)
-    } 
+    }
 
     function inputLocal(tar){
         setLocalBranch(tar.target.value)
@@ -161,7 +162,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
 
     cols.push(
         <Col>
-            {(localBranch && remoteBranch) && 
+            {(localBranch && remoteBranch) &&
                 <button type="submit" onClick={pull} className="tdb__button__base tdb__button__base--green">
                     Pull Updates to {localBranch} Branch
                 </button>
@@ -179,7 +180,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         cols.push(
             <Col>
                 <Select
-                    placeholder = {localBranch} 
+                    placeholder = {localBranch}
                     className = "select-branch"
                     onChange ={changeLocal}
                     name = "merge_branch_target"
@@ -193,7 +194,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
     else {
         cols.push(
             <Col>
-                <input 
+                <input
                     className = "local-branch-input"
                     type="text"
                     placeholder="Local Branch ID"
@@ -215,7 +216,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         cols.push(
             <Col>
                 <Select
-                    placeholder = {remoteBranch} 
+                    placeholder = {remoteBranch}
                     className = "select-branch"
                     onChange ={changeRemote}
                     name = "merge_branch_target"
@@ -229,7 +230,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
     else {
         cols.push(
             <Col>
-                <input 
+                <input
                     className = "commit-log-input"
                     type="text"
                     placeholder="Remote Branch ID"
@@ -243,7 +244,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
     }
     cols.push(
         <Col>
-            {(localBranch && remoteBranch) && 
+            {(localBranch && remoteBranch) &&
                 <button type="submit" onClick={push} className="tdb__button__base tdb__button__base--green">
                     Push Updates to {remoteBranch} Branch
                 </button>
@@ -264,8 +265,8 @@ export const RemoteComparison = ({meta, repo, onPush, onPull}) => {
         return false
     }
 
-    for(var i = 0; i<meta.branches.length; i++){ 
-        let b = meta.branches[i].branch            
+    for(var i = 0; i<meta.branches.length; i++){
+        let b = meta.branches[i].branch
         if(meta.remote_record && meta.remote_record.branches){
             let remote = _containsBranch(b, meta.remote_record.branches)
             branch_comp.push(
@@ -276,17 +277,17 @@ export const RemoteComparison = ({meta, repo, onPush, onPull}) => {
             branch_comp.push(
                 <UnknownComparison repo={repo} onPush={onPush} onPull={onPull} key={"ub_" + i} branch={b} local={meta.branches[i]} />
             )
-        } 
+        }
     }
     if(meta.remote_record && meta.remote_record.branches){
-        for(var i = 0; i<meta.remote_record.branches.length; i++){ 
-            let b2 = meta.remote_record.branches[i].branch            
+        for(var i = 0; i<meta.remote_record.branches.length; i++){
+            let b2 = meta.remote_record.branches[i].branch
             if(_containsBranch(b2, meta.branches) === false){
                 branch_comp.push(
                     <BranchComparison repo={repo} onPush={onPush} onPull={onPull} key={"bz_" + i} branch={b2} remote={meta.remote_record.branches[i]} />
                 )
             }
-        }        
+        }
     }
     return (<Col>
         <Row>
@@ -313,13 +314,13 @@ export const RemoteComparison = ({meta, repo, onPush, onPull}) => {
 export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) => {
     let local_ts, remote_ts, canpull, canpush
     if(local){
-        local_ts = printts(local.updated, DATETIME_COMPLETE) 
+        local_ts = printts(local.updated, DATETIME_COMPLETE)
     }
     else {
         local_ts = ""
     }
     if(remote){
-        remote_ts = printts(remote.updated, DATETIME_COMPLETE) 
+        remote_ts = printts(remote.updated, DATETIME_COMPLETE)
     }
     else {
         remote_ts = ""
@@ -343,7 +344,7 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
         }
         else {
             canpull = "local has been updated more recently than remote"
-            canpush = "local has been updated more recently than remote"            
+            canpush = "local has been updated more recently than remote"
         }
     }
 
@@ -359,14 +360,14 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
     return(
     <Row>
         <Col md={1}>
-            {(canpull && (canpull != "ok")) && 
+            {(canpull && (canpull != "ok")) &&
                 <span onClick={doPull}>
                     <PullControl meta={local} />
                 </span>
             }
             {(canpull && (canpull == "ok")) &&
                 <AllGoodControl meta={local} />
-            } 
+            }
         </Col>
         <Col>
             {local_ts}
@@ -377,15 +378,15 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
         <Col>
             {remote_ts}
         </Col>
-        <Col md={1}>   
-            {(canpush && (canpush != "ok")) && 
+        <Col md={1}>
+            {(canpush && (canpush != "ok")) &&
                 <span onClick={doPush}>
                     <PushControl meta={local} />
                 </span>
             }
             {(canpush && (canpush == "ok")) &&
                 <AllGoodControl meta={local} />
-            }         
+            }
        </Col>
     </Row>)
 
@@ -407,7 +408,7 @@ export const UnknownComparison = ({branch, local}) => {
             {branch}
         </Col>
         <Col>
-            
+
         </Col>
         <Col>
             <span onClick={doPush}>
@@ -415,7 +416,7 @@ export const UnknownComparison = ({branch, local}) => {
             </span>
        </Col>
     </Row>
-    )    
+    )
 }
 
 
@@ -437,10 +438,16 @@ export const RemoteTitle = ({title, url, max, max_url}) => {
 
     return (
         <span className='database-listing-title-row'>
-            <span key='a' className={title_css + " database-listing-title"}>{str}</span>
-            <span className={"database-url-remote database-listing-url"} title={url}>{urlstr}</span>
+            <div key='a' className={title_css + " database-listing-title"}>{str}</div>
+            <div className={"database-url-remote database-listing-url"} title={url}>{urlstr}</div>
         </span>
     )
+    /*
+    <span className='database-listing-title-row'>
+        <span key='a' className={title_css + " database-listing-title"}>{str}</span>
+        <span className={"database-url-remote database-listing-url"} title={url}>{urlstr}</span>
+    </span>
+    */
 }
 
 export const RemoteControlPanel = ({meta, repo, onDelete, onRefresh}) => {
@@ -475,7 +482,7 @@ export const RemoteControlPanel = ({meta, repo, onDelete, onRefresh}) => {
 }
 
 export const DBControls = ({meta, repo, onRefresh, onDelete}) => {
-        
+
         function showDelete(){
             alert("show delete modal now")
             if(onDelete) onDelete(repo)
@@ -488,24 +495,31 @@ export const DBControls = ({meta, repo, onRefresh, onDelete}) => {
         return (
         <Container className='database-controls database-listing-title-row'>
             <Row className='major-database-controls'>
-                <Col className='delete-control' onClick={showDelete}>
-                    <DeleteControl meta={meta} />
-                </Col>
-                <Col className='refresh-control' onClick={refreshRemote}>
-                    <RefreshControl meta={meta} />
-                </Col>
+                <span>
+                    <span className='refresh-control'><RefreshControl meta={meta} /></span>
+                    <span className='delete-control'><DeleteControl meta={meta} /></span>
+                </span>
             </Row>
         </Container>
     )
+    /*
+    <Col className='refresh-control' onClick={refreshRemote}>
+        <RefreshControl meta={meta} />
+    </Col>
+    <Col className='delete-control' onClick={showDelete}>
+        <DeleteControl meta={meta} />
+    </Col>
+    */
 }
 
 export const DeleteControl = ({meta}) => {
-    return <span className="delete-action"  title="Delete Database">Delete <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
-    //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
+    //return <span className="delete-action"  title="Delete Database">Delete <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
+    return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
 }
 
 export const RefreshControl = ({meta}) => {
-    return <span className="refresh-action"  title="Refresh Remote Record">Refresh <AiFillCopy className='database-action database-listing-refresh' /></span>
+    //return <span className="refresh-action"  title="Refresh Remote Record">Refresh<AiFillCopy className='database-action database-listing-refresh' /></span>
+    return <span className="refresh-action"  title="Refresh Remote Record"><MdRefresh color="#155724" className='database-action database-listing-refresh' /> Refresh</span>
 }
 
 
@@ -779,7 +793,7 @@ export const RemoteCredits = ({meta, user}) => {
         )
     }
     return (
-        <div className="database-listing-title-row">
+        <div className="database-listing-title-row credit-spacing">
             {res}
         </div>
     )

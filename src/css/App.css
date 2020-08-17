@@ -1507,6 +1507,12 @@ pre {
   width: 100%
 }
 
+.table th {
+    color: #00C08B !important;
+    border: 0 !important
+}
+
+
 .table-hover.table td{
   word-break: break-word;
 }
@@ -2711,7 +2717,7 @@ h4.prefix-section-header {
 }
 
 .database-listing-title-row {;
-    margin: 10px 0px 0px 0px;
+    margin: 0px;
 }
 
 .database-listing-title {
@@ -2734,7 +2740,7 @@ h4.prefix-section-header {
     margin: 20px 10px 0px 15px;
     font-size: 15px;
     font-weight: 400;
-    color: #586069;
+    color: #787878;
 }
 
 .database-main-action-message, .action-divider {
@@ -2782,6 +2788,10 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.database-listing-url {
+    color: #787878;
+}
+
 .database-secondary-option {
     height: 30px;
     font-size: 12px;
@@ -2796,12 +2806,44 @@ h4.prefix-section-header {
     margin: auto;
 }
 
+.credit-spacing {
+    margin: 10px 0px 0px -15px !important;
+}
 .delete-action{
     color: #721c24;
     border: 1px solid #721c24;
     background-color: #f8d7da;
     border-radius: 2em;
     padding: 0 10px;
+    font-size: 14px;
+    vertical-align: middle;
+    margin: 0px 0px 0px 2px;
+}
+
+
+.refresh-action {
+    color: #155724;
+    border-radius: 2em;
+    padding: 0 10px;
+    font-size: 14px;
+    vertical-align: middle;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    border: 1px solid #155724;
+    margin: 0px 0px 0px 2px;
+}
+
+.context-style {
+    margin-top: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.update-list{
+    width: 100%;
+}
+
+.delete-action:hover, .refresh-action:hover {
+    cursor: pointer
 }
 
 .fork-action{
@@ -2934,8 +2976,8 @@ h4.prefix-section-header {
 }
 
 .database-context-row {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }
 
 .commit-selector-header {
@@ -3029,4 +3071,8 @@ h4.prefix-section-header {
 
 .select-branch {
     margin-left: 0;
+}
+
+.remote-synch-actions {
+    margin-top: 40px
 }
