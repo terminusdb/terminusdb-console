@@ -55,6 +55,10 @@ export const isHubURL = function(hurl){
     return false
 }
 
+export const isLocalURL = function(lurl, client){
+    return _is_local_server(client, lurl)
+}
+
 export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {  
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}

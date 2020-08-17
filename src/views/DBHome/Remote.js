@@ -21,25 +21,82 @@ import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
 import Select from "react-select";
 import { validURL } from '../../utils/helperFunctions'
-import { Push } from '../../components/Query/CollaborateAPI'
+import { isHubURL } from '../../components/Query/CollaborateAPI'
 
 export const DBRemoteSummary = ({woqlClient, repos, onCreate}) => {
     let meta = woqlClient.get_database()
+    let user = woqlClient.user()
 
     function onRefresh(){
         alert("here we have to refresh the local record")
     } 
 
+    function categorize(repos){
+        let hubs = []
+        let locals = []
+        let others = []
+        for(var k in repos){
+            if(repos[k].type == "Remote"){
+                if(isHubURL(repos[k].url)) hubs.push(repos[k])
+                else if(isLocalURL(repos[k].url, woqlClient)) locals.push(repos[k])
+                else others.push(repos[k])
+            }
+        } 
+        return {hub: hubs, local: locals, other: others}   
+    }   
+
+    let cats = categorize(repos)
+
+    let tots = cats.hubs.length + cats.locals.length + cats.others.length
+    let share_to_hub = (cats.hubs.length == 0)
+    let intro_text
+    if(tots == 0){
+        intro_text = "This database is not connected to any remote databases"
+    }
+    if(tots == 1 && cats.hubs.length == 1){
+        intro_text = "This database is connected to database on Terminus Hub"
+    }
+    else if(tots == 1 && cats.locals.length == 1){
+        intro_text = "This database is connected to a local database"
+    }
+    else if(tots == 1 && cats.others.length == 1){       
+        intro_text = "This database is connected to a remote database"
+    }
+    else {
+        intro_text = `This database is connected to ${tots} remotes`
+    }
+    //possibilities : 
+    //   no remotes (publish to hub, add remote) (not logged in)
+    //   1 remote = hub (not logged in)
+    //   1 remote = local (local clone) (publish to hub?) ()
+    //   multiple remotes no hub => (publish to hub)
+    //   multiple remotes including hub =>  
+
     if(!meta || !repos) return null;
+    
+    console.log(repos)
     return (
         <Row>
-            <Col md={9}>
-                halleluja
+            <Col md={6}>
+                {intro_text}
             </Col>
             <Col md={3}>
-                <button type="submit" onClick={onRefresh} className="tdb__button__base tdb__button__base--green">
-                    Refresh Local State
-                </button>                
+                {share_to_hub && 
+                    <span>
+                    {(user && user.logged_in) && 
+                        <button type="submit" onClick={onRefresh} className="tdb__button__base tdb__button__base--green">
+                            Save to Terminus Hub
+                        </button>                            
+                    }
+                    {!(user && user.logged_in) && 
+                        <button type="submit" onClick={onRefresh} className="tdb__button__base tdb__button__base--green">
+                            Login to Terminus Hub to Save
+                        </button>                                                
+                    }
+                    </span>
+                }
+            </Col>
+            <Col md={3}>
                 <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--green">
                     Add Remote
                 </button>                
@@ -67,7 +124,7 @@ export const DBRemotes = ({meta, repos, branch, onDelete, onRefresh, onPull, onP
             )
         }
     }
-    return (<span>These are the remotes {remotes}</span>)    
+    return remotes    
 }
 
 export const DBRemote = ({repo, meta, repos, branch, onDelete, onRefresh, onPush, onPull, onFetch}) => {
@@ -392,7 +449,15 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
 }
 
 
-export const UnknownComparison = ({branch, local}) => {
+export const UnknownComparison = ({branch, local, repo, onPull, onPush}) => {
+    function doPush(){
+        if(onPush) return onPush(branch, branch, repo)
+    }
+
+    function doPull(){
+        if(onPull) return onPull(branch, branch, repo)
+    }
+
     return (
     <Row>
         <Col md={1}>
@@ -409,7 +474,7 @@ export const UnknownComparison = ({branch, local}) => {
         <Col>
             
         </Col>
-        <Col>
+        <Col md={1}>
             <span onClick={doPush}>
                 <PushControl meta={local} />
             </span>
