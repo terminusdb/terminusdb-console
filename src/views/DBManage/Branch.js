@@ -15,6 +15,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
+import {legalURLID} from "../../components/Query/CollaborateAPI"
 import {Col, Row, Container, Alert} from "reactstrap"
 import Loading from '../../components/Reports/Loading'
 
@@ -90,13 +91,6 @@ export const Branch = () => {
         setSubmissionProblem(msg)
     }
 
-    function containsProblems(newID){
-        if(!newID.match(/^[0-9a-z_]+$/)) {
-            return "failed to match"            
-        }
-        return false
-    }
-
     function checkSubmission(){
         if(!sourceCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
@@ -110,12 +104,8 @@ export const Branch = () => {
                 return setUserError("create_branch_id", "A branch already exists with the same ID - choose a new ID")
             }
             else {
-                if(nid.length > 40){
-                    return setUserError("create_branch_id", "Branch IDs should be no more than 40 characters long")
-                }
-                let err = containsProblems(nid) 
-                if(err){
-                    return setUserError("create_branch_id", "Branch IDs should only include lowercase characters, numbers and underscores")
+                if(!legalURLID(nid)){
+                    return setUserError("create_branch_id", "Branch IDs can only include lowercase characters, numbers and underscores and be no more than 40 characters long")
                 }
                 return onCreate()
             }

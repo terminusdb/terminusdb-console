@@ -55,6 +55,10 @@ export const isHubURL = function(hurl){
     return false
 }
 
+export const isLocalURL = function(lurl, client){
+    return _is_local_server(client, lurl)
+}
+
 export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {  
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
@@ -146,14 +150,20 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     })
 }
 
-export const addRemote = async (remote_name, remote_url, client, getTokenSilently) => {  
-    const jwtoken = await getTokenSilently()
-    let creds = {type: "jwt", key: jwtoken}
-    client.remote_auth(creds)
+export const addRemote = async (remote_name, remote_url, client, getTokenSilently) => { 
+    let WOQL = TerminusClient.WOQL
     let using = client.organization() + "/" + client.db() + "/_meta"
     let q = WOQL.lib().add_remote(using, remote_url, remote_name)       
-    return client.query(q, `Adding remote ${remote_name} at ${remote_url}`)
-    .then(() => client.fetch(remote_name))
+    let res = await client.query(q, `Adding remote ${remote_name} at ${remote_url}`)
+    let nClient = client.copy()
+    if(_is_local_server(nClient, remote_url)){
+        nClient.remote_auth( nClient.local_auth() )
+    }
+    else {
+        const jwtoken = await getTokenSilently()
+        nClient.remote_auth({type: "jwt", key: jwtoken})
+    }
+    return nClient.fetch(remote_name)
 }
 
 
@@ -231,6 +241,14 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
         nClient.remote_auth({type: "jwt", key: jwtoken})
     }
     return nClient.pull(pull_from)
+}
+
+export const legalURLID = (idstr) => {
+    if(!idstr.match(/^[0-9a-z_]+$/)) {
+        return false            
+    }
+    if(idstr.length > 40) return false
+    return true
 }
 
 function _new_local_id(starter, dbl){

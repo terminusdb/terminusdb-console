@@ -23,14 +23,14 @@ import {UnderConstruction} from '../../components/Reports/UnderConstruction'
 import {PageView} from '../Templates/PageView'
 import {DBRemotes, DBRemoteSummary} from "./Remote"
 import {RefreshDatabaseRecord, isHubURL, Fetch, Push, Pull, addRemote} from "../../components/Query/CollaborateAPI"
+import {AddRemote} from "./AddRemote"
 
 export const Synchronize = () => {
     const {repos, branches, updateBranches, branch} = DBContextObj()
     if (!repos) return null
 
-    const { getTokenSilently } = useAuth0();
+    const { getTokenSilently, loginWithRedirect } = useAuth0();
 
-    const [sourceValues, setSourceValues] = useState()
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
@@ -39,6 +39,7 @@ export const Synchronize = () => {
 
     let update_start = Date.now()
 
+    /*
     useEffect(() => {
         if (repos) {
             let rem = repos.remote || repos.local_clone
@@ -54,7 +55,7 @@ export const Synchronize = () => {
             if (repos.remote) setIsRemote(true)
             else setIsRemote(false)
         }
-    }, [repos])
+    }, [repos])*/
 
     /*
 
@@ -223,7 +224,20 @@ export const Synchronize = () => {
     }
 
     function showAddRemote(){
-        alert("show add piece")
+        setOperation("create")
+    }
+
+    function showShareDB(){
+        setOperation("share")
+    }
+
+    function unsetOperation(){
+        setOperation(false)
+    }
+
+
+    async function doAddRemote(remote_name, remote_url){
+        let res = await addRemote(remote_name, remote_url, woqlClient, getTokenSilently)  
     }
 
     async function doPull(local_branch, remote_branch, remote){
@@ -264,13 +278,23 @@ export const Synchronize = () => {
     if (!repos || !branches) {
         return <Loading type={TERMINUS_COMPONENT} />
     }
+    let user = woqlClient.user()
     return (
         <PageView>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
-            {!loading && <>                
-                <DBRemoteSummary repos={repos} woqlClient={woqlClient} onCreate={showAddRemote} key="dbsum" />
+            {!loading && !operation && <>                
+                <DBRemoteSummary 
+                    repos={repos} 
+                    woqlClient={woqlClient} 
+                    onCreate={showAddRemote} 
+                    onShare={showShareDB} 
+                    onLogin={loginWithRedirect} 
+                    key="dbsum" 
+                />
                 <DBRemotes 
+                    woqlClient={woqlClient}
                     meta={meta}
+                    user={user}
                     repos={repos} 
                     branch={branch} 
                     onPush={doPush}
@@ -279,7 +303,14 @@ export const Synchronize = () => {
                     onDelete={doDelete}
                     onRefresh={refresh}
                     key="dbsumy" />
-            </>}
+            </>
+            }
+            {(operation && operation == "share") && 
+                <span>share</span>
+            }
+            {(operation && operation == "create") && 
+               <AddRemote onCreate={doAddRemote} onCancel={unsetOperation} repos={repos} />
+            }
         </PageView>
     )
 }
