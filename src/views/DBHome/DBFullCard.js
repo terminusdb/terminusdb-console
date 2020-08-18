@@ -453,7 +453,7 @@ export const PullControl = ({meta, user}) => {
 }
 
 export const CloneControl = ({meta, user}) => {
-    return <span className="refresh-action"  title="Clone"><FaClone color={"#155724"} className='database-action database-listing-refresh' /> Clone</span>
+    return <span className="refresh-action"  title="Clone"><FaClone color="#155724" className='database-action database-listing-refresh' /> Clone</span>
     //return (<button  className="tdb__button__base tdb__button__base--bgreen">Clone</button>)
 }
 

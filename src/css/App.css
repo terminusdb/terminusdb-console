@@ -2672,7 +2672,7 @@ h4.prefix-section-header {
 }
 
 .database-left-column {
-    width: 180px
+    width: 280px
 }
 
 .database-control-panel {
@@ -2683,6 +2683,7 @@ h4.prefix-section-header {
     height: 120px;
     text-align: center;
     margin: 8px auto;
+    border-radius: 6px;
 }
 
 .database-listing-icon{
@@ -2834,7 +2835,7 @@ h4.prefix-section-header {
     /*border: 1px solid #721c24;
     background-color: #f8d7da;*/
     border-radius: 2em;
-    padding: 0 10px;
+    padding-left: 1px;
     font-size: 14px;
     /*vertical-align: middle;*/
     margin: 0px 0px 0px 2px;
@@ -2844,13 +2845,14 @@ h4.prefix-section-header {
 .refresh-action {
     color: #155724;
     border-radius: 2em;
-    padding: 0 10px;
+    /*padding: 0 10px;*/
     font-size: 14px;
     /*vertical-align: middle;
     background-color: #d4edda;
     border-color: #c3e6cb;
     border: 1px solid #155724; */
     margin: 0px 0px 0px 2px;
+    padding-left: 5px;
 }
 
 .fetch-action {
@@ -2886,6 +2888,7 @@ h4.prefix-section-header {
     margin: auto;
     padding: 0 10px;
 }
+
 
 .db-main-action {
     margin:auto;
@@ -3153,9 +3156,9 @@ h4.prefix-section-header {
     background-color: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    min-width: 230px;
+    min-width: 214px;
     width: 100%;
-    margin-left: -30px;
+    margin-left: -20px;
 }
 
 .remote-info {
