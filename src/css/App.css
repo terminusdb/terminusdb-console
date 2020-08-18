@@ -2853,6 +2853,18 @@ h4.prefix-section-header {
     margin: 0px 0px 0px 2px;
 }
 
+.fetch-action {
+    color: #004085;
+    border-radius: 2em;
+    padding: 0 10px;
+    font-size: 14px;
+    /*vertical-align: middle;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    border: 1px solid #155724; */
+    margin: 0px 0px 0px 2px;
+}
+
 .context-style {
     margin-top: 40px;
     border-bottom: 1px solid #ddd;
@@ -2862,7 +2874,7 @@ h4.prefix-section-header {
     width: 100%;
 }
 
-.delete-action:hover, .refresh-action:hover {
+.delete-action:hover, .refresh-action:hover, .fetch-action:hover {
     cursor: pointer
 }
 
