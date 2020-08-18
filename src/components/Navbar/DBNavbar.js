@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, {Fragment,useState} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {NavLink} from 'react-router-dom'
 import {getDBPageRoute} from '../Router/ConsoleRouter'
@@ -27,7 +27,15 @@ export const DBNavbar = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const databaseInfo = woqlClient.get_database()
+    const databaseInfo = woqlClient.get_database()   
+    const [isTopOpen, setTopDropdownOpen] = useState(false)
+    const toggleTop = () => setTopDropdownOpen((prevState) => !prevState)
+
+    const topmenu =
+        isTopOpen === true
+            ? 'nav__main__center  nav__main__center--show'
+            : 'nav__main__center nav__main__center--hide'
+
 
     function getNavURL(page) {
         return getDBPageRoute(woqlClient.db(), woqlClient.organization(), page)
@@ -38,7 +46,7 @@ const GuardedDBNavbar = (props) => {
             <div className="nav__main__wrap">
             <div className="console__page__container--width" >
             <nav className="nav__main nav__main--sub">
-                <ul className="nav__main__center nav__main__center--show">
+                <ul className={topmenu}>
                     <li className="nav__main__item nav__main__item--sub">
                         <NavLink
                             tag={NavLink}
@@ -114,6 +122,18 @@ const GuardedDBNavbar = (props) => {
                         </NavLink>
                     </li>
                     </ul>
+                    <div className="nav__main__menu">
+                    <button
+                        className="nav__main__burger nav__main__burger--sub"
+                        onClick={toggleTop}
+                        role="button"
+                        aria-label="Navigation burger button"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
                 </nav>
             </div>
             </div> 
