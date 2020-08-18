@@ -20,6 +20,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall } from 'react-icons/gi';
 import { MdRefresh } from 'react-icons/md';
+import { RiDeleteBin5Line } from 'react-icons/ri'
 import Select from "react-select";
 import { validURL } from '../../utils/helperFunctions'
 import { Push } from '../../components/Query/CollaborateAPI'
@@ -166,7 +167,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         <Col md={7} className="db-remote-action-display-controls">
             {(localBranch && remoteBranch) &&
                 <button type="submit" onClick={pull} className="tdb__button__base tdb__button__base--green">
-                    <b>Pull</b> Updates to {localBranch} Branch
+                    Pull Updates to {localBranch} Branch
                 </button>
             }
         </Col>
@@ -483,7 +484,7 @@ export const RemoteControlPanel = ({meta, repo, onDelete, onRefresh}) => {
             <Row key="rr" onClick={goDB}>
                 {disp}
             </Row>
-            <Row key="rd">
+            <Row key="rd" className="db-controls">
                 <DBControls meta={meta} repo={repo} onRefresh={onRefresh} onDelete={onDelete}/>
             </Row>
         </Col>
@@ -523,7 +524,7 @@ export const DBControls = ({meta, repo, onRefresh, onDelete}) => {
 
 export const DeleteControl = ({meta}) => {
     //return <span className="delete-action"  title="Delete Database">Delete <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /></span>
-    return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
+    return <span className="delete-action"  title="Delete Database"><RiDeleteBin5Line color="#721c24" className='database-action database-listing-delete' />Delete</span>
 }
 
 export const RefreshControl = ({meta}) => {

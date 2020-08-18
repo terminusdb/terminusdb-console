@@ -2825,12 +2825,12 @@ h4.prefix-section-header {
 }
 .delete-action{
     color: #721c24;
-    border: 1px solid #721c24;
-    background-color: #f8d7da;
+    /*border: 1px solid #721c24;
+    background-color: #f8d7da;*/
     border-radius: 2em;
     padding: 0 10px;
     font-size: 14px;
-    vertical-align: middle;
+    /*vertical-align: middle;*/
     margin: 0px 0px 0px 2px;
 }
 
@@ -2840,10 +2840,10 @@ h4.prefix-section-header {
     border-radius: 2em;
     padding: 0 10px;
     font-size: 14px;
-    vertical-align: middle;
+    /*vertical-align: middle;
     background-color: #d4edda;
     border-color: #c3e6cb;
-    border: 1px solid #155724;
+    border: 1px solid #155724; */
     margin: 0px 0px 0px 2px;
 }
 
@@ -3146,4 +3146,10 @@ h4.prefix-section-header {
 .db-remote-action-display-controls{
     display: inline-flex;
     padding: 20px;
+}
+
+.db-controls {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
 }
