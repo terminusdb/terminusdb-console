@@ -2722,12 +2722,16 @@ h4.prefix-section-header {
 .database-main-content {
 }
 
-.database-listing-title-row {;
-    margin: 0px;
+.database-listing-title-row {
+    margin: 0;
+}
+.database-listing-credits-row {
+    margin: 0px 0px 0px -25px;
 }
 
 .database-listing-title {
     font-size: 40px;
+    margin-left: 10px;
 }
 .database-listing-id {
     font-size: 10px;
@@ -2741,6 +2745,7 @@ h4.prefix-section-header {
 }
 
 .database-credits {
+    margin-top: 15px;
 }
 .database-listing-description-row {
     margin: 20px 10px 0px 15px;
@@ -2774,7 +2779,9 @@ h4.prefix-section-header {
     border-color: #ffeeba;
 }
 
+
 .database-listing-description {
+    /*margin: 0px 0px 0px -15px;*/
 }
 .database-production-credits {
     width: 120px;
@@ -2796,6 +2803,7 @@ h4.prefix-section-header {
 
 .database-listing-url {
     color: #787878;
+    margin: 5px 15px 10px 15px;
 }
 
 .database-secondary-option {
@@ -2813,7 +2821,7 @@ h4.prefix-section-header {
 }
 
 .credit-spacing {
-    margin: 10px 0px 0px -15px !important;
+    /*margin: 10px 0px 0px -15px !important; */
 }
 .delete-action{
     color: #721c24;
@@ -3081,4 +3089,61 @@ h4.prefix-section-header {
 
 .remote-synch-actions {
     margin-top: 40px
+}
+
+.remote-comparison {
+    margin-top: 30px;
+}
+
+.remote-comparison-headers {
+    color: #00C08B !important;
+    font-weight: 600;
+}
+
+.remote-comparison-headers-row {
+    padding: 0.75rem;
+    vertical-align: top;
+}
+
+.remote-comparison-spacing {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.db-origin-label-styling{
+    width: 160px;
+    margin-top: 10px;
+    float: right;
+    margin-left: 1280px;
+}
+
+.db-origin-icon{
+    margin: -3px 6px 0px 0px;
+    vertical-align: middle;
+}
+
+.db-origin-label {
+    font-size: 15px;
+    color: #787878;
+}
+
+.db-remote-action-box {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin: 50px;
+}
+
+.db-remote-action-label {
+    margin: -10px 10px 0px 0px;
+    font-size: 14px;
+    background-color: #fff;
+    width: fit-content;
+    padding: 0px 10px 0px 10px;
+    font-weight: 600;
+}
+.db-remote-action-display-controls{
+    display: inline-flex;
+    padding: 20px;
 }

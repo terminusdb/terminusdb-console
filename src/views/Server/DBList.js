@@ -105,7 +105,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r3'>
                         <DBTitle meta={meta} user={user} max={title_max}/>
                     </Row>
-                    <Row key='r4'>
+                    <Row key='r4' className="database-listing-credits-row">
                         <DBCredits meta={meta}  user={user} />
                     </Row>
                     <Row key='r8'>

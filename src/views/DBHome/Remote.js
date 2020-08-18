@@ -117,7 +117,7 @@ export const DBRemote = ({repo, meta, repos, branch, onDelete, onRefresh, onPush
 }
 
 export const SynchronizeActions = ({branches, repo, remote_branches, branch, onPush, onPull, onFetch}) => {
-    let cols = []
+    let localCols = [], remoteCols = []
 
     const [localBranch, setLocalBranch] = useState(branch)
     const [remoteBranch, setRemoteBranch] = useState(getDefaultRemoteBranch(remote_branches, branch))
@@ -159,26 +159,24 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
     function inputRemote(tar){
         setRemoteBranch(tar.target.value)
     }
-
-    cols.push(
-        <Col>
+    localCols.push(
+        <Row className="db-remote-action-label">Local Branch</Row>
+    )
+    localCols.push(
+        <Col md={7} className="db-remote-action-display-controls">
             {(localBranch && remoteBranch) &&
                 <button type="submit" onClick={pull} className="tdb__button__base tdb__button__base--green">
-                    Pull Updates to {localBranch} Branch
+                    <b>Pull</b> Updates to {localBranch} Branch
                 </button>
             }
         </Col>
     )
-    cols.push(
-        <Col>Local Branch</Col>
-    )
-
     if(branches && branches.length){
         let bopts = branches.map( (item) => {
             return {label: item.branch, value: item.branch}
         })
-        cols.push(
-            <Col>
+        localCols.push(
+            <Col md={4} className="db-remote-action-display-controls">
                 <Select
                     placeholder = {localBranch}
                     className = "select-branch"
@@ -192,8 +190,8 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         )
     }
     else {
-        cols.push(
-            <Col>
+        localCols.push(
+            <Col md={4} className="db-remote-action-display-controls">
                 <input
                     className = "local-branch-input"
                     type="text"
@@ -206,15 +204,25 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
             </Col>
         )
     }
-    cols.push(
-        <Col>Remote Branch</Col>
+
+    remoteCols.push(
+        <Row className="db-remote-action-label">Remote Branch</Row>
+    )
+    remoteCols.push(
+        <Col md={7} className="db-remote-action-display-controls">
+            {(localBranch && remoteBranch) &&
+                <button type="submit" onClick={push} className="tdb__button__base tdb__button__base--green">
+                    Push Updates to {remoteBranch} Branch
+                </button>
+            }
+        </Col>
     )
     if(remote_branches && remote_branches.length){
         let ropts = remote_branches.map( (item) => {
             return {label: item.branch, value: item.branch}
         })
-        cols.push(
-            <Col>
+        remoteCols.push(
+            <Col md={4} className="db-remote-action-display-controls">
                 <Select
                     placeholder = {remoteBranch}
                     className = "select-branch"
@@ -228,8 +236,8 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         )
     }
     else {
-        cols.push(
-            <Col>
+        remoteCols.push(
+            <Col md={4} className="db-remote-action-display-controls">
                 <input
                     className = "commit-log-input"
                     type="text"
@@ -242,16 +250,17 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
             </Col>
         )
     }
-    cols.push(
-        <Col>
-            {(localBranch && remoteBranch) &&
-                <button type="submit" onClick={push} className="tdb__button__base tdb__button__base--green">
-                    Push Updates to {remoteBranch} Branch
-                </button>
-            }
-        </Col>
+    //return cols
+    return (
+        <>
+            <Col md={5} className="db-remote-action-box">
+                {localCols}
+            </Col>
+            <Col md={5}className="db-remote-action-box">
+                {remoteCols}
+            </Col>
+        </>
     )
-    return cols
 }
 
 
@@ -290,20 +299,20 @@ export const RemoteComparison = ({meta, repo, onPush, onPull}) => {
         }
     }
     return (<Col>
-        <Row>
-            <Col md={1}>
+        <Row className="remote-comparison-headers-row">
+            <Col md={1} className="remote-comparison-headers">
                 Pull
             </Col>
-            <Col>
+            <Col className="remote-comparison-headers">
                 Latest Local Commit
             </Col>
-            <Col>
+            <Col className="remote-comparison-headers">
                 Branch ID
             </Col>
-            <Col>
+            <Col className="remote-comparison-headers">
                 Latest Remote Commit
             </Col>
-            <Col md={1}>
+            <Col md={1} className="remote-comparison-headers">
                 Push
             </Col>
         </Row>
@@ -358,7 +367,7 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
 
 
     return(
-    <Row>
+    <Row className="remote-comparison-spacing">
         <Col md={1}>
             {(canpull && (canpull != "ok")) &&
                 <span onClick={doPull}>
@@ -395,7 +404,7 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
 
 export const UnknownComparison = ({branch, local}) => {
     return (
-    <Row>
+    <Row className="remote-comparison-spacing">
         <Col md={1}>
             <span onClick={doPull}>
                 <PullControl meta={local} />

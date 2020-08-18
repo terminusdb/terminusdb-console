@@ -11,6 +11,8 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { parseTwoDigitYear } from 'moment'
+import { GiPlainCircle } from 'react-icons/gi';
+
 
 export const ScopedDetails = () => {
 
@@ -109,8 +111,13 @@ export const ScopedDetails = () => {
     if(!latest) return null
     return (
         <Row className="context-style sub-headings">
-
-                {getContextTitle(latest)}
+            <span>
+                <span>{getContextTitle(latest)}</span>
+                <span className="db-origin-label-styling">
+                    <GiPlainCircle className={"db-origin-icon"} color={"#ff9800"} title={""}/>
+                    <span className="db-origin-label">Remote Status</span>
+                </span>
+            </span>
             <div className="database-context-row detail-credits">
                 <ContextCredits meta={latest[0]} graphs={graphs} branches={branches}/>
             </div>

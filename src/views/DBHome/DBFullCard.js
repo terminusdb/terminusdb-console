@@ -67,7 +67,7 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r6'>
                         {decr}
                     </Row>
-                    <Row key='r90'>
+                    <Row key='r90' className="database-credits">
                         <RemoteCredits meta={meta}  user={user} />
                     </Row>
                 </Col>
@@ -144,6 +144,8 @@ export const DBFirstCommit = ({meta, user}) => {
         </span>
     )
 }
+
+
 
 export const DBLastCommit = ({meta, user}) => {
     let ts = meta.updated
