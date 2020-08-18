@@ -15,10 +15,10 @@ import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit,
-    AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild,
+    AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineInfoCircle,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
-import { GiMeshBall } from 'react-icons/gi';
+import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
 import { FaClone } from 'react-icons/fa';
 import { validURL } from '../../utils/helperFunctions'
 
@@ -61,13 +61,13 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r3'>
                         <DBTitle meta={meta} user={user} max={title_max}/>
                     </Row>
-                    <Row key='r4'>
-                        <DBCredits meta={meta}  user={user} />
-                    </Row>
                     <Row key='r6'>
                         {decr}
                     </Row>
-                    <Row key='r90' className="database-credits">
+                    <Row key='r4' className="database-credits">
+                        <DBCredits meta={meta}  user={user} />
+                    </Row>
+                    <Row key='r90' className="database-remote-credits remote-info">
                         <RemoteCredits meta={meta}  user={user} />
                     </Row>
                 </Col>
@@ -159,10 +159,10 @@ export const DBLastCommit = ({meta, user}) => {
 
     if(meta.author) ct += " by " + meta.author
     return (
-        <span>
+        <div>
             <AiFillEdit className="db_info_icon_spacing"/>
             <span className="db_info">{ct}</span>
-        </span>
+        </div>
     )
 }
 
@@ -183,10 +183,14 @@ export const RemoteCredits = ({meta, user}) => {
             <DBLastCommit key='ad' meta={meta.remote_record} user={user} />
         )
     }
-    return (
-        <div className="database-listing-title-row">
-            {res}
+    return (<>
+        <div className="remote-info-align">
+            <AiOutlineInfoCircle className={"database-remote-icon"} color={"#856404"} title={""}/>
+            <span className="remote-info-label">Remote Info</span>
         </div>
+        <div className="database-remote-info-row">
+            {res}
+        </div></>
     )
 }
 
@@ -340,7 +344,7 @@ export const DBControlPanel = ({meta, user}) => {
             {<Row key="rr" onClick={goDB}>
                 {disp}
             </Row>}
-            <Row key="rd">
+            <Row key="rd" className="db-controls">
                 <DBControls user={user}/>
             </Row>
         </Col>

@@ -45,13 +45,13 @@ export const MonitorDB = (props) => {
     if(!branches) return null
     return (
         <div>
-            <Row>
+            <Row key="rr">
                 <DBFullCard meta={assetRecord} user={woqlClient.user()}/>
             </Row>
-            <Row>
+            <Row key="rs">
                 <ScopedDetails />
             </Row>
-            <Row>
+            <Row key="rd">
                 <CommitLog />
             </Row>
         </div>

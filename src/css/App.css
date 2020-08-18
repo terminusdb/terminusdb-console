@@ -2668,7 +2668,7 @@ h4.prefix-section-header {
 .database-summary-listing {
     margin-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    /*border-bottom: 1px solid #ddd;*/
 }
 
 .database-left-column {
@@ -2745,8 +2745,14 @@ h4.prefix-section-header {
 }
 
 .database-credits {
-    margin-top: 15px;
+    margin-top: 30px;
 }
+
+.database-remote-credits {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
 .database-listing-description-row {
     margin: 20px 10px 0px 15px;
     font-size: 15px;
@@ -2991,7 +2997,7 @@ h4.prefix-section-header {
 
 .database-context-row {
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .commit-selector-header {
@@ -3111,23 +3117,6 @@ h4.prefix-section-header {
     border-top: 1px solid #dee2e6;
 }
 
-.db-origin-label-styling{
-    width: 160px;
-    margin-top: 10px;
-    float: right;
-    margin-left: 1280px;
-}
-
-.db-origin-icon{
-    margin: -3px 6px 0px 0px;
-    vertical-align: middle;
-}
-
-.db-origin-label {
-    font-size: 15px;
-    color: #787878;
-}
-
 .db-remote-action-box {
     background-color: #fff;
     border: 1px solid #e1e4e8;
@@ -3152,4 +3141,65 @@ h4.prefix-section-header {
     background-color: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
+}
+
+.remote-info {
+    background-color: #fff;
+    border: 1px solid #856404;
+    border-radius: 6px;
+    display: block;
+}
+
+.remote-info-align {
+    margin: -12px 0px 0px 20px;
+    padding: 0px 10px 0px 10px;
+    background-color: #fff;
+    width: fit-content;
+}
+
+.remote-info-label {
+    font-size: 15px;
+    color: #856404;
+}
+
+.database-remote-info-row {
+    padding: 10px 0px 10px 10px;
+}
+
+.database-remote-icon {
+    margin: -3px 6px 0px 0px;
+    vertical-align: middle;
+    color: #856404;
+    font-size: 20px;
+}
+
+.db_info_branch_icon {
+    font-size: 20px;
+    margin: 0px 5px 0px 5px;
+}
+
+.db_info_branch_label {
+    margin-left: 5px;
+    color: #00C08B;
+    font-weight: 600;
+}
+
+.db_info_branch_text {
+    color: #787878;
+}
+
+.branch-info{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: block;
+    margin-bottom: 30px;
+}
+
+.db-branch-info-align {
+    margin-top: -12px;
+    margin-left: 20px;
+    padding: 0px 20px 0px 20px;
+    background-color: #fff;
+    width: fit-content;
 }

@@ -7,12 +7,10 @@ import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 import {LatestUpdates} from '../Tables/LatestUpdates'
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit, AiOutlinePushpin,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { parseTwoDigitYear } from 'moment'
-import { GiPlainCircle } from 'react-icons/gi';
-
 
 export const ScopedDetails = () => {
 
@@ -91,7 +89,11 @@ export const ScopedDetails = () => {
             return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref
         }
         if(branches && Object.keys(branches).length > 1) {
-            return "Viewing Branch " + branch
+            return <>
+                    <AiOutlinePushpin color={"#787878"} className="db_info_branch_icon"/>
+                    <span className="db_info_branch_text">Viewing Branch</span>
+                    <span className="db_info_branch_label">{branch}</span>
+                </>
         }
         else return "Database Contents"
     }
@@ -110,14 +112,8 @@ export const ScopedDetails = () => {
 
     if(!latest) return null
     return (
-        <Row className="context-style sub-headings">
-            <span>
-                <span>{getContextTitle(latest)}</span>
-                <span className="db-origin-label-styling">
-                    <GiPlainCircle className={"db-origin-icon"} color={"#ff9800"} title={""}/>
-                    <span className="db-origin-label">Remote Status</span>
-                </span>
-            </span>
+        <Row className="context-style sub-headings branch-info">
+            <div className="db-branch-info-align ">{getContextTitle(latest)}</div>
             <div className="database-context-row detail-credits">
                 <ContextCredits meta={latest[0]} graphs={graphs} branches={branches}/>
             </div>
