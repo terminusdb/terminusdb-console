@@ -259,6 +259,10 @@ export const WOQLClientProvider = ({children, params}) => {
                     }
                     woqlClient.databases(nudbs)
                 }
+                else {
+                    let odb = woqlClient.get_database(id, org)
+                    odb = local
+                }                
                 setContextEnriched(contextEnriched + 1)
             }
         })
