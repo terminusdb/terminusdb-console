@@ -56,7 +56,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
             <Col md={6}>
                 <AiOutlineInfoCircle color={"#787878"} className={"intro_text_icon"}/><span className="intro_text">{intro_text}</span>
             </Col>
-            <Col md={3}>
+            <Col md={4}>
                 {share_to_hub &&
                     <span>
                     {showSave &&
@@ -72,7 +72,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
                     </span>
                 }
             </Col>
-            <Col md={3}>
+            <Col md={2} className="remote-summary-action">
                 <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--bgreen">
                     Add Remote
                 </button>

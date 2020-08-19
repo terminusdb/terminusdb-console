@@ -1,9 +1,9 @@
 /**
  * Display card for a single remote
  */
-import React from 'react'
+import React, {useState} from 'react'
 import { GRAPHDB } from "../../constants/images"
-import {Row, Col, Container} from "reactstrap"
+import {Row, Col, Button, Container, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap"
 import { printts } from "../../constants/dates"
 import { DATETIME_COMPLETE } from "../../constants/dates"
 import { AiFillEdit, AiFillCopy, AiOutlineBlock, AiFillLock, AiOutlineUser, AiOutlineWarning,
@@ -11,7 +11,8 @@ import { AiFillEdit, AiFillCopy, AiOutlineBlock, AiFillLock, AiOutlineUser, AiOu
 import { DescribeDifferences } from "./DBDifferences"
 import { validURL } from '../../utils/helperFunctions'
 import { MdRefresh } from 'react-icons/md';
-import { RiDeleteBin5Line } from 'react-icons/ri'
+import { AiOutlineCloudSync } from 'react-icons/ai';
+import { RiDeleteBin5Line, RiErrorWarningLine } from 'react-icons/ri'
 
 export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, onFetch}) => {
     let allowed_fetch = false
@@ -45,15 +46,15 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
                             repo={repo}
                         />
                     </Row>
-                    <Row>
-                        <RemoteDescription
-                            local={local}
-                            remote={remote}
-                            repo={repo}
-                            user={user}
-                        />
-                    </Row>
                 </Col>
+            </Row>
+            <Row className="synch-info remote-difference">
+                <RemoteDescription
+                    local={local}
+                    remote={remote}
+                    repo={repo}
+                    user={user}
+                />
             </Row>
         </Col>
     )
@@ -91,11 +92,16 @@ export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, 
     )
 }
 
+
 //Left column - control widget
 export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
 
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+
     function showDelete(){
-        alert("show delete modal now")
+        //alert("show delete modal now")
         if(onDelete) onDelete(repo)
     }
 
@@ -120,8 +126,19 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
                         <FetchControl repo={repo} />
                     </span>
                 }
-                <span className='delete-control' onClick={showDelete}>
+                <span className='delete-control' onClick={toggle}>
                     <DeleteControl repo={repo} />
+                    <Modal isOpen={modal} toggle={toggle}>
+                      <ModalBody className="delete-modal-body">
+                            <Row>
+                                <RiErrorWarningLine color="#ff9800" className="delete-modal-icon"/>
+                                <span className="delete-modal-text">This action will delete the database from hub!</span>
+                            </Row>
+                      </ModalBody>
+                      <ModalFooter>
+                        <button className="tdb__button__base tdb__button__base--bred"  onClick={showDelete}>Delete</button>{' '}
+                      </ModalFooter>
+                    </Modal>
                 </span>
             </span>
         </Row>
@@ -177,7 +194,7 @@ export const RemoteTitle = ({repo, meta}) => {
         <span className='database-listing-title-row'>
             <span className={title_css + " database-listing-title"}>{str}</span>
             {meta && meta.label &&
-                <span> ({repo.title}) </span>
+                <span class="repo_title"> ({repo.title}) </span>
             }
         </span>
     )
@@ -237,10 +254,10 @@ export const DBLastCommit = ({meta}) => {
     }
     if(meta.author) ct += " by " + meta.author
     return (
-        <span>
+        <div>
             <AiFillEdit className="db_info_icon_spacing"/>
             <span className="db_info">{ct}</span>
-        </span>
+        </div>
     )
 }
 
@@ -314,11 +331,14 @@ export const RemoteDescription = ({local, remote, repo, user}) => {
         return (<DBWarningCredits text="No record of remote database found" />)
     }
     else {
-        return (
-            <div className="remote-difference">
-                <h2>Synchronization with local database</h2>
+        return (<>
+            <div className="remote-info-align">
+                <AiOutlineCloudSync className={"database-remote-icon"} color={"#ff9800"}/> <span className="sync-info-label">Synchronization with local database</span>
+            </div>
+            <div className="database-remote-info-row">
                 <DescribeDifferences a={local} b={remote} />
             </div>
+        </>
         )
     }
 }

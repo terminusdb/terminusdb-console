@@ -186,7 +186,7 @@ export const RemoteCredits = ({meta, user}) => {
     }
     return (<>
         <div className="remote-info-align">
-            <AiOutlineInfoCircle className={"database-remote-icon"} color={"#856404"} title={""}/>
+            <AiOutlineInfoCircle className={"database-remote-icon"} color={"#856404"}/>
             <span className="remote-info-label">Remote Info</span>
         </div>
         <div className="database-remote-info-row">
