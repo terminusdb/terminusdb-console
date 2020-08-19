@@ -10,6 +10,7 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit, AiOutlinePushpin,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
+import { FiBox } from 'react-icons/fi'
 import { parseTwoDigitYear } from 'moment'
 
 export const ScopedDetails = () => {
@@ -90,12 +91,15 @@ export const ScopedDetails = () => {
         }
         if(branches && Object.keys(branches).length > 1) {
             return <>
-                    <AiOutlinePushpin color={"#787878"} className="db_info_branch_icon"/>
+                    <AiOutlinePushpin color={"#ddd"} className="db_info_branch_icon"/>
                     <span className="db_info_branch_text">Viewing Branch</span>
                     <span className="db_info_branch_label">{branch}</span>
                 </>
         }
-        else return "Database Contents"
+        else return <>
+            <FiBox color={"#ddd"} className="db_info_branch_icon"/>
+            <span className="db_info_branch_text">Database Contents</span>
+        </>
     }
 
     //number of commits

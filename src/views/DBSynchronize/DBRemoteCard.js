@@ -1,5 +1,5 @@
 /**
- * Display card for a single remote 
+ * Display card for a single remote
  */
 import React from 'react'
 import { GRAPHDB } from "../../constants/images"
@@ -24,14 +24,14 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
     return (
         <Col>
             <Row className='database-summary-listing'>
-                <Col md={2} className='database-control-panel'>
-                    <RemoteControlPanel 
-                        local={local} 
+                <Col md={2} className='database-control-panel database-control-panel-border'>
+                    <RemoteControlPanel
+                        local={local}
                         repo={repo}
-                        remote={remote} 
-                        show_refresh={allowed_fetch} 
-                        onFetch={onFetch} 
-                        onDelete={onDelete} 
+                        remote={remote}
+                        show_refresh={allowed_fetch}
+                        onFetch={onFetch}
+                        onDelete={onDelete}
                         onRefresh={onRefresh}
                     />
                 </Col>
@@ -41,18 +41,18 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
                     </Row>
                     <Row>
                         <RemoteCredits
-                            remote={remote} 
+                            remote={remote}
                             repo={repo}
                         />
                     </Row>
                     <Row>
-                        <RemoteDescription 
-                            local={local} 
-                            remote={remote} 
-                            repo={repo} 
+                        <RemoteDescription
+                            local={local}
+                            remote={remote}
+                            repo={repo}
                             user={user}
                         />
-                    </Row>                
+                    </Row>
                 </Col>
             </Row>
         </Col>
@@ -73,26 +73,27 @@ export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, 
     }
     let doRefresh = (show_refresh ? onRefresh : false)
     let doFetch = (show_refresh ? onFetch : false)
+
     return (
-        <Col className='database-left-column'>
-            <Row>
+        <div>
+            <Row key="rr" class="database-left-img">
                 {disp}
             </Row>
-            <Row>
-                <DBControls 
-                    onFetch={doFetch} 
-                    repo={repo} 
-                    onRefresh={doRefresh} 
+            <Row  key="rd" className="db-controls">
+                <DBControls
+                    onFetch={doFetch}
+                    repo={repo}
+                    onRefresh={doRefresh}
                     onDelete={onDelete}
                 />
             </Row>
-        </Col>
+        </div>
     )
 }
 
 //Left column - control widget
-export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {        
-    
+export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
+
     function showDelete(){
         alert("show delete modal now")
         if(onDelete) onDelete(repo)
@@ -107,51 +108,54 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
     }
 
     return (
-        <Container className='database-controls database-listing-title-row'>
-            <Row className='major-database-controls'>
-                <Col className='delete-control' onClick={showDelete}>
-                    <DeleteControl repo={repo} />
-                </Col>
-                {onRefresh && 
-                    <Col className='refresh-control' onClick={doRefresh}>
+        <Row className='major-database-controls'>
+            <span>
+                {onRefresh &&
+                    <span className='refresh-control' onClick={doRefresh}>
                         <RefreshControl repo={repo} />
-                    </Col>
+                    </span>
                 }
-                {onFetch && 
-                    <Col className='refresh-control' onClick={doFetch}>
+                {onFetch &&
+                    <span className='refresh-control' onClick={doFetch}>
                         <FetchControl repo={repo} />
-                    </Col>
+                    </span>
                 }
-            </Row>
-        </Container>
+                <span className='delete-control' onClick={showDelete}>
+                    <DeleteControl repo={repo} />
+                </span>
+            </span>
+        </Row>
     )
 }
 
 export const DeleteControl = ({repo}) => {
     let title = `Delete Remote ${repo.title} (${repo.url})`
-    return (
+    return <span className="db-action"  title={title}><RiDeleteBin5Line color="#721c24" className='db-control' /></span>
+    /*return (
         <span className="delete-action"  title={title}>
             <RiDeleteBin5Line color="#721c24" className='database-action database-listing-delete' />
         </span>
-    )
+    )*/
 }
 
 export const RefreshControl = ({repo}) => {
     let title = `Refresh Remote ${repo.title} from ${repo.url}`
-    return ( 
+    return <span className="db-action"  title={title}><MdRefresh color="#0055bb" className='db-control' /></span>
+    /*return (
         <span className="refresh-action" title={title}>
-            <MdRefresh className='database-action database-listing-refresh' /> 
+            <MdRefresh className='database-action database-listing-refresh' />
         </span>
-    )
+    )*/
 }
 
 export const FetchControl = ({repo}) => {
     let title = `Fetch Remote ${repo.title} from ${repo.url}`
-    return ( 
+    return <span className="db-action"  title={title}><AiFillCopy color="#0055bb" className='db-control' /></span>
+    /*return (
         <span className="refresh-action"  title={title}>
-            <AiFillCopy className='database-action database-listing-refresh' />            
+            <AiFillCopy className='database-action database-listing-refresh' />
         </span>
-    )
+    )*/
 }
 
 export const DBWarningCredits = ({text}) => {
@@ -168,7 +172,7 @@ export const DBWarningCredits = ({text}) => {
 
 export const RemoteTitle = ({repo, meta}) => {
     let title_css = "database-title-remote"
-    let str = (meta && meta.label ? meta.label : repo.title) 
+    let str = (meta && meta.label ? meta.label : repo.title)
     return (
         <span className='database-listing-title-row'>
             <span className={title_css + " database-listing-title"}>{str}</span>
@@ -181,10 +185,10 @@ export const RemoteTitle = ({repo, meta}) => {
 
 export const RemoteCredits = ({remote, repo}) => {
     let res = []
-    res.push(<DBRemoteTitle repo={repo} key="aaa" />)  
+    res.push(<DBRemoteTitle repo={repo} key="aaa" />)
     if(repo && repo.url){
         res.push(<DBRemoteURL url={repo.url} key="cadf" />)
-    }  
+    }
     if(remote){
         if(repo && repo.type == "hub"){
             res.push (
@@ -305,7 +309,7 @@ export const RemoteDescription = ({local, remote, repo, user}) => {
                 <DBWarningCredits text="Log in to Terminus Hub to synchronize" />
             </span>
         </Row>)
-    }   
+    }
     if(!remote){
         return (<DBWarningCredits text="No record of remote database found" />)
     }

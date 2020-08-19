@@ -415,6 +415,11 @@ div.header legend, div.row legend {
     margin-top: 0px !important
 }
 
+div.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 div.ePDqSK {
     height:auto !important;
 }
@@ -2672,12 +2677,18 @@ h4.prefix-section-header {
     /*border-bottom: 1px solid #ddd;*/
 }
 
-.database-left-column {
-    width: 280px
+.database-left-img {
+    padding: 5px 0px 5px 0px;
+    /*width: 280px*/
 }
 
 .database-control-panel {
     display: inline-block;
+    border-radius: 6px;
+}
+
+.database-control-panel-border {
+    border: 1px solid #ddd;
 }
 
 .db-home-listing-image {
@@ -2690,8 +2701,8 @@ h4.prefix-section-header {
 .database-listing-image {
     height: 120px;
     text-align: center;
-    margin: 8px auto;
     border-radius: 6px;
+    margin-top: 15px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
@@ -2798,7 +2809,8 @@ h4.prefix-section-header {
 
 
 .database-listing-description {
-    /*margin: 0px 0px 0px -15px;*/
+    margin: 0px 0px 0px 15px !important;
+    color: #989CA0;
 }
 .database-production-credits {
     width: 120px;
@@ -2851,30 +2863,17 @@ h4.prefix-section-header {
     margin: 0px 0px 0px 2px;
 }
 
-
-.refresh-action {
-    color: #155724;
-    border-radius: 2em;
-    /*padding: 0 10px;*/
-    font-size: 14px;
-    /*vertical-align: middle;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    border: 1px solid #155724; */
-    margin: 0px 0px 0px 2px;
-    padding-left: 5px;
+.db-control {
+    margin: 25px 10px 15px -20px;
+    font-size: 20px;
 }
 
-.fetch-action {
-    color: #004085;
+.db-action {
+    color: #155724;
     border-radius: 2em;
-    padding: 0 10px;
     font-size: 14px;
-    /*vertical-align: middle;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    border: 1px solid #155724; */
-    margin: 0px 0px 0px 2px;
+    margin: 12px;
+    padding-left: 5px;
 }
 
 .context-style {
@@ -2886,7 +2885,7 @@ h4.prefix-section-header {
     width: 100%;
 }
 
-.delete-action:hover, .refresh-action:hover, .fetch-action:hover {
+.delete-action:hover, .db-action:hover {
     cursor: pointer
 }
 
@@ -3191,14 +3190,14 @@ h4.prefix-section-header {
 
 .db-controls {
     background-color: #fff;
-    border: 1px solid #e1e4e8;
+    /* border: 1px solid #e1e4e8; */
     border-radius: 6px;
-    min-width: 211px;
+    min-width: 204px;
     width: 100%;
     /* margin: -15px -8px 0px -20px; */
     /* margin-left: -20px; */
     margin-top: -15px;
-    /* margin-right: 10px;*/
+    /* margin-right: 10px; */
 }
 
 .remote-info {
@@ -3206,6 +3205,8 @@ h4.prefix-section-header {
     border: 1px solid #856404;
     border-radius: 6px;
     display: block;
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .remote-info-align {
@@ -3252,6 +3253,8 @@ h4.prefix-section-header {
     border: 1px solid #ddd;
     border-radius: 6px;
     display: block;
+    width: -webkit-fill-available;
+    width: -moz-available;
     margin-bottom: 30px;
 }
 
@@ -3262,4 +3265,13 @@ h4.prefix-section-header {
     background-color: #fff;
     width: fit-content;
     width: -moz-fit-content;
+}
+
+.intro_text_icon {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.intro_text {
+    color: #787878;
 }

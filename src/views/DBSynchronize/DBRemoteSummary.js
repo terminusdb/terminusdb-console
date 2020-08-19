@@ -1,6 +1,7 @@
 import {Row, Col} from "reactstrap"
 import React from 'react'
 import { isHubURL, isLocalURL } from '../../components/Query/CollaborateAPI'
+import { AiOutlineInfoCircle } from 'react-icons/ai'
 
 
 /**
@@ -53,7 +54,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
     return (
         <Row>
             <Col md={6}>
-                {intro_text}
+                <AiOutlineInfoCircle color={"#787878"} className={"intro_text_icon"}/><span className="intro_text">{intro_text}</span>
             </Col>
             <Col md={3}>
                 {share_to_hub &&

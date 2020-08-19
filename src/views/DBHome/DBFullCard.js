@@ -49,13 +49,13 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
     }
 
     let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
-    return (
+    return (<>
         <Row key='r7' className='database-summary-listing'>
             {loading &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
             {!loading && <>
-                <Col key='r5' md={2} className='database-control-panel'>
+                <Col key='r5' md={2} className='database-control-panel database-control-panel-border'>
                     <DBControlPanel meta={meta} user={user} />
                 </Col>
                 <Col md={10} className='database-main-content'>
@@ -68,15 +68,15 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r6'>
                         {decr}
                     </Row>
-                    <Row key='r90' className="database-remote-credits remote-info">
-                        <RemoteCredits meta={meta}  user={user} />
-                    </Row>
                 </Col>
                 {/*<Col key='r6' md={2} className='database-main-actions'>
                     <DBStatus meta={meta}  user={user}  onAction={onGo}/>
                 </Col>*/}
             </>}
         </Row>
+        <Row key='r90' className="database-remote-credits remote-info">
+            <RemoteCredits meta={meta}  user={user} />
+        </Row> </>
     )
 }
 
@@ -341,14 +341,14 @@ export const DBControlPanel = ({meta, user}) => {
     }
 
     return (
-        <Col className='database-left-column'>
-            {<Row key="rr" onClick={goDB}>
+        <div>
+            {<Row key="rr" class="database-left-img" onClick={goDB}>
                 {disp}
             </Row>}
             <Row key="rd" className="db-controls">
                 <DBControls user={user}/>
             </Row>
-        </Col>
+        </div>
     )
 }
 
@@ -365,14 +365,12 @@ export const DBControls = ({meta, user, repo, onRefresh, onDelete}) => {
     }
 
     return (
-        <Container className='database-controls database-listing-title-row'>
             <Row className='major-database-controls'>
                 <span>
                     <span className='refresh-control'><CloneControl meta={meta} user={user} onClick={myClone}/></span>
                     <span className='delete-control'><DeleteControl meta={meta} user={user} onClick={myDelete}/></span>
                 </span>
             </Row>
-        </Container>
     )
 
 }
@@ -454,7 +452,7 @@ export const PullControl = ({meta, user}) => {
 }
 
 export const CloneControl = ({meta, user}) => {
-    return <span className="refresh-action"  title="Clone"><MdContentCopy color="#155724" className='database-action database-listing-refresh' /></span>
+    return <span className="db-action"  title="Clone"><MdContentCopy color="#0055bb" className='db-control' /></span>
     //return (<button  className="tdb__button__base tdb__button__base--bgreen">Clone</button>)
 }
 
@@ -501,7 +499,7 @@ export const AcceptControl = ({meta}) => {
 
 export const DeleteControl = ({meta}) => {
     //return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
-    return <span className="delete-action"  title="Delete Database"><RiDeleteBin5Line color="#721c24" className='database-action database-listing-delete' /></span>
+    return <span className="db-action"  title="Delete Database"><RiDeleteBin5Line color="#721c24" className='db-control' /></span>
 }
 
 export const TimeControl = ({meta, type}) => {
