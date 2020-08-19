@@ -132,7 +132,7 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
                       <ModalBody className="delete-modal-body">
                             <Row>
                                 <RiErrorWarningLine color="#ff9800" className="delete-modal-icon"/>
-                                <span className="delete-modal-text">This action will delete the database from hub!</span>
+                                <span className="warning-modal-text">This action will delete the database from hub!</span>
                             </Row>
                       </ModalBody>
                       <ModalFooter>
@@ -333,7 +333,7 @@ export const RemoteDescription = ({local, remote, repo, user}) => {
     else {
         return (<>
             <div className="remote-info-align">
-                <AiOutlineCloudSync className={"database-remote-icon"} color={"#ff9800"}/> <span className="sync-info-label">Synchronization with local database</span>
+                <AiOutlineCloudSync className={"database-remote-icon"} color={"#856404"}/> <span className="sync-info-label">Synchronization with local database</span>
             </div>
             <div className="database-remote-info-row">
                 <DescribeDifferences a={local} b={remote} />
