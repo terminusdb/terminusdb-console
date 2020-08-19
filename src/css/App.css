@@ -3126,7 +3126,7 @@ h4.prefix-section-header {
 }
 
 .remote-comparison-action {
-    color: #00C08B;
+    color: #0055bb;
     padding: 6px 8px;
     border-radius: 5px;
 }
@@ -3134,7 +3134,7 @@ h4.prefix-section-header {
 .remote-comparison-action:hover {
     color: white;
     cursor: pointer;
-    background-color: #00C08B;
+    background-color: #0055bb;
     padding: 6px 8px;
 }
 
