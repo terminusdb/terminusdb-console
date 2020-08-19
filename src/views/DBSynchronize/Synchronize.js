@@ -11,21 +11,43 @@ import Loading from '../../components/Reports/Loading'
 import {PageView} from '../Templates/PageView'
 import {DBRemotes} from "./DBRemotes"
 import {DBRemoteSummary} from "./DBRemoteSummary"
-import {RefreshDatabaseRecord, removeRemote, addRemote, isLocalURL, isHubURL} from "../../components/Query/CollaborateAPI"
+import {RefreshDatabaseRecord, removeRemote, addRemote, isLocalURL} from "../../components/Query/CollaborateAPI"
 import {AddRemote} from "./AddRemote"
 import {CreateDatabase} from "../CreateDB/CreateDatabase"
 
 export const Synchronize = () => {
-    const {repos, branches, updateRepos, branch} = DBContextObj()
+    const {woqlClient, bffClient, refreshDBRecord, remoteClient } = WOQLClientObj()
+    const {repos, branches, updateRepos, branch, updateBranches} = DBContextObj()
     const { getTokenSilently, loginWithRedirect } = useAuth0();
 
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
-    const [isRemote, setIsRemote] = useState()
-    const {woqlClient, bffClient, refreshDBRecord } = WOQLClientObj()
+    const [meta, setMeta] = useState()
+    //let meta = woqlClient.get_database()
+    let user = woqlClient.user()   
+
+    useEffect(() => {
+        if(branches){
+            if(meta) {
+                refreshDBRecord()
+                .then(() => {
+                    let lmeta = woqlClient.get_database()
+                    setMeta(lmeta)        
+                })
+            }
+            else {
+                setMeta(woqlClient.get_database())
+            }
+        }
+    }, [branches])
 
     let update_start = Date.now()
+
+    function isHubURL(url){
+        return isLocalURL(url, remoteClient) 
+    }
+
 
    
     function showAddRemote(){
@@ -113,9 +135,7 @@ export const Synchronize = () => {
         })
         .finally(() => setLoading(false))
     }
-    if(!repos || !branches) return null
-    let meta = woqlClient.get_database()
-    let user = woqlClient.user()   
+    if(!repos || !branches || !meta ) return null
     return (
         <PageView>
             {loading && <Loading type={TERMINUS_COMPONENT} />}
@@ -125,6 +145,7 @@ export const Synchronize = () => {
                     woqlClient={woqlClient} 
                     onCreate={showAddRemote} 
                     onShare={showShareDB} 
+                    isHubURL={isHubURL}
                     onLogin={loginWithRedirect} 
                 />
             }
@@ -143,7 +164,9 @@ export const Synchronize = () => {
                     onLogin={loginWithRedirect} 
                     onDelete={doDelete}
                     onRefresh={onRefresh}
+                    isHubURL={isHubURL}
                     getTokenSilently={getTokenSilently}
+                    branchesUpdated={updateBranches}
                 />
             }
             {(operation && operation == "share") && 
@@ -153,6 +176,7 @@ export const Synchronize = () => {
                <AddRemote 
                     onCreate={doAddRemote} 
                     onCancel={unsetOperation} 
+                    isHubURL={isHubURL}
                     repos={repos} 
                 />
             }

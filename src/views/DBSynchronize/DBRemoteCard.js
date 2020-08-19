@@ -18,9 +18,10 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
     if(repo.type == "hub" && user.logged_in){
         allowed_fetch = true
     }
-    else if(repo.type == "local"){
+    else if(repo.type == "local" || repo.type == "remote"){
         allowed_fetch = true
     }
+
     return (
         <Col>
             <Row className='database-summary-listing'>

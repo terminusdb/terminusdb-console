@@ -28,7 +28,6 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     let rmeta = meta
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {
-        //if(resp.url) rmeta.remote_url = resp.url
         if(!rmeta.roles) rmeta.roles = ['create']
         return CloneDB(rmeta, client, getTokenSilently)
     })
@@ -50,11 +49,6 @@ export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
     })
 }
 
-export const isHubURL = function(hurl){
-    if(hurl.indexOf("://hub") != -1) return true
-    return false
-}
-
 export const isLocalURL = function(lurl, client){
     return _is_local_server(client, lurl)
 }
@@ -73,7 +67,7 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 * label
 * comment
 */
-export const CloneDB = async (meta, client, getTokenSilently) => {
+export const CloneDB = async (meta, client, getTokenSilently, no_auth) => {
     let dbs = client.databases()
     //console.log(dbs)
     let url = meta.remote_url 
@@ -91,6 +85,9 @@ export const CloneDB = async (meta, client, getTokenSilently) => {
     }
     if(_is_local_server(client, meta.remote_url)){
         client.remote_auth(client.local_auth())
+    }
+    else if(no_auth && no_auth === true){
+        client.remote_auth(false)
     }
     else {
         const jwtoken = await getTokenSilently()
@@ -150,12 +147,12 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     })
 }
 
-export const addRemote = async (remote_name, remote_url, client, getTokenSilently) => { 
+export const addRemote = async (remote_name, remote_url, client, getTokenSilently, isHubURL) => { 
     let WOQL = TerminusClient.WOQL
     let using = client.organization() + "/" + client.db() + "/_meta"
     let q = WOQL.lib().add_remote(using, remote_url, remote_name)       
     let res = await client.query(q, `Adding remote ${remote_name} at ${remote_url}`)
-    return Fetch(remote_name, remote_url, client, getTokenSilently)
+    return Fetch(remote_name, remote_url, client, getTokenSilently, isHubURL)
 }
 
 export const removeRemote = async (remote_name, client, getTokenSilently) => { 
@@ -165,10 +162,13 @@ export const removeRemote = async (remote_name, client, getTokenSilently) => {
     return client.query(q, `Deleting remote ${remote_name}`)
 }
 
-export const Fetch = async (remote_name, remote_url, client, getTokenSilently) => {  
+export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth) => {  
     let nClient = client.copy()
     if(_is_local_server(nClient, remote_url)){
         nClient.remote_auth( nClient.local_auth() )
+    }
+    else if(no_auth && no_auth === true){
+        nClient.remote_auth(false)
     }
     else {
         const jwtoken = await getTokenSilently()
@@ -224,7 +224,7 @@ export const Push = async (local_branch, remote, remote_branch, remote_url, comm
 /*
 * meta has : local_branch / remote_branch / url / commit 
 */
-export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently) => {  
+export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, no_auth) => {  
     let to_branch = local_branch || 'main'
     let from_branch = remote_branch || 'main'
     commit = commit || `Pull to local branch ${local_branch} from ${remote} branch ${remote_branch} with Console`
@@ -238,6 +238,9 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
     //create copy so we don't change internal state of woqlClient inadvertently
     if(_is_local_server(client, remote_url)){
         nClient.remote_auth(nClient.local_auth())
+    }
+    else if(no_auth && no_auth === true){
+        nClient.remote_auth(false)
     }
     else {
         const jwtoken = await getTokenSilently()

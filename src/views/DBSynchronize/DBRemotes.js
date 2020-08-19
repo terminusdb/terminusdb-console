@@ -2,7 +2,7 @@ import React from 'react'
 import { isHubURL, isLocalURL } from '../../components/Query/CollaborateAPI'
 import {DBRemote} from "./DBRemote"
 
-export const DBRemotes = ({woqlClient, meta, user, repos, branch, onDelete, onRefresh, onLogin, getTokenSilently}) => {
+export const DBRemotes = ({woqlClient, meta, user, repos, branch, onDelete, onRefresh, onLogin, isHubURL, getTokenSilently, branchesUpdated}) => {
     if(!meta || !repos) return null;
     let remotes = []
     function _repo_categorize(url){
@@ -26,6 +26,7 @@ export const DBRemotes = ({woqlClient, meta, user, repos, branch, onDelete, onRe
                     onLogin={onLogin}
                     woqlClient={woqlClient}
                     getTokenSilently={getTokenSilently} 
+                    branchesUpdated={branchesUpdated}
                 />
             )
         }

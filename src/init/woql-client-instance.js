@@ -200,6 +200,8 @@ export const WOQLClientProvider = ({children, params}) => {
      * Called after clone / create to create the db card for the new db and associate it with its remote
      */
     const refreshDBRecord = (id, org, action, meta) => {
+        id = id || woqlClient.db()
+        org = org || woqlClient.organization()
         let usings = [org + "/" + id]
         let sysClient = woqlClient.copy()
         sysClient.set_system_db()
@@ -261,7 +263,9 @@ export const WOQLClientProvider = ({children, params}) => {
                 }
                 else {
                     let odb = woqlClient.get_database(id, org)
-                    odb = local
+                    for(var k in local){
+                        odb[k] = local[k]
+                    }
                 }                
                 setContextEnriched(contextEnriched + 1)
             }
