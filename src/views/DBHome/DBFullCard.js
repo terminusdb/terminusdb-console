@@ -62,11 +62,11 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r3'>
                         <DBTitle meta={meta} user={user} max={title_max}/>
                     </Row>
-                    <Row key='r6'>
-                        {decr}
-                    </Row>
                     <Row key='r4' className="database-credits">
                         <DBCredits meta={meta}  user={user} />
+                    </Row>
+                    <Row key='r6'>
+                        {decr}
                     </Row>
                     <Row key='r90' className="database-remote-credits remote-info">
                         <RemoteCredits meta={meta}  user={user} />
