@@ -20,9 +20,9 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
                 else if(isLocalURL(repos[k].url, woqlClient)) locals.push(repos[k])
                 else others.push(repos[k])
             }
-        } 
-        return {hub: hubs, local: locals, other: others}   
-    }   
+        }
+        return {hub: hubs, local: locals, other: others}
+    }
 
     let cats = categorize(repos)
 
@@ -38,7 +38,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
     else if(tots == 1 && cats.local.length == 1){
         intro_text = "This database is connected to a local database"
     }
-    else if(tots == 1 && cats.other.length == 1){       
+    else if(tots == 1 && cats.other.length == 1){
         intro_text = "This database is connected to a remote database"
     }
     else {
@@ -46,7 +46,7 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
     }
 
     if(!meta || !repos) return null;
-    
+
     let showSave = (user && user.logged_in)
     let showLogin = (!(user && user.logged_in))
 
@@ -56,25 +56,25 @@ export const DBRemoteSummary = ({woqlClient, repos, onCreate, onShare, onLogin})
                 {intro_text}
             </Col>
             <Col md={3}>
-                {share_to_hub && 
+                {share_to_hub &&
                     <span>
-                    {showSave && 
+                    {showSave &&
                         <button type="submit" onClick={onShare} className="tdb__button__base tdb__button__base--green">
                             Save to Terminus Hub
-                        </button>                            
+                        </button>
                     }
-                    {showLogin && 
+                    {showLogin &&
                         <button type="submit" onClick={onLogin} className="tdb__button__base tdb__button__base--green">
                             Login to Terminus Hub to Save
-                        </button>                                                
+                        </button>
                     }
                     </span>
                 }
             </Col>
             <Col md={3}>
-                <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--green">
+                <button type="submit" onClick={onCreate} className="tdb__button__base tdb__button__base--bgreen">
                     Add Remote
-                </button>                
+                </button>
             </Col>
         </Row>
     )

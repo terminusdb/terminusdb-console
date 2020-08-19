@@ -19,8 +19,9 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
-import { FaClone } from 'react-icons/fa';
-import { validURL } from '../../utils/helperFunctions'
+import { MdContentCopy } from 'react-icons/md';
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import { validURL } from '../../utils/helperFunctions';
 
 export const DBFullCard = ({meta, user, title_max, onAction}) => {
     const [loading, setLoading] = useState()
@@ -61,11 +62,11 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r3'>
                         <DBTitle meta={meta} user={user} max={title_max}/>
                     </Row>
-                    <Row key='r6'>
-                        {decr}
-                    </Row>
                     <Row key='r4' className="database-credits">
                         <DBCredits meta={meta}  user={user} />
+                    </Row>
+                    <Row key='r6'>
+                        {decr}
                     </Row>
                     <Row key='r90' className="database-remote-credits remote-info">
                         <RemoteCredits meta={meta}  user={user} />
@@ -453,7 +454,7 @@ export const PullControl = ({meta, user}) => {
 }
 
 export const CloneControl = ({meta, user}) => {
-    return <span className="refresh-action"  title="Clone"><FaClone color="#155724" className='database-action database-listing-refresh' /> Clone</span>
+    return <span className="refresh-action"  title="Clone"><MdContentCopy color="#155724" className='database-action database-listing-refresh' /></span>
     //return (<button  className="tdb__button__base tdb__button__base--bgreen">Clone</button>)
 }
 
@@ -499,13 +500,8 @@ export const AcceptControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
-
-    /*return <button className="tdb__button__base tdb__button__base--bred"  title="Delete Database">
-                Delete
-           </button>*/
-           //<AiOutlineDelete color="#721c24" className='database-action database-listing-delete' />
-    //return <FontAwesomeIcon className='database-action database-listing-delete' icon={DELETE_ICON} title="Delete Database"/>
+    //return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
+    return <span className="delete-action"  title="Delete Database"><RiDeleteBin5Line color="#721c24" className='database-action database-listing-delete' /></span>
 }
 
 export const TimeControl = ({meta, type}) => {

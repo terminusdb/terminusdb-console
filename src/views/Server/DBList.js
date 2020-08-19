@@ -392,7 +392,7 @@ export const DBControlPanel = ({meta, user}) => {
     let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
 
     if(icon){
-        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} key="xx1"  />)
+        if(validURL(icon)) disp.push(<img className='db-home-listing-image' src={icon} title={title} key="xx1"  />)
         else disp.push(<i key="xx" className={'database-listing-icon ' + icon} title={title}/>)
     }
 
