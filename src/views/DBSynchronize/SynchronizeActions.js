@@ -71,8 +71,8 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
     localCols.push(
         <Col key="lc2" md={7} className="db-remote-action-display-controls">
             {(localBranch && remoteBranch) &&
-                <button type="submit" onClick={pull} className="tdb__button__base tdb__button__base--green">
-                    {pull_title}
+                <button type="submit" onClick={pull} className="tdb__button__base tdb__button__base--green synch-action-text">
+                    <AiOutlineCloudDownload color="fff" className="title-remote-action-icon"/> <span className="title-remote-action">{pull_title}</span>
                 </button>
             }
         </Col>
@@ -133,8 +133,8 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         remoteCols.push(
             <Col key="rc2" md={7} className="db-remote-action-display-controls">
                 {(localBranch && remoteBranch) &&
-                    <button type="submit" onClick={push} className="tdb__button__base tdb__button__base--green">
-                        {push_title}
+                    <button type="submit" onClick={push} className="tdb__button__base tdb__button__base--green synch-action-text">
+                        <AiOutlineCloudUpload color="fff" className="title-remote-action-icon"/> <span className="title-remote-action">{push_title}</span>
                     </button>
                 }
             </Col>
@@ -144,7 +144,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         remoteCols.push(
             <Col key="rc3" md={7} className="db-remote-action-display-controls">
                 {(localBranch && remoteBranch) &&
-                    <button type="submit" onClick={onSubmitUpdate} className="tdb__button__base tdb__button__base--orange">
+                    <button type="submit" onClick={onSubmitUpdate} className="tdb__button__base tdb__button__base--orange synch-action-text">
                         Submit Update
                     </button>
                 }
@@ -155,7 +155,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
         remoteCols.push(
             <Col key="rc4" md={7} className="db-remote-action-display-controls">
                 {(localBranch && remoteBranch) &&
-                    <button type="submit" className="tdb__button__base tdb__button__base--gray">
+                    <button type="submit" className="tdb__button__base tdb__button__base--gray synch-action-text">
                         Push not permitted
                     </button>
                 }
@@ -169,7 +169,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
                     return {label: item.branch, value: item.branch}
                 })
                 remoteCols.push(
-                    <Col key="rc5" md={4} className="db-remote-action-display-controls">
+                    <Col key="rc5" md={4} className="db-remote-action-display-controls ">
                         <Select
                             placeholder = {remoteBranch}
                             className = "select-branch"

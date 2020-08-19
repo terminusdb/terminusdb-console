@@ -3,7 +3,7 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB } from "../../constants/images"
 import moment from 'moment';
-import {Row, Col, Badge, Container} from "reactstrap"
+import {Row, Col, Badge, Container, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
     SHARE_ICON, PUSH_ICON, PULL_ICON, CLONE_ICON, ALL_GOOD_ICON, NO_CAN_DO_ICON, CLONED_ICON } from "../../constants/faicons"
@@ -186,7 +186,7 @@ export const RemoteCredits = ({meta, user}) => {
     }
     return (<>
         <div className="remote-info-align">
-            <AiOutlineInfoCircle className={"database-remote-icon"} color={"#856404"} title={""}/>
+            <AiOutlineInfoCircle className={"database-remote-icon"} color={"#856404"}/>
             <span className="remote-info-label">Remote Info</span>
         </div>
         <div className="database-remote-info-row">
@@ -354,9 +354,14 @@ export const DBControlPanel = ({meta, user}) => {
 
 export const DBControls = ({meta, user, repo, onRefresh, onDelete}) => {
 
+    const [modal, setModal] = useState(false);
+
+    const toggle = () => setModal(!modal);
+
     function myDelete(){
-        meta.action = 'delete'
-        if(onAction) onAction(meta)
+        // /meta.action = 'delete'
+        //alert('delete-local-database')
+        //if(onAction) onAction(meta)
     }
 
     function myClone(){
@@ -368,7 +373,20 @@ export const DBControls = ({meta, user, repo, onRefresh, onDelete}) => {
             <Row className='major-database-controls'>
                 <span>
                     <span className='refresh-control'><CloneControl meta={meta} user={user} onClick={myClone}/></span>
-                    <span className='delete-control'><DeleteControl meta={meta} user={user} onClick={myDelete}/></span>
+                    <span className='delete-control' onClick={toggle}>
+                        <DeleteControl meta={meta} user={user}/>
+                        <Modal isOpen={modal} toggle={toggle}>
+                          <ModalBody className="delete-modal-body">
+                                <Row>
+                                    <RiDeleteBin5Line color="#721c24" className="delete-modal-icon"/>
+                                    <span className="delete-modal-text">This action will delete the database locally</span>
+                                </Row>
+                          </ModalBody>
+                          <ModalFooter>
+                            <button className="tdb__button__base tdb__button__base--bred"  onClick={myDelete()}>Delete</button>{' '}
+                          </ModalFooter>
+                        </Modal>
+                    </span>
                 </span>
             </Row>
     )

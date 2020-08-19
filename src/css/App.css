@@ -3126,7 +3126,7 @@ h4.prefix-section-header {
 }
 
 .remote-comparison-action {
-    color: #00C08B;
+    color: #0055bb;
     padding: 6px 8px;
     border-radius: 5px;
 }
@@ -3134,21 +3134,34 @@ h4.prefix-section-header {
 .remote-comparison-action:hover {
     color: white;
     cursor: pointer;
-    background-color: #00C08B;
+    background-color: #0055bb;
     padding: 6px 8px;
 }
 
 .remote-difference {
-    margin-top: 1em;
+    margin: 20px;
 }
 
 .branch-comparison-col {
     font-weight: 500;
 }
 
+.branch-comparison-name {
+    font-weight: bold;
+    color: #002856;
+}
+
 .branch-update-action {
     font-size: 2em;
     font-weight: 800;
+}
+
+.title-remote-action {
+    margin-left: 10px;
+}
+
+.title-remote-action-icon {
+    font-size: 20px;
 }
 
 .remote-comparison-headers {
@@ -3185,7 +3198,8 @@ h4.prefix-section-header {
 }
 .db-remote-action-display-controls{
     display: inline-flex;
-    padding: 20px;
+    padding: 20px 0px 20px 0px;
+    width: 100%;
 }
 
 .db-controls {
@@ -3200,7 +3214,11 @@ h4.prefix-section-header {
     /* margin-right: 10px; */
 }
 
-.remote-info {
+.remote-summary-action{
+    float:right;
+}
+
+.synch-info, .remote-info {
     background-color: #fff;
     border: 1px solid #856404;
     border-radius: 6px;
@@ -3217,7 +3235,7 @@ h4.prefix-section-header {
     width: -moz-fit-content;
 }
 
-.remote-info-label {
+.sync-info-label, .remote-info-label {
     font-size: 15px;
     color: #856404;
 }
@@ -3274,4 +3292,38 @@ h4.prefix-section-header {
 
 .intro_text {
     color: #787878;
+}
+
+.synch-action-text {
+    padding: 12px !important;
+}
+
+.repo_title {
+    color: #0055bb;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.delete-modal-body {
+    text-align: center;
+}
+
+.delete-modal-icon {
+    font-size: 80px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.delete-modal-text {
+    font-size: 17px;
+    color: #721c24;
+    margin-top: 80px;
+    margin-left: 10px;
+}
+
+.warning-modal-text {
+    font-size: 17px;
+    color: #856404;
+    margin-top: 80px;
+    margin-left: 10px;
 }
