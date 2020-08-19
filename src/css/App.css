@@ -2680,11 +2680,20 @@ h4.prefix-section-header {
     display: inline-block;
 }
 
+.db-home-listing-image {
+    height: 120px;
+    text-align: center;
+    margin: 8px auto;
+    border-radius: 6px;
+}
+
 .database-listing-image {
     height: 120px;
     text-align: center;
     margin: 8px auto;
     border-radius: 6px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .database-listing-icon{
@@ -3171,6 +3180,7 @@ h4.prefix-section-header {
     font-size: 14px;
     background-color: #fff;
     width: fit-content;
+    width: -moz-fit-content;
     padding: 0px 10px 0px 10px;
     font-weight: 600;
 }
@@ -3183,9 +3193,12 @@ h4.prefix-section-header {
     background-color: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    min-width: 214px;
+    min-width: 211px;
     width: 100%;
-    margin-left: -20px;
+    /* margin: -15px -8px 0px -20px; */
+    /* margin-left: -20px; */
+    margin-top: -15px;
+    /* margin-right: 10px;*/
 }
 
 .remote-info {
@@ -3200,6 +3213,7 @@ h4.prefix-section-header {
     padding: 0px 10px 0px 10px;
     background-color: #fff;
     width: fit-content;
+    width: -moz-fit-content;
 }
 
 .remote-info-label {
@@ -3247,4 +3261,5 @@ h4.prefix-section-header {
     padding: 0px 20px 0px 20px;
     background-color: #fff;
     width: fit-content;
+    width: -moz-fit-content;
 }
