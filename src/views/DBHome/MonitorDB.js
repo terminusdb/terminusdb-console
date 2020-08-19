@@ -7,6 +7,7 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {CommitLog} from "./CommitLog"
 import {ScopedDetails} from "./ScopedDetails"
+import { GiPlainCircle } from 'react-icons/gi';
 
 export const MonitorDB = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -16,7 +17,7 @@ export const MonitorDB = (props) => {
     const [latest, setLatest] = useState()
     let dbmeta = woqlClient.get_database() || {}
     const [assetRecord, setAssetRecord] = useState(dbmeta)
-    
+
     let WOQL = TerminusClient.WOQL
 
     useEffect(() => {
@@ -42,17 +43,17 @@ export const MonitorDB = (props) => {
 
 
     if(!branches) return null
-    return ( 
+    return (
         <div>
-            <Row>
-                <DBFullCard meta={assetRecord} user={woqlClient.user()}/>               
+            <Row key="rr">
+                <DBFullCard meta={assetRecord} user={woqlClient.user()}/>
             </Row>
-            <Row>
-                <ScopedDetails />               
+            <Row key="rs">
+                <ScopedDetails />
             </Row>
-            <Row>
-                <CommitLog />               
-            </Row>            
+            <Row key="rd">
+                <CommitLog />
+            </Row>
         </div>
     )
 }

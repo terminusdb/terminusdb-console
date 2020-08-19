@@ -1507,6 +1507,18 @@ pre {
   width: 100%
 }
 
+.table th {
+    color: #00C08B !important;
+    border: 0 !important
+}
+
+.sub-headings {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 20px 0px 0px 0px;
+}
+
+
 .table-hover.table td{
   word-break: break-word;
 }
@@ -2656,11 +2668,11 @@ h4.prefix-section-header {
 .database-summary-listing {
     margin-top: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    /*border-bottom: 1px solid #ddd;*/
 }
 
 .database-left-column {
-    width: 180px
+    width: 280px
 }
 
 .database-control-panel {
@@ -2671,6 +2683,7 @@ h4.prefix-section-header {
     height: 120px;
     text-align: center;
     margin: 8px auto;
+    border-radius: 6px;
 }
 
 .database-listing-icon{
@@ -2710,12 +2723,16 @@ h4.prefix-section-header {
 .database-main-content {
 }
 
-.database-listing-title-row {;
-    margin: 10px 0px 0px 0px;
+.database-listing-title-row {
+    margin: 0;
+}
+.database-listing-credits-row {
+    margin: 0px 0px 0px -25px;
 }
 
 .database-listing-title {
     font-size: 40px;
+    margin-left: 10px;
 }
 .database-listing-id {
     font-size: 10px;
@@ -2729,12 +2746,19 @@ h4.prefix-section-header {
 }
 
 .database-credits {
+    margin-top: 30px;
 }
+
+.database-remote-credits {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
 .database-listing-description-row {
     margin: 20px 10px 0px 15px;
     font-size: 15px;
     font-weight: 400;
-    color: #586069;
+    color: #787878;
 }
 
 .database-main-action-message, .action-divider {
@@ -2762,7 +2786,9 @@ h4.prefix-section-header {
     border-color: #ffeeba;
 }
 
+
 .database-listing-description {
+    /*margin: 0px 0px 0px -15px;*/
 }
 .database-production-credits {
     width: 120px;
@@ -2782,6 +2808,11 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.database-listing-url {
+    color: #787878;
+    margin: 5px 15px 10px 15px;
+}
+
 .database-secondary-option {
     height: 30px;
     font-size: 12px;
@@ -2796,12 +2827,57 @@ h4.prefix-section-header {
     margin: auto;
 }
 
+.credit-spacing {
+    /*margin: 10px 0px 0px -15px !important; */
+}
 .delete-action{
     color: #721c24;
-    border: 1px solid #721c24;
-    background-color: #f8d7da;
+    /*border: 1px solid #721c24;
+    background-color: #f8d7da;*/
+    border-radius: 2em;
+    padding-left: 1px;
+    font-size: 14px;
+    /*vertical-align: middle;*/
+    margin: 0px 0px 0px 2px;
+}
+
+
+.refresh-action {
+    color: #155724;
+    border-radius: 2em;
+    /*padding: 0 10px;*/
+    font-size: 14px;
+    /*vertical-align: middle;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    border: 1px solid #155724; */
+    margin: 0px 0px 0px 2px;
+    padding-left: 5px;
+}
+
+.fetch-action {
+    color: #004085;
     border-radius: 2em;
     padding: 0 10px;
+    font-size: 14px;
+    /*vertical-align: middle;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    border: 1px solid #155724; */
+    margin: 0px 0px 0px 2px;
+}
+
+.context-style {
+    margin-top: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.update-list{
+    width: 100%;
+}
+
+.delete-action:hover, .refresh-action:hover, .fetch-action:hover {
+    cursor: pointer
 }
 
 .fork-action{
@@ -2812,6 +2888,7 @@ h4.prefix-section-header {
     margin: auto;
     padding: 0 10px;
 }
+
 
 .db-main-action {
     margin:auto;
@@ -2934,7 +3011,7 @@ h4.prefix-section-header {
 }
 
 .database-context-row {
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -3029,4 +3106,144 @@ h4.prefix-section-header {
 
 .select-branch {
     margin-left: 0;
+}
+
+.remote-synch-actions {
+    margin-top: 40px
+}
+
+.remote-comparison {
+    margin-top: 30px;
+}
+
+.remote-comparison-action {
+    color: #00C08B;
+    padding: 6px 8px;
+    border-radius: 5px;
+}
+
+.remote-comparison-action:hover {
+    color: white;
+    cursor: pointer;
+    background-color: #00C08B;
+    padding: 6px 8px;
+}
+
+.remote-difference {
+    margin-top: 1em;
+}
+
+.branch-comparison-col {
+    font-weight: 500;
+}
+
+.branch-update-action {
+    font-size: 2em;
+    font-weight: 800;
+}
+
+.remote-comparison-headers {
+    color: #00C08B !important;
+    font-weight: 600;
+}
+
+.remote-comparison-headers-row {
+    padding: 0.75rem;
+    vertical-align: top;
+}
+
+.remote-comparison-spacing {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.db-remote-action-box {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin: 50px;
+}
+
+.db-remote-action-label {
+    margin: -10px 10px 0px 0px;
+    font-size: 14px;
+    background-color: #fff;
+    width: fit-content;
+    padding: 0px 10px 0px 10px;
+    font-weight: 600;
+}
+.db-remote-action-display-controls{
+    display: inline-flex;
+    padding: 20px;
+}
+
+.db-controls {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    min-width: 214px;
+    width: 100%;
+    margin-left: -20px;
+}
+
+.remote-info {
+    background-color: #fff;
+    border: 1px solid #856404;
+    border-radius: 6px;
+    display: block;
+}
+
+.remote-info-align {
+    margin: -12px 0px 0px 20px;
+    padding: 0px 10px 0px 10px;
+    background-color: #fff;
+    width: fit-content;
+}
+
+.remote-info-label {
+    font-size: 15px;
+    color: #856404;
+}
+
+.database-remote-info-row {
+    padding: 10px 0px 10px 10px;
+}
+
+.database-remote-icon {
+    margin: -3px 6px 0px 0px;
+    vertical-align: middle;
+    color: #856404;
+    font-size: 20px;
+}
+
+.db_info_branch_icon {
+    font-size: 20px;
+    margin: 0px 5px 0px 5px;
+}
+
+.db_info_branch_label {
+    margin-left: 5px;
+    color: #00C08B;
+    font-weight: 600;
+}
+
+.db_info_branch_text {
+    color: #787878;
+}
+
+.branch-info{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: block;
+    margin-bottom: 30px;
+}
+
+.db-branch-info-align {
+    margin-top: -12px;
+    margin-left: 20px;
+    padding: 0px 20px 0px 20px;
+    background-color: #fff;
+    width: fit-content;
 }

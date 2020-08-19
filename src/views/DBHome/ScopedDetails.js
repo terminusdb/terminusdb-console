@@ -7,7 +7,7 @@ import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 import {LatestUpdates} from '../Tables/LatestUpdates'
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit,
+    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit, AiOutlinePushpin,
     AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineBuild,
     AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { parseTwoDigitYear } from 'moment'
@@ -17,7 +17,7 @@ export const ScopedDetails = () => {
     const {woqlClient} = WOQLClientObj()
     const {branch, branches, ref, graphs, consoleTime} = DBContextObj()
     const [latest, setLatest] = useState()
-    
+
 
     function load_context(b, r){
         let WOQL = TerminusClient.WOQL
@@ -27,7 +27,7 @@ export const ScopedDetails = () => {
             commit_id = r
         }
         let [commit_iri, cpath, tail_iri] = WOQL.vars("ciri", "cpath", "tiri")
-        
+
 
         let q = WOQL.using("_commits").triple(commit_iri, "ref:commit_id", commit_id)
             .path(commit_iri, "ref:commit_parent+", tail_iri, cpath)
@@ -86,15 +86,19 @@ export const ScopedDetails = () => {
 
     function getContextTitle(){
         if(ref){
-            return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref 
+            return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref
         }
         if(branches && Object.keys(branches).length > 1) {
-            return "Viewing Branch " + branch
+            return <>
+                    <AiOutlinePushpin color={"#787878"} className="db_info_branch_icon"/>
+                    <span className="db_info_branch_text">Viewing Branch</span>
+                    <span className="db_info_branch_label">{branch}</span>
+                </>
         }
         else return "Database Contents"
     }
 
-    //number of commits 
+    //number of commits
     //size of graph(s)
     //number / types of graphs
     //classes / properties / size
@@ -108,14 +112,13 @@ export const ScopedDetails = () => {
 
     if(!latest) return null
     return (
-        <Col>
-           
-                {getContextTitle(latest)}
+        <Row className="context-style sub-headings branch-info">
+            <div className="db-branch-info-align ">{getContextTitle(latest)}</div>
             <div className="database-context-row detail-credits">
                 <ContextCredits meta={latest[0]} graphs={graphs} branches={branches}/>
             </div>
-                      
-        </Col>
+
+        </Row>
     )
 }
 
@@ -141,7 +144,7 @@ export const DBCommits = ({meta}) => {
                 <AiFillBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
-         )  
+         )
     }
     return null
 }
@@ -155,7 +158,7 @@ export const DBSize = ({meta}) => {
                 <AiFillBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
-         )  
+         )
     }
     return null
 }
@@ -168,7 +171,7 @@ export const DBTriples = ({meta, user}) => {
             <AiOutlineBuild className="db_info_icon_spacing"/>
             <span className="db_info">{ct}</span>
         </span>
-        )  
+        )
     }
     return null
 }
@@ -185,7 +188,7 @@ function formatBytes(bytes, decimals = 2) {
 
 export const DBDocs= ({meta}) => {
     if(meta['Documents']){
-        let ct = meta['Documents']['@value'] 
+        let ct = meta['Documents']['@value']
         if(ct == 1) ct += " document"
         else ct += " documents"
         return (
@@ -193,16 +196,16 @@ export const DBDocs= ({meta}) => {
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
-        )  
+        )
     }
     return null
 }
 
 export const DBGraphs = ({meta, graphs}) => {
     let str
-    
+
     if(graphs) {
-        let inf = 0; 
+        let inf = 0;
         let sch = 0;
         let ins = 0;
         str = Object.keys(graphs).length + " graphs: "
@@ -235,7 +238,7 @@ export const DBGraphs = ({meta, graphs}) => {
 export const DBSchema = ({meta}) => {
     let parts = []
     if(meta['Classes']){
-        let ct = meta['Classes']['@value'] 
+        let ct = meta['Classes']['@value']
         if(ct == 1) ct += " class"
         else ct += " classes"
         parts.push(
@@ -243,10 +246,10 @@ export const DBSchema = ({meta}) => {
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
-        )  
+        )
     }
     if(meta['Properties']){
-        let ct = meta['Properties']['@value'] 
+        let ct = meta['Properties']['@value']
         if(ct == 1) ct += " property"
         else ct += " properties"
         parts.push(
@@ -254,7 +257,7 @@ export const DBSchema = ({meta}) => {
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
-        )  
+        )
     }
     return parts
 }
@@ -271,8 +274,7 @@ export const DBLastCommit = ({meta, branches}) => {
                 <span className="db_info">{ct}</span>
             </span>
         )
-    
+
     }
     else return null
 }
-
