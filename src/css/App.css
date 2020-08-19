@@ -2668,6 +2668,7 @@ h4.prefix-section-header {
 .database-summary-listing {
     margin-top: 20px;
     padding-bottom: 20px;
+    width: 101%;
     /*border-bottom: 1px solid #ddd;*/
 }
 
@@ -2746,7 +2747,7 @@ h4.prefix-section-header {
 }
 
 .database-credits {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 .database-remote-credits {
@@ -2755,7 +2756,7 @@ h4.prefix-section-header {
 }
 
 .database-listing-description-row {
-    margin: 20px 10px 0px 15px;
+    margin: 10px 10px 0px 15px;
     font-size: 15px;
     font-weight: 400;
     color: #787878;
