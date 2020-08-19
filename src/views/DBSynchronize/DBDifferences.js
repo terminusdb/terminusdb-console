@@ -293,10 +293,14 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
     }
 
     function doPush(){
+        repo.local_status = local_status
+        repo.remote_status = remote_status
         if(onPush) return onPush(branch, branch, repo)
     }
 
     function doPull(){
+        repo.local_status = local_status
+        repo.remote_status = remote_status
         if(onPull) return onPull(branch, branch, repo)
     }
 
@@ -316,7 +320,7 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
             <BranchStatus status={local_status} type="local" branch={branch} />
         </Col>
         <Col md={1}>
-            <strong>{branch}</strong>
+            <span className="branch-comparison-name">{branch}</span>
         </Col>
         <Col md={1}>
             <BranchStatus status={remote_status} type="remote" branch={branch} />

@@ -24,6 +24,9 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     }
 
     async function onPull(local_branch, remote_branch, remote){
+        if(remote && remote.local_status && remote.local_status == "missing"){
+            let newb = await woqlClient.branch(local_branch, true)
+        }
         return Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
     }
 
