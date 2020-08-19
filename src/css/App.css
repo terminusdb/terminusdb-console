@@ -3117,6 +3117,32 @@ h4.prefix-section-header {
     margin-top: 30px;
 }
 
+.remote-comparison-action {
+    color: #00C08B;
+    padding: 6px 8px;
+    border-radius: 5px;
+}
+
+.remote-comparison-action:hover {
+    color: white;
+    cursor: pointer;
+    background-color: #00C08B;
+    padding: 6px 8px;
+}
+
+.remote-difference {
+    margin-top: 1em;
+}
+
+.branch-comparison-col {
+    font-weight: 500;
+}
+
+.branch-update-action {
+    font-size: 2em;
+    font-weight: 800;
+}
+
 .remote-comparison-headers {
     color: #00C08B !important;
     font-weight: 600;

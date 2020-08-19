@@ -166,6 +166,13 @@ export const addRemote = async (remote_name, remote_url, client, getTokenSilentl
     return nClient.fetch(remote_name)
 }
 
+export const removeRemote = async (remote_name, client, getTokenSilently) => { 
+    let WOQL = TerminusClient.WOQL
+    let using = client.organization() + "/" + client.db() + "/_meta"
+    let q = WOQL.lib().delete_remote(using, remote_name)       
+    return client.query(q, `Deleting remote ${remote_name}`)
+}
+
 
 export const Fetch = async (remote_name, client, getTokenSilently) => {  
     const jwtoken = await getTokenSilently()

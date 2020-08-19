@@ -2,42 +2,114 @@
  * Controller application for branch creation form
  */
 import React, {useState, useEffect} from 'react'
-import {useAuth0} from '../../react-auth0-spa'
-import {
-    PUSH_REMOTE_FORM,
-    SYNCHRONISE_FORM,
-    PUSH_LOCAL_FORM,
-    PULL_LOCAL_FORM,
-    PULL_REMOTE_FORM,
-    DEFAULT_LOCAL_PULL_COMMIT,
-    DEFAULT_LOCAL_PUSH_COMMIT,
-    DEFAULT_REMOTE_PULL_COMMIT,
-    DEFAULT_REMOTE_PUSH_COMMIT,
-} from './constants.dbcollaborate'
-import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
-import {WOQLClientObj} from '../../init/woql-client-instance'
-import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import Loading from '../../components/Reports/Loading'
-import {UnderConstruction} from '../../components/Reports/UnderConstruction'
-import {PageView} from '../Templates/PageView'
-import {DBRemotes, DBRemoteSummary} from "./Remote"
-import {RefreshDatabaseRecord, isHubURL, Fetch, Push, Pull, addRemote} from "../../components/Query/CollaborateAPI"
-import {AddRemote} from "./AddRemote"
+import {Row, Col, Badge, Container} from "reactstrap"
+import Loading from "../../components/Reports/Loading"
+import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
+import {SynchronizeActions} from "./SynchronizeActions"
+import {RemoteComparison} from "./DBDifferences"
+import {RefreshDatabaseRecord, Fetch, Push, Pull, addRemote, isLocalURL, isHubURL} from "../../components/Query/CollaborateAPI"
+import {DBRemoteCard} from "./DBRemoteCard"
+/*
+    Main controller for a particular remote
+    contains user reporting and main view logic
+*/
 
-export const Synchronize = () => {
-    const {repos, branches, updateBranches, branch} = DBContextObj()
-    if (!repos) return null
-
-    const { getTokenSilently, loginWithRedirect } = useAuth0();
-
+export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin, woqlClient, getTokenSilently}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
-    const [operation, setOperation] = useState()
-    const [isRemote, setIsRemote] = useState()
-    const {woqlClient, bffClient, refreshDBRecord } = WOQLClientObj()
 
-    let update_start = Date.now()
+    async function onPush(local_branch, remote_branch, remote){
+        return Push(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
+    }
+
+    async function onPull(local_branch, remote_branch, remote){
+        return Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
+    }
+
+    async function onFetch(remote){
+        return Fetch(remote.title, woqlClient, getTokenSilently)
+    }
+
+    
+    let remote_branches = (meta.remote_record && meta.remote_record.branches ? meta.remote_record.branches : [])
+
+    let show_actions = (repo.type == "local" || (repo.type == "hub" && user.logged_in))
+    let show_branches = (remote_branches.length > 0)
+
+    let submit = false
+
+    let doPush = onPush
+    if(!meta.remote_record){
+        doPush = false
+    }
+    else {
+        if(repo.type == "hub"){
+            if(!meta.remote_record || !_allowed_push(meta.remote_record.roles)){
+                doPush = false
+            }
+            if(user.logged_in){
+                submit = function(){
+                    alert("testing")
+                }
+            }
+        }
+        else if(repo.type == "remote"){
+            doPush = false
+        }
+    }
+
+    function _allowed_push(roles){
+        if(roles.indexOf('create') != -1) return true
+        if(roles.indexOf('write') != -1) return true
+        return false
+    }
+
+    return (
+        <Col>
+            <Row key='xyz3' className="mydbcard">
+                <DBRemoteCard 
+                    onFetch={onFetch}
+                    user={user}
+                    onRefresh={onRefresh}
+                    onDelete={onDelete}
+                    local={meta}
+                    remote={meta.remote_record}
+                    repo={repo}
+                />        
+            </Row>
+            {report &&
+                <TerminusDBSpeaks report={report} />
+            }
+            {show_actions && 
+                <Row key='r79' className='remote-synch-actions'>
+                    <SynchronizeActions 
+                        repo={repo} 
+                        remote_branches={remote_branches} 
+                        branches={meta.branches} 
+                        branch={branch} 
+                        onPull={onPull} 
+                        onPush={doPush}
+                        onSubmitUpdate={submit}
+                    />
+                </Row>
+            } 
+            {show_branches && 
+                <Row key='r78' className='remote-comparison'>
+                    <RemoteComparison 
+                        repo={repo} 
+                        local={meta}
+                        remote={meta.remote_record}
+                        onPush={doPush} 
+                        onSubmitUpdate={submit} 
+                        onPull={onPull}
+                    />
+                </Row>
+            }
+        </Col>
+    )
+}
+
 
     /*
     useEffect(() => {
@@ -218,101 +290,3 @@ export const Synchronize = () => {
             })
     }
     */
-
-    if (report && report.status == TERMINUS_SUCCESS) {
-        return <TerminusDBSpeaks report={report} />
-    }
-
-    function showAddRemote(){
-        setOperation("create")
-    }
-
-    function showShareDB(){
-        setOperation("share")
-    }
-
-    function unsetOperation(){
-        setOperation(false)
-    }
-
-
-    async function doAddRemote(remote_name, remote_url){
-        let res = await addRemote(remote_name, remote_url, woqlClient, getTokenSilently)  
-    }
-
-    async function doPull(local_branch, remote_branch, remote){
-        let res = await Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
-    }
-
-    async function doPush(local_branch, remote_branch, remote){
-        let res = await Push(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
-    }
-
-    async function doFetch(remote){
-        let res = await Fetch(remote.title, woqlClient, getTokenSilently)
-        //alert("fetching remote " + remote.title)
-    }
-
-    function doDelete(remote){
-        alert("deleting remote " + remote.title)
-    }
-
-    async function refresh(remote){
-        //if(isHubURL(remote.url)){
-            let bits = remote.url.split("/")
-            let meta = {id: bits[bits.length-1], organization: bits[bits.length-2]}
-            RefreshDatabaseRecord(meta, bffClient, getTokenSilently).then((data) => {
-                console.log("got back data", data)
-                alert("got it")
-            })
-            .catch((e) => console.log("got error", e))
-        //}
-        //else {
-        //    console.log("Cant refresh non hub remotes")
-        //}
-    }
-
-    let meta = woqlClient.get_database()
-
-
-    if (!repos || !branches) {
-        return <Loading type={TERMINUS_COMPONENT} />
-    }
-    let user = woqlClient.user()
-    return (
-        <PageView>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
-            {!loading && !operation && <>                
-                <DBRemoteSummary 
-                    repos={repos} 
-                    woqlClient={woqlClient} 
-                    onCreate={showAddRemote} 
-                    onShare={showShareDB} 
-                    onLogin={loginWithRedirect} 
-                    key="dbsum" 
-                />
-                <DBRemotes 
-                    woqlClient={woqlClient}
-                    meta={meta}
-                    user={user}
-                    repos={repos} 
-                    branch={branch} 
-                    onPush={doPush}
-                    onPull={doPull}
-                    onFetch={doFetch}
-                    onDelete={doDelete}
-                    onRefresh={refresh}
-                    key="dbsumy" />
-            </>
-            }
-            {(operation && operation == "share") && 
-                <span>share</span>
-            }
-            {(operation && operation == "create") && 
-               <AddRemote onCreate={doAddRemote} onCancel={unsetOperation} repos={repos} />
-            }
-        </PageView>
-    )
-}
-
-

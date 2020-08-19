@@ -34,6 +34,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
+    const [reposReload, setReposReload] = useState(0)
 
     const [branchesReload, setBranchesReload] = useState(0)
 
@@ -113,20 +114,22 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     //load Repo
     useEffect(() => {
-        setLoading(loading + 1)
-        let cresource = woqlClient.resource('meta')
-        WOQL.lib()
-            .repos(false, false, cresource)
-            .execute(woqlClient)
-            .then((res) => {
-                let binds = res && res.bindings ? ReposFromBindings(res.bindings) : []
-                setRepos(binds)
-            })
-            .catch((e) => {
-                setReport({error: e, status: TERMINUS_ERROR})
-            })
-            .finally(() => setLoading(loading - 1))
-    }, [branches])
+        if(branches){
+            setLoading(loading + 1)
+            let cresource = woqlClient.resource('meta')
+            WOQL.lib()
+                .repos(false, false, cresource)
+                .execute(woqlClient)
+                .then((res) => {
+                    let binds = res && res.bindings ? ReposFromBindings(res.bindings) : []
+                    setRepos(binds)
+                })
+                .catch((e) => {
+                    setReport({error: e, status: TERMINUS_ERROR})
+                })
+                .finally(() => setLoading(loading - 1))
+        }
+    }, [branches, reposReload])
 
 
 
@@ -156,6 +159,10 @@ export const DBContextProvider = ({children, woqlClient}) => {
         setBranchesReload(branchesReload + 1)
     }
 
+    function updateRepos(){
+        setReposReload(reposReload + 1)
+    }
+
     function dbStructureFromBindings(bindings) {
         let info = {}
         if (bindings && bindings[0] && bindings[0]['Time']) {
@@ -176,25 +183,22 @@ export const DBContextProvider = ({children, woqlClient}) => {
         let repos = {}
         for (var i = 0; i < bindings.length; i++) {
             let b = bindings[i]
-            if (b['Remote URL'] && b['Remote URL']['@value']) {
-                if (isLocalClone(b['Remote URL']['@value'])) {
-                    repos.local_clone = {
+            if(b['Repository Name'] && b['Repository Name']['@value']){
+                let title = b['Repository Name']['@value']
+                if(repos[title]){
+                    title += i
+                }
+                if (b['Remote URL'] && b['Remote URL']['@value']) {                    
+                    repos[title] = { 
                         url: b['Remote URL']['@value'],
-                        title: b['Repository Name']['@value'],
-                        type: 'Local Clone',
-                    }
-                } else {
-                    repos.remote = {
-                        url: b['Remote URL']['@value'],
-                        title: b['Repository Name']['@value'],
-                        type: 'Remote',
+                        title: title,
                     }
                 }
-            } else {
-                repos.local = {
-                    type: 'Local',
-                    title: b['Repository Name']['@value'],
-                }
+                else {
+                    repos.local = {
+                        title: 'local'
+                    }
+                }    
             }
         }
         return repos
@@ -245,12 +249,14 @@ export const DBContextProvider = ({children, woqlClient}) => {
         return gs
     }
 
+
     return (
         <DBContext.Provider
             value={{
                 setConsoleTime,
                 setHead,
                 updateBranches,
+                updateRepos,
                 consoleTime,
                 DBInfo,
                 branches,
@@ -258,7 +264,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 report,
                 branch,
                 ref,
-              
                 repos,
                 prefixes,
                 loading,

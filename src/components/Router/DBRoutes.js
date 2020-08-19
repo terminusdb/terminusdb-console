@@ -11,7 +11,7 @@ import {
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
-import {Synchronize} from '../../views/DBHome/Synchronize'
+import {Synchronize} from '../../views/DBSynchronize/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
