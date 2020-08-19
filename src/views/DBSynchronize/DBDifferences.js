@@ -20,6 +20,14 @@ function _containsBranch(bid, barr){
 export const DescribeDifferences = ({a, b}) => {
     let comps = []
     let bdesc = {}
+    if(!a.branches){
+        comps.push(<DBUnsynchCredits key="dbs5" text="local database is uninitialized" />)
+        return comps
+    }
+    if(!b.branches){
+        comps.push(<DBUnsynchCredits key="dbd5" text="remote database is uninitialized" />)
+        return comps
+    }
     for(var i = 0; i<a.branches.length; i++){
         let myb = a.branches[i]
         let index = _containsBranch(myb.branch, b.branches)

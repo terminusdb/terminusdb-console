@@ -126,13 +126,15 @@ export const ScopedDetails = () => {
 
 export const ContextCredits = ({meta, graphs, branches}) => {
     let res = []
-    res.push(<DBSize key='dbt' meta={meta} />)
-    res.push(<DBTriples key='dxt' meta={meta} />)
-    res.push(<DBCommits key='cmts' meta={meta} />)
-    res.push(<DBGraphs  key='abc' meta={meta} graphs={graphs} />)
-    res.push(<DBSchema key='ab' meta={meta} />)
-    res.push(<DBDocs key='dbc' meta={meta} />)
-    res.push(<DBLastCommit key='dbv' meta={meta} branches={branches} />)
+    if(meta){
+        res.push(<DBSize key='dbt' meta={meta} />)
+        res.push(<DBTriples key='dxt' meta={meta} />)
+        res.push(<DBCommits key='cmts' meta={meta} />)
+        res.push(<DBGraphs  key='abc' meta={meta} graphs={graphs} />)
+        res.push(<DBSchema key='ab' meta={meta} />)
+        res.push(<DBDocs key='dbc' meta={meta} />)
+        res.push(<DBLastCommit key='dbv' meta={meta} branches={branches} />)
+    }
     return res
 }
 
@@ -187,7 +189,7 @@ function formatBytes(bytes, decimals = 2) {
 }
 
 export const DBDocs= ({meta}) => {
-    if(meta['Documents']){
+    if(meta && meta['Documents']){
         let ct = meta['Documents']['@value']
         if(ct == 1) ct += " document"
         else ct += " documents"
@@ -242,7 +244,7 @@ export const DBSchema = ({meta}) => {
         if(ct == 1) ct += " class"
         else ct += " classes"
         parts.push(
-            <span>
+            <span key={"aa_" + parts.length}>
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
@@ -253,7 +255,7 @@ export const DBSchema = ({meta}) => {
         if(ct == 1) ct += " property"
         else ct += " properties"
         parts.push(
-            <span>
+            <span key={"aab" + parts.length}>
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>

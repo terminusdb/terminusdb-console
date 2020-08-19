@@ -28,7 +28,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     }
 
     async function onFetch(remote){
-        return Fetch(remote.title, woqlClient, getTokenSilently)
+        return Fetch(remote.title, remote.url, woqlClient, getTokenSilently)
     }
 
     
