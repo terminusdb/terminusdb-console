@@ -20,6 +20,14 @@ function _containsBranch(bid, barr){
 export const DescribeDifferences = ({a, b}) => {
     let comps = []
     let bdesc = {}
+    if(!a.branches){
+        comps.push(<DBUnsynchCredits key="dbs5" text="local database is uninitialized" />)
+        return comps
+    }
+    if(!b.branches){
+        comps.push(<DBUnsynchCredits key="dbd5" text="remote database is uninitialized" />)
+        return comps
+    }
     for(var i = 0; i<a.branches.length; i++){
         let myb = a.branches[i]
         let index = _containsBranch(myb.branch, b.branches)
@@ -285,10 +293,14 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
     }
 
     function doPush(){
+        repo.local_status = local_status
+        repo.remote_status = remote_status
         if(onPush) return onPush(branch, branch, repo)
     }
 
     function doPull(){
+        repo.local_status = local_status
+        repo.remote_status = remote_status
         if(onPull) return onPull(branch, branch, repo)
     }
 
@@ -308,7 +320,7 @@ export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) 
             <BranchStatus status={local_status} type="local" branch={branch} />
         </Col>
         <Col md={1}>
-            <strong>{branch}</strong>
+            <span className="branch-comparison-name">{branch}</span>
         </Col>
         <Col md={1}>
             <BranchStatus status={remote_status} type="remote" branch={branch} />

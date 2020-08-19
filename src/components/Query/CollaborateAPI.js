@@ -155,15 +155,7 @@ export const addRemote = async (remote_name, remote_url, client, getTokenSilentl
     let using = client.organization() + "/" + client.db() + "/_meta"
     let q = WOQL.lib().add_remote(using, remote_url, remote_name)       
     let res = await client.query(q, `Adding remote ${remote_name} at ${remote_url}`)
-    let nClient = client.copy()
-    if(_is_local_server(nClient, remote_url)){
-        nClient.remote_auth( nClient.local_auth() )
-    }
-    else {
-        const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
-    }
-    return nClient.fetch(remote_name)
+    return Fetch(remote_name, remote_url, client, getTokenSilently)
 }
 
 export const removeRemote = async (remote_name, client, getTokenSilently) => { 
@@ -173,12 +165,16 @@ export const removeRemote = async (remote_name, client, getTokenSilently) => {
     return client.query(q, `Deleting remote ${remote_name}`)
 }
 
-
-export const Fetch = async (remote_name, client, getTokenSilently) => {  
-    const jwtoken = await getTokenSilently()
-    let creds = {type: "jwt", key: jwtoken}
-    client.remote_auth(creds)
-    return client.fetch(remote_name)
+export const Fetch = async (remote_name, remote_url, client, getTokenSilently) => {  
+    let nClient = client.copy()
+    if(_is_local_server(nClient, remote_url)){
+        nClient.remote_auth( nClient.local_auth() )
+    }
+    else {
+        const jwtoken = await getTokenSilently()
+        nClient.remote_auth({type: "jwt", key: jwtoken})
+    }
+    return nClient.fetch(remote_name)
 }
 
 

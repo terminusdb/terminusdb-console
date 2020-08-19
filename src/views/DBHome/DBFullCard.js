@@ -171,14 +171,14 @@ export const RemoteCredits = ({meta, user}) => {
     let res = []
     res.push(<DBCloneStatus  key='cl' meta={meta} user={user} />)
     if(meta && meta.remote_record){
-        res.push(<DBRemoteTitle  key='cl' meta={meta.remote_record} user={user} />)
+        res.push(<DBRemoteTitle  key='cdl' meta={meta.remote_record} user={user} />)
     }
     if(meta && meta.remote_record && meta.type != "local_clone"){
         res.push (
             <DBProductionCredits  key='ac' meta={meta.remote_record} user={user} />
         )
         res.push(
-            <DBRoleCredits key='ad' meta={meta.remote_record} user={user} />
+            <DBRoleCredits key='asd' meta={meta.remote_record} user={user} />
         )
         res.push(
             <DBLastCommit key='ad' meta={meta.remote_record} user={user} />
