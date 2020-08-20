@@ -53,8 +53,8 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
                 message: `Successfully pushed updates to ${remote.title} ${remote_branch} from local ${local_branch}`,
                 time: Date.now() - update_start
             }
-            setReport(newrep)
             remoteRefresh()
+            setReport(newrep)
         })
         .catch((e) => {
             let newrep = {
@@ -173,12 +173,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
         if(repo.type == "hub"){
             if(!myRemote|| !_allowed_push(myRemote.roles)){
                 doPush = false
-            }
-            if(user.logged_in){
-                //submit = function(){
-                //    alert("testing")
-                //}
-            }
+            }            
         }
         else if(repo.type == "remote"){
             doPush = false
