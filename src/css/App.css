@@ -2869,8 +2869,12 @@ h4.prefix-section-header {
 }
 
 .db-control {
-    margin: 25px 10px 15px -20px;
+    margin: 25px 10px 15px -10px;
     font-size: 20px;
+}
+
+.delete-modal-col-align {
+    margin-top: 40px;
 }
 
 .db-action {
@@ -3342,6 +3346,10 @@ h4.prefix-section-header {
     color: #856404;
     margin-top: 80px;
     margin-left: 10px;
+}
+
+.major-database-controls-align {
+    margin: 0px 50px 0px 50px;
 }
 
 .dbremote-full-card {

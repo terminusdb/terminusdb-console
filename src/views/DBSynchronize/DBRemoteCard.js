@@ -111,12 +111,12 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
 
     return (
         <Row className='major-database-controls'>
-            <span>
+            <span className='major-database-controls-align'>
                 {onRefresh &&
                     <span className='refresh-control' onClick={doRefresh}>
                         <RefreshControl repo={repo} />
                     </span>
-                }                
+                }
                 <DeleteControl repo={repo} onDelete={doDelete} />
             </span>
         </Row>

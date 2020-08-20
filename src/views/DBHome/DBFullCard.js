@@ -355,7 +355,7 @@ export const DBControlPanel = ({meta, user, onClone}) => {
 export const DBControls = ({meta, user, onClone}) => {
     return (
         <Row className='major-database-controls'>
-            <span>
+            <span className="major-database-controls-align">
                 <span className='refresh-control' onClick={onClone}>
                     <CloneControl meta={meta} user={user}/>
                 </span>
