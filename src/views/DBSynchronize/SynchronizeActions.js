@@ -127,7 +127,7 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
                 {onPush && 
                     <button type="submit" onClick={doPush} className="tdb__button__base tdb__button__base--green synch-action-text">
                         <AiOutlineCloudUpload style={{"fontSize": "6em"}} color="fff" className="title-remote-action-icon"/> 
-                        <span className="title-remote-action" style={{"fontSize": "3em"}}> Push </span>
+                        <span className="title-remote-action" style={{"fontSize": "2em"}}> Push </span>
                     </button>
                 }
                 {!onPush && 
@@ -250,7 +250,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
             <Row>
                 <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text">
                     <AiOutlineCloudDownload style={{"fontSize": "6em"}} color="fff" className="title-remote-action-icon"/> 
-                    <span className="title-remote-action" style={{"fontSize": "3em"}}> Pull </span>
+                    <span className="title-remote-action" style={{"fontSize": "2em"}}> Pull </span>
                 </button>
             </Row>
             {show_local_branching && 
