@@ -45,7 +45,12 @@ export const Synchronize = () => {
     let update_start = Date.now()
 
     function isHubURL(url){
-        return isLocalURL(url, remoteClient) 
+        if(remoteClient){
+            return isLocalURL(url, remoteClient)             
+        }
+        let x = "https://hub."
+        if(x == url.substring(0, x.length)) return true
+        return false
     }
 
 
