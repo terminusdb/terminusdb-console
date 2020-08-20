@@ -2677,6 +2677,10 @@ h4.prefix-section-header {
     /*border-bottom: 1px solid #ddd;*/
 }
 
+.database-listing-line {
+    border-bottom: 1px solid #ddd;
+}
+
 .database-left-img {
     padding: 5px 0px 5px 0px;
     /*width: 280px*/
@@ -2720,6 +2724,7 @@ h4.prefix-section-header {
 .major-database-controls {
     text-align: center;
     font-size: 1.6em;
+    margin: 0px 50px 0px 50px;
 }
 
 .time-control{
@@ -3238,10 +3243,21 @@ h4.prefix-section-header {
 .sync-info-label, .remote-info-label {
     font-size: 15px;
     color: #856404;
+    font-weight: 600;
+}
+
+.db-remote-action-info-label {
+    font-size: 15px;
+    color: #002856;
+    font-weight: 600;
 }
 
 .database-remote-info-row {
     padding: 10px 0px 10px 10px;
+}
+
+.db-remote-action-spacing {
+    margin: 20px 0px 20px 0px;
 }
 
 .database-remote-icon {
@@ -3332,4 +3348,10 @@ h4.prefix-section-header {
     padding-bottom: 30px;
     border-bottom: 1px solid #aaa;
     margin-bottom: 40px;
+}
+
+.db-remote-action-buttons {
+    width: 100%;
+    padding: 0px 20px 0px 20px !important;
+    margin: 0px 80px 10px 70px !important;
 }

@@ -3,29 +3,41 @@
  */
 import React, {useState, useEffect} from 'react'
 import {Row, Col, Badge, Container} from "reactstrap"
-import { AiOutlineCloudUpload, AiOutlineCloudDownload, AiOutlineBranches} from 'react-icons/ai';
+import { AiOutlineCloudUpload, AiOutlineCloudDownload, AiOutlineBranches } from 'react-icons/ai';
 import Select from "react-select";
 
-export const SynchronizeActions = ({branches, repo, remote_branches, branch, onPush, onPull}) => { 
+export const SynchronizeActions = ({branches, repo, remote_branches, branch, onPush, onPull}) => {
     return (
         <>
             <Col key="rc7" className="db-remote-action-box">
-                <PullControl 
-                    branches={branches}
-                    remote_branches={remote_branches}
-                    branch={branch}
-                    onPull={onPull}
-                    repo={repo}
-                />
+                <div className="remote-info-align">
+                    {<AiOutlineCloudDownload className={"database-remote-icon"} color={"#002856"}/>}
+                    <span className="db-remote-action-info-label">Download</span>
+                </div>
+                <div className="database-remote-info-row">
+                    <PullControl
+                        branches={branches}
+                        remote_branches={remote_branches}
+                        branch={branch}
+                        onPull={onPull}
+                        repo={repo}
+                    />
+                </div>
             </Col>
             <Col key="rc8" className="db-remote-action-box">
-                <PushControl 
-                    branches={branches}
-                    remote_branches={remote_branches}
-                    branch={branch}
-                    onPush={onPush}
-                    repo={repo}
-                />
+                <div className="remote-info-align">
+                    {<AiOutlineCloudUpload className={"database-remote-icon"} color={"#002856"}/>}
+                    <span className="db-remote-action-info-label">Upload</span>
+                </div>
+                <div className="database-remote-info-row">
+                    <PushControl
+                        branches={branches}
+                        remote_branches={remote_branches}
+                        branch={branch}
+                        onPush={onPush}
+                        repo={repo}
+                    />
+                </div>
             </Col>
         </>
     )
@@ -41,7 +53,7 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
     let show_remote_branching = (onPush ? true : false)
     if(remote_branches.length == 1 && !show_local_branching){
         show_remote_branching = false
-    } 
+    }
 
     function toggle_branch(){
         let p = !newBranch
@@ -88,82 +100,95 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
 
     return (
         <Col>
-            {show_remote_branching && 
-                <Row>
-                    To Remote Branch 
-                    {newBranch && 
-                        <input
-                            className = "local-branch-input"
-                            type="text"
-                            placeholder="Local Branch ID"
-                            value={remoteBranch}
-                            width="40"
-                            onChange={inputRemote}
-                            id= "local_branch_id"
-                        />
+            {show_remote_branching &&
+                <Row className="db-remote-action-spacing">
+                    To Remote Branch
+                    {newBranch &&
+                        <Col md={6}>
+                            <input
+                                className = "tcf-input"
+                                type="text"
+                                placeholder="Local Branch ID"
+                                value={remoteBranch}
+                                width="40"
+                                onChange={inputRemote}
+                                id= "local_branch_id"
+                            />
+                        </Col>
                     }
-                    {!newBranch && 
-                        <Select
-                            placeholder = {remoteBranch}
-                            className = "select-branch"
-                            onChange ={changeRemote}
-                            name = "merge_branch_target"
-                            id= "merge_branch_target"
-                            options = {ropts()}
-                            defaultValue= {remoteBranch}
-                        />                    
+                    {!newBranch &&
+                        <Col md={6}>
+                            <Select
+                                placeholder = {remoteBranch}
+                                className = "select-branch"
+                                onChange ={changeRemote}
+                                name = "merge_branch_target"
+                                id= "merge_branch_target"
+                                options = {ropts()}
+                                defaultValue= {remoteBranch}
+                            />
+                        </Col>
                     }
-                    <span onClick={toggle_branch}>
-                        <BranchInputToggler/>
-                    </span>   
-                </Row>        
+                    <Col md={3}>
+                        <span onClick={toggle_branch}>
+                            <BranchInputToggler/>
+                        </span>
+                    </Col>
+                </Row>
             }
-            {!show_remote_branching && 
-                <Row>
+            {!show_remote_branching &&
+                <Row className="db-remote-action-spacing">
                     To Remote Database
                 </Row>
             }
-            <Row>
-                {onPush && 
-                    <button type="submit" onClick={doPush} className="tdb__button__base tdb__button__base--green synch-action-text">
-                        <AiOutlineCloudUpload style={{"fontSize": "6em"}} color="fff" className="title-remote-action-icon"/> 
-                        <span className="title-remote-action" style={{"fontSize": "2em"}}> Push </span>
-                    </button>
-                }
-                {!onPush && 
-                    <button type="submit" className="tdb__button__base tdb__button__base--gray synch-action-text">
-                        <AiOutlineCloudUpload style={{"fontSize": "6em"}} className="title-remote-action-icon"/> 
-                        <span className="title-remote-action">Push not permitted</span>
-                    </button>                
-                }
-            </Row>            
-            {show_local_branching && 
-                <Row>From Local Branch
-                    <Select
-                        placeholder = {localBranch}
-                        className = "select-branch"
-                        onChange ={changeLocal}
-                        name = "merge_branch_target"
-                        id= "merge_branch_target"
-                        options = {bopts()}
-                        defaultValue= {localBranch}
-                    />                 
-                </Row>        
+            {show_local_branching &&
+                <Row className="db-remote-action-spacing">From Local Branch
+                    <Col md={6}>
+                        <Select
+                            placeholder = {localBranch}
+                            className = "select-branch"
+                            onChange ={changeLocal}
+                            name = "merge_branch_target"
+                            id= "merge_branch_target"
+                            options = {bopts()}
+                            defaultValue= {localBranch}
+                        />
+                    </Col>
+                </Row>
             }
-            {!show_local_branching && 
-                <Row>
+            {!show_local_branching &&
+                <Row  className="db-remote-action-spacing">
                     From Local Database
                 </Row>
             }
+            <Row>
+                {onPush &&
+                    <button type="submit" onClick={doPush} className="tdb__button__base tdb__button__base--green synch-action-text db-remote-action-buttons">
+                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
+                        <span className="title-remote-action" style={{"fontSize": "20px"}}> Push </span>
+                    </button>
+                }
+                {!onPush &&
+                    <button type="submit" className="tdb__button__base tdb__button__base--gray synch-action-text db-remote-action-buttons">
+                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} className="title-remote-action-icon"/>
+                        <span className="title-remote-action">Push not permitted</span>
+                    </button>
+                }
+            </Row>
         </Col>
     )
 }
 
 export const BranchInputToggler = () => {
-    return (<span title="Toggle Branch Selector">
-        <AiOutlineBranches className="db_info_icon_spacing"/>
+    return (
+        <span className="remote-comparison-action" title="Toggle Branch Selector">
+            New <AiOutlineBranches className='branch-update-action' />
+        </span>
+    )
+    /*return (<span title="Toggle Branch Selector">
         <span className="db_info">New</span>
-    </span>)   
+        <AiOutlineBranches className="db_info_icon_spacing"/>
+    </span>)*/
 }
 
 
@@ -177,7 +202,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
     let show_local_branching = true
     if(branches.length == 1 && !show_remote_branching){
         show_local_branching = false
-    } 
+    }
 
     function toggle_branch(){
         let p = !newBranch
@@ -228,9 +253,9 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
 
     return (
         <Col>
-            {show_remote_branching && 
+            {show_remote_branching &&
                 <Row>
-                    From Remote Branch 
+                    From Remote Branch
                     <Select
                         placeholder = {remoteBranch}
                         className = "select-branch"
@@ -240,54 +265,60 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
                         options = {ropts()}
                         defaultValue= {remoteBranch}
                     />
-                </Row>        
-            }
-            {!show_remote_branching && 
-                <Row>
-                    From Remote Database 
                 </Row>
             }
-            <Row>
-                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text">
-                    <AiOutlineCloudDownload style={{"fontSize": "6em"}} color="fff" className="title-remote-action-icon"/> 
-                    <span className="title-remote-action" style={{"fontSize": "2em"}}> Pull </span>
+            {!show_remote_branching &&
+                <Row className="db-remote-action-spacing">
+                    From Remote Database
+                </Row>
+            }
+            {show_local_branching &&
+                <Row className="db-remote-action-spacing">
+                    To Local Branch
+                    {newBranch &&
+                        <Col md={6}>
+                            <input
+                                className = "tcf-input"
+                                type="text"
+                                placeholder="Local Branch ID"
+                                value={localBranch}
+                                width="40"
+                                onChange={inputLocal}
+                                id= "local_branch_id"
+                            />
+                        </Col>
+                    }
+                    {!newBranch &&
+                        <Col md={6}>
+                            <Select
+                                placeholder = {localBranch}
+                                className = "select-branch"
+                                onChange ={changeLocal}
+                                name = "merge_branch_target"
+                                id= "merge_branch_target"
+                                options = {bopts()}
+                                defaultValue= {localBranch}
+                            />
+                        </Col>
+                    }
+                    <Col md={3}>
+                        <span onClick={toggle_branch}>
+                            <BranchInputToggler/>
+                        </span>
+                    </Col>
+                </Row>
+            }
+            {!show_local_branching &&
+                <Row>
+                    To Local Database
+                </Row>
+            }
+            <Row className="db-remote-action-spacing">
+                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text synch-action-text db-remote-action-buttons">
+                    <AiOutlineCloudDownload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
+                    <span className="title-remote-action" style={{"fontSize": "20px"}}> Pull </span>
                 </button>
             </Row>
-            {show_local_branching && 
-                <Row>
-                    To Local Branch 
-                    {newBranch && 
-                        <input
-                            className = "local-branch-input"
-                            type="text"
-                            placeholder="Local Branch ID"
-                            value={localBranch}
-                            width="40"
-                            onChange={inputLocal}
-                            id= "local_branch_id"
-                        />
-                    }
-                    {!newBranch && 
-                        <Select
-                            placeholder = {localBranch}
-                            className = "select-branch"
-                            onChange ={changeLocal}
-                            name = "merge_branch_target"
-                            id= "merge_branch_target"
-                            options = {bopts()}
-                            defaultValue= {localBranch}
-                        />                    
-                    }  
-                    <span onClick={toggle_branch}>
-                        <BranchInputToggler/>
-                    </span>                      
-                </Row>        
-            }
-            {!show_local_branching && 
-                <Row>
-                    To Local Database 
-                </Row>
-            }
         </Col>
     )
 }

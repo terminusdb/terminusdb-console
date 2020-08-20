@@ -93,7 +93,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 
     let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
     return (
-        <Row key='r7' className='database-summary-listing'>
+        <Row key='r7' className='database-summary-listing database-listing-line'>
             {loading &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
