@@ -101,7 +101,7 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
     return (
         <Col>
             {show_remote_branching &&
-                <Row className="db-remote-action-spacing">
+                <Row className="db-remote-action-spacing db-first-remote-action-height">
                     To Remote Branch
                     {newBranch &&
                         <Col md={6}>
@@ -137,10 +137,24 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
                 </Row>
             }
             {!show_remote_branching &&
-                <Row className="db-remote-action-spacing">
+                <Row className="db-remote-action-spacing db-first-remote-action-height">
                     To Remote Database
                 </Row>
             }
+            <Row>
+                {onPush &&
+                    <button type="submit" onClick={doPush} className="tdb__button__base tdb__button__base--green synch-action-text db-remote-action-buttons">
+                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
+                        <span className="title-remote-action" style={{"fontSize": "20px"}}> Push </span>
+                    </button>
+                }
+                {!onPush &&
+                    <button type="submit" className="tdb__button__base tdb__button__base--gray synch-action-text db-remote-action-buttons">
+                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} className="title-remote-action-icon"/>
+                        <span className="title-remote-action" style={{"fontSize": "20px"}}>Push not permitted</span>
+                    </button>
+                }
+            </Row>
             {show_local_branching &&
                 <Row className="db-remote-action-spacing">From Local Branch
                     <Col md={6}>
@@ -161,20 +175,6 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
                     From Local Database
                 </Row>
             }
-            <Row>
-                {onPush &&
-                    <button type="submit" onClick={doPush} className="tdb__button__base tdb__button__base--green synch-action-text db-remote-action-buttons">
-                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
-                        <span className="title-remote-action" style={{"fontSize": "20px"}}> Push </span>
-                    </button>
-                }
-                {!onPush &&
-                    <button type="submit" className="tdb__button__base tdb__button__base--gray synch-action-text db-remote-action-buttons">
-                        <AiOutlineCloudUpload style={{"fontSize": "40px"}} className="title-remote-action-icon"/>
-                        <span className="title-remote-action">Push not permitted</span>
-                    </button>
-                }
-            </Row>
         </Col>
     )
 }
@@ -253,7 +253,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
     return (
         <Col>
             {show_remote_branching &&
-                <Row className="db-remote-action-spacing">
+                <Row className="db-remote-action-spacing db-first-remote-action-height">
                     From Remote Branch
                     <Col md={6}>
                         <Select
@@ -269,10 +269,16 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
                 </Row>
             }
             {!show_remote_branching &&
-                <Row className="db-remote-action-spacing">
+                <Row className="db-remote-action-spacing  db-first-remote-action-height">
                     From Remote Database
                 </Row>
             }
+            <Row className="db-remote-action-spacing">
+                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text synch-action-text db-remote-action-buttons">
+                    <AiOutlineCloudDownload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
+                    <span className="title-remote-action" style={{"fontSize": "20px"}}> Pull </span>
+                </button>
+            </Row>
             {show_local_branching &&
                 <Row className="db-remote-action-spacing">
                     To Local Branch
@@ -314,12 +320,6 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
                     To Local Database
                 </Row>
             }
-            <Row className="db-remote-action-spacing">
-                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text synch-action-text db-remote-action-buttons">
-                    <AiOutlineCloudDownload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
-                    <span className="title-remote-action" style={{"fontSize": "20px"}}> Pull </span>
-                </button>
-            </Row>
         </Col>
     )
 }
