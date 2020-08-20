@@ -82,9 +82,8 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
                     />
                 </span>
             )}
-            <div className="tdb__loading__parent">
-                <DBDetailsForm buttons={buttons} onSubmit={onClone} from_local={meta} />
-            </div>
+            
+            <DBDetailsForm buttons={buttons} onSubmit={onClone} from_local={meta} />
         </div>
     )
 }
