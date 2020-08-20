@@ -153,7 +153,7 @@ export const CreateDatabase = ({from_local}) => {
                 </span>
             )}
             <div className="tdb__loading__parent">
-                <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
+               <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         </>
