@@ -92,19 +92,12 @@ export const Synchronize = () => {
 
     async function onRefresh(remote){
         let bits = remote.url.split("/")
-        let meta = {id: bits[bits.length-1], organization: bits[bits.length-2]}
+        let hmeta = {id: bits[bits.length-1], organization: bits[bits.length-2]}
         if(isHubURL(remote.url)){
-            RefreshDatabaseRecord(meta, bffClient, getTokenSilently).then((data) => {
-                console.log("got back data", data)
-                alert("got it")
-            })
-            .catch((e) => console.log("got error", e))
+            return RefreshDatabaseRecord(hmeta, bffClient, getTokenSilently)
         }
         else if(isLocalURL(remote.url, woqlClient)){
-            refreshDBRecord(bits.id, bits.organization).then((data) => {
-                console.log("got local back", data)
-                alert("got it gazooks")
-            })
+            return refreshDBRecord(hmeta.id, hmeta.organization).then(() => woqlClient.get_database(hmeta.id, hmeta.organization))
         }
     }
 
@@ -138,7 +131,7 @@ export const Synchronize = () => {
     if(!repos || !branches || !meta ) return null
     return (
         <PageView>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
+            {loading && <Loading />}
             {!loading && !operation &&                 
                 <DBRemoteSummary 
                     repos={repos} 

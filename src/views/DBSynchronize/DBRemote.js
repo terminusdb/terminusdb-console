@@ -19,7 +19,26 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [upperReport, setUpperReport] = useState()
-    const [cmeta, setCmeta] = useState(meta)
+    const [myLocal, setMyLocal] = useState(meta)
+    const [myRemote, setMyRemote] = useState()
+
+    useEffect(() => {
+        if(meta.remote_url && meta.remote_url == repo.url){
+            setMyRemote(meta.remote_record)
+        }
+        else {
+            onRefresh(repo).then((upd) => setMyRemote(upd))
+        }
+    }, [])
+
+    function loadRemote(meta, repo){
+        if(repo.type == "remote") return false
+        if(meta.remote_url && meta.remote_url == repo.url){
+            return meta.remote_record
+        }
+        onRefresh(repo).then((upd) => setMyRemote(upd))
+        return false
+    }
 
     let update_start = Date.now()//timer for api calls
 
@@ -50,7 +69,18 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     }
 
     async function remoteRefresh(){
-        alert("refresh remote")
+        if(repo.type == "remote") return
+        setLoading(true)
+        setUpperReport(false)
+        setReport(false)
+        onRefresh(repo).then((upd) => {
+            setMyRemote(upd)
+            if(myLocal.remote_url && myLocal.remote_url == repo.url){
+                let abc = myLocal
+                abc.remote_record = upd
+                setMyLocal(abc)
+            }
+        }).finally(() => setLoading(false))
     }
 
     async function repoRefresh(){
@@ -100,6 +130,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     async function onFetch(remote){
         setUpperReport(false)
         setReport(false)
+        setLoading(true)
         update_start = Date.now()
         let no_auth = (remote.type == "remote")
         return Fetch(remote.title, remote.url, woqlClient, getTokenSilently, no_auth)
@@ -123,25 +154,30 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
         .finally(() => setLoading(false))        
     }
 
-    let remote_branches = (cmeta.remote_record && cmeta.remote_record.branches ? cmeta.remote_record.branches : [])
+    async function remoteFetch(){
+        remoteRefresh()
+        onFetch(repo)
+    }
+
+    let remote_branches = (myRemote && myRemote.branches ? myRemote.branches : [])
     let show_actions = (repo.type == "local" || (repo.type == "hub" && user.logged_in))
     let show_branches = (remote_branches.length > 0)
 
     let submit = false
 
     let doPush = onPush
-    if(!cmeta.remote_record){
+    if(!myRemote){
         doPush = false
     }
     else {
         if(repo.type == "hub"){
-            if(!cmeta.remote_record || !_allowed_push(cmeta.remote_record.roles)){
+            if(!myRemote|| !_allowed_push(myRemote.roles)){
                 doPush = false
             }
             if(user.logged_in){
-                submit = function(){
-                    alert("testing")
-                }
+                //submit = function(){
+                //    alert("testing")
+                //}
             }
         }
         else if(repo.type == "remote"){
@@ -150,24 +186,24 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
     }
 
     function _allowed_push(roles){
-        if(roles.indexOf('create') != -1) return true
-        if(roles.indexOf('write') != -1) return true
+        if(roles && roles.indexOf('create') != -1) return true
+        if(roles && roles.indexOf('write') != -1) return true
         return false
     }
 
     return (
         <Col>
             {loading && 
-                <Loading />
+                <Loading type={TERMINUS_COMPONENT}/>
             }
             <Row key='xyz3' className="mydbcard">
                 <DBRemoteCard 
                     onFetch={onFetch}
                     user={user}
-                    onRefresh={onRefresh}
+                    onRefresh={remoteFetch}
                     onDelete={onDelete}
-                    local={cmeta}
-                    remote={cmeta.remote_record}
+                    local={myLocal}
+                    remote={myRemote}
                     repo={repo}
                 />        
             </Row>            
@@ -179,7 +215,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
                     <SynchronizeActions 
                         repo={repo} 
                         remote_branches={remote_branches} 
-                        branches={cmeta.branches} 
+                        branches={myLocal.branches} 
                         branch={branch} 
                         onPull={onPull} 
                         onPush={doPush}
@@ -194,8 +230,8 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
                 <Row key='r78' className='remote-comparison'>
                     <RemoteComparison 
                         repo={repo} 
-                        local={cmeta}
-                        remote={cmeta.remote_record}
+                        local={myLocal}
+                        remote={myRemote}
                         onPush={doPush} 
                         onSubmitUpdate={submit} 
                         onPull={onPull}
@@ -205,184 +241,3 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
         </Col>
     )
 }
-
-
-    /*
-    useEffect(() => {
-        if (repos) {
-            let rem = repos.remote || repos.local_clone
-            if(!rem){
-                let db = woqlClient.get_database()
-                rem = {url: db.remote_url, remote: ""}
-            }
-            setSourceValues({
-                remote_url: rem.url,
-                remote: rem.title,
-                operation: '',
-            })
-            if (repos.remote) setIsRemote(true)
-            else setIsRemote(false)
-        }
-    }, [repos])*/
-
-    /*
-
-    function pushLocal(deets) {
-        let from_branch = deets.local_branch || 'main'
-        let commit = deets.commit || DEFAULT_LOCAL_PUSH_COMMIT
-        let push_to = {
-            remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'main',
-            message: commit,
-        }
-        //create copy so we don't change internal state of woqlClient inadvertently
-        let nClient = woqlClient.copy()
-
-        nClient.remote_auth( nClient.local_auth() )
-        nClient.checkout(from_branch)
-        setLoading(true)
-        update_start = Date.now()
-        nClient
-            .push(push_to)
-            .then((res) => {
-                let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                afterPush()
-            })
-            .catch((err) => {
-                let message = `${SYNCHRONISE_FORM.pushFailureMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    function pullLocal(deets) {
-        let to_branch = deets.local_branch || 'main'
-        let commit = deets.commit || DEFAULT_LOCAL_PULL_COMMIT
-        let pull_from = {
-            remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'main',
-            message: commit,
-        }
-        //create copy so we don't change internal state of woqlClient inadvertently
-        let nClient = woqlClient.copy()
-        nClient.remote_auth(nClient.local_auth())
-        if (to_branch != nClient.checkout()) nClient.checkout(to_branch)
-        update_start = Date.now()
-        setLoading(true)
-        nClient
-            .pull(pull_from)
-            .then((res) => {
-                let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                afterPull()
-            })
-            .catch((err) => {
-                let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    function afterPush() {
-        //alert("Push was successful")
-    }
-
-    function afterPull() {
-        updateBranches()
-    }
-
-    async function pushRemote(deets) {
-        let from_branch = deets.local_branch || 'main'
-        let commit = deets.commit || DEFAULT_REMOTE_PUSH_COMMIT
-        let push_to = {
-            remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'main',
-            message: commit,
-        }
-        update_start = Date.now()
-
-        let nClient = woqlClient.copy()
-        const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
-       
-
-        //if (deets.user && deets.password) {
-        //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
-        //}
-        nClient.checkout(from_branch)
-        setLoading(true)
-        nClient
-            .push(push_to)
-            .then((res) => {
-                let message = `${SYNCHRONISE_FORM.pushSuccessMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                afterPush()
-            })
-            .catch((err) => {
-                let message = `${SYNCHRONISE_FORM.pushFailureMessage} from branch ${from_branch} to ${push_to.remote} ${push_to.remote_branch}`
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-
-    async function pullRemote(deets) {
-        let to_branch = deets.local_branch || 'main'
-        let commit = deets.commit || DEFAULT_REMOTE_PULL_COMMIT
-        let pull_from = {
-            remote: sourceValues.remote,
-            remote_branch: deets.remote_branch || 'main',
-            message: commit,
-        }
-        let nClient = woqlClient.copy()
-        const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
- 
-        //if (deets.user && deets.password) {
-        //    nClient.remote_auth({type: 'basic', key: deets.password, user: deets.user})
-        //}
-        if (to_branch != nClient.checkout()) nClient.checkout(to_branch)
-        setLoading(true)
-        update_start = Date.now()
-        nClient
-            .pull(pull_from)
-            .then((res) => {
-                let message = `${SYNCHRONISE_FORM.pullSuccessMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                afterPull()
-            })
-            .catch((err) => {
-                let message = `${SYNCHRONISE_FORM.pullFailureMessage} from branch ${to_branch} to ${pull_from.remote} ${pull_from.remote_branch}`
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-    }
-    */

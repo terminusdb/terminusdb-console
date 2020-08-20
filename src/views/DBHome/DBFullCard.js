@@ -20,10 +20,10 @@ import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
 import { MdContentCopy } from 'react-icons/md';
-import { RiDeleteBin5Line } from 'react-icons/ri';
 import { validURL } from '../../utils/helperFunctions';
+import { DeleteDB } from "./DeleteDB"
 
-export const DBFullCard = ({meta, user, title_max, onAction}) => {
+export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
 
@@ -56,7 +56,7 @@ export const DBFullCard = ({meta, user, title_max, onAction}) => {
             }
             {!loading && <>
                 <Col key='r5' md={2} className='database-control-panel database-control-panel-border'>
-                    <DBControlPanel meta={meta} user={user} />
+                    <DBControlPanel meta={meta} user={user} onClone={onClone} />
                 </Col>
                 <Col md={10} className='database-main-content'>
                     <Row key='r3'>
@@ -321,7 +321,7 @@ function _get_role_title(id, orgtype){
     return map[id] || "?"
 }
 
-export const DBControlPanel = ({meta, user}) => {
+export const DBControlPanel = ({meta, user, onClone}) => {
     const [isImage, setImage] = useState(false);
     const [isIcon, setIcon] = useState(false);
     let disp = []
@@ -342,55 +342,27 @@ export const DBControlPanel = ({meta, user}) => {
 
     return (
         <div>
-            {<Row key="rr" class="database-left-img" onClick={goDB}>
+            {<Row className="database-left-img" onClick={goDB}>
                 {disp}
             </Row>}
-            <Row key="rd" className="db-controls">
-                <DBControls user={user}/>
+            <Row className="db-controls">
+                <DBControls user={user} onClone={onClone}/>
             </Row>
         </div>
     )
 }
 
-export const DBControls = ({meta, user, repo, onRefresh, onDelete}) => {
-
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
-
-    function myDelete(){
-        // /meta.action = 'delete'
-        //alert('delete-local-database')
-        //if(onAction) onAction(meta)
-    }
-
-    function myClone(){
-        meta.action = 'clone'
-        if(onAction) onAction(meta)
-    }
-
+export const DBControls = ({meta, user, onClone}) => {
     return (
-            <Row className='major-database-controls'>
-                <span>
-                    <span className='refresh-control'><CloneControl meta={meta} user={user} onClick={myClone}/></span>
-                    <span className='delete-control' onClick={toggle}>
-                        <DeleteControl meta={meta} user={user}/>
-                        <Modal isOpen={modal} toggle={toggle}>
-                          <ModalBody className="delete-modal-body">
-                                <Row>
-                                    <RiDeleteBin5Line color="#721c24" className="delete-modal-icon"/>
-                                    <span className="delete-modal-text">This action will delete the database locally</span>
-                                </Row>
-                          </ModalBody>
-                          <ModalFooter>
-                            <button className="tdb__button__base tdb__button__base--bred"  onClick={myDelete()}>Delete</button>{' '}
-                          </ModalFooter>
-                        </Modal>
-                    </span>
+        <Row className='major-database-controls'>
+            <span>
+                <span className='refresh-control' onClick={onClone}>
+                    <CloneControl meta={meta} user={user}/>
                 </span>
-            </Row>
+                <DeleteDB/>
+            </span>
+        </Row>
     )
-
 }
 
 export const DBStatus = ({meta, user, onAction}) => {
@@ -516,8 +488,7 @@ export const AcceptControl = ({meta}) => {
 }
 
 export const DeleteControl = ({meta}) => {
-    //return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
-    return <span className="db-action"  title="Delete Database"><RiDeleteBin5Line color="#721c24" className='db-control' /></span>
+    return <span className="delete-action"  title="Delete Database"><AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete</span>
 }
 
 export const TimeControl = ({meta, type}) => {

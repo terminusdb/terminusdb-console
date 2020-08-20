@@ -3327,3 +3327,9 @@ h4.prefix-section-header {
     margin-top: 80px;
     margin-left: 10px;
 }
+
+.dbremote-full-card {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 40px;
+}

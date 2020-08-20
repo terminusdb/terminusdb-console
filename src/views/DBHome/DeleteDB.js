@@ -6,13 +6,14 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {DELETE_ICON} from '../../constants/images'
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {goServerHome} from '../../components/Router/ConsoleRouter'
-import {DELETE_DB_MODAL} from '../DBManage/constants.dbmanage'
+import {DELETE_DB_MODAL} from './constants.dbhome'
+import { RiDeleteBin5Line } from 'react-icons/ri';
 
 export const DeleteDB = (props) => {
     const {register, handleSubmit, errors} = useForm()
     const {woqlClient, reconnectToServer} = WOQLClientObj()
     const [rep, setReport] = useState()
-    const [modal, setModal] = useState(props.modal)
+    const [modal, setModal] = useState()
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
@@ -68,32 +69,39 @@ export const DeleteDB = (props) => {
     }
 
     return (
-        <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}> {DELETE_DB_MODAL.prompt} </ModalHeader>
-            <ModalBody>
-                <Col md={12}>
-                    {rep && <TerminusDBSpeaks report={rep} />}
-                    <div className="del-mod">
-                        <p className="del-message">
-                            {' '}
-                            {DELETE_DB_MODAL.message} {woqlClient.db()}
-                        </p>
-                        <img src={DELETE_ICON} className="center" />
-                        <form onSubmit={handleSubmit(onDelete)}>
-                            <input
-                                type="text"
-                                name="dbId"
-                                id="dbId"
-                                ref={register({validate: (value) => value.length > 0})}
-                            />
-                            <hr className="my-space-25" />
-                            <Button color="danger" disabled={disabled}>
-                                {DELETE_DB_MODAL.confirm}
-                            </Button>
-                        </form>
-                    </div>
-                </Col>
-            </ModalBody>
-        </Modal>
+        <span className='delete-control' onClick={toggle}>
+
+            <span className="db-action"  title="Delete Database">
+                <RiDeleteBin5Line color="#721c24" className='db-control' />
+            </span>
+
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}> {DELETE_DB_MODAL.prompt} </ModalHeader>
+                <ModalBody>
+                    <Col md={12}>
+                        {rep && <TerminusDBSpeaks report={rep} />}
+                        <div className="del-mod">
+                            <p className="del-message">
+                                {' '}
+                                {DELETE_DB_MODAL.message} {woqlClient.db()}
+                            </p>
+                            <img src={DELETE_ICON} className="center" />
+                            <form onSubmit={handleSubmit(onDelete)}>
+                                <input
+                                    type="text"
+                                    name="dbId"
+                                    id="dbId"
+                                    ref={register({validate: (value) => value.length > 0})}
+                                />
+                                <hr className="my-space-25" />
+                                <Button color="danger" disabled={disabled}>
+                                    {DELETE_DB_MODAL.confirm}
+                                </Button>
+                            </form>
+                        </div>
+                    </Col>
+                </ModalBody>
+            </Modal>
+        </span>
     )
 }

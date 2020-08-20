@@ -34,10 +34,10 @@ export const DBRemoteSummary = ({woqlClient, repos, isHubURL, onCreate, onShare,
         intro_text = "This database is local only, it is associated with no remote databases"
     }
     else if(tots == 1 && cats.hub.length == 1){
-        intro_text = "This database is connected to database on Terminus Hub"
+        intro_text = "Your local database is a clone of a database stored on Terminus Hub"
     }
     else if(tots == 1 && cats.local.length == 1){
-        intro_text = "This database is connected to a local database"
+        intro_text = "This database is a clone of a local database"
     }
     else if(tots == 1 && cats.other.length == 1){
         intro_text = "This database is connected to a remote database"

@@ -8,13 +8,13 @@ import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {CommitLog} from "./CommitLog"
 import {ScopedDetails} from "./ScopedDetails"
 import { GiPlainCircle } from 'react-icons/gi';
+import { CloneLocal } from "../CreateDB/CloneDatabase"
 
 export const MonitorDB = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref} = DBContextObj()
+    const {branches} = DBContextObj()
 
-    const [commitCount, setCommitCount] = useState()
-    const [latest, setLatest] = useState()
+    const [cloning, setCloning] = useState()
     let dbmeta = woqlClient.get_database() || {}
     const [assetRecord, setAssetRecord] = useState(dbmeta)
 
@@ -41,23 +41,31 @@ export const MonitorDB = (props) => {
         })
     }
 
+    function toggle(){
+        setCloning(!cloning)
+    }
 
     if(!branches) return null
     return (
         <div>
             <Row key="rr">
-                <DBFullCard meta={assetRecord} user={woqlClient.user()}/>
+                <DBFullCard meta={assetRecord} onClone={toggle} user={woqlClient.user()}/>
             </Row>
-            <Row key="rs">
-                <ScopedDetails />
-            </Row>
-            <Row key="rd">
-                <CommitLog />
-            </Row>
+            {cloning && 
+                <Row key="rc">
+                    <CloneLocal meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
+                </Row>
+            }
+            {!cloning && <>
+                <Row key="rs">
+                    <ScopedDetails />
+                </Row>
+                <Row key="rd">
+                    <CommitLog />
+                </Row>
+            </>}
         </div>
     )
 }
-
-
 
 //<LatestUpdates />

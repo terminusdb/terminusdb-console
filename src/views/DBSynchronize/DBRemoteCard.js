@@ -3,7 +3,7 @@
  */
 import React, {useState} from 'react'
 import { GRAPHDB } from "../../constants/images"
-import {Row, Col, Button, Container, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap"
+import {Row, Col} from "reactstrap"
 import { printts } from "../../constants/dates"
 import { DATETIME_COMPLETE } from "../../constants/dates"
 import { AiFillEdit, AiFillCopy, AiOutlineBlock, AiFillLock, AiOutlineUser, AiOutlineWarning,
@@ -12,7 +12,7 @@ import { DescribeDifferences } from "./DBDifferences"
 import { validURL } from '../../utils/helperFunctions'
 import { MdRefresh } from 'react-icons/md';
 import { AiOutlineCloudSync } from 'react-icons/ai';
-import { RiDeleteBin5Line, RiErrorWarningLine } from 'react-icons/ri'
+import { DeleteControl } from './DeleteControl'
 
 export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, onFetch}) => {
     let allowed_fetch = false
@@ -78,10 +78,10 @@ export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, 
 
     return (
         <div>
-            <Row key="rr" class="database-left-img">
+            <Row className="database-left-img">
                 {disp}
             </Row>
-            <Row  key="rd" className="db-controls">
+            <Row className="db-controls">
                 <DBControls
                     onFetch={doFetch}
                     repo={repo}
@@ -97,12 +97,7 @@ export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, 
 //Left column - control widget
 export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
 
-    const [modal, setModal] = useState(false);
-
-    const toggle = () => setModal(!modal);
-
-    function showDelete(){
-        //alert("show delete modal now")
+    function doDelete(){
         if(onDelete) onDelete(repo)
     }
 
@@ -121,59 +116,21 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
                     <span className='refresh-control' onClick={doRefresh}>
                         <RefreshControl repo={repo} />
                     </span>
-                }
-                {onFetch &&
-                    <span className='refresh-control' onClick={doFetch}>
-                        <FetchControl repo={repo} />
-                    </span>
-                }
-                <span className='delete-control' onClick={toggle}>
-                    <DeleteControl repo={repo} />
-                    <Modal isOpen={modal} toggle={toggle}>
-                      <ModalBody className="delete-modal-body">
-                            <Row>
-                                <RiErrorWarningLine color="#ff9800" className="delete-modal-icon"/>
-                                <span className="warning-modal-text">This action will delete the database from hub!</span>
-                            </Row>
-                      </ModalBody>
-                      <ModalFooter>
-                        <button className="tdb__button__base tdb__button__base--bred"  onClick={showDelete}>Delete</button>{' '}
-                      </ModalFooter>
-                    </Modal>
-                </span>
+                }                
+                <DeleteControl repo={repo} onDelete={doDelete} />
             </span>
         </Row>
     )
 }
 
-export const DeleteControl = ({repo}) => {
-    let title = `Delete Remote ${repo.title} (${repo.url})`
-    return <span className="db-action"  title={title}><RiDeleteBin5Line color="#721c24" className='db-control' /></span>
-    /*return (
-        <span className="delete-action"  title={title}>
-            <RiDeleteBin5Line color="#721c24" className='database-action database-listing-delete' />
-        </span>
-    )*/
-}
-
 export const RefreshControl = ({repo}) => {
     let title = `Refresh Remote ${repo.title} from ${repo.url}`
     return <span className="db-action"  title={title}><MdRefresh color="#0055bb" className='db-control' /></span>
-    /*return (
-        <span className="refresh-action" title={title}>
-            <MdRefresh className='database-action database-listing-refresh' />
-        </span>
-    )*/
 }
 
 export const FetchControl = ({repo}) => {
     let title = `Fetch Remote ${repo.title} from ${repo.url}`
     return <span className="db-action"  title={title}><AiFillCopy color="#0055bb" className='db-control' /></span>
-    /*return (
-        <span className="refresh-action"  title={title}>
-            <AiFillCopy className='database-action database-listing-refresh' />
-        </span>
-    )*/
 }
 
 export const DBWarningCredits = ({text}) => {
@@ -195,7 +152,7 @@ export const RemoteTitle = ({repo, meta}) => {
         <span className='database-listing-title-row'>
             <span className={title_css + " database-listing-title"}>{str}</span>
             {meta && meta.label &&
-                <span class="repo_title"> ({repo.title}) </span>
+                <span> ({repo.title}) </span>
             }
         </span>
     )

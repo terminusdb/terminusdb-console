@@ -52,7 +52,7 @@ export const DescribeDifferences = ({a, b}) => {
         }
     }
     if(a.branches.length == 1 && b.branches.length == 1 && a.branches[0].branch == b.branches[0].branch){
-        if(!bdesc[a.branches]){
+        if(!bdesc[a.branches[0].branch]){
             comps.push(<DBSynchCredits key="db1" text="Databases synchronized" />)
         }
         else {
