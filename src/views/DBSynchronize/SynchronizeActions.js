@@ -250,21 +250,22 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
         }
         onPull(localBranch, remoteBranch, repo)
     }
-
     return (
         <Col>
             {show_remote_branching &&
-                <Row>
+                <Row className="db-remote-action-spacing">
                     From Remote Branch
-                    <Select
-                        placeholder = {remoteBranch}
-                        className = "select-branch"
-                        onChange ={changeRemote}
-                        name = "merge_branch_target"
-                        id= "merge_branch_target"
-                        options = {ropts()}
-                        defaultValue= {remoteBranch}
-                    />
+                    <Col md={6}>
+                        <Select
+                            placeholder = {remoteBranch}
+                            className = "select-branch"
+                            onChange ={changeRemote}
+                            name = "merge_branch_target"
+                            id= "merge_branch_target"
+                            options = {ropts()}
+                            defaultValue= {remoteBranch}
+                        />
+                    </Col>
                 </Row>
             }
             {!show_remote_branching &&
