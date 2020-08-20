@@ -93,7 +93,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 
     let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
     return (
-        <Row key='r7' className='database-summary-listing'>
+        <Row key='r7' className='database-summary-listing database-listing-line'>
             {loading &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
@@ -105,7 +105,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     <Row key='r3'>
                         <DBTitle meta={meta} user={user} max={title_max}/>
                     </Row>
-                    <Row key='r4'>
+                    <Row key='r4' className="database-listing-credits-row">
                         <DBCredits meta={meta}  user={user} />
                     </Row>
                     <Row key='r8'>
@@ -392,7 +392,7 @@ export const DBControlPanel = ({meta, user}) => {
     let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
 
     if(icon){
-        if(validURL(icon)) disp.push(<img className='database-listing-image' src={icon} title={title} key="xx1"  />)
+        if(validURL(icon)) disp.push(<img className='db-home-listing-image' src={icon} title={title} key="xx1"  />)
         else disp.push(<i key="xx" className={'database-listing-icon ' + icon} title={title}/>)
     }
 

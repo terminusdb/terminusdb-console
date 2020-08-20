@@ -41,14 +41,6 @@ export const RiverOfSections = ({active, label, sections, children}) => {
 
     let ros = (
         <Container className={RIVER_OF_SECTIONS.pageCSS}>
-            {(typeof activeSection != "undefined") && 
-                <Container className={RIVER_OF_SECTIONS.crumbsCSS}>
-                    <Crumbs 
-                        buttons={[{text: label}, {text: sections[activeSection].title}]} 
-                        setPage = {closeSection}
-                    />
-                </Container>
-            }
             {contents}
         </Container>
     )

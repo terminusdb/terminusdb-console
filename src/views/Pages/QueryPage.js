@@ -35,7 +35,7 @@ const QueryPage = () => {
     }
 
     return (
-        <PageView>
+        <PageView dbPage={true}>
             <NewQueryPane/>
         </PageView>    
     )

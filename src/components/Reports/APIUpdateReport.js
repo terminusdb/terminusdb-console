@@ -87,7 +87,9 @@ const APISystemError = ({message, error, time}) => {
         <Alert color="danger">
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
-            <SystemError error={error} />
+            {error && 
+                <SystemError error={error} />
+            }
         </Alert>
     )
 }

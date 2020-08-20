@@ -2,6 +2,7 @@ import React from 'react'
 import {Route, useParams, useRouteMatch, Switch} from 'react-router-dom'
 import {
     DB_QUERY_ROUTE,
+    DB_SYNCHRONISE,
     DB_SCHEMA_ROUTE,
     DB_DOCUMENT_ROUTE,
     SPECIFIC_DB_ROUTE,
@@ -10,6 +11,7 @@ import {
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
+import {Synchronize} from '../../views/DBSynchronize/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
@@ -22,7 +24,7 @@ export const DBRoutes = () => {
     * base path db/
     */
     const {path} = useRouteMatch()
-    console.log("__PATH___DBRoutes",path);
+    //console.log("__PATH___DBRoutes",path);
 
     return (
         <Switch>
@@ -81,6 +83,7 @@ const DBRoute = () => {
 
     woqlClient.db(dbid)
     woqlClient.organization(aid)
+    const databaseInfo = woqlClient.get_database()
     const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>
@@ -95,6 +98,11 @@ const DBRoute = () => {
     routes.push(
         <Route key="dbschema" path={`${path}${DB_SCHEMA_ROUTE}`}>
             <SchemaRoutes />
+        </Route>,
+    )
+    routes.push(
+        <Route key="dbsynchronize" path={`${path}${DB_SYNCHRONISE}`}>
+            <Synchronize />
         </Route>,
     )
     routes.push(

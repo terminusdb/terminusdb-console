@@ -16,7 +16,7 @@ export async function enrich_local_db_listing(woqlClient){
     //let micro = Date.now()
     let res
     try {
-        res = await TerminusClient.WOQL.lib().assets_overview(usings, sysClient)
+        res = await TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
     }
     catch(e){
         console.log(e)

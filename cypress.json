@@ -1,7 +1,10 @@
 {
   "viewportWidth": 1440,
   "viewportHeight": 900,
-  "baseUrl":"https://127.0.0.1:6363/",
+  "baseUrl":"http://localhost:3005/",
   "responseTimeout":120000,
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "env": {
+    "password": "root"
+  }
 }

@@ -44,6 +44,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
+                    setError(true)
                     setConnecting(false)
                     setLoading(false)
                 }
@@ -199,6 +200,8 @@ export const WOQLClientProvider = ({children, params}) => {
      * Called after clone / create to create the db card for the new db and associate it with its remote
      */
     const refreshDBRecord = (id, org, action, meta) => {
+        id = id || woqlClient.db()
+        org = org || woqlClient.organization()
         let usings = [org + "/" + id]
         let sysClient = woqlClient.copy()
         sysClient.set_system_db()
@@ -258,6 +261,12 @@ export const WOQLClientProvider = ({children, params}) => {
                     }
                     woqlClient.databases(nudbs)
                 }
+                else {
+                    let odb = woqlClient.get_database(id, org)
+                    for(var k in local){
+                        odb[k] = local[k]
+                    }
+                }                
                 setContextEnriched(contextEnriched + 1)
             }
         })

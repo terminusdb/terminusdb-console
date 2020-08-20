@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { WOQLGraph } from '@terminusdb/terminusdb-react-graph';
+import { WOQLGraph } from '@terminusdb/terminusdb-react-components';
 
-import { WOQLTable } from '@terminusdb/terminusdb-react-table';
+import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 import TerminusClient from '@terminusdb/terminusdb-client';
-//import { WOQLChart } from '@terminusdb/terminusdb-react-chart';
 
 export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) => {
-
     const [currentView, setView] = useState(viewConfig)
     /*
     to be review  I have to move from here
@@ -19,7 +17,6 @@ export const ResultViewer = ({bindings, type, viewConfig, query, updateQuery}) =
     let viewer = woqlGraphConfig.create(null);
     viewer.setResult(result);
     const myviewer=viewer;
-
 
     return (<>
         {bindings && type==="table" &&

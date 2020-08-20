@@ -9,10 +9,10 @@ context('check connection', () => {
         cy.loginAndLogout();
         /*cy.get("body").then($body => {
 
-              if ($body.find("button.nav__main__login").length > 0) {
-                  cy.get('button.nav__main__login').click()
-              }
-         })*/
+    	 	 if ($body.find("button.nav__main__login").length > 0) {
+    	 	 	cy.get('button.nav__main__login').click()
+    	 	 }
+    	 })//login_button
     })
 
 

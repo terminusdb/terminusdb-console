@@ -6,6 +6,25 @@
   background-color: #00C08B !important;
 }
 
+.select-branch{
+  min-width: 200px;
+  margin-left: 20px;
+}
+.column-mod{
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: space-around;
+}
+.detail-credits{
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap-reverse;
+    padding: 0px 20px 0 20px;
+    align-items: center;
+    /* justify-content: center; */
+}
 .select-nav-bar{
     margin-top: 10px;
     height: 40px;
@@ -394,6 +413,11 @@ button.cOJQpm:disabled svg{
 
 div.header legend, div.row legend {
     margin-top: 0px !important
+}
+
+div.row {
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 div.ePDqSK {
@@ -1309,7 +1333,9 @@ p.dscr{
     padding: 0;
 }
 
-
+input.rfipicons__cp {
+    width: 50%;
+}
 
 .subNavBar{
     background-color: #fff !important;
@@ -1485,6 +1511,18 @@ h2{
 pre {
   width: 100%
 }
+
+.table th {
+    color: #00C08B !important;
+    border: 0 !important
+}
+
+.sub-headings {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 20px 0px 0px 0px;
+}
+
 
 .table-hover.table td{
   word-break: break-word;
@@ -2635,21 +2673,42 @@ h4.prefix-section-header {
 .database-summary-listing {
     margin-top: 20px;
     padding-bottom: 20px;
+    width: 101%;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+.database-listing-line {
     border-bottom: 1px solid #ddd;
 }
 
-.database-left-column {
-    width: 180px
+.database-left-img {
+    padding: 5px 0px 5px 0px;
+    /*width: 280px*/
 }
 
 .database-control-panel {
     display: inline-block;
+    border-radius: 6px;
+}
+
+.database-control-panel-border {
+    border: 1px solid #ddd;
+}
+
+.db-home-listing-image {
+    height: 120px;
+    text-align: center;
+    margin: 8px auto;
+    border-radius: 6px;
 }
 
 .database-listing-image {
     height: 120px;
     text-align: center;
-    margin: 8px auto;
+    border-radius: 6px;
+    margin-top: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .database-listing-icon{
@@ -2665,6 +2724,7 @@ h4.prefix-section-header {
 .major-database-controls {
     text-align: center;
     font-size: 1.6em;
+    margin: 0px 50px 0px 50px;
 }
 
 .time-control{
@@ -2689,12 +2749,16 @@ h4.prefix-section-header {
 .database-main-content {
 }
 
-.database-listing-title-row {;
-    margin: 10px 0px 0px 0px;
+.database-listing-title-row {
+    margin: 0;
+}
+.database-listing-credits-row {
+    margin: 0px 0px 0px -25px;
 }
 
 .database-listing-title {
     font-size: 40px;
+    margin-left: 10px;
 }
 .database-listing-id {
     font-size: 10px;
@@ -2708,12 +2772,19 @@ h4.prefix-section-header {
 }
 
 .database-credits {
+    margin-top: 10px;
 }
+
+.database-remote-credits {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
 .database-listing-description-row {
-    margin: 20px 10px 0px 15px;
+    margin: 10px 10px 0px 15px;
     font-size: 15px;
     font-weight: 400;
-    color: #586069;
+    color: #787878;
 }
 
 .database-main-action-message, .action-divider {
@@ -2741,7 +2812,10 @@ h4.prefix-section-header {
     border-color: #ffeeba;
 }
 
+
 .database-listing-description {
+    margin: 0px 0px 0px 15px !important;
+    color: #989CA0;
 }
 .database-production-credits {
     width: 120px;
@@ -2761,6 +2835,11 @@ h4.prefix-section-header {
     width: 120px;
 }
 
+.database-listing-url {
+    color: #787878;
+    margin: 5px 15px 10px 15px;
+}
+
 .database-secondary-option {
     height: 30px;
     font-size: 12px;
@@ -2775,12 +2854,52 @@ h4.prefix-section-header {
     margin: auto;
 }
 
+.credit-spacing {
+    /*margin: 10px 0px 0px -15px !important; */
+}
 .delete-action{
     color: #721c24;
-    border: 1px solid #721c24;
-    background-color: #f8d7da;
+    /*border: 1px solid #721c24;
+    background-color: #f8d7da;*/
     border-radius: 2em;
-    padding: 0 10px;
+    padding-left: 1px;
+    font-size: 14px;
+    /*vertical-align: middle;*/
+    margin: 0px 0px 0px 2px;
+}
+
+.db-control {
+    margin: 25px 10px 15px -10px;
+    font-size: 20px;
+}
+
+.db-first-remote-action-height {
+    min-height: 50px;
+}
+
+.delete-modal-col-align {
+    margin-top: 40px;
+}
+
+.db-action {
+    color: #155724;
+    border-radius: 2em;
+    font-size: 14px;
+    margin: 12px;
+    padding-left: 5px;
+}
+
+.context-style {
+    margin-top: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.update-list{
+    width: 100%;
+}
+
+.delete-action:hover, .db-action:hover {
+    cursor: pointer
 }
 
 .fork-action{
@@ -2791,6 +2910,7 @@ h4.prefix-section-header {
     margin: auto;
     padding: 0 10px;
 }
+
 
 .db-main-action {
     margin:auto;
@@ -2910,4 +3030,340 @@ h4.prefix-section-header {
 
 .database-listing-allgood:hover {
     cursor: pointer;
+}
+
+.database-context-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.commit-selector-header {
+    margin-top: 3em;
+    border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+.commit-title-col {
+    padding-top: 8px;
+    text-align: right;
+}
+
+.commit-id-col {
+    padding-top: 4px
+}
+
+
+.new-branch {
+}
+
+.branch-title-col {
+    padding-top: 14px;
+    text-align: right;
+}
+
+.branch-selector-title-col {
+    padding-top: 20px;
+    text-align: right;
+}
+
+.commit-log-title{
+    padding-top: 8px;
+    text-align: right;
+}
+
+
+.branch-id-col {
+
+}
+
+.commit-selector-title {
+    font-weight: 700;
+}
+
+.commit-id-label {
+    padding-right: 1em;
+}
+
+.commit-id-input-box {
+}
+
+.branch-id-input {
+    width: 300px;
+    padding: 6px 12px;
+    border: 1px solid #aaa;
+}
+
+.commit-id-input {
+    width: 250px;
+    padding: 4px 10px;
+    background-color: rgba(0, 102, 253, 0.05);
+    border: 0;
+    color: #666;
+}
+
+
+.commit-branch-context {
+    padding-top: 8px;
+    color: #666;
+}
+
+.commit-branch-selector {
+    text-align: right;
+}
+
+.commit-log-col {
+    padding-left: 0
+}
+
+.merge-inputs {
+}
+
+.merge-commit{
+    margin-top: 8px;
+}
+
+.branch-selector-col {
+    height: 58px;
+    padding: 1px 0;
+}
+
+.select-branch {
+    margin-left: 0;
+}
+
+.remote-synch-actions {
+    margin-top: 40px
+}
+
+.remote-comparison {
+    margin-top: 30px;
+}
+
+.remote-comparison-action {
+    color: #0055bb;
+    padding: 6px 8px;
+    border-radius: 5px;
+}
+
+.remote-comparison-action:hover {
+    color: white;
+    cursor: pointer;
+    background-color: #0055bb;
+    padding: 6px 8px;
+}
+
+.remote-difference {
+    margin: 20px;
+}
+
+.branch-comparison-col {
+    font-weight: 500;
+}
+
+.branch-comparison-name {
+    font-weight: bold;
+    color: #002856;
+}
+
+.branch-update-action {
+    font-size: 2em;
+    font-weight: 800;
+}
+
+.title-remote-action {
+    margin-left: 10px;
+}
+
+.title-remote-action-icon {
+    font-size: 20px;
+}
+
+.remote-comparison-headers {
+    color: #00C08B !important;
+    font-weight: 600;
+}
+
+.remote-comparison-headers-row {
+    padding: 0.75rem;
+    vertical-align: top;
+}
+
+.remote-comparison-spacing {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.db-remote-action-box {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin: 50px;
+}
+
+.db-remote-action-label {
+    margin: -10px 10px 0px 0px;
+    font-size: 14px;
+    background-color: #fff;
+    width: fit-content;
+    width: -moz-fit-content;
+    padding: 0px 10px 0px 10px;
+    font-weight: 600;
+}
+.db-remote-action-display-controls{
+    display: inline-flex;
+    padding: 20px 0px 20px 0px;
+    width: 100%;
+}
+
+.db-controls {
+    background-color: #fff;
+    /* border: 1px solid #e1e4e8; */
+    border-radius: 6px;
+    min-width: 204px;
+    width: 100%;
+    /* margin: -15px -8px 0px -20px; */
+    /* margin-left: -20px; */
+    margin-top: -15px;
+    /* margin-right: 10px; */
+}
+
+.remote-summary-action{
+    float:right;
+}
+
+.synch-info, .remote-info {
+    background-color: #fff;
+    border: 1px solid #856404;
+    border-radius: 6px;
+    display: block;
+    width: -webkit-fill-available;
+    width: -moz-available;
+}
+
+.remote-info-align {
+    margin: -12px 0px 0px 20px;
+    padding: 0px 10px 0px 10px;
+    background-color: #fff;
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+.sync-info-label, .remote-info-label {
+    font-size: 15px;
+    color: #856404;
+    font-weight: 600;
+}
+
+.db-remote-action-info-label {
+    font-size: 15px;
+    color: #002856;
+    font-weight: 600;
+}
+
+.database-remote-info-row {
+    padding: 10px 0px 10px 10px;
+}
+
+.db-remote-action-spacing {
+    margin: 20px 0px 20px 0px;
+}
+
+.database-remote-icon {
+    margin: -3px 6px 0px 0px;
+    vertical-align: middle;
+    color: #856404;
+    font-size: 20px;
+}
+
+.db_info_branch_icon {
+    font-size: 20px;
+    margin: 0px 5px 0px 5px;
+}
+
+.db_info_branch_label {
+    margin-left: 5px;
+    color: #00C08B;
+    font-weight: 600;
+}
+
+.db_info_branch_text {
+    color: #787878;
+}
+
+.branch-info{
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    display: block;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    margin-bottom: 30px;
+}
+
+.db-branch-info-align {
+    margin-top: -12px;
+    margin-left: 20px;
+    padding: 0px 20px 0px 20px;
+    background-color: #fff;
+    width: fit-content;
+    width: -moz-fit-content;
+}
+
+.intro_text_icon {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.intro_text {
+    color: #787878;
+}
+
+.synch-action-text {
+    padding: 12px !important;
+}
+
+.repo_title {
+    color: #0055bb;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.delete-modal-body {
+    text-align: center;
+}
+
+.delete-modal-icon {
+    font-size: 80px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.delete-modal-text {
+    font-size: 17px;
+    color: #721c24;
+    margin-top: 80px;
+    margin-left: 10px;
+}
+
+.warning-modal-text {
+    font-size: 17px;
+    color: #856404;
+    margin-top: 80px;
+    margin-left: 10px;
+}
+
+.major-database-controls-align {
+    margin: 0px 50px 0px 50px;
+}
+
+.dbremote-full-card {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 40px;
+}
+
+.db-remote-action-buttons {
+    width: 100%;
+    padding: 0px 20px 0px 20px !important;
+    margin: 0px 80px 10px 70px !important;
 }

@@ -26,18 +26,23 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [branch, setBranch] = useState(woqlClient.checkout())
     const [prefixes, setPrefixes] = useState()
     const [repos, setRepos] = useState()
+
     const [ref, setRef] = useState(woqlClient.ref())
+    
     const [consoleTime, setConsoleTime] = useState()
+    
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
-    const [scale, setScale] = useState()
+    const [reposReload, setReposReload] = useState(0)
 
     const [branchesReload, setBranchesReload] = useState(0)
 
     const WOQL = TerminusClient.WOQL
 
-    //load branch structure
+    /*
+    * I load the branch list, will be update if I add a new branch
+    */
     useEffect(() => {
         setLoading(loading + 1)
         WOQL.lib()
@@ -46,25 +51,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
             .then((res) => {
                 let binds = res && res.bindings ? branchStructureFromBindings(res.bindings) : []
                 setBranches(binds)
-            })
-            .catch((e) => {
-                setReport({error: e, status: TERMINUS_ERROR})
-            })
-            .finally(() => setLoading(loading - 1))
-    }, [branchesReload])
-
-    //load dbSize
-    useEffect(() => {
-        setLoading(loading + 1)
-        let dbres = woqlClient.resource('db')
-        WOQL.triple_count(dbres, 'v:Triple Count')
-            .size(dbres, 'v:Size')
-            .execute(woqlClient)
-            .then((res) => {
-                let nscale = {}
-                nscale.size = res.bindings[0]['Size']['@value']
-                nscale.triple_count = res.bindings[0]['Triple Count']['@value']
-                setScale(nscale)
             })
             .catch((e) => {
                 setReport({error: e, status: TERMINUS_ERROR})
@@ -102,7 +88,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [])
+    }, [branchesReload])
 
     //load graph structure
     useEffect(() => {
@@ -124,84 +110,57 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [branch, ref])
+    }, [branch, ref, branches])
 
     //load Repo
     useEffect(() => {
-        setLoading(loading + 1)
-        let cresource = woqlClient.resource('meta')
-        WOQL.lib()
-            .repos(false, false, cresource)
-            .execute(woqlClient)
-            .then((res) => {
-                let binds = res && res.bindings ? ReposFromBindings(res.bindings) : []
-                setRepos(binds)
-            })
-            .catch((e) => {
-                setReport({error: e, status: TERMINUS_ERROR})
-            })
-            .finally(() => setLoading(loading - 1))
-    }, [])
-
-    //load head ref when consoleTime is set
-    useEffect(() => {
-        if (headUpdating && ref) {
+        if(branches){
+            setLoading(loading + 1)
+            let cresource = woqlClient.resource('meta')
             WOQL.lib()
-                .commits(ref)
+                .repos(false, false, cresource)
                 .execute(woqlClient)
                 .then((res) => {
-                    if (res.bindings && res.bindings[0] && res.bindings[0]['Time']) {
-                        let ts = res.bindings[0]['Time']['@value']
-                        setConsoleTime(ts)
-                    }
+                    let binds = res && res.bindings ? ReposFromBindings(res.bindings) : []
+                    setRepos(binds)
                 })
-            setHeadUpdating(false)
-        } else if (consoleTime && branches && branch && branches[branch]) {
-            setLoading(loading + 1)
-            if (consoleTime < branches[branch].updated) {
-                let woql = getActiveCommitAtTime(branch, String(consoleTime))
-                woql.execute(woqlClient)
-                    .then((res) => {
-                        if (res.bindings && res.bindings[0] && res.bindings[0]['Commit ID']) {
-                            let cid = res.bindings[0]['Commit ID']['@value']
-                            if (cid != branches[branch].head) {
-                                woqlClient.ref(cid)
-                                setRef(cid)
-                            } else {
-                                woqlClient.ref(false)
-                                setRef(false)
-                            }
-                        }
-                    })
-                    .catch((e) => {
-                        setReport({error: e, status: TERMINUS_ERROR})
-                    })
-                    .finally(() => setLoading(loading - 1))
-            } else {
-                if (ref) {
-                    woqlClient.ref(false)
-                    setRef(false)
-                }
-                if (consoleTime >= Date.now() / 1000) {
-                    setConsoleTime()
-                }
-            }
+                .catch((e) => {
+                    setReport({error: e, status: TERMINUS_ERROR})
+                })
+                .finally(() => setLoading(loading - 1))
         }
-    }, [consoleTime, ref, branches, branch])
+    }, [branches, reposReload])
 
-    function setHead(bid, rid) {
-        woqlClient.checkout(bid)
-        woqlClient.ref(rid)
-        setBranch(bid)
-        setRef(rid)
-        if (rid) {
-            //don't trigger update for console time change
-            setHeadUpdating(true)
+
+
+    function setHead(branchID, refObject={}){// ridConsoleTime=false) {
+        woqlClient.checkout(branchID)
+        let sref=refObject.commit;
+        let refTime=refObject.time;
+
+        //alert(branch + " => " + branchID + " ref: " + ref + " => " + sref + " " + consoleTime)
+
+        if(branches && branches[branchID] && branches[branchID].head == sref){
+            sref = false
+            refTime=false  
         }
+        sref = sref || false
+        woqlClient.ref(sref)
+       /*
+       to be review
+       remove consoleTime and ref and leave only refObject ????;
+       */
+        setBranch(branchID)
+        setRef(sref);
+        setConsoleTime(refTime)
     }
 
-    function updateBranches() {
+    function updateBranches(bid) {
         setBranchesReload(branchesReload + 1)
+    }
+
+    function updateRepos(){
+        setReposReload(reposReload + 1)
     }
 
     function dbStructureFromBindings(bindings) {
@@ -224,25 +183,22 @@ export const DBContextProvider = ({children, woqlClient}) => {
         let repos = {}
         for (var i = 0; i < bindings.length; i++) {
             let b = bindings[i]
-            if (b['Remote URL'] && b['Remote URL']['@value']) {
-                if (isLocalClone(b['Remote URL']['@value'])) {
-                    repos.local_clone = {
+            if(b['Repository Name'] && b['Repository Name']['@value']){
+                let title = b['Repository Name']['@value']
+                if(repos[title]){
+                    title += i
+                }
+                if (b['Remote URL'] && b['Remote URL']['@value']) {                    
+                    repos[title] = { 
                         url: b['Remote URL']['@value'],
-                        title: b['Repository Name']['@value'],
-                        type: 'Local Clone',
-                    }
-                } else {
-                    repos.remote = {
-                        url: b['Remote URL']['@value'],
-                        title: b['Repository Name']['@value'],
-                        type: 'Remote',
+                        title: title,
                     }
                 }
-            } else {
-                repos.local = {
-                    type: 'Local',
-                    title: b['Repository Name']['@value'],
-                }
+                else {
+                    repos.local = {
+                        title: 'local'
+                    }
+                }    
             }
         }
         return repos
@@ -293,12 +249,14 @@ export const DBContextProvider = ({children, woqlClient}) => {
         return gs
     }
 
+
     return (
         <DBContext.Provider
             value={{
                 setConsoleTime,
                 setHead,
                 updateBranches,
+                updateRepos,
                 consoleTime,
                 DBInfo,
                 branches,
@@ -307,7 +265,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 branch,
                 ref,
                 repos,
-                scale,
                 prefixes,
                 loading,
             }}
@@ -348,8 +305,9 @@ export const TerminusDBProvider = (woqlClient) => {
         prefixes,
         graphs,
         report,
-        branch,
         ref,
+        branch,
+        refObject,
         loading,
     }
 }
@@ -371,54 +329,16 @@ export const NullDBProvider = (woqlClient) => {
         setConsoleTime,
         setHead,
         updateBranches,
-        consoleTime,
         DBInfo,
         branches,
         prefixes,
         graphs,
         report,
         branch,
+        consoleTime,
         ref,
         loading,
     }
 
 }
 
-
-function getActiveCommitAtTime(branch, ts) {
-    const WOQL = TerminusClient.WOQL
-
-    let constraint = WOQL.eq('v:Branch ID', branch)
-    let vars = ['A', 'Head IRI', 'Head Time', 'D', 'E', 'F', 'G', 'H', 'Branch ID']
-    let head = WOQL.lib().commits(constraint, vars)
-    let head_deets = WOQL.limit(1).and(head, WOQL.lib().commit_chain())
-    let bottom = WOQL.less(ts, 'v:Bottom Time')
-    let tail = WOQL.using('_commits')
-        .limit(1)
-        .and(
-            WOQL.path('v:Head IRI', 'ref:commit_parent+', 'v:Bottom IRI', 'v:Paths'),
-            WOQL.lib().commits(false, [
-                'AA',
-                'BB',
-                'Bottom Time',
-                'DD',
-                'EE',
-                'FF',
-                'GG',
-                'HH',
-                'JJ',
-            ]),
-            bottom,
-            WOQL.triple('v:BB', 'ref:commit_parent', 'v:Actual Tail'),
-            WOQL.triple('v:Actual Tail', 'ref:commit_timestamp', 'v:Actual Tail Time'),
-            WOQL.triple('v:Actual Tail', 'ref:commit_id', 'v:Commit ID'),
-            WOQL.not().less(ts, 'v:Actual Tail Time'),
-        )
-
-    let top = WOQL.not().less(ts, 'v:Head Time')
-
-    return WOQL.select('v:Commit ID').and(
-        head_deets,
-        WOQL.or(WOQL.and(top, WOQL.eq('v:Commit ID', 'v:Head ID')), tail),
-    )
-}
