@@ -4,7 +4,7 @@
 import React, {useState, useEffect} from 'react'
 import {useAuth0} from '../../react-auth0-spa'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
+import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
