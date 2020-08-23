@@ -21,13 +21,23 @@ import {legalURLID} from "../../components/Query/CollaborateAPI"
 import Select from "react-select";
 import { AiFillCloseCircle} from 'react-icons/ai';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import TerminusClient from '@terminusdb/terminusdb-client'
+import {formatBytes} from "../DBHome/DBFullCard"
+
 
 export const GraphManager = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {graphs, updateGraphs} = DBContextObj()
+    const {graphs, updateGraphs, ref, branch} = DBContextObj()
     const [loading, setLoading] = useState(false)
     const [subpage, setSubpage] = useState("list")
     const [report, setReport] = useState()
+    const [graphListings, setGraphListings] = useState()
+
+    useEffect(() => {
+        if(graphs){
+            gQuery(graphs)
+        }
+    }, [graphs])
 
     function submitDelete(id, type, commit){
         commit = (commit ? commit : `Deleted ${type} graph ${id} from console >> schema >> graphs`)
@@ -75,6 +85,54 @@ export const GraphManager = (props) => {
         setSubpage("list")
     }
 
+    function gQuery(graphs) {
+        let WOQL = TerminusClient.WOQL
+        let qbase = (ref ? woqlClient.resource("ref", ref) : woqlClient.resource("branch", branch))
+        let q = WOQL.query()
+        let i = 0
+        for(var k in graphs){
+            let gq = qbase + "/" + k
+            q.and(
+                WOQL.size(gq, "v:S_" + i).triple_count(gq, "v:T_" + i)
+            )
+            i++
+        }
+        woqlClient.query(q)
+        .then((res) => {
+            let ngs = []
+            if(res.bindings && res.bindings[0]){
+                let gres = res.bindings[0]
+                let j = 0
+                for(var k in graphs){
+                    let ng = {}
+                    ng.Type = graphs[k].type
+                    ng.ID = graphs[k].id
+                    let s = gres["S_" + j]
+                    let t =  gres["T_" + j]
+                    if(s){
+                        ng["Size"] = formatBytes(s['@value'])
+                    }
+                    if(t){
+                        ng["Triples"] = t['@value']
+                    }
+                    ngs.push(ng)
+                    j++
+                }
+            }
+            else {
+                ngs = Object.values(graphs)
+            }
+            setGraphListings(ngs)
+        })
+        .catch((e) => {
+            let rep = { status: TERMINUS_ERROR, message: "Failed to load graph sizes", error: e}
+            setReport(rep)
+            setGraphListings(Object.values(graphs))
+        })
+    }
+
+
+
     return (
         <div className={TAB_SCREEN_CSS}>
             {!graphs && <Loading />}
@@ -101,7 +159,9 @@ export const GraphManager = (props) => {
                     }
                 </Row>
                 <span className="graphs-listing">
-                    <GraphList graphs={Object.values(graphs)} />
+                    {graphListings && 
+                        <GraphList graphs={graphListings} />
+                    }
                 </span>  
             </>}
         </div>            

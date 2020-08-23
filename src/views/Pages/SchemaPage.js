@@ -15,10 +15,7 @@ import {
     SCHEMA_PREFIXES_ROUTE,
 } from '../../constants/routes'
 
-import {WOQLClientObj} from '../../init/woql-client-instance'
-import TerminusClient from '@terminusdb/terminusdb-client'
 import {DBContextObj} from '../../components/Query/DBContext'
-
 import {Classes} from '../Schema/Classes'
 import {Properties} from '../Schema/Properties'
 import {OWL} from '../Schema/OWL'

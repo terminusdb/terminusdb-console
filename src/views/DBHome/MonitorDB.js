@@ -21,8 +21,8 @@ export const MonitorDB = (props) => {
     let WOQL = TerminusClient.WOQL
 
     useEffect(() => {
-        load_assets()
-    }, [])
+        if(branches) load_assets()
+    }, [branches])
 
 
     function load_assets(){
