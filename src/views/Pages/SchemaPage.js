@@ -84,8 +84,25 @@ const SchemaPage = (props) => {
     }
 
     function getDefaultInstanceFilter() {
-        let x = getDefaultSchemaFilter()
-        if(x) return x
+        let cand = false;
+        for (var key in graphs) {
+            if (graphs[key].type == 'schema'){
+                if(!cand || cand.type != 'schema' || graphs[key].id == "main"){
+                    cand = graphs[key]
+                }
+            }            
+            if (graphs[key].type == 'inference'){
+                if(!cand || cand.type == 'instance'){
+                    cand = graphs[key]
+                }
+            }
+            if (graphs[key].type == 'instance'){
+                if(!cand){
+                    cand = graphs[key]
+                }
+            }
+        }
+        if(cand) return cand
         return {type: "instance", id: "main"}
     }
 

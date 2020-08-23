@@ -136,7 +136,6 @@ const ListSubpage = ({graphs, onCreate, onDelete, message}) => {
     }
 
     let dopts = []
-    console.log(graphs)
     for(var k in graphs){
         if(k != "instance/main"){
             dopts.push({label: graphs[k].type + " " + graphs[k].id, value: k})
@@ -151,12 +150,14 @@ const ListSubpage = ({graphs, onCreate, onDelete, message}) => {
     cols.push(
         <Col  key='m2' md={3} className={TOOLBAR_CSS.graphCol}>
             <span className="schema-toolbar-prefixes-holder">
-                <Select 
-                    className = {GRAPH_FILTER_CSS}
-                    placeholder = "Select Graph to Delete"
-                    onChange = {changeDel}
-                    options = {dopts}
-                />
+                {(dopts && dopts.length > 0) &&
+                    <Select 
+                        className = {GRAPH_FILTER_CSS}
+                        placeholder = "Select Graph to Delete"
+                        onChange = {changeDel}
+                        options = {dopts}
+                    />
+                }
             </span>
             {del && 
                 <span className="schema-toolbar-delete-holder" title={"Delete " + del}>

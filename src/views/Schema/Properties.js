@@ -14,7 +14,6 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {PropertyList} from '../Tables/PropertyList'
 import {SCHEMA_PROPERTIES_ROUTE} from '../../constants/routes'
-import {SchemaToolbar} from './SchemaToolbar'
 import {PROPERTIES_TABLE_INFO_MSG} from './constants.schema'
 import {TERMINUS_INFO} from '../../constants/identifiers'
 import {Col, Row, Button} from "reactstrap"

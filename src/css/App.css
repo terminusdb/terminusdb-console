@@ -2542,6 +2542,7 @@ h4.prefix-section-header {
 .schema-toolbar-graphs {
     padding: 0;
     margin-top: -3px;
+    z-index: 999999!important;
 }
 
 .schema-toolbar-create {
