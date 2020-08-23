@@ -35,7 +35,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
     const [reposReload, setReposReload] = useState(0)
-
+    const [graphsReload, setGraphsReload] = useState(0)
     const [branchesReload, setBranchesReload] = useState(0)
 
     const WOQL = TerminusClient.WOQL
@@ -110,7 +110,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [branch, ref, branches])
+    }, [branch, ref, branches, graphsReload])
 
     //load Repo
     useEffect(() => {
@@ -161,6 +161,10 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     function updateRepos(){
         setReposReload(reposReload + 1)
+    }
+
+    function updateGraphs(){
+        setGraphsReload(graphsReload + 1)
     }
 
     function dbStructureFromBindings(bindings) {
@@ -257,6 +261,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 setHead,
                 updateBranches,
                 updateRepos,
+                updateGraphs,
                 consoleTime,
                 DBInfo,
                 branches,

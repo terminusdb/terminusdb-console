@@ -12,9 +12,9 @@ import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
 import { CreateLocal } from '../../components/Query/CollaborateAPI'
 
-export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
+export const CloneLocal = ({meta, woqlClient, onCancel, onClone, refreshDBRecord}) => {
     const [loading, setLoading] = useState(false)
-
+    let update_start = Date.now()
     let intro_message = "Cloning a local database creates an entirely new copy of the database, that can be changed independently, but remains connected to the original and can be synchronized"
     let clone_intro = {status: TERMINUS_INFO,  message: intro_message};
     const [report, setReport] = useState(clone_intro)
@@ -53,8 +53,14 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
             time: Date.now() - update_start,
         }
         setReport(rep)
-        refreshDBRecord(id, organization)
-        .then(() => goDBHome(id, organization, report))
+        alert(organization)
+        try {
+            refreshDBRecord(id, organization)
+            .then(() => goDBHome(id, organization, report))
+        }
+        catch(e){
+            console.log(e)
+        }
     }
 
     let buttons = {

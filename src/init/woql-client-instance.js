@@ -32,7 +32,7 @@ export const WOQLClientProvider = ({children, params}) => {
 
             const opts = params || {}
             const dbClient = new TerminusClient.WOQLClient(opts.server)
-
+            TerminusClient.WOQL.client(dbClient)
             if (!opts.key || opts.key === 'undefined') {
                 setShowLogin(true)
             } 
@@ -262,9 +262,16 @@ export const WOQLClientProvider = ({children, params}) => {
                     woqlClient.databases(nudbs)
                 }
                 else {
-                    let odb = woqlClient.get_database(id, org)
-                    for(var k in local){
-                        odb[k] = local[k]
+                    let odb = woqlClient.get_database(id, org) 
+                    if(odb){
+                        for(var k in local){
+                            odb[k] = local[k]
+                        }
+                    }
+                    else {
+                        let xudbs = woqlClient.databases()
+                        xudbs.push(local)
+                        woqlClient.databases(xudbs)
                     }
                 }                
                 setContextEnriched(contextEnriched + 1)

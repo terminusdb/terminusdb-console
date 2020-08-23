@@ -6,22 +6,28 @@ import {
     UPDATE_OWL_BUTTON,
     COMMIT_PLACEHOLDER,
     SUBMIT_INPUT_LABEL,
+    CREATE_PREFIX_BUTTON,
     CREATE_GRAPH_BUTTON,
+    GRAPH_FILTER_CSS
 } from './constants.schema'
 import {GraphFilter} from './GraphFilter'
 import {Row, Col, Button} from 'reactstrap'
-import {SCHEMA_OWL_ROUTE, SCHEMA_GRAPHS_ROUTE} from '../../constants/routes'
+import {SCHEMA_OWL_ROUTE, SCHEMA_GRAPHS_ROUTE, SCHEMA_PREFIXES_ROUTE} from '../../constants/routes'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {WOQLClientObj} from '../../init/woql-client-instance'
+import Select from "react-select";
 
 export const SchemaToolbar = ({
     editmode,
     report,
     page,
     graph,
+    graphs,
+    prefixes,
     onChangeGraph,
     onAction,
+    onEdit,
     onCancel,
     onUpdate,
 }) => {
@@ -44,14 +50,20 @@ export const SchemaToolbar = ({
                     {EDIT_OWL_BUTTON}
                 </Button>
             )
-        } else if (p == SCHEMA_GRAPHS_ROUTE && !consoleTime && woqlClient.db() != 'terminus') {
+        } else if (p == SCHEMA_GRAPHS_ROUTE && !consoleTime && woqlClient.db() != "_system" ) {
             return (
                 <Button className={TOOLBAR_CSS.createGraphButton} onClick={onAction}>
                     {CREATE_GRAPH_BUTTON}
                 </Button>
             )
+        } else if (p == SCHEMA_PREFIXES_ROUTE && !consoleTime && woqlClient.db() != "_system" ) {
+            return (
+                <Button className={TOOLBAR_CSS.createGraphButton} onClick={onAction}>
+                    {CREATE_PREFIX_BUTTON}
+                </Button>
+            )
         }
-        return null
+    return null
     }
 
     function extractInput() {
@@ -73,6 +85,33 @@ export const SchemaToolbar = ({
     }
 
     let gf = GraphFilter(page, graph, onChangeGraph)
+
+
+
+    if(page === SCHEMA_PREFIXES_ROUTE){
+        
+        function editThing(tval){
+            if(onEdit) onEdit(tval.value)
+        }
+
+        let popts = prefixes.map((item) => {
+            return {label: "View " + item["Prefix"]["@value"], value: item["Prefix Pair IRI"]}
+        })
+
+        let allopts = [{label: "List Prefixes", value: ""}].concat(popts)
+
+        if(popts.length){
+            gf = (
+            <Select 
+                className = {GRAPH_FILTER_CSS}
+                placeholder = "List Prefixes"
+                onChange = {editThing}
+                options = {allopts}
+            />)
+        }
+    }
+
+
     let cr = getCreateForPage(page)
     let but = getSubmitButtons(page)
 
@@ -142,14 +181,14 @@ export const SchemaToolbar = ({
                     </span>
                 )}
             </Col>
-            {cr && (
-                <Col md={2} className={TOOLBAR_CSS.createCol}>
-                    {cr}
-                </Col>
-            )}
             {gf && (
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                     {gf}
+                </Col>
+            )}
+            {cr && (
+                <Col md={2} className={TOOLBAR_CSS.createCol}>
+                    {cr}
                 </Col>
             )}
         </Row>

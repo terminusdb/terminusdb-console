@@ -142,7 +142,7 @@ export const OWL = (props) => {
                     onUpdate={tryUpdateSchema}
                 />
             )}
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
+            {loading && <Loading />}
             {failure && <TerminusDBSpeaks failure={failure.failure} report={failure.report} />}
             {!(loading || failure) && (
                 <OWLEditor dataProvider={dataProvider} edit={edit} onChange={getContents} />

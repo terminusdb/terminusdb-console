@@ -11,7 +11,7 @@ import { GiPlainCircle } from 'react-icons/gi';
 import { CloneLocal } from "../CreateDB/CloneDatabase"
 
 export const MonitorDB = (props) => {
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient, refreshDBRecord} = WOQLClientObj()
     const {branches} = DBContextObj()
 
     const [cloning, setCloning] = useState()
@@ -53,7 +53,7 @@ export const MonitorDB = (props) => {
             </Row>
             {cloning && 
                 <Row key="rc">
-                    <CloneLocal meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
+                    <CloneLocal refreshDBRecord={refreshDBRecord} meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
                 </Row>
             }
             {!cloning && <>

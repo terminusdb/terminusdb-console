@@ -2517,10 +2517,10 @@ h4.prefix-section-header {
 }
 
 .schema-toolbar {
-    height: 60px;
-    background-color: rgba(0, 102, 253, 0.1);
+    height: 64px;
     margin: 0px 0px 0px 0px;
-    padding: 2px;
+    border-bottom: 1px solid #00C08B;
+    padding: 2px 2px 8px 2px;
 }
 
 .schema-edit-toolbar {
@@ -2576,6 +2576,25 @@ h4.prefix-section-header {
     border-radius: 3px;
 }
 
+.schema-toolbar-update-prefix {
+    background-color: #00C08B !important;
+    color: #eee !important;
+    width: 120px  !important;
+    border: 2px solid white  !important;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    border-radius: 3px;
+    height: 54px;
+    width: 150px;
+}
+
+.schema-toolbar-update-prefix:hover {
+    border: 2px solid #00C08B !important;
+    color: white !important;
+} 
+
 .schema-toolbar-cancel {
     background-color:#888 !important;
     color: #eee !important;
@@ -2606,7 +2625,7 @@ h4.prefix-section-header {
 
 .schema-toolbar-action {
     background-color: white !important;
-    height: 52px;
+    height: 54px;
     width: 150px;
     color: #888 !important;
     border: 1px solid #ddd;
@@ -2622,7 +2641,83 @@ h4.prefix-section-header {
 
 }
 
-.schema-toolbar-messages, .query-pane-toolbar-row {
+.schema-toolbar-input-error {
+    padding-left: 6px; 
+    color: #a00;
+}
+
+.schema-toolbar-title {
+    height: 50px;
+    text-align: left;
+    width: 100%;
+    padding-top: 18px;
+    font-size: 1.15em;
+    color: #668 !important;
+}
+
+.schema-toolbar-cancel-icon {
+    font-size: 3em;
+}
+
+.schema-toolbar-cancel-icon:hover {
+    cursor: pointer;
+}
+
+.schema-toolbar-delete-holder {
+    margin-left: 6px;
+    font-size: 1.2em;
+}
+
+.schema-toolbar-delete-holder:hover {
+    cursor: pointer;
+}
+
+.schema-toolbar-cancel-holder {
+    text-align: right;
+    width: 100%;
+    margin-left: 6px;
+}
+
+.schema-toolbar-iri-holder {
+    width: 500px;
+    padding-top: 10px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.schema-toolbar-prefix-holder {
+    width: 150px;
+    padding-top: 10px;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.schema-toolbar-prefix {
+    border:2px solid rgb(226, 232, 240);
+    padding: 12px 6px;
+    font-size: 1.1em !important;
+}
+
+.schema-toolbar-iri {
+    border:2px solid rgb(226, 232, 240);
+    padding: 12px 6px;
+    font-size: 1.1em !important;
+}
+
+.generic-message-holder {
+    height: 40px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    display: inline-block;
+    width: 100%;
+}
+
+.schema-toolbar-prefixes-holder {
+    display: inline-block;
+    width: 250px;
+}
+
+.query-pane-toolbar-row {
     padding: 5px;
     text-align: center;
     width: 100%;
@@ -2651,6 +2746,8 @@ h4.prefix-section-header {
     text-align: right;
     padding-top: 6px;
 }
+
+.schema-toolbar-update
 
 .schema-toolbar-action:hover {
     background-color: #00C08B !important;
@@ -2715,6 +2812,19 @@ h4.prefix-section-header {
     text-align: center;
     font-size: 70px;
     margin: 35px 60px 0px 60px;
+}
+
+div.builtin-prefixes {
+    margin-top: 60px;
+    border-top: 1px solid #ccc;
+    padding-top: 40px;
+}
+
+.builtin-prefixes-header {
+    font-size: 1.2em !important;
+    color: #00C08B;
+    padding-bottom: 0px !important;
+    margin-bottom: 0 !important;
 }
 
 .database-controls {
