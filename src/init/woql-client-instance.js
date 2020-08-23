@@ -205,7 +205,7 @@ export const WOQLClientProvider = ({children, params}) => {
         let usings = [org + "/" + id]
         let sysClient = woqlClient.copy()
         sysClient.set_system_db()
-        return TerminusClient.WOQL.lib().assets_overview(usings, sysClient)
+        return TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
         .then((res) =>{
             if(res[0]){
                 let local = res[0]

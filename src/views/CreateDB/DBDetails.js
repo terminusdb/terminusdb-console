@@ -96,7 +96,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
             />
 
             <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
-                {!advancedSettings && (
+                {(!advancedSettings && !from_local) && (
                     <button
                         className={DB_ADVANCED_FORM.advancedButtonClassName}
                         onClick={toggleAdvanced}

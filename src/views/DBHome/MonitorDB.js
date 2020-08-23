@@ -9,10 +9,11 @@ import {CommitLog} from "./CommitLog"
 import {ScopedDetails} from "./ScopedDetails"
 import { GiPlainCircle } from 'react-icons/gi';
 import { CloneLocal } from "../CreateDB/CloneDatabase"
+import { goDBHome } from '../../components/Router/ConsoleRouter'
 
 export const MonitorDB = (props) => {
     const {woqlClient, refreshDBRecord} = WOQLClientObj()
-    const {branches} = DBContextObj()
+    const {branches, updateBranches} = DBContextObj()
 
     const [cloning, setCloning] = useState()
     let dbmeta = woqlClient.get_database() || {}
@@ -45,6 +46,33 @@ export const MonitorDB = (props) => {
         setCloning(!cloning)
     }
 
+    function onClone(id, org, doc){
+        setCloning(false)
+        let oldie = woqlClient.get_database()
+        let nu = {
+            id: id,
+            organization: org,
+            label: doc.label,
+            comment: doc.comment,
+            type: "local_clone"
+        }
+        nu.remote_record = oldie;
+        let dbs = woqlClient.databases()
+        dbs.push(nu)
+        let ostate = assetRecord
+        var nkstate = {}
+        for(var k in ostate){
+            if(k == "label" || k == "id" || k == "comment") nkstate[k] = nu[k]
+            else nkstate[k] = ostate[k]
+        }
+        refreshDBRecord(id, org).then(() => {
+            goDBHome(id, org)
+            updateBranches()
+            woqlClient.db(id)
+            setAssetRecord(woqlClient.get_database())
+        })
+    }
+
     if(!branches) return null
     return (
         <div>
@@ -53,7 +81,7 @@ export const MonitorDB = (props) => {
             </Row>
             {cloning && 
                 <Row key="rc">
-                    <CloneLocal refreshDBRecord={refreshDBRecord} meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
+                    <CloneLocal onClone={onClone} meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
                 </Row>
             }
             {!cloning && <>
