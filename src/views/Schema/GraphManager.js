@@ -97,38 +97,43 @@ export const GraphManager = (props) => {
             )
             i++
         }
-        woqlClient.query(q)
-        .then((res) => {
-            let ngs = []
-            if(res.bindings && res.bindings[0]){
-                let gres = res.bindings[0]
-                let j = 0
-                for(var k in graphs){
-                    let ng = {}
-                    ng.Type = graphs[k].type
-                    ng.ID = graphs[k].id
-                    let s = gres["S_" + j]
-                    let t =  gres["T_" + j]
-                    if(s){
-                        ng["Size"] = formatBytes(s['@value'])
+        if(i > 1){
+            woqlClient.query(q)
+            .then((res) => {
+                let ngs = []
+                if(res.bindings && res.bindings[0]){
+                    let gres = res.bindings[0]
+                    let j = 0
+                    for(var k in graphs){
+                        let ng = {}
+                        ng.Type = graphs[k].type
+                        ng.ID = graphs[k].id
+                        let s = gres["S_" + j]
+                        let t =  gres["T_" + j]
+                        if(s){
+                            ng["Size"] = formatBytes(s['@value'])
+                        }
+                        if(t){
+                            ng["Triples"] = t['@value']
+                        }
+                        ngs.push(ng)
+                        j++
                     }
-                    if(t){
-                        ng["Triples"] = t['@value']
-                    }
-                    ngs.push(ng)
-                    j++
                 }
-            }
-            else {
-                ngs = Object.values(graphs)
-            }
-            setGraphListings(ngs)
-        })
-        .catch((e) => {
-            let rep = { status: TERMINUS_ERROR, message: "Failed to load graph sizes", error: e}
-            setReport(rep)
-            setGraphListings(Object.values(graphs))
-        })
+                else {
+                    ngs = Object.values(graphs)
+                }
+                setGraphListings(ngs)
+            })
+            .catch((e) => {
+                let rep = { status: TERMINUS_ERROR, message: "Failed to load graph sizes", error: e}
+                setReport(rep)
+                setGraphListings(Object.values(graphs))
+            })
+        }
+        else {
+            setGraphListings([{Type: "instance", "ID": "main", "Size": "0 Bytes", "Triples": "0"}])
+        }
     }
 
 
