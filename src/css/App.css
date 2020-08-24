@@ -3319,6 +3319,10 @@ div.builtin-prefixes {
     border-top: 1px solid #dee2e6;
 }
 
+.db-remote-branch-label {
+    width: 130px !important;
+}
+
 .db-remote-action-box {
     background-color: #fff;
     border: 1px solid #e1e4e8;

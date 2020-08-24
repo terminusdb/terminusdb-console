@@ -102,7 +102,7 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
         <Col>
             {show_remote_branching &&
                 <Row className="db-remote-action-spacing db-first-remote-action-height">
-                    To Remote Branch
+                    <span className="db-remote-branch-label">To Remote Branch</span>
                     {newBranch &&
                         <Col md={6}>
                             <input
@@ -156,7 +156,8 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
                 }
             </Row>
             {show_local_branching &&
-                <Row className="db-remote-action-spacing">From Local Branch
+                <Row className="db-remote-action-spacing">
+                    <span className="db-remote-branch-label">From Local Branch</span>
                     <Col md={6}>
                         <Select
                             placeholder = {localBranch}
@@ -281,7 +282,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
             </Row>
             {show_local_branching &&
                 <Row className="db-remote-action-spacing">
-                    To Local Branch
+                    <span className="db-remote-branch-label">To Local Branch</span>
                     {newBranch &&
                         <Col md={6}>
                             <input
