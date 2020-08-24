@@ -6,16 +6,17 @@ import {
     FAILED_LOADING_SCHEMA_CLASSES,
     CLASSES_QUERY_LIMIT,
     TAB_SCREEN_CSS,
+    TOOLBAR_CSS,
 } from './constants.schema'
-import {TERMINUS_COMPONENT, TERMINUS_INFO} from '../../constants/identifiers'
-import {ComponentFailure} from '../../components/Reports/ComponentFailure.js'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {ClassList} from '../Tables/ClassList'
-import {SchemaToolbar} from './SchemaToolbar'
 import {SCHEMA_CLASSES_ROUTE} from '../../constants/routes'
-import {CLASS_TABLE_INFO_MSG} from './constants.schema'
+import {Col, Row, Button} from "reactstrap"
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
+import {GraphFilter} from './GraphFilter'
+
 
 export const Classes = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -28,11 +29,6 @@ export const Classes = (props) => {
         branch,
         ref,
     )
-
-    let initMsg = CLASS_TABLE_INFO_MSG
-        ? {status: TERMINUS_INFO, message: CLASS_TABLE_INFO_MSG}
-        : null
-    const [reportMessage, setReport] = useState(initMsg)
 
     useEffect(() => {
         if (
@@ -54,20 +50,31 @@ export const Classes = (props) => {
 
     return (
         <div className={TAB_SCREEN_CSS}>
-            <SchemaToolbar
-                page={SCHEMA_CLASSES_ROUTE}
-                graph={filter}
-                onChangeGraph={props.onChangeGraph}
-                report={reportMessage}
-            />
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
-            {report && report.error && (
-                <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />
-            )}
-            {report && report.rows > 0 && bindings && (
-                <ClassList query={woql} classes={bindings} updateQuery={updateQuery} />
-            )}
-            {report && report.rows == 0 && <EmptyResult report={report} />}
+            {loading && <Loading />}
+            <Row className={TOOLBAR_CSS.container}>
+                <Col key='m1' md={9} className="schema-toolbar-title">
+                    Classes define the permitted shapes of documents and data-objects stored in your database
+                </Col>
+                <Col md={3} className={TOOLBAR_CSS.graphCol}>
+                     {GraphFilter(SCHEMA_CLASSES_ROUTE, filter, props.onChangeGraph)}
+                </Col>
+            </Row>            
+            <Row className="generic-message-holder">
+                {(report && report.status) && 
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            {(bindings && bindings.length > 0) && 
+               <span className="graphs-listing">
+                    <ClassList query={woql} classes={bindings} updateQuery={updateQuery} />
+                </span>  
+            }
+            {(!(bindings && bindings.length > 0)) &&
+                <Row className="generic-message-holder">
+                    <EmptyResult report={report} />
+                </Row>
+            } 
         </div>
     )
 }
+

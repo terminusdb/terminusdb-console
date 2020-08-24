@@ -44,7 +44,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
 }
 
 export const PushControl = ({branches, repo, remote_branches, branch, onPush}) => {
-
+    branches = branches || []
     const [localBranch, setLocalBranch] = useState(branch)
     const [remoteBranch, setRemoteBranch] = useState(getDefaultRemoteBranch(remote_branches, branch))
     const [newBranch, setNewBranch] = useState(false)
@@ -200,7 +200,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
 
     let show_remote_branching = (remote_branches.length > 1)
     let show_local_branching = true
-    if(branches.length == 1 && !show_remote_branching){
+    if(!branches || (branches.length == 1 && !show_remote_branching)){
         show_local_branching = false
     }
 

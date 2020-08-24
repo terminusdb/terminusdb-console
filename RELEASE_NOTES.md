@@ -1,3 +1,18 @@
+# TerminusDB Console v2.0.7 Release Notes
+
+## New
+
+* Integration of new react-component package
+* New time travel widget
+* New branch creation page with time travel widget
+* New merge page with time travel widget
+* New synchronize page with ability to add multiple remotes
+* New database home page responsive to context / time travelling
+
+## bug-fixes
+
+
+
 # TerminusDB Console v2.0.6 Release Notes
 
 ## New

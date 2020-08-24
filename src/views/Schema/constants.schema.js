@@ -22,14 +22,14 @@ export const FAILED_LOADING_OWL = {
 
 export const DELETE_ICON_CSS = "tcf-delete-icon"
 
-export const CLASSES_QUERY_LIMIT = 200
-export const PROPERTIES_QUERY_LIMIT = 200
+export const CLASSES_QUERY_LIMIT = 5000
+export const PROPERTIES_QUERY_LIMIT = 5000
 
 
 /* schema tabs */
 export const CLASSES_TAB = "Classes"
 export const PROPERTIES_TAB = "Properties"
-export const OWL_TAB = "OWL"
+export const OWL_TAB = "Triples"
 export const GRAPHS_TAB = "Graphs"
 export const PREFIXES_TAB = "URL Prefixes"
 
@@ -46,7 +46,7 @@ export const ALL_SCHEMA_GRAPHS = "All Schema Graphs"
 export const ALL_INFERENCE_GRAPHS = "All Inference Graphs"
 export const SCHEMA_GRAPH = "Schema Graph"
 export const INFERENCE_GRAPH = "Inference Graph"
-
+export const INSTANCE_GRAPH = "Instance Graph"
 
 
 export const TERMINUS_GRAPHS_BLURB = "TerminusDB databases are divided internally into one or more named graphs. This gives you greater control over data-integration but comes at the cost of complexity."
@@ -117,7 +117,7 @@ export const TOOLBAR_CSS = {
 
 export const SUBMIT_INPUT_LABEL = "Commit Log"
 
-export const EDIT_OWL_BUTTON = "Edit OWL"
+export const EDIT_OWL_BUTTON = "Edit"
 export const CANCEL_OWL_BUTTON = "Cancel"
 export const UPDATE_OWL_BUTTON = "Save Changes"
 export const COMMIT_PLACEHOLDER = "Enter a brief description of the update and its purpose"
@@ -139,6 +139,7 @@ export const UPDATE_TURTLE_ERROR = "Failed to update OWL"
 export const DEFAULT_TURTLE_UPDATE_MSG = "Console update triples interface updated "
 
 export const CREATE_GRAPH_BUTTON = "Create New Graph"
+export const CREATE_PREFIX_BUTTON = "New Prefix"
 
 export const PREFIXES = {
     createInfo: "", 

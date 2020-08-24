@@ -6,6 +6,7 @@ import {
     FAILED_LOADING_SCHEMA_CLASSES,
     PROPERTIES_QUERY_LIMIT,
     TAB_SCREEN_CSS,
+    TOOLBAR_CSS
 } from './constants.schema'
 import {ComponentFailure} from '../../components/Reports/ComponentFailure.js'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
@@ -13,9 +14,13 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {PropertyList} from '../Tables/PropertyList'
 import {SCHEMA_PROPERTIES_ROUTE} from '../../constants/routes'
-import {SchemaToolbar} from './SchemaToolbar'
 import {PROPERTIES_TABLE_INFO_MSG} from './constants.schema'
 import {TERMINUS_INFO} from '../../constants/identifiers'
+import {Col, Row, Button} from "reactstrap"
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
+import {GraphFilter} from './GraphFilter'
+
+
 
 export const Properties = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -27,11 +32,6 @@ export const Properties = (props) => {
         branch,
         ref,
     )
-
-    let initMsg = PROPERTIES_TABLE_INFO_MSG
-        ? {status: TERMINUS_INFO, message: PROPERTIES_TABLE_INFO_MSG}
-        : null
-    const [reportMessage, setReport] = useState(initMsg)
 
     useEffect(() => {
         if (
@@ -50,23 +50,34 @@ export const Properties = (props) => {
             TerminusClient.WOQL.lib().properties(false, false, gstr),
         )
     }
-
     return (
         <div className={TAB_SCREEN_CSS}>
-            <SchemaToolbar
-                page={SCHEMA_PROPERTIES_ROUTE}
-                graph={filter}
-                onChangeGraph={props.onChangeGraph}
-                report={reportMessage}
-            />
-            {loading && <Loading type="component" />}
-            {report && report.error && (
-                <ComponentFailure failure={FAILED_LOADING_SCHEMA_CLASSES} error={report.error} />
-            )}
-            {report && report.rows > 0 && bindings && (
-                <PropertyList query={woql} properties={bindings} updateQuery={updateQuery} />
-            )}
-            {report && report.rows == 0 && <EmptyResult report={report} />}
+            {loading && <Loading />}
+            <Row className={TOOLBAR_CSS.container}>
+                <Col key='m1' md={9} className="schema-toolbar-title">
+                    Properties relate objects to data about the object and to other objects
+                </Col>
+                <Col md={3} className={TOOLBAR_CSS.graphCol}>
+                     {GraphFilter(SCHEMA_PROPERTIES_ROUTE, filter, props.onChangeGraph)}
+                </Col>
+            </Row>            
+            <Row className="generic-message-holder">
+                {(report && report.status) && 
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            {(bindings && bindings.length > 0) && 
+               <span className="graphs-listing">
+                    <PropertyList query={woql} properties={bindings} updateQuery={updateQuery} />
+                </span>  
+            }
+            {(!(bindings && bindings.length > 0)) &&
+                <Row className="generic-message-holder">
+                    <EmptyResult report={report} />
+                </Row>
+            } 
         </div>
     )
 }
+
+
