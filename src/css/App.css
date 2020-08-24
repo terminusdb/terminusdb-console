@@ -2604,7 +2604,7 @@ h4.prefix-section-header {
 .schema-toolbar-update-prefix:hover {
     border: 2px solid #00C08B !important;
     color: white !important;
-} 
+}
 
 .schema-toolbar-cancel {
     background-color:#888 !important;
@@ -2653,7 +2653,7 @@ h4.prefix-section-header {
 }
 
 .schema-toolbar-input-error {
-    padding-left: 6px; 
+    padding-left: 6px;
     color: #a00;
 }
 
@@ -3323,7 +3323,7 @@ div.builtin-prefixes {
     background-color: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    margin: 50px;
+    margin: 50px 10px 50px 10px;
 }
 
 .db-remote-action-label {
