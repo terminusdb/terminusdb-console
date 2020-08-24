@@ -1,6 +1,8 @@
 import { RiDeleteBin5Line, RiErrorWarningLine } from 'react-icons/ri'
+import { AiOutlineDelete } from "react-icons/ai"
 import {Row, Modal, ModalHeader, ModalBody, ModalFooter, Col} from "reactstrap"
 import React, {useState} from 'react'
+import {DELETE_DB_MODAL} from '../DBHome/constants.dbhome'
 
 
 export const DeleteControl = ({repo, onDelete}) => {
@@ -10,6 +12,28 @@ export const DeleteControl = ({repo, onDelete}) => {
     return (<span className='delete-control' onClick={toggle}>
         <DeleteWidget repo={repo} />
         <Modal isOpen={modal} toggle={toggle}>
+            <ModalHeader toggle={toggle}/>
+            <ModalBody>
+
+                <Row key="re">
+                    <span className="modal-head">Delete Remote Database?</span>
+                </Row>
+                <Row key="rd">
+                    <Col md={12} className="delete-modal-col-align">
+                        <span className="delete-modal-text">
+                            This action will remove the connection to the remote database - it will not effect your local database, but you will no longer be able to push and pull updates.
+                        </span>
+                    </Col>
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
+                    <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
+                    {DELETE_DB_MODAL.confirm}
+                </button>
+            </ModalFooter>
+        </Modal>
+        {/*<Modal isOpen={modal} toggle={toggle}>
             <ModalHeader toggle={toggle}></ModalHeader>
             <ModalBody className="delete-modal-body">
                 <Row>
@@ -22,9 +46,9 @@ export const DeleteControl = ({repo, onDelete}) => {
                 </Row>
             </ModalBody>
             <ModalFooter>
-            <button className="tdb__button__base tdb__button__base--bred"  onClick={onDelete}>Delete</button>{' '}
+            <button className="tdb__button__base tdb__button__base--bred"  onClick={onDelete}>Delete</button>
             </ModalFooter>
-        </Modal>
+        </Modal>*/}
     </span>)
 }
 

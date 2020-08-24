@@ -253,8 +253,18 @@ img.center {
     margin-right: auto;
 }
 
+.modal-head {
+    font-size: 30px;
+    color: #721c24;
+    margin: 0px 55px 0px 55px;
+}
+
+.del-mod-row {
+    width: 380px !important;
+}
+
 div.del-mod{
-    margin-top: 40px;
+    margin: 10px 0px 40px 50px;
 }
 
 p.del-message{
@@ -2878,7 +2888,12 @@ h4.prefix-section-header {
 }
 
 .delete-modal-col-align {
-    margin-top: 40px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delete-modal-button{
+    margin: 0px 90px 0px 90px !important;
 }
 
 .db-action {
@@ -3333,9 +3348,8 @@ h4.prefix-section-header {
 }
 
 .delete-modal-icon {
-    font-size: 80px;
-    margin-top: 50px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-right: 20px;
 }
 
 .delete-modal-text {
@@ -3349,7 +3363,7 @@ h4.prefix-section-header {
     font-size: 17px;
     color: #856404;
     margin-top: 80px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .major-database-controls-align {
