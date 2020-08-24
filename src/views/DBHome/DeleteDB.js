@@ -99,7 +99,7 @@ export const DeleteDB = (props) => {
                                             <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
                                         </Col>
                                         <Col md={10}>
-                                            <label class="tcf-checkbox-label" for="remote-db">Delete remote database?</label>
+                                            <label class="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
                                         </Col>
                                     </Row>
                                     <input
