@@ -297,6 +297,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 bffClient,
                 refreshDBRecord,
                 refreshDBListing, 
+                remoteEnriched,
                 showLogin,
                 reconnectToServer,
                 remoteClient,

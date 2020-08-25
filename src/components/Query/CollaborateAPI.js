@@ -254,7 +254,7 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
 }
 
 export const legalURLID = (idstr) => {
-    if(!idstr.match(/^[0-9a-z_]+$/)) {
+    if(!idstr.match(/^[0-9a-z_\-]+$/)) {
         return false            
     }
     if(idstr.length > 40) return false
