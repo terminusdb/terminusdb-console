@@ -277,7 +277,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
                 </Row>
             }
             <Row className="db-remote-action-spacing">
-                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text synch-action-text db-remote-action-buttons">
+                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text db-remote-action-buttons">
                     <AiOutlineCloudDownload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
                     <span className="title-remote-action" style={{"fontSize": "20px"}}> Pull </span>
                 </button>

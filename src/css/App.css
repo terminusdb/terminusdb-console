@@ -2592,11 +2592,11 @@ span.database-header-description-row {
 .create-header-text {
     display: inline-block;
     margin-left: 16px;
-    vertical-align: middle;    
+    vertical-align: middle;
 }
 
 .database-choice-icon {
-    display: inline-block;    
+    display: inline-block;
 }
 
 .database-create-id {
@@ -2638,13 +2638,13 @@ span.database-header-description-row {
 }
 
 textarea.database-description-input:hover,
-.database-create-title-input:hover, 
+.database-create-title-input:hover,
 .database-create-id-input:hover {
     border:1px solid rgb(226, 232, 240);
 }
 
 textarea.database-description-input:focus, textarea.database-description-input:after,
-.database-create-title-input:focus, .database-create-title-input:after, 
+.database-create-title-input:focus, .database-create-title-input:after,
 .database-create-id-input:focus, .database-create-id-input:after {
     border: 1px solid #000;
 }
@@ -2670,17 +2670,24 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 }
 
 .database-create-exec {
+    float: right;
+    margin-top: 70px;
 }
 
 .database-create-status {
     padding-top: 3em;
     padding-bottom: 1em;
+    float: right;
 }
 
 .database-create-submit  {
     margin: 8px;
     padding: 4px;
     text-align: center;
+}
+
+.db-required-color {
+    color: #856404;
 }
 
 .database-submit-title {
@@ -3724,11 +3731,15 @@ div.builtin-prefixes {
     border: 1px solid #ddd;
     min-height: 200px;
     border-radius: 16px;
-    cursor: pointer;
 }
 
 .add-image-control {
-    font-size: 50px;
+    font-size: 70px;
+    margin-top: 60px;
+}
+
+.add-image-control:hover, .delete-modal-icon:hover {
+    color: #fff
 }
 
 .add-image-control-text {
@@ -3736,4 +3747,96 @@ div.builtin-prefixes {
     margin-top: 30px;
     font-size: 15px;
     color: rgba(0, 0, 0, .5);
+}
+
+.custom-modal-style {
+    height: 100%;
+    width:100%;
+    overflow: auto;
+}
+
+.PopUpActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 14px;
+    letter-spacing: .02em;
+}
+
+.PopUpActions-divider {
+    height: 10px;
+    margin: 30px 343px 30px 343px;
+}
+
+.PopUpActions-divider--line {
+    height: 10px;
+    margin: 30px 343px 30px 343px;
+    font-size: 15px;
+    color: #787878;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.db-details-image{
+    width: 300px;
+    border-radius: 6px;
+    height: 140px;
+}
+
+.image-align {
+    margin: 10px;
+}
+
+.image-picker-link:hover {
+    color: #005cbf;
+    text-decoration: underline;
+}
+
+.db-create-image-url {
+    width: 225px !important;
+    margin: 0px 40px 10px 40px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.rfipbtn {
+    width: 210px;
+    min-height: min-content;
+    background-color: #fafbfe !important;
+    height: 40px;
+}
+
+.rfipbtn__icon--empty{
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-style: unset;
+}
+
+.db-create-remote-row {
+    margin: 0px 0px 10px 0px;
+}
+
+.db-icon-create {
+    font-size: 60px;
+}
+
+.image-picker {
+    max-width:100%;
+    max-height:100%;
+}
+
+.or-after-image-picker{
+    margin-top: 40px;
+}
+
+.or-text-hr {
+    margin: -12px 140px 0px 140px;
+    padding: 0px 15px 0px 15px;
+    background-color: #fff;
+    width: 20px;
+    text-align: center;
+}
+
+.image-picker-tile {
+    cursor: pointer;
 }

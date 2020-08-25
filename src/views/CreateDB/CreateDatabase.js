@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
@@ -13,11 +13,8 @@ import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Pexels } from '../../components/Pexels/Pexels';
-import { Row, Modal, ModalHeader, ModalBody, ModalFooter, Col } from "reactstrap"
-import { IoMdImages } from 'react-icons/io';
+import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
-import {Row, Col} from "reactstrap"
 import {DBCreateHeader, DBLocalCreateHeader, DBCreateCard, DBShareHeader} from "./DBCreateCard"
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
@@ -172,6 +169,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         )
     }
 
+
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     let allow_remote = (user.logged_in || from_local)
     let show_fancy = (user.logged_in && from_local)
@@ -184,17 +182,24 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
             {(!allow_remote && !show_fancy) &&
                 <DBLocalCreateHeader />
             }
+
+
+
             <Row className="generic-message-holder">
                 {report &&
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            {local &&
-                <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
-            }
-            {!local &&
-                <DBRemoteForm onSubmit={createRemote}/>
-            }
+
+            <Row>
+                {local &&
+                    <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
+                }
+                {!local &&
+                    <DBRemoteForm onSubmit={createRemote}/>
+                }
+            </Row>
+
         </div>
     )
 }
