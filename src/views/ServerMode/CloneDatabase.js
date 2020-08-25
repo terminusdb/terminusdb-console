@@ -122,6 +122,7 @@ export const CloneDatabase = () => {
                     time={report.time}
                 />
             )}
+
             <TCForm
                 onSubmit={onClone}
                 layout={[2, 1]}

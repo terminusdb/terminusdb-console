@@ -6,7 +6,9 @@ import {Row, Col, Badge, Container} from "reactstrap"
 import { AiOutlineCloudUpload, AiOutlineCloudDownload, AiOutlineBranches } from 'react-icons/ai';
 import Select from "react-select";
 
+
 export const SynchronizeActions = ({branches, repo, remote_branches, branch, onPush, onPull}) => {
+
     return (
         <>
             <Col key="rc7" className="db-remote-action-box">

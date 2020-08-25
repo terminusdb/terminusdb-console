@@ -3501,3 +3501,21 @@ div.builtin-prefixes {
     padding: 0px 20px 0px 20px !important;
     margin: 0px 80px 10px 70px !important;
 }
+
+.upload-pic {
+    border: 1px solid #ddd;
+    min-height: 200px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.add-image-control {
+    font-size: 50px;
+}
+
+.add-image-control-text {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 15px;
+    color: rgba(0, 0, 0, .5);
+}

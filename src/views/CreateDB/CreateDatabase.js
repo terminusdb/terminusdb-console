@@ -14,6 +14,9 @@ import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
+import { Pexels } from '../../components/Pexels/Pexels';
+import { Row, Modal, ModalHeader, ModalBody, ModalFooter, Col } from "reactstrap"
+import { IoMdImages } from 'react-icons/io';
 
 
 export const CreateDatabase = ({from_local}) => {
@@ -132,8 +135,42 @@ export const CreateDatabase = ({from_local}) => {
             time: Date.now() - update_start,
         })
     }
-    
+
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
+
+    /*export const getImagePicker = () => {
+        const [modal, setModal] = useState(false);
+
+        const toggle = () => setModal(!modal);
+
+        return (<span className='delete-control' onClick={toggle}>
+            <DeleteWidget repo={repo} />
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}/>
+                <ModalBody>
+
+                    <Row key="re">
+                        <span className="modal-head">Delete Remote Database?</span>
+                    </Row>
+                    <Row key="rd">
+                        <Col md={12} className="delete-modal-col-align">
+                            <span className="delete-modal-text">
+                                This action will remove the connection to the remote database - it will not effect your local database, but you will no longer be able to push and pull updates.
+                            </span>
+                        </Col>
+                    </Row>
+                </ModalBody>
+                <ModalFooter>
+                    <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
+                        <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
+                        {DELETE_DB_MODAL.confirm}
+                    </button>
+                </ModalFooter>
+            </Modal>
+        </span>)
+    }*/
+
+
     return (
         <>
             {report && report.error && (
@@ -152,6 +189,17 @@ export const CreateDatabase = ({from_local}) => {
                     />
                 </span>
             )}
+
+            <Col md={2} className="upload-pic">
+                <div className="add-image-control-text">
+                    <IoMdImages color="#005cbf" className={"add-image-control"}/>
+                    <div>Click here to choose a picture </div>
+                    <div>or </div>
+                    <div>Pase Url</div>
+                </div>
+            </Col>
+            <Pexels/>
+
             <div className="tdb__loading__parent">
                <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={user.logged_in} from_local={from_local} />
                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
