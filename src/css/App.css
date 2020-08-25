@@ -2560,6 +2560,189 @@ h4.prefix-section-header {
     padding: 2px;
 }
 
+.database-create-header {
+    background-color: #f8f8f8;
+    padding: 2px;
+    height: 84px;
+}
+
+.database-header-image {
+    height: 80px;
+    margin-top: 0;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: top;
+}
+
+.database-header-title {
+    display: inline-block;
+    margin-left: 1em;
+    color: #446;
+    font-size: 28px;
+    margin-left: 16px;
+    margin-top: 8px;
+    margin-bottom: -4px;
+}
+
+span.database-header-description-row {
+    display: inline-block;
+    clear: left;
+}
+
+.create-header-text {
+    display: inline-block;
+    margin-left: 16px;
+    vertical-align: middle;    
+}
+
+.database-choice-icon {
+    display: inline-block;    
+}
+
+.database-create-id {
+    width: 300px;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+
+.database-create-title {
+    width: 500px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 16px;
+}
+
+.database-create-title-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 4px;
+    padding: 13px 12px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+    border:1px solid #f2f3fa;
+    background-color: #fafbfe !important;
+}
+
+
+.database-create-id-input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 4px;
+    padding: 13px 12px;
+    font-size: 17px;
+    border:1px solid #f2f3fa;
+    background-color: #fafbfe !important;
+}
+
+textarea.database-description-input:hover,
+.database-create-title-input:hover, 
+.database-create-id-input:hover {
+    border:1px solid rgb(226, 232, 240);
+}
+
+textarea.database-description-input:focus, textarea.database-description-input:after,
+.database-create-title-input:focus, .database-create-title-input:after, 
+.database-create-id-input:focus, .database-create-id-input:after {
+    border: 1px solid #000;
+}
+
+.database-create-title-holder,
+.database-create-id-holder {
+    display: inline-block;
+    width: 100%;
+    margin-left: 14px;
+}
+
+.database-description-input-row {
+    width: 100%;
+    height: 100px !important;
+    padding-left: 14px;
+    padding-top: 10px;
+}
+
+.database-create-credits {
+    margin-top: 16px;
+    margin-bottom: 2px;
+    padding: 8px;
+}
+
+.database-create-exec {
+}
+
+.database-create-status {
+    padding-top: 3em;
+    padding-bottom: 1em;
+}
+
+.database-create-submit  {
+    margin: 8px;
+    padding: 4px;
+    text-align: center;
+}
+
+.database-submit-title {
+    display: inline-block;
+    padding: 10px 18px;
+    text-align: center;
+    font-weight: 600;
+    width: 200px;
+    font-size: 1.2em;
+}
+
+.database-create-submit-inactive {
+    color: #ddd;
+}
+
+.database-create-submit-active {
+    background-color: #00C08B !important;
+    color: #eee;
+}
+
+.database-create-submit-active:hover {
+    cursor: pointer;
+    color: #fcfcfc;
+}
+
+
+textarea.database-description-input {
+    min-height: 50px !important;
+    height: 80px !important;
+    background-color: #fafbfe !important;
+    padding: 1em;
+    border:1px solid #f2f3fa;
+}
+
+.database-choice-title {
+    display: inline-block;
+    padding: 18px 6px 6px 6px;
+    text-align: center;
+    font-weight: 500;
+    width: 120px;
+}
+
+.database-create-picture {
+    border: 1px solid green;
+}
+
+.database-create-choice {
+    background-color: white;
+    border: 1px solid #efefef;
+    padding: 0 0 0 6px !important;
+    margin-bottom: 0;
+    color: #446;
+    height: 80px;
+}
+
+.database-create-choice:hover {
+    background-color: #00C08B !important;
+    color: #eee !important;
+    padding: 0 0 0 6px !important;
+    cursor: pointer;
+    border: 1px solid white;
+}
 
 
 .schema-toolbar-cancel:visited,
@@ -3081,6 +3264,41 @@ div.builtin-prefixes {
     margin: 0px;
     color: #0055bb;
 }
+
+.db_icons_standard {
+    color: #0055bb;
+}
+
+.input-error-icon {
+     color: #bf1650;
+     font-size: 1.5em;
+}
+
+.create-change-privacy {
+    margin-left: 6px;
+}
+
+.privacy-holder {
+}
+
+.create-db-privacy {
+    padding: 6px 0 6px 0;
+}
+
+.create-db-privacy:hover {
+    cursor: pointer;
+    color: white !important;
+    background-color: #00C08B;
+}
+
+.create-input-error {
+    display: inline-block;
+    font-size: 0.9em;
+    color: #bf1650;
+    max-width: 300px;
+    vertical-align: middle;
+}
+
 
 .author_info{
     display: inline-block;

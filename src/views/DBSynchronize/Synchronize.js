@@ -51,10 +51,7 @@ export const Synchronize = () => {
         let x = "https://hub."
         if(x == url.substring(0, x.length)) return true
         return false
-    }
-
-
-   
+    } 
     function showAddRemote(){
         setOperation("create")
     }
@@ -65,6 +62,13 @@ export const Synchronize = () => {
 
     function unsetOperation(){
         setOperation(false)
+    }
+
+    function afterShare(doc){
+        updateRepos()
+        unsetOperation()
+        refreshDBRecord()
+        RefreshDatabaseRecord(doc, bffClient, getTokenSilently)
     }
 
     function doDelete(remote){
@@ -168,7 +172,7 @@ export const Synchronize = () => {
                 />
             }
             {(operation && operation == "share") && 
-                <CreateDatabase from_local={meta} />
+                <CreateDatabase type='share' from_local={meta} onShare={afterShare}/>
             }
             {(operation && operation == "create") && 
                <AddRemote 

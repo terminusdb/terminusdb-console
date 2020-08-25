@@ -4,6 +4,7 @@ export const PROFILE_ROUTE = process.env.TERMINUS_HUB_PROFILE_URL
 export const SERVER_ROUTE = '/'
 export const CREATE_DB_ROUTE = '/newdb'
 export const CLONE_DB_ROUTE = '/clone'
+export const HUB_RECORD_ROUTE = '/hub'
 export const COLLABORATE_DB_ROUTE = '/collaborate'
 
 //Route To Terminus (Master) DB
