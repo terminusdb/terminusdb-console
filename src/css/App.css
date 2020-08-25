@@ -253,8 +253,18 @@ img.center {
     margin-right: auto;
 }
 
+.modal-head {
+    font-size: 30px;
+    color: #721c24;
+    margin: 0px 55px 0px 55px;
+}
+
+.del-mod-row {
+    width: 380px !important;
+}
+
 div.del-mod{
-    margin-top: 40px;
+    margin: 10px 0px 40px 50px;
 }
 
 p.del-message{
@@ -2777,7 +2787,7 @@ textarea.database-description-input {
 .schema-toolbar-update-prefix:hover {
     border: 2px solid #00C08B !important;
     color: white !important;
-} 
+}
 
 .schema-toolbar-cancel {
     background-color:#888 !important;
@@ -2826,7 +2836,7 @@ textarea.database-description-input {
 }
 
 .schema-toolbar-input-error {
-    padding-left: 6px; 
+    padding-left: 6px;
     color: #a00;
 }
 
@@ -3172,7 +3182,12 @@ div.builtin-prefixes {
 }
 
 .delete-modal-col-align {
-    margin-top: 40px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delete-modal-button{
+    margin: 0px 90px 0px 90px !important;
 }
 
 .db-action {
@@ -3522,11 +3537,20 @@ div.builtin-prefixes {
     border-top: 1px solid #dee2e6;
 }
 
+.tcf-label-modal-align {
+    padding: 5px 7px 0px 7px !important;
+    margin-left: -20px;
+}
+
+.db-remote-branch-label {
+    width: 130px !important;
+}
+
 .db-remote-action-box {
     background-color: #fff;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    margin: 50px;
+    margin: 50px 10px 50px 10px;
 }
 
 .db-remote-action-label {
@@ -3662,9 +3686,8 @@ div.builtin-prefixes {
 }
 
 .delete-modal-icon {
-    font-size: 80px;
-    margin-top: 50px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-right: 20px;
 }
 
 .delete-modal-text {
@@ -3678,7 +3701,7 @@ div.builtin-prefixes {
     font-size: 17px;
     color: #856404;
     margin-top: 80px;
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .major-database-controls-align {
