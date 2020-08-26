@@ -198,8 +198,6 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
 
     function changeIcon(ic){
         let n = {}
-        console.log('****ic ***', ic)
-        console.log('current, current', current)
         for(var k in current){
             if(k == 'icon'){
                 n[k] = ic
@@ -233,7 +231,6 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
         if(current.public) sub.public = true
         if(current.schema) sub.schema = true
         if(current.icon) sub.icon = current.icon
-        console.log('sub', sub)
         onSubmit(sub)
     }
 
@@ -363,6 +360,7 @@ export const DBControlPanel = ({meta, onChange}) => {
 
     function loadImageToDbDetailsForm () {
         onChange(imageUrl);
+        setdbDetailsImage(imageUrl);
         setIconImg(false)
         setModal(false)
     }
@@ -371,12 +369,15 @@ export const DBControlPanel = ({meta, onChange}) => {
     const [val, setVal] = useState("")
     //useEffect(() => {setVal(value)}, [value])
     let vchange = function(selval){
+        setdbDetailsImage(false);
+        setImageUrl(false);
         setVal(selval)
         setIconImg(selval)
         onChange(selval);
-        setdbDetailsImage(false);
-        setImageUrl(false);
         //onChange(field_id, selval)
+        console.log('dbDetailsImage', dbDetailsImage)
+        console.log('iconImg', iconImg)
+        console.log('selval', selval)
     }
 
     return (
