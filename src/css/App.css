@@ -2059,9 +2059,9 @@ label.checkbox-label-create-form {
 .tcf-form {
     padding: 40px;
     width: 100%;
-    border: 1px solid #cacaca;
+    /*border: 1px solid #cacaca;*/
     border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);
+    /*box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
     margin: 20px 0px 30px 0px;
 }
 
@@ -2561,7 +2561,7 @@ h4.prefix-section-header {
 }
 
 .database-create-header {
-    background-color: #f8f8f8;
+    /*background-color: #f8f8f8;*/
     padding: 2px;
     height: 84px;
 }
@@ -2581,7 +2581,7 @@ h4.prefix-section-header {
     font-size: 28px;
     margin-left: 16px;
     margin-top: 8px;
-    margin-bottom: -4px;
+    margin-bottom: 5px;
 }
 
 span.database-header-description-row {
@@ -2600,7 +2600,7 @@ span.database-header-description-row {
 }
 
 .database-create-id {
-    width: 300px;
+    width: 500px;
     display: inline-block;
     margin-right: 8px;
 }
@@ -2664,14 +2664,14 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 }
 
 .database-create-credits {
-    margin-top: 16px;
+    margin-top: 25px !important;
     margin-bottom: 2px;
     padding: 8px;
 }
 
 .database-create-exec {
     float: right;
-    margin-top: 70px;
+    margin-top: 60px;
 }
 
 .database-create-status {
@@ -2688,6 +2688,7 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 
 .db-required-color {
     color: #856404;
+    margin-top: 60px;
 }
 
 .database-submit-title {
@@ -2716,7 +2717,7 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 
 textarea.database-description-input {
     min-height: 50px !important;
-    height: 80px !important;
+    height: 140px !important;
     background-color: #fafbfe !important;
     padding: 1em;
     border:1px solid #f2f3fa;
@@ -2724,10 +2725,11 @@ textarea.database-description-input {
 
 .database-choice-title {
     display: inline-block;
-    padding: 18px 6px 6px 6px;
+    padding: 28px 6px 6px 2px;
     text-align: center;
     font-weight: 500;
-    width: 120px;
+    width: 220px;
+    font-size: 16px;
 }
 
 .database-create-picture {
@@ -2741,6 +2743,7 @@ textarea.database-description-input {
     margin-bottom: 0;
     color: #446;
     height: 80px;
+    color: #00C08B
 }
 
 .database-create-choice:hover {
@@ -3128,6 +3131,7 @@ div.builtin-prefixes {
 .database-listing-description {
     margin: 0px 0px 0px 15px !important;
     color: #989CA0;
+    font-size: 15px;
 }
 .database-production-credits {
     width: 120px;
@@ -3731,7 +3735,7 @@ div.builtin-prefixes {
 .upload-pic {
     border: 1px solid #ddd;
     min-height: 200px;
-    border-radius: 16px;
+    border-radius: 8px;
 }
 
 .add-image-control {
@@ -3739,13 +3743,13 @@ div.builtin-prefixes {
     margin-top: 60px;
 }
 
-.add-image-control:hover, .delete-modal-icon:hover {
+.delete-modal-icon:hover {
     color: #fff
 }
 
 .add-image-control-text {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 15px;
     color: rgba(0, 0, 0, .5);
 }
@@ -3796,7 +3800,7 @@ div.builtin-prefixes {
 
 .db-create-image-url {
     width: 225px !important;
-    margin: 0px 40px 10px 40px;
+    margin: 0px 40px 25px 40px;
     text-align: center;
     color: rgba(0, 0, 0, 0.5) !important;
 }
@@ -3818,7 +3822,8 @@ div.builtin-prefixes {
 }
 
 .db-icon-create {
-    font-size: 60px;
+    font-size: 25px;
+    margin-left: 35px;
 }
 
 .image-picker {
@@ -3827,12 +3832,15 @@ div.builtin-prefixes {
 }
 
 .or-after-image-picker{
-    margin-top: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 230px;
+    margin-left: 40px;
 }
 
 .or-text-hr {
-    margin: -12px 140px 0px 140px;
-    padding: 0px 15px 0px 15px;
+    margin: -12px 110px 0px 110px;
+    /*padding: 0px 15px 0px 15px;*/
     background-color: #fff;
     width: 20px;
     text-align: center;
@@ -3840,4 +3848,40 @@ div.builtin-prefixes {
 
 .image-picker-tile {
     cursor: pointer;
+    height: 180px;
+}
+
+.pretty-form{
+    padding: 40px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 60px 0px 30px 0px;
+}
+
+.create-place-badge {
+    margin-top: -50px;
+    margin-left: 10px;
+    width: 180px;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.local-badge {
+    color: #00C08B;
+}
+
+.remote-badge {
+    color: #856404;
+}
+
+.upload-image-btn {
+    color: #fff
+}
+
+.upload-image-btn:hover {
+    color: #00C08B;
 }

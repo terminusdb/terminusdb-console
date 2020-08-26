@@ -13,7 +13,7 @@ import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Row, Col } from "reactstrap"
+import { Row, Col, Button } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import {DBCreateHeader, DBLocalCreateHeader, DBCreateCard, DBShareHeader} from "./DBCreateCard"
 
@@ -175,31 +175,39 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     let show_fancy = (user.logged_in && from_local)
     return (
         <div className="tdb__loading__parent">
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            {(allow_remote && !show_fancy) &&
-                <DBCreateHeader local={local} toggle={toggleLocal}/>
-            }
-            {(!allow_remote && !show_fancy) &&
-                <DBLocalCreateHeader />
-            }
+            <form className="pretty-form">
+                {local && <div className="create-place-badge local-badge">
+                    Local Database
+                </div>}
+                {!local && <div className="create-place-badge remote-badge">
+                    Terminus Hub Database
+                </div>}
 
-
-
-            <Row className="generic-message-holder">
-                {report &&
-                    <TerminusDBSpeaks report={report} />
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                {(allow_remote && !show_fancy) &&
+                    <DBCreateHeader local={local} toggle={toggleLocal}/>
                 }
-            </Row>
-
-            <Row>
-                {local &&
-                    <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
+                {(!allow_remote && !show_fancy) &&
+                    <DBLocalCreateHeader />
                 }
-                {!local &&
-                    <DBRemoteForm onSubmit={createRemote}/>
-                }
-            </Row>
 
+
+
+                <Row className="generic-message-holder">
+                    {report &&
+                        <TerminusDBSpeaks report={report} />
+                    }
+                </Row>
+
+                <Row>
+                    {local &&
+                        <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
+                    }
+                    {!local &&
+                        <DBRemoteForm onSubmit={createRemote}/>
+                    }
+                </Row>
+            </form>
         </div>
     )
 }

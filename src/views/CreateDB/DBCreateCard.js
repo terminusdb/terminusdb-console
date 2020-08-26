@@ -11,13 +11,14 @@ import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
-import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiFillWarning,
+import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiFillWarning, AiOutlineRead,
     AiOutlineDown, AiOutlineSchedule, AiOutlineFork, AiFillCheckCircle,AiOutlineThunderbolt, AiOutlinePlusCircle,
     AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, AiFillBuild, AiOutlineInfoCircle,
     AiOutlineGlobal, AiOutlineLeft, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
 import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
 import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
 import { MdContentCopy } from 'react-icons/md';
+import { FiDatabase } from "react-icons/fi"
 import { validURL } from '../../utils/helperFunctions';
 import { legalURLID } from "../../components/Query/CollaborateAPI"
 import { IoMdImages } from 'react-icons/io';
@@ -26,7 +27,7 @@ import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
 import { FcDatabase } from "react-icons/fc"
 
-
+/*
 export const DBCreateHeader = ({local, toggle}) => {
     let local_text = "Create a new database on your local TerminusDB - only accessible locally"
     let remote_text = "Create a new database on Terminus Hub where you can share it with collaborators"
@@ -39,7 +40,7 @@ export const DBCreateHeader = ({local, toggle}) => {
             <Col key='r5' md={1} className='database-create-current'>
                 <DBCreatePicture local={local} />
             </Col>
-            <Col key='r7' md={9} className='database-create-current'>
+            <Col key='r7' md={8} className='database-create-current'>
                 <span className='database-listing-title-row'>
                     <Row>
                         <span className="database-header-title">{choice}</span>
@@ -49,7 +50,7 @@ export const DBCreateHeader = ({local, toggle}) => {
                     </Row>
                 </span>
             </Col>
-            <Col key='r6' md={2} className='database-create-choice' onClick={toggle}>
+            <Col key='r6' md={3} className='database-create-choice' onClick={toggle}>
                 <DBCreatePicture local={!local} />
                 <span className='database-choice-title'>
                     {alt_choice}
@@ -57,6 +58,42 @@ export const DBCreateHeader = ({local, toggle}) => {
             </Col>
         </Row>
         </>
+    )
+}*/
+
+export const DBCreateHeader = ({local, toggle}) => {
+    let local_text = "Create a new database on your local TerminusDB - only accessible locally"
+    let remote_text = "Create a new database on Terminus Hub where you can share it with collaborators"
+    let text = local ? local_text : remote_text
+    let alt_text = local ? remote_text : local_text
+    let choice = local ? "Create Local Database" : "Create Database on Terminus Hub"
+    let alt_choice = local ? "Create Database on Terminus Hub" : "Create Local Database"
+    return ( <>
+        <Row className='database-create-header'>
+            {/*<Col key='r5' md={1} className='database-create-current'>
+                <DBCreatePicture local={local} />
+            </Col>*/}
+            <Col key='r7' md={9} className='database-create-current'>
+                <span className='database-listing-title-row'>
+                    <Row  key="rr">
+                        <span className="database-header-title">{choice}</span>
+                    </Row>
+                    <Row key="re">
+                        <span className="database-listing-description-header">
+                            <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
+                            <span className="database-listing-description ">{text}</span>
+                        </span>
+                    </Row>
+                </span>
+            </Col>
+            <Col key='r6' md={3} className='database-create-choice' onClick={toggle}>
+                <DBCreatePicture local={!local} />
+                <span className='database-choice-title'>
+                    {alt_choice}
+                </span>
+            </Col>
+        </Row>
+    </>
     )
 }
 
@@ -128,16 +165,13 @@ const DBCreatePicture = ({local}) => {
         icon = HUBDB
     }
     let title = (local ? "Local Database" : "Terminus Hub Database")
-    return (<img className='database-header-image' src={icon} title={title}  />)
+    //return (<img className='database-header-image' src={icon} title={title}  />)
 
-    /*
+
     if (icon == GRAPHDB)
-        ics.push( <FcDatabase title={title} className='database-header-image' color="#005cbf" className={"db-icon-create"}/>)
-    else ics.push(<span title={title}>
-            <span><FcDatabase className='database-header-image' color="#005cbf" className={"db-icon-create"}/></span>
-            <span><img className='database-header-image' src={'https://terminusdb.com/img/logos/logo.svg'}/></span>
-        </span>)
-    return <>{ics}</>*/
+        ics.push(<FiDatabase title={title} className='database-header-image' className={"db-icon-create"}/>)
+    else ics.push(<img className='database-header-image' src={icon} title={title}  />)
+    return <>{ics}</>
 }
 
 
@@ -237,7 +271,7 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
     if(!current) return null
 
     return (<>
-        <Row key='r7' className='database-summary-listing database-listing-line'>
+        <Row key='r7' className='database-summary-listing'>
             <Col key='r5' md={3} className='database-control-panel'>
                 <DBControlPanel meta={current} onChange={changeIcon} />
             </Col>
@@ -340,7 +374,6 @@ export const DBControlPanel = ({meta, onChange}) => {
         alert("choose url")
     }
 
-
     let disp = ""
     if(icon){
         if(validURL(icon)) disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
@@ -349,7 +382,9 @@ export const DBControlPanel = ({meta, onChange}) => {
 
     const [modal, setModal] = useState(false);
     const imagePickerToggle = () => setModal(!modal);
+
     const [imageUrl, setImageUrl] = useState(false);
+
     const [dbDetailsImage, setdbDetailsImage] = useState(false);
     const [iconImg, setIconImg] = useState(false);
 
@@ -365,20 +400,16 @@ export const DBControlPanel = ({meta, onChange}) => {
         setModal(false)
     }
 
-    //if(typeof className != "string" || !className)  className = INPUT_CSS
     const [val, setVal] = useState("")
-    //useEffect(() => {setVal(value)}, [value])
+
+    useEffect(() => {setVal(val)}, [val])
     let vchange = function(selval){
-        setdbDetailsImage(false);
-        setImageUrl(false);
         setVal(selval)
+        onChange(selval)
         setIconImg(selval)
-        onChange(selval);
-        //onChange(field_id, selval)
-        console.log('dbDetailsImage', dbDetailsImage)
-        console.log('iconImg', iconImg)
-        console.log('selval', selval)
+        setdbDetailsImage(false)
     }
+
 
     return (
         <div className="upload-pic">
@@ -417,10 +448,12 @@ export const DBControlPanel = ({meta, onChange}) => {
                 <ModalHeader toggle={imagePickerToggle}/>
                 <ModalBody>
                     <Row key="mr">
-                        <button className="tdb__button__base tdb__button__base--bgreen delete-modal-button" onClick={loadImageToDbDetailsForm}>
-                            <IoMdImages color="#fff" className="delete-modal-icon"/>
-                            Upload Image
-                        </button>
+                        <span className="upload-image-btn">
+                            <button className="tdb__button__base tdb__button__base--bgreen delete-modal-button" onClick={loadImageToDbDetailsForm}>
+                                <IoMdImages className="delete-modal-icon"/>
+                                Upload Image
+                            </button>
+                        </span>
                     </Row>
                     <Row key="re">
                         <Pexels setImageUrl={setImageUrl}/>
