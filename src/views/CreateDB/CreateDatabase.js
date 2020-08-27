@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
@@ -8,7 +10,7 @@ import {
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO } from './constants.createdb'
+import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO, CREATE_DATABASE_LOCALLY, CREATE_DATABASE_HUB } from './constants.createdb'
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
@@ -16,6 +18,8 @@ import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/Co
 import { Row, Col, Button } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import {DBCreateHeader, DBLocalCreateHeader, DBCreateCard, DBShareHeader} from "./DBCreateCard"
+import { RiMapPinRangeLine } from 'react-icons/ri'
+import { AiOutlineRead } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
     const [loading, setLoading] = useState(false)
@@ -170,28 +174,106 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     }
 
 
+
+
+   /* <input className="create-db-button active"><RiMapPinRangeLine color="#0055bb" className="tab_icon_info"/>Local database</button> */
+
+
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     let allow_remote = (user.logged_in || from_local)
     let show_fancy = (user.logged_in && from_local)
+    let local_text = "Create a new database on your local TerminusDB - only accessible locally"
+    let remote_text = "Create a new database on Terminus Hub where you can share it with collaborators"
+
+    const [localCreate, setLocalCreate] = useState(true)
+    const [hubCreate, setHubCreate] = useState(false)
+    const [createType, setCreateType] = useState(CREATE_DATABASE_LOCALLY)
+
+    const handleLocal = () => {
+        setLocalCreate(true)
+        setHubCreate(false)
+        setCreateType(CREATE_DATABASE_LOCALLY)
+    }
+
+    const handleHub = () => {
+        setLocalCreate(false)
+        setHubCreate(true)
+        setCreateType(CREATE_DATABASE_HUB)
+    }
+
+    useEffect(() => {
+        if(createType === CREATE_DATABASE_LOCALLY)
+            setLocal(true)
+        else setLocal(false)
+    }, [createType])
+
     return (
         <div className="tdb__loading__parent">
-            <form className="pretty-form">
+
+            <div className="create-section">
+                <Row>
+                    <Col md={6}>
+                        <Row key="rr">
+                            <span className="create-db-span">
+                                <input type="radio" id={CREATE_DATABASE_LOCALLY}
+                                    name={CREATE_DATABASE_LOCALLY}
+                                    value={CREATE_DATABASE_LOCALLY}
+                                    checked={localCreate}
+                                    onClick={handleLocal}/>
+                                <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
+                            </span>
+                        </Row>
+                        <Row key="rd">
+                            <span className="database-listing-description-header">
+                                <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
+                                <span className="database-listing-description ">{local_text}</span>
+                            </span>
+                        </Row>
+                    </Col>
+                    <Col md={6}>
+                        <Row key="rk">
+                            <span className="create-db-span">
+                                <input type="radio" id={CREATE_DATABASE_HUB}
+                                    name={CREATE_DATABASE_HUB}
+                                    value={CREATE_DATABASE_HUB}
+                                    checked={hubCreate}
+                                    onClick={handleHub}/>
+                                <label className="create-db-options" for={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
+                            </span>
+                        </Row>
+                        <Row key="rm">
+                            <span className="database-listing-description-header">
+                                <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
+                                <span className="database-listing-description ">{remote_text}</span>
+                            </span>
+                        </Row>
+                    </Col>
+                </Row>
+            </div>
+
+            <div className="pretty-form">
+
                 {local && <div className="create-place-badge local-badge">
-                    Local Database
+                    Create a Local Database
+                </div>}
+                {local && <div className="create-place-badge-img">
+                    <img src="https://assets.terminusdb.com/terminusdb-console/images/horizontal_lockup%20-%20Newsletter%20(1100x220).png" title="Terminus DB logo"/>
                 </div>}
                 {!local && <div className="create-place-badge remote-badge">
-                    Terminus Hub Database
+                    Create a Terminus Hub Database
+                </div>}
+                {!local && <div className="create-place-badge-hub-img">
+                    <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                 </div>}
 
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-                {(allow_remote && !show_fancy) &&
+
+                {/*(allow_remote && !show_fancy) &&
                     <DBCreateHeader local={local} toggle={toggleLocal}/>
-                }
-                {(!allow_remote && !show_fancy) &&
+                */}
+                {/*(!allow_remote && !show_fancy) &&
                     <DBLocalCreateHeader />
-                }
-
-
+                */}
 
                 <Row className="generic-message-holder">
                     {report &&
@@ -207,7 +289,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                         <DBRemoteForm onSubmit={createRemote}/>
                     }
                 </Row>
-            </form>
+            </div>
         </div>
     )
 }

@@ -27,39 +27,6 @@ import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
 import { FcDatabase } from "react-icons/fc"
 
-/*
-export const DBCreateHeader = ({local, toggle}) => {
-    let local_text = "Create a new database on your local TerminusDB - only accessible locally"
-    let remote_text = "Create a new database on Terminus Hub where you can share it with collaborators"
-    let text = local ? local_text : remote_text
-    let alt_text = local ? remote_text : local_text
-    let choice = local ? "Create Local Database" : "Create Database on Terminus Hub"
-    let alt_choice = local ? "Create Database on Terminus Hub" : "Create Local Database"
-    return ( <>
-        <Row className='database-create-header'>
-            <Col key='r5' md={1} className='database-create-current'>
-                <DBCreatePicture local={local} />
-            </Col>
-            <Col key='r7' md={8} className='database-create-current'>
-                <span className='database-listing-title-row'>
-                    <Row>
-                        <span className="database-header-title">{choice}</span>
-                    </Row>
-                    <Row>
-                        <span className="database-listing-description">{text}</span>
-                    </Row>
-                </span>
-            </Col>
-            <Col key='r6' md={3} className='database-create-choice' onClick={toggle}>
-                <DBCreatePicture local={!local} />
-                <span className='database-choice-title'>
-                    {alt_choice}
-                </span>
-            </Col>
-        </Row>
-        </>
-    )
-}*/
 
 export const DBCreateHeader = ({local, toggle}) => {
     let local_text = "Create a new database on your local TerminusDB - only accessible locally"
@@ -449,7 +416,7 @@ export const DBControlPanel = ({meta, onChange}) => {
                 <ModalBody>
                     <Row key="mr">
                         <span className="upload-image-btn">
-                            <button className="tdb__button__base tdb__button__base--bgreen delete-modal-button" onClick={loadImageToDbDetailsForm}>
+                            <button className="tdb__button__base tdb__button__base--bgreen delete-modal-button upload-image-align" onClick={loadImageToDbDetailsForm}>
                                 <IoMdImages className="delete-modal-icon"/>
                                 Upload Image
                             </button>

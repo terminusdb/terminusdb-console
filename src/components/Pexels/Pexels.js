@@ -3,6 +3,7 @@ import initPexel from './initPexel';
 import SearchBar from './SearchBar';
 import ImageList from './ImageList';
 import './SearchBar.css';
+import { Row, Col } from "reactstrap"
 
 
 export const Pexels = (params) => {
@@ -24,16 +25,24 @@ export const Pexels = (params) => {
 
 
     return (
-    <div className="container" style={{marginTop: '10px'}}>
-        <div className="field">
-            <input type="text"
-                placeholder="Search for photos on Pexels..."
-                value={searchText}
-                onChange={  (e) =>{
-                    setSearchText(e.target.value)
-                } }/>
-        </div>
-        <button onClick={onSearchSubmit}>Search</button>
+    <div className="container" style={{marginTop: '50px'}}>
+        <Row>
+            <Col md={9}>
+                <div className="field">
+                    <input type="text"
+                        placeholder="Search for photos on Pexels..."
+                        value={searchText}
+                        className="pexel-search-input"
+                        onChange={  (e) =>{
+                            setSearchText(e.target.value)
+                        } }/>
+                </div>
+            </Col>
+            <Col md={3}>
+                <button onClick={onSearchSubmit}>Search</button>
+            </Col>
+        </Row>
+
         <ImageList images={images.photos} setImageUrl={setImageUrl}/>
     </div>
     );
