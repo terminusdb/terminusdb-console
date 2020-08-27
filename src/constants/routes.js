@@ -12,6 +12,7 @@ export const TERMINUS_ROUTE = '/_system'
 
 //Specific DB Route
 export const SPECIFIC_DB_ROUTE = '/:aid/:dbid'
+export const SPECIFIC_ORG_ROUTE = '/:aid'
 
 //Routes within DB
 export const DB_SCHEMA_ROUTE = '/schema'
