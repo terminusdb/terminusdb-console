@@ -3009,7 +3009,7 @@ textarea.database-description-input {
     text-align: center;
     border-radius: 6px;
     margin-top: 15px;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
