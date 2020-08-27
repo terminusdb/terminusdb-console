@@ -40,7 +40,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 try {
                     await dbClient.connect(opts)
                     setWoqlClient(dbClient)
-                    //await enrich_local_db_listing(dbClient)
+                    await enrich_local_db_listing(dbClient)
                     setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
