@@ -207,9 +207,9 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         else setLocal(false)
     }, [createType])
 
-    return (
+    return (<>
         <div className="tdb__loading__parent">
-
+        </div>
             <div className="create-section">
                 <Row>
                     <Col md={6}>
@@ -285,12 +285,12 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     {local &&
                         <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
                     }
-                    {!local && 
+                    {!local &&
                         <DBRemoteForm onSubmit={createRemote}/>
                     }
                 </Row>
             </div>
-        </div>
+        </>
     )
 }
 
