@@ -230,7 +230,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                             </span>
                         </Row>
                     </Col>
-                    <Col md={6}>
+                    {allow_remote && <Col md={6}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
@@ -247,7 +247,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                 <span className="database-listing-description ">{remote_text}</span>
                             </span>
                         </Row>
-                    </Col>
+                    </Col>}
                 </Row>
             </div>
 
