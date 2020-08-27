@@ -117,8 +117,9 @@ export const DeleteDB = (props) => {
                     <span className="delete-button">
                         <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
                             <AiOutlineDelete className="delete-modal-icon"/>
-                            {DELETE_DB_MODAL.confirm}
+                            {DELETE_DB_MODAL.confirmLocal}
                         </button>
+                        <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
                     </span>
                 </ModalFooter>
                 </form>

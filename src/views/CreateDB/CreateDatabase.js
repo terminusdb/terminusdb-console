@@ -211,7 +211,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         <div className="tdb__loading__parent">
         </div>
             <div className="create-section">
-                <Row>
+                {allow_remote && <Row>
                     <Col md={6}>
                         <Row key="rr">
                             <span className="create-db-span">
@@ -230,7 +230,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                             </span>
                         </Row>
                     </Col>
-                    {allow_remote && <Col md={6}>
+                    <Col md={6}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
@@ -247,8 +247,8 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                 <span className="database-listing-description ">{remote_text}</span>
                             </span>
                         </Row>
-                    </Col>}
-                </Row>
+                    </Col>
+                </Row>}
             </div>
 
             <div className="pretty-form">
