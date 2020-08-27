@@ -330,16 +330,7 @@ export const DBCreate = ({meta, databases, onSubmit, type}) => {
 
 export const DBControlPanel = ({meta, onChange}) => {
 
-    let icon = meta.icon
-    if(!icon) icon = GRAPHDB
-
-    function chooseIcon(){
-        alert("choose icon")
-    }
-
-    function chooseURL(){
-        alert("choose url")
-    }
+    let icon = meta.icon || ""
 
     let disp = ""
     if(icon){
@@ -368,7 +359,7 @@ export const DBControlPanel = ({meta, onChange}) => {
         setModal(false)
     }
 
-    const [val, setVal] = useState("")
+    const [val, setVal] = useState(icon)
 
     useEffect(() => {setVal(val)}, [val])
     let vchange = function(selval){
@@ -437,14 +428,6 @@ export const DBControlPanel = ({meta, onChange}) => {
             </Modal>
         </div>
     )
-    /*<div>
-        <Row className="database-left-img" onClick={chooseIcon}>
-            {disp}
-        </Row>
-        <Row className="db-controls" onClick={chooseURL}>
-            URL
-        </Row>
-    </div>*/
 }
 
 export const DBID = ({id, organization, hub_url, onChange, databases}) => {
