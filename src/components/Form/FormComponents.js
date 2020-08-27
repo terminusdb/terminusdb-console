@@ -115,7 +115,7 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
     return (
         <TCSubmitWrap buttonsClassName={buttonsClassName} className={className}>
             {submitText &&
-                <button type="submit" className={submitClassName}>
+                <button type="submit" className={"tdb__button__base tdb__button__base--green"} >
                     {submitText}
                 </button>
             }

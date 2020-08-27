@@ -2057,11 +2057,11 @@ label.checkbox-label-create-form {
 }
 
 .tcf-form {
-    padding: 40px;
+    /*padding: 40px;*/
     width: 100%;
-    border: 1px solid #cacaca;
+    /*border: 1px solid #cacaca;*/
     border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);
+    /*box-shadow: 0 2px 10px rgba(0, 40, 85, 0.1);*/
     margin: 20px 0px 30px 0px;
 }
 
@@ -2561,7 +2561,7 @@ h4.prefix-section-header {
 }
 
 .database-create-header {
-    background-color: #f8f8f8;
+    /*background-color: #f8f8f8;*/
     padding: 2px;
     height: 84px;
 }
@@ -2581,7 +2581,7 @@ h4.prefix-section-header {
     font-size: 28px;
     margin-left: 16px;
     margin-top: 8px;
-    margin-bottom: -4px;
+    margin-bottom: 5px;
 }
 
 span.database-header-description-row {
@@ -2592,15 +2592,15 @@ span.database-header-description-row {
 .create-header-text {
     display: inline-block;
     margin-left: 16px;
-    vertical-align: middle;    
+    vertical-align: middle;
 }
 
 .database-choice-icon {
-    display: inline-block;    
+    display: inline-block;
 }
 
 .database-create-id {
-    width: 300px;
+    width: 500px;
     display: inline-block;
     margin-right: 8px;
 }
@@ -2626,7 +2626,7 @@ span.database-header-description-row {
 }
 
 
-.database-create-id-input {
+.database-create-id-input, .pexel-search-input {
     display: block;
     box-sizing: border-box;
     width: 100%;
@@ -2638,13 +2638,14 @@ span.database-header-description-row {
 }
 
 textarea.database-description-input:hover,
-.database-create-title-input:hover, 
+.database-create-title-input:hover,
+.pexel-search-input:hover,
 .database-create-id-input:hover {
     border:1px solid rgb(226, 232, 240);
 }
 
 textarea.database-description-input:focus, textarea.database-description-input:after,
-.database-create-title-input:focus, .database-create-title-input:after, 
+.database-create-title-input:focus, .database-create-title-input:after,
 .database-create-id-input:focus, .database-create-id-input:after {
     border: 1px solid #000;
 }
@@ -2664,23 +2665,31 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 }
 
 .database-create-credits {
-    margin-top: 16px;
+    margin-top: 25px !important;
     margin-bottom: 2px;
     padding: 8px;
 }
 
 .database-create-exec {
+    float: right;
+    margin-top: 60px;
 }
 
 .database-create-status {
     padding-top: 3em;
     padding-bottom: 1em;
+    float: right;
 }
 
 .database-create-submit  {
     margin: 8px;
     padding: 4px;
     text-align: center;
+}
+
+.db-required-color {
+    color: #856404;
+    margin-top: 60px;
 }
 
 .database-submit-title {
@@ -2709,7 +2718,7 @@ textarea.database-description-input:focus, textarea.database-description-input:a
 
 textarea.database-description-input {
     min-height: 50px !important;
-    height: 80px !important;
+    height: 140px !important;
     background-color: #fafbfe !important;
     padding: 1em;
     border:1px solid #f2f3fa;
@@ -2717,10 +2726,11 @@ textarea.database-description-input {
 
 .database-choice-title {
     display: inline-block;
-    padding: 18px 6px 6px 6px;
+    padding: 28px 6px 6px 2px;
     text-align: center;
     font-weight: 500;
-    width: 120px;
+    width: 220px;
+    font-size: 16px;
 }
 
 .database-create-picture {
@@ -2734,6 +2744,7 @@ textarea.database-description-input {
     margin-bottom: 0;
     color: #446;
     height: 80px;
+    color: #00C08B
 }
 
 .database-create-choice:hover {
@@ -2998,6 +3009,7 @@ textarea.database-description-input {
     text-align: center;
     border-radius: 6px;
     margin-top: 15px;
+    margin-left: 10px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
@@ -3120,6 +3132,7 @@ div.builtin-prefixes {
 .database-listing-description {
     margin: 0px 0px 0px 15px !important;
     color: #989CA0;
+    font-size: 15px;
 }
 .database-production-credits {
     width: 120px;
@@ -3319,6 +3332,12 @@ div.builtin-prefixes {
     font-size: 14px;
     color: #586069;
     margin: 0px 30px 0px 5px;
+}
+
+.tab_icon_info {
+    font-size: 20px;
+    color: #586069;
+    margin: 0px 20px 0px 5px;
 }
 
 .database-update-status {
@@ -3718,4 +3737,199 @@ div.builtin-prefixes {
     width: 100%;
     padding: 0px 20px 0px 20px !important;
     margin: 0px 80px 10px 70px !important;
+}
+
+.upload-pic {
+    border: 1px solid #ddd;
+    min-height: 200px;
+    border-radius: 8px;
+}
+
+.add-image-control {
+    font-size: 70px;
+    margin-top: 60px;
+}
+
+.delete-modal-icon:hover {
+    color: #fff
+}
+
+.add-image-control-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    color: rgba(0, 0, 0, .5);
+}
+
+.custom-modal-style {
+    height: 100%;
+    width:100%;
+    overflow: auto;
+}
+
+.PopUpActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 14px;
+    letter-spacing: .02em;
+}
+
+.PopUpActions-divider {
+    height: 10px;
+    margin: 30px 343px 30px 343px;
+}
+
+.PopUpActions-divider--line {
+    height: 10px;
+    margin: 30px 343px 30px 343px;
+    font-size: 15px;
+    color: #787878;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.db-details-image{
+    width: 300px;
+    border-radius: 6px;
+    height: 140px;
+}
+
+.image-align {
+    margin: 10px;
+}
+
+.image-picker-link:hover {
+    color: #005cbf;
+    text-decoration: underline;
+}
+
+.db-create-image-url {
+    width: 225px !important;
+    margin: 0px 40px 25px 40px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.rfipbtn {
+    width: 210px;
+    min-height: min-content;
+    background-color: #fafbfe !important;
+    height: 40px;
+}
+
+.rfipbtn__icon--empty{
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-style: unset;
+}
+
+.db-create-remote-row {
+    margin: 0px 0px 10px 0px;
+}
+
+.db-icon-create {
+    font-size: 25px;
+    margin-left: 35px;
+}
+
+.image-picker {
+    max-width:100%;
+    max-height:100%;
+}
+
+.or-after-image-picker{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 230px;
+    margin-left: 40px;
+}
+
+.or-text-hr {
+    margin: -12px 110px 0px 110px;
+    /*padding: 0px 15px 0px 15px;*/
+    background-color: #fff;
+    width: 20px;
+    text-align: center;
+}
+
+.image-picker-tile {
+    cursor: pointer;
+    height: 180px;
+}
+
+.pretty-form{
+    padding: 40px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 60px 0px 30px 0px;
+}
+
+.create-place-badge {
+    margin-top: -50px;
+    margin-left: 10px;
+    width: 250px;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.create-place-badge-img {
+    margin-top: -50px;
+    float: right;
+    width: 150px;
+    height: 10px;
+}
+
+.create-place-badge-hub-img {
+    margin-top: -90px;
+    float: right;
+    height: 100px;
+    width: 100px;
+}
+
+.local-badge {
+    color: #00C08B;
+}
+
+.remote-badge {
+    color: #856404;
+}
+
+.upload-image-btn {
+    color: #fff;
+    float: right;
+    width: 100%;
+}
+
+.upload-image-align {
+    float: right;
+    margin-right: 0 !important;
+}
+
+.upload-image-btn:hover {
+    color: #00C08B;
+}
+
+.create-section {
+    margin-top: 50px;
+}
+
+.create-db-options {
+    font-size: 20px;
+    background-color: #fff;
+    margin-left: 15px;
+    margin-top: -8px;
+}
+
+.create-db-span {
+    display:flex;
+}
+
+.database-listing-description-header{
+    margin-left: 10px;
+    margin-top: -8px;
 }
