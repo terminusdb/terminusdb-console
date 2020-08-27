@@ -3875,10 +3875,10 @@ div.builtin-prefixes {
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 6px;
-    margin: 60px 0px 30px 0px;
+    margin: 0px 0px 30px 0px;
 }
 
-.create-place-badge {
+.ge {
     margin-top: -50px;
     margin-left: 10px;
     width: 250px;
@@ -3894,6 +3894,7 @@ div.builtin-prefixes {
     float: right;
     width: 150px;
     height: 10px;
+    margin-left: 320px;
 }
 
 .create-place-badge-hub-img {
@@ -3935,6 +3936,18 @@ div.builtin-prefixes {
     background-color: #fff;
     margin-left: 15px;
     margin-top: -8px;
+}
+
+.create-db-select {
+    /*border: 1px solid #ddd;*/
+    border-radius: 6px;
+    height: 100px;
+    padding: 30px;
+    cursor: pointer;
+}
+
+.create-db-select:active {
+    border-bottom: 5px solid #00C08B;
 }
 
 .create-db-span {

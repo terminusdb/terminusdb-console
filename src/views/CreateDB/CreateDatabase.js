@@ -212,14 +212,13 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         </div>
             <div className="create-section">
                 {allow_remote && <Row>
-                    <Col md={6}>
+                    <Col md={6} className="create-db-select" onClick={handleLocal} active>
                         <Row key="rr">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_LOCALLY}
                                     name={CREATE_DATABASE_LOCALLY}
                                     value={CREATE_DATABASE_LOCALLY}
-                                    checked={localCreate}
-                                    onClick={handleLocal}/>
+                                    checked={localCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
                             </span>
                         </Row>
@@ -230,14 +229,13 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                             </span>
                         </Row>
                     </Col>
-                    <Col md={6}>
+                    <Col md={6} className="create-db-select" onClick={handleHub}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
                                     name={CREATE_DATABASE_HUB}
                                     value={CREATE_DATABASE_HUB}
-                                    checked={hubCreate}
-                                    onClick={handleHub}/>
+                                    checked={hubCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
                             </span>
                         </Row>
@@ -256,15 +254,15 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                 {local && <div className="create-place-badge local-badge">
                     Create a Local Database
                 </div>}
-                {local && <div className="create-place-badge-img">
+                {/*local && <div className="create-place-badge-img">
                     <img src="https://assets.terminusdb.com/terminusdb-console/images/horizontal_lockup%20-%20Newsletter%20(1100x220).png" title="Terminus DB logo"/>
-                </div>}
+                </div>*/}
                 {!local && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
                 </div>}
-                {!local && <div className="create-place-badge-hub-img">
+                {/*!local && <div className="create-place-badge-hub-img">
                     <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                </div>}
+                </div>*/}
 
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
 
