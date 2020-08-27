@@ -285,7 +285,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     {local &&
                         <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
                     }
-                    {!local &&
+                    {!local && 
                         <DBRemoteForm onSubmit={createRemote}/>
                     }
                 </Row>

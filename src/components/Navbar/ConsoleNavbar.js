@@ -53,7 +53,7 @@ export const ConsoleNavbar = (props) => {
                     <div className="nav__main__right">
                         {showUnderCostruction && (
                             <UnderConstruction
-                                buttonClassName="tdb__button__base nav__main__login"
+                                buttonClassName="tdb__button__base tdb__button__base--green nav__main__login"
                                 buttonColor={'white'}
                                 buttonText={LOGIN_LABEL}
                                 action="Login in HUB"

@@ -3806,14 +3806,14 @@ div.builtin-prefixes {
 }
 
 .db-create-image-url {
-    width: 225px !important;
-    margin: 0px 40px 25px 40px;
+    width: 250px !important;
+    margin: 0px 15px 25px 15px;
     text-align: center;
     color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .rfipbtn {
-    width: 210px;
+    width: 249px;
     min-height: min-content;
     background-color: #fafbfe !important;
     height: 40px;
