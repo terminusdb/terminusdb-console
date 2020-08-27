@@ -18,12 +18,7 @@ export const DeleteDB = (props) => {
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
-    const [dbName,setDBName] = useState(null);
-
-    const changeDBName=(evt)=>{
-        const name=evt.target.value;
-        setDBName(name)
-    }
+    
 
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
@@ -42,13 +37,8 @@ export const DeleteDB = (props) => {
         }
         woqlClient.databases(ndbs)
     }
-    //const onDelete = data => console.log(data);
-
-    const onSubmit = values => console.log(values);
-
+ 
     const onDelete = (data) => {
-        console.log(data);
-
         setDisabled(true)
         if (data.dbId && data.dbId == woqlClient.db()) {
         //if(dbName && dbName === woqlClient.db()){
