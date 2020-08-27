@@ -43,10 +43,10 @@ const NoLoginLayout = (props) =>{
 }
 
 PrivateRoute.propTypes = {
-    component: PropTypes.oneOfType([
+    /*component: PropTypes.oneOfType([
         PropTypes.element, 
         PropTypes.func]
-    ).isRequired,
+    ).isRequired,*/
     path: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.string)

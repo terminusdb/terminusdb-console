@@ -21,7 +21,7 @@ export const ConsoleNavbar = (props) => {
         isTopOpen === true
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
-
+    if(!woqlClient) return null
     const showUnderCostruction = false//window.location.protocol === 'https' || window.location.host==="localhost:3005" ? false : true
     return (
         <Fragment>

@@ -1,6 +1,6 @@
 import React from 'react'
 import {createHashHistory} from 'history'
-import {DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
+import {DB_ROUTE, CLONE_DB_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
 import {Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
 //import {ProfileRoutes} from './ProfileRoutes'
@@ -33,6 +33,18 @@ export const getDBRoute = (db, aid) => {
     if (db == '_system') return DB_ROUTE + TERMINUS_ROUTE
     return `${DB_ROUTE}/${aid}/${db}`
 }
+
+export const getHubRoute = (orgid, dbid) => {
+    let base = `${CLONE_DB_ROUTE}/${orgid}`
+    if(dbid) base += `/${dbid}`
+    return base
+}
+
+export const goHubPage = (org, dbid, report) => {
+    let route = getHubRoute(org, dbid)
+    goTo(route, report)
+}
+
 
 export const getDBPageRoute = (db, aid, page) => {
     return getDBRoute(db, aid) + `/${page}`

@@ -78,9 +78,6 @@ const DBRoute = () => {
     const {path} = useRouteMatch()
     const {aid, dbid} = useParams()
     const { woqlClient } = WOQLClientObj()
-
-    console.log("___DBRoute____PATH", path, aid, dbid);
-
     woqlClient.db(dbid)
     woqlClient.organization(aid)
     const databaseInfo = woqlClient.get_database()
