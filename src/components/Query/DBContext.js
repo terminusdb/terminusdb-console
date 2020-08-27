@@ -37,6 +37,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [reposReload, setReposReload] = useState(0)
     const [graphsReload, setGraphsReload] = useState(0)
     const [branchesReload, setBranchesReload] = useState(0)
+    const [prefixesReload, setPrefixesReload] = useState(0)
 
     const WOQL = TerminusClient.WOQL
 
@@ -76,19 +77,35 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     //load Prefixes
     useEffect(() => {
+        setPrefixes()
         setLoading(loading + 1)
         WOQL.lib()
             .prefixes()
             .execute(woqlClient)
             .then((res) => {
-                let binds = res && res.bindings ? prefixesFromBindings(res.bindings) : []
+                let binds = res && res.bindings ? res.bindings : []
                 setPrefixes(binds)
             })
             .catch((e) => {
                 setReport({error: e, status: TERMINUS_ERROR})
             })
             .finally(() => setLoading(loading - 1))
-    }, [branchesReload])
+    }, [branchesReload, prefixesReload])
+
+    //update Prefixes
+    useEffect(() => {
+        if(prefixes && prefixesReload){
+            let nups = {}
+            for(var i = 0; i<prefixes.length; i++){
+                if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
+                    nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
+                }   
+            }
+            woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
+            console.log(nups)
+        }
+    }, [prefixes])
+
 
     //load graph structure
     useEffect(() => {
@@ -159,6 +176,11 @@ export const DBContextProvider = ({children, woqlClient}) => {
         setBranchesReload(branchesReload + 1)
     }
 
+    function updatePrefixes() {
+        setPrefixesReload(prefixesReload + 1)
+    }
+
+
     function updateRepos(){
         setReposReload(reposReload + 1)
     }
@@ -221,23 +243,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
     }
 
     function prefixesFromBindings(bindings) {
-        let ctxt = {}
-        for (var i = 0; i < bindings.length; i++) {
-            let iri =
-                bindings[i]['URI'] && bindings[i]['URI']['@value']
-                    ? bindings[i]['URI']['@value']
-                    : false
-            let prefix =
-                bindings[i]['Prefix'] && bindings[i]['Prefix']['@value']
-                    ? bindings[i]['Prefix']['@value']
-                    : false
-            ctxt[prefix] = iri
-        }
-        for (var k in TerminusClient.UTILS.standard_urls) {
-            ctxt[k] = TerminusClient.UTILS.standard_urls[k]
-        }
-        woqlClient.connection.setJSONContext(ctxt)
-        let x = woqlClient.connection.getJSONContext()
         return bindings
     }
 
@@ -262,6 +267,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 updateBranches,
                 updateRepos,
                 updateGraphs,
+                updatePrefixes,
                 consoleTime,
                 DBInfo,
                 branches,
