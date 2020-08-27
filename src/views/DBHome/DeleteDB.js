@@ -18,10 +18,7 @@ export const DeleteDB = (props) => {
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
-    const changeDBName=(evt)=>{
-        const name=evt.target.value;
-        setDBName(name)
-    }
+    
 
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
@@ -81,12 +78,9 @@ export const DeleteDB = (props) => {
                 <RiDeleteBin5Line color="#721c24" className='db-control' />
             </span>
             <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}/>
+                <ModalHeader toggle={toggle}>  <span className="modal-head">Delete Local Database?</span> </ModalHeader>
                 <form onSubmit={handleSubmit(onDelete)}>
                 <ModalBody>
-                    <Row key="re">
-                        <span className="modal-head">Delete Local Database?</span>
-                    </Row>
                     <Row key="rd">
                         <Col md={12} className="delete-modal-col-align">
                             <span className="delete-modal-text"> This action will remove your local database, but will be available remotely.
@@ -97,7 +91,7 @@ export const DeleteDB = (props) => {
                     <Row key="rr">
                         {rep && <TerminusDBSpeaks report={rep} />}
                             <div className="del-mod">
-                                
+
                                    {/* <Row key="rm" className="del-mod-row">
                                         <Col md={2}>
                                             <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
@@ -115,15 +109,17 @@ export const DeleteDB = (props) => {
                                           validate: (value) => value.length > 0
                                         })}
                                     />
-                              
+
                             </div>
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                    <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
-                        <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
-                        {DELETE_DB_MODAL.confirm}
-                    </button>
+                    <span className="delete-button">
+                        <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                            <AiOutlineDelete className="delete-modal-icon"/>
+                            {DELETE_DB_MODAL.confirm}
+                        </button>
+                    </span>
                 </ModalFooter>
                 </form>
             </Modal>

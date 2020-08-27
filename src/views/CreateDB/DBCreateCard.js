@@ -354,6 +354,7 @@ export const DBControlPanel = ({meta, onChange}) => {
 
     const [dbDetailsImage, setdbDetailsImage] = useState(false);
     const [iconImg, setIconImg] = useState(false);
+    const showPexels = false; // nuking pexels temporarily
 
     useEffect(() => {
         setdbDetailsImage(imageUrl);
@@ -381,15 +382,22 @@ export const DBControlPanel = ({meta, onChange}) => {
     return (
         <div className="upload-pic">
             <div className="add-image-control-text">
-                <div onClick={imagePickerToggle} className="image-picker-tile">
+                {showPexels && <div onClick={imagePickerToggle} className="image-picker-tile">
                     <div className="db-details-image">
                         {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
                         {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
                         {iconImg && <i class={iconImg + " add-image-control"}/>}
-                        <div className="image-picker-link image-align" >Click here to choose a picture </div>
+                        {<div className="image-picker-link image-align" >Click here to choose a picture </div>}
                     </div>
-                </div>
-                <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+                </div>}
+                {!showPexels && <div>
+                    <div className="db-details-image">
+                        {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
+                        {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
+                        {iconImg && <i class={iconImg + " add-image-control"}/>}
+                    </div>
+                </div>}
+                {showPexels && <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>}
                 <div className="image-align">
                     <input type="text"
                         placeholder="Paste an Image URL"
