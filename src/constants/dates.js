@@ -5,6 +5,8 @@
  */
 import { format } from "date-fns";
 
+export const DATETIME_DB_UPDATED = "HH.mm, MMM d yyyy "
+
 export const DATETIME_COMPLETE = "MMM d, yyyy - HH:mm:ss"
 export const DATETIME_FULL = "hh:mm:ss, dd/MM/yy"
 export const DATETIME_REGULAR = "dd-MM-yy hh.mm"

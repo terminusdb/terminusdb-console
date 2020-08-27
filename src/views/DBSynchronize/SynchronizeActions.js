@@ -6,7 +6,9 @@ import {Row, Col, Badge, Container} from "reactstrap"
 import { AiOutlineCloudUpload, AiOutlineCloudDownload, AiOutlineBranches } from 'react-icons/ai';
 import Select from "react-select";
 
+
 export const SynchronizeActions = ({branches, repo, remote_branches, branch, onPush, onPull}) => {
+
     return (
         <>
             <Col key="rc7" className="db-remote-action-box">
@@ -44,7 +46,7 @@ export const SynchronizeActions = ({branches, repo, remote_branches, branch, onP
 }
 
 export const PushControl = ({branches, repo, remote_branches, branch, onPush}) => {
-
+    branches = branches || []
     const [localBranch, setLocalBranch] = useState(branch)
     const [remoteBranch, setRemoteBranch] = useState(getDefaultRemoteBranch(remote_branches, branch))
     const [newBranch, setNewBranch] = useState(false)
@@ -102,7 +104,7 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
         <Col>
             {show_remote_branching &&
                 <Row className="db-remote-action-spacing db-first-remote-action-height">
-                    To Remote Branch
+                    <span className="db-remote-branch-label">To Remote Branch</span>
                     {newBranch &&
                         <Col md={6}>
                             <input
@@ -156,7 +158,8 @@ export const PushControl = ({branches, repo, remote_branches, branch, onPush}) =
                 }
             </Row>
             {show_local_branching &&
-                <Row className="db-remote-action-spacing">From Local Branch
+                <Row className="db-remote-action-spacing">
+                    <span className="db-remote-branch-label">From Local Branch</span>
                     <Col md={6}>
                         <Select
                             placeholder = {localBranch}
@@ -200,7 +203,7 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
 
     let show_remote_branching = (remote_branches.length > 1)
     let show_local_branching = true
-    if(branches.length == 1 && !show_remote_branching){
+    if(!branches || (branches.length == 1 && !show_remote_branching)){
         show_local_branching = false
     }
 
@@ -274,14 +277,14 @@ export const PullControl = ({branches, repo, remote_branches, branch, onPull}) =
                 </Row>
             }
             <Row className="db-remote-action-spacing">
-                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text synch-action-text db-remote-action-buttons">
+                <button type="submit" onClick={doPull} className="tdb__button__base tdb__button__base--green synch-action-text db-remote-action-buttons">
                     <AiOutlineCloudDownload style={{"fontSize": "40px"}} color="fff" className="title-remote-action-icon"/>
                     <span className="title-remote-action" style={{"fontSize": "20px"}}> Pull </span>
                 </button>
             </Row>
             {show_local_branching &&
                 <Row className="db-remote-action-spacing">
-                    To Local Branch
+                    <span className="db-remote-branch-label">To Local Branch</span>
                     {newBranch &&
                         <Col md={6}>
                             <input

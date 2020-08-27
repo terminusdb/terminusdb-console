@@ -4,7 +4,7 @@
 import React, {useState, useEffect} from 'react'
 import {useAuth0} from '../../react-auth0-spa'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
+import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
@@ -51,10 +51,7 @@ export const Synchronize = () => {
         let x = "https://hub."
         if(x == url.substring(0, x.length)) return true
         return false
-    }
-
-
-   
+    } 
     function showAddRemote(){
         setOperation("create")
     }
@@ -65,6 +62,13 @@ export const Synchronize = () => {
 
     function unsetOperation(){
         setOperation(false)
+    }
+
+    function afterShare(doc){
+        updateRepos()
+        unsetOperation()
+        refreshDBRecord()
+        RefreshDatabaseRecord(doc, bffClient, getTokenSilently)
     }
 
     function doDelete(remote){
@@ -168,7 +172,7 @@ export const Synchronize = () => {
                 />
             }
             {(operation && operation == "share") && 
-                <CreateDatabase from_local={meta} />
+                <CreateDatabase type='share' from_local={meta} onShare={afterShare}/>
             }
             {(operation && operation == "create") && 
                <AddRemote 

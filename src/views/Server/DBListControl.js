@@ -12,6 +12,7 @@ import Select from "react-select";
 import {Row, Col} from "reactstrap"
 import {CreateDatabase} from "../CreateDB/CreateDatabase"
 import Loading from "../../components/Reports/Loading"
+import {HubRecord} from "../DBSynchronize/HubRecord"
 
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
@@ -86,6 +87,9 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         }
         if(db.action == 'share'){
             setSpecial({action:db.action, meta: db})
+        }
+        else if(db.action == 'hub'){
+            setSpecial({action:db.action, meta: db})            
         }
         else if(db.action == 'accept'){
             setLoading(true)
@@ -214,13 +218,16 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     if(!sorted) return null
     if(loading) return (<Loading type={TERMINUS_COMPONENT}/>)
     return (<>
-            {special && <>
+            {(special && special.action == "share") && <>
                 <span className="database-list-back database-list-intro" onClick={function(){setSpecial(false)}}>
                     back to database list
                 </span>
                 <DBSummaryCard meta={special.meta} user={user} />
                 <CreateDatabase from_local={special.meta} className={className}/>
             </>}
+            {(special && special.action == "hub") && 
+                <HubRecord meta={special.meta} />
+            }
             {!special && <>
                 <span className="database-list-intro">
                     <TerminusDBSpeaks report={report} />

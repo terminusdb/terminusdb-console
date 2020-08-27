@@ -77,6 +77,11 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
         if(report) setReport(report)
     }
 
+    function loadHubDB(){
+        meta.action = "hub"
+        onGo()
+    }
+
     function onGo(){
         if(onAction){
             setReport(false)
@@ -103,7 +108,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                 </Col>
                 <Col md={8} className='database-main-content'>
                     <Row key='r3'>
-                        <DBTitle meta={meta} user={user} max={title_max}/>
+                        <DBTitle meta={meta} user={user} max={title_max} goHubDB={loadHubDB}/>
                     </Row>
                     <Row key='r4' className="database-listing-credits-row">
                         <DBCredits meta={meta}  user={user} />
@@ -137,11 +142,12 @@ export const DBInvite = ({meta}) => {
 }
 
 
-export const DBTitle = ({meta, user, onAction, max}) => {
+export const DBTitle = ({meta, user, goHubDB, max}) => {
     let maxtitle = max || 40, author = false
 
     function goDB(){
         if(meta.id) goDBHome(meta.id, meta.organization)
+        else goHubDB(meta)
     }
 
     let title_css = meta.id ? "database-title-local" : "database-title-missing"

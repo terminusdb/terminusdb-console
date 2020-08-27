@@ -70,9 +70,9 @@ export const MANAGE_TAB = 'Manage'
 /* schema tabs */
 export const CLASSES_TAB = "Classes"
 export const PROPERTIES_TAB = "Properties"
-export const OWL_TAB = "OWL"
+export const OWL_TAB = "Triples"
 export const GRAPHS_TAB = "Graphs"
-export const PREFIXES_TAB = "URL Prefixes"
+export const PREFIXES_TAB = "Prefixes"
 
 // commit queries
 export const GET_COMMITS = 'GET_COMMITS'

@@ -8,8 +8,6 @@ import {WOQLClientProvider ,redirect_uri} from '@terminusdb/terminusdb-console'
 
 
 const onRedirectCallback = appState => {
-  console.log("___CALLBACK___",window.location.pathname)
-
   ConsoleHistory.push(
     appState && appState.targetUrl
       ? appState.targetUrl
@@ -21,8 +19,6 @@ const onRedirectCallback = appState => {
  * Wraps the entire application in a auth0 domain
  * initializes woqlClient and passes it off to the app to connect
  */
-console.log("___REDIRECT__CALL__",redirect_uri);
-
 
 ReactDOM.render(
     <Auth0Provider

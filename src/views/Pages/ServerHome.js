@@ -26,7 +26,7 @@ const ServerHome = (props) => {
     let active = props.page
 
     const { woqlClient, contextEnriched } = WOQLClientObj()
-    let showlist = woqlClient.databases().length || false
+    
 
     useEffect(() => {
         if(woqlClient){
@@ -36,6 +36,9 @@ const ServerHome = (props) => {
             showlist = mdbs.length || false
         }
     }, [woqlClient, contextEnriched])
+
+    if(!woqlClient) return null
+    let showlist = (woqlClient ? woqlClient.databases().length : false)
 
     function fixCommitLog(id, email){
         let WOQL = TerminusClient.WOQL 

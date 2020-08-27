@@ -7,13 +7,15 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 /**
  * Meta has create db (id, label, comment, organization)
  */
-export const CreateLocal = async (meta, client) => {  
-    let dbs = client.databases()
-    meta.id = _new_local_id(meta.id, dbs)
-    if(!meta.label){
-        meta.label = meta.id
+export const CreateLocal = async (meta, client, preformed) => {  
+    if(!preformed){
+        let dbs = client.databases()
+        meta.id = _new_local_id(meta.id, dbs)
+        if(!meta.label){
+            meta.label = meta.id
+        }
+        meta.label = _new_local_label(meta.label, dbs)
     }
-    meta.label = _new_local_label(meta.label, dbs)
     if(!meta.comment){
         meta.comment = ""
     }
@@ -67,19 +69,21 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 * label
 * comment
 */
-export const CloneDB = async (meta, client, getTokenSilently, no_auth) => {
-    let dbs = client.databases()
+export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed) => {
     //console.log(dbs)
     let url = meta.remote_url 
     let newid = meta.id
     if(!newid){
         newid = url.substring(url.lastIndexOf('/')+ 1)
     }
-    newid = _new_local_id(newid, dbs)
     if(!meta.label){
         meta.label = newid
     }
-    meta.label = _new_local_label(meta.label, dbs)
+    if(!preformed) {
+        let dbs = client.databases()
+        newid = _new_local_id(newid, dbs)
+        meta.label = _new_local_label(meta.label, dbs)
+    }
     if(!meta.comment){
         meta.comment = ""
     }
@@ -250,11 +254,15 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
 }
 
 export const legalURLID = (idstr) => {
-    if(!idstr.match(/^[0-9a-z_]+$/)) {
+    if(!idstr.match(/^[0-9a-z_\-]+$/)) {
         return false            
     }
     if(idstr.length > 40) return false
     return true
+}
+
+export function NewLocalID(starter, client){
+    return _new_local_id(starter, client.databases())
 }
 
 function _new_local_id(starter, dbl){
@@ -302,19 +310,23 @@ function _is_local_server(client, url){
     return (client.server() == url.substring(0, client.server().length))
 }
 
+export function NewLocalLabel(starter, client){
+    return _new_local_label(starter, client.databases())
+}
+
 
 function _new_local_label(starter, dbl){
     let ind = 0;
     if(starter.lastIndexOf(" (") != -1 && starter.lastIndexOf(")") == (starter.length-1) ){
-        let num = starter.substring(starter.lastIndexOf(" (") + 1, starter.lastIndexOf(")"))
+        let num = starter.substring(starter.lastIndexOf(" (") + 2, starter.lastIndexOf(")"))
         if(_is_integer(num)){
             ind = num
-            starter = start.substring(0, starter.lastIndexOf(" (") - 1)
+            starter = starter.substring(0, starter.lastIndexOf(" ("))
         }    
     }
     let ndbl = []
     for(var i = 0 ; i<dbl.length; i++){
-        if(dbl[i].id) ndbl.push(dbl)
+        if(dbl[i].id) ndbl.push(dbl[i])
     }
     let base = starter
     let labs = ndbl.map((item) => item.label)
