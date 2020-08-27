@@ -18,6 +18,13 @@ export const DeleteDB = (props) => {
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
+    const [dbName,setDBName] = useState(null); 
+
+    const changeDBName=(evt)=>{
+        const name=evt.target.value;
+        setDBName(name)
+    }
+
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
         orgid = orgid || woqlClient.organization()
@@ -35,10 +42,16 @@ export const DeleteDB = (props) => {
         }
         woqlClient.databases(ndbs)
     }
+    //const onDelete = data => console.log(data);
+
+    const onSubmit = values => console.log(values);
 
     const onDelete = (data) => {
+        console.log(data);
+
         setDisabled(true)
         if (data.dbId && data.dbId == woqlClient.db()) {
+        //if(dbName && dbName === woqlClient.db()){
             let st = Date.now()
             woqlClient
                 .deleteDatabase(data.dbId,  woqlClient.organization())
@@ -71,15 +84,13 @@ export const DeleteDB = (props) => {
 
     return (
         <span className='delete-control' onClick={toggle}>
-
             <span className="db-action"  title="Delete Database">
                 <RiDeleteBin5Line color="#721c24" className='db-control' />
             </span>
-
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}/>
+                <form onSubmit={handleSubmit(onDelete)}>
                 <ModalBody>
-
                     <Row key="re">
                         <span className="modal-head">Delete Local Database?</span>
                     </Row>
@@ -93,56 +104,35 @@ export const DeleteDB = (props) => {
                     <Row key="rr">
                         {rep && <TerminusDBSpeaks report={rep} />}
                             <div className="del-mod">
-                                <form onSubmit={handleSubmit(onDelete)}>
-                                    <Row key="rm" className="del-mod-row">
+                                
+                                   {/* <Row key="rm" className="del-mod-row">
                                         <Col md={2}>
                                             <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
                                         </Col>
                                         <Col md={10}>
                                             <label class="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
                                         </Col>
-                                    </Row>
+                                    </Row> */}
+
                                     <input
-                                        type="text"
                                         name="dbId"
-                                        id="dbId"
-                                        className = "tcf-input"
-                                        ref={register({validate: (value) => value.length > 0})}
                                         placeholder= {DELETE_DB_MODAL.placeholder}
+                                        className = "tcf-input"
+                                        ref={register({
+                                          validate: (value) => value.length > 0
+                                        })}
                                     />
-                                </form>
+                              
                             </div>
                     </Row>
-
-                    {/*<Col md={12}>
-                        {rep && <TerminusDBSpeaks report={rep} />}
-                        <div className="del-mod">
-                            <p className="del-message">
-                                {' '}
-                                {DELETE_DB_MODAL.message} {woqlClient.db()}
-                            </p>
-                            <img src={DELETE_ICON} className="center" />
-                            <form onSubmit={handleSubmit(onDelete)}>
-                                <input
-                                    type="text"
-                                    name="dbId"
-                                    id="dbId"
-                                    ref={register({validate: (value) => value.length > 0})}
-                                />
-                                <hr className="my-space-25" />
-                                <Button color="danger" disabled={disabled}>
-                                    {DELETE_DB_MODAL.confirm}
-                                </Button>
-                            </form>
-                        </div>
-                    </Col>*/}
                 </ModalBody>
                 <ModalFooter>
-                    <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
+                    <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
                         <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
                         {DELETE_DB_MODAL.confirm}
                     </button>
                 </ModalFooter>
+                </form>
             </Modal>
         </span>
     )
