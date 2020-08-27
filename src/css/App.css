@@ -4225,99 +4225,135 @@ span.delete-button:hover {
   .or-after-image-picker{
     /*margin-top: 10px;
     margin-bottom: 20px;*/
-      width: 230px;
-      margin-left: 40px;
-  }
-  
-  .or-text-hr {
-      margin: -12px 110px 0px 110px;
-      /*padding: 0px 15px 0px 15px;*/
-      background-color: #fff;
-      width: 20px;
-      text-align: center;
-  }
-  
-  .image-picker-tile {
-      cursor: pointer;
-      height: 180px;
-  }
-  
-  .pretty-form{
-      padding: 40px;
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin: 60px 0px 30px 0px;
-  }
-  
-  .create-place-badge {
-      margin-top: -50px;
-      margin-left: 10px;
-      width: 250px;
-      padding: 0px 10px 0px 10px;
-      margin-bottom: 30px;
-      background-color: #fff;
-      font-weight: 600;
-      text-align: center;
-  }
-  
-  .create-place-badge-img {
-      margin-top: -50px;
-      float: right;
-      width: 150px;
-      height: 10px;
-  }
-  
-  .create-place-badge-hub-img {
-      margin-top: -90px;
-      float: right;
-      height: 100px;
-      width: 100px;
-  }
-  
-  .local-badge {
-      color: #00C08B;
-  }
-  
-  .remote-badge {
-      color: #856404;
-  }
-  
-  .upload-image-btn {
-      color: #fff;
-      float: right;
-      width: 100%;
-  }
-  
-  .upload-image-align {
-      float: right;
-      margin-right: 0 !important;
-  }
-  
-  .upload-image-btn:hover {
-      color: #00C08B;
-  }
-  
-  .create-section {
-      margin-top: 50px;
-  }
-  
-  .create-db-options {
-      font-size: 20px;
-      background-color: #fff;
-      margin-left: 15px;
-      margin-top: -8px;
-  }
-  
-  .create-db-span {
-      display:flex;
-  }
-  
-  .database-listing-description-header{
-      margin-left: 10px;
-      margin-top: -8px;
-  }
-  
+    width: 230px;
+    margin-left: 40px;
+}
+
+.or-text-hr {
+    margin: -12px 110px 0px 110px;
+    /*padding: 0px 15px 0px 15px;*/
+    background-color: #fff;
+    width: 20px;
+    text-align: center;
+}
+
+.image-picker-tile {
+    cursor: pointer;
+    height: 180px;
+}
+
+.pretty-form{
+    padding: 40px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 0px 0px 30px 0px;
+}
+
+.ge {
+    margin-top: -50px;
+    margin-left: 10px;
+    width: 250px;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.create-place-badge-img {
+    margin-top: -50px;
+    float: right;
+    width: 150px;
+    height: 10px;
+    margin-left: 320px;
+}
+
+.create-place-badge-hub-img {
+    margin-top: -15px;
+    float: right;
+    margin-left: 10px;
+    height: 40px;
+    width: 40px;
+}
+
+.create-place-badge {
+
+}
+
+.local-badge {
+    color: #00C08B;
+    border: 1px solid #ddd;
+    border-top: 0;
+    width: 300px;
+    padding: 15px;
+    margin-top: -40px;
+    text-align: center;
+}
+
+.remote-badge {
+    color: #856404;
+    border: 1px solid #ddd;
+    border-left: 0;
+    width: 300px;
+    padding: 15px;
+    margin-left: 15px;
+    /* color: #00C08B; */
+    border: 1px solid #ddd;
+    border-top: 0;
+    width: 300px;
+    padding: 15px;
+    margin-top: -40px;
+    text-align: center;
+}
+
+.upload-image-btn {
+    color: #fff;
+    float: right;
+    width: 100%;
+}
+
+.upload-image-align {
+    float: right;
+    margin-right: 0 !important;
+}
+
+.upload-image-btn:hover {
+    color: #00C08B;
+}
+
+.create-section {
+    margin-top: 50px;
+}
+
+.create-db-options {
+    font-size: 20px;
+    background-color: #fff;
+    margin-left: 15px;
+    margin-top: -8px;
+}
+
+.create-db-select {
+    /*border: 1px solid #ddd;
+    border-radius: 6px;*/
+    height: 100px;
+    padding: 30px;
+    cursor: pointer;
+}
+
+.create-db-select:hover {
+    border-bottom: 5px solid #00C08B;
+}
+
+.create-db-span {
+    display:flex;
+}
+
+.database-listing-description-header{
+    margin-left: 10px;
+}
+
+
 button.tdb__button__cancel {
     background-color: white;
     border: 1px solid #808080;
