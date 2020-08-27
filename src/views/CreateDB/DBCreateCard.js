@@ -354,7 +354,7 @@ export const DBControlPanel = ({meta, onChange}) => {
 
     const [dbDetailsImage, setdbDetailsImage] = useState(false);
     const [iconImg, setIconImg] = useState(false);
-    const showPexels = false;
+    const showPexels = false; // nuking pexels temporarily
 
     useEffect(() => {
         setdbDetailsImage(imageUrl);
