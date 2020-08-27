@@ -12,12 +12,8 @@ export const DeleteControl = ({repo, onDelete}) => {
     return (<span className='delete-control' onClick={toggle}>
         <DeleteWidget repo={repo} />
         <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}/>
+            <ModalHeader toggle={toggle}> <span className="modal-head">Delete Remote</span> </ModalHeader>
             <ModalBody>
-
-                <Row key="re">
-                    <span className="modal-head">Delete Remote Database?</span>
-                </Row>
                 <Row key="rd">
                     <Col md={12} className="delete-modal-col-align">
                         <span className="delete-modal-text">
@@ -27,10 +23,13 @@ export const DeleteControl = ({repo, onDelete}) => {
                 </Row>
             </ModalBody>
             <ModalFooter>
-                <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
-                    <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
-                    {DELETE_DB_MODAL.confirm}
-                </button>
+                <span className="delete-button">
+                    <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
+                        <AiOutlineDelete className="delete-modal-icon"/>
+                        {DELETE_DB_MODAL.confirmRemote}
+                    </button>
+                    <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                </span>
             </ModalFooter>
         </Modal>
         {/*<Modal isOpen={modal} toggle={toggle}>

@@ -3211,7 +3211,8 @@ div.builtin-prefixes {
 }
 
 .delete-modal-button{
-    margin: 0px 90px 0px 90px !important;
+    margin: 0px 20px 0px 0px !important;
+    width: 290px;
 }
 
 .db-action {
@@ -3943,4 +3944,17 @@ div.builtin-prefixes {
 .database-listing-description-header{
     margin-left: 10px;
     margin-top: -8px;
+}
+
+
+button.tdb__button__cancel {
+    background-color: white;
+    border: 1px solid #808080;
+    color: #808080;
+}
+
+button.tdb__button__cancel:hover {
+    border: 1px solid #808080;
+    background-color: #808080;
+    color: white;
 }
