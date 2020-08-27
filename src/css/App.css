@@ -3898,18 +3898,41 @@ div.builtin-prefixes {
 }
 
 .create-place-badge-hub-img {
-    margin-top: -90px;
+    margin-top: -15px;
     float: right;
-    height: 100px;
-    width: 100px;
+    margin-left: 10px;
+    height: 40px;
+    width: 40px;
+}
+
+.create-place-badge {
+
 }
 
 .local-badge {
     color: #00C08B;
+    border: 1px solid #ddd;
+    border-top: 0;
+    width: 300px;
+    padding: 15px;
+    margin-top: -40px;
+    text-align: center;
 }
 
 .remote-badge {
     color: #856404;
+    border: 1px solid #ddd;
+    border-left: 0;
+    width: 300px;
+    padding: 15px;
+    margin-left: 15px;
+    /* color: #00C08B; */
+    border: 1px solid #ddd;
+    border-top: 0;
+    width: 300px;
+    padding: 15px;
+    margin-top: -40px;
+    text-align: center;
 }
 
 .upload-image-btn {
@@ -3939,14 +3962,14 @@ div.builtin-prefixes {
 }
 
 .create-db-select {
-    /*border: 1px solid #ddd;*/
-    border-radius: 6px;
+    /*border: 1px solid #ddd;
+    border-radius: 6px;*/
     height: 100px;
     padding: 30px;
     cursor: pointer;
 }
 
-.create-db-select:active {
+.create-db-select:hover {
     border-bottom: 5px solid #00C08B;
 }
 

@@ -237,6 +237,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                     value={CREATE_DATABASE_HUB}
                                     checked={hubCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
+                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
                         <Row key="rm">
@@ -251,13 +252,13 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
 
             <div className="pretty-form">
 
-                {local && <div className="create-place-badge local-badge">
+                {local && allow_remote && <div className="create-place-badge local-badge">
                     Create a Local Database
                 </div>}
                 {/*local && <div className="create-place-badge-img">
                     <img src="https://assets.terminusdb.com/terminusdb-console/images/horizontal_lockup%20-%20Newsletter%20(1100x220).png" title="Terminus DB logo"/>
                 </div>*/}
-                {!local && <div className="create-place-badge remote-badge">
+                {!local && allow_remote && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
                 </div>}
                 {/*!local && <div className="create-place-badge-hub-img">
