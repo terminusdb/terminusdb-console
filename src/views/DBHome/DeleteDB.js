@@ -18,7 +18,7 @@ export const DeleteDB = (props) => {
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
 
-    
+
 
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
@@ -37,7 +37,7 @@ export const DeleteDB = (props) => {
         }
         woqlClient.databases(ndbs)
     }
- 
+
     const onDelete = (data) => {
         setDisabled(true)
         if (data.dbId && data.dbId == woqlClient.db()) {
@@ -78,7 +78,7 @@ export const DeleteDB = (props) => {
                 <RiDeleteBin5Line color="#721c24" className='db-control' />
             </span>
             <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>  <span className="modal-head">Delete Local Database?</span> </ModalHeader>
+                <ModalHeader toggle={toggle}>  <span className="modal-head">Delete Local Database</span> </ModalHeader>
                 <form onSubmit={handleSubmit(onDelete)}>
                 <ModalBody>
                     <Row key="rd">
@@ -104,7 +104,7 @@ export const DeleteDB = (props) => {
                                     <input
                                         name="dbId"
                                         placeholder= {DELETE_DB_MODAL.placeholder}
-                                        className = "tcf-input"
+                                        className = "tcf-input tcf-inp-center"
                                         ref={register({
                                           validate: (value) => value.length > 0
                                         })}

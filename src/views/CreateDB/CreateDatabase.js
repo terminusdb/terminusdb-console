@@ -159,7 +159,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     if(type && type == "share"){
         return (
             <div className="tdb__loading__parent">
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                 <DBShareHeader />
                 <Row className="generic-message-holder">
                     {report &&
@@ -169,6 +168,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                 {
                     <DBShareForm starter={from_local} onSubmit={shareLocal} />
                 }
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
@@ -207,9 +207,8 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         else setLocal(false)
     }, [createType])
 
-    return (<>
+    return (
         <div className="tdb__loading__parent">
-        </div>
             <div className="create-section">
                 {allow_remote && <Row>
                     <Col md={6} className="create-db-select" onClick={handleLocal} active>
@@ -265,7 +264,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                 </div>*/}
 
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
 
                 {/*(allow_remote && !show_fancy) &&
                     <DBCreateHeader local={local} toggle={toggleLocal}/>
@@ -289,7 +287,8 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     }
                 </Row>
             </div>
-        </>
+             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        </div>
     )
 }
 
