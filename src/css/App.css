@@ -2597,7 +2597,7 @@ span.delete-modal-label {
   .database-create-header {
       /*background-color: #f8f8f8;*/
       padding: 2px;
-      height: 54px;
+      height: 34px;
   }
 
   .hub-toolbar {
@@ -2750,17 +2750,31 @@ span.delete-modal-label {
 
 
   .fork-full-action {
-    color:#FF8C00;
+    /*color:#FF8C00;
     display: block;
     background-color: #fdffef;
-    border: 1px solid #FF8C00;
+    border: 1px solid #FF8C00;*/
+    color: #FF8C00;
+    display: block;
+    background-color: #fdffef;
+    border: 1px solid #856404;
+    color: #856404;
+    background-color: #fff3cd;
+    /* border-color: #ffeeba; */
+    border-radius: 4px;
   }
 
+
   .clone-full-action {
-    color: #4984c9;
+    /*color: #4984c9;
     display: block;
     background-color: #f1f8ff;
-    border: 1px solid #0366d6;
+    border: 1px solid #0366d6;*/
+    color: #004085;
+    background-color: #cce5ff;
+    border:1px solid #004085;
+    border-radius: 4px;
+    display: block;
   }
 
   .fork-full-action:hover,
@@ -3270,6 +3284,16 @@ span.delete-modal-label {
       text-align: center;
       margin: 8px auto;
       border-radius: 6px;
+  }
+
+  .clone-list-control-row {
+      height: 30px;
+      background-color: #fff;
+      border-top: 1px solid #00C08B;
+      border-radius: 6px;
+      display: block;
+      width: -webkit-fill-available;
+      width: -moz-available;
   }
 
   .database-listing-image {
@@ -4438,6 +4462,6 @@ button.tdb__button__cancel:hover {
     color: white;
 }
 
-.clone-widget {
+.clone-widget-title, .share-on-hub-title {
     margin-top: 50px;
 }

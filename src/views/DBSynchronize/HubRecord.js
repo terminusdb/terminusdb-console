@@ -30,13 +30,11 @@ export const HubRecord = ({meta}) => {
     const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
     let user = woqlClient.user()
 
-    console.log(meta)
     return (
         <div className="tdb__loading__parent">
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             <DBHubHeader />
             <HubDBCard meta={meta.remote_record} localClient={woqlClient}/>
-
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         </div>
     )
 
@@ -73,7 +71,7 @@ export const HubDBCard = ({meta, onFetch, onDelete, localClient, onRefresh}) => 
                 </Col>
             </Row>
             <Row>
-                <HubDescription                    
+                <HubDescription
                     meta={meta}
                 />
             </Row>
@@ -131,7 +129,7 @@ export const HubControls = ({meta, onRefresh, onDelete}) => {
                 <span className='refresh-control' onClick={onRefresh}>
                     <RefreshControl meta={meta} />
                 </span>
-                {can_edit && <> 
+                {can_edit && <>
                     <span className='delete-control' onClick={onDelete}>
                         <DeleteControl meta={meta} />
                     </span>

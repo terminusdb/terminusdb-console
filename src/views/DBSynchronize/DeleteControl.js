@@ -32,22 +32,6 @@ export const DeleteControl = ({repo, onDelete}) => {
                 </span>
             </ModalFooter>
         </Modal>
-        {/*<Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}></ModalHeader>
-            <ModalBody className="delete-modal-body">
-                <Row>
-                    <Col md={2}>
-                        <RiErrorWarningLine color="#ff9800" className="delete-modal-icon"/>
-                    </Col>
-                    <Col md={10} className="delete-modal-col-align">
-                        <span className="warning-modal-text">This action will remove the connection to the remote database - it will not effect your local database, but you will no longer be able to push and pull updates. </span>
-                    </Col>
-                </Row>
-            </ModalBody>
-            <ModalFooter>
-            <button className="tdb__button__base tdb__button__base--bred"  onClick={onDelete}>Delete</button>
-            </ModalFooter>
-        </Modal>*/}
     </span>)
 }
 

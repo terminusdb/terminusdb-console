@@ -229,30 +229,30 @@ export const CloneController = ({list, db, organization, meta}) => {
         return (
             <div className="tdb__loading__parent">
                 <CloneHubHeader organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />
                     }
                 </Row>
                 <CloneListControl list={currentList} onAction={fireAction} />
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
     else {
         return (<div className="tdb__loading__parent">
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             <Row className="generic-message-holder">
                 {report &&
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         </div>)
     }
 }
 
 export const CloneHubHeader = ({organization, list, onChange, onError}) => {
-    return ( <Row className="remote-info clone-widget">
+    return ( <Row className="remote-info clone-widget-title">
                 <div className="remote-info-align database-create-header">
                     <HubPicture />
                     <span className='database-listing-header-row'>
@@ -267,15 +267,17 @@ export const CloneHubHeader = ({organization, list, onChange, onError}) => {
 
 export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
     let text = "This database is stored on Terminus Hub"
-    return (<>
-        <div className='database-create-header'>
+    return (<Row className="remote-info clone-widget-title">
+        <div className='remote-info-align database-create-header'>
             <HubPicture />
             <span className='database-listing-header-row'>
-                <span key='a' className="database-header-title">Terminus Hub Database</span>
+                <span key='a' className="database-header-title remote-info-label">Terminus Hub Database</span>
             </span>
         </div>
-        <HubToolbar onChange={onChange} onError={onError} url={url} organization={organization}/>
-    </>)
+        <div className="database-remote-info-row">
+            <HubToolbar onChange={onChange} onError={onError} url={url} organization={organization}/>
+        </div>
+    </Row>)
 }
 
 export const HubToolbar = ({onChange, onError, organization, url}) => {

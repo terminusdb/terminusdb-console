@@ -346,7 +346,7 @@ export const DBControlPanel = ({meta, user, onClone}) => {
                 {disp}
             </Row>}
             <Row className="db-controls">
-                <DBControls user={user} onClone={onClone}/>
+                <DBControls meta={meta} user={user} onClone={onClone}/>
             </Row>
         </div>
     )
@@ -359,7 +359,7 @@ export const DBControls = ({meta, user, onClone}) => {
                 <span className='refresh-control' onClick={onClone}>
                     <CloneControl meta={meta} user={user}/>
                 </span>
-                <DeleteDB/>
+                <DeleteDB meta={meta}/>
             </span>
         </Row>
     )
