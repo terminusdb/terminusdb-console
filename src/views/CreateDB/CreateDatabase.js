@@ -159,7 +159,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     if(type && type == "share"){
         return (
             <div className="tdb__loading__parent">
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                 <DBShareHeader />
                 <Row className="generic-message-holder">
                     {report &&
@@ -169,6 +168,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                 {
                     <DBShareForm starter={from_local} onSubmit={shareLocal} />
                 }
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
