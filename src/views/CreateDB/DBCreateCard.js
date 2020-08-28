@@ -236,7 +236,7 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
     }
 
     if(!current) return null
-    
+
     let isEdit = (type && type == "edit")
     return (<>
         <Row key='r7' className='database-summary-listing'>
@@ -247,12 +247,12 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
                 <Row className='database-create-title-row db-create-remote-row'>
                     <DBTitle label={current.label} organization={current.organization} onChange={changeTitle} databases={databases}/>
                 </Row>
-                {!isEdit && 
+                {!isEdit &&
                     <Row className='database-create-id-row db-create-remote-row'>
                         <DBID id={current.id} organization={current.organization} databases={databases} hub_url={current.hub_url} onChange={changeID} />
                     </Row>
                 }
-                {!isEdit && 
+                {!isEdit &&
                     <Row className="database-create-credits db-create-remote-row">
                         <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} isEdit={isEdit}/>
                     </Row>
@@ -284,7 +284,7 @@ export const DBRequired = ({meta, databases, type}) => {
 function _problems(meta, databases){
     let a = _validate_id(meta.id, meta.organization, databases)
     let b = _validate_title(meta.label, meta.organization, databases)
-    
+
     if(a == "empty" && b == "empty"){
         return "ID and title required"
     }
@@ -366,14 +366,15 @@ export const DBControlPanel = ({meta, onChange}) => {
         setModal(false)
     }
 
-    const [val, setVal] = useState(icon)
+    const [val, setIcon] = useState(icon)
 
-    useEffect(() => {setVal(val)}, [val])
+    useEffect(() => {setIcon(val)}, [val])
     let vchange = function(selval){
-        setVal(selval)
+        setIcon(selval)
         onChange(selval)
         setIconImg(selval)
         setdbDetailsImage(false)
+        document.getElementById("imageUrlInput").value = "";
     }
 
 
@@ -388,6 +389,7 @@ export const DBControlPanel = ({meta, onChange}) => {
                         {<div className="image-picker-link image-align" >Click here to choose a picture </div>}
                     </div>
                 </div>}
+
                 {!showPexels && <div>
                     <div className="db-details-image">
                         {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
@@ -396,16 +398,20 @@ export const DBControlPanel = ({meta, onChange}) => {
                     </div>
                 </div>}
                 {showPexels && <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>}
+
                 <div className="image-align">
                     <input type="text"
+                        id="imageUrlInput"
                         placeholder="Paste an Image URL"
                         className="database-create-id-input database-input-empty  db-create-image-url"
                         onChange={  (e) =>{
                             setImageUrl(e.target.value)
                             onChange(e.target.value);
+                            setIcon(false); //set icon to false
                     }}/>
                 </div>
                 <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+
                 <div className="image-align">
                     <FontIconPicker icons={ICONS_PICKER}
                         onChange={value => vchange(value)}

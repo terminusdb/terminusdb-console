@@ -2664,7 +2664,7 @@ span.delete-modal-label {
 
   .database-header-image {
       height: 48px;
-      margin-top: 0;
+      margin-top: -15px;
       margin-left: 14px;
       margin-right: 4px;
       vertical-align: top;
@@ -4436,4 +4436,8 @@ button.tdb__button__cancel:hover {
     border: 1px solid #808080;
     background-color: #808080;
     color: white;
+}
+
+.clone-widget {
+    margin-top: 50px;
 }
