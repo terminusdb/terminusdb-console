@@ -264,10 +264,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                 </div>*/}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 70b8c8b08dcabde912851e32e3b8f8b286952ff3
 
                 {/*(allow_remote && !show_fancy) &&
                     <DBCreateHeader local={local} toggle={toggleLocal}/>
@@ -291,11 +287,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     }
                 </Row>
             </div>
-<<<<<<< HEAD
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-=======
              {loading &&  <Loading type={TERMINUS_COMPONENT} />}
->>>>>>> 70b8c8b08dcabde912851e32e3b8f8b286952ff3
         </div>
     )
 }
