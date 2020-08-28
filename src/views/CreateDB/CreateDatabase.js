@@ -207,9 +207,9 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         else setLocal(false)
     }, [createType])
 
-    return (<>
+    return (
         <div className="tdb__loading__parent">
-        </div>
+
             <div className="create-section">
                 {allow_remote && <Row>
                     <Col md={6} className="create-db-select" onClick={handleLocal} active>
@@ -289,7 +289,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     }
                 </Row>
             </div>
-        </>
+        </div>
     )
 }
 
