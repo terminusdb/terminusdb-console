@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 
-import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite, isLocalURL, isHubURL, RefreshDatabaseRecord } from '../../components/Query/CollaborateAPI'
+import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite, UpdateDatabase, isLocalURL, isHubURL, RefreshDatabaseRecord } from '../../components/Query/CollaborateAPI'
 import {DBList, DBSummaryCard} from '../Server/DBList'
 import {useAuth0} from '../../react-auth0-spa'
 import {goDBPage, goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
@@ -11,13 +11,12 @@ import {DBListControl} from "../Server/DBListControl"
 import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle, AiOutlineCopy, AiFillWarning,
     AiFillCrown, AiFillEdit, AiOutlineStar, AiFillCheckCircle,AiOutlineThunderbolt,
     AiOutlineLink, AiOutlineMail, AiFillInfoCircle, AiOutlineUser, AiOutlineInbox, AiOutlineExclamation, AiFillBuild, AiOutlineInfoCircle,
-    AiOutlineGlobal, AiOutlineBell, AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
-
+    AiOutlineGlobal, AiOutlineBell, AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiFillDatabase, AiOutlineWarning} from 'react-icons/ai';
+import {useForm} from 'react-hook-form'
 import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { LIST_LOCAL, LIST_REMOTE, CLONE, CLONEDBS } from "./constants.pages"
 import { CloneURL } from '../Server/CloneURL'
 import Select from "react-select";
-import { Row, Col, Container } from "reactstrap"
 import Loading from "../../components/Reports/Loading"
 import { validURL } from '../../utils/helperFunctions';
 import { GRAPHDB, HUBDB } from "../../constants/images"
@@ -29,7 +28,11 @@ import { DATETIME_COMPLETE, DATETIME_DB_UPDATED, DATETIME_REGULAR, DATE_REGULAR 
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {DBCreateCard} from "../CreateDB/DBCreateCard"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
-
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import {Button, Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
+import {DELETE_DB_MODAL} from '../DBHome/constants.dbhome'
+import { isFuture } from 'date-fns'
+import { json } from '../../../../terminusdb-client/lib/woql'
 
 const ClonePage = ({organization, db}) => {
     let list = (organization || db ? false : CLONEDBS)
@@ -54,11 +57,15 @@ export const CloneController = ({list, db, organization, meta}) => {
     if(!woqlClient || !bffClient) return null
 
     function loadNewStuff(org, db){
+        setOrgid(false)
+        setDBid(false)
+        setCurrentDB()
         setOrgid(org)
         setDBid(db)
+
     }
 
-    useEffect(() => {
+    useEffect(() => {   
         if(dbid && orgid){
             setLoading(true)
             setReport()
@@ -126,48 +133,31 @@ export const CloneController = ({list, db, organization, meta}) => {
         }
         else if(db.action == 'clone'){
             setLoading(true)
-            CloneDB(db, woqlClient, getTokenSilently)
+            let pred = (db.auto ? false : true)
+            CloneDB(db, woqlClient, getTokenSilently, false, pred)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
             })
+            .catch((e) => {
+                console.log(e)
+                setReport({status: TERMINUS_ERROR, message: "Failed to clone database", error: e})
+            })
             .finally(() => setLoading(false))
         }
         if(db.action == 'fork'){
             setLoading(true)
-            let nuid = db.remote_url.substring(db.remote_url.lastIndexOf("/") + 1)
-            db.id = nuid
-            db.organization = bffClient.user_organization() 
-            ForkDB(db, woqlClient, bffClient, getTokenSilently)
-            .then((id) => {
-                setReport({status: TERMINUS_SUCCESS, message: "Successfully Forked Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+            ForkDB(db, woqlClient, bffClient, getTokenSilently, true)
+            .then(() => {
+                loadNewStuff()
+                goHubPage(db.organization, db.id)
+            })
+            .catch((e) => {
+                setReport({status: TERMINUS_ERROR, message: "Failed to fork database", error: e})
             })
             .finally(() => setLoading(false))
-        }
-        else if(db.action == 'delete'){
-            setLoading(true)
-            DeleteDB(db, woqlClient, bffClient, getTokenSilently)
-            .then((id) => {
-                setReport({status: TERMINUS_SUCCESS, message: "Successfully Removed Database"})
-                removeDeletedRemoteDB(db)
-                refreshDBListing() 
-            })            
-            .finally(() => setLoading(false))
-        } 
-        else if(db.action == 'update'){
-            setLoading(true)
-            let nuid = db.remote_url.substring(db.remote_url.lastIndexOf("/") + 1)
-            ForkDB(db, woqlClient, bffClient, getTokenSilently)
-            .then((id) => {
-                setReport({status: TERMINUS_SUCCESS, message: "Successfully Updated Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
-            })
-            .finally(() => setLoading(false))
-        }       
+        }               
     }
 
     function removeProcessedInvite(dbrec){
@@ -215,25 +205,30 @@ export const CloneController = ({list, db, organization, meta}) => {
         setReport({status: TERMINUS_ERROR, message: "Database not found " + str, error: e})
     }
 
+    function refreshHub(orgid, dbid){
+        loadNewStuff(orgid, dbid)
+        goHubPage(orgid, dbid)
+    }
+
     if(currentDB){
         let url = remoteClient.server() + currentDB.organization + "/" + currentDB.id
         return (
-            <div className="tdb__loading__parent">
-                <DBHubHeader url={url} meta={currentDB} />
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            <div>
+                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError}/>
+                {loading &&  <Loading />}
                     <Row className="generic-message-holder">
                         {report && 
                             <TerminusDBSpeaks report={report} />
                         }
                     </Row>
-                    <HubDBCard meta={currentDB} localClient={woqlClient}/>
+                    <HubDBCard meta={currentDB} onAction={fireAction}/>
             </div>
         )
     }
     else if(currentList){
         return (
             <div className="tdb__loading__parent">
-                <CloneHubHeader organization={orgid} list={currentList} onChange={loadNewStuff} onError={reportComponentError}/>
+                <CloneHubHeader organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                 <Row className="generic-message-holder">
                     {report && 
@@ -257,46 +252,31 @@ export const CloneController = ({list, db, organization, meta}) => {
 }
 
 export const CloneHubHeader = ({organization, list, onChange, onError}) => {
-    let text = "Share, Clone and Collaborate through Terminus Hub" 
-    let choice = "Databases available on Terminus Hub"
-    return (<>        
-        <Row className='database-create-header'>
-            <Col key='r5' md={1} className='database-create-current'>
-                <HubPicture />
-            </Col>
-            <Col key='r7' md={9} className='database-create-current'>
-                <span className='database-listing-title-row'>
-                    <Row>
-                        <span className="database-header-title">{choice}</span>
-                    </Row>
-                    <Row>
-                        <span className="database-listing-description">{text}</span>
-                    </Row>
-                </span>
-            </Col>
-            <Col key='r6' md={2} className=''>
-            </Col>
-        </Row>
+    return (<>
+        <div className='database-create-header'>
+            <HubPicture />
+            <span className='database-listing-header-row'>
+                <span key='a' className="database-header-title">Share, Clone and Collaborate with Terminus Hub</span>
+            </span>
+        </div>
         <HubToolbar onChange={onChange} onError={onError} organization={organization}/>
+    </>) 
+}
+
+export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
+    let text = "This database is stored on Terminus Hub" 
+    return (<>
+        <div className='database-create-header'>
+            <HubPicture />
+            <span className='database-listing-header-row'>
+                <span key='a' className="database-header-title">Terminus Hub Database</span>
+            </span>
+        </div>
+        <HubToolbar onChange={onChange} onError={onError} url={url} organization={organization}/>
     </>)    
 }
 
-export const DBHubHeader = ({onCancel}) => {
-    let text = "This is a record of a database stored on Terminus Hub" 
-    return (        
-        <Row className='database-create-header'>
-            <HubPicture local={false} />
-            <span className='database-listing-title-row'>
-                <span key='a' className="database-header-title">Terminus Hub Database</span>
-                <div key='z' className='database-header-description-row'>
-                    <span className="database-listing-description">{text}</span>
-                </div>
-            </span>
-        </Row>
-    )    
-}
-
-export const HubToolbar = ({onChange, onError, organization}) => {
+export const HubToolbar = ({onChange, onError, organization, url}) => {
     const { woqlClient, remoteClient } = WOQLClientObj()
     function goInvites(){
         onChange("invitations")
@@ -347,7 +327,7 @@ export const HubToolbar = ({onChange, onError, organization}) => {
                 <PublisherPicker onSubmit={onChange} organization={organization} />
             </span>
             <span className="hub-toolbar-col url-picker-col">
-                <URLPicker onSubmit={doURLTry} />
+                <URLPicker url={url} onSubmit={doURLTry} />
             </span>
         </Row>
     )
@@ -360,20 +340,23 @@ const PublisherPicker = ({onSubmit, organization}) => {
             onSubmit(event.target.value)
         }
     }
+    let ph = "Enter Publisher ID"
+
     return (
         <span className='hub-inputbar publisher-picker'>
             <AiOutlineUser className="hub-bar-spacing"/>
             <input 
                 type="text"
+                defaultValue={organization}
                 className='publisher-picker-input' 
-                placeholder="Enter Publisher ID" 
+                placeholder={ph} 
                 onKeyPress={checkKeys}
             />
         </span>
     )
 }
 
-const URLPicker = ({onSubmit}) => {
+const URLPicker = ({onSubmit, url}) => {
     function checkKeys(event){
         if(event.key === "Enter" && event.target.value && validURL(event.target.value)) onSubmit(event.target.value)
     }
@@ -382,6 +365,7 @@ const URLPicker = ({onSubmit}) => {
             <AiOutlineLink className="hub-bar-spacing"/>
             <input 
                 type="text"
+                defaultValue={url}
                 className='url-picker-input' 
                 placeholder="Enter Database URL" 
                 onKeyPress={checkKeys}
@@ -723,6 +707,21 @@ export const HubDBCard = ({meta, onAction}) => {
         setMode(ss)
     }
 
+    function onEditSuccess(){
+        meta.action = "load"
+        onAction(meta)
+        setMode()
+    }
+
+    function onFork(doc){
+        setMode()   
+        onAction(doc)
+    }
+
+    function onCancel(){
+        setMode()   
+    }
+
     return (<>
         <Row key='r7' className='database-summary-listing database-listing-line'>
             <CloneImagePanel meta={meta} />
@@ -739,71 +738,129 @@ export const HubDBCard = ({meta, onAction}) => {
         </Row>
         <Row key="r88" className='hubdb-main-screen' />
         {(mode == "clone") && 
-             <HubClonePage meta={meta}/>
+             <HubClonePage meta={meta} onAction={onAction} onCancel={onCancel}/>
         }
         {(mode == "fork") && 
-             <HubForkPage meta={meta}/>
+             <HubForkPage meta={meta} onAction={onFork} onCancel={onCancel}/>
         }
         {(mode == "delete") && 
-            <span>delete modal</span>
+            <DeleteHubDB meta={meta} />
         }
         {(mode == "edit") && 
-            <span>edit subpage</span>
-        }
-        {!mode && 
-            <span>details subpage</span>        
+            <EditHubPage meta={meta} onSuccess={onEditSuccess}/>
         }
     </>)
 }
 
-export const HubForkPage = ({meta}) => {
+export const HubForkPage = ({meta, onAction, onCancel}) => {
     const {bffClient, localClient, remoteClient } = WOQLClientObj()
     let u = bffClient.user()
     let smeta = {}
     for(var k in meta){
         smeta[k] = meta[k]
     }
-    smeta.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
     let o = u.organizations[0]
     for(var k in o){
         smeta[k] = o[k]
     }
+    smeta.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
 
     function doSubmit(doc){
-        onSubmit(doc)
+        doc.action = "fork"
+        doc.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
+        doc.remote_record = meta
+        onAction(doc)
     }
 
-    return (<DBCreateCard start={smeta} organizations={u.organizations} databases={bffClient.databases()}  type="fork" />)
+    return (<DBCreateCard start={smeta} onSubmit={doSubmit} organizations={u.organizations} databases={bffClient.databases()}  type="fork" />)
+}
+
+export const HubClonePage = ({meta, onAction, onCancel}) => {
+    const {remoteClient, woqlClient } = WOQLClientObj()
+    function onClone(cln){
+        cln.action = "clone"
+        cln.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
+        cln.remote_record = meta
+        onAction(cln)
+    }
+    return <CloneLocal onClone={onClone} onCancel={onCancel} meta={meta} woqlClient={woqlClient} type="hub"/>
 }
 
 
-export const EditHubPage = ({meta}) => {
-    const {bffClient, localClient, remoteClient } = WOQLClientObj()
+
+export const EditHubPage = ({meta, onSuccess}) => {
+    const {bffClient} = WOQLClientObj()
+    const {getTokenSilently} = useAuth0()
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState()
+    
+    if(!bffClient) return null
+    let databases = bffClient.databases()
+    let excludes = []
+    databases.map((item) => {
+        if(item.id != meta.id || item.organization != meta.organization){
+            excludes.push(item)
+        }
+    })
+
     let u = bffClient.user()
     let smeta = {}
     for(var k in meta){
         smeta[k] = meta[k]
     }
-    smeta.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
     let o = u.organizations[0]
     for(var k in o){
         smeta[k] = o[k]
     }
+    smeta.label = smeta.label || ""
+    smeta.comment = smeta.comment || ""
+    smeta.icon = smeta.icon || ""
 
     function doSubmit(doc){
-        onSubmit(doc)
+        let sub = {action: "edit"}
+        sub.id = meta.id
+        sub.organization = meta.organization 
+        sub.label = doc.label
+        sub.comment = doc.comment
+        sub.icon = doc.icon
+        if(meta.public && !doc.public){
+            sub.make_private = true;
+            sub.public = false  
+        }
+        else if(doc.public && !meta.public){
+            sub.make_public = true
+            sub.public = false
+        }
+        setLoading(true)
+        UpdateDatabase(sub, bffClient, getTokenSilently)
+        .then(() => {
+            onSuccess(sub)
+        })
+        .catch((e) => {
+            setReport({message: "Update failed", status:TERMINUS_ERROR, error: e})
+        })
+        .finally(() => setLoading(false))
     }
 
-    return (<DBCreateCard start={smeta} organizations={u.organizations} databases={bffClient.databases()}  type="fork" />)
+    return (
+        <div>
+            {loading && <Loading />}
+            {report && 
+                <TerminusDBSpeaks report={report} />
+            }
+            <DBCreateCard 
+                start={smeta} 
+                organizations={u.organizations} 
+                onSubmit={doSubmit} 
+                databases={excludes} 
+                type="edit" 
+            />
+        </div>
+
+    )
 }
 
-export const HubClonePage = ({meta, onAction}) => {
-    const {woqlClient } = WOQLClientObj()
-    function onClone (){}
-    function toggle (){}
-    return <CloneLocal onClone={onClone} meta={meta} onCancel={toggle} woqlClient={woqlClient}/>
 
-}
 
 
 export const HubTitle = ({meta, onAction}) => {
@@ -823,26 +880,7 @@ export const HubTitle = ({meta, onAction}) => {
 
 
 
-export const CloneTitle = ({meta, onAction}) => {
 
-    function goDB(){
-        meta.action = "load"
-        return onAction(meta)
-    }
-
-    let title_css = "database-title-local"
-    let title_html = "" //meta.id ? "database id: " + meta.id : "Available to clone from Terminus Hub"
-
-    let str = meta.label || '['+ meta.id+']'
-    
-    return (
-        <span>
-            <span onClick={goDB} title={title_html} className='database-listing-title-row'>
-                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
-            </span>
-        </span>
-    )
-}
 
 
 export const HubDBImage = ({meta, onAction}) => {
@@ -863,26 +901,25 @@ export const HubDBImage = ({meta, onAction}) => {
 
 export const HubCredits = ({meta, onAction}) => {
     return (<>
-            <div className="dbcard-creditline">
-                <CloneProductionCredits  key='ac' meta={meta} onAction={onAction}/>
-                <CloneRoleCredits key='ade' meta={meta} />
-                <DBPrivacy key='ad' meta={meta} />
-                <DBBranches key='abc' meta={meta} type="full"/>
-                <DBSchema key='dbfe' meta={meta}/>
-                {!meta.created && 
-                    <DBEmpty />
-                }
-            </div>
-           <div className="dbcard-sub-creditline">
-               <CloneURLCredit key="cuc" meta={meta} />
-               {meta.created && 
-                    <DBCreated ts={meta.created} type="full" />
-               }
-               {meta.updated && 
-                   <DBLastCommit meta={meta} />
-               }
-           </div>
-        </>
+        <div className="dbcard-creditline">
+            <CloneProductionCredits  key='ac' meta={meta} onAction={onAction}/>
+            <CloneRoleCredits key='ade' meta={meta} />
+            <DBPrivacy key='ad' meta={meta} />
+            <DBBranches key='abc' meta={meta} type="full"/>
+            <DBSchema key='dbfe' meta={meta}/>
+            {!meta.created && 
+                <DBEmpty />
+            }
+        </div>
+        <div className="dbcard-sub-creditline">
+            {meta.created && 
+                <DBCreated ts={meta.created} type="full" />
+            }
+            {meta.updated && 
+                <DBLastCommit meta={meta} />
+            }
+        </div>
+    </>
     )
 }
 
@@ -940,12 +977,8 @@ export const CloneSummaryCard = ({meta, onAction}) => {
                 <Row key='r3'>
                     <CloneTitle meta={meta} onAction={onAction}/>
                 </Row>
-                <Row key='r4'>
-                    <CloneCredits meta={meta} onAction={onAction}/>
-                </Row>
-                <Row key='r8'>
-                    <CloneDescription meta={meta} />
-                </Row>
+                <CloneCredits meta={meta} onAction={onAction}/>
+                <CloneDescription meta={meta} />
                 {meta.invitation_id &&
                     <Row key='r9'>
                         <DBInvite meta={meta}/>
@@ -985,6 +1018,25 @@ export const CloneImagePanel = ({meta, onAction}) => {
     )
 }
 
+export const CloneTitle = ({meta, onAction}) => {
+
+    function goDB(){
+        meta.action = "load"
+        onAction(meta)
+        goHubPage(meta.organization, meta.id)
+    }
+
+    let title_css = "database-title-local"
+    let str = meta.label || '['+ meta.id+']'
+    
+    return (
+        <span>
+            <span onClick={goDB} className='database-listing-title-row'>
+                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
+            </span>
+        </span>
+    )
+}
 
 export const CloneDescription = ({meta, user}) => {
     let str = meta.comment || ""
@@ -1026,7 +1078,7 @@ export const CloneCredits = ({meta, onAction}) => {
     res.push(
         <CloneRoleCredits key='ade' meta={meta} />
     )  
-    res.push(<CloneURLCredit key="cuc" meta={meta} />)
+    //res.push(<CloneURLCredit key="cuc" meta={meta} />)
     if(meta && (meta.created || meta.updated)) {
         res.push(<DBTimings key='dbt' meta={meta} />)
     }
@@ -1141,7 +1193,8 @@ export const DBTimings = ({meta}) => {
         }
         if(meta.updated){
             let uts = updateStamp(meta.updated, true)
-            parts.push(<DBUpdated key='dbu' display={uts} ts={meta.updated}/>)
+            if(meta.author) uts += " by " + meta.author
+            parts.push(<DBUpdated key='dbu' author={meta.author} display={uts} ts={meta.updated}/>)
         }
     }
     return parts
@@ -1308,22 +1361,29 @@ export const HubStatus = ({meta, onAction}) => {
 
 
 export const CloneStatus = ({meta, onAction}) => {
-    meta.action = (meta.invitation_id ? "accept" : "clone")
-    return (
-        <div className='database-action-column'>
-            <Row className='database-update-status'>
-                <RemoteUpdated meta={meta} />
-            </Row>
-            {meta.action == "clone" && 
-                <Row className='database-action-option' >
-                    <CloneMainAction meta={meta} onAction={onAction}/>
+    if(meta.invitation_id){
+        return (
+            <div className='database-action-column'>
+                <Row className='database-update-status'>
+                    <RemoteUpdated meta={meta} />
+                </Row>               
+                <Row className='database-secondary-option'>
+                    <CloneSecondaryAction meta={meta} onAction={onAction}/>
                 </Row>
-            }
-            <Row className='database-secondary-option'>
-                <CloneSecondaryAction meta={meta} onAction={onAction}/>
-            </Row>
-        </div>
-    )
+            </div>
+        )
+    }
+    else {
+        return (
+            <div className='database-action-column'>
+                <div className="hub-minor-actions">
+                </div>            
+                <div className="hub-major-actions">
+                    <CloneMainAction meta={meta} onAction={onAction}/>
+                </div>
+            </div>
+        )
+    }
 }
 
 export const RemoteUpdated = ({meta}) => {
@@ -1335,8 +1395,21 @@ export const RemoteUpdated = ({meta}) => {
 }
 
 export const CloneMainAction = ({meta, onAction}) => {
-
-    let onc = function(){onAction(meta)}
+    const {remoteClient } = WOQLClientObj()
+    if(!remoteClient) return null
+    let rurl = remoteClient.server() + meta.organization + "/" + meta.id
+    let onc = function(){
+        let myc = {
+            id: meta.id,
+            label: meta.label,
+            comment: meta.comment,
+            remote_url: rurl,
+            remote_record: meta,
+            auto: true,
+        }
+        myc.action = "clone"
+        onAction(myc)
+    }
     if(meta.public || meta.roles){
         return (
             <span className="database-clone-action" onClick={onc}>
@@ -1377,7 +1450,7 @@ export const CloneSecondaryAction = ({meta, onAction}) => {
 }
 
 export const CloneControl = ({meta}) => {
-    return <AiOutlineCloudDownload className="database-action" color={"#4984c9"} title="Clone this database now"/>
+    return <AiOutlineCloudDownload className="database-action"  className="clone-main-action-icon" title="Clone this database now"/>
 }
 
 export const CloneFullControl = ({meta}) => {
@@ -1426,6 +1499,108 @@ export const DeleteControl = ({meta}) => {
 export const EditControl = ({meta}) => {
     return <span className="edit-hub-action" title="Edit Hub Database Details"><AiFillEdit className='database-action database-listing-edit' /> Edit</span>
 }
+
+export const DeleteHubDB = ({meta}) => {
+    const {woqlClient, bffClient, reconnectToServer} = WOQLClientObj()
+    const {getTokenSilently} = useAuth0()
+    const [rep, setReport] = useState()
+    const [modal, setModal] = useState(true)
+    const toggle = () => setModal(!modal)
+    const [disabled, setDisabled] = useState(true) 
+    const [loading, setLoading] = useState()
+
+    function removeDBCard(dbid, orgid){
+        dbid = dbid ||  woqlClient.db()
+        orgid = orgid || woqlClient.organization()
+        let dbs =  woqlClient.databases()
+        let ndbs = []
+        for(var i = 0; i<dbs.length; i++){
+            if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
+                ndbs.push(dbs[i])
+            }
+            else if(dbs[i].remote_record) {
+                dbs[i].id = ""
+                dbs[i].type = "missing"
+                ndbs.push(dbs[i])
+            }
+        }
+        woqlClient.databases(ndbs)
+    }
+ 
+    const onDelete = () => {
+        setDisabled(true)
+        setLoading(true)
+        DeleteDB(meta, woqlClient, bffClient, getTokenSilently)
+        .then(() => {            
+            setReport({
+                message: `Deleted Database ${meta.organization}/${meta.id}`,
+                status: TERMINUS_SUCCESS,
+            })
+            goHubPage(meta.organization)
+        })
+        .catch((err) => {
+            setDisabled(false)
+            console.log(err)
+            setReport({
+                error: err,
+                message: `Failed to Delete Database ${meta.organization}/${meta.id}`,
+                status: TERMINUS_ERROR,
+            })    
+        })
+        .finally(() => {
+            setLoading(false)
+        })
+    }
+
+    function uip(e){
+        if(e && e.target){
+            setDisabled(e.target.value != meta.id)
+        }
+    }
+
+    let tbdel = meta.id
+
+    return (
+            <Modal isOpen={modal} toggle={toggle}>
+                {loading && <Loading />}
+                <ModalHeader toggle={toggle}>  <span className="modal-head">Confirm Database Delete</span> </ModalHeader>
+                <ModalBody>
+                    <Row key="rd">
+                        <span className="delete-modal-atext"><AiOutlineWarning className="del-hub-warning" /> This will remove the database permanently from your hub account. 
+                            Copies of the database, locally or on hub, will not be affected.
+                        </span>
+                    </Row>
+                    <Row key="rz">
+                        <span className="delete-modal-label">
+                            Enter database ID - <strong>{tbdel}</strong> - to confirm delete 
+                        </span>
+                    </Row>
+                    <Row key="rr" className='del-hub-input'>
+                        {rep && <TerminusDBSpeaks report={rep} />}
+                        <input
+                            name="dbId"
+                            placeholder= "Enter ID"
+                            className = "tcf-input"
+                            onChange ={uip}
+                        />
+                    </Row>
+                </ModalBody>
+                <ModalFooter>
+                    <span className="delete-button">
+                        {disabled && 
+                            <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                        }
+                        {!disabled && 
+                            <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                                <AiOutlineDelete className="delete-button"/> Delete Database
+                            </button>
+                        }
+                    </span>
+                </ModalFooter>
+            </Modal>
+    )
+}
+
 
 
 export default ClonePage

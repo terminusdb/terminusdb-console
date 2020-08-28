@@ -236,7 +236,8 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
     }
 
     if(!current) return null
-
+    
+    let isEdit = (type && type == "edit")
     return (<>
         <Row key='r7' className='database-summary-listing'>
             <Col key='r5' md={3} className='database-control-panel'>
@@ -246,17 +247,21 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
                 <Row className='database-create-title-row db-create-remote-row'>
                     <DBTitle label={current.label} organization={current.organization} onChange={changeTitle} databases={databases}/>
                 </Row>
-                <Row className='database-create-id-row db-create-remote-row'>
-                    <DBID id={current.id} organization={current.organization} databases={databases} hub_url={current.hub_url} onChange={changeID} />
-                </Row>
-                <Row className="database-create-credits db-create-remote-row">
-                    <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} />
-                </Row>
+                {!isEdit && 
+                    <Row className='database-create-id-row db-create-remote-row'>
+                        <DBID id={current.id} organization={current.organization} databases={databases} hub_url={current.hub_url} onChange={changeID} />
+                    </Row>
+                }
+                {!isEdit && 
+                    <Row className="database-create-credits db-create-remote-row">
+                        <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} isEdit={isEdit}/>
+                    </Row>
+                }
                 <Row className="database-create-decription-row db-create-remote-row">
                     <DBDescription meta={current} onChange={changeComment} />
                 </Row>
                 <Row className="database-create-status">
-                    <DBRequired meta={current} databases={databases} />
+                    <DBRequired meta={current} databases={databases} type={type}/>
                 </Row>
                 <Row className="database-create-exec">
                     <DBCreate meta={current} databases={databases} onSubmit={doSubmit} type={type} />
@@ -266,10 +271,10 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
     </>)
 }
 
-export const DBRequired = ({meta, databases}) => {
-    let p = _problems(meta, databases)
+export const DBRequired = ({meta, databases, type}) => {
+    let p = _problems(meta, databases, type)
     if(p === false){
-        return null;// (<span><AiFillCheckCircle color="#12aa22" title='tit' className="db_info_icon_spacing"/> ID and Title Supplied</span>)
+        return null;
     }
     else {
         return (<span className="db-required-color"><AiFillInfoCircle title='tit' color="#856404" className="db_info_icon_spacing"/> {p}</span>)
@@ -279,6 +284,7 @@ export const DBRequired = ({meta, databases}) => {
 function _problems(meta, databases){
     let a = _validate_id(meta.id, meta.organization, databases)
     let b = _validate_title(meta.label, meta.organization, databases)
+    
     if(a == "empty" && b == "empty"){
         return "ID and title required"
     }
@@ -305,7 +311,8 @@ function _problems(meta, databases){
 export const DBCreate = ({meta, databases, onSubmit, type}) => {
     let str = "Create on Terminus Hub"
     if(type && type == "share") str = "Share on Terminus Hub"
-    if(_problems(meta, databases) === false){
+    if(type && type == "edit") str = "Update Terminus Hub Database Record"
+    if(_problems(meta, databases, type) === false){
         /*return (<span className='database-create-submit database-create-submit-active' onClick={onSubmit}>
             <span className='database-submit-title'>
                 {str}
@@ -539,11 +546,13 @@ export const InputError = ({problem}) => {
 
 
 
-export const DBCredits = ({meta, onPrivacyChange, onSchemaChange}) => {
+export const DBCredits = ({meta, onPrivacyChange, onSchemaChange, isEdit}) => {
     let res = []
     res.push(<DBRoleCredits key='dbxx' meta={meta} onPrivacyChange={onPrivacyChange} />)
-    res.push(<DBSchemaCredits key='dbxxs' meta={meta} onSchemaChange={onSchemaChange} />)
-    res.push(<DBProductionCredits key='dbx' meta={meta} />)
+    if(!isEdit){
+        res.push(<DBSchemaCredits key='dbxxs' meta={meta} onSchemaChange={onSchemaChange} />)
+        res.push(<DBProductionCredits key='dbx' meta={meta} />)
+    }
     return res
 }
 
@@ -643,7 +652,7 @@ export const DBDescription = ({meta, onChange}) => {
 }
 
 function _validate_id(id, organization, databases){
-    if(id == ""){
+    if(!id || id == ""){
         return "empty"
     }
     if(id.length > 30){
@@ -663,7 +672,7 @@ function _validate_id(id, organization, databases){
 }
 
 function _validate_title(label, organization, databases){
-    if(label.trim() == ""){
+    if(!label || label.trim() == ""){
         return "empty"
     }
     if(label.length > 40){

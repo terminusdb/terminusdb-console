@@ -279,10 +279,28 @@
   
 span.delete-button {
     color: #dc3545;
+    padding-right: 6px;
 }
 
 span.delete-button:hover {
     color: #fff;
+}
+
+.del-hub-warning {
+    color: #ff8000;
+}
+
+.del-hub-input {
+    padding: 0 20px 20px 20px;
+
+}
+
+span.delete-modal-label {
+    color: #446;
+    font-weight: 500;
+    padding: 10px;
+
+
 }
 
   img.cancel-ic{
@@ -2573,16 +2591,15 @@ span.delete-button:hover {
   .database-create-header {
       /*background-color: #f8f8f8;*/
       padding: 2px;
-      height: 84px;
+      height: 54px;
   }
   
   .hub-toolbar {
-      background-color: #f8f8f8;
   }
   
   
   .hub-toolbar-col {
-      margin-top: -4px;
+      margin-top: 0;
       padding-left: 10px;
       padding-right: 10px;
       padding-bottom: 4px;
@@ -2640,18 +2657,19 @@ span.delete-button:hover {
   }
   
   .database-header-image {
-      height: 80px;
+      height: 48px;
       margin-top: 0;
-      margin-left: 4px;
+      margin-left: 14px;
       margin-right: 4px;
       vertical-align: top;
   }
   
+
+
   .database-header-title {
-      display: inline-block;
       margin-left: 1em;
       color: #446;
-      font-size: 28px;
+      font-size: 22px;
       margin-left: 16px;
       margin-top: 8px;
       margin-bottom: 5px;
@@ -3399,6 +3417,12 @@ span.delete-button:hover {
       flex-grow: 0;
       color: #484C47;
   }  
+
+  .database-listing-description {
+    flex-grow: 0;
+    margin-left: 10px;
+    font-size: 15px;
+  }
   
   .database-listing-description-row {
       margin: 10px 10px 0px 0px;
@@ -3416,10 +3440,40 @@ span.delete-button:hover {
   .database-listing-credits-row {
       margin: 0px 0px 0px -25px;
   }
-  
+
+  .clickable-image-panel {
+        border: 0 !important;
+        margin-right: 26px !important;
+   }
+
+   .database-clone-action {
+       padding: 10px 8px;
+   }
+
+   .clone-main-action-icon {
+       font-size: 6em;
+       color: rgb(0, 40, 86) !important;
+   }
+
+   .clone-main-action-icon:hover {
+        cursor: pointer;
+        border-radius: 8px;
+        border: 1px solid #dfe3ec
+   }
+
+
+  .clickable-image-panel:hover {
+      cursor: pointer;
+      box-shadow: 1px 1px 2px 0 #dfe3ec
+   }
+
   .database-listing-title-nolink,
   .database-listing-title {
       font-size: 40px;
+  }
+
+  .database-listing-title {
+      margin-left: 14px;
   }
   
   .database-listing-id {
@@ -3549,7 +3603,7 @@ span.delete-button:hover {
   }
   
   .delete-modal-button{
-      margin: 0px 90px 0px 90px !important;
+      margin: 0px auto !important;
   }
   
   .db-action {
@@ -4098,7 +4152,18 @@ span.delete-button:hover {
       margin-top: 80px;
       margin-left: 10px;
   }
+
+  .delete-modal-atext {
+      padding: 20px 10px;
+      font-size: 1.1em;
+      color: #721c24;
+  }
   
+  .delete-hub-modal-icon {
+      color: #856404 !important;
+
+  }
+
   .warning-modal-text {
       font-size: 17px;
       color: #856404;
