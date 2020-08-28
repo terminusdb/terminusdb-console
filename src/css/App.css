@@ -2710,14 +2710,15 @@ span.delete-modal-label {
   }
 
   .fork-full-icon {
-    color:#FF8C00;
+    color:#856404;
     font-size:1.8em;
     padding-bottom: 2px;
     padding-right: 8px;
   }
 
   .clone-full-icon {
-    color: #4984c9;
+    /*color: #4984c9;*/
+    color: #004085;
     font-size:2em;
     padding-bottom: 6px;
     padding-right: 6px;
@@ -2802,7 +2803,7 @@ span.delete-modal-label {
 
   .fork-full-title,
   .clone-full-title {
-    font-size: 1.3em;
+    font-size: 16px;
     font-weight: 500;
   }
 
