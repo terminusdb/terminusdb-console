@@ -3334,7 +3334,7 @@ span.delete-modal-label {
   .database-main-content {
       min-width: 200px;
       flex-grow: 1;
-      max-width: 77%;
+      max-width: 75%;
       padding-left: 10px;
   }
    
@@ -3342,7 +3342,7 @@ span.delete-modal-label {
   
   @media (max-width:1800px) {
       .database-main-content {
-        max-width: 77%;
+        max-width: 75%;
       }
     }
   
@@ -3351,7 +3351,7 @@ span.delete-modal-label {
   
   @media (max-width:1400px) {
       .database-main-content {
-        max-width: 74%;
+        max-width: 70%;
       }
     }
   
@@ -3359,13 +3359,13 @@ span.delete-modal-label {
   
   @media (max-width:1199px) {
       .database-main-content {
-        max-width: 66%;
+        max-width: 62%;
       }
     }
   
     @media (max-width:960px) {
       .database-main-content {
-        max-width: 64%;
+        max-width: 60%;
       }
     }
   
@@ -3373,7 +3373,7 @@ span.delete-modal-label {
   
     @media (max-width:900px) {
       .database-main-content {
-        max-width: 60%;
+        max-width: 58%;
       }
     }
   
@@ -3457,7 +3457,7 @@ span.delete-modal-label {
 
    .clone-main-action-icon:hover {
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 20px;
         border: 1px solid #dfe3ec
    }
 
