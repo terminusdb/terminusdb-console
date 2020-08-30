@@ -155,7 +155,9 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     if(type && type == "share"){
         return (
             <div className="tdb__loading__parent">
-                <DBShareHeader />
+                <Row className="remote-info share-on-hub-title">
+                    <DBShareHeader />
+                </Row>
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />

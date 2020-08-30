@@ -76,7 +76,6 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone, type}) => {
 
     return (
         <div className="tdb__loading__parent">
-            {loading &&  <Loading type={TERMINUS_COMPONENT}/>}
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -93,10 +92,10 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone, type}) => {
                     />
                 </span>
             )}
-            {starter && 
+            {starter &&
                 <DBDetailsForm buttons={buttons} onSubmit={doClone} from_local={starter} />
             }
+            {loading &&  <Loading type={TERMINUS_COMPONENT}/>}
         </div>
     )
 }
-

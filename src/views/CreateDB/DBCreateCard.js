@@ -66,16 +66,19 @@ export const DBLocalCreateHeader = () => {
 
 export const DBShareHeader = ({onCancel}) => {
     let text = "Share your database on Terminus Hub"
-    return (
-        <Row className='database-create-header'>
-            <DBCreatePicture key='a' local={false} />
-            <span key='z' className='database-listing-title-row'>
-                <span className="database-header-title">Share Database</span>
-                <div className='database-header-description-row'>
+    return (<>
+        <div className='remote-info-align database-create-header '>
+            <DBCreatePicture local={false} />
+            <span className='database-listing-title-row'>
+                <span key='a' className="database-header-title remote-info-label">Share Database</span>
+            </span>
+        </div>
+            <div className="database-remote-info-row">
+                <div key='z' className='database-header-description-row'>
                     <span className="database-listing-description">{text}</span>
                 </div>
-            </span>
-        </Row>
+            </div> </>
+
     )
 }
 
@@ -318,16 +321,30 @@ export const DBCreate = ({meta, databases, onSubmit, type}) => {
 
 export const DBControlPanel = ({meta, onChange}) => {
     let icon = meta.icon || ""
-    let disp
-    if(icon){
-        if(validURL(icon)) disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
-        else disp = (<i key="xx" className={'database-listing-icon ' + icon} />)
-    }
+
+    let disp = "", isIcon=false;
+
     const [modal, setModal] = useState(false);
     const imagePickerToggle = () => setModal(!modal);
-    const [imageUrl, setImageUrl] = useState(false);
-    const [dbDetailsImage, setdbDetailsImage] = useState(false);
-    const [iconImg, setIconImg] = useState(false);
+
+    const [imageUrl, setImageUrl] = useState(icon);
+
+    const [dbDetailsImage, setdbDetailsImage] = useState(icon);
+
+    if(icon){
+        if(validURL(icon)) {
+            disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
+            isIcon = false;
+        }
+        else{
+            disp = (<i key="xx" className={'database-listing-icon ' + icon} />)
+            isIcon = icon;
+        }
+    }
+
+    const [iconImg, setIconImg] = useState(isIcon);
+    const [val, setIcon] = useState(isIcon)
+
     const showPexels = false; // nuking pexels temporarily
 
     useEffect(() => {
@@ -342,7 +359,7 @@ export const DBControlPanel = ({meta, onChange}) => {
         setModal(false)
     }
 
-    const [val, setIcon] = useState(icon)
+
 
     useEffect(() => {setIcon(val)}, [val])
     let vchange = function(selval){
@@ -378,7 +395,7 @@ export const DBControlPanel = ({meta, onChange}) => {
                     <input type="text"
                         id="imageUrlInput"
                         placeholder="Paste an Image URL"
-                        className="database-create-id-input database-input-empty  db-create-image-url"
+                        className="database-create-id-input database-input-empty db-create-image-url"
                         onChange={  (e) =>{
                             setImageUrl(e.target.value)
                             onChange(e.target.value);

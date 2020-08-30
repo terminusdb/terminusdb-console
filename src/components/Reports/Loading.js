@@ -10,8 +10,8 @@ const Loading = ({type,loadingMessage}) => {
     ///
     return (
         <div className="tdb__loading" id="loading">
-            {loadingMessage && <span className="tdb__loading__message">{loadingMessage}</span>}
             <img src={LOADING_SPINNER} alt={IS_LOADING} />
+            {loadingMessage && <span className="tdb__loading__message">{loadingMessage}</span>}
         </div>
     )
 }

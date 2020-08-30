@@ -9,15 +9,14 @@ import {DELETE_DB_MODAL} from './constants.dbhome'
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-export const DeleteDB = (props) => {
+export const DeleteDB = ({meta}) => {
     const {register, handleSubmit, errors} = useForm()
     const {woqlClient, reconnectToServer} = WOQLClientObj()
     const [rep, setReport] = useState()
     const [modal, setModal] = useState()
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
-
-
+    const [deleteConfirm, setDeleteConfirm] = useState(false)
 
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
@@ -71,6 +70,13 @@ export const DeleteDB = (props) => {
         }
     }
 
+    function uip(e){
+        if(e && e.target){
+            setDeleteConfirm(e.target.value == meta.id)
+        }
+    }
+
+
     return (
         <span className='delete-control' onClick={toggle}>
             <span className="db-action"  title="Delete Database">
@@ -91,25 +97,49 @@ export const DeleteDB = (props) => {
                     <Row key="rr">
                         {rep && <TerminusDBSpeaks report={rep} />}
                             <div className="del-mod">
-                                <input
-                                    name="dbId"
-                                    placeholder= {DELETE_DB_MODAL.placeholder}
-                                    className = "tcf-input tcf-inp-center"
-                                    ref={register({
-                                        validate: (value) => value.length > 0
-                                    })}
-                                />
+
+                                   {/* <Row key="rm" className="del-mod-row">
+                                        <Col md={2}>
+                                            <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
+                                        </Col>
+                                        <Col md={10}>
+                                            <label class="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
+                                        </Col>
+                                    </Row> */}
+
+                                    <input
+                                        name="dbId"
+                                        placeholder= {DELETE_DB_MODAL.placeholder}
+                                        className = "tcf-input tcf-inp-center"
+                                        onChange ={uip}
+                                        ref={register({
+                                          validate: (value) => value.length > 0
+                                        })}
+                                    />
+
                             </div>
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                    <span className="delete-button">
+                    {/*<span className="delete-button">
                         <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
                             <AiOutlineDelete className="delete-modal-icon"/>
                             {DELETE_DB_MODAL.confirmLocal}
                         </button>
                         <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                    </span>*/}
+
+                    <span className="delete-button">
+                        {!deleteConfirm &&
+                            <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                        }
+                        {deleteConfirm &&
+                            <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                                <AiOutlineDelete className="delete-modal-icon"/> {DELETE_DB_MODAL.confirmLocal}
+                            </button>
+                        }
                     </span>
+
                 </ModalFooter>
                 </form>
             </Modal>
