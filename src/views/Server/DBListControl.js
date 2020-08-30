@@ -53,7 +53,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             setLoading(true)
             CloneDB(db, woqlClient, getTokenSilently)
             .then((id) => {
-                setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
