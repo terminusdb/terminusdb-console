@@ -1386,13 +1386,6 @@ span.delete-modal-label {
   }
 
 
-  @media (min-width:576px) {
-    .container {
-      max-width: inherit;
-      word-wrap: break-word;
-    }
-  }
-
   @media (min-width:992px) {
     .container {
       max-width: 960px;
@@ -1400,7 +1393,7 @@ span.delete-modal-label {
     }
   }
 
-  @media (min-width:1200px) {
+  @media (min-width:1000px) {
     .container {
       max-width: 1440px;
       word-wrap: break-word;
@@ -1562,10 +1555,13 @@ span.delete-modal-label {
   }
 
   .sub-headings {
-      font-size: 15px;
-      font-weight: 500;
-      margin: 20px 0px 0px 0px;
+      font-size: 19px;
+      color: #bbc;
+      padding-left: 1em;
   }
+
+  .latest-update-heading {
+   }
 
 
   .table-hover.table td{
@@ -2390,6 +2386,26 @@ span.delete-modal-label {
      margin-top: -10px;
   }
 
+  .dblist-filters {
+      display: inline-block;
+  }
+
+  .dbicon-container {
+      text-align: center;
+      border-radius: 12px;
+  }
+
+  .dbicon-container:hover {
+      cursor: pointer;
+      background-color: #eff8ff;
+  }
+
+  .dblist-filter {
+     float: right;
+     width: 300px;
+     margin-left: 12px;
+  }
+
   .collaborate-soon-button {
       border-radius: 0 !important;
       width: 160px;
@@ -2600,12 +2616,9 @@ span.delete-modal-label {
       height: 54px;
   }
 
-  .hub-toolbar {
-  }
-
 
   .hub-toolbar-col {
-      margin-top: 0;
+      margin: 0;
       padding-left: 10px;
       padding-right: 10px;
       padding-bottom: 4px;
@@ -2618,8 +2631,13 @@ span.delete-modal-label {
       display: inline-block;
       border-radius: 8px;
       padding-right: 10px;
-      margin-right: 14px;
   }
+
+  .hub-inputbar {
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0 14px;
+}
 
   .publisher-picker-input {
       width: 220px !important;
@@ -2708,6 +2726,61 @@ span.delete-modal-label {
       text-align: center;
       height: 30px;
   }
+
+  .action-tooltip-holder {
+    position: relative;
+  }
+
+  .action-tooltip {
+    text-align: left;
+    display: inline-block;
+    z-index: 99999;
+    background-color: #002856;
+    color: #ddd;
+    position:absolute;
+    border-radius: 12px;
+    width: 590px;
+    left: -690px;
+    top: -62px;
+    padding: 10px 10px 10px 5px;
+  }
+
+  .database-widget-image {
+    width: 70px;
+    vertical-align: top;
+}
+
+.tooltip-action-title {
+    display: block;
+    margin-left: 70px;
+    margin-top: 0;
+    color: white;
+    font-size: 1.2em;
+}
+
+.tooltip-differences {
+    display: block;
+    border-radius: 4px;
+    padding: 4px 0;
+}
+
+.action-tooltip-text {
+    display: block;
+    margin-left: 70px;
+    color: #eee;
+}
+
+.tooltip-image {
+    float: left;
+    margin-top: -30px;
+    margin-left: -8px;
+}
+
+  .hub-major-action {
+      display: block;
+  }
+
+
 
   .fork-full-icon {
     color:#FF8C00;
@@ -3229,6 +3302,28 @@ span.delete-modal-label {
       text-align: center;
   }
 
+  
+  @media (max-width:680px) {
+    .dbcard-control-panel  {
+       display: none;
+    }    
+  }
+
+  @media (max-width:800px) {
+    .dbcard-control-panel {
+       padding: 10px 0px 10px 0px !important;
+       max-width: 50px !important;
+       flex: 1 !important;
+    }
+  }
+
+  @media (max-width:800px) {
+    .dbcard-icon {
+        font-size: 30px !important;
+        margin-top: 10px !important;;
+    }
+}
+
   .database-main-actions {
       flex: 0 0 160px;
       max-width: 160px;
@@ -3262,7 +3357,6 @@ span.delete-modal-label {
 
 
   .database-control-panel-border {
-      border: 1px solid #ddd;
   }
 
   .db-home-listing-image {
@@ -3283,16 +3377,18 @@ span.delete-modal-label {
   }
 
 
+ 
+
+
 
   .database-listing-icon{
       text-align: center;
-      font-size: 70px;
-      margin: 35px 60px 0px 60px;
+      font-size: 60px;
+      margin: 30px auto;
   }
 
   .hub-listing-icon{
       font-size: 70px;
-      border: 2px solid blue;
   }
 
   div.builtin-prefixes {
@@ -3340,7 +3436,7 @@ span.delete-modal-label {
   .database-main-content {
       min-width: 200px;
       flex-grow: 1;
-      max-width: 75%;
+      max-width: 74%;
       padding-left: 10px;
   }
 
@@ -3348,7 +3444,7 @@ span.delete-modal-label {
 
   @media (max-width:1800px) {
       .database-main-content {
-        max-width: 75%;
+        max-width: 74%;
       }
     }
 
@@ -3363,71 +3459,52 @@ span.delete-modal-label {
 
 
 
-  @media (max-width:1199px) {
+  @media (max-width:1350px) {
       .database-main-content {
         max-width: 62%;
       }
     }
 
-    @media (max-width:960px) {
+    @media (max-width:1000px) {
       .database-main-content {
-        max-width: 60%;
+        max-width: 55%;
       }
     }
 
-
-
-    @media (max-width:900px) {
-      .database-main-content {
-        max-width: 58%;
-      }
-    }
 
 
     @media (max-width:800px) {
       .database-main-content {
-        max-width: 54%;
+        max-width: 80%;
       }
     }
 
 
     @media (max-width:680px) {
-      .database-main-content {
-        max-width: 52%;
+       .database-main-content {
+        max-width: 75%;
       }
     }
 
-
-    @media (max-width:670px) {
-      .database-main-content {
-        max-width: 49%;
-      }
-    }
-
-    @media (max-width:630px) {
-      .database-main-content {
-        max-width: 73%;
-      }
-    }
-
-    @media (max-width:588px) {
-      .database-main-content {
-        max-width: 100%;
-      }
-    }
+    @media (max-width:590px) {
+        .database-main-content {
+         max-width: 100%;
+       }
+     }
+ 
 
 
   .database-listing-description-full {
       margin: 10px 10px 0px 16px;
-      font-size: 13px;
+      font-size: 14px;
       flex-grow: 0;
       color: #484C47;
   }
 
-  .database-listing-description {
+  .database-listing-description-summary {
     flex-grow: 0;
     margin-left: 10px;
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .database-listing-description-row {
@@ -3441,6 +3518,7 @@ span.delete-modal-label {
 
   .database-listing-title-row {
       margin: 0;
+      display: inline-block;
       padding-left: 14px;
   }
   .database-listing-credits-row {
@@ -3449,7 +3527,7 @@ span.delete-modal-label {
 
   .clickable-image-panel {
         border: 0 !important;
-        margin-right: 26px !important;
+        margin-right: 26px ;
    }
 
    .database-clone-action {
@@ -3457,29 +3535,91 @@ span.delete-modal-label {
    }
 
    .clone-main-action-icon {
-       font-size: 6em;
-       color: rgb(0, 40, 86) !important;
+        color:rgb(220, 230, 250);
    }
 
-   .clone-main-action-icon:hover {
-        cursor: pointer;
+
+   .share-main-action-icon {
+        color: rgb(220, 230, 250);
+    }
+
+
+    .ok-main-action-icon {
+        color:#ccffed ;
+    }
+    
+    .synch-page-action-icon,
+    .ok-main-action-icon:hover {
+        color: #00C08B !important;
+    }
+
+    .cloned-main-action-icon {
+        color: rgb(250,230,230);
+    }
+
+    .unsynch-main-action-icon {
+        color: #facdaa;
+    }
+
+    .unsynch-page-action-icon,
+    .unsynch-main-action-icon:hover {
+        color: #da9d00 !important;
+    }
+
+   .hub-main-action-icon {
+        font-size: 6em;
         border-radius: 20px;
-        border: 1px solid #dfe3ec
    }
 
+   .db-sync-link {
+       font-size: 3em;
+       border-radius: 10px;
+       float: left;
+       margin-left: -10px;
+       margin-top: -14px;
+       padding-right: 8px;
+       text-align: left;
+   }
 
+   .hub-main-action-icon:hover {
+        cursor: pointer;
+        background-color: rgb(0, 40, 86);
+   }
+
+  .db-sync-link:hover {
+    cursor: pointer;    
+  }
+
+  .unsynch-page-action-icon {
+      margin-left: 10px;
+  }
+
+ 
   .clickable-image-panel:hover {
       cursor: pointer;
-      box-shadow: 1px 1px 2px 0 #dfe3ec
-   }
+      background-color: #eff8ff;
+  }
+
+  .dbcredits-full-page {
+      margin-left: 4px;
+  }
+
+  .db-title-full-page {
+  }
 
   .database-listing-title-nolink,
   .database-listing-title {
       font-size: 40px;
+      line-height: 95%;
+      padding-top: 10px;
+      display: block;
+      padding-bottom: 8px;
   }
 
   .database-listing-title {
-      margin-left: 14px;
+      padding-left: 14px;
+      padding-right: 14px;
+      display: inline-block;
   }
 
   .database-listing-id {
@@ -3497,10 +3637,7 @@ span.delete-modal-label {
       margin-top: 10px;
   }
 
-  .database-remote-credits {
-      margin-top: 35px;
-      margin-bottom: 20px;
-  }
+
 
   .database-listing-description-row {
       margin: 10px 10px 0px 15px;
@@ -3529,10 +3666,7 @@ span.delete-modal-label {
 
   }
 
-  .hub-major-action {
-      display: block;
-  }
-
+ 
   .invite-user{
       border-radius: 5px;
       padding: 0px 10px 0px 10px;
@@ -3540,8 +3674,6 @@ span.delete-modal-label {
       background-color: #fff3cd;
       border-color: #ffeeba;
   }
-
-
 
   .database-production-credits {
       width: 120px;
@@ -3594,10 +3726,6 @@ span.delete-modal-label {
       margin: 0px 0px 0px 2px;
   }
 
-  .db-control {
-      margin: 25px 10px 15px -10px;
-      font-size: 20px;
-  }
 
   .db-first-remote-action-height {
       min-height: 50px;
@@ -3660,6 +3788,11 @@ span.delete-modal-label {
   .minor-control:hover,
   .database-action:hover {
       cursor: pointer
+  }
+
+  .database-listing-title:hover {
+      background-color: #eff8ff;
+      border-radius: 12px;
   }
 
   .database-action-option {
@@ -3751,6 +3884,12 @@ span.delete-modal-label {
       color: #788089;
   }
 
+  .db-card-id {
+    color: #033684;
+    font-weight: 500;
+  }
+
+
   .db-card-email,
   .db-card-date {
       padding: 0 3px 0 3px;
@@ -3772,12 +3911,14 @@ span.delete-modal-label {
   }
 
   .hub-organization-link:hover .db-card-orgname {
-      color: #00C08B !important;
-  }
+    font-weight: 500;
+}
 
   .hub-organization-link:hover {
       cursor: pointer;
-      background-color: #eeffee !important;
+      color: #033684;
+      border-radius: 12px;
+      background-color: #eef6ff !important;
   }
 
 
@@ -4047,17 +4188,29 @@ span.delete-modal-label {
       float:right;
   }
 
+  .synch-info {
+      display: block;
+  }
+
   .synch-info, .remote-info {
+      display: block;
       background-color: #fff;
       border: 1px solid #856404;
       border-radius: 6px;
-      display: block;
       width: -webkit-fill-available;
       width: -moz-available;
   }
 
+  .database-remote-credits {
+     text-align: left;
+     padding-bottom: 10px;
+     margin-left: 14px;
+     margin-right: 14px;
+     margin-top: 40px;
+}
+
   .remote-info-align {
-      margin: -12px 0px 0px 20px;
+      margin: -12px 0px 10px 20px;
       padding: 0px 10px 0px 10px;
       background-color: #fff;
       width: fit-content;
@@ -4077,7 +4230,7 @@ span.delete-modal-label {
   }
 
   .database-remote-info-row {
-      padding: 10px 0px 10px 10px;
+      padding: 0px 0px 4px 10px;
   }
 
   .db-remote-action-spacing {
@@ -4179,8 +4332,37 @@ span.delete-modal-label {
   }
 
   .major-database-controls-align {
-      margin: 0px 50px 0px 50px;
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+      margin-top: 6px;
   }
+
+
+  .db-control-box {
+      display: inline-block;
+      height: 24px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 2px solid #efefef;
+  }
+
+  .db-control {
+     font-size: 14px;
+   }
+
+   .db-clone-control:hover,
+   .clone-control:hover {
+        border:2px solid #0055bb;
+   }
+
+   .db-delete-control:hover {
+        border:2px solid #721c24;
+    }
+
+    .db-clone-control {
+        color: #0055bb !important;
+    }
 
   .dbremote-full-card {
       padding-bottom: 30px;

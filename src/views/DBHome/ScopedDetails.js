@@ -3,13 +3,9 @@ import {Row, Col} from 'reactstrap'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
-import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
-import {LatestUpdates} from '../Tables/LatestUpdates'
-import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy,
-    AiOutlineCloudSync, AiOutlineCloudDownload, AiOutlineFork, AiFillCheckCircle,AiFillEdit, AiOutlinePushpin,
-    AiOutlineBlock, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiFillBuild, AiOutlineBuild,
-    AiOutlineGlobal, AiOutlineInbox, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
+import {printts, DATETIME_COMPLETE} from '../../constants/dates'
+import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList, 
+    AiFillEdit, AiOutlinePushpin, AiOutlineEdit, AiFillBuild, AiOutlineBuild} from 'react-icons/ai';
 import { FiBox } from 'react-icons/fi'
 import { parseTwoDigitYear } from 'moment'
 
@@ -146,8 +142,8 @@ export const DBCommits = ({meta}) => {
     if(meta['Commits']){
         let ct = meta['Commits']['@value'] + " commits"
          return (
-            <span>
-                <AiFillBuild className="db_info_icon_spacing"/>
+            <span className="db-card-credit">
+                <AiOutlineEdit className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
          )
@@ -160,7 +156,7 @@ export const DBSize = ({meta}) => {
     if(meta['Size']){
          let ct = formatBytes(meta['Size']['@value'])
          return (
-            <span>
+            <span className="db-card-credit">
                 <AiFillBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
@@ -173,10 +169,10 @@ export const DBTriples = ({meta, user}) => {
     if(meta['Triples']){
         let ct = meta['Triples']['@value'] + " triples"
         return (
-        <span>
-            <AiOutlineBuild className="db_info_icon_spacing"/>
-            <span className="db_info">{ct}</span>
-        </span>
+            <span className="db-card-credit">
+                <AiOutlineBuild className="db_info_icon_spacing"/>
+                <span className="db_info">{ct}</span>
+            </span>
         )
     }
     return null
@@ -198,7 +194,7 @@ export const DBDocs= ({meta}) => {
         if(ct == 1) ct += " document"
         else ct += " documents"
         return (
-            <span>
+            <span className="db-card-credit">
                 <AiOutlineBuild className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
@@ -234,8 +230,8 @@ export const DBGraphs = ({meta, graphs}) => {
         str = "schema free database - single graph"
     }
     return (
-        <span>
-            <AiFillInfoCircle className="db_info_icon_spacing"/>
+        <span className="db-card-credit">
+            <AiOutlineShareAlt className="db_info_icon_spacing"/>
             <span className="db_info">{str}</span>
         </span>
     )
@@ -248,8 +244,8 @@ export const DBSchema = ({meta}) => {
         if(ct == 1) ct += " class"
         else ct += " classes"
         parts.push(
-            <span key={"aa_" + parts.length}>
-                <AiOutlineBuild className="db_info_icon_spacing"/>
+            <span className="db-card-credit" key={"aa_" + parts.length} >
+                <AiOutlineIdcard className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
         )
@@ -259,8 +255,8 @@ export const DBSchema = ({meta}) => {
         if(ct == 1) ct += " property"
         else ct += " properties"
         parts.push(
-            <span key={"aab" + parts.length}>
-                <AiOutlineBuild className="db_info_icon_spacing"/>
+            <span className="db-card-credit" key={"aab" + parts.length}>
+                <AiOutlineUnorderedList className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>
         )
@@ -275,7 +271,7 @@ export const DBLastCommit = ({meta, branches}) => {
         if(meta['Time']) ct += " at " + printts(meta['Time']["@value"], DATETIME_COMPLETE)
         if(meta['Message']) ct += ' "' + meta['Message']["@value"] + '"'
         return (
-            <span>
+            <span className="db-card-credit">
                 <AiFillEdit className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
             </span>

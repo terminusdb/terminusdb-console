@@ -1,23 +1,9 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
-import moment from 'moment';
-import {Row, Col, Button, Badge, Container, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap"
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
-    SHARE_ICON, PUSH_ICON, PULL_ICON, CLONE_ICON, ALL_GOOD_ICON, NO_CAN_DO_ICON, CLONED_ICON } from "../../constants/faicons"
-import { printts } from "../../constants/dates"
-import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
-import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
-import Loading from "../../components/Reports/Loading"
-import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
-import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
-import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiFillWarning, AiOutlineRead,
-    AiOutlineDown, AiOutlineSchedule, AiOutlineFork, AiFillCheckCircle,AiOutlineThunderbolt, AiOutlinePlusCircle,
-    AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, AiFillBuild, AiOutlineInfoCircle,
-    AiOutlineGlobal, AiOutlineLeft, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
-import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
-import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
-import { MdContentCopy } from 'react-icons/md';
+import {Row, Col, Modal, ModalHeader, ModalBody} from "reactstrap"
+import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt, 
+    AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, 
+    AiOutlineGlobal, AiOutlineLeft} from 'react-icons/ai';
 import { FiDatabase } from "react-icons/fi"
 import { validURL } from '../../utils/helperFunctions';
 import { legalURLID } from "../../components/Query/CollaborateAPI"
@@ -25,8 +11,6 @@ import { IoMdImages } from 'react-icons/io';
 import { Pexels } from '../../components/Pexels/Pexels';
 import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
-import { FcDatabase } from "react-icons/fc"
-
 
 export const DBCreateHeader = ({local, toggle}) => {
     let local_text = "Create a new database on your local TerminusDB - only accessible locally"
@@ -64,6 +48,7 @@ export const DBCreateHeader = ({local, toggle}) => {
     )
 }
 
+
 export const DBLocalCreateHeader = () => {
     let text = "Create a new database on your local TerminusDB"
     return (
@@ -83,10 +68,10 @@ export const DBShareHeader = ({onCancel}) => {
     let text = "Share your database on Terminus Hub"
     return (
         <Row className='database-create-header'>
-            <DBCreatePicture local={false} />
-            <span className='database-listing-title-row'>
-                <span key='a' className="database-header-title">Share Database</span>
-                <div key='z' className='database-header-description-row'>
+            <DBCreatePicture key='a' local={false} />
+            <span key='z' className='database-listing-title-row'>
+                <span className="database-header-title">Share Database</span>
+                <div className='database-header-description-row'>
                     <span className="database-listing-description">{text}</span>
                 </div>
             </span>
@@ -132,9 +117,6 @@ const DBCreatePicture = ({local}) => {
         icon = HUBDB
     }
     let title = (local ? "Local Database" : "Terminus Hub Database")
-    //return (<img className='database-header-image' src={icon} title={title}  />)
-
-
     if (icon == GRAPHDB)
         ics.push(<FiDatabase title={title} className='database-header-image' className={"db-icon-create"}/>)
     else ics.push(<img className='database-header-image' src={icon} title={title}  />)
@@ -277,7 +259,9 @@ export const DBRequired = ({meta, databases, type}) => {
         return null;
     }
     else {
-        return (<span className="db-required-color"><AiFillInfoCircle title='tit' color="#856404" className="db_info_icon_spacing"/> {p}</span>)
+        return (<span className="db-required-color">
+            <AiFillInfoCircle color="#856404" className="db_info_icon_spacing"/> {p}</span>
+        )
     }
 }
 
@@ -332,24 +316,16 @@ export const DBCreate = ({meta, databases, onSubmit, type}) => {
     }
 }
 
-
-
-
 export const DBControlPanel = ({meta, onChange}) => {
-
     let icon = meta.icon || ""
-
-    let disp = ""
+    let disp
     if(icon){
         if(validURL(icon)) disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
         else disp = (<i key="xx" className={'database-listing-icon ' + icon} />)
     }
-
     const [modal, setModal] = useState(false);
     const imagePickerToggle = () => setModal(!modal);
-
     const [imageUrl, setImageUrl] = useState(false);
-
     const [dbDetailsImage, setdbDetailsImage] = useState(false);
     const [iconImg, setIconImg] = useState(false);
     const showPexels = false; // nuking pexels temporarily
@@ -376,7 +352,6 @@ export const DBControlPanel = ({meta, onChange}) => {
         setdbDetailsImage(false)
         document.getElementById("imageUrlInput").value = "";
     }
-
 
     return (
         <div className="upload-pic">
@@ -475,9 +450,6 @@ export const DBID = ({id, organization, hub_url, onChange, databases}) => {
     )
 }
 
-
-
-
 export const DBTitle = ({label, organization, onChange, databases}) => {
 
     function doChange(t){
@@ -512,12 +484,11 @@ export const DBRemoteURL = ({hub_url, organization, id}) => {
     return(
         <span>
             <AiFillCheckCircle title={id + " is a valid id for the database"} className="db_info_icon_spacing" color="#12aa22"/>
-            <span title="This URL is where your database will be available on terminus hub" className="db_info">
+            <span title="This URL is the ID of your database on terminus hub" className="db_info">
             <AiOutlineLink className="db_icons_standard"/> {base}</span>
         </span>
     )
 }
-
 
 export const InputResult = ({state}) => {
     if(state && state == "empty"){
@@ -532,7 +503,7 @@ export const InputResult = ({state}) => {
 }
 
 export const InputEmpty = ({}) => {
-    return (<AiOutlineLeft className="db_info_icon_spacing"/>)
+    return (<AiOutlineLeft className="db-required-color db_info_icon_spacing"/>)
 }
 
 export const InputGood = ({title}) => {
@@ -549,9 +520,6 @@ export const InputError = ({problem}) => {
     )
 }
 
-
-
-
 export const DBCredits = ({meta, onPrivacyChange, onSchemaChange, isEdit}) => {
     let res = []
     res.push(<DBRoleCredits key='dbxx' meta={meta} onPrivacyChange={onPrivacyChange} />)
@@ -561,7 +529,6 @@ export const DBCredits = ({meta, onPrivacyChange, onSchemaChange, isEdit}) => {
     }
     return res
 }
-
 
 export const DBProductionCredits = ({meta}) => {
     if(meta){

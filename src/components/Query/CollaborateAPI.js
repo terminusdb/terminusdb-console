@@ -119,7 +119,7 @@ export const RejectInvite = async (meta, client, remoteClient, getTokenSilently)
 
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
-    let remote_name = "origin"
+    let remote_name = meta.remote || "origin"
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
@@ -128,21 +128,28 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => { 
-        let rem = resp.url || meta.remote_url
-        let push_to = {
-            remote: remote_name,
-            remote_branch: "main",
-            message: "publishing db content to hub via console",
-        }
+        let rem = meta.remote_url
+        alert(rem);
         let using = client.organization() + "/" + client.db() + "/_meta"
-        let q = WOQL.lib().add_remote(using, rem, "origin")       
-        return client.query(q, "Setting remote for sharing database on Terminus Hub")
-        .then(() => {
-            return client.fetch(push_to.remote).then(() => {
-                client.push(push_to)
-            })
-        })
+        let q = WOQL.lib().add_remote(using, rem, remote)       
+        client.query(q, "Setting remote for sharing database on Terminus Hub")
+        .then(() => AfterShare(remote_name, client, getTokenSilently))
     })
+}
+
+export const AfterShare = async (remote_name, client, getTokenSilently) => {
+    let push_to = {
+        remote: remote_name,
+        remote_branch: "main",
+        message: "publishing db content to hub via console",
+    }
+    const jwtoken2 = await getTokenSilently()
+    let ncreds = {type: "jwt", key: jwtoken2}
+    client.remote_auth(ncreds)
+    return client.fetch(push_to.remote).then(() => {
+        client.push(push_to)
+    })
+
 }
 
 export const addRemote = async (remote_name, remote_url, client, getTokenSilently, isHubURL) => { 

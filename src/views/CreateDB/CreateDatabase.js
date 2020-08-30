@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
     TERMINUS_SUCCESS,
-    TERMINUS_INFO,
     TERMINUS_ERROR,
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
@@ -15,10 +13,9 @@ import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Row, Col, Button } from "reactstrap"
+import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
-import {DBCreateHeader, DBLocalCreateHeader, DBCreateCard, DBShareHeader} from "./DBCreateCard"
-import { RiMapPinRangeLine } from 'react-icons/ri'
+import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineRead } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
@@ -85,7 +82,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, lid)))
         .finally(() => setLoading(false))
     }
-
 
     async function createRemote(doc, update_start) {
         setLoading(true)
@@ -173,12 +169,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         )
     }
 
-
-
-
-   /* <input className="create-db-button active"><RiMapPinRangeLine color="#0055bb" className="tab_icon_info"/>Local database</button> */
-
-
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     let allow_remote = (user.logged_in || from_local)
     let show_fancy = (user.logged_in && from_local)
@@ -254,30 +244,14 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                 {local && allow_remote && <div className="create-place-badge local-badge">
                     Create a Local Database
                 </div>}
-                {/*local && <div className="create-place-badge-img">
-                    <img src="https://assets.terminusdb.com/terminusdb-console/images/horizontal_lockup%20-%20Newsletter%20(1100x220).png" title="Terminus DB logo"/>
-                </div>*/}
                 {!local && allow_remote && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
                 </div>}
-                {/*!local && <div className="create-place-badge-hub-img">
-                    <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                </div>*/}
-
-
-                {/*(allow_remote && !show_fancy) &&
-                    <DBCreateHeader local={local} toggle={toggleLocal}/>
-                */}
-                {/*(!allow_remote && !show_fancy) &&
-                    <DBLocalCreateHeader />
-                */}
-
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />
                     }
                 </Row>
-
                 <Row>
                     {local &&
                         <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />

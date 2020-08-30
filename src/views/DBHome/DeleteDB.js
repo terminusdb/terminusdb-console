@@ -3,7 +3,6 @@ import {Button, Row, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reac
 import {useForm} from 'react-hook-form'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {DELETE_ICON} from '../../constants/images'
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {goServerHome} from '../../components/Router/ConsoleRouter'
 import {DELETE_DB_MODAL} from './constants.dbhome'
@@ -76,6 +75,7 @@ export const DeleteDB = (props) => {
         <span className='delete-control' onClick={toggle}>
             <span className="db-action"  title="Delete Database">
                 <RiDeleteBin5Line color="#721c24" className='db-control' />
+                <span style={{color: "#721c24"}}> delete</span>
             </span>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}>  <span className="modal-head">Delete Local Database</span> </ModalHeader>
@@ -91,25 +91,14 @@ export const DeleteDB = (props) => {
                     <Row key="rr">
                         {rep && <TerminusDBSpeaks report={rep} />}
                             <div className="del-mod">
-
-                                   {/* <Row key="rm" className="del-mod-row">
-                                        <Col md={2}>
-                                            <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
-                                        </Col>
-                                        <Col md={10}>
-                                            <label class="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
-                                        </Col>
-                                    </Row> */}
-
-                                    <input
-                                        name="dbId"
-                                        placeholder= {DELETE_DB_MODAL.placeholder}
-                                        className = "tcf-input tcf-inp-center"
-                                        ref={register({
-                                          validate: (value) => value.length > 0
-                                        })}
-                                    />
-
+                                <input
+                                    name="dbId"
+                                    placeholder= {DELETE_DB_MODAL.placeholder}
+                                    className = "tcf-input tcf-inp-center"
+                                    ref={register({
+                                        validate: (value) => value.length > 0
+                                    })}
+                                />
                             </div>
                     </Row>
                 </ModalBody>
