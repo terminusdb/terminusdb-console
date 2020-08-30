@@ -275,7 +275,7 @@ export const DBImagePanel = ({meta, user, onClone}) => {
     let title = `Database ${meta.id}`
     let vi = validURL(icon)
     return (
-        <span title={title} className='dbcard-control-panel' >
+        <span title={title} className='dbcard-control-panel-dbfull' >
         {vi &&
             <img className='dbcard-image' src={icon}/>
         }

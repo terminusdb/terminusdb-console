@@ -3317,7 +3317,24 @@ span.delete-modal-label {
       text-align: center;
   }
 
-  
+  .major-database-controls-align {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 8px;
+  }
+
+  .dbcard-control-panel-dbfull {
+    display: inline-block;
+    border-radius: 6px;
+    width: 160px;
+    flex: 0 0 160px;
+    height: 240px;
+    padding: 0px 10px;
+    text-align: center;
+  }
+
   @media (max-width:680px) {
     .dbcard-control-panel  {
        display: none;
@@ -4217,6 +4234,8 @@ span.delete-modal-label {
       display: block;
   }
 
+
+
   .synch-info, .remote-info {
       display: block;
       background-color: #fff;
@@ -4226,6 +4245,10 @@ span.delete-modal-label {
       width: -moz-available;
   }
 
+.scoped-details-row {
+    padding: 0 !important;
+    margin-top: -20px;
+}
   .database-remote-credits {
      text-align: left;
      padding-bottom: 10px;
@@ -4240,6 +4263,13 @@ span.delete-modal-label {
       background-color: #fff;
       width: fit-content;
       width: -moz-fit-content;
+  }
+
+  .effing-spacing {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background-color: yellow;
   }
 
   .sync-info-label, .remote-info-label {
@@ -4356,12 +4386,7 @@ span.delete-modal-label {
       margin-left: 20px;
   }
 
-  .major-database-controls-align {
-      display: inline-block;
-      text-align: center;
-      width: 100%;
-      margin-top: 6px;
-  }
+  
 
 
   .db-control-box {

@@ -25,6 +25,7 @@ import {TabbedPageView} from '../Templates/TabbedPageView'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import Loading from '../../components/Reports/Loading'
 import {TERMINUS_COMPONENT, TERMINUS_PAGE} from '../../constants/identifiers'
+import {formatBytes} from "../Server/DBList"
 
 const SchemaPage = (props) => {
     const {graphs, setHead, branch, report} = DBContextObj()

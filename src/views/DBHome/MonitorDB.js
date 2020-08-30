@@ -83,10 +83,8 @@ export const MonitorDB = (props) => {
                 </Row>
             }
             {!cloning && <>
-                <Row key="rs">
-                    <Col>
-                        <ScopedDetails />
-                    </Col>                   
+                <Row className="scoped-details-row">
+                     <ScopedDetails />
                 </Row>
                 <Row key="rd">
                     <CommitLog />

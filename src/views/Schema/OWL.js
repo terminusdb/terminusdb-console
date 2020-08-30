@@ -24,7 +24,7 @@ import {
     TERMINUS_SUCCESS,
 } from '../../constants/identifiers'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {formatBytes} from "../DBHome/DBFullCard"
+import {formatBytes} from "../Server/DBList"
 
 export const OWL = (props) => {
     const [edit, setEdit] = useState(false)
