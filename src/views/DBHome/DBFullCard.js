@@ -106,7 +106,7 @@ export const DBDescription = ({meta, user}) => {
     }
     else str = meta.comment || ""
     return (
-        <Row key='z' className='database-listing-description-row'>
+        <Row key='z' className='database-listing-description-fullrow'>
             <span className="database-listing-description">{str}</span>
         </Row>
     )

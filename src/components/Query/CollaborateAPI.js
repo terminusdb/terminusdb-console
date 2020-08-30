@@ -125,22 +125,17 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
     if(meta.schema) delete meta['schema']
-    meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
-    return remoteClient.createDatabase(meta.id, meta, meta.organization)
-    .then((resp) => { 
-        let rem = meta.remote_url
-        let using = client.organization() + "/" + client.db() + "/_meta"
-        let q = WOQL.lib().add_remote(using, rem, remote)       
-        client.query(q, "Setting remote for sharing database on Terminus Hub")
-        .then(() => AfterShare(remote_name, client, getTokenSilently))
-    })
-}
-
-export const AfterShare = async (remote_name, client, getTokenSilently) => {
+    //meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
+    let resp = await remoteClient.createDatabase(meta.id, meta, meta.organization)
+    console.log(resp, " is the response")
+    let rem = meta.remote_url
+    let using = client.user_organization() + "/" + client.db() + "/_meta"
+    let q = WOQL.lib().add_remote(using, rem, remote_name)       
+    let uprepo = await client.query(q, "Setting remote for sharing database on Terminus Hub")
     let push_to = {
         remote: remote_name,
         remote_branch: "main",
-        message: "publishing db content to hub via console",
+        message: "publishing db content to hub with console",
     }
     const jwtoken2 = await getTokenSilently()
     let ncreds = {type: "jwt", key: jwtoken2}
@@ -148,7 +143,6 @@ export const AfterShare = async (remote_name, client, getTokenSilently) => {
     return client.fetch(push_to.remote).then(() => {
         client.push(push_to)
     })
-
 }
 
 export const addRemote = async (remote_name, remote_url, client, getTokenSilently, isHubURL) => { 

@@ -3534,10 +3534,16 @@ span.delete-modal-label {
        }
      }
  
-
+   .database-listing-description-fullrow {
+        margin: 18px 0px 10px 10px !important;
+        font-size: 14px;
+        flex-grow: 0;
+        color: #989CA0;
+    }
+  
 
   .database-listing-description-full {
-      margin: 10px 10px 0px 16px;
+      margin: 16px 10px 0px 24px;
       font-size: 14px;
       flex-grow: 0;
       color: #484C47;
