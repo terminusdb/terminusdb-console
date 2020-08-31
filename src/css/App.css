@@ -4240,7 +4240,12 @@ span.delete-modal-label {
       display: block;
   }
 
-
+  .database-listing-organization-icon {
+      height: 20px;
+      border-radius: 8px;
+      border: 1px solid #0055bb;
+      max-width: 20px;
+  }
 
   .synch-info, .remote-info {
       display: block;
