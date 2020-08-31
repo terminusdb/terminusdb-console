@@ -1,8 +1,8 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
 import {Row, Col, Modal, ModalHeader, ModalBody} from "reactstrap"
-import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt, 
-    AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, 
+import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt,
+    AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation,
     AiOutlineGlobal, AiOutlineLeft} from 'react-icons/ai';
 import { FiDatabase } from "react-icons/fi"
 import { validURL } from '../../utils/helperFunctions';
@@ -128,6 +128,7 @@ const DBCreatePicture = ({local}) => {
 
 
 export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) => {
+
     const [current, setCurrent] = useState(start)
 
     function changePrivacy(){
@@ -184,6 +185,7 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
 
     function changeIcon(ic){
         let n = {}
+        console.log('current', current)
         for(var k in current){
             if(k == 'icon'){
                 n[k] = ic
@@ -348,45 +350,47 @@ export const DBControlPanel = ({meta, onChange}) => {
     const showPexels = false; // nuking pexels temporarily
 
     useEffect(() => {
-        setdbDetailsImage(imageUrl);
         setIconImg(false)
-    }, [imageUrl]);
+        setdbDetailsImage(imageUrl);
+        onChange(imageUrl);
+    }, [imageUrl, dbDetailsImage]);
 
     function loadImageToDbDetailsForm () {
-        onChange(imageUrl);
         setdbDetailsImage(imageUrl);
         setIconImg(false)
         setModal(false)
     }
 
-
-
-    useEffect(() => {setIcon(val)}, [val])
+    useEffect(() => {
+            setIcon(val)
+            setIconImg(val)
+            onChange(val)
+            setdbDetailsImage(false);
+    }, [val])
     let vchange = function(selval){
         setIcon(selval)
-        onChange(selval)
-        setIconImg(selval)
         setdbDetailsImage(false)
         document.getElementById("imageUrlInput").value = "";
     }
+
 
     return (
         <div className="upload-pic">
             <div className="add-image-control-text">
                 {showPexels && <div onClick={imagePickerToggle} className="image-picker-tile">
                     <div className="db-details-image">
-                        {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
+                        {dbDetailsImage && !iconImg && <img src={dbDetailsImage} className="image-picker"/>}
                         {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
-                        {iconImg && <i class={iconImg + " add-image-control"}/>}
+                        {iconImg && !dbDetailsImage && <i class={iconImg + " add-image-control"}/>}
                         {<div className="image-picker-link image-align" >Click here to choose a picture </div>}
                     </div>
                 </div>}
 
                 {!showPexels && <div>
                     <div className="db-details-image">
-                        {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
+                        {dbDetailsImage && !iconImg && <img src={dbDetailsImage} className="image-picker"/>}
                         {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
-                        {iconImg && <i class={iconImg + " add-image-control"}/>}
+                        {iconImg && !dbDetailsImage && <i class={iconImg + " add-image-control"}/>}
                     </div>
                 </div>}
                 {showPexels && <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>}
@@ -397,9 +401,10 @@ export const DBControlPanel = ({meta, onChange}) => {
                         placeholder="Paste an Image URL"
                         className="database-create-id-input database-input-empty db-create-image-url"
                         onChange={  (e) =>{
+                            setIcon(false); //set icon to false
                             setImageUrl(e.target.value)
                             onChange(e.target.value);
-                            setIcon(false); //set icon to false
+                            setdbDetailsImage(e.target.value);
                     }}/>
                 </div>
                 <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
