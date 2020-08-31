@@ -185,7 +185,6 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
 
     function changeIcon(ic){
         let n = {}
-        console.log('current', current)
         for(var k in current){
             if(k == 'icon'){
                 n[k] = ic
