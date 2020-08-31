@@ -1,23 +1,9 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
-import moment from 'moment';
-import {Row, Col, Button, Badge, Container, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap"
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {QUERY_ICON, DELETE_ICON, SCHEMA_ICON, DOCUMENTS_ICON, COMMITS_ICON,
-    SHARE_ICON, PUSH_ICON, PULL_ICON, CLONE_ICON, ALL_GOOD_ICON, NO_CAN_DO_ICON, CLONED_ICON } from "../../constants/faicons"
-import { printts } from "../../constants/dates"
-import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
-import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
-import Loading from "../../components/Reports/Loading"
-import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
-import { DATETIME_COMPLETE, DATETIME_REGULAR, DATE_REGULAR } from "../../constants/dates"
-import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineCopy, AiFillWarning, AiOutlineRead,
-    AiOutlineDown, AiOutlineSchedule, AiOutlineFork, AiFillCheckCircle,AiOutlineThunderbolt, AiOutlinePlusCircle,
-    AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, AiFillBuild, AiOutlineInfoCircle,
-    AiOutlineGlobal, AiOutlineLeft, AiOutlineBranches, AiOutlineBook, AiOutlineDelete, AiFillDatabase} from 'react-icons/ai';
-import { BsBook, BsFillEnvelopeFill } from 'react-icons/bs';
-import { GiMeshBall, GiPlainCircle } from 'react-icons/gi';
-import { MdContentCopy } from 'react-icons/md';
+import {Row, Col, Modal, ModalHeader, ModalBody} from "reactstrap"
+import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt, 
+    AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation, 
+    AiOutlineGlobal, AiOutlineLeft} from 'react-icons/ai';
 import { FiDatabase } from "react-icons/fi"
 import { validURL } from '../../utils/helperFunctions';
 import { legalURLID } from "../../components/Query/CollaborateAPI"
@@ -25,8 +11,6 @@ import { IoMdImages } from 'react-icons/io';
 import { Pexels } from '../../components/Pexels/Pexels';
 import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
-import { FcDatabase } from "react-icons/fc"
-
 
 export const DBCreateHeader = ({local, toggle}) => {
     let local_text = "Create a new database on your local TerminusDB - only accessible locally"
@@ -64,6 +48,7 @@ export const DBCreateHeader = ({local, toggle}) => {
     )
 }
 
+
 export const DBLocalCreateHeader = () => {
     let text = "Create a new database on your local TerminusDB"
     return (
@@ -81,16 +66,19 @@ export const DBLocalCreateHeader = () => {
 
 export const DBShareHeader = ({onCancel}) => {
     let text = "Share your database on Terminus Hub"
-    return (
-        <Row className='database-create-header'>
+    return (<>
+        <div className='remote-info-align database-create-header '>
             <DBCreatePicture local={false} />
             <span className='database-listing-title-row'>
-                <span key='a' className="database-header-title">Share Database</span>
+                <span key='a' className="database-header-title remote-info-label">Share Database</span>
+            </span>
+        </div>
+            <div className="database-remote-info-row">
                 <div key='z' className='database-header-description-row'>
                     <span className="database-listing-description">{text}</span>
                 </div>
-            </span>
-        </Row>
+            </div> </>
+
     )
 }
 
@@ -132,9 +120,6 @@ const DBCreatePicture = ({local}) => {
         icon = HUBDB
     }
     let title = (local ? "Local Database" : "Terminus Hub Database")
-    //return (<img className='database-header-image' src={icon} title={title}  />)
-
-
     if (icon == GRAPHDB)
         ics.push(<FiDatabase title={title} className='database-header-image' className={"db-icon-create"}/>)
     else ics.push(<img className='database-header-image' src={icon} title={title}  />)
@@ -237,6 +222,7 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
 
     if(!current) return null
 
+    let isEdit = (type && type == "edit")
     return (<>
         <Row key='r7' className='database-summary-listing'>
             <Col key='r5' md={3} className='database-control-panel'>
@@ -246,17 +232,21 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
                 <Row className='database-create-title-row db-create-remote-row'>
                     <DBTitle label={current.label} organization={current.organization} onChange={changeTitle} databases={databases}/>
                 </Row>
-                <Row className='database-create-id-row db-create-remote-row'>
-                    <DBID id={current.id} organization={current.organization} databases={databases} hub_url={current.hub_url} onChange={changeID} />
-                </Row>
-                <Row className="database-create-credits db-create-remote-row">
-                    <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} />
-                </Row>
+                {!isEdit &&
+                    <Row className='database-create-id-row db-create-remote-row'>
+                        <DBID id={current.id} organization={current.organization} databases={databases} hub_url={current.hub_url} onChange={changeID} />
+                    </Row>
+                }
+                {!isEdit &&
+                    <Row className="database-create-credits db-create-remote-row">
+                        <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} isEdit={isEdit}/>
+                    </Row>
+                }
                 <Row className="database-create-decription-row db-create-remote-row">
                     <DBDescription meta={current} onChange={changeComment} />
                 </Row>
                 <Row className="database-create-status">
-                    <DBRequired meta={current} databases={databases} />
+                    <DBRequired meta={current} databases={databases} type={type}/>
                 </Row>
                 <Row className="database-create-exec">
                     <DBCreate meta={current} databases={databases} onSubmit={doSubmit} type={type} />
@@ -266,19 +256,22 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
     </>)
 }
 
-export const DBRequired = ({meta, databases}) => {
-    let p = _problems(meta, databases)
+export const DBRequired = ({meta, databases, type}) => {
+    let p = _problems(meta, databases, type)
     if(p === false){
-        return null;// (<span><AiFillCheckCircle color="#12aa22" title='tit' className="db_info_icon_spacing"/> ID and Title Supplied</span>)
+        return null;
     }
     else {
-        return (<span className="db-required-color"><AiFillInfoCircle title='tit' color="#856404" className="db_info_icon_spacing"/> {p}</span>)
+        return (<span className="db-required-color">
+            <AiFillInfoCircle color="#856404" className="db_info_icon_spacing"/> {p}</span>
+        )
     }
 }
 
 function _problems(meta, databases){
     let a = _validate_id(meta.id, meta.organization, databases)
     let b = _validate_title(meta.label, meta.organization, databases)
+
     if(a == "empty" && b == "empty"){
         return "ID and title required"
     }
@@ -305,7 +298,8 @@ function _problems(meta, databases){
 export const DBCreate = ({meta, databases, onSubmit, type}) => {
     let str = "Create on Terminus Hub"
     if(type && type == "share") str = "Share on Terminus Hub"
-    if(_problems(meta, databases) === false){
+    if(type && type == "edit") str = "Update Terminus Hub Database Record"
+    if(_problems(meta, databases, type) === false){
         /*return (<span className='database-create-submit database-create-submit-active' onClick={onSubmit}>
             <span className='database-submit-title'>
                 {str}
@@ -325,35 +319,33 @@ export const DBCreate = ({meta, databases, onSubmit, type}) => {
     }
 }
 
-
-
-
 export const DBControlPanel = ({meta, onChange}) => {
+    let icon = meta.icon || ""
 
-    let icon = meta.icon
-    if(!icon) icon = GRAPHDB
-
-    function chooseIcon(){
-        alert("choose icon")
-    }
-
-    function chooseURL(){
-        alert("choose url")
-    }
-
-    let disp = ""
-    if(icon){
-        if(validURL(icon)) disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
-        else disp = (<i key="xx" className={'database-listing-icon ' + icon} />)
-    }
+    let disp = "", isIcon=false;
 
     const [modal, setModal] = useState(false);
     const imagePickerToggle = () => setModal(!modal);
 
-    const [imageUrl, setImageUrl] = useState(false);
+    const [imageUrl, setImageUrl] = useState(icon);
 
-    const [dbDetailsImage, setdbDetailsImage] = useState(false);
-    const [iconImg, setIconImg] = useState(false);
+    const [dbDetailsImage, setdbDetailsImage] = useState(icon);
+
+    if(icon){
+        if(validURL(icon)) {
+            disp = (<img className='database-listing-image' src={icon} key="xx1"  />)
+            isIcon = false;
+        }
+        else{
+            disp = (<i key="xx" className={'database-listing-icon ' + icon} />)
+            isIcon = icon;
+        }
+    }
+
+    const [iconImg, setIconImg] = useState(isIcon);
+    const [val, setIcon] = useState(isIcon)
+
+    const showPexels = false; // nuking pexels temporarily
 
     useEffect(() => {
         setdbDetailsImage(imageUrl);
@@ -367,39 +359,51 @@ export const DBControlPanel = ({meta, onChange}) => {
         setModal(false)
     }
 
-    const [val, setVal] = useState("")
 
-    useEffect(() => {setVal(val)}, [val])
+
+    useEffect(() => {setIcon(val)}, [val])
     let vchange = function(selval){
-        setVal(selval)
+        setIcon(selval)
         onChange(selval)
         setIconImg(selval)
         setdbDetailsImage(false)
+        document.getElementById("imageUrlInput").value = "";
     }
-
 
     return (
         <div className="upload-pic">
             <div className="add-image-control-text">
-                <div onClick={imagePickerToggle} className="image-picker-tile">
+                {showPexels && <div onClick={imagePickerToggle} className="image-picker-tile">
                     <div className="db-details-image">
                         {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
                         {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
                         {iconImg && <i class={iconImg + " add-image-control"}/>}
-                        <div className="image-picker-link image-align" >Click here to choose a picture </div>
+                        {<div className="image-picker-link image-align" >Click here to choose a picture </div>}
                     </div>
-                </div>
-                <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+                </div>}
+
+                {!showPexels && <div>
+                    <div className="db-details-image">
+                        {dbDetailsImage && <img src={dbDetailsImage} className="image-picker"/>}
+                        {!dbDetailsImage && !iconImg && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
+                        {iconImg && <i class={iconImg + " add-image-control"}/>}
+                    </div>
+                </div>}
+                {showPexels && <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>}
+
                 <div className="image-align">
                     <input type="text"
+                        id="imageUrlInput"
                         placeholder="Paste an Image URL"
-                        className="database-create-id-input database-input-empty  db-create-image-url"
+                        className="database-create-id-input database-input-empty db-create-image-url"
                         onChange={  (e) =>{
                             setImageUrl(e.target.value)
                             onChange(e.target.value);
+                            setIcon(false); //set icon to false
                     }}/>
                 </div>
                 <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+
                 <div className="image-align">
                     <FontIconPicker icons={ICONS_PICKER}
                         onChange={value => vchange(value)}
@@ -429,14 +433,6 @@ export const DBControlPanel = ({meta, onChange}) => {
             </Modal>
         </div>
     )
-    /*<div>
-        <Row className="database-left-img" onClick={chooseIcon}>
-            {disp}
-        </Row>
-        <Row className="db-controls" onClick={chooseURL}>
-            URL
-        </Row>
-    </div>*/
 }
 
 export const DBID = ({id, organization, hub_url, onChange, databases}) => {
@@ -470,9 +466,6 @@ export const DBID = ({id, organization, hub_url, onChange, databases}) => {
         </span>
     )
 }
-
-
-
 
 export const DBTitle = ({label, organization, onChange, databases}) => {
 
@@ -508,12 +501,11 @@ export const DBRemoteURL = ({hub_url, organization, id}) => {
     return(
         <span>
             <AiFillCheckCircle title={id + " is a valid id for the database"} className="db_info_icon_spacing" color="#12aa22"/>
-            <span title="This URL is where your database will be available on terminus hub" className="db_info">
+            <span title="This URL is the ID of your database on terminus hub" className="db_info">
             <AiOutlineLink className="db_icons_standard"/> {base}</span>
         </span>
     )
 }
-
 
 export const InputResult = ({state}) => {
     if(state && state == "empty"){
@@ -528,7 +520,7 @@ export const InputResult = ({state}) => {
 }
 
 export const InputEmpty = ({}) => {
-    return (<AiOutlineLeft className="db_info_icon_spacing"/>)
+    return (<AiOutlineLeft className="db-required-color db_info_icon_spacing"/>)
 }
 
 export const InputGood = ({title}) => {
@@ -545,17 +537,15 @@ export const InputError = ({problem}) => {
     )
 }
 
-
-
-
-export const DBCredits = ({meta, onPrivacyChange, onSchemaChange}) => {
+export const DBCredits = ({meta, onPrivacyChange, onSchemaChange, isEdit}) => {
     let res = []
     res.push(<DBRoleCredits key='dbxx' meta={meta} onPrivacyChange={onPrivacyChange} />)
-    res.push(<DBSchemaCredits key='dbxxs' meta={meta} onSchemaChange={onSchemaChange} />)
-    res.push(<DBProductionCredits key='dbx' meta={meta} />)
+    if(!isEdit){
+        res.push(<DBSchemaCredits key='dbxxs' meta={meta} onSchemaChange={onSchemaChange} />)
+        res.push(<DBProductionCredits key='dbx' meta={meta} />)
+    }
     return res
 }
-
 
 export const DBProductionCredits = ({meta}) => {
     if(meta){
@@ -652,7 +642,7 @@ export const DBDescription = ({meta, onChange}) => {
 }
 
 function _validate_id(id, organization, databases){
-    if(id == ""){
+    if(!id || id == ""){
         return "empty"
     }
     if(id.length > 30){
@@ -672,7 +662,7 @@ function _validate_id(id, organization, databases){
 }
 
 function _validate_title(label, organization, databases){
-    if(label.trim() == ""){
+    if(!label || label.trim() == ""){
         return "empty"
     }
     if(label.length > 40){

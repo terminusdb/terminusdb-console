@@ -7,6 +7,8 @@ import ClonePage from "../../views/Pages/ClonePage"
 import CreateDBPage from "../../views/Pages/CreateDBPage"
 import { useAuth0 } from "../../react-auth0-spa";
 import PrivateRoute from './PrivateRoute';
+import {WOQLClientObj} from '../../init/woql-client-instance'
+
 
 export const ServerRoutes = () => {
 
@@ -40,11 +42,24 @@ export const CloneRoutes = () => {
 
 const HubDBPage= ()=>{
     const {aid, dbid} = useParams()
+    /*
+    try {
+        const { woqlClient } = WOQLClientObj()
+        woqlClient.db(false)
+        woqlClient.organization(false)
+    }
+    catch(e){console.log(e)}*/
     return <ClonePage organization={aid} db={dbid} />
 }
 
 const HubOrgPage= ()=>{
     const {aid} = useParams()
+    /*try {
+        const { woqlClient } = WOQLClientObj()
+        woqlClient.db(false)
+        woqlClient.organization(false)
+    }
+    catch(e){console.log(e)}*/
     return <ClonePage organization={aid} />
 }
 

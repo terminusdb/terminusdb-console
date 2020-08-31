@@ -35,7 +35,8 @@ export const INFO_LIMIT = 100
 export const DELETE_DB_MODAL = {
     placeholder: "Enter the database ID you wish to delete.",
     message: "ID of current database:",
-    confirm: "Confirm Database Delete",
+    confirmLocal: "Confirm Database Delete",
+    confirmRemote: "Confirm Delete",
     error:  "The Database ID entered was incorrect",
     deleted: "Database Deleted",
     failed: "Failed to Delete Database"

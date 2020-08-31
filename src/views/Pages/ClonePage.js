@@ -1,115 +1,106 @@
 import React, {useEffect, useState} from 'react'
-
-import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite, isLocalURL, isHubURL } from '../../components/Query/CollaborateAPI'
-import {DBList, DBSummaryCard} from '../Server/DBList'
+import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite, UpdateDatabase, isLocalURL, isHubURL, RefreshDatabaseRecord } from '../../components/Query/CollaborateAPI'
 import {useAuth0} from '../../react-auth0-spa'
-import {goDBPage, goDBHome} from "../../components/Router/ConsoleRouter"
-import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
+import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
+import {TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {SimplePageView} from '../Templates/SimplePageView'
-import {DBListControl} from "../Server/DBListControl"
-import {CloneHubHeader} from "../CreateDB/DBCreateCard"
-
-import { TERMINUS_INFO, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
-import { LIST_LOCAL, LIST_REMOTE, CLONE, CLONEDBS } from "./constants.pages"
-import {CloneURL} from '../Server/CloneURL'
-import Select from "react-select";
-import {Row, Col} from "reactstrap"
-import {CreateDatabase} from "../CreateDB/CreateDatabase"
+import { SimplePageView} from '../Templates/SimplePageView'
+import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle, 
+    AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink, 
+    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell, 
+    AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning} from 'react-icons/ai';
+import { TERMINUS_WARNING, TERMINUS_ERROR, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
+import { CLONEDBS } from "./constants.pages"
 import Loading from "../../components/Reports/Loading"
-import {HubRecord} from "../DBSynchronize/HubRecord"
 import { validURL } from '../../utils/helperFunctions';
+import { HUBDB } from "../../constants/images"
+import { BsFillEnvelopeFill } from 'react-icons/bs';
+import moment from 'moment';
+import { printts } from "../../constants/dates"
+import { DATETIME_DB_UPDATED } from "../../constants/dates"
+import {EmptyResult} from '../../components/Reports/EmptyResult'
+import {DBCreateCard} from "../CreateDB/DBCreateCard"
+import { CloneLocal } from "../CreateDB/CloneDatabase"
+import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
+import Select from "react-select"
 
-
-
-const ClonePage = (props) => {
-    const { woqlClient, contextEnriched } = WOQLClientObj()
-    let user = woqlClient.user()
-   
+const ClonePage = ({organization, db}) => {
+    let org = organization || "recommendations"
+    let list = (organization || db ? false : CLONEDBS)
     return (
-        <SimplePageView  id="clonePage" >
-            <DBListControl  key="ja" list={CLONEDBS} type='clone' user={user} count={CLONEDBS.length}/>
+        <SimplePageView id="clonePage">
+            <CloneController organization={org} db={db} list={list} />
         </SimplePageView>
     )
 }
 
-export const CloneListControl = ({list, className, user, type, sort, filter}) => {
-    if(!list || !user ) return null
-    const { woqlClient,  refreshDBRecord, refreshDBListing, bffClient, remoteClient } = WOQLClientObj()
-    const { getTokenSilently } = useAuth0()    
-    let [special, setSpecial] = useState(false)
-    const [listSort, setSort] = useState(sort || "updated")
-    const [listFilter, setFilter] = useState(filter || "")
-    const [sorted, setSorted] = useState()
-    const [shares, setShares] = useState([])
-    const [shareFilter, setShareFilter] = useState(filter || "")
-    const [shareSort, setShareSort] = useState(filter || "")
-    const [loading, setLoading] = useState()
-    const [bump, setBump] = useState(0)
-    const [publisher, setPublisher] = useState("")
+export const CloneController = ({list, db, organization, meta}) => {
+    let [currentDB, setCurrentDB] = useState(meta)
+    let [dbid, setDBid] = useState()
+    let [orgid, setOrgid] = useState()
+    let [currentList, setCurrentList] = useState(list)
+    let [loading, setLoading] = useState()
+    let [report, setReport] = useState()
+
+    const { woqlClient,  refreshDBRecord, bffClient, remoteClient } = WOQLClientObj()
+    const { getTokenSilently } = useAuth0()
+
+    if(!woqlClient || !bffClient) return null
 
     useEffect(() => {
-        if(listSort){
-            let filt = _filter_list(list, listFilter)
-            setSorted(_sort_list(filt, listSort))
+        setOrgid(organization)
+        setDBid(db)
+    }, [organization, db])
+
+    function loadNewStuff(org, db){
+        setOrgid(false)
+        setDBid(false)
+        setCurrentDB()
+        setCurrentList()
+        setOrgid(org)
+        setDBid(db)
+
+    }
+
+    useEffect(() => {
+        if(dbid && orgid){
+            setLoading(true)
+            setReport()
+            RefreshDatabaseRecord({id: dbid, organization: orgid}, bffClient, getTokenSilently)
+            .then((xmeta) => setCurrentDB(xmeta))
+            .catch((e) => reportDB404(orgid, dbid, e))
+            .finally(() => setLoading(false))
         }
-    }, [listSort, listFilter])
-
-    useEffect(() => {
-        if(publisher){
-            bffClient.getOrganization(publisher)
+        else if(orgid && !dbid){
+            setLoading(true)
+            setReport()
+            bffClient.getOrganization(orgid)
+            .then((res) => {
+                processOrganizationListing(orgid, res)
+            })
+            .catch((e) => reportOrganization404(orgid, e))
+            .finally(() => setLoading(false))
         }
-    }, [publisher])
-
-
-    useEffect(() => {
-        if(bffClient){
-            if(!shareFilter){
-                let u = bffClient.user()
-                let dbl = []
-                if(u.invites){
-                    dbl = _invites_to_cards(u.invites, remoteClient.server())
-                }
-                if(sorted){
-                    dbl = dbl.concat(sorted)           
-                }
-
-                setShares(dbl)            
-            }
-            else if(shareFilter == "recommendations"){
-                if(sorted) setShares(sorted)
-            }
-            else if(shareFilter == "invitations"){
-                let u = bffClient.user()           
-                setShares(_invites_to_cards(u.invites))
-            }
+        else if(!orgid && !dbid){
+            if(list) setCurrentList(list)
+            else if(meta) setCurrentDB(meta)
         }
-    }, [shareFilter, shareSort, sorted, bump])
+    }, [dbid, orgid])
 
-    useEffect(() => {
-        let filt = _filter_list(list, listFilter)
-        if(listSort){
-            setSorted(_sort_list(filt, listSort))
+    function processOrganizationListing(o, res){
+        if(o == "invitations") setCurrentList(res)
+        else if(res.databases){
+            setCurrentList(res.databases)
         }
         else {
-            setSorted(list)
+            reportOrganization404(o)
         }
-    }, [list])
-
-
-    let message = ""
-    if(type == 'clone'){
-        message = CLONE
     }
-    else {
-        message = user.logged_in ?  LIST_REMOTE : LIST_LOCAL 
-    }
-    let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
-    
-    function setAction(dbmeta){
+
+    function fireAction(dbmeta){
         let db = _copy_db_card(dbmeta)
-        if(db.action == 'hub'){
-            setSpecial({action:db.action, meta: db})            
+        if(db.action == 'load'){
+            loadNewStuff(dbmeta.organization, dbmeta.id)
         }
         else if(db.action == 'accept'){
             setLoading(true)
@@ -122,7 +113,7 @@ export const CloneListControl = ({list, className, user, type, sort, filter}) =>
                     setSpecial(false)
                     setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                     refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                    .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+                    .then(() => goDBHome(id, woqlClient.user_organization(), report))
                 })
             })
             .finally(() => setLoading(false))
@@ -139,15 +130,31 @@ export const CloneListControl = ({list, className, user, type, sort, filter}) =>
         }
         else if(db.action == 'clone'){
             setLoading(true)
-            CloneDB(db, woqlClient, getTokenSilently)
+            let pred = (db.auto ? false : true)
+            CloneDB(db, woqlClient, getTokenSilently, false, pred)
             .then((id) => {
-                setSpecial(false)
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+                .then(() => goDBHome(id, woqlClient.user_organization(), report))
+            })
+            .catch((e) => {
+                console.log(e)
+                setReport({status: TERMINUS_ERROR, message: "Failed to clone database", error: e})
             })
             .finally(() => setLoading(false))
-        }        
+        }
+        if(db.action == 'fork'){
+            setLoading(true)
+            ForkDB(db, woqlClient, bffClient, getTokenSilently, true)
+            .then(() => {
+                loadNewStuff()
+                goHubPage(db.organization, db.id)
+            })
+            .catch((e) => {
+                setReport({status: TERMINUS_ERROR, message: "Failed to fork database", error: e})
+            })
+            .finally(() => setLoading(false))
+        }
     }
 
     function removeProcessedInvite(dbrec){
@@ -163,181 +170,308 @@ export const CloneListControl = ({list, className, user, type, sort, filter}) =>
         bffClient.connection.user.invites = ninvites
     }
 
-    function cloneURL(url){
-        if(url.substring(0, 7) == "http://" || url.substring(0, 8) == "https://"){
-            let db = {action: 'clone'}            
-            db.id = url.substring(url.lastIndexOf("/")+1)
-            if(woqlClient.server() == url.substring(0, woqlClient.server().length)){
-                let edb = woqlClient.get_database(db.id, woqlClient.user_organization())
-                db.label = edb.label
-                db.comment = edb.comment   
-            }
-            else {
-                db.label = db.id
-                db.comment = ""
-            }
-            db.remote_url = url
-            setAction(db)
-        }
-        else return "You must supply a valid URL"
+    function reportOrganization404(org, e){
+        setReport({status: TERMINUS_WARNING, message: "Publisher not found", error: e})
     }
 
-    function callSort(nsort){
-        setSort(nsort.value)
+    function reportDB404(db, org, e){
+        setReport({status: TERMINUS_WARNING, message: "Database not found", error: e})
     }
 
-    function callFilter(nfilt){
-        setFilter(nfilt.value)
+    function reportComponentError(code, str){
+        setReport({status: TERMINUS_WARNING, message: "Database not found " + str, error: e})
     }
 
-    function callShareSort(nfilt){
-        alert(nfilt.value)
+    function refreshHub(orgid, dbid){
+        loadNewStuff(orgid, dbid)
+        goHubPage(orgid, dbid)
     }
 
-    function callShareFilter(nfilt){
-        setShareFilter(nfilt.value)
+    if(currentDB){
+        let url = remoteClient.server() + currentDB.organization + "/" + currentDB.id
+        return (
+            <div>
+                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError}/>
+                    <Row className="generic-message-holder">
+                        {report &&
+                            <TerminusDBSpeaks report={report} />
+                        }
+                    </Row>
+                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                    <HubDBCard meta={currentDB} onAction={fireAction}/>
+            </div>
+        )
+    }
+    else if(currentList){
+        return (
+            <div className="tdb__loading__parent">
+                <CloneHubHeader organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
+                <Row className="generic-message-holder">
+                    {report &&
+                        <TerminusDBSpeaks report={report} />
+                    }
+                </Row>
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                <CloneListControl list={currentList} onAction={fireAction} />
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            </div>
+        )
+    }
+    else {
+        return (<div className="tdb__loading__parent">
+            <Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        </div>)
+    }
+}
+
+export const CloneHubHeader = ({organization, list, onChange, onError}) => {
+    return ( <Row className="remote-info clone-widget-title">
+                <div className="remote-info-align database-create-header">
+                    <HubPicture />
+                    <span className='database-listing-header-row'>
+                        <span key='a' className="database-header-title remote-info-label">Share, Clone and Collaborate with Terminus Hub</span>
+                    </span>
+                </div>
+                <div className="database-remote-info-row">
+                    <HubToolbar onChange={onChange} onError={onError} organization={organization}/>
+                </div>
+    </Row>)
+}
+
+export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
+    let text = "This database is stored on Terminus Hub"
+    return (<Row className="remote-info clone-widget-title">
+        <div className='remote-info-align database-create-header'>
+            <HubPicture />
+            <span className='database-listing-header-row'>
+                <span key='a' className="database-header-title remote-info-label">Terminus Hub Database</span>
+            </span>
+        </div>
+        <div className="database-remote-info-row">
+            <HubToolbar onChange={onChange} onError={onError} url={url} organization={organization}/>
+        </div>
+    </Row>)
+}
+
+export const HubToolbar = ({onChange, onError, organization, url}) => {
+    const { woqlClient, remoteClient } = WOQLClientObj()
+    function goInvites(){
+        onChange("invitations")
     }
 
-    function callPublisherPicker(v){
-        setPublisher(v)
+    function goRecommendations(){
+        onChange("recommendations")
     }
 
     function doURLTry(u){
+        if(!validURL(u)){
+            return alert("Not a valid URL")
+        }
         if(isLocalURL(u, woqlClient)){
             let did = u.substring(u.lastIndexOf("/")+1)
-            alert(did)
             let ded = woqlClient.get_database(did, woqlClient.user_organization())
             if(ded){
                 goDBHome(ded, woqlClient.user_organization())
+            }
+            else {
+                onError(404, `Local database ${u} does not exist`)
             }
         }
         else if(isLocalURL(u, remoteClient)){
             let bits = u.split("/")
             let did = bits[bits.length-1]
             let oid = bits[bits.length-2]
-            setSpecial({action: "hub", meta: {id: did, organization: oid}})
+            onChange(oid, did)
+        }
+        else {
+            //onChange("clone", url)
         }
     }
 
-    if(!sorted) return null
-    if(loading) return (<Loading type={TERMINUS_COMPONENT}/>)
-    return (<>
-            {(special && special.action == "hub") && 
-                <HubRecord meta={special.meta} />
-            }
-            {!special && <>
-                {type == 'clone' && 
-                    <Row>
-                        <Col>
-                            <PublisherPicker onSubmit={callPublisherPicker} />
-                        </Col>
-                        <Col>
-                        <URLPicker onSubmit={doURLTry} />
-                        </Col>
-                        <Col>
-                        </Col>
-                        <Col>
-                        </Col>
-                    </Row>
-                }
-                {type == 'clone' && (shareFilter == "clone") &&                   
-                    <CloneURL onClone={cloneURL} />
-                }
-                {type == 'clone' && (shareFilter != "clone") && shares && shares.length && 
-                    <DBList list={shares} className={className} user={user} onAction={setAction}/>            
-                }
-        </>}
-    </>)
-}
-
-export const ListFilter = ({filter, onChange, logged_in}) => {
-    if(!logged_in) return null
-    let filters = [
-        {value: "", label: "Show all"},
-        {value: "remote", label: "Hub Databases"},
-        {value: "public", label: "Public Databases"},
-        {value: "local", label: "Local Databases"},
-        {value: "missing", label: "Databases Only on Hub"},
-        {value: "unsynched", label: "Need Synchronisation"},
-    ]
     return (
-        <Select 
-            options={filters}
-            placeholder = "Filter listings"
-            defaultValue= {filter}
-            onChange ={onChange}
-        />)
+        <Row className="hub-toolbar">
+            <Col md={2}className="hub-toolbar-col hub-recommendations-col">
+                <RecommendationsLinker organization={organization} onSubmit={goRecommendations}/>
+            </Col>
+            <Col md={2} className="hub-toolbar-col hub-invitations-col">
+                <InvitationsLinker organization={organization} onSubmit={goInvites}/>
+            </Col>
+            <Col md={3} className="hub-toolbar-col publisher-picker-col">
+                <PublisherPicker onSubmit={onChange} organization={organization} />
+            </Col>
+            <Col md={5} className="hub-toolbar-col url-picker-col">
+                <URLPicker url={url} onSubmit={doURLTry} />
+            </Col>
+        </Row>
+    )
 }
 
-export const ShareFilter = ({filter, onChange}) => {
-    let filters = [
-        {value: "", label: "Invitations and Suggestions"},
-        {value: "recommended", label: "Recommendations"},
-        {value: "invitations", label: "Invitations"},
-    ]
-    return (
-        <Select 
-            options={filters}
-            placeholder = "Invitations and Suggestions"
-            defaultValue= {filter}
-            onChange ={onChange}
-        />)
-}
 
-export const ShareSorter = ({sort, logged_in, onChange}) => {
-    return null
-}
-
-const PublisherPicker = ({onSubmit}) => {
+const PublisherPicker = ({onSubmit, organization}) => {
     function checkKeys(event){
-        if(event.key === "Enter" && event.target.value) onSubmit(event.target.value)
+        if(event.key === "Enter" && event.target.value) {
+            onSubmit(event.target.value)
+        }
     }
+
+    let ph = "Enter Publisher ID"
+
     return (
-        <span>
-            <input placeholder="publisher id" onKeyPress={checkKeys}/>
+        <span className='hub-inputbar publisher-picker'>
+            <AiOutlineUser className="hub-bar-spacing"/>
+            <input
+                type="text"
+                defaultValue={organization}
+                className='publisher-picker-input'
+                placeholder={ph}
+                onKeyPress={checkKeys}
+            />
         </span>
     )
 }
 
-const URLPicker = ({onSubmit}) => {
+const URLPicker = ({onSubmit, url}) => {
     function checkKeys(event){
         if(event.key === "Enter" && event.target.value && validURL(event.target.value)) onSubmit(event.target.value)
     }
     return (
-        <span>
-            <input placeholder="publisher id" onKeyPress={checkKeys}/>
+        <span className='hub-inputbar url-picker'>
+            <AiOutlineLink className="hub-bar-spacing"/>
+            <input
+                type="text"
+                defaultValue={url}
+                className='url-picker-input'
+                placeholder="Enter Database URL"
+                onKeyPress={checkKeys}
+            />
+        </span>
+    )
+}
+
+const InvitationsLinker = ({organization, onSubmit}) => {
+    if(organization == "invitations"){
+        return(
+            <span title="Invitations" className='hub-inputbar hub-active-link'>
+                <AiOutlineMail className="hub-active-icon active-mail hub-bar-spacing"/> Invitations
+            </span>
+        )
+    }
+    return (
+        <span onClick={onSubmit} title="View Latest Invitations" className='hub-inputbar hub-link'>
+            <AiOutlineMail className="hub-inactive-icon inactive-mail hub-bar-spacing"/> Invitations
+        </span>
+    )
+}
+
+const RecommendationsLinker = ({organization, onSubmit}) => {
+    if(organization == "recommendations"){
+        return (
+            <span title="Recommendations" className='hub-inputbar hub-active-link'>
+                <AiOutlineStar className="hub-active-icon active-star hub-bar-spacing"/> Recommendations
+            </span>
+        )
+    }
+    return (
+        <span  title="View Latest Recommendations" onClick={onSubmit} className='hub-inputbar hub-link'>
+            <AiOutlineStar className="hub-inactive-icon inactive-star hub-bar-spacing"/> Recommendations
         </span>
     )
 }
 
 
-export const ListSorter = ({sort, logged_in, onChange}) => {
-    let local_sort_algos = [
-        {value: "updated", label: "Most recent update"},
-        {value: "oldest", label: "Least recent update"},
-        {value: "created", label: "Database Creation Time"},
-        {value: "name", label: "Database Name"},
-        {value: "size", label: "Database Size"}
-    ]
+const HubPicture = ({title}) => {
+    let icon = HUBDB
+    title = title || "Terminus Hub Database"
+    return (<img className='database-header-image' src={icon} title={title}  />)
+}
 
-    let remote_sort_algos = [
-        {value: "organization", label: "Publisher"},
-        {value: "updated local", label: "Local Update Time"},
-        {value: "updated remote", label: "Remote Update Time"},
-    ]
+export const CloneListControl = ({list, onAction, organization, sort, filter}) => {
+    if(!list) return null
+    const [listSort, setSort] = useState(sort || "updated")
+    const [listFilter, setFilter] = useState(filter || "")
+    const [sorted, setSorted] = useState()
 
-    if(logged_in){
-        var sorts = local_sort_algos.concat(remote_sort_algos)
+    useEffect(() => {
+        if(listSort && list){
+            let filt = _filter_list(list, listFilter)
+            setSorted(_sort_list(filt, listSort))
+        }
+    }, [listSort, listFilter])
+
+    useEffect(() => {
+        let filt = _filter_list(list, listFilter)
+        if(listSort){
+            setSorted(_sort_list(filt, listSort))
+        }
+        else {
+            setSorted(list)
+        }
+    }, [list])
+
+    function callSort(nsort){
+        setSort(nsort.value)
     }
-    else {
-        var sorts = local_sort_algos
+
+    if(!sorted) return null
+    let show_header = list.length > 20;
+
+    return (<>
+        {show_header &&
+            <div className='db-list-filter-bar'>
+                <ListSorter sort={listSort} onChange={callSort}  organization={organization}  />
+            </div>
+        }
+        <CloneList list={sorted} onAction={onAction}/>
+  </>)
+}
+
+export const ListFilter = ({filter, onChange, organization}) => {
+    if(organization == "invitations") return <InvitationFilter filter={filter} onChange={onChange}/>
+    let filters = [
+        {value: "", label: "Show all"},
+        {value: "public", label: "Public Databases"},
+        {value: "private", label: "Private Databases"},
+        {value: "local", label: "Databases I have locally"},
+        {value: "hub", label: "Databases I don't have locally"},
+        {value: "unsynched", label: "Need Synchronisation"}
+    ]
+
+    let ph = ""
+    for(var i = 0; i<filters.length; i++){
+        if(filters[i].value == filter) ph += filters[i].label
+    }
+
+    return (
+        <Select
+            options={filters}
+            placeholder = {ph}
+            defaultValue= {filter}
+            onChange={onChange}
+        />
+    )
+}
+
+export const InvitationFilter = ({filter, onChange, organization}) => {
+    let filters = [
+        {value: "", label: "Pending Invitations"},
+        {value: "accepted", label: "Accepted Invitations"},
+        {value: "rejected", label: "Rejected Invitations"},
+    ]
+    let ph = ""
+    for(var i = 0; i<filters.length; i++){
+        if(filters[i].value == filter) ph += filters[i].label
     }
     return (
-        <Select 
-            options={sorts}
-            placeholder = "Sort Listings"
-            defaultValue= {sort}
-            onChange ={onChange}
+        <Select
+            options={filters}
+            placeholder = {ph}
+            defaultValue= {filter}
+            onChange={onChange}
         />)
 }
 
@@ -346,19 +480,19 @@ function _filter_list(unfiltered, filter){
     if(filter == ""){
         filtf = function(){return true}
     }
-    if(filter == "remote"){
+    if(filter == "hub"){
         filtf = function(dbrec){
-            if(dbrec.remote_record) return true
-            return false
+            if(dbrec.local_copies) return false
+            return true
         }
     }
     if(filter == "local"){
         filtf = function(dbrec){
-            if(dbrec.remote_record) return false
+            if(dbrec.local_copies) return true
             return true
         }
     }
-    if(filter == "missing"){
+    if(filter == "rejected"){
         filtf = function(dbrec){
             if(dbrec.id) return false
             return true
@@ -366,29 +500,25 @@ function _filter_list(unfiltered, filter){
     }
     if(filter == "unsynched"){
         filtf = function(dbrec){
-            if(!dbrec.remote_record) return false
             if(dbrec.ahead || dbrec.behind || dbrec.structure_mismatch) return true
             return false
         }
     }
-    if(filter == "recommended"){
+    if(filter == "accepted"){
         filtf = function(dbrec){
-            if(!dbrec.remote_record) return false
-            if(dbrec.invitation) return false
+            if(dbrec.invitation) return true
             return false
         }
     }
-    if(filter == "invitations"){
+    if(filter == "private"){
         filtf = function(dbrec){
-            if(!dbrec.remote_record) return false
-            if(dbrec.invitation) return true
+            if(dbrec.public) return false
             return false
         }
     }
     if(filter == "public"){
         filtf = function(dbrec){
             if(dbrec.public) return true
-            if(dbrec.remote_record && dbrec.remote_record.public) return true
             return false
         }
     }
@@ -400,18 +530,47 @@ function _filter_list(unfiltered, filter){
     }
 }
 
+export const ListSorter = ({sort, onChange}) => {
+    sort = sort || "updated"
+    let sort_algos = [
+        {value: "updated", label: "Most Recently Updated First"},
+        {value: "oldest", label: "Least Recently Updated First"},
+        {value: "created", label: "Newest Database First"},
+        {value: "name", label: "Database Name (a-z)"},
+        {value: "organization", label: "Publisher"},
+    ]
+
+    let ph = ""
+    for(var i = 0; i<sort_algos.length; i++){
+        if(sort_algos[i].value == sort) ph += sort_algos[i].label
+    }
+
+    return (
+        <Select
+            className="dblist-filter"
+            options={sort_algos}
+            placeholder = {ph}
+            defaultValue= {sort}
+            onChange ={onChange}
+        />)
+}
+
+function _sort_str(a, b){
+    if(a && b){
+        if(a.toLowerCase() < b.toLowerCase()) { return -1; }
+        if(a.toLowerCase() > b.toLowerCase()) { return 1; }
+    }
+    if(a) return 1
+    if(b) return -1
+    return 0;
+}
+
 function _sort_list(unsorted, listSort){
     let sortf
     if(listSort == 'updated'){
         sortf = function(a, b){
             var lts = a.updated || 0
             var rts = b.updated || 0
-            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated 
-            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated 
-            if(rts == lts){
-                lts = a.updated || 0
-                rts = b.updated || 0
-            }
             return (rts - lts)
         }
     }
@@ -419,25 +578,7 @@ function _sort_list(unsorted, listSort){
         sortf = function(a, b){
             var lts = a.updated || 0
             var rts = b.updated || 0
-            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated 
-            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated 
             return lts - rts
-        }
-    }
-    else if(listSort == 'updated local'){
-        sortf = function(a, b){
-            var lts = (a.id ? (a.updated || 0) : 0)
-            var rts = (b.id ? (b.updated || 0) : 0)
-            return rts - lts 
-        }
-    }
-    else if(listSort == 'updated remote'){
-        sortf = function(a, b){
-            if(a.remote_record && b.remote_record){
-                var lts = a.remote_record.updated || 0                
-                var rts = b.remote_record.updated || 0                
-                return rts - lts
-            }
         }
     }
     else if(listSort == 'created'){
@@ -447,27 +588,14 @@ function _sort_list(unsorted, listSort){
             return rts - lts
         }
     }
-    else if(listSort == 'size'){
-        sortf = function(a, b){
-            var lts = a.size || 0
-            var rts = b.size || 0
-            return rts - lts
-        }
-    }
     else if(listSort == 'organization'){
         sortf = function(a, b){
-            if(a.remote_record && b.remote_record){
-                return b.remote_record.organization_label - b.remote_record.organization_label
-            }
+            return b.organization - b.organization
         }
     }
     else if(listSort == 'name'){
         sortf = function(a, b){
-            if(a.label && b.label){
-                if(a.label.toLowerCase() < b.label.toLowerCase()) { return -1; }
-                if(a.label.toLowerCase() > b.label.toLowerCase()) { return 1; }
-                return 0;
-            }
+            return _sort_str(a.label, b.label)
         }
     }
     if(sortf){
@@ -494,8 +622,7 @@ function _invite_to_card(inv, srvr){
     nlocal.remote_url = srvr + inv.organization + "/" + inv.id
     nlocal.actions = ['clone']
     return nlocal
-}    
-
+}
 
 function _copy_db_card(card){
     let ncard = {}
@@ -504,15 +631,15 @@ function _copy_db_card(card){
             ncard[k] = []
             for(var i = 0; i<card[k].length; i++){
                 if(typeof card[k][i] == "object"){
-                    ncard[k].push(_copy_db_card(card[k][i]))   
+                    ncard[k].push(_copy_db_card(card[k][i]))
                 }
                 else {
                     ncard[k].push(card[k][i])
-                }                
+                }
             }
         }
         else if(typeof card[k] == "object"){
-            ncard[k] = _copy_db_card(card[k])   
+            ncard[k] = _copy_db_card(card[k])
         }
         else {
             ncard[k] = card[k]
@@ -521,5 +648,900 @@ function _copy_db_card(card){
     return ncard
 }
 
+export const CloneList = ({list, onAction}) => {
+    if(!list.length){
+        return (
+            <Row className="generic-message-holder">
+                <EmptyResult report={{}} />
+            </Row>
+        )
+    }
+    return (
+        <Container fluid>
+            {list.map((value, index) => {
+                return (<CloneSummaryCard key={"sum_" + index} meta={value} onAction={onAction}/>)
+            })}
+        </Container>
+    )
+}
+
+export const HubDBCard = ({meta, onAction}) => {
+    let [mode, setMode] = useState()
+
+    function showSubscreen(ss){
+        setMode(ss)
+    }
+
+    function onEditSuccess(){
+        meta.action = "load"
+        onAction(meta)
+        setMode()
+    }
+
+    function onFork(doc){
+        setMode()
+        onAction(doc)
+    }
+
+    function onCancel(){
+        setMode()
+    }
+
+    return (<>
+        <Row key='r7' className='database-summary-listing database-listing-line'>
+            <CloneImagePanel meta={meta} />
+            <span className='database-main-content'>
+                <Row key='r3'>
+                    <HubTitle meta={meta} onAction={onAction}/>
+                </Row>
+                <HubCredits meta={meta} onAction={onAction}/>
+                <HubDescription meta={meta} />
+            </span>
+            <span className='database-main-actions'>
+                <HubStatus meta={meta} onAction={showSubscreen}/>
+            </span>
+        </Row>
+        <Row key="r88" className='hubdb-main-screen' />
+        {(mode == "clone") &&
+             <HubClonePage meta={meta} onAction={onAction} onCancel={onCancel}/>
+        }
+        {(mode == "fork") &&
+             <HubForkPage meta={meta} onAction={onFork} onCancel={onCancel}/>
+        }
+        {(mode == "delete") &&
+            <DeleteHubDB meta={meta} />
+        }
+        {(mode == "edit") &&
+            <EditHubPage meta={meta} onSuccess={onEditSuccess}/>
+        }
+    </>)
+}
+
+export const HubForkPage = ({meta, onAction}) => {
+    const {bffClient, remoteClient } = WOQLClientObj()
+    let u = bffClient.user()
+    let smeta = {}
+    for(var k in meta){
+        smeta[k] = meta[k]
+    }
+    let o = u.organizations[0]
+    for(var k in o){
+        smeta[k] = o[k]
+    }
+    smeta.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
+
+    function doSubmit(doc){
+        doc.action = "fork"
+        doc.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
+        doc.remote_record = meta
+        onAction(doc)
+    }
+
+    return (<DBCreateCard start={smeta} onSubmit={doSubmit} organizations={u.organizations} databases={bffClient.databases()}  type="fork" />)
+}
+
+export const HubClonePage = ({meta, onAction, onCancel}) => {
+    const {remoteClient, woqlClient } = WOQLClientObj()
+    function onClone(cln){
+        cln.action = "clone"
+        cln.remote_url = remoteClient.server() + meta.organization + "/" + meta.id
+        cln.remote_record = meta
+        onAction(cln)
+    }
+    return <CloneLocal onClone={onClone} onCancel={onCancel} meta={meta} woqlClient={woqlClient} type="hub"/>
+}
+
+
+
+export const EditHubPage = ({meta, onSuccess}) => {
+    const {bffClient} = WOQLClientObj()
+    const {getTokenSilently} = useAuth0()
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState()
+
+    if(!bffClient) return null
+    let databases = bffClient.databases()
+    let excludes = []
+    databases.map((item) => {
+        if(item.id != meta.id || item.organization != meta.organization){
+            excludes.push(item)
+        }
+    })
+
+    let u = bffClient.user()
+    let smeta = {}
+    for(var k in meta){
+        smeta[k] = meta[k]
+    }
+    let o = u.organizations[0]
+    for(var k in o){
+        smeta[k] = o[k]
+    }
+    smeta.label = smeta.label || ""
+    smeta.comment = smeta.comment || ""
+    smeta.icon = smeta.icon || ""
+
+    function doSubmit(doc){
+        let sub = {action: "edit"}
+        sub.id = meta.id
+        sub.organization = meta.organization
+        sub.label = doc.label
+        sub.comment = doc.comment
+        sub.icon = doc.icon
+        if(meta.public && !doc.public){
+            sub.make_private = true;
+            sub.public = false
+        }
+        else if(doc.public && !meta.public){
+            sub.make_public = true
+            sub.public = false
+        }
+        setLoading(true)
+        UpdateDatabase(sub, bffClient, getTokenSilently)
+        .then(() => {
+            onSuccess(sub)
+        })
+        .catch((e) => {
+            setReport({message: "Update failed", status:TERMINUS_ERROR, error: e})
+        })
+        .finally(() => setLoading(false))
+    }
+
+    return (
+        <div>
+            {loading && <Loading />}
+            {report &&
+                <TerminusDBSpeaks report={report} />
+            }
+            <DBCreateCard
+                start={smeta}
+                organizations={u.organizations}
+                onSubmit={doSubmit}
+                databases={excludes}
+                type="edit"
+            />
+        </div>
+
+    )
+}
+
+export const HubTitle = ({meta, onAction}) => {
+    let str = meta.label || '['+ meta.id+']'
+    return (
+        <span>
+            <span className='database-listing-title-row'>
+                <span key='a' className="database-listing-title-nolink">{str}</span>
+            </span>
+        </span>
+    )
+}
+
+export const HubDBImage = ({meta, onAction}) => {
+    let icon = meta.icon
+    if(!icon) icon = HUBDB
+    let vi = validURL(icon)
+    if(vi){
+        return (
+            <img className='db-home-listing-image' src={icon}/>
+        )
+    }
+    else {
+        return (
+            <i className={'hub-listing-icon ' + icon} />
+        )
+    }
+}
+
+export const HubCredits = ({meta, onAction}) => {
+    return (<>
+        <div className="dbcard-creditline">
+            <CloneProductionCredits  key='ac' meta={meta} onAction={onAction}/>
+            <CloneRoleCredits key='ade' meta={meta} />
+            <DBPrivacy key='ad' meta={meta} />
+            <DBBranches key='abc' meta={meta} type="full"/>
+            <DBSchema key='dbfe' meta={meta}/>
+            {!meta.created &&
+                <DBEmpty />
+            }
+        </div>
+        <div className="dbcard-sub-creditline">
+            {meta.created &&
+                <DBCreated ts={meta.created} type="full" />
+            }
+            {meta.updated &&
+                <DBLastCommit meta={meta} />
+            }
+        </div>
+    </>
+    )
+}
+
+export const DBEmpty = ({meta}) => {
+    return (
+        <span title={"This is an empty database"}>
+            <AiOutlineInbox className="db_info_icon_spacing"/>
+            <span className="db_info">Empty</span>
+        </span>
+    )
+}
+
+export const HubDescription = ({meta}) => {
+    if(meta.comment){
+        return (
+            <p key='z' className='database-listing-description-full'>
+                {meta.comment}
+            </p>
+        )
+    }
+    return null
+}
+
+export const DBSchema = ({meta}) => {
+    if(meta.schema){
+        return (
+            <span className="db-card-credit schema-credit-holder">
+                <AiOutlineSchedule title="Database has Schema" className="db_info_icon_spacing"/>
+                <span className="db_info">
+                    Schema
+                </span>
+            </span>
+        )
+    }
+    return (
+        <span className="db-card-credit schema-credit-holder">
+            <AiOutlineThunderbolt title="Schema Free Database" className="db_info_icon_spacing"/>
+            <span className="db_info">
+                Schema Free
+            </span>
+        </span>
+    )
+}
+
+export const CloneSummaryCard = ({meta, onAction}) => {
+    return (
+        <Row key='r7' className='database-summary-listing database-listing-line'>
+            <CloneImagePanel meta={meta} onAction={onAction} />
+            <span className='database-main-content'>
+                <Row key='r3'>
+                    <CloneTitle meta={meta} onAction={onAction}/>
+                </Row>
+                <CloneCredits meta={meta} onAction={onAction}/>
+                <CloneDescription meta={meta} />
+                {meta.invitation_id &&
+                    <Row key='r9'>
+                        <DBInvite meta={meta}/>
+                    </Row>
+                }
+            </span>
+            <span className='database-main-actions'>
+                <CloneStatus meta={meta} onAction={onAction}/>
+            </span>
+        </Row>
+    )
+}
+
+export const CloneImagePanel = ({meta, onAction}) => {
+    let icon = meta.icon
+    let goDB = onAction ? function(){
+        meta.action = "load"
+        onAction(meta)
+        goHubPage(meta.organization, meta.id)
+    } : undefined
+
+    let clickcss = onAction ? " clickable-image-panel" : ""
+
+    if(!icon) icon = HUBDB
+    let title = `Database ${meta.id} in organization ${meta.organization}`
+    let vi = validURL(icon)
+    return (
+        <span title={title} className={'dbcard-control-panel' + clickcss} onClick={goDB} >
+        {vi &&
+            <img className='dbcard-image' src={icon}/>
+        }
+        {!vi &&
+            <i className={'dbcard-icon ' + icon} />
+        }
+        </span>
+    )
+}
+
+export const CloneTitle = ({meta, onAction}) => {
+
+    function goDB(){
+        meta.action = "load"
+        onAction(meta)
+        goHubPage(meta.organization, meta.id)
+    }
+
+    let title_css = "database-title-local"
+    let str = meta.label || '['+ meta.id+']'
+
+    return (
+        <span>
+            <span onClick={goDB} className='database-listing-title-row'>
+                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
+            </span>
+        </span>
+    )
+}
+
+export const CloneDescription = ({meta, user}) => {
+    let str = meta.comment || ""
+    let title = str;
+    if(str && str.length > 80){
+        str =  meta.comment.substring(76) + " ..."
+    }
+    if(str){
+        return (
+            <Row key='z' title={title} className='database-listing-description-row'>
+                <span className="database-listing-description">{str}</span>
+            </Row>
+        )
+    }
+    return null
+}
+
+export const DBInvite = ({meta, onAction}) => {
+    return (
+        <div className="database-listing-description-row">
+            <span>
+                <BsFillEnvelopeFill className="invitation_info_icon_spacing"/>
+                <span className="db_info"><span className="invite-user">{meta.inviter}</span> has invited you to collaborate on this database: "{meta.invitation}"</span>
+            </span>
+        </div>
+    )
+}
+
+export const CloneCredits = ({meta, onAction}) => {
+    let res = []
+    res.push (
+        <CloneProductionCredits  key='ac' meta={meta} onAction={onAction}/>
+    )
+    res.push(
+        <DBPrivacy key='ad' meta={meta} />
+    )
+    res.push(
+        <CloneRoleCredits key='ade' meta={meta} />
+    )
+    //res.push(<CloneURLCredit key="cuc" meta={meta} />)
+    if(meta && (meta.created || meta.updated)) {
+        res.push(<DBTimings key='dbt' meta={meta} />)
+    }
+    if(meta.branches && meta.branches.length > 1) {
+        res.push(
+            <DBBranches key='abc' meta={meta} />
+        )
+    }
+    return (
+        <div className="database-listing-title-row">
+            {res}
+        </div>
+    )
+}
+
+export const CloneURLCredit = ({meta}) => {
+    const { remoteClient } = WOQLClientObj()
+    let url = remoteClient.server() + meta.organization + "/" + meta.id
+    return(<span className="db-card-credit">
+        <AiOutlineLink className="db_info_icon_spacing"/>
+        <span className="db_info db-card-url">{url}</span>
+    </span>)
+}
+
+export const DBBranches = ({meta, type}) => {
+    type = type || "summary"
+    let word = (meta.branches && meta.branches.length == 1 ? "branch" : "branches")
+    if(meta.branches && meta.branches.length > 1) {
+        let text = meta.branches.length + (type == "full" ? " " + word : "")
+        return (
+            <span className="db-card-credit" title={meta.branches.length + " " + word}>
+                <AiOutlineBranches className="db_info_icon_spacing"/>
+                <span className="db_info">
+                    {text}
+                </span>
+            </span>
+        )
+    }
+    return false
+}
+
+export const DBPrivacy = ({meta}) => {
+    if(meta.public) {
+        return (
+            <span className="db-card-credit">
+                <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
+                <span className="db_info">Public</span>
+            </span>
+        )
+    }
+    else {
+        return (
+            <span className="db-card-credit" >
+                <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+                <span className="db_info">Private</span>
+            </span>
+        )
+    }
+}
+
+export const CloneRoleCredits = ({meta}) => {
+    let rs = []
+    function _get_role_title(id, orgtype){
+        let map = {
+            "create": "Owner",
+            "manage": "Manager",
+            "write": "Contributor",
+            "read": "Reader",
+            "monitor": "Monitor"
+        }
+        return map[id] || "?"
+    }
+
+    if(meta.roles){
+        for(var i = 0 ; i<meta.roles.length; i++){
+            rs.push(_get_role_title(meta.roles[i]))
+        }
+    }
+    if(meta.public && rs.length == 0) return null;
+    if(rs.length >= 1){
+        return (
+            <span className="db-card-credit" >
+                <AiFillCrown title="Database Roles" className="db_info_icon_spacing"/>
+                <span className="db_info">{rs}</span>
+            </span>
+        )
+    }
+    return (
+        <span className="db-card-credit" >
+            <AiFillLock title="No Access" className="db_info_icon_spacing"/>
+            <span className="db_info">No Access</span>
+        </span>
+    )
+}
+
+export const DBTimings = ({meta}) => {
+    let parts = []
+    function updateStamp(ts){
+        let lab = moment(ts*1000).startOf('hour').fromNow()
+        return lab
+    }
+
+    if(meta.created && meta.updated && (meta.created == meta.updated)){
+        let cts = updateStamp(meta.created, true)
+        parts.push(<DBCreated key='xss' display={cts} ts={meta.created}/>)
+    }
+    else {
+        if(meta.created){
+            let cats = updateStamp(meta.created, !meta.updated)
+            parts.push(<DBCreated key='ds' display={cats} ts={meta.created} />)
+        }
+        if(meta.updated){
+            let uts = updateStamp(meta.updated, true)
+            if(meta.author) uts += " by " + meta.author
+            parts.push(<DBUpdated key='dbu' author={meta.author} display={uts} ts={meta.updated}/>)
+        }
+    }
+    return parts
+}
+
+export const DBCreated = ({display, ts, author}) => {
+    if(!ts) return null
+    let ct = "First Commit " + printts(ts, DATETIME_DB_UPDATED)
+    if(author) ct += " by " + author
+    return (
+        <span className="db-card-credit" title={ct}>
+            <AiOutlineBell className="db_info_icon_spacing"/>
+            {display &&
+                <span className="db_info">{display}</span>
+            }
+            {!display &&
+                <span className="db_info">
+                    <span className="db-card-label">First Commit </span>
+                    <span className="db-card-date">{printts(ts, DATETIME_DB_UPDATED)}</span>
+                    {author &&
+                        <span className="db-card-author">
+                            <span className="db-card-label"> by </span>
+                            <span className="db-card-email">{author}</span>
+                        </span>
+                    }
+                </span>
+            }
+        </span>
+    )
+}
+
+export const CloneProductionCredits = ({meta, onAction, type}) => {
+    var tit = (meta.organization_type ? meta.organization_type + " Organization " + meta.organization : "")
+    let txt = meta.organization_label || meta.organization
+    if(type == "full") txt += " " + tit
+    function goDB(){
+        if(onAction) onAction({action: "load", organization: meta.organization})
+        else goHubPage(meta.organization)
+    }
+    let icon = (meta.organization_icon ? (<img className="database-listing-organization-icon" src={meta.organization_icon}></img>) : "")
+
+    return (
+        <span className="db-card-credit hub-organization-link" title={tit} onClick={goDB}>
+            <AiOutlineUser className="db_info_icon_spacing"/>
+            <span className="db_info">
+                <span className="db-card-label">
+                    Publisher
+                </span> {icon} <span className="db-card-orgname">{txt}</span>
+            </span>
+        </span>
+    )
+}
+
+export const DBUpdated = ({display, ts, author}) => {
+    if(!ts) return null
+    let ct = "Most Recent Commit " + printts(ts, DATETIME_DB_UPDATED)
+    if(author) ct += " by " + author
+    return (
+        <span className="db-card-credit" title={ct}>
+            <AiFillEdit className="db_info_icon_spacing"/>
+            {display &&
+                <span className="db_info">{display}</span>
+            }
+            {!display &&
+                <span className="db_info">
+                    <span className="db-card-label">Most Recent Commit </span>
+                    <span className="db-card-date">{printts(ts, DATETIME_DB_UPDATED)}</span>
+                    {author &&
+                        <span className="db-card-author">
+                            <span className="db-card-label"> by </span>
+                            <span className="db-card-email">{author}</span>
+                        </span>
+                    }
+                </span>
+            }
+        </span>
+    )
+}
+
+export const DBLastCommit = ({meta}) => {
+    let ts = meta.updated
+    if(!ts) return null
+    let onb = []
+    if(meta.branches && meta.branches.length > 1){
+        meta.branches.map((item) => {
+            if(item.updated == meta.updated) onb.push(item.branch)
+        })
+    }
+
+    let brtxt = ""
+    if(onb.length == 1) {
+        brtxt = (
+            <span>
+                <span className="db-card-label"> on branch </span>
+                {onb[0]}
+            </span>
+        )
+    }
+    else if(onb.length > 1){
+        let tit = "Branches " + onb.join(", ")
+        brtxt = (<span title={tit} className="db-card-label"> on {onb.length} branches</span>)
+    }
+
+    let ct = "Last Commit Timestamp: " + ts
+    if(meta.author) ct += " by " + meta.author
+    return (
+        <span className="db-card-credit" title={ct}>
+            <AiFillEdit className="db_info_icon_spacing"/>
+            <span className="db_info">
+                <span className="db-card-label">Most Recent Commit </span>
+                <span className="db-card-date">{printts(ts, DATETIME_DB_UPDATED)}</span>
+                {brtxt}
+                {meta.author &&
+                    <span className="db-card-author">
+                        <span className="db-card-label"> by </span>
+                        <span className="db-card-email">{meta.author}</span>
+                    </span>
+                }
+            </span>
+        </span>
+    )
+}
+
+
+export const HubStatus = ({meta, onAction}) => {
+
+    let doFork = function(){meta.action="fork", onAction("fork")}
+    let doDel = function(){meta.action="delete", onAction("delete")}
+    let doClone = function(){meta.action="clone", onAction("clone")}
+    let doEdit = function(){meta.action="edit", onAction("edit")}
+    let showmin = false;
+    if(meta && meta.roles && meta.roles.indexOf("create") != -1){
+        showmin = true
+    }
+
+    return (
+        <div className='database-action-column'>
+            {showmin &&
+                <div className="hub-minor-actions">
+                    <span className = 'hub-main-action' onClick={doEdit}>
+                        <EditControl meta={meta} />
+                    </span>
+                    <span onClick={doDel} className='hub-main-action'>
+                        <DeleteControl meta={meta} />
+                    </span>
+                </div>
+            }
+            {!showmin &&
+                <div className="hub-minor-actions">
+                </div>
+            }
+            <div className="hub-major-actions">
+                <span className = 'hub-major-action' onClick={doFork}>
+                    <ForkFullControl meta={meta} />
+                </span>
+                <span onClick={doClone} className='hub-major-action'>
+                    <CloneFullControl meta={meta} />
+                </span>
+            </div>
+        </div>
+    )
+}
+
+export const CloneStatus = ({meta, onAction}) => {
+    if(meta.invitation_id){
+        return (
+            <div className='database-action-column'>
+                <Row className='database-update-status'>
+                    <RemoteUpdated meta={meta} />
+                </Row>
+                <Row className='database-secondary-option'>
+                    <CloneSecondaryAction meta={meta} onAction={onAction}/>
+                </Row>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div className='database-action-column'>
+                <div className="hub-minor-actions">
+                </div>
+                <div className="hub-major-actions">
+                    <CloneMainAction meta={meta} onAction={onAction}/>
+                </div>
+            </div>
+        )
+    }
+}
+
+export const RemoteUpdated = ({meta}) => {
+    let css = "database-main-action-message action-text-color";
+    if(meta.invitation_id){
+        //return (<span className={css}>Accept Invitation?</span>)
+    }
+    return null
+}
+
+export const CloneMainAction = ({meta, onAction}) => {
+    const {remoteClient } = WOQLClientObj()
+    if(!remoteClient) return null
+    let rurl = remoteClient.server() + meta.organization + "/" + meta.id
+    let onc = function(){
+        let myc = {
+            id: meta.id,
+            label: meta.label,
+            comment: meta.comment,
+            remote_url: rurl,
+            remote_record: meta,
+            auto: true,
+        }
+        myc.action = "clone"
+        onAction(myc)
+    }
+    if(meta.public || meta.roles){
+        return (
+            <span className="database-clone-action" onClick={onc}>
+                <CloneControl meta={meta} />
+            </span>
+        )
+    }
+    return false
+}
+
+export const CloneSecondaryAction = ({meta, onAction}) => {
+
+    function myReject(){
+        meta.action = 'reject'
+        if(onAction) onAction(meta)
+    }
+
+    function myAccept(){
+        meta.action = 'accept'
+        if(onAction) onAction(meta)
+    }
+
+    if(meta.action == 'accept'){
+        return (
+            <div className="action-centralise">
+                <div>
+                    <span onClick={myAccept} className='invite-main-action'>
+                        <AcceptControl meta={meta} />
+                    </span>
+                    <span className = 'invite-main-action' onClick={myReject}>
+                        <RejectControl meta={meta} />
+                    </span>
+                </div>
+            </div>
+        )
+    }
+    return null
+}
+
+export const CloneControl = ({meta}) => {
+    return <AiOutlineCloudDownload className="hub-main-action-icon clone-main-action-icon" title="Clone this database now"/>
+}
+
+export const CloneFullControl = ({meta}) => {
+    return <span className="clone-full-action">
+        <span className="clone-full-title-bar">
+            <AiOutlineCloudDownload className="clone-full-icon" title="Clone Database"/>
+            <span className="clone-full-title">Clone</span>
+         </span>
+         <span className="clone-full-descr">download a local copy</span>
+    </span>
+}
+
+export const ForkFullControl = ({meta}) => {
+    return <span className="fork-full-action">
+        <span className="clone-full-title-bar">
+            <AiOutlineFork className="fork-full-icon" title="Fork Database"/>
+            <span className="fork-full-title">Fork</span>
+        </span>
+        <span className="fork-full-descr">copy to your hub account</span>
+    </span>
+}
+
+
+export const ForkControl = ({meta}) => {
+    return <AiOutlineFork  color={"#0055bb"}/>
+}
+
+export const RejectControl = ({meta}) => {
+    return (<span className="reject-action"  title="Reject Invitation">
+        <AiOutlineDelete  className='database-action database-listing-delete' /> Reject </span>)
+}
+
+export const AcceptControl = ({meta}) => {
+    return (<span title='Accept Invitation to collaborate on database' className="accept-action" >
+        <AiOutlineCheckCircle title={"Accept Invitation to collaborate on database"}/> Accept </span>)
+}
+
+export const DeleteControl = ({meta}) => {
+    return (
+        <span className="delete-hub-action"  title="Delete Hub Database">
+            <AiOutlineDelete color="#721c24" className='database-action database-listing-delete' /> Delete
+        </span>
+    )
+}
+
+export const EditControl = ({meta}) => {
+    return <span className="edit-hub-action" title="Edit Hub Database Details"><AiFillEdit className='database-action database-listing-edit' /> Edit</span>
+}
+
+export const DeleteHubDB = ({meta}) => {
+    const {woqlClient, bffClient, reconnectToServer} = WOQLClientObj()
+    const {getTokenSilently} = useAuth0()
+    const [rep, setReport] = useState()
+    const [modal, setModal] = useState(true)
+    const toggle = () => setModal(!modal)
+    const [disabled, setDisabled] = useState(true)
+    const [loading, setLoading] = useState()
+
+    function removeDBCard(dbid, orgid){
+        dbid = dbid ||  woqlClient.db()
+        orgid = orgid || woqlClient.organization()
+        let dbs =  woqlClient.databases()
+        let ndbs = []
+        for(var i = 0; i<dbs.length; i++){
+            if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
+                ndbs.push(dbs[i])
+            }
+            else if(dbs[i].remote_record) {
+                dbs[i].id = ""
+                dbs[i].type = "missing"
+                ndbs.push(dbs[i])
+            }
+        }
+        woqlClient.databases(ndbs)
+    }
+
+    const onDelete = () => {
+        setDisabled(true)
+        setLoading(true)
+        DeleteDB(meta, woqlClient, bffClient, getTokenSilently)
+        .then(() => {
+            setReport({
+                message: `Deleted Database ${meta.organization}/${meta.id}`,
+                status: TERMINUS_SUCCESS,
+            })
+            goHubPage(meta.organization)
+        })
+        .catch((err) => {
+            setDisabled(false)
+            console.log(err)
+            setReport({
+                error: err,
+                message: `Failed to Delete Database ${meta.organization}/${meta.id}`,
+                status: TERMINUS_ERROR,
+            })
+        })
+        .finally(() => {
+            setLoading(false)
+        })
+    }
+
+    function uip(e){
+        if(e && e.target){
+            setDisabled(e.target.value != meta.id)
+        }
+    }
+
+    let tbdel = meta.id
+
+    return (
+        <Modal isOpen={modal} toggle={toggle}>
+            {loading && <Loading />}
+            <ModalHeader toggle={toggle}>  <span className="modal-head">Confirm Database Delete</span> </ModalHeader>
+            <ModalBody>
+                <Row key="rd">
+                    <span className="delete-modal-atext"><AiOutlineWarning className="del-hub-warning" /> This will remove the database permanently from your hub account.
+                        Copies of the database, locally or on hub, will not be affected.
+                    </span>
+                </Row>
+                <Row key="rz">
+                    <span className="delete-modal-label">
+                        Enter database ID - <strong>{tbdel}</strong> - to confirm delete
+                    </span>
+                </Row>
+                <Row key="rr" className='del-hub-input'>
+                    {rep && <TerminusDBSpeaks report={rep} />}
+                    <input
+                        name="dbId"
+                        placeholder= "Enter ID"
+                        className = "tcf-input"
+                        onChange ={uip}
+                    />
+                </Row>
+            </ModalBody>
+            <ModalFooter>
+                <span className="delete-button">
+                    {disabled &&
+                        <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                    }
+                    {!disabled &&
+                        <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                            <AiOutlineDelete className="delete-button"/> Delete Database
+                        </button>
+                    }
+                </span>
+            </ModalFooter>
+        </Modal>
+    )
+}
 
 export default ClonePage
+

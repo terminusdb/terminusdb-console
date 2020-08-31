@@ -14,7 +14,7 @@ export const Login = (props) => {
 
     const toggle = () => setOpen(prevState => !prevState);
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
-    
+
     const onOutsideClick=()=>{
         if(isOpen===true){
             toggle(false)
@@ -30,9 +30,9 @@ export const Login = (props) => {
         logout({
             returnTo: redirect_uri//window.location.origin+'/console/'
     });
-    return (<Fragment>      
-            {!isAuthenticated && !user && 
-                <button id="login_button" className="tdb__button__base nav__main__login" onClick={ () => loginWithRedirect()}>
+    return (<Fragment>
+            {!isAuthenticated && !user &&
+                <button id="login_button" className="tdb__button__base tdb__button__base--green nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}
                 </button>
             }
@@ -42,24 +42,24 @@ export const Login = (props) => {
                         <button onClick={toggle} className="nav__main__profile__button"  aria-expanded="false">
                             <img src={user.picture}
                                 alt={PROFILE_PAGE_LABEL}
-                                className="nav__main__profile__img" 
+                                className="nav__main__profile__img"
                                 width="50"/>
-                        </button>               
+                        </button>
                         <div className={dropdownContent}>
                             <a  className="tdb__dropdown__button"
                                 href = {PROFILE_ROUTE}>
-                                <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}                 
+                                <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
                             </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"
                                 onClick={() => logoutWithRedirect()}
                                 to="#"
                                 exact>
-                                <FontAwesomeIcon icon={POWER_OFF} className="mr-3" />{LOGOUT_LABEL}                 
-                            </NavLink>                  
+                                <FontAwesomeIcon icon={POWER_OFF} className="mr-3" />{LOGOUT_LABEL}
+                            </NavLink>
                         </div>
                        </div>
                 </OutsideClickHandler>
-            }                 
-            </Fragment>       
+            }
+            </Fragment>
     )
 }

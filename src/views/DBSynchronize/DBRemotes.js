@@ -17,9 +17,11 @@ export const DBRemotes = ({woqlClient, meta, user, repos, branch, onDelete, onRe
             let rmeta = repos[rem]
             rmeta.type = _repo_categorize(rmeta.url)
             remotes.push(
-                <div className="dbremote-full-card">
+                <div 
+                    key={"abc_" + remotes.length} 
+                    className="dbremote-full-card"
+                >
                     <DBRemote
-                        key={"abc_" + remotes.length} 
                         repo={rmeta} 
                         user={user}
                         meta={meta} 

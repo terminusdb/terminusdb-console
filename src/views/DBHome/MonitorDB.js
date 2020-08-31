@@ -4,10 +4,8 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {DBFullCard} from './DBFullCard'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
 import {CommitLog} from "./CommitLog"
 import {ScopedDetails} from "./ScopedDetails"
-import { GiPlainCircle } from 'react-icons/gi';
 import { CloneLocal } from "../CreateDB/CloneDatabase"
 import { goDBHome } from '../../components/Router/ConsoleRouter'
 
@@ -85,8 +83,8 @@ export const MonitorDB = (props) => {
                 </Row>
             }
             {!cloning && <>
-                <Row key="rs">
-                    <ScopedDetails />
+                <Row className="scoped-details-row">
+                     <ScopedDetails />
                 </Row>
                 <Row key="rd">
                     <CommitLog />

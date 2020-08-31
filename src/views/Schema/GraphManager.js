@@ -22,7 +22,7 @@ import Select from "react-select";
 import { AiFillCloseCircle} from 'react-icons/ai';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {formatBytes} from "../DBHome/DBFullCard"
+import {formatBytes} from "../Server/DBList"
 
 
 export const GraphManager = (props) => {

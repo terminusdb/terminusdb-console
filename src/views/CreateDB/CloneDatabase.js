@@ -11,7 +11,7 @@ import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
 import { DBDetailsForm } from './DBDetails'
 import { CloneDB, NewLocalLabel, NewLocalID } from '../../components/Query/CollaborateAPI'
 
-export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
+export const CloneLocal = ({meta, woqlClient, onCancel, onClone, type}) => {
     const [loading, setLoading] = useState(false)
     let update_start = Date.now()
     let intro_message = "Cloning a local database creates an entirely new copy of the database, that can be changed independently, but remains connected to the original and can be synchronized"
@@ -43,16 +43,19 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
     }
 
     async function doClone(doc){
-        update_start = Date.now()
-        if(setLoading) setLoading(true)
-        doc.organization = woqlClient.user_organization()
-        doc.remote_url = woqlClient.connectionConfig.cloneableURL()
-        return CloneDB(doc, woqlClient, false, false, true)
-        .then((local_id) => {
-            afterClone(local_id, doc.organization, doc, getSuccessMessage(doc), Date.now()-update_start)
-        })
-        .catch((err) => setReport(getErrorReport(err, doc, update_start)))
-        .finally(() => setLoading(false))
+        if(!(type && type == "hub")){
+            update_start = Date.now()
+            if(setLoading) setLoading(true)
+            doc.organization = woqlClient.user_organization()
+            doc.remote_url = woqlClient.connectionConfig.cloneableURL()
+            return CloneDB(doc, woqlClient, false, false, true)
+            .then((local_id) => {
+                afterClone(local_id, doc.organization, doc, getSuccessMessage(doc), Date.now()-update_start)
+            })
+            .catch((err) => setReport(getErrorReport(err, doc, update_start)))
+            .finally(() => setLoading(false))
+        }
+        else onClone(doc)
     }
 
     function afterClone(id, organization, doc, message, update_start){
@@ -73,7 +76,6 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
 
     return (
         <div className="tdb__loading__parent">
-            {loading &&  <Loading type={TERMINUS_COMPONENT}/>}
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -90,10 +92,10 @@ export const CloneLocal = ({meta, woqlClient, onCancel, onClone}) => {
                     />
                 </span>
             )}
-            {starter && 
+            {starter &&
                 <DBDetailsForm buttons={buttons} onSubmit={doClone} from_local={starter} />
             }
+            {loading &&  <Loading type={TERMINUS_COMPONENT}/>}
         </div>
     )
 }
-

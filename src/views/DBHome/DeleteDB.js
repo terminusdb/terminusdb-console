@@ -3,27 +3,20 @@ import {Button, Row, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reac
 import {useForm} from 'react-hook-form'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {DELETE_ICON} from '../../constants/images'
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {goServerHome} from '../../components/Router/ConsoleRouter'
 import {DELETE_DB_MODAL} from './constants.dbhome'
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { AiOutlineDelete } from 'react-icons/ai';
 
-export const DeleteDB = (props) => {
+export const DeleteDB = ({meta}) => {
     const {register, handleSubmit, errors} = useForm()
     const {woqlClient, reconnectToServer} = WOQLClientObj()
     const [rep, setReport] = useState()
     const [modal, setModal] = useState()
     const toggle = () => setModal(!modal)
     const [disabled, setDisabled] = useState(false)
-
-    const [dbName,setDBName] = useState(null); 
-
-    const changeDBName=(evt)=>{
-        const name=evt.target.value;
-        setDBName(name)
-    }
+    const [deleteConfirm, setDeleteConfirm] = useState(false)
 
     function removeDBCard(dbid, orgid){
         dbid = dbid ||  woqlClient.db()
@@ -42,13 +35,8 @@ export const DeleteDB = (props) => {
         }
         woqlClient.databases(ndbs)
     }
-    //const onDelete = data => console.log(data);
-
-    const onSubmit = values => console.log(values);
 
     const onDelete = (data) => {
-        console.log(data);
-
         setDisabled(true)
         if (data.dbId && data.dbId == woqlClient.db()) {
         //if(dbName && dbName === woqlClient.db()){
@@ -82,18 +70,23 @@ export const DeleteDB = (props) => {
         }
     }
 
+    function uip(e){
+        if(e && e.target){
+            setDeleteConfirm(e.target.value == meta.id)
+        }
+    }
+
+
     return (
         <span className='delete-control' onClick={toggle}>
             <span className="db-action"  title="Delete Database">
                 <RiDeleteBin5Line color="#721c24" className='db-control' />
+                <span style={{color: "#721c24"}}> delete</span>
             </span>
             <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle}/>
+                <ModalHeader toggle={toggle}>  <span className="modal-head">Delete Local Database</span> </ModalHeader>
                 <form onSubmit={handleSubmit(onDelete)}>
                 <ModalBody>
-                    <Row key="re">
-                        <span className="modal-head">Delete Local Database?</span>
-                    </Row>
                     <Row key="rd">
                         <Col md={12} className="delete-modal-col-align">
                             <span className="delete-modal-text"> This action will remove your local database, but will be available remotely.
@@ -104,7 +97,7 @@ export const DeleteDB = (props) => {
                     <Row key="rr">
                         {rep && <TerminusDBSpeaks report={rep} />}
                             <div className="del-mod">
-                                
+
                                    {/* <Row key="rm" className="del-mod-row">
                                         <Col md={2}>
                                             <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
@@ -117,20 +110,36 @@ export const DeleteDB = (props) => {
                                     <input
                                         name="dbId"
                                         placeholder= {DELETE_DB_MODAL.placeholder}
-                                        className = "tcf-input"
+                                        className = "tcf-input tcf-inp-center"
+                                        onChange ={uip}
                                         ref={register({
                                           validate: (value) => value.length > 0
                                         })}
                                     />
-                              
+
                             </div>
                     </Row>
                 </ModalBody>
                 <ModalFooter>
-                    <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
-                        <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
-                        {DELETE_DB_MODAL.confirm}
-                    </button>
+                    {/*<span className="delete-button">
+                        <button type="submit" className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                            <AiOutlineDelete className="delete-modal-icon"/>
+                            {DELETE_DB_MODAL.confirmLocal}
+                        </button>
+                        <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                    </span>*/}
+
+                    <span className="delete-button">
+                        {!deleteConfirm &&
+                            <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                        }
+                        {deleteConfirm &&
+                            <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                                <AiOutlineDelete className="delete-modal-icon"/> {DELETE_DB_MODAL.confirmLocal}
+                            </button>
+                        }
+                    </span>
+
                 </ModalFooter>
                 </form>
             </Modal>

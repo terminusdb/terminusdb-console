@@ -24,7 +24,6 @@ export const Synchronize = () => {
     const [report, setReport] = useState()
     const [operation, setOperation] = useState()
     const [meta, setMeta] = useState()
-    //let meta = woqlClient.get_database()
     let user = woqlClient.user()   
 
     useEffect(() => {

@@ -12,12 +12,8 @@ export const DeleteControl = ({repo, onDelete}) => {
     return (<span className='delete-control' onClick={toggle}>
         <DeleteWidget repo={repo} />
         <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}/>
+            <ModalHeader toggle={toggle}> <span className="modal-head">Delete Remote</span> </ModalHeader>
             <ModalBody>
-
-                <Row key="re">
-                    <span className="modal-head">Delete Remote Database?</span>
-                </Row>
                 <Row key="rd">
                     <Col md={12} className="delete-modal-col-align">
                         <span className="delete-modal-text">
@@ -27,28 +23,15 @@ export const DeleteControl = ({repo, onDelete}) => {
                 </Row>
             </ModalBody>
             <ModalFooter>
-                <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
-                    <AiOutlineDelete color="#dc3545" className="delete-modal-icon"/>
-                    {DELETE_DB_MODAL.confirm}
-                </button>
+                <span className="delete-button">
+                    <button className="tdb__button__base tdb__button__base--bred delete-modal-button"  onClick={onDelete}>
+                        <AiOutlineDelete className="delete-modal-icon"/>
+                        {DELETE_DB_MODAL.confirmRemote}
+                    </button>
+                    <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
+                </span>
             </ModalFooter>
         </Modal>
-        {/*<Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}></ModalHeader>
-            <ModalBody className="delete-modal-body">
-                <Row>
-                    <Col md={2}>
-                        <RiErrorWarningLine color="#ff9800" className="delete-modal-icon"/>
-                    </Col>
-                    <Col md={10} className="delete-modal-col-align">
-                        <span className="warning-modal-text">This action will remove the connection to the remote database - it will not effect your local database, but you will no longer be able to push and pull updates. </span>
-                    </Col>
-                </Row>
-            </ModalBody>
-            <ModalFooter>
-            <button className="tdb__button__base tdb__button__base--bred"  onClick={onDelete}>Delete</button>
-            </ModalFooter>
-        </Modal>*/}
     </span>)
 }
 

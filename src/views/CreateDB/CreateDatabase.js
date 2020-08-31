@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
     TERMINUS_SUCCESS,
-    TERMINUS_INFO,
     TERMINUS_ERROR,
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
@@ -15,10 +13,9 @@ import { goDBHome } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Row, Col, Button } from "reactstrap"
+import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
-import {DBCreateHeader, DBLocalCreateHeader, DBCreateCard, DBShareHeader} from "./DBCreateCard"
-import { RiMapPinRangeLine } from 'react-icons/ri'
+import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineRead } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
@@ -85,7 +82,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, lid)))
         .finally(() => setLoading(false))
     }
-
 
     async function createRemote(doc, update_start) {
         setLoading(true)
@@ -159,8 +155,9 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     if(type && type == "share"){
         return (
             <div className="tdb__loading__parent">
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-                <DBShareHeader />
+                <Row className="remote-info share-on-hub-title">
+                    <DBShareHeader />
+                </Row>
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />
@@ -169,15 +166,10 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                 {
                     <DBShareForm starter={from_local} onSubmit={shareLocal} />
                 }
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
-
-
-
-
-   /* <input className="create-db-button active"><RiMapPinRangeLine color="#0055bb" className="tab_icon_info"/>Local database</button> */
-
 
     let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
     let allow_remote = (user.logged_in || from_local)
@@ -209,17 +201,15 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
 
     return (
         <div className="tdb__loading__parent">
-
             <div className="create-section">
-                <Row>
-                    <Col md={6}>
+                {allow_remote && <Row>
+                    <Col md={6} className="create-db-select" onClick={handleLocal} active>
                         <Row key="rr">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_LOCALLY}
                                     name={CREATE_DATABASE_LOCALLY}
                                     value={CREATE_DATABASE_LOCALLY}
-                                    checked={localCreate}
-                                    onClick={handleLocal}/>
+                                    checked={localCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
                             </span>
                         </Row>
@@ -230,15 +220,15 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                             </span>
                         </Row>
                     </Col>
-                    {allow_remote && <Col md={6}>
+                    <Col md={6} className="create-db-select" onClick={handleHub}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
                                     name={CREATE_DATABASE_HUB}
                                     value={CREATE_DATABASE_HUB}
-                                    checked={hubCreate}
-                                    onClick={handleHub}/>
+                                    checked={hubCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
+                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
                         <Row key="rm">
@@ -247,40 +237,23 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                 <span className="database-listing-description ">{remote_text}</span>
                             </span>
                         </Row>
-                    </Col>}
-                </Row>
+                    </Col>
+                </Row>}
             </div>
 
             <div className="pretty-form">
 
-                {local && <div className="create-place-badge local-badge">
+                {local && allow_remote && <div className="create-place-badge local-badge">
                     Create a Local Database
                 </div>}
-                {local && <div className="create-place-badge-img">
-                    <img src="https://assets.terminusdb.com/terminusdb-console/images/horizontal_lockup%20-%20Newsletter%20(1100x220).png" title="Terminus DB logo"/>
-                </div>}
-                {!local && <div className="create-place-badge remote-badge">
+                {!local && allow_remote && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
                 </div>}
-                {!local && <div className="create-place-badge-hub-img">
-                    <img src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                </div>}
-
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-
-                {/*(allow_remote && !show_fancy) &&
-                    <DBCreateHeader local={local} toggle={toggleLocal}/>
-                */}
-                {/*(!allow_remote && !show_fancy) &&
-                    <DBLocalCreateHeader />
-                */}
-
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />
                     }
                 </Row>
-
                 <Row>
                     {local &&
                         <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
@@ -290,6 +263,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                     }
                 </Row>
             </div>
+             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         </div>
     )
 }

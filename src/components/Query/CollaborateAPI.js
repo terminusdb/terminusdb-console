@@ -40,26 +40,20 @@ export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
-    let rmeta = meta
     meta.fork = true
-    meta.id = _new_remote_id(meta.id, meta.organization, remoteClient.databases())
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
-    .then((resp) => {
-        if(resp.url) rmeta.remote_url = resp.url
-        if(!rmeta.organization_roles) rmeta.organization_roles = ['create'] 
-        return CloneDB(rmeta, client, getTokenSilently)
-    })
 }
 
 export const isLocalURL = function(lurl, client){
     return _is_local_server(client, lurl)
 }
 
-export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {  
+export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => { 
+    let dewun = (meta.remote_record ? meta.remote_record : meta) 
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    return remoteClient.deleteDatabase(meta.remote_record.id, meta.remote_record.organization)
+    return remoteClient.deleteDatabase(dewun.id, dewun.organization)
 }
 
 
@@ -125,29 +119,29 @@ export const RejectInvite = async (meta, client, remoteClient, getTokenSilently)
 
 export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
     let WOQL = TerminusClient.WOQL
-    let remote_name = "origin"
+    let remote_name = meta.remote || "origin"
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
     if(meta.schema) delete meta['schema']
-    meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
-    return remoteClient.createDatabase(meta.id, meta, meta.organization)
-    .then((resp) => { 
-        let rem = resp.url || meta.remote_url
-        let push_to = {
-            remote: remote_name,
-            remote_branch: "main",
-            message: "publishing db content to hub via console",
-        }
-        let using = client.organization() + "/" + client.db() + "/_meta"
-        let q = WOQL.lib().add_remote(using, rem, "origin")       
-        return client.query(q, "Setting remote for sharing database on Terminus Hub")
-        .then(() => {
-            return client.fetch(push_to.remote).then(() => {
-                client.push(push_to)
-            })
-        })
+    //meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
+    let resp = await remoteClient.createDatabase(meta.id, meta, meta.organization)
+    console.log(resp, " is the response")
+    let rem = meta.remote_url
+    let using = client.user_organization() + "/" + client.db() + "/_meta"
+    let q = WOQL.lib().add_remote(using, rem, remote_name)       
+    let uprepo = await client.query(q, "Setting remote for sharing database on Terminus Hub")
+    let push_to = {
+        remote: remote_name,
+        remote_branch: "main",
+        message: "publishing db content to hub with console",
+    }
+    const jwtoken2 = await getTokenSilently()
+    let ncreds = {type: "jwt", key: jwtoken2}
+    client.remote_auth(ncreds)
+    return client.fetch(push_to.remote).then(() => {
+        client.push(push_to)
     })
 }
 
@@ -187,6 +181,14 @@ export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) =
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     return remoteClient.updateOrganization(meta.id, meta)    
+}
+
+
+export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {  
+    const jwtoken = await getTokenSilently()
+    let creds = {type: "jwt", key: jwtoken}
+    remoteClient.local_auth(creds)
+    return remoteClient.updateDatabase(meta)    
 }
 
 

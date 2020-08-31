@@ -104,21 +104,21 @@ export const DescribeDifferences = ({a, b}) => {
             else if(remote_onlies.length > 1){
                 str+= ` ${remote_onlies.length} branches only exist on remote. `
             }
-            comps.push(<DBUnsynchCredits key="db5" text={str} />)
+            comps.push(<DBUnsynchCredits key="dbg5" text={str} />)
         }
         if(local_ahead.length + remote_ahead.length + synchs.length > 0){
             if(local_ahead.length + remote_ahead.length > 0){
                 if(local_ahead.length == 1){
                     let txt = `local branch ${local_ahead[0]} ahead of remote`
-                    comps.push(<DBUnsynchCredits key="db6" text={txt} />)
+                    comps.push(<DBUnsynchCredits key="dbh6" text={txt} />)
                 }
                 else if(local_ahead.length > 1) {
                     let txt = `${local_ahead.length} local branches ahead of remote`
-                    comps.push(<DBUnsynchCredits key="db7" text={txt} />)
+                    comps.push(<DBUnsynchCredits key="dby7" text={txt} />)
                 }
                 if(remote_ahead.length == 1){
                     let txt = `remote branch ${remote_ahead[0]} ahead of local`
-                    comps.push(<DBUnsynchCredits text={txt} />)
+                    comps.push(<DBUnsynchCredits key="fre" text={txt} />)
                 }
                 else if(remote_ahead.length > 1) {
                     let txt = `${remote_ahead.length} remote branches ahead of local`
@@ -146,7 +146,7 @@ export const DescribeDifferences = ({a, b}) => {
 
 export const DBSynchCredits = ({text}) => {
     return (
-        <span>
+        <span className="db-card-credit">
             <AiOutlineCheckCircle title="Synchronized" className="db_info_icon_spacing"/>
             <span className="db_info">{text}</span>
         </span>
@@ -155,7 +155,7 @@ export const DBSynchCredits = ({text}) => {
 
 export const DBBranchCredits = ({text}) => {
     return (
-        <span>
+        <span className="db-card-credit">
             <AiOutlineBranches title="Branch Synchronization" className="db_info_icon_spacing"/>
             <span className="db_info">{text}</span>
         </span>
@@ -164,7 +164,7 @@ export const DBBranchCredits = ({text}) => {
 
 export const DBUnsynchCredits = ({text}) => {
     return (
-        <span>
+        <span className="db-card-credit">
             <AiOutlineCloudSync title="Branches out of synch" className="db_info_icon_spacing"/>
             <span className="db_info">{text}</span>
         </span>
@@ -244,6 +244,20 @@ export const RemoteComparison = ({local, remote, repo, onPush, onPull}) => {
         {branch_comp}
     </Col>)
 }
+
+export const AreSynched = (local, remote) => {
+    if(!local.branches && !remote.branches) return true
+    if(!local.branches || !remote.branches) return false
+    if(local.branches.length != remote.branches.length) return false
+    for(var i = 0; i<local.branches.length; i++){
+        let rem = _containsBranch(local.branches[i].branch, remote.branches)
+        if(rem === false) return false
+        let remb = remote.branches[rem]
+        if(remb.head != local.branches[i].head) return false;
+    }
+    return true;
+}
+
 
 export const BranchComparison = ({branch, local, remote, repo, onPush, onPull}) => {
     let local_ts, remote_ts, canpull, canpush, local_status, remote_status
