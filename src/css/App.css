@@ -1675,6 +1675,10 @@ span.delete-modal-label {
     color: #0066f9
   }
 
+  a.profile_a {
+      color: #002856!important;
+  }
+
   .btn-primary {
     background-color: #00C08B;
     border: 0px solid #fff;
@@ -3341,7 +3345,7 @@ span.delete-modal-label {
    }
 
 
-  
+
   .major-database-controls-align {
     display: inline-block;
     text-align: center;
@@ -3363,7 +3367,7 @@ span.delete-modal-label {
   @media (max-width:680px) {
     .dbcard-control-panel  {
        display: none;
-    }    
+    }
   }
 
   @media (max-width:800px) {
@@ -3412,7 +3416,7 @@ span.delete-modal-label {
       margin-top: 20px;
   }
 
-  
+
   .database-control-panel-border {
     padding-bottom: 8px;
   }
@@ -3445,7 +3449,7 @@ span.delete-modal-label {
   }
 
 
- 
+
 
 
 
@@ -3559,14 +3563,14 @@ span.delete-modal-label {
          max-width: 100%;
        }
      }
- 
+
    .database-listing-description-fullrow {
         margin: 18px 0px 10px 10px !important;
         font-size: 14px;
         flex-grow: 0;
         color: #989CA0;
     }
-  
+
 
   .database-listing-description-full {
       margin: 16px 10px 0px 24px;
@@ -3621,7 +3625,7 @@ span.delete-modal-label {
     .ok-main-action-icon {
         color:#ccffed ;
     }
-    
+
     .synch-page-action-icon,
     .ok-main-action-icon:hover {
         color: #00C08B !important;
@@ -3661,7 +3665,7 @@ span.delete-modal-label {
    }
 
   .db-sync-link:hover {
-    cursor: pointer;    
+    cursor: pointer;
   }
 
   .unsynch-page-action-icon {
@@ -3740,7 +3744,7 @@ span.delete-modal-label {
 
   }
 
- 
+
   .invite-user{
       border-radius: 5px;
       padding: 0px 10px 0px 10px;
@@ -4434,7 +4438,7 @@ span.delete-modal-label {
       margin-left: 20px;
   }
 
-  
+
 
 
   .db-control-box {
