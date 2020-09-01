@@ -13,8 +13,9 @@ import { validURL } from '../../utils/helperFunctions'
 import { MdRefresh } from 'react-icons/md';
 import { AiOutlineCloudSync } from 'react-icons/ai';
 import { DeleteControl } from './DeleteControl'
+import { DBLastCommit, CloneRoleCredits, DBPrivacy, CloneProductionCredits } from "../Pages/ClonePage"
 
-export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, onFetch}) => {
+export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, onFetch, onGoHub}) => {
     let allowed_fetch = false
     if(repo.type == "hub" && user.logged_in){
         allowed_fetch = true
@@ -35,16 +36,19 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
                         onFetch={onFetch}
                         onDelete={onDelete}
                         onRefresh={onRefresh}
+                        onGoHub={onGoHub}
                     />
                 </Col>
-                <Col md={10} className='database-main-content'>
+                <Col md={10} className='database-full-summary-content'>
                     <Row>
-                        <RemoteTitle repo={repo} meta={remote}/>
+                        <RemoteTitle onGoHub={onGoHub} repo={repo} meta={remote}/>
+                        <RemoteOrigin repo={repo} meta={remote}/>
                     </Row>
                     <Row>
                         <RemoteCredits
                             remote={remote}
                             repo={repo}
+                            onGoHub={onGoHub}
                         />
                     </Row>
                 </Col>
@@ -61,11 +65,9 @@ export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, on
     )
 }
 
-export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, onDelete, onRefresh}) => {
-
+export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, onDelete, onRefresh, onGoHub}) => {
     let disp = []
     let icon = local.icon
-
     if(!icon && remote && remote.icon) icon = remote.icon
     if(!icon) icon = GRAPHDB
     let title = "Remote Database: " + (repo.url ? repo.url : repo.title)
@@ -77,8 +79,8 @@ export const RemoteControlPanel = ({local, remote, show_refresh, repo, onFetch, 
     let doFetch = (show_refresh ? onFetch : false)
 
     return (
-        <div>
-            <Row className="database-left-img">
+        <div className='rcp'>
+            <Row className="database-left-img database-left-img-clickable" onClick={onGoHub}>
                 {disp}
             </Row>
             <Row className="db-controls">
@@ -111,13 +113,17 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
 
     return (
         <Row className='major-database-controls'>
-            <span className='major-database-controls-align'>
+            <span className='major-database-controls-align major-database-controls-sync'>
                 {onRefresh &&
-                    <span className='refresh-control' onClick={doRefresh}>
-                        <RefreshControl repo={repo} />
+                    <span onClick={doRefresh}>
+                        <span className='rdefresh-control'>
+                            <RefreshControl repo={repo} />                         
+                        </span>
                     </span>
                 }
-                <DeleteControl repo={repo} onDelete={doDelete} />
+                <span className='sdb-delete-control'>
+                    <DeleteControl repo={repo} onDelete={doDelete} />
+                </span>
             </span>
         </Row>
     )
@@ -125,12 +131,12 @@ export const DBControls = ({repo, onFetch, onRefresh, onDelete}) => {
 
 export const RefreshControl = ({repo}) => {
     let title = `Refresh Remote ${repo.title} from ${repo.url}`
-    return <span className="db-action"  title={title}><MdRefresh color="#0055bb" className='db-control' /></span>
+    return <span className="db-action db-refresh-action"  title={title}><MdRefresh color="#0055bb" className='db-control' /> fetch</span>
 }
 
 export const FetchControl = ({repo}) => {
     let title = `Fetch Remote ${repo.title} from ${repo.url}`
-    return <span className="db-action"  title={title}><AiFillCopy color="#0055bb" className='db-control' /></span>
+    return <span className="db-action db-fetch-action"  title={title}><AiFillCopy color="#0055bb" className='db-control' /> fetch</span>
 }
 
 export const DBWarningCredits = ({text}) => {
@@ -145,32 +151,35 @@ export const DBWarningCredits = ({text}) => {
 
 //Title & remote metadata
 
-export const RemoteTitle = ({repo, meta}) => {
+export const RemoteTitle = ({repo, meta, onGoHub}) => {
     let title_css = "database-title-remote"
     let str = (meta && meta.label ? meta.label : repo.title)
     return (
-        <span className='database-listing-title-row'>
+        <span className='database-listing-title-row' onClick={onGoHub}>
             <span className={title_css + " database-listing-title"}>{str}</span>
-            {meta && meta.label &&
-                <span> ({repo.title}) </span>
-            }
         </span>
     )
 }
 
-export const RemoteCredits = ({remote, repo}) => {
+export const RemoteOrigin = ({repo, meta}) => {
+    return <div className="remote-origin">{repo.title}</div>
+}
+
+export const RemoteCredits = ({remote, repo, onGoHub}) => {
     let res = []
-    res.push(<DBRemoteTitle repo={repo} key="aaa" />)
     if(repo && repo.url){
-        res.push(<DBRemoteURL url={repo.url} key="cadf" />)
+        res.push(<DBRemoteURL url={repo.url} key="cadf" onGoHub={onGoHub} />)
     }
     if(remote){
         if(repo && repo.type == "hub"){
             res.push (
-                <DBProductionCredits  key='ac' meta={remote} />
+                <CloneProductionCredits  key='ac' meta={remote} />
+            )
+            res.push (
+                <DBPrivacy  key='addc' meta={remote} />
             )
             res.push(
-                <DBRoleCredits key='ad' meta={remote} />
+                <CloneRoleCredits key='ad' meta={remote} />
             )
         }
         res.push(
@@ -184,97 +193,13 @@ export const RemoteCredits = ({remote, repo}) => {
     )
 }
 
-export const DBRemoteTitle = ({repo}) => {
-    let ct = repo.type + " db: " + repo.title
-    return(<span>
-        <AiOutlineBlock className="db_info_icon_spacing"/>
-        <span className="db_info">{ct}</span>
-    </span>)
-}
-
-
-export const DBRemoteURL = ({url}) => {
-    return(<span>
+export const DBRemoteURL = ({url, onGoHub}) => {
+    return(
+    <span onClick={onGoHub} className="db-card-credit hub-organization-link">
         <AiOutlineLink className="db_info_icon_spacing"/>
         <span className="db_info">{url}</span>
     </span>)
 }
-
-
-export const DBLastCommit = ({meta}) => {
-    let ts = meta.updated
-    if(!ts) return null
-    let ct = "Latest Update: " + printts(ts, DATETIME_COMPLETE)
-    if(meta.branches && meta.branches.length > 1){
-        meta.branches.map((item) => {
-            if(item.updated == meta.updated) ct += " on branch " + item.branch
-        })
-    }
-    if(meta.author) ct += " by " + meta.author
-    return (
-        <div>
-            <AiFillEdit className="db_info_icon_spacing"/>
-            <span className="db_info">{ct}</span>
-        </div>
-    )
-}
-
-export const DBProductionCredits = ({meta}) => {
-    if(meta){
-        var tit = (meta.organization_type ? meta.organization_type + " Organization " + meta.organization : "")
-        let txt = (meta.organization_label ? meta.organization_label  : meta.organization)
-        let icon = (meta.organization_icon ? (<img className="database-listing-organization-icon" src={meta.organization_icon}></img>) : "")
-        return (
-            <span title={tit}>
-                <AiOutlineUser className="db_info_icon_spacing"/>
-                <span className="db_info">Publisher: {icon} {txt}</span>
-            </span>
-        )
-    }
-    return null
-}
-
-
-function _get_role_title(id, orgtype){
-    let map = {
-        "create": "Owner",
-        "manage": "Manager",
-        "write": "Contributor",
-        "read": "Reader",
-        "monitor": "Monitor"
-    }
-    return map[id] || "?"
-}
-
-export const DBRoleCredits = ({meta}) => {
-    if(meta){
-        let dbrec = meta
-        let rs = [];
-        if(dbrec.roles){
-            for(var i = 0 ; i<dbrec.roles.length; i++){
-                rs.push(_get_role_title(dbrec.roles[i]))
-            }
-        }
-        if(dbrec.public){
-            if(rs.length == 0) rs.push("Public")
-            return (
-                <span>
-                    <AiOutlineGlobal title="Public Database" className="db_info_icon_spacing"/>
-                    <span className="db_info">{rs}</span>
-                </span>
-            )
-        }
-        if(rs.length == 0) rs.push("No Access")
-        return (
-            <span>
-                <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
-                <span className="db_info">{rs}</span>
-            </span>
-        )
-    }
-    return null
-}
-
 
 // Description of differences between local and remote
 export const RemoteDescription = ({local, remote, repo, user}) => {

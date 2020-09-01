@@ -15,7 +15,7 @@ import {DBRemoteCard} from "./DBRemoteCard"
     contains user reporting and main view logic
 */
 
-export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin, woqlClient, getTokenSilently, branchesUpdated}) => {
+export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh, onLogin, woqlClient, getTokenSilently, branchesUpdated}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [upperReport, setUpperReport] = useState()
@@ -186,6 +186,10 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
         return false
     }
 
+    function loadHubRecord(){
+        onGoHub(myRemote.organization, myRemote.id)
+    }
+
     return (
         <Col>
             {loading && 
@@ -197,6 +201,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onRefresh, onLogin
                     user={user}
                     onRefresh={remoteFetch}
                     onDelete={onDelete}
+                    onGoHub={loadHubRecord}
                     local={myLocal}
                     remote={myRemote}
                     repo={repo}
