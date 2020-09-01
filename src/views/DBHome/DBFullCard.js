@@ -46,7 +46,7 @@ export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
             {loading &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
-            { report && 
+            { report &&
                 <TerminusDBSpeaks report={report} />
             }
             {!loading && <>
@@ -57,11 +57,11 @@ export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
                     </Row>
                     <span className="dbcredits-full-page">
                         <DBCredits meta={meta}  user={user} />
-                    </span>    
-                    {meta.comment && 
-                        <DBDescription meta={meta}  user={user} />                            
+                    </span>
+                    {meta.comment &&
+                        <DBDescription meta={meta}  user={user} />
                     }
-                    {meta.remote_url && 
+                    {meta.remote_url &&
                         <Row key='r6'>
                             <span className="database-remote-credits branch-info">
                                 <RemoteCredits meta={meta}  user={user} />
@@ -155,8 +155,8 @@ export const DBCloneStatus = ({meta, user}) => {
             </>
         }
         return <DBRemoteCloned meta={meta.remote_url} user={user} />
-    }  
-    return null 
+    }
+    return null
 }
 
 export const DBLocalClone = ({meta, user}) => {
@@ -193,7 +193,7 @@ export const DBHubClone = ({meta, url}) => {
             <span className="db_info">Unavailable Terminus Hub DB {url}</span>
         </span>
     }
-     
+
     let ct = meta.label ? meta.label : meta.id
     return(
         <span className="db-card-credit hub-organization-link" onClick={goHub}>
@@ -271,7 +271,7 @@ export const DBSize = ({meta, user}) => {
 }
 
 export const DBImagePanel = ({meta, user, onClone}) => {
-    let icon = (meta.remote_record && meta.remote_record.icon ? meta.remote_record.icon : GRAPHDB) 
+    let icon = (meta.remote_record && meta.remote_record.icon ? meta.remote_record.icon : GRAPHDB)
     let title = `Database ${meta.id}`
     let vi = validURL(icon)
     return (
@@ -282,7 +282,7 @@ export const DBImagePanel = ({meta, user, onClone}) => {
         {!vi &&
             <i className={'dbcard-icon ' + icon} />
         }
-        <DBControls user={user} onClone={onClone}/>
+        <DBControls meta={meta} user={user} onClone={onClone}/>
         </span>
     )
 }
@@ -293,10 +293,10 @@ export const DBControls = ({meta, user, onClone}) => {
     return (
          <span className="major-database-controls-align">
             <span className='db-control-box db-clone-control' onClick={onClone}>
-                <CloneControl meta={meta} user={user}/> 
+                <CloneControl meta={meta} user={user}/>
             </span>
             <span className='db-control-box db-delete-control'>
-                <DeleteDB meta={meta} user={user}/> 
+                <DeleteDB meta={meta} user={user}/>
             </span>
         </span>
     )
@@ -305,7 +305,3 @@ export const DBControls = ({meta, user, onClone}) => {
 export const CloneControl = ({meta, user}) => {
     return <span className="db-action" style={{color: "#0055bb"}} title="Clone"><MdContentCopy color="#0055bb" className='db-control db-clone-control' /> clone</span>
 }
-
-
-
-
