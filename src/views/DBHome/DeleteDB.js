@@ -134,7 +134,7 @@ export const DeleteDB = ({meta}) => {
                             <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
                         }
                         {deleteConfirm &&
-                            <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                            <button className="tdb__button__base tdb__button__base--bred delete-modal-button" >
                                 <AiOutlineDelete className="delete-modal-icon"/> {DELETE_DB_MODAL.confirmLocal}
                             </button>
                         }
