@@ -625,7 +625,7 @@ export const DBSchemaCredits = ({meta, onSchemaChange}) => {
 }
 
 export const DBDescription = ({meta, onChange}) => {
-    if(meta.comment && meta.comment.length > 80 && !meta.testing){
+    if(meta.comment && meta.comment.length > 80 && !meta.testing && !onChange){
         var str =  meta.comment.substring(76) + " ..."
     }
     else str = meta.comment || ""

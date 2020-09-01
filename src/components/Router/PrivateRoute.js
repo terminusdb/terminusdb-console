@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { useAuth0 } from "../../react-auth0-spa";
 import { PageView } from '../../views/Templates/PageView'
 import {LOGIN_LABEL} from '../Navbar/constants.navbar'
-import {Row, Col } from "react-bootstrap";
+import { HUBDB } from "../../constants/images"
 
 const PrivateRoute = ({ component: Component, path, ...rest }) => {
     const { isAuthenticated, loginWithRedirect } = useAuth0();
@@ -21,17 +21,20 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
     }, [isAuthenticated, loginWithRedirect, path])*/
 
     const render = props =>
-        isAuthenticated === true ? <Component {...props} /> : <NoLoginLayout loginWithRedirect={loginWithRedirect}/>;
+        isAuthenticated !== true ? <NoLoginLayout loginWithRedirect={loginWithRedirect}/> :  <Component {...props} />;
         return <Route path={path} render={render} {...rest} />;
 }
 
-const NoLoginLayout = (props) =>{
+export const NoLoginLayout = (props) =>{
+
+    let text = props.text ? props.text: "Log in to Terminus Hub, where you can share your databases and collaborate with others"
 
     return (
             <PageView >
                 <div className="console__page__box">
-                    <div className="console__page__title">
-                        You need to login in hub to see this page
+
+                    <div className="console__page__title"  style={{fontSize: "20px !important;"}}>
+                        <img className='db-home-listing-image' src={HUBDB}/> {text}
                     </div>
                     <button id="login_clone_button" className="tdb__button__base nav__main__login" onClick={ () => props.loginWithRedirect()}>
                         {LOGIN_LABEL}
