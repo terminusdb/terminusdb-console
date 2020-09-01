@@ -89,7 +89,7 @@ export const DeleteDB = ({meta}) => {
                 <ModalBody>
                     <Row key="rd">
                         <Col md={12} className="delete-modal-col-align">
-                            <span className="delete-modal-text"> This action will remove your local database, but will be available remotely.
+                            <span className="delete-modal-text"> This will delete your local database but will not effect the linked remote which will still be available in your hub account.
                             {DELETE_DB_MODAL.message} {woqlClient.db()} </span>
                         </Col>
                     </Row>
