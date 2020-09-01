@@ -46,7 +46,7 @@ export const Login = (props) => {
                                 width="50"/>
                         </button>
                         <div className={dropdownContent}>
-                            <a  className="tdb__dropdown__button"
+                            <a  className="tdb__dropdown__button profile_a"
                                 href = {PROFILE_ROUTE}>
                                 <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
                             </a>
