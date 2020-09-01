@@ -15,7 +15,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     if(!list || !user ) return null
     const { woqlClient,  refreshDBRecord } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()    
-    const [listSort, setSort] = useState(sort || "updated")
+    const [listSort, setSort] = useState(sort || "name")
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
     const [loading, setLoading] = useState()
@@ -116,7 +116,7 @@ export const ListSorter = ({sort, logged_in, onChange}) => {
         {value: "updated", label: "Most recent update"},
         {value: "oldest", label: "Least recent update"},
         {value: "created", label: "Database Creation Time"},
-        {value: "name", label: "Database Name"},
+        {value: "name", label: "Database Name (A-Z)"},
       //  {value: "size", label: "Database Size"}
     ]
 

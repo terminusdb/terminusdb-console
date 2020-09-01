@@ -950,7 +950,10 @@ export const CloneImagePanel = ({meta, onAction}) => {
 
     let clickcss = onAction ? " clickable-image-panel" : ""
 
-    if(!icon) icon = HUBDB
+    if(!icon) {
+        if(meta.organization_icon) icon = meta.organization_icon
+        else icon = HUBDB
+    }
     let title = `Database ${meta.id} in organization ${meta.organization}`
     let vi = validURL(icon)
     return (
@@ -988,8 +991,8 @@ export const CloneTitle = ({meta, onAction}) => {
 export const CloneDescription = ({meta, user}) => {
     let str = meta.comment || ""
     let title = str;
-    if(str && str.length > 80){
-        str =  meta.comment.substring(76) + " ..."
+    if(str && str.length > 400){
+        str =  meta.comment.substring(0, 396) + " ..."
     }
     if(str){
         return (
