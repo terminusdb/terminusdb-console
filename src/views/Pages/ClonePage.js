@@ -5,9 +5,9 @@ import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
 import {TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { SimplePageView} from '../Templates/SimplePageView'
-import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle, 
-    AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink, 
-    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell, 
+import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle,
+    AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink,
+    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell,
     AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning} from 'react-icons/ai';
 import { TERMINUS_WARNING, TERMINUS_ERROR, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { CLONEDBS } from "./constants.pages"
@@ -190,15 +190,15 @@ export const CloneController = ({list, db, organization, meta}) => {
     if(currentDB){
         let url = remoteClient.server() + currentDB.organization + "/" + currentDB.id
         return (
-            <div>
+            <div className="tdb__loading__parent">
                 <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError}/>
                     <Row className="generic-message-holder">
                         {report &&
                             <TerminusDBSpeaks report={report} />
                         }
                     </Row>
-                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                     <HubDBCard meta={currentDB} onAction={fireAction}/>
+                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
@@ -211,7 +211,7 @@ export const CloneController = ({list, db, organization, meta}) => {
                         <TerminusDBSpeaks report={report} />
                     }
                 </Row>
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                {/*loading &&  <Loading type={TERMINUS_COMPONENT} />*/}
                 <CloneListControl list={currentList} onAction={fireAction} />
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
@@ -1547,4 +1547,3 @@ export const DeleteHubDB = ({meta}) => {
 }
 
 export default ClonePage
-
