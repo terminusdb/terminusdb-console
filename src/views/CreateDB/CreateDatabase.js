@@ -202,8 +202,10 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     return (
         <div className="tdb__loading__parent">
             <div className="create-section">
+                <hr/>
+                <div className="create-db-option-descr">Choose where you want to create your database</div>
                 {allow_remote && <Row>
-                    <Col md={6} className="create-db-select" onClick={handleLocal} active>
+                    <Col md={4} className="create-db-select" onClick={handleLocal} active>
                         <Row key="rr">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_LOCALLY}
@@ -211,16 +213,17 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                     value={CREATE_DATABASE_LOCALLY}
                                     checked={localCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
+                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
-                        <Row key="rd">
+                        {/*<Row key="rd">
                             <span className="database-listing-description-header">
                                 <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
                                 <span className="database-listing-description ">{local_text}</span>
                             </span>
-                        </Row>
+                        </Row>*/}
                     </Col>
-                    <Col md={6} className="create-db-select" onClick={handleHub}>
+                    <Col md={4} className="create-db-select" onClick={handleHub}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
@@ -231,24 +234,24 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                 <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
-                        <Row key="rm">
+                        {/*<Row key="rm">
                             <span className="database-listing-description-header">
                                 <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
                                 <span className="database-listing-description ">{remote_text}</span>
                             </span>
-                        </Row>
+                        </Row>*/}
                     </Col>
                 </Row>}
             </div>
 
             <div className="pretty-form">
 
-                {local && allow_remote && <div className="create-place-badge local-badge">
+                {/*local && allow_remote && <div className="create-place-badge local-badge">
                     Create a Local Database
-                </div>}
-                {!local && allow_remote && <div className="create-place-badge remote-badge">
+                </div>*/}
+                {/*!local && allow_remote && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
-                </div>}
+                </div>*/}
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />
