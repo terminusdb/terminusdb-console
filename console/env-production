@@ -1,0 +1,6 @@
+AUTH0_DOMAIN="terminusdb.eu.auth0.com"
+AUTH0_CLIENT_ID="4EYIHQaVLgwi5V5m2gRNYdtpZZfbwtDz"
+AUDIENCE="https://terminusdb.com/hubservices"
+
+TERMINUS_BFF_URL="https://terminusdb.com/"
+TERMINUS_HUB_URL="https://hub.terminusdb.com/"
