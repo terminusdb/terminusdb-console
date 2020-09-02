@@ -135,6 +135,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     let push_to = {
         remote: remote_name,
         remote_branch: "main",
+        push_prefixes: true,
         message: "publishing db content to hub with console",
     }
     const jwtoken2 = await getTokenSilently()
