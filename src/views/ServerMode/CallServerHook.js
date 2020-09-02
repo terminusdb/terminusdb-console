@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {useAuth0} from '../../react-auth0-spa'
+import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const CREATE_DB_END_POINT = 'db'
 export const UPDATE_CAPABILITIES_END_POINT = 'capabilities'
@@ -57,27 +58,35 @@ function CallServerHook() {
     const [dataProvider, setDataprovider] = useState([])
     const [loadingProfile, setLoading] = useState(true)
     const [profileError, setError] = useState(true)
+    const {woqlClient} = WOQLClientObj()
+
 
     const options = {
         mode: 'cors', // no-cors, cors, *same-origin
         redirect: 'follow', // manual, *follow, error
         referrer: 'client',
     }
+
+    
+
     //create db and updatecapabilities
     useEffect(() => {
         async function callHubServer() {
-            try {
-                setLoading(true)
-                const token = await getTokenSilently()
-                options.headers = {Authorization: `Bearer ${token}`}
+            if(woqlClient){
+                let url = `${baseUrl}/profile?console=${encodeURIComponent(woqlClient.server())}`
+                try {
+                    setLoading(true)
+                    const token = await getTokenSilently()
+                    options.headers = {Authorization: `Bearer ${token}`}
 
-                const result = await axiosHub.get(`${baseUrl}/profile`, options)
+                    const result = await axiosHub.get(url, options)
 
-                setDataprovider(result)
-                setLoading(false)
-            } catch (err) {
-                setError(err)
-                console.error(err)
+                    setDataprovider(result)
+                    setLoading(false)
+                } catch (err) {
+                    setError(err)
+                    console.error(err)
+                }
             }
         }
         //REACT_APP_BASE_URL

@@ -20,6 +20,10 @@ export const Login = (props) => {
             toggle(false)
         }
     }
+
+    let profile_arg = `?console=console`
+
+
     /*
     * TO BE REVIEW TO GET FROM HISTORY BASE NAME
     */
@@ -46,8 +50,8 @@ export const Login = (props) => {
                                 width="50"/>
                         </button>
                         <div className={dropdownContent}>
-                            <a  className="tdb__dropdown__button"
-                                href = {PROFILE_ROUTE}>
+                            <a  className="tdb__dropdown__button profile_a"
+                                href = {PROFILE_ROUTE+profile_arg}>
                                 <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
                             </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"

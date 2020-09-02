@@ -151,7 +151,7 @@ export const DBTitle = ({meta, user, goHubDB, max}) => {
     }
 
     if(meta.label && meta.label.length > maxtitle){
-        var str =  meta.label.substring(maxtitle -4) + " ..."
+        var str =  meta.label.substring(0, maxtitle -4) + " ..."
     }
     else str = meta.label || ""
 
@@ -267,6 +267,7 @@ export const DBControlPanel = ({meta, user}) => {
     let icon = meta.icon
 
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
+    if(!icon && meta.remote_record && meta.remote_record.organization_icon) icon = meta.remote_record.organization_icon
     if(!icon) icon = GRAPHDB
     let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
 

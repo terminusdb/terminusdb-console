@@ -67,15 +67,15 @@ export const AddRemote = ({onCreate, onCancel, repos, error}) => {
         }
         <Row>
             <Col md={3}>
-                Remote ID
-                <input 
+                <input
+                    placeholder="New Remote ID"
                     value={newID}
                     onChange={updateID}
                     type="text" />
             </Col>
             <Col md={5}>
-                URL
-                <input 
+                <input
+                    placeholder="URL of remote" 
                     value={remoteURL}
                     onChange={updateURL}
                     type="text" />

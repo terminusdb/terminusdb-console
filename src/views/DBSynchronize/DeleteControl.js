@@ -37,5 +37,5 @@ export const DeleteControl = ({repo, onDelete}) => {
 
 export const DeleteWidget = ({repo}) => {
     let title = `Delete Remote ${repo.title} (${repo.url})`
-    return <span className="db-action"  title={title}><RiDeleteBin5Line color="#721c24" className='db-control' /></span>
+    return <span className="db-delete-maction"  title={title}><RiDeleteBin5Line color="#721c24" className='db-control' /> remove</span>
 }

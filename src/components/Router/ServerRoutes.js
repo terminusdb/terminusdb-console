@@ -7,7 +7,7 @@ import ClonePage from "../../views/Pages/ClonePage"
 import CreateDBPage from "../../views/Pages/CreateDBPage"
 import { useAuth0 } from "../../react-auth0-spa";
 import PrivateRoute from './PrivateRoute';
-import {WOQLClientObj} from '../../init/woql-client-instance'
+import {NoLoginLayout} from './PrivateRoute'
 
 
 export const ServerRoutes = () => {
@@ -25,6 +25,10 @@ export const ServerRoutes = () => {
 }
 
 export const CloneRoutes = () => {
+    const { isAuthenticated, loginWithRedirect, loading } = useAuth0();
+    let nogo = "Log in to Terminus Hub, where you can clone databases shared by others to your local machine"
+
+    if(!loading && !isAuthenticated) return <NoLoginLayout text={nogo} loginWithRedirect={loginWithRedirect}/>
     return (
         <Switch>
             <Route key="specificclone" path={`${CLONE_DB_ROUTE}${SPECIFIC_DB_ROUTE}`}>
