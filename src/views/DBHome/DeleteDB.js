@@ -7,7 +7,7 @@ import {TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
 import {goServerHome} from '../../components/Router/ConsoleRouter'
 import {DELETE_DB_MODAL} from './constants.dbhome'
 import { RiDeleteBin5Line } from 'react-icons/ri';
-import { AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineWarning } from 'react-icons/ai';
 
 export const DeleteDB = ({meta}) => {
     const {register, handleSubmit, errors} = useForm()
@@ -89,8 +89,8 @@ export const DeleteDB = ({meta}) => {
                 <ModalBody>
                     <Row key="rd">
                         <Col md={12} className="delete-modal-col-align">
-                            <div className="delete-modal-text"> This will delete your local database but will not effect the linked remote which will still be available in your hub account.</div><br/>
-                            <div>{DELETE_DB_MODAL.message} <b>{woqlClient.db()}</b></div>
+                            <div className="delete-modal-text"> <AiOutlineWarning className="del-hub-warning" />This will delete your local database but will not effect the linked remote which will still be available in your hub account.</div><br/>
+                            <div className="delete-modal-text"><span>{DELETE_DB_MODAL.message}</span> <b>{woqlClient.db()}</b></div>
                         </Col>
                     </Row>
 

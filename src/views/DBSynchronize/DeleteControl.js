@@ -3,6 +3,7 @@ import { AiOutlineDelete } from "react-icons/ai"
 import {Row, Modal, ModalHeader, ModalBody, ModalFooter, Col} from "reactstrap"
 import React, {useState} from 'react'
 import {DELETE_DB_MODAL} from '../DBHome/constants.dbhome'
+import { AiOutlineWarning } from "react-icons/ai"
 
 
 export const DeleteControl = ({repo, onDelete}) => {
@@ -16,7 +17,7 @@ export const DeleteControl = ({repo, onDelete}) => {
             <ModalBody>
                 <Row key="rd">
                     <Col md={12} className="delete-modal-col-align">
-                        <span className="delete-modal-text">
+                        <span className="delete-modal-text">  <AiOutlineWarning className="del-hub-warning" />
                             This action will remove the connection to the remote database - it will not effect your local database, but you will no longer be able to push and pull updates.
                         </span>
                     </Col>
