@@ -23,6 +23,7 @@ jobs:
         -  if [ "$TRAVIS_BRANCH" = "dev" ]; then echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc; fi
         -  if [ "$TRAVIS_BRANCH" = "rc" ]; then echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-rc" > $TRAVIS_BUILD_DIR/.npmrc; fi
         -  if [ "$TRAVIS_BRANCH" = "canary" ]; then echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-canary" > $TRAVIS_BUILD_DIR/.npmrc; fi
+        -  if [ "$TRAVIS_BRANCH" != "dev" ]; then echo "https://terminusdb.com/hub/profile" > $TRAVIS_BUILD_DIR/.env; else echo "https://hub-dev.dcm.ist/hub/profile" > $TRAVIS_BUILD_DIR/.env; fi
 
     - stage: deploy_dev
       before_install:
