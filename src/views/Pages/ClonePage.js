@@ -134,7 +134,7 @@ export const CloneController = ({list, db, organization, meta}) => {
             CloneDB(db, woqlClient, getTokenSilently, false, pred)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
+                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report))
             })
             .catch((e) => {
