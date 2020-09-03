@@ -97,7 +97,7 @@ export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed
 
 export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently) => {
     let msg = {invitation: {
-        id: meta.remote_record.invitation_id, 
+        id: meta.invitation_id, 
         action: "accept"
     }}
     const jwtoken = await getTokenSilently()
@@ -108,7 +108,7 @@ export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently)
 
 export const RejectInvite = async (meta, client, remoteClient, getTokenSilently) => {
     let msg = {invitation: {
-        id: meta.remote_record.invitation_id, 
+        id: meta.invitation_id, 
         action: "reject"
     }}
     const jwtoken = await getTokenSilently()

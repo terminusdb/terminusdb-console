@@ -3020,7 +3020,7 @@ span.delete-modal-label {
   }
 
   .db-required-color {
-      color: #856404;
+      color: #856404 !important;
       margin-top: 60px;
   }
   .database-submit-title {
@@ -4487,8 +4487,11 @@ span.delete-modal-label {
 
 
   .upload-pic {
+      display: inline-block;
       border: 1px solid #ddd;
       min-height: 200px;
+      width: 300px;
+      height: 360px;
       border-radius: 8px;
   }
 

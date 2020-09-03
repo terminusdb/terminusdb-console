@@ -3,7 +3,7 @@ import { ResultViewer } from "./ResultViewer"
 import { TOOLBAR_CSS } from './constants.querypane'
 import { ViewChooser } from "./ViewChooser";
 
-export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {
+export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes}) => {
 
 	const currentViewStart=resultView || "table";
     const [currentView,setCurrentView] = useState(currentViewStart)
@@ -16,7 +16,7 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery}) => {
 	return(
 		<div className="tdb__qpane__editor" >
             <ViewChooser updateView={updateView} view={currentView}/>
-            <ResultViewer type={currentView} bindings={bindings} query={query}/>
+            <ResultViewer type={currentView} bindings={bindings} query={query} prefixes={prefixes}/>
         </div>
 	)
 }

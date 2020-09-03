@@ -225,11 +225,9 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
 
     let isEdit = (type && type == "edit")
     return (<>
-        <Row key='r7' className='database-summary-listing'>
-            <Col key='r5' md={3} className='database-control-panel'>
-                <DBControlPanel meta={current} onChange={changeIcon} />
-            </Col>
-            <Col md={9} className='database-main-content'>
+        <Row key='r7' flex className='database-summary-listing'>
+            <DBControlPanel meta={current} onChange={changeIcon} />
+            <Col className='database-main-content'>
                 <Row className='database-create-title-row db-create-remote-row'>
                     <DBTitle label={current.label} organization={current.organization} onChange={changeTitle} databases={databases}/>
                 </Row>

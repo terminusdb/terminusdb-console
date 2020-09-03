@@ -28,7 +28,7 @@ import {TERMINUS_COMPONENT, TERMINUS_PAGE} from '../../constants/identifiers'
 import {formatBytes} from "../Server/DBList"
 
 const SchemaPage = (props) => {
-    const {graphs, setHead, branch, report} = DBContextObj()
+    const {graphs, setHead, branch, report, prefixes} = DBContextObj()
 
     const [graphFilter, setGraphFilter] = useState()
 

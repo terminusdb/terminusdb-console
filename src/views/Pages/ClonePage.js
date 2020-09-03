@@ -109,14 +109,18 @@ export const CloneController = ({list, db, organization, meta}) => {
             setLoading(true)
             AcceptInvite(db, woqlClient, bffClient, getTokenSilently)
             .then(() => {
-                removeProcessedInvite(db)
+                let newb = { remote_record: db}
+                newb.remote_url = remoteClient.server() + db.organization + "/" + db.id
                 setBump(bump+1)
-                CloneDB(db, woqlClient, getTokenSilently)
+                setReport({status: TERMINUS_SUCCESS, message: "Invitation Accepted - Cloning Database"})
+                return CloneDB(newb, woqlClient, getTokenSilently)
                 .then((id) => {
-                    setSpecial(false)
-                    setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                    refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                    .then(() => goDBHome(id, woqlClient.user_organization(), report))
+                    setReport({status: TERMINUS_SUCCESS, message: "Cloning successful"})
+                    return addClone(id, woqlClient.user_organization(), newb)
+                    .then(() => {
+                        goDBHome(id, woqlClient.user_organization(), report)
+                        removeProcessedInvite(db)
+                    })
                 })
             })
             .finally(() => setLoading(false))
@@ -162,15 +166,13 @@ export const CloneController = ({list, db, organization, meta}) => {
 
     function removeProcessedInvite(dbrec){
         let ninvites = []
-        let rr = dbrec.remote_record || {}
-        let oinvites = bffClient.connection.user.invites || []
+        let oinvites = currentList || []
         for(var i = 0; i<oinvites.length; i++){
-            let or = oinvites[i]
-            if(!(rr.id == or.id && rr.organization == or.organization)){
+            if(dbrec.invitation_id != oinvites[i].invitation_id){
                 ninvites.push(oinvites[i])
             }
         }
-        bffClient.connection.user.invites = ninvites
+        setCurrentList(ninvites)
     }
 
     function reportOrganization404(org, e){
@@ -616,24 +618,6 @@ function _sort_list(unsorted, listSort){
     else {
         return unsorted
     }
-}
-
-function _invites_to_cards(invites, srvr){
-    let cards = []
-    for(var i = 0; i<invites.length; i++){
-        let oni = _invite_to_card(invites[i], srvr)
-        if(oni) cards.push(oni)
-    }
-    return cards
-}
-
-function _invite_to_card(inv, srvr){
-    let nlocal = {id: "", "organization":"admin", label: inv.label, "comment": inv.comment }
-    nlocal.type = "invite"
-    nlocal.remote_record = inv
-    nlocal.remote_url = srvr + inv.organization + "/" + inv.id
-    nlocal.actions = ['clone']
-    return nlocal
 }
 
 function _copy_db_card(card){
@@ -1319,6 +1303,7 @@ export const HubStatus = ({meta, onAction}) => {
 
 export const CloneStatus = ({meta, onAction}) => {
     if(meta.invitation_id){
+        console.log(meta)
         return (
             <div className='database-action-column'>
                 <Row className='database-update-status'>
@@ -1389,20 +1374,18 @@ export const CloneSecondaryAction = ({meta, onAction}) => {
         if(onAction) onAction(meta)
     }
 
-    if(meta.action == 'accept'){
-        return (
-            <div className="action-centralise">
-                <div>
-                    <span onClick={myAccept} className='invite-main-action'>
-                        <AcceptControl meta={meta} />
-                    </span>
-                    <span className = 'invite-main-action' onClick={myReject}>
-                        <RejectControl meta={meta} />
-                    </span>
-                </div>
+    return (
+        <div className="action-centralise">
+            <div>
+                <span onClick={myAccept} className='invite-main-action'>
+                    <AcceptControl meta={meta} />
+                </span>
+                <span className = 'invite-main-action' onClick={myReject}>
+                    <RejectControl meta={meta} />
+                </span>
             </div>
-        )
-    }
+        </div>
+    )
     return null
 }
 
@@ -1471,7 +1454,7 @@ export const DeleteHubDB = ({meta}) => {
         let ndbs = []
         for(var i = 0; i<dbs.length; i++){
             if(dbs[i].id == "" && dbs[i].remote_record && dbs[i].remote_record.organization == orgid && dbs[i].remote_record.id == dbid ){
-                
+
             }
             else {
                 ndbs.push(dbs[i])
