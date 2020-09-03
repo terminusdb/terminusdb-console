@@ -29,7 +29,7 @@ const ClonePage = ({organization, db}) => {
     let list = (organization || db ? false : CLONEDBS)
     return (
         <SimplePageView id="clonePage">
-            <CloneController organization={org} db={db} list={list} />
+            <CloneController organization={org} db={db} />
         </SimplePageView>
     )
 }
@@ -41,8 +41,9 @@ export const CloneController = ({list, db, organization, meta}) => {
     let [currentList, setCurrentList] = useState(list)
     let [loading, setLoading] = useState()
     let [report, setReport] = useState()
+    let [bump, setBump] = useState(0)
 
-    const { woqlClient,  refreshDBRecord, bffClient, remoteClient } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, bffClient, remoteClient, addClone } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
 
     if(!woqlClient || !bffClient) return null
@@ -85,10 +86,12 @@ export const CloneController = ({list, db, organization, meta}) => {
             if(list) setCurrentList(list)
             else if(meta) setCurrentDB(meta)
         }
-    }, [dbid, orgid])
+    }, [dbid, orgid, bump])
 
     function processOrganizationListing(o, res){
-        if(o == "invitations") setCurrentList(res)
+        if(o == "invitations") {
+            setCurrentList(res)
+        }
         else if(res.databases){
             setCurrentList(res.databases)
         }
@@ -134,7 +137,7 @@ export const CloneController = ({list, db, organization, meta}) => {
             CloneDB(db, woqlClient, getTokenSilently, false, pred)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                addClone(id, woqlClient.user_organization(), db)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report))
             })
             .catch((e) => {
@@ -182,16 +185,22 @@ export const CloneController = ({list, db, organization, meta}) => {
         setReport({status: TERMINUS_WARNING, message: "Database not found " + str, error: e})
     }
 
-    function refreshHub(orgid, dbid){
-        loadNewStuff(orgid, dbid)
-        goHubPage(orgid, dbid)
+    function refreshHub(org, db){
+        setCurrentDB()
+        setCurrentList()
+        if(org == orgid && db == dbid || organization == "recommendations" || organization == "invitations"){
+            setBump(bump+1)
+        }
+        setOrgid(org)
+        setDBid(db)
+        goHubPage(org, db)
     }
 
     if(currentDB){
         let url = remoteClient.server() + currentDB.organization + "/" + currentDB.id
         return (
             <div className="tdb__loading__parent">
-                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError}/>
+                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError} bump={bump}/>
                     <Row className="generic-message-holder">
                         {report &&
                             <TerminusDBSpeaks report={report} />
@@ -260,6 +269,9 @@ export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
 
 export const HubToolbar = ({onChange, onError, organization, url}) => {
     const { woqlClient, remoteClient } = WOQLClientObj()
+
+    const [bump, setBump] = useState(0)
+
     function goInvites(){
         onChange("invitations")
     }
@@ -296,10 +308,10 @@ export const HubToolbar = ({onChange, onError, organization, url}) => {
     return (
         <Row className="hub-toolbar">
             <Col md={2}className="hub-toolbar-col hub-recommendations-col">
-                <RecommendationsLinker organization={organization} onSubmit={goRecommendations}/>
+                <RecommendationsLinker  bump={bump} organization={organization} onSubmit={goRecommendations}/>
             </Col>
             <Col md={2} className="hub-toolbar-col hub-invitations-col">
-                <InvitationsLinker organization={organization} onSubmit={goInvites}/>
+                <InvitationsLinker bump={bump} organization={organization} onSubmit={goInvites}/>
             </Col>
             <Col md={3} className="hub-toolbar-col publisher-picker-col">
                 <PublisherPicker onSubmit={onChange} organization={organization} />
@@ -320,13 +332,13 @@ const PublisherPicker = ({onSubmit, organization}) => {
     }
 
     let ph = "Enter Publisher ID"
-
+    let df = (["recommendations", "invitations"].indexOf(organization) == -1 ) ? organization : null
     return (
         <span className='hub-inputbar publisher-picker'>
             <AiOutlineUser className="hub-bar-spacing"/>
             <input
                 type="text"
-                defaultValue={organization}
+                defaultValue={df}
                 className='publisher-picker-input'
                 placeholder={ph}
                 onKeyPress={checkKeys}
@@ -1455,17 +1467,13 @@ export const DeleteHubDB = ({meta}) => {
     const [loading, setLoading] = useState()
 
     function removeDBCard(dbid, orgid){
-        dbid = dbid ||  woqlClient.db()
-        orgid = orgid || woqlClient.organization()
         let dbs =  woqlClient.databases()
         let ndbs = []
         for(var i = 0; i<dbs.length; i++){
-            if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
-                ndbs.push(dbs[i])
+            if(dbs[i].id == "" && dbs[i].remote_record && dbs[i].remote_record.organization == orgid && dbs[i].remote_record.id == dbid ){
+                
             }
-            else if(dbs[i].remote_record) {
-                dbs[i].id = ""
-                dbs[i].type = "missing"
+            else {
                 ndbs.push(dbs[i])
             }
         }
@@ -1481,6 +1489,7 @@ export const DeleteHubDB = ({meta}) => {
                 message: `Deleted Database ${meta.organization}/${meta.id}`,
                 status: TERMINUS_SUCCESS,
             })
+            removeDBCard(meta.id, meta.organization)
             goHubPage(meta.organization)
         })
         .catch((err) => {

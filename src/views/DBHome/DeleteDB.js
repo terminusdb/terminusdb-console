@@ -52,6 +52,7 @@ export const DeleteDB = ({meta}) => {
                     removeDBCard()
                     reconnectToServer()
                     setDisabled(false)
+                    woqlClient.db(false)
                     goServerHome()
                 })
                 .catch((err) => {

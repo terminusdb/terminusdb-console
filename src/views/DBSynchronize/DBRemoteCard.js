@@ -167,13 +167,18 @@ export const RemoteOrigin = ({repo, meta}) => {
 
 export const RemoteCredits = ({remote, repo, onGoHub}) => {
     let res = []
+
+    function goHub(){
+        onGoHub(remote.organization, remote.id)
+    }
+
     if(repo && repo.url){
         res.push(<DBRemoteURL url={repo.url} key="cadf" onGoHub={onGoHub} />)
     }
     if(remote){
         if(repo && repo.type == "hub"){
             res.push (
-                <CloneProductionCredits  key='ac' meta={remote} />
+                <CloneProductionCredits  key='ac' meta={remote} onAction={goHub}/>
             )
             res.push (
                 <DBPrivacy  key='addc' meta={remote} />

@@ -23,22 +23,28 @@ export const ScopedDetails = () => {
         if(r){
             commit_id = r
         }
-        let [commit_iri, cpath, tail_iri] = WOQL.vars("ciri", "cpath", "tiri")
+        let [commit_iri, cpath, tail_iri, no_tail_iri] = WOQL.vars("ciri", "cpath", "tiri", "nt_iri")
 
-
-        let q = WOQL.using("_commits").triple(commit_iri, "ref:commit_id", commit_id)
-            .path(commit_iri, "ref:commit_parent+", tail_iri, cpath)
         if(r){
+            let q = WOQL.using("_commits").or(
+                WOQL.triple(commit_iri, "ref:commit_id", commit_id).path(commit_iri, "ref:commit_parent+", tail_iri, cpath),
+                WOQL.triple(commit_iri, "ref:commit_id", r)
+            )
             woql.and(WOQL.count("v:Commits", q))
         }
         else {
             woql.and(
                 WOQL.count("v:Commits").and(
                     WOQL.lib().active_commit_id(b, false, "Active ID"),
-                    q
+                    WOQL.using("_commits").or(
+                        WOQL.triple(commit_iri, "ref:commit_id", commit_id).path(commit_iri, "ref:commit_parent+", tail_iri, cpath),
+                        WOQL.eq(commit_iri, "v:Active ID")
+                    )
                 )
             )
         }
+
+
 
         //no need for graph queries - comes in from graphs / asset_overview
 
@@ -140,8 +146,10 @@ export const ContextCredits = ({meta, graphs, branches}) => {
 
 export const DBCommits = ({meta}) => {
     if(meta['Commits']){
-        let ct = meta['Commits']['@value'] + " commits"
-         return (
+        let ct = meta['Commits']['@value'];
+        if(ct == 1) ct += " commit"
+        else ct += " commits"
+        return (
             <span className="db-card-credit">
                 <AiOutlineEdit className="db_info_icon_spacing"/>
                 <span className="db_info">{ct}</span>
@@ -167,7 +175,7 @@ export const DBSize = ({meta}) => {
 
 export const DBTriples = ({meta, user}) => {
     if(meta['Triples']){
-        let ct = meta['Triples']['@value'] + " triples"
+        let ct = formatTripleCount(meta['Triples']['@value'])
         return (
             <span className="db-card-credit">
                 <AiOutlineBuild className="db_info_icon_spacing"/>
@@ -176,6 +184,12 @@ export const DBTriples = ({meta, user}) => {
         )
     }
     return null
+}
+
+function formatTripleCount(tc){
+    if(tc == 1) return tc + " triple"
+    if(tc < 999){ return tc + " triples" }
+    return tc.toLocaleString() + " triples"
 }
 
 

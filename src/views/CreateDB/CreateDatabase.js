@@ -9,7 +9,7 @@ import {
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
 import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO, CREATE_DATABASE_LOCALLY, CREATE_DATABASE_HUB } from './constants.createdb'
-import { goDBHome } from '../../components/Router/ConsoleRouter'
+import { goDBHome, goHubPage } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
@@ -20,7 +20,7 @@ import { AiOutlineRead } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
     const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
+    const {woqlClient, remoteClient, bffClient, refreshDBRecord, addClone, addShare } = WOQLClientObj()
     let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
@@ -77,7 +77,11 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         let lid = sclient.db()
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
-            after_create_db(update_start, get_local_create_message(doc.label, doc.id), lid, "share", doc, onShare)
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Shared Database to Hub"}
+            setReport(rep)
+            return addShare(lid, woqlClient.user_organization(), doc).then((dbrec) => {
+                goHubPage(doc.organization, doc.id)
+            })
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, lid)))
         .finally(() => setLoading(false))
@@ -90,7 +94,13 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
         CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
         .then((local_id) => {
-            after_create_db(update_start, get_remote_create_message(doc.label, local_id), local_id, "clone", doc)
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
+            setReport(rep)
+            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
+            newguy.remote_url = doc.remote_url
+            newguy.remote_record = doc 
+            addClone(local_id, woqlClient.user_organization(), newguy)
+            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
         .finally(() => setLoading(false))
@@ -146,6 +156,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
             message: message,
             time: Date.now() - update_start,
         })
+        console.log(err)
     }
 
     function toggleLocal(){
