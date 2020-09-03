@@ -7,12 +7,10 @@ cache:
 
 stages:
   - name: build
-  - name: deploy_dev
-    if: branch = dev
-  - name: deploy_canary
+  - name: deploy
+    if: branch IN (dev, canary, rc)
+  - name: trigger_canary
     if: branch = canary
-  - name: deploy_rc
-    if: branch = rc
 
 before_install:
   - if [ "$TRAVIS_BRANCH" != "dev" ]; then mv console/env-production console/.env; else mv console/env-development console/.env; fi
@@ -25,21 +23,14 @@ jobs:
       script:
         - npm run build
 
-    - stage: deploy_dev
+    - stage: deploy
       script:
         - npm run build
-        - bash .ci/publish_dev.sh
+        - bash ".ci/publish_$TRAVIS_BRANCH.sh"
 
-    - stage: deploy_canary
+    - stage: trigger_canary
       script:
-        - npm run build
         - bash .ci/trigger_canary.sh
-        - bash .ci/publish_canary.sh
-
-    - stage: deploy_rc
-      script:
-        - npm run build
-        - bash .ci/publish_rc.sh
 
 deploy:
   - provider: npm
