@@ -98,7 +98,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
             setReport(rep)
             let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
             newguy.remote_url = doc.remote_url
-            newguy.remote_record = doc 
+            newguy.remote_record = doc
             addClone(local_id, woqlClient.user_organization(), newguy)
             .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
         })
@@ -214,8 +214,10 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         <div className="tdb__loading__parent">
             <div className="create-section">
                 <hr/>
-                <div className="create-db-option-descr">Choose where you want to create your database</div>
-                {allow_remote && <Row>
+
+                {allow_remote && <>
+                    <div className="create-db-option-descr">Choose where you want to create your database</div>
+                    <Row>
                     <Col md={4} className="create-db-select" onClick={handleLocal} active>
                         <Row key="rr">
                             <span className="create-db-span">
@@ -252,7 +254,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                             </span>
                         </Row>*/}
                     </Col>
-                </Row>}
+                </Row></>}
             </div>
 
             <div className="pretty-form">
