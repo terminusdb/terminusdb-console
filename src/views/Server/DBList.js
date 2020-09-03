@@ -246,7 +246,7 @@ export const DBSize = ({meta, user}) => {
 
 export const DBDescription = ({meta, user}) => {
     if(meta.comment && meta.comment.length > 80 && !meta.testing){
-        var str =  meta.comment.substring(76) + " ..."
+        var str =  meta.comment.substring(0, 76) + " ..."
     }
     else str = meta.comment || ""
     return (
