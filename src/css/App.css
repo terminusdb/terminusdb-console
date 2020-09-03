@@ -2752,6 +2752,7 @@ span.delete-modal-label {
     left: -690px;
     top: -62px;
     padding: 10px 10px 10px 5px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
   }
 
   .database-widget-image {
