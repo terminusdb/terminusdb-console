@@ -94,17 +94,21 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     //update Prefixes
     useEffect(() => {
-        if(prefixes && prefixesReload){
-            let nups = {}
-            for(var i = 0; i<prefixes.length; i++){
-                if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
-                    nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
-                }   
-            }
-            woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
-            console.log(nups)
+        if(prefixes){
+            _do_update_prefixes(prefixes)
         }
     }, [prefixes])
+
+
+    function _do_update_prefixes(prefixes){
+        let nups = {}
+        for(var i = 0; i<prefixes.length; i++){
+            if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
+                nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
+            }   
+        }
+        woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
+    }
 
 
     //load graph structure
@@ -240,10 +244,6 @@ export const DBContextProvider = ({children, woqlClient}) => {
             }
         }
         return brans
-    }
-
-    function prefixesFromBindings(bindings) {
-        return bindings
     }
 
     function graphStructureFromBindings(bindings) {

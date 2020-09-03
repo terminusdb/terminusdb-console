@@ -65,7 +65,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
             }
             setReport(newrep)
         })
-        .finally(() => setLoading(false))        
+        .finally(() => setLoading(false))
     }
 
     async function remoteRefresh(){
@@ -124,7 +124,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
             }
             setReport(newrep)
         })
-        .finally(() => setLoading(false))        
+        .finally(() => setLoading(false))
     }
 
     async function onFetch(remote){
@@ -151,7 +151,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
             }
             setUpperReport(newrep)
         })
-        .finally(() => setLoading(false))        
+        .finally(() => setLoading(false))
     }
 
     async function remoteFetch(){
@@ -173,7 +173,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
         if(repo.type == "hub"){
             if(!myRemote|| !_allowed_push(myRemote.roles)){
                 doPush = false
-            }            
+            }
         }
         else if(repo.type == "remote"){
             doPush = false
@@ -191,12 +191,10 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
     }
 
     return (
+
         <Col>
-            {loading && 
-                <Loading type={TERMINUS_COMPONENT}/>
-            }
             <Row key='xyz3' className="mydbcard">
-                <DBRemoteCard 
+                <DBRemoteCard
                     onFetch={onFetch}
                     user={user}
                     onRefresh={remoteFetch}
@@ -205,39 +203,43 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
                     local={myLocal}
                     remote={myRemote}
                     repo={repo}
-                />        
-            </Row>            
+                />
+            </Row>
             {upperReport &&
                 <TerminusDBSpeaks report={upperReport} />
-            } 
-            {show_actions && 
-                <Row key='r79' className='remote-synch-actions'>
-                    <SynchronizeActions 
-                        repo={repo} 
-                        remote_branches={remote_branches} 
-                        branches={myLocal.branches} 
-                        branch={branch} 
-                        onPull={onPull} 
+            }
+            {show_actions &&
+                <Row key='r79' className='remote-synch-actions tdb__loading__parent'>
+                    <SynchronizeActions
+                        repo={repo}
+                        remote_branches={remote_branches}
+                        branches={myLocal.branches}
+                        branch={branch}
+                        onPull={onPull}
                         onPush={doPush}
                         onSubmitUpdate={submit}
                     />
+                    {loading &&
+                        <Loading type={TERMINUS_COMPONENT}/>
+                    }
                 </Row>
             }
             {report &&
                 <TerminusDBSpeaks report={report} />
-            } 
-            {show_branches && 
+            }
+            {show_branches &&
                 <Row key='r78' className='remote-comparison'>
-                    <RemoteComparison 
-                        repo={repo} 
+                    <RemoteComparison
+                        repo={repo}
                         local={myLocal}
                         remote={myRemote}
-                        onPush={doPush} 
-                        onSubmitUpdate={submit} 
+                        onPush={doPush}
+                        onSubmitUpdate={submit}
                         onPull={onPull}
                     />
                 </Row>
             }
         </Col>
+
     )
 }

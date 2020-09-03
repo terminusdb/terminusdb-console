@@ -2739,26 +2739,34 @@ span.delete-modal-label {
     text-align: left;
     display: inline-block;
     z-index: 99999;
-    background-color: #002856;
-    color: #ddd;
+    /*background-color: #002856;
+    color: #ddd;*/
     position:absolute;
     border-radius: 12px;
+    /*color: #383d41;*/
+    background-color: #fafbfe ;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    color: #002856;
     width: 590px;
     left: -690px;
     top: -62px;
     padding: 10px 10px 10px 5px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
   }
 
   .database-widget-image {
-    width: 70px;
+    width: 50px;
     vertical-align: top;
+    margin-left: 15px;
 }
 
 .tooltip-action-title {
     display: block;
     margin-left: 70px;
     margin-top: 0;
-    color: white;
+    /*color: white;*/
+    color: #002856;
     font-size: 1.2em;
 }
 
@@ -2771,7 +2779,8 @@ span.delete-modal-label {
 .action-tooltip-text {
     display: block;
     margin-left: 70px;
-    color: #eee;
+    /*color: #eee;*/
+    color: #002856;
 }
 
 .tooltip-image {
@@ -3012,7 +3021,7 @@ span.delete-modal-label {
   }
 
   .db-required-color {
-      color: #856404;
+      color: #856404 !important;
       margin-top: 60px;
   }
   .database-submit-title {
@@ -4479,8 +4488,11 @@ span.delete-modal-label {
 
 
   .upload-pic {
+      display: inline-block;
       border: 1px solid #ddd;
       min-height: 200px;
+      width: 300px;
+      height: 360px;
       border-radius: 8px;
   }
 
@@ -4598,7 +4610,7 @@ span.delete-modal-label {
 }
 
 .pretty-form{
-    padding: 40px;
+    padding: 20px 40px 40px 40px;
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -4690,9 +4702,12 @@ span.delete-modal-label {
 
 .create-db-select {
     /*border: 1px solid #ddd;
-    border-radius: 6px;*/
+    border-radius: 6px;
     height: 100px;
-    padding: 30px;
+    padding: 30px;*/
+    height: 80px;
+    padding: 30px 30px 20px 30px;
+    cursor: pointer;
     cursor: pointer;
 }
 
@@ -4708,6 +4723,14 @@ span.delete-modal-label {
     margin-left: 10px;
 }
 
+.create-db-option-descr{
+    margin-top: -10px;
+    margin-left: 20px;
+    padding: 0px 20px 0px 20px;
+    width: 350px;
+    background-color: #fff;
+    color: #787878;
+}
 
 button.tdb__button__cancel {
     background-color: white;
