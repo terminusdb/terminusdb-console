@@ -27,7 +27,7 @@ jobs:
     - stage: deploy_dev
       before_install:
         -  echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev" > $TRAVIS_BUILD_DIR/.npmrc
-        -  mv console/env-development console/.env
+        -  mv console/env-production console/.env
       script:
         - npm run build
         - bash .ci/publish_dev.sh
