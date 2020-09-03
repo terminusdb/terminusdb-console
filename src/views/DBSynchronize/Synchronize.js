@@ -14,7 +14,7 @@ import {DBRemoteSummary} from "./DBRemoteSummary"
 import {RefreshDatabaseRecord, removeRemote, addRemote, isLocalURL} from "../../components/Query/CollaborateAPI"
 import {AddRemote} from "./AddRemote"
 import {CreateDatabase} from "../CreateDB/CreateDatabase"
-import {goHubPage} from "../../components/Router/ConsoleRouter"
+import {goHubPage, goDBHome} from "../../components/Router/ConsoleRouter"
 
 export const Synchronize = () => {
     const {woqlClient, bffClient, refreshDBRecord, remoteClient } = WOQLClientObj()
@@ -45,7 +45,16 @@ export const Synchronize = () => {
     let update_start = Date.now()
 
     function goHub(org, dbid){
-        goHubPage(org, dbid)
+        if(woqlClient){
+            if(org == "admin"){
+                goDBHome(dbid, org)
+            }
+            else {
+                woqlClient.db(false)
+                woqlClient.organization(false)
+                goHubPage(org, dbid)
+            }
+        }
     }
 
     function isHubURL(url){

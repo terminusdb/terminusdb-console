@@ -5,9 +5,9 @@ import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
 import {TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { SimplePageView} from '../Templates/SimplePageView'
-import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle, 
-    AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink, 
-    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell, 
+import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle,
+    AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink,
+    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell,
     AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning} from 'react-icons/ai';
 import { TERMINUS_WARNING, TERMINUS_ERROR, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { CLONEDBS } from "./constants.pages"
@@ -29,7 +29,7 @@ const ClonePage = ({organization, db}) => {
     let list = (organization || db ? false : CLONEDBS)
     return (
         <SimplePageView id="clonePage">
-            <CloneController organization={org} db={db} list={list} />
+            <CloneController organization={org} db={db} />
         </SimplePageView>
     )
 }
@@ -41,8 +41,9 @@ export const CloneController = ({list, db, organization, meta}) => {
     let [currentList, setCurrentList] = useState(list)
     let [loading, setLoading] = useState()
     let [report, setReport] = useState()
+    let [bump, setBump] = useState(0)
 
-    const { woqlClient,  refreshDBRecord, bffClient, remoteClient } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, bffClient, remoteClient, addClone } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
 
     if(!woqlClient || !bffClient) return null
@@ -85,10 +86,12 @@ export const CloneController = ({list, db, organization, meta}) => {
             if(list) setCurrentList(list)
             else if(meta) setCurrentDB(meta)
         }
-    }, [dbid, orgid])
+    }, [dbid, orgid, bump])
 
     function processOrganizationListing(o, res){
-        if(o == "invitations") setCurrentList(res)
+        if(o == "invitations") {
+            setCurrentList(res)
+        }
         else if(res.databases){
             setCurrentList(res.databases)
         }
@@ -106,14 +109,18 @@ export const CloneController = ({list, db, organization, meta}) => {
             setLoading(true)
             AcceptInvite(db, woqlClient, bffClient, getTokenSilently)
             .then(() => {
-                removeProcessedInvite(db)
+                let newb = { remote_record: db}
+                newb.remote_url = remoteClient.server() + db.organization + "/" + db.id
                 setBump(bump+1)
-                CloneDB(db, woqlClient, getTokenSilently)
+                setReport({status: TERMINUS_SUCCESS, message: "Invitation Accepted - Cloning Database"})
+                return CloneDB(newb, woqlClient, getTokenSilently)
                 .then((id) => {
-                    setSpecial(false)
-                    setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                    refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                    .then(() => goDBHome(id, woqlClient.user_organization(), report))
+                    setReport({status: TERMINUS_SUCCESS, message: "Cloning successful"})
+                    return addClone(id, woqlClient.user_organization(), newb)
+                    .then(() => {
+                        goDBHome(id, woqlClient.user_organization(), report)
+                        removeProcessedInvite(db)
+                    })
                 })
             })
             .finally(() => setLoading(false))
@@ -134,7 +141,7 @@ export const CloneController = ({list, db, organization, meta}) => {
             CloneDB(db, woqlClient, getTokenSilently, false, pred)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
-                refreshDBRecord(id, woqlClient.user_organization(), 'clone', db)
+                addClone(id, woqlClient.user_organization(), db)
                 .then(() => goDBHome(id, woqlClient.user_organization(), report))
             })
             .catch((e) => {
@@ -159,15 +166,13 @@ export const CloneController = ({list, db, organization, meta}) => {
 
     function removeProcessedInvite(dbrec){
         let ninvites = []
-        let rr = dbrec.remote_record || {}
-        let oinvites = bffClient.connection.user.invites || []
+        let oinvites = currentList || []
         for(var i = 0; i<oinvites.length; i++){
-            let or = oinvites[i]
-            if(!(rr.id == or.id && rr.organization == or.organization)){
+            if(dbrec.invitation_id != oinvites[i].invitation_id){
                 ninvites.push(oinvites[i])
             }
         }
-        bffClient.connection.user.invites = ninvites
+        setCurrentList(ninvites)
     }
 
     function reportOrganization404(org, e){
@@ -182,23 +187,29 @@ export const CloneController = ({list, db, organization, meta}) => {
         setReport({status: TERMINUS_WARNING, message: "Database not found " + str, error: e})
     }
 
-    function refreshHub(orgid, dbid){
-        loadNewStuff(orgid, dbid)
-        goHubPage(orgid, dbid)
+    function refreshHub(org, db){
+        setCurrentDB()
+        setCurrentList()
+        if(org == orgid && db == dbid || organization == "recommendations" || organization == "invitations"){
+            setBump(bump+1)
+        }
+        setOrgid(org)
+        setDBid(db)
+        goHubPage(org, db)
     }
 
     if(currentDB){
         let url = remoteClient.server() + currentDB.organization + "/" + currentDB.id
         return (
-            <div>
-                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError}/>
+            <div className="tdb__loading__parent">
+                <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError} bump={bump}/>
                     <Row className="generic-message-holder">
                         {report &&
                             <TerminusDBSpeaks report={report} />
                         }
                     </Row>
-                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
                     <HubDBCard meta={currentDB} onAction={fireAction}/>
+                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
@@ -211,7 +222,7 @@ export const CloneController = ({list, db, organization, meta}) => {
                         <TerminusDBSpeaks report={report} />
                     }
                 </Row>
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                {/*loading &&  <Loading type={TERMINUS_COMPONENT} />*/}
                 <CloneListControl list={currentList} onAction={fireAction} />
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
@@ -260,6 +271,9 @@ export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
 
 export const HubToolbar = ({onChange, onError, organization, url}) => {
     const { woqlClient, remoteClient } = WOQLClientObj()
+
+    const [bump, setBump] = useState(0)
+
     function goInvites(){
         onChange("invitations")
     }
@@ -296,10 +310,10 @@ export const HubToolbar = ({onChange, onError, organization, url}) => {
     return (
         <Row className="hub-toolbar">
             <Col md={2}className="hub-toolbar-col hub-recommendations-col">
-                <RecommendationsLinker organization={organization} onSubmit={goRecommendations}/>
+                <RecommendationsLinker  bump={bump} organization={organization} onSubmit={goRecommendations}/>
             </Col>
             <Col md={2} className="hub-toolbar-col hub-invitations-col">
-                <InvitationsLinker organization={organization} onSubmit={goInvites}/>
+                <InvitationsLinker bump={bump} organization={organization} onSubmit={goInvites}/>
             </Col>
             <Col md={3} className="hub-toolbar-col publisher-picker-col">
                 <PublisherPicker onSubmit={onChange} organization={organization} />
@@ -320,13 +334,13 @@ const PublisherPicker = ({onSubmit, organization}) => {
     }
 
     let ph = "Enter Publisher ID"
-
+    let df = (["recommendations", "invitations"].indexOf(organization) == -1 ) ? organization : null
     return (
         <span className='hub-inputbar publisher-picker'>
             <AiOutlineUser className="hub-bar-spacing"/>
             <input
                 type="text"
-                defaultValue={organization}
+                defaultValue={df}
                 className='publisher-picker-input'
                 placeholder={ph}
                 onKeyPress={checkKeys}
@@ -604,24 +618,6 @@ function _sort_list(unsorted, listSort){
     else {
         return unsorted
     }
-}
-
-function _invites_to_cards(invites, srvr){
-    let cards = []
-    for(var i = 0; i<invites.length; i++){
-        let oni = _invite_to_card(invites[i], srvr)
-        if(oni) cards.push(oni)
-    }
-    return cards
-}
-
-function _invite_to_card(inv, srvr){
-    let nlocal = {id: "", "organization":"admin", label: inv.label, "comment": inv.comment }
-    nlocal.type = "invite"
-    nlocal.remote_record = inv
-    nlocal.remote_url = srvr + inv.organization + "/" + inv.id
-    nlocal.actions = ['clone']
-    return nlocal
 }
 
 function _copy_db_card(card){
@@ -1307,6 +1303,7 @@ export const HubStatus = ({meta, onAction}) => {
 
 export const CloneStatus = ({meta, onAction}) => {
     if(meta.invitation_id){
+        console.log(meta)
         return (
             <div className='database-action-column'>
                 <Row className='database-update-status'>
@@ -1377,20 +1374,18 @@ export const CloneSecondaryAction = ({meta, onAction}) => {
         if(onAction) onAction(meta)
     }
 
-    if(meta.action == 'accept'){
-        return (
-            <div className="action-centralise">
-                <div>
-                    <span onClick={myAccept} className='invite-main-action'>
-                        <AcceptControl meta={meta} />
-                    </span>
-                    <span className = 'invite-main-action' onClick={myReject}>
-                        <RejectControl meta={meta} />
-                    </span>
-                </div>
+    return (
+        <div className="action-centralise">
+            <div>
+                <span onClick={myAccept} className='invite-main-action'>
+                    <AcceptControl meta={meta} />
+                </span>
+                <span className = 'invite-main-action' onClick={myReject}>
+                    <RejectControl meta={meta} />
+                </span>
             </div>
-        )
-    }
+        </div>
+    )
     return null
 }
 
@@ -1455,17 +1450,13 @@ export const DeleteHubDB = ({meta}) => {
     const [loading, setLoading] = useState()
 
     function removeDBCard(dbid, orgid){
-        dbid = dbid ||  woqlClient.db()
-        orgid = orgid || woqlClient.organization()
         let dbs =  woqlClient.databases()
         let ndbs = []
         for(var i = 0; i<dbs.length; i++){
-            if(!(dbs[i].id == dbid && dbs[i].organization == orgid)){
-                ndbs.push(dbs[i])
+            if(dbs[i].id == "" && dbs[i].remote_record && dbs[i].remote_record.organization == orgid && dbs[i].remote_record.id == dbid ){
+
             }
-            else if(dbs[i].remote_record) {
-                dbs[i].id = ""
-                dbs[i].type = "missing"
+            else {
                 ndbs.push(dbs[i])
             }
         }
@@ -1481,6 +1472,7 @@ export const DeleteHubDB = ({meta}) => {
                 message: `Deleted Database ${meta.organization}/${meta.id}`,
                 status: TERMINUS_SUCCESS,
             })
+            removeDBCard(meta.id, meta.organization)
             goHubPage(meta.organization)
         })
         .catch((err) => {
@@ -1547,4 +1539,3 @@ export const DeleteHubDB = ({meta}) => {
 }
 
 export default ClonePage
-

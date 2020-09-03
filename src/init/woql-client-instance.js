@@ -2,8 +2,10 @@ import React, {useState, useEffect, useContext} from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {useAuth0} from '../react-auth0-spa'
 import {enrich_local_db_listing, append_remote_record} from "./repo-init-queries"
+import {RefreshDatabaseRecord} from "../components/Query/CollaborateAPI"
 export const WOQLContext = React.createContext()
 export const WOQLClientObj = () => useContext(WOQLContext)
+
 
 export const WOQLClientProvider = ({children, params}) => {
     //if (window.location.search.includes("code=")) return null
@@ -279,6 +281,101 @@ export const WOQLClientProvider = ({children, params}) => {
         })
     }
 
+    const asset_view = async(id, org) => {
+        id = id || woqlClient.db()
+        org = org || woqlClient.organization()
+        let usings = [org + "/" + id]
+        let sysClient = woqlClient.copy()
+        sysClient.set_system_db()
+        return TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
+    }
+
+    const add_db = (meta) => {
+        let dbs = woqlClient.databases()
+        dbs.push(meta)
+        woqlClient.databases(dbs)
+    }
+
+    const addShare = async (id, org, meta) => {
+        let res = await asset_view(id, org)
+        if(res && res[0]){
+            let dbrec = res[0]
+            if(!meta.roles) {
+                meta.roles = ["create"]
+            }
+            dbrec.remote_url = meta.remote_url            
+            dbrec = append_remote_record(dbrec, meta)
+            update_db(dbrec)
+            let dmeta = await RefreshDatabaseRecord(meta, bffClient, getTokenSilently)
+            if(dmeta) updateRemote(dmeta)  
+            else {
+                alert("No refresh")
+                console.log(meta)
+            }
+            setContextEnriched(contextEnriched + 1)
+            return dbrec
+        }
+    }
+
+    
+    const update_db = (meta) => {
+        let dbs = woqlClient.databases()
+        let nudbs = []
+        for(var i = 0; i<dbs.length; i++){
+            if(dbs[i].id == meta.id && dbs[i].organization == meta.organization){
+                nudbs.push(meta)
+            }
+            else {
+                nudbs.push(dbs[i])
+            }
+        }
+        woqlClient.databases(nudbs)    
+    }
+
+    const addClone = async (id, org, meta) => {
+        let res = await asset_view(id, org)
+        if(res && res[0]){
+            let dbrec = res[0]
+            if(dbrec){
+                dbrec.label = meta.label || meta.remote_record.label || id
+            }
+            dbrec.comment = meta.comment || ""
+            if(!meta.remote_record.roles) {
+                meta.remote_record.roles = ["read"]
+            }
+            dbrec = append_remote_record(dbrec, meta.remote_record)
+            add_db(dbrec)
+            let dmeta = await RefreshDatabaseRecord({id: meta.remote_record.id, organization: meta.remote_record.organization}, bffClient, getTokenSilently)
+            if(dmeta) updateRemote(dmeta)  
+            setContextEnriched(contextEnriched + 1)
+            return dbrec
+        }
+    }
+
+    const addRemote = async (id, org, meta) => {
+        let dbs = woqlClient.databases()
+        console.log()
+    }
+
+    function is_hub_remote(url, id, org){
+        return (url == remoteClient.server() + org + "/" + id)
+    }
+
+    const updateRemote = (dmeta) => {
+        if(dmeta){
+            let dbs = woqlClient.databases()
+            for(var i = 0; i<dbs.length; i++){
+                if(dbs[i].remote_url && is_hub_remote(dbs[i].remote_url, dmeta.id, dmeta.organization)){
+                    dbs[i] = append_remote_record(dbs[i], dmeta)
+                }
+            }
+            woqlClient.databases(dbs)
+        }
+        return dmeta
+    }
+
+
+
     const reconnectToServer = () => {
         setContextEnriched(contextEnriched + 1)        
     }
@@ -295,11 +392,13 @@ export const WOQLClientProvider = ({children, params}) => {
                 clientError,
                 setKey,
                 bffClient,
+                addShare,
                 refreshDBRecord,
                 refreshDBListing, 
                 remoteEnriched,
                 showLogin,
                 reconnectToServer,
+                addClone,
                 remoteClient,
                 contextEnriched,
             }}

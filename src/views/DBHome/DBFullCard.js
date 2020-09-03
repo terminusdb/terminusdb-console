@@ -15,6 +15,7 @@ import { DeleteDB } from "./DeleteDB"
 import { DBID, isOnHub, formatBytes } from "../Server/DBList"
 import { AreSynched } from "../DBSynchronize/DBDifferences"
 import { DBBranches, DBLastCommit, CloneRoleCredits, DBPrivacy, DBCreated, CloneProductionCredits } from "../Pages/ClonePage"
+import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
     const [loading, setLoading] = useState()
@@ -113,11 +114,20 @@ export const DBDescription = ({meta, user}) => {
 }
 
 export const RemoteCredits = ({meta, user}) => {
+    const {woqlClient} = WOQLClientObj()
+    function myLoad(dbmeta){
+        if(woqlClient){
+             woqlClient.db(false)
+             woqlClient.organization(false)
+        }
+        goHubPage(dbmeta.organization, dbmeta.id)
+    }
+
     let res = []
     res.push(<DBCloneStatus  key='cl' meta={meta} user={user} />)
     if(meta && meta.remote_record && meta.type != "local_clone"){
         res.push (
-            <CloneProductionCredits  key='ac' meta={meta.remote_record} user={user} />
+            <CloneProductionCredits  key='ac' onAction={myLoad} meta={meta.remote_record} user={user} />
         )
         res.push(
             <CloneRoleCredits key='asd' meta={meta.remote_record} user={user} />
@@ -179,8 +189,16 @@ export const DBRemoteCloned = ({meta, user}) => {
     )
 }
 
+
+
 export const DBHubClone = ({meta, url}) => {
+    const {woqlClient} = WOQLClientObj()
+
     function goHub(){
+        if(woqlClient){
+            woqlClient.db(false)
+            woqlClient.organization(false)
+        }
         if(meta) goHubPage(meta.organization, meta.id)
         if(url) {
             let bits = url.split("/")
@@ -234,9 +252,13 @@ export const UnsynchControl = ({meta}) => {
 
 
 export const DBHubCloneStatus = ({meta}) => {
-
+    const {woqlClient} = WOQLClientObj()
     let ct = meta.label ? meta.label : meta.id
     function goHub(){
+        if(woqlClient){
+            woqlClient.db(false)
+            woqlClient.organization(false)
+        }
         goHubPage(meta.oganization, meta.id)
     }
     return(

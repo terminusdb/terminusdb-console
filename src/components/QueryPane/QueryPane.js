@@ -19,7 +19,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
      */
 
     const {woqlClient} = WOQLClientObj()
-    const {ref, branch} = DBContextObj()
+    const {ref, branch, prefixes} = DBContextObj()
     const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
         woqlClient,
         query,
@@ -106,6 +106,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         resultView={resultView}
                         bindings={bindings || []}
                         query={woql}
+                        prefixes={prefixes}
                         updateQuery={updateQuery}
                     />
                 </Tab>

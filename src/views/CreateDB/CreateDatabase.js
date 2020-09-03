@@ -9,7 +9,7 @@ import {
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
 import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO, CREATE_DATABASE_LOCALLY, CREATE_DATABASE_HUB } from './constants.createdb'
-import { goDBHome } from '../../components/Router/ConsoleRouter'
+import { goDBHome, goHubPage } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
@@ -20,7 +20,7 @@ import { AiOutlineRead } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
     const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
+    const {woqlClient, remoteClient, bffClient, refreshDBRecord, addClone, addShare } = WOQLClientObj()
     let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
@@ -77,7 +77,11 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         let lid = sclient.db()
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
-            after_create_db(update_start, get_local_create_message(doc.label, doc.id), lid, "share", doc, onShare)
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Shared Database to Hub"}
+            setReport(rep)
+            return addShare(lid, woqlClient.user_organization(), doc).then((dbrec) => {
+                goHubPage(doc.organization, doc.id)
+            })
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, lid)))
         .finally(() => setLoading(false))
@@ -90,7 +94,13 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
         CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
         .then((local_id) => {
-            after_create_db(update_start, get_remote_create_message(doc.label, local_id), local_id, "clone", doc)
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
+            setReport(rep)
+            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
+            newguy.remote_url = doc.remote_url
+            newguy.remote_record = doc
+            addClone(local_id, woqlClient.user_organization(), newguy)
+            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
         })
         .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
         .finally(() => setLoading(false))
@@ -146,6 +156,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
             message: message,
             time: Date.now() - update_start,
         })
+        console.log(err)
     }
 
     function toggleLocal(){
@@ -202,8 +213,12 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     return (
         <div className="tdb__loading__parent">
             <div className="create-section">
-                {allow_remote && <Row>
-                    <Col md={6} className="create-db-select" onClick={handleLocal} active>
+                <hr/>
+
+                {allow_remote && <>
+                    <div className="create-db-option-descr">Choose where you want to create your database</div>
+                    <Row>
+                    <Col md={4} className="create-db-select" onClick={handleLocal} active>
                         <Row key="rr">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_LOCALLY}
@@ -211,16 +226,17 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                     value={CREATE_DATABASE_LOCALLY}
                                     checked={localCreate}/>
                                 <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
+                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
-                        <Row key="rd">
+                        {/*<Row key="rd">
                             <span className="database-listing-description-header">
                                 <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
                                 <span className="database-listing-description ">{local_text}</span>
                             </span>
-                        </Row>
+                        </Row>*/}
                     </Col>
-                    <Col md={6} className="create-db-select" onClick={handleHub}>
+                    <Col md={4} className="create-db-select" onClick={handleHub}>
                         <Row key="rk">
                             <span className="create-db-span">
                                 <input type="radio" id={CREATE_DATABASE_HUB}
@@ -231,24 +247,24 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                                 <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
                             </span>
                         </Row>
-                        <Row key="rm">
+                        {/*<Row key="rm">
                             <span className="database-listing-description-header">
                                 <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
                                 <span className="database-listing-description ">{remote_text}</span>
                             </span>
-                        </Row>
+                        </Row>*/}
                     </Col>
-                </Row>}
+                </Row></>}
             </div>
 
             <div className="pretty-form">
 
-                {local && allow_remote && <div className="create-place-badge local-badge">
+                {/*local && allow_remote && <div className="create-place-badge local-badge">
                     Create a Local Database
-                </div>}
-                {!local && allow_remote && <div className="create-place-badge remote-badge">
+                </div>*/}
+                {/*!local && allow_remote && <div className="create-place-badge remote-badge">
                     Create a Terminus Hub Database
-                </div>}
+                </div>*/}
                 <Row className="generic-message-holder">
                     {report &&
                         <TerminusDBSpeaks report={report} />

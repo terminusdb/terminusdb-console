@@ -10,6 +10,9 @@ import { NEW_QUERY_BUTTON_TEXT } from "./constants.pages"
  */
 
 const QueryPage = () => {
+
+    
+
     const QueryPaneBox = (props) => {
         const {qp, setQp} = props.pstate;        
         return (

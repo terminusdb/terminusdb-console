@@ -113,7 +113,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     }
                 </Col>
                 <Col key='r6' md={2} className='database-main-actions'>
-                    {user.logged_in && 
+                    {user.logged_in &&
                         <DBStatus meta={meta}  user={user}  onAction={onGo}/>
                     }
                 </Col>
@@ -246,7 +246,7 @@ export const DBSize = ({meta, user}) => {
 
 export const DBDescription = ({meta, user}) => {
     if(meta.comment && meta.comment.length > 80 && !meta.testing){
-        var str =  meta.comment.substring(76) + " ..."
+        var str =  meta.comment.substring(0, 76) + " ..."
     }
     else str = meta.comment || ""
     return (
@@ -298,19 +298,19 @@ export const DBStatus = ({meta, user, onAction}) => {
     let text = (onhub ? "" : "Share your Database on Terminus Hub")
     let title = "Save to Terminus Hub"
     if(onhub){
-        if(!meta.remote_record || meta.remote_record.actions && 
+        if(!meta.remote_record || meta.remote_record.actions &&
             meta.remote_record.actions.indexOf('pull') == -1){
             meta.action = "synchronise"
             mode = "cloned"
             title = "Cloned From Terminus Hub"
             text = <span className="tooltip-warning">
-                <AiFillWarning className="tooltip-warning-icon" /> 
+                <AiFillWarning className="tooltip-warning-icon" />
                 {`This database was cloned from ${meta.remote_url} on Terminus Hub but the source is currently unavailable`}
                 </span>
         }
         else if(meta.action == 'synchronise' && meta.remote_record){
             mode = AreSynched(meta, meta.remote_record) ? "synch" : "unsynch"
-            title = (mode == "synch" ? "Synchronized" : "Not Synchronized") 
+            title = (mode == "synch" ? "Synchronized" : "Not Synchronized")
             title += ` with (${meta.remote_record.organization}/${meta.remote_record.id})`
             text = <span className="tooltip-differences">
                 <DescribeDifferences a={meta} b={meta.remote_record} />
@@ -332,12 +332,12 @@ export const DBStatus = ({meta, user, onAction}) => {
             <div className="hub-minor-actions">
             </div>
             <span className='action-tooltip-holder'>
-                {hov && 
+                {hov &&
                     <div className='action-tooltip'>
                         <span className="tooltip-action-title">{title}</span>
                         <span className="tooltip-image">
                             <img className='database-widget-image' src={HUBDB} />
-                        </span> 
+                        </span>
                         <span className="action-tooltip-text">
                             {text}
                         </span>
@@ -345,30 +345,30 @@ export const DBStatus = ({meta, user, onAction}) => {
                 }
             </span>
             <div className="hub-major-actions">
-                <span 
-                    onClick={onAction} 
+                <span
+                    onClick={onAction}
                     className='hub-main-action'
                     onMouseEnter={() => setHov(true)}
                     onMouseLeave={() => setHov(false)}
                 >
-                    {mode == "clone" && 
+                    {mode == "clone" &&
                         <CloneControl meta={meta} />
                     }
-                    {mode == "cloned" && 
+                    {mode == "cloned" &&
                         <ClonedControl meta={meta}/>
                     }
-                    {mode == "share" && 
+                    {mode == "share" &&
                         <ShareControl meta={meta}/>
                     }
-                    {mode == "unsynch" && 
+                    {mode == "unsynch" &&
                         <UnsynchControl meta={meta}/>
                     }
-                    {mode == "synch" && 
+                    {mode == "synch" &&
                         <AllGoodControl meta={meta}/>
                     }
                 </span>
             </div>
-        </div> 
+        </div>
     )
 }
 
@@ -410,6 +410,3 @@ export function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k))
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
-
-
-
