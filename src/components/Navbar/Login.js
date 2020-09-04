@@ -51,7 +51,8 @@ export const Login = (props) => {
                         </button>
                         <div className={dropdownContent}>
                             <a  className="tdb__dropdown__button profile_a"
-                                href = {PROFILE_ROUTE+profile_arg}>
+                                href = {PROFILE_ROUTE+profile_arg}
+                                target="_blank">
                                 <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
                             </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"

@@ -1,13 +1,15 @@
-# TerminusDB Console v3.0 
+# TerminusDB Console v3.0.0 Release Notes
 
-Support for integrated distributed operation, collaboration via Terminus Hub
-New integrated query libraries
-Full support for Terminus Server 3.0 API
-Improved support for RDF - turtle loading, prefix handling
-Time travel & Commit navigator tools
-Synchronisation management tool
-Branch & Merge management tool
+The Emancipation Release
 
+* Support for integrated distributed operation, collaboration via TerminusHub
+* New integrated query libraries
+* Full support for Terminus Server 3.0 API
+* Improved support for RDF - turtle loading, prefix handling
+* Time travel & Commit navigator tools
+* Synchronization management tool
+* Branch & Merge management tool
+>>>>>>> dev
 
 # TerminusDB Console v2.0.7 Release Notes
 
