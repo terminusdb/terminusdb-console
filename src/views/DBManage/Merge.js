@@ -59,10 +59,10 @@ export const Merge = () => {
     }, [branch, ref, consoleTime, branches])
 
     const [report, setReport] = useState()
-    
+
     function getMergeRoot(){
         let b = isBranchHead(sourceCommit)
-        if(b) return woqlClient.resource('branch', b)         
+        if(b) return woqlClient.resource('branch', b)
         return woqlClient.resource('ref', sourceCommit)
     }
 
@@ -71,7 +71,7 @@ export const Merge = () => {
             if(branches[b].head == sourceCommit){
                 return b
             }
-        }        
+        }
         return false
     }
 
@@ -87,7 +87,7 @@ export const Merge = () => {
             rebase_from: getMergeRoot(),
         }
         if (commitMsg) rebase_source.message = commitMsg
-        else rebase_source.message = `Merging from ${sourceCommit}, branch ${starterBranch}, into branch ${targetBranch} with console` 
+        else rebase_source.message = `Merging from ${sourceCommit}, branch ${starterBranch}, into branch ${targetBranch} with console`
         return nClient
             .rebase(rebase_source)
             .then(() => {
@@ -171,7 +171,7 @@ export const Merge = () => {
     if(!starterBranch || !targetBranch) return null
 
     const showAlert = submissionProblem ? {} : {style:{visibility:'hidden'}}
-   
+
     let bopts = ((branches && Object.keys(branches).length) ? Object.values(branches).map( (item) => {
         return {label: item.id, value: item.id}
     }) : [])
@@ -179,8 +179,8 @@ export const Merge = () => {
             {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
             <Container>
                 <Row>
-                    <CommitSelector 
-                        branch={starterBranch} 
+                    <CommitSelector
+                        branch={starterBranch}
                         branches={branches}
                         onChangeBranch={changeSourceBranch}
                         contextText={"Merge Commits From "}
@@ -205,7 +205,7 @@ export const Merge = () => {
                         </Col>
                         <Col md={4} className="branch-selector-col" >
                             <Select
-                                placeholder = {targetBranch} 
+                                placeholder = {targetBranch}
                                 className = "select-branch"
                                 onChange ={changeTarget}
                                 name = "merge_branch_target"
@@ -222,7 +222,7 @@ export const Merge = () => {
                             </span>
                         </Col>
                         <Col md={7} className="commit-log-col" >
-                            <input 
+                            <input
                                 className = "commit-log-input"
                                 type="text"
                                 placeholder="Enter message for commit log"
@@ -243,4 +243,3 @@ export const Merge = () => {
         </>
     )
 }
-
