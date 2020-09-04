@@ -64,23 +64,21 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 * comment
 */
 export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed) => {
-    //console.log(dbs)
     let url = meta.remote_url 
     let newid = meta.id
+    let newby = {}
     if(!newid){
         newid = url.substring(url.lastIndexOf('/')+ 1)
-    }
-    if(!meta.label){
-        meta.label = newid
     }
     if(!preformed) {
         let dbs = client.databases()
         newid = _new_local_id(newid, dbs)
         meta.label = _new_local_label(meta.label, dbs)
     }
-    if(!meta.comment){
-        meta.comment = ""
-    }
+    newby.id = newid
+    newby.label = meta.label || newid
+    newby.comment = meta.comment || ""
+    newby.remote_url = meta.remote_url
     if(_is_local_server(client, meta.remote_url)){
         client.remote_auth(client.local_auth())
     }
@@ -91,7 +89,7 @@ export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed
         const jwtoken = await getTokenSilently()
         client.remote_auth({type: "jwt", key: jwtoken})
     }
-    return client.clonedb(meta, newid).then(() => newid)
+    return client.clonedb(newby, newid).then(() => newid)
 }
 
 
