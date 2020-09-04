@@ -160,10 +160,10 @@ export const SETUP_FORM = {
     },
 }
 
-export const ADD_ORGANIZATION_FORM = {
+export const ORGANIZATION_FORM = {
     fields: [
         {
-            id: 'oid',
+            id: 'id',
             value: '',
             helpCols: 7,
             label: 'Organization ID',
@@ -174,9 +174,8 @@ export const ADD_ORGANIZATION_FORM = {
                 placeholder: 'Enter ID of new organization',
             },
         },
-
         {
-            id: 'display',
+            id: 'label',
             label: 'Display Name',
             value: '',
             inputElement: {
@@ -185,35 +184,91 @@ export const ADD_ORGANIZATION_FORM = {
             },
         },
         {
-            id: 'databases',
-            label: 'Databases',
-            value: '',
+            id: "icon",
+            label: 'Icon',
             inputElement: {
-                type: 'textarea',
-            },
-        },
+                type: "input",
+                placeholder: "Enter URL of an icon to use for your database"
+            }
+        },  
         {
-            id: 'children',
-            label: 'Children',
-            value: '',
+            id: "type",
+            label: 'Organization Type',
+            mandatory: true,
             inputElement: {
-                type: 'textarea',
-            },
-        },
+                type: "select",
+                options: [
+                    {value: "Personal", label: "Personal"}, 
+                    {value: "Professional", label: "Professional"},
+                    {value: "Team", label: "Team"},
+                    {value: "Enterprise", label: "Enterprise"},
+                    {value: "Public", label: "Public Interest"}
+                ],
+                placeholder: "Select Organization Type"
+            }
+        },      
         {
-            id: 'notes',
-            label: 'Notes',
+            id: 'comment',
+            label: 'Description',
             value: '',
             inputElement: {
                 type: 'textarea',
-                placeholder: 'You can attach notes to organizations to aid administration',
+                placeholder: 'Enter basic description of organization, its purpose, etc',
             },
         },
     ],
     buttons: {
         submitText: 'Create Organization',
-    },
+    }
+}
 
+export const ADD_COLLABORATORS_FORM = {
+    fields: [{
+            id: "database",
+            value: "",
+            label: "Database",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [],
+                placeholder: "Select Database"
+            },
+        },
+        {
+            id: "permission",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                options: [
+                    {value: "read", label: "Read"}, 
+                    {value: "write", label: "Write"},
+                    {value: "manage", label: "Manage"}
+                ],
+                placeholder: "Select Permission to Grant"
+            },
+            label: 'Permission'
+        },
+        {
+            id: "users",
+            inputElement: {
+                placeholder: "comma seperated list of user ids or email addresses",
+                type: "textarea",
+            },
+            label: 'Collaborator IDs'
+        },
+        {
+            id: "invitation",
+            inputElement: {
+                placeholder: "Introductory note to send to user",
+                type: "textarea",
+            },
+            label: 'Introduction Note'
+        }
+    ],
+    buttons: {
+        submitText: "Add Collaborators",
+    }
 }
 
 export const ADD_USER_FORM = {
@@ -366,6 +421,25 @@ export const CREATE_ROLE_FORM = {
     },
 }
 
+
+export const CLONE_URL_FORM = {
+    fields: [
+        {
+            id: 'url',
+            label: 'URL',
+            value: '',
+            mandatory: true,
+            inputElement: {
+                type: 'input',
+                placeholder: 'Enter the URL of the TerminusDB database you wish to clone',
+            },
+        }
+    ],
+    buttons: {
+        submitText: 'Clone from URL',
+    },
+}
+
 export const GRANT_CAP_FORM = {
     fields: [
         {
@@ -489,3 +563,4 @@ export const JUST_COMMIT_LOG_EXPLANATION = (
 export const ADMIN_ACCOUNT_NOTES = 'Administrator Account set up with TerminusDB console at '
 export const CREATED_ADMIN_MESSAGE = 'Administrator account set up successfully'
 export const FAILED_CREATING_ADMIN = 'Failed to create admin account'
+

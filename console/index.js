@@ -2,39 +2,35 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import {Auth0Provider, ConsoleHistory} from '@terminusdb/terminusdb-console'
-import config from './auth_config.json'
+import {auth0_conf} from './auth_config'
 import {localSettings} from './localSettings'
-import {WOQLClientProvider} from '@terminusdb/terminusdb-console'
+import {WOQLClientProvider ,redirect_uri} from '@terminusdb/terminusdb-console'
 
-const onRedirectCallback = (appState) => {
-    ConsoleHistory.go(-3)
-}
+
+const onRedirectCallback = appState => {
+  ConsoleHistory.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : ''
+  );
+};
 
 /*
  * Wraps the entire application in a auth0 domain
  * initializes woqlClient and passes it off to the app to connect
  */
+
 ReactDOM.render(
     <Auth0Provider
-        domain={config.domain}
-        client_id={config.clientId}
-        redirect_uri={window.location.origin + window.location.pathname} //{`${window.location.origin}/download`}
+        domain={auth0_conf.domain}
+        client_id={auth0_conf.clientId}
+        redirect_uri={redirect_uri}
         onRedirectCallback={onRedirectCallback}
-        audience={config.audience}
+        audience={auth0_conf.audience}
     >
-        <WOQLClientProvider params={localSettings}>
-            <App />
-        </WOQLClientProvider>
+      <WOQLClientProvider params={localSettings}>
+          <App />
+      </WOQLClientProvider>
     </Auth0Provider>,
     document.getElementById('root'),
 )
-/*
-<Auth0Provider
-      domain={config.domain}
-      client_id={config.clientId}
-      redirect_uri={window.location.origin} //{`${window.location.origin}/download`}
-      onRedirectCallback={onRedirectCallback}
-      audience={config.audience}
-    > 
-    <App/>
-   </Auth0Provider>*/

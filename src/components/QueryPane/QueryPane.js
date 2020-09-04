@@ -6,7 +6,7 @@ import {WOQLQueryContainerHook} from '../Query/WOQLQueryContainerHook'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {Tabs, Tab} from 'react-bootstrap-tabs'
 import {ResultQueryPane} from './ResultQueryPane'
-import TerminusClient from '@terminusdb/terminusdb-client'
+import {WOQLEditorControlled} from '@terminusdb/terminusdb-react-components'
 import {QUERY_PANEL_TITLE, QUERY_EDITOR_LABEL} from './constants.querypane'
 import {DBContextObj} from '..//Query/DBContext'
 
@@ -19,7 +19,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
      */
 
     const {woqlClient} = WOQLClientObj()
-    const {ref, branch} = DBContextObj()
+    const {ref, branch, prefixes} = DBContextObj()
     const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
         woqlClient,
         query,
@@ -106,6 +106,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         resultView={resultView}
                         bindings={bindings || []}
                         query={woql}
+                        prefixes={prefixes}
                         updateQuery={updateQuery}
                     />
                 </Tab>

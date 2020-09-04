@@ -1,12 +1,16 @@
 import React from 'react'
 import {createHashHistory} from 'history'
-import {DB_ROUTE, PROFILE_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
-import {HashRouter, Switch, Route} from 'react-router-dom'
+import {DB_ROUTE, CLONE_DB_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
+import {Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
-import {ProfileRoutes} from './ProfileRoutes'
+//import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
+import {base_router} from '../../utils/baseRouter'
 
-export const ConsoleHistory = createHashHistory()
+import { createBrowserHistory } from "history";
+import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
+
+export const ConsoleHistory= createBrowserHistory()//{basename: base_router});
 
 export const ConsoleRouter = (props) => {
     function getSwitch() {
@@ -15,22 +19,32 @@ export const ConsoleRouter = (props) => {
                 <Route path={DB_ROUTE}>
                     <DBRoutes />
                 </Route>
-                <Route path={PROFILE_ROUTE}>
-                    <ProfileRoutes />
-                </Route>
-                <Route path={SERVER_ROUTE}>
-                    <ServerRoutes />
-                </Route>
+                <ServerRoutes />
             </Switch>
         )
     }
-    return <HashRouter history={props.history}>{getSwitch()}</HashRouter>
+    return <Router history={props.history}>{getSwitch()}</Router>
 }
 
+/*
+* for page navigation, create dinamically the /db/username/dbname 
+*/
 export const getDBRoute = (db, aid) => {
     if (db == '_system') return DB_ROUTE + TERMINUS_ROUTE
     return `${DB_ROUTE}/${aid}/${db}`
 }
+
+export const getHubRoute = (orgid, dbid) => {
+    let base = `${CLONE_DB_ROUTE}/${orgid}`
+    if(dbid) base += `/${dbid}`
+    return base
+}
+
+export const goHubPage = (org, dbid, report) => {
+    let route = getHubRoute(org, dbid)
+    goTo(route, report)
+}
+
 
 export const getDBPageRoute = (db, aid, page) => {
     return getDBRoute(db, aid) + `/${page}`

@@ -1,12 +1,15 @@
 import React, {useState, Fragment} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
+import {DBNavbarTop} from './DBNavbarTop'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
-import {HistoryNavigator} from '../History/HistoryNavigator'
 import {Login} from './Login'
 import {UnderConstruction} from '../Reports/UnderConstruction'
-import {LOGIN_LABEL} from './constants.navbar'
-//import {TimeTraveler} from '../History/TimeTraveler'
+import {LOGIN_LABEL,noHttps} from './constants.navbar'
+import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
+import {NavLink} from 'react-router-dom'
+import {HomeMainMenu} from './HomeMainMenu'
+
 export const ConsoleNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
     const [isOpen, setIsOpen] = useState(false)
@@ -18,8 +21,8 @@ export const ConsoleNavbar = (props) => {
         isTopOpen === true
             ? 'nav__main__center  nav__main__center--show'
             : 'nav__main__center nav__main__center--hide'
-
-    const showUnderCostruction = false//process.env.TERMINUSDB_ENV === 'dev' ? false : true
+    if(!woqlClient) return null
+    const showUnderCostruction = false//window.location.protocol === 'https' || window.location.host==="localhost:3005" ? false : true
     return (
         <Fragment>
             <header className="console__page__header">
@@ -38,8 +41,9 @@ export const ConsoleNavbar = (props) => {
                     </div>
                     <ServerNavbar />
                     <ul className={topmenu}>
+                        {!woqlClient.db() && <HomeMainMenu/>}
                         {woqlClient.db() && (
-                            <DBNavbar
+                            <DBNavbarTop
                                 isOpen={isOpen}
                                 page={props.page}
                                 toggleTimeTravel={toggleNavBar}
@@ -49,17 +53,22 @@ export const ConsoleNavbar = (props) => {
                     <div className="nav__main__right">
                         {showUnderCostruction && (
                             <UnderConstruction
-                                buttonClassName="tdb__button__base nav__main__login"
+                                buttonClassName="tdb__button__base tdb__button__base--green nav__main__login"
                                 buttonColor={'white'}
                                 buttonText={LOGIN_LABEL}
                                 action="Login in HUB"
+                                headerText={noHttps.title}
+                                description={noHttps.description}
+                                noEmail={true}
+                                noIcon={true}
                             />
                         )}
                         {showUnderCostruction === false && <Login />}
                     </div>
                 </nav>
             </header>
-            {isOpen && woqlClient.db() && <HistoryNavigator />}
+            {woqlClient.db() && <DBNavbar />}
+            {isOpen && woqlClient.db() && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
         </Fragment>
     )
 }

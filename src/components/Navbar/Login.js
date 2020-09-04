@@ -6,27 +6,37 @@ import { USER, POWER_OFF } from "../../constants/faicons"
 import { PROFILE_ROUTE } from "../../constants/routes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OutsideClickHandler from 'react-outside-click-handler';
+import {redirect_uri} from '../../utils/baseRouter'
 
 export const Login = (props) => {
-    const {isAuthenticated, user, loading, authError,loginWithRedirect,logout } = useAuth0();
+    const {isAuthenticated, user, loading,loginWithRedirect,logout } = useAuth0();
     const [isOpen,setOpen] =useState(false);
 
     const toggle = () => setOpen(prevState => !prevState);
-    const disabled= authError===true  ? {disabled:true} : {onClick : () => loginWithRedirect()} 
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
-    
+
     const onOutsideClick=()=>{
         if(isOpen===true){
             toggle(false)
         }
     }
+
+    let profile_arg = `?console=console`
+
+
+    /*
+    * TO BE REVIEW TO GET FROM HISTORY BASE NAME
+    */
+    //const base_router = process.env.TERMINUSDB_APP_BASE_ROUTER || '/console';
+    //const redirect_uri=`${window.location.origin}${base_router}`
+
     const logoutWithRedirect = () =>
         logout({
-            returnTo: window.location.origin
+            returnTo: redirect_uri//window.location.origin+'/console/'
     });
-    return (<Fragment>      
-            {!isAuthenticated && !user && 
-                <button className="tdb__button__base nav__main__login" {...disabled}>
+    return (<Fragment>
+            {!isAuthenticated && !user &&
+                <button id="login_button" className="tdb__button__base tdb__button__base--green nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}
                 </button>
             }
@@ -36,25 +46,25 @@ export const Login = (props) => {
                         <button onClick={toggle} className="nav__main__profile__button"  aria-expanded="false">
                             <img src={user.picture}
                                 alt={PROFILE_PAGE_LABEL}
-                                className="nav__main__profile__img" 
+                                className="nav__main__profile__img"
                                 width="50"/>
-                        </button>               
+                        </button>
                         <div className={dropdownContent}>
-                            <NavLink tag = {NavLink} className="tdb__dropdown__button"
-                                to = {PROFILE_ROUTE}
-                                exact>
-                                <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}                 
-                            </NavLink>
+                            <a  className="tdb__dropdown__button profile_a"
+                                href = {PROFILE_ROUTE+profile_arg}
+                                target="_blank">
+                                <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
+                            </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"
                                 onClick={() => logoutWithRedirect()}
                                 to="#"
                                 exact>
-                                <FontAwesomeIcon icon={POWER_OFF} className="mr-3" />{LOGOUT_LABEL}                 
-                            </NavLink>                  
+                                <FontAwesomeIcon icon={POWER_OFF} className="mr-3" />{LOGOUT_LABEL}
+                            </NavLink>
                         </div>
                        </div>
                 </OutsideClickHandler>
-            }                 
-            </Fragment>       
+            }
+            </Fragment>
     )
 }

@@ -2,7 +2,7 @@ export const FAILED_LOADING_LATEST_UPDATES = {
     id: "FAILED_LOADING_LATEST_UPDATES",
     color: "danger",
     title: "Failed to load latest updates",
-    message: "An error occurred while loading latest updates"    
+    message: "An error occurred while loading latest updates"
 }
 
 
@@ -28,5 +28,16 @@ export const MANAGE_COMPONENTS = {
 export const LATEST_UPDATES_LENGTH = 20
 export const SUB_TITLE_LIMIT = 24
 export const MAIN_LIMIT = 12
-export const TITLE_LIMIT = 14 
+export const TITLE_LIMIT = 14
 export const INFO_LIMIT = 100
+
+
+export const DELETE_DB_MODAL = {
+    placeholder: "Enter the database ID you wish to delete.",
+    message: "ID of current database:",
+    confirmLocal: "Confirm Database Delete",
+    confirmRemote: "Confirm Delete",
+    error:  "The Database ID entered was incorrect",
+    deleted: "Database Deleted",
+    failed: "Failed to Delete Database"
+}

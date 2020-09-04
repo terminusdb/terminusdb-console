@@ -1,93 +1,81 @@
 import React, {useState} from 'react'
 import Loading from '../../components/Reports/Loading'
-import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
     TERMINUS_SUCCESS,
+    TERMINUS_INFO,
     TERMINUS_ERROR,
     TERMINUS_WARNING,
     TERMINUS_COMPONENT,
 } from '../../constants/identifiers'
-import {COPY_REMOTE_FORM, COPY_DB_DETAILS_FORM, COPY_DB_DETAILS} from './constants.createdb'
-import {goDBHome} from '../../components/Router/ConsoleRouter'
-import {APIUpdateReport} from '../../components/Reports/APIUpdateReport'
-import {TCForm, TCSubmitWrap} from '../../components/Form/FormComponents'
+import { APIUpdateReport } from '../../components/Reports/APIUpdateReport'
+import { DBDetailsForm } from './DBDetails'
+import { CloneDB, NewLocalLabel, NewLocalID } from '../../components/Query/CollaborateAPI'
 
-export const CloneDatabase = () => {
-    const { woqlClient, reconnectToServer, remoteClient } = WOQLClientObj()
-    const [updateLoading, setUpdateLoading] = useState(false)
-    const [report, setReport] = useState()
-    const [sourceURL, setSourceURL] = useState()
-    const { getTokenSilently } = useAuth0();
-
+export const CloneLocal = ({meta, woqlClient, onCancel, onClone, type}) => {
+    const [loading, setLoading] = useState(false)
     let update_start = Date.now()
+    let intro_message = "Cloning a local database creates an entirely new copy of the database, that can be changed independently, but remains connected to the original and can be synchronized"
+    let clone_intro = {status: TERMINUS_INFO,  message: intro_message};
+    const [report, setReport] = useState(clone_intro)
+    const [starter, setStarter] = useState(getStarter(meta))
 
-    let basicInfo = {}
-    //let fields = COPY_REMOTE_FORM.fields
-    let fields = COPY_DB_DETAILS_FORM.fields
+    function getSuccessMessage(doc ){
+        return "Cloned database - clone has id " + doc.id + " and label " + doc.label
+    }
 
-    //build values and options from database options
-    COPY_REMOTE_FORM.fields.map((item, index) => {
-        basicInfo[item.id] = item.value || ''
-    })
+    function getStarter(meta){
+        let st = {}
+        st.id = NewLocalID(meta.id, woqlClient)
+        st.label = NewLocalLabel(meta.label, woqlClient)
+        st.organization = meta.organization
+        st.comment = meta.comment
+        return st
+    }
 
-    function onChangeBasics(field_id, value) {
-        if (field_id == 'dbsource') {
-            setSourceURL(value)
+    function getErrorReport(e, doc, update_start){
+        let rep = {
+            status: TERMINUS_ERROR,
+            message: "Failed to clone database " + doc.id,
+            error: e,
+            time: Date.now() - update_start
         }
+        return rep
     }
 
-    let user = woqlClient.user()
-
-    //we should really do some behind the scenes checking of auth situation before actually pulling the trigger, but oh well....
-    async function onClone(details) {
-        if (!sourceURL) return
-        update_start = Date.now()
-        setUpdateLoading(true)
-        let newid = sourceURL.substring(sourceURL.lastIndexOf('/') + 1)
-        let src = {
-            remote_url: sourceURL,
-            label: details.name || newid,
+    async function doClone(doc){
+        if(!(type && type == "hub")){
+            update_start = Date.now()
+            if(setLoading) setLoading(true)
+            doc.organization = woqlClient.user_organization()
+            doc.remote_url = woqlClient.connectionConfig.cloneableURL()
+            return CloneDB(doc, woqlClient, false, false, true)
+            .then((local_id) => {
+                afterClone(local_id, doc.organization, doc, getSuccessMessage(doc), Date.now()-update_start)
+            })
+            .catch((err) => setReport(getErrorReport(err, doc, update_start)))
+            .finally(() => setLoading(false))
         }
-        if (details.description) src.comment = details.description
-        const jwtoken = await getTokenSilently()
-        remoteClient.local_auth({type: "jwt", key: jwtoken})
-       
-        return remoteClient
-            .clonedb(src, newid)
-            .then(() => {
-                let message = `${COPY_REMOTE_FORM.cloneSuccessMessage} (id: ${sourceURL})`
-                let rep = {
-                    message: message,
-                    status: TERMINUS_SUCCESS,
-                    time: Date.now() - update_start,
-                }
-                setReport(rep)
-                afterCreate(newid, rep)
-            })
-            .catch((err) => {
-                let message = `${COPY_REMOTE_FORM.cloneFailureMessage} (id: ${sourceURL}) `
-                setReport({error: err, status: TERMINUS_ERROR, message: message})
-            })
-            .finally(() => {
-                setUpdateLoading(false)
-            })
+        else onClone(doc)
     }
 
-    /**
-     * Reloads database list by reconnecting and goes to the db home
-     */
-    function afterCreate(id, rep) {
-        reconnectToServer().then((result) => {
-            goDBHome(id, woqlClient.user_organization(), rep)
-        })
+    function afterClone(id, organization, doc, message, update_start){
+        let rep = {
+            status: TERMINUS_SUCCESS,
+            message: message,
+            time: Date.now() - update_start,
+        }
+        setReport(rep)
+        if(onClone) onClone(id, organization, doc)
     }
 
-    let buttons = user ? COPY_REMOTE_FORM.buttons : true
-    //let buttons = COPY_REMOTE_FORM.buttons
+    let buttons = {
+        submitText: "Create Clone",
+        cancelText: "Cancel",
+        onCancel: onCancel
+    }
 
     return (
-        <>
-            {(updateLoading) && <Loading type={TERMINUS_COMPONENT} />}
+        <div className="tdb__loading__parent">
             {report && report.error && (
                 <APIUpdateReport
                     status={report.status}
@@ -96,14 +84,18 @@ export const CloneDatabase = () => {
                     time={report.time}
                 />
             )}
-            <TCForm
-                onSubmit={onClone}
-                layout={[3, 1]}
-                noCowDucks
-                onChange={onChangeBasics}
-                fields={fields}
-                buttons={buttons}
-            />
-        </>
+            {report && !report.error && (
+                <span className="database-list-intro">
+                    <APIUpdateReport
+                        status={report.status}
+                        message={report.message}
+                    />
+                </span>
+            )}
+            {starter &&
+                <DBDetailsForm buttons={buttons} onSubmit={doClone} from_local={starter} />
+            }
+            {loading &&  <Loading type={TERMINUS_COMPONENT}/>}
+        </div>
     )
 }

@@ -5,13 +5,15 @@ import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAIN
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS,
          PROMPT_ROW_CSS, INPUT_ROW_CSS, INPUT_GUTTER_CSS, ERROR_ROW_CSS, SELECT_CSS, INPUT_CSS,
          TEXTAREA_CSS, CHECKBOX_CSS, CHECKBOX_WRAPPER_CSS, CHECKBOX_LABEL_CSS, HELP_CSS,
-         DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS, 
+         DEPLOY_COWDUCKS, COWDUCK_WRAPPER_CSS, COWDUCK_ICON_CSS, INTERNAL_ROW_CSS, INTERNAL_COL_CSS,
          INPUT_COL_CSS, HELP_LABEL_COL_CSS, HELP_COL_CSS, INVISIBLE_HELP_CSS, CHECKED_WRAPPER_CSS
         } from "./constants.form"
 import Select from "react-select";
 import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
 import {APIUpdateReport} from '../Reports/APIUpdateReport'
+import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
+import { ICONS_PICKER } from '../../constants/fontawesomepicker'
 
 export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children, noCowDucks}) => {
 
@@ -112,8 +114,8 @@ export const TCFormSubmits = ({className, buttonsClassName, onCancel, cancelText
 
     return (
         <TCSubmitWrap buttonsClassName={buttonsClassName} className={className}>
-            {submitText && 
-                <button type="submit" className={submitClassName}>
+            {submitText &&
+                <button type="submit" className={"tdb__button__base tdb__button__base--green"} >
                     {submitText}
                 </button>
             }
@@ -166,7 +168,7 @@ export const TCFormField = ({
     helpExpanded = ((helpExpanded && !isObject(helpExpanded)) ? helpExpanded  : false)
 
     const [helpVisible, setHelpVisible] = useState(helpExpanded)
-  
+
     function toggleHelp(){
         setHelpVisible(!helpVisible)
     }
@@ -316,6 +318,27 @@ export const TCFormInput = ({field_id, value, disabled, onChange, placeholder, c
     )
 }
 
+export const TCFormIcon = ({field_id, value, disabled, onChange, placeholder, className}) =>    {
+    placeholder = placeholder || ""
+    if(typeof className != "string" || !className)  className = INPUT_CSS
+    const [val, setVal] = useState("")
+    useEffect(() => {setVal(value)}, [value])
+    let vchange = function(selval){
+        setVal(selval)
+        onChange(field_id, selval)
+    }
+
+    return <FontIconPicker icons={ICONS_PICKER}
+        onChange={value => vchange(value)}
+		appendTo="body"
+        showSearch={true}
+        closeOnSelect={true}
+        renderUsing='class'
+		value={val}
+    />
+}
+
+
 
 export const TCFormTextarea = ({field_id, value, disabled, onChange, placeholder, className}) =>    {
     placeholder = (placeholder && !isObject(placeholder) ? placeholder  : "")
@@ -403,7 +426,7 @@ export const TCFormCheckbox = ({field_id, onChange, className, label, checked, d
 }
 
 export const TCFormRefSelector = ({field_id, onChange, className, label, checked, disabled, wrapperClassName, labelClassName}) => {
-    
+
 }
 
 export const TCRow = ({className, children}) => {
@@ -553,7 +576,7 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
             value={value}
             className={elt.className}
             onChange={onChange}
-        />        
+        />
     }
     else if(elt.type == "textarea"){
         return (
@@ -578,6 +601,19 @@ export const JSONTCInputElement = (field_id, value, mandatory, onChange, elt) =>
                 className={elt.className}
                 onChange={onChange}
                 label={elt.label}
+                placeholder={elt.placeholder}
+            />
+        )
+    }
+    else if(elt.type == "icon"){
+        return (
+            <TCFormIcon
+                field_id={field_id}
+                disabled ={elt.disabled}
+                mandatory ={mandatory}
+                value={value}
+                className={elt.className}
+                onChange={onChange}
                 placeholder={elt.placeholder}
             />
         )

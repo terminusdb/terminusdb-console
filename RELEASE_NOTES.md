@@ -1,6 +1,36 @@
+# TerminusDB Console v3.0.0 Release Notes
+
+The Emancipation Release
+
+* Support for integrated distributed operation, collaboration via TerminusHub
+* New integrated query libraries
+* Full support for Terminus Server 3.0 API
+* Improved support for RDF - turtle loading, prefix handling
+* Time travel & Commit navigator tools
+* Synchronization management tool
+* Branch & Merge management tool
+>>>>>>> dev
+
+# TerminusDB Console v2.0.7 Release Notes
+
+## New
+
+* Integration of new react-component package
+* New time travel widget
+* New branch creation page with time travel widget
+* New merge page with time travel widget
+* New synchronize page with ability to add multiple remotes
+* New database home page responsive to context / time travelling
+
+## bug-fixes
+
+
+
 # TerminusDB Console v2.0.6 Release Notes
 
-* Minor fixes
+## New
+
+* Sortable database listing page with metadata
 
 # TerminusDB Console v2.0.5 Release Notes
 
@@ -21,7 +51,7 @@
 
 ## Bug fixes
 
-Upgrade of Navigation Bar and redisgn of widgets 
+Upgrade of Navigation Bar and redesign of widgets 
 
 Changed login to connect button
 

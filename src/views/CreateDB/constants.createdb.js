@@ -27,6 +27,9 @@ const copyImg = TERMINUS_IMAGE_BASE + "copy-db.png"
 const copyLocallyImg = TERMINUS_IMAGE_BASE + "copy-locally.png"
 const copyRemoteImg = TERMINUS_IMAGE_BASE + "copy-remote.png"
 
+export const CREATE_DATABASE_LOCALLY = "Local Database"
+export const CREATE_DATABASE_HUB = "Terminus Hub Database"
+
 //const cloneImg = TERMINUS_IMAGE_BASE + "clone.png"
 //const forkImg = TERMINUS_IMAGE_BASE + "fork.png"
 
@@ -91,6 +94,13 @@ export const CREATE_DB_FORM = {
     }
 }
 
+
+export const SHARE_DB_FORM = {
+    buttons: {
+        submitText: "Share on Terminus Hub"
+    }
+}
+
 export const DB_DETAILS_FORM = {
     fields: [
         {
@@ -117,11 +127,26 @@ export const DB_DETAILS_FORM = {
         {
             id: "sharing",
             label: 'Sharing',
-            mandatory: true,
             inputElement: {
                 type: "select",
                 options: [{value: "public", label: "Public"}, {value: "private", label: "Private"}, {value: "local", label: "Local Only - No Sharing"}],
                 placeholder: "Public"
+            }
+        },
+        {
+            id: "iconUrl",
+            label: 'Image Url to use for your database',
+            inputElement: {
+                type: "input",
+                placeholder: "Enter URL of an image with valid format"
+            }
+        },
+        {
+            id: "icon",
+            label: 'Pick an icon to use for your database',
+            inputElement: {
+                type: "icon",
+                placeholder: "Select icon"
             }
         },
         {
@@ -226,7 +251,7 @@ export const COPY_REMOTE_FORM = {
     sample: {
         dbid: "sales-marketing-01",
         dbname: "Marketing Statistics (imported)",
-        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to master as it is live!"
+        description: "The sales and marketing latest analysis outputs and source data. This constitutes the most up to date and reliable data we have as it feeds from the main PoS system and updates are published hourly. Please be careful before pushing to main as it is live!"
     },
     fields: [
         {
@@ -250,24 +275,50 @@ export const COPY_REMOTE_FORM = {
 
 export const COPY_DB_DETAILS_FORM = {
     fields: [
-        /*{
-            id: "dbid",
-            label: 'Original ID',
-            inputElement: {
-                type: "input",
-                disabled: true
-            }
-        },*/
         {
             id: "copy",
+            value: "TerminusDB",
             label: 'Copy From',
             mandatory: true,
             inputElement: {
                 type: "select",
+                disabled: false,
                 options: [{value: "remote", label: "TerminusDB"}, {value: "local", label: "Local Database"}],
                 placeholder: "TerminusDB"
             }
-        }
+        },
+        {
+            id: "sourceId",
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose local database to copy from",
+                options: []
+            },
+            label: 'Source'
+        },
+        {
+            id: "dbId",
+            value: "",
+            label: 'New Database Id',
+            mandatory: true,
+            inputElement: {
+                type: "input",
+                placeholder: "Enter new database Id to clone"
+            }
+        },
+        /*{
+            id: "sourceID",
+            label: 'Source',
+            value: "",
+            mandatory: true,
+            inputElement: {
+                type: "select",
+                placeholder: "Choose database URL from which you would want to copy from",
+                options: []
+            }
+        }*/
     ],
     buttons: {
         submitText: "Copy Database"
@@ -406,3 +457,5 @@ export const CREATE_REMOTE_FORM = {
     }
 }
 
+export const CREATE_LOCAL_INTRO = "Create a new database on your local TerminusDB server"
+export const CREATE_REMOTE_INTRO = "You can choose to create a new database on your local server, or save it directly to your TerminusHub account for sharing with others"

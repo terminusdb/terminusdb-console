@@ -1,185 +1,95 @@
 import React, {useEffect, useState} from 'react'
-import {useAuth0} from '../../react-auth0-spa'
 import {Row, Col} from 'reactstrap'
-import {DetailsCard} from './DetailsCard'
-import * as icons from '../../constants/faicons'
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {LatestUpdates} from '../Tables/LatestUpdates'
-import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-
+import {DBFullCard} from './DBFullCard'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {printts, DATETIME_DATE, DATETIME_COMPLETE} from '../../constants/dates'
-import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
+import {CommitLog} from "./CommitLog"
+import {ScopedDetails} from "./ScopedDetails"
+import { CloneLocal } from "../CreateDB/CloneDatabase"
+import { goDBHome } from '../../components/Router/ConsoleRouter'
 
 export const MonitorDB = (props) => {
-    const {woqlClient} = WOQLClientObj()
-    const {graphs, branch, branches, DBInfo, ref, consoleTime, repos, scale} = DBContextObj()
+    const {woqlClient, refreshDBRecord} = WOQLClientObj()
+    const {branches, updateBranches} = DBContextObj()
 
-    const [commitCount, setCommitCount] = useState()
-    const [latest, setLatest] = useState()
+    const [cloning, setCloning] = useState()
+    let dbmeta = woqlClient.get_database() || {}
+    const [assetRecord, setAssetRecord] = useState(dbmeta)
 
     let WOQL = TerminusClient.WOQL
-    let ts = consoleTime || Date.now() / 1000
 
-    let latest_woql = false
-
-    //load commit Count
     useEffect(() => {
-        let w = WOQL.using('_commits').triple('v:A', 'type', 'ref:ValidCommit')
-        woqlClient.query(w).then((result) => {
-            if (result.bindings) setCommitCount(result.bindings.length)
-        })
-    }, [])
+        if(branches) load_assets()
+    }, [branches])
 
-    //load commit Count
-    useEffect(() => {
-        let vals = consoleTime ? WOQL.not().greater('v:Time', String(consoleTime)) : false
-        let q = WOQL.lib().commits()
-        if (vals) q.and(vals)
-        latest_woql = WOQL.limit(LATEST_UPDATES_LENGTH)
-            .select('v:Time', 'v:Author', 'v:Message')
-            .order_by('v:Time', q)
-        woqlClient.query(latest_woql).then((result) => {
-            if (result.bindings) setLatest(result.bindings)
-        })
-    }, [consoleTime])
 
-    const db_uri = woqlClient.connectionConfig.cloneableURL()
-
-    function getCommitInfo() {
-        let str = ''
-        if (scale) {
-            str += 'DB Size: ' + formatBytes(scale.size) + ' ~ Triples: ' + scale.triple_count
-        }
-        if (latest && latest[0]) {
-            let r = latest[0]
-            if (scale) {
-                str += '\n ~ '
+    function load_assets(){
+        let x = woqlClient.resource("db").substring(0, woqlClient.resource("db").length-1)
+        WOQL.lib().assets_overview([x], woqlClient).then((res) => {
+            let nstate = res[0]
+            let ostate = assetRecord
+            var nkstate = {}
+            for(var k in ostate){
+                nkstate[k] = ostate[k]
             }
-            str +=
-                'Last Update (' + r['Author']['@value'] + '): ' + printts(r['Time']['@value']) + ' '
-        }
-        return str
-    }
-
-    function getCurrentDBName() {
-        let db = woqlClient.get_database()
-        if (db) return db.label
-        return 'unknown'
-    }
-    function getCurrentDbDescr() {
-        let db = woqlClient.get_database()
-        if (db) return db.description
-        return 'unknown database'
-    }
-
-
-    function getRepoInfo() {
-        let info = {title: 'Origin', type: '', sub: '', info: ''}
-        if (repos) {
-            if (repos.remote) {
-                info = repos.remote
-                info.sub = 'Distributed Database'
-                info.info = 'Cloned from ' + info.url
-            } else if (repos.local_clone) {
-                info = repos.local_clone
-                info.sub = 'Clone of Local Database'
-                info.info = 'Cloned from ' + info.url
-            } else {
-                info = repos.local
-                info.sub = 'Local Database'
-                info.info = 'Clone URL: ' + db_uri
+            for(var k in nstate){
+                nkstate[k] = nstate[k]
             }
+            setAssetRecord(nkstate)
+        })
+    }
+
+    function toggle(){
+        setCloning(!cloning)
+    }
+
+    function onClone(id, org, doc){
+        setCloning(false)
+        let oldie = woqlClient.get_database()
+        let nu = {
+            id: id,
+            organization: org,
+            label: doc.label,
+            comment: doc.comment,
+            type: "local_clone"
         }
-        return info
-    }
-
-    function showCreateTime(cre, author) {
-        if (cre > 0) return 'Created ' + printts(cre, DATETIME_DATE) + ' by ' + author
-        else if (cre == 0) return 'DB Not Initialised'
-        else return ''
-    }
-
-    function getBranchGraphCount(branches, graphs) {
-        let str = ''
-        if (branches)
-            str +=
-                Object.keys(branches).length +
-                (Object.keys(branches).length > 1 ? ' Branches ' : ' Branch ')
-        if (graphs) {
-            if (branches) str += ' ~ '
-            str +=
-                Object.keys(graphs).length + (Object.keys(graphs).length > 1 ? ' Graphs' : ' Graph')
+        nu.remote_record = oldie;
+        let dbs = woqlClient.databases()
+        dbs.push(nu)
+        let ostate = assetRecord
+        var nkstate = {}
+        for(var k in ostate){
+            if(k == "label" || k == "id" || k == "comment") nkstate[k] = nu[k]
+            else nkstate[k] = ostate[k]
         }
-        return str
+        refreshDBRecord(id, org).then(() => {
+            goDBHome(id, org)
+            updateBranches()
+            woqlClient.db(id)
+            setAssetRecord(woqlClient.get_database())
+        })
     }
 
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return '0 Bytes'
-
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-    }
-
-    let ri = getRepoInfo()
-
+    if(!branches) return null
     return (
         <div>
-            <hr className="my-space-50" />
-            <hr className="my-space-50" />
-            <hr className="my-space-50" />
-
-            <Row>
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        title={woqlClient.db()}
-                        main={getCurrentDBName()}
-                        subTitle={
-                            ' ' + (DBInfo ? showCreateTime(DBInfo.created, DBInfo.author) : '...')
-                        }
-                        info={getCurrentDbDescr()}
-                    />
-                </Col>
-
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.COMMIT}
-                        title="Commits"
-                        main={commitCount}
-                        subTitle={
-                            branches || graphs ? getBranchGraphCount(branches, graphs) : '...'
-                        }
-                        info={getCommitInfo()}
-                    />
-                </Col>
-
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.USERS}
-                        title="User"
-                        main=" 1 "
-                        subTitle="Desktop Client"
-                        info="Desktop users can add collaborators to their databases through TerminusDB hub"
-                    />
-                </Col>
-
-                <Col md={3} className="mb-3 dd-c">
-                    <DetailsCard
-                        icon={icons.ORIGIN}
-                        title={ri.title}
-                        main={ri.type}
-                        info={ri.info}
-                        subTitle={ri.sub}
-                    />
-                </Col>
+            <Row key="rr">
+                <DBFullCard meta={assetRecord} onClone={toggle} user={woqlClient.user()}/>
             </Row>
-            {latest && <LatestUpdates latests={latest} query={latest_woql} />}
+            {cloning && 
+                <Row key="rc">
+                    <CloneLocal onClone={onClone} meta={assetRecord} onCancel={toggle} woqlClient={woqlClient}/>
+                </Row>
+            }
+            {!cloning && <>
+                <Row className="scoped-details-row">
+                     <ScopedDetails />
+                </Row>
+                <Row key="rd">
+                    <CommitLog />
+                </Row>
+            </>}
         </div>
     )
 }

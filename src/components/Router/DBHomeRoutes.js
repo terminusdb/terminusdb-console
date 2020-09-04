@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Route, useRouteMatch, useLocation, Switch } from "react-router-dom"
 import DatabaseHome from "../../views/Pages/DatabaseHome"
-import {DB_COLLABORATE, DB_MANAGE} from "../../constants/routes"
-
+import {DB_SYNCHRONISE, DB_MANAGE} from "../../constants/routes"
+import {ManageDB} from "../../views/DBManage/ManageDB"
 
 export const DBHomeRoutes = () => {
     let { path } = useRouteMatch()
@@ -10,13 +10,13 @@ export const DBHomeRoutes = () => {
     let report = (location.state && location.state.report ? location.state.report : false)  
     let routes = []
     routes.push(
-        <Route key="collab" path={`${path}${DB_COLLABORATE}`}>
-            <DatabaseHome page={DB_COLLABORATE} report={report} />
+        <Route key="collab" path={`${path}${DB_SYNCHRONISE}`}>
+            <DatabaseHome page={DB_SYNCHRONISE} report={report} />
         </Route>
     )
     routes.push(
         <Route key="manage" path={`${path}${DB_MANAGE}`}>
-            <DatabaseHome page={DB_MANAGE} report={report} />
+            <ManageDB page={DB_MANAGE} report={report} />
         </Route>
     )
     routes.push(

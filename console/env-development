@@ -1,0 +1,6 @@
+AUTH0_DOMAIN="terminushub.eu.auth0.com"
+AUTH0_CLIENT_ID="MJJndGp0zUdM7o3POTQPmRJImY2ho0ai"
+AUDIENCE="https://terminushub/registerUser"
+
+TERMINUS_BFF_URL="https://hub-dev.dcm.ist/"
+TERMINUS_HUB_URL="https://hub-dev-server.dcm.ist/"

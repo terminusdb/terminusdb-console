@@ -1,4 +1,6 @@
-const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}`
+const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/`
+
+//console.log('__CONSOLE____',process.env.TERMINUSDB_SERVER)
 
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
@@ -13,8 +15,6 @@ const bff_url = process.env.TERMINUS_BFF_URL || "https://hub-dev.dcm.ist/"
 if(!key){
 	key=window.sessionStorage.getItem("apiKey");
 }
-
-console.log("__SERVER___",server);
 
 export const localSettings = {server : server, key : key, user: userName, remote: hub_url, bff: bff_url}
 

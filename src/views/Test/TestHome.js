@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 //import WOQLQueryContainer from "../components/WOQLQueryContainer";
 import * as q from "../../labels/queryLabels";
-import { WOQLTable } from '@terminusdb/terminusdb-react-table';
+import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 
 import TerminusClient from '@terminusdb/terminusdb-client';
 //import {ResultViewer} from  "../components/QueryPane/ResultViewer"

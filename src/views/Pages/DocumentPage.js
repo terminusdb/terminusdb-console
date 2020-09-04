@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {SimplePageView} from '../Templates/SimplePageView'
+import {PageView} from '../Templates/PageView'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS} from './constants.pages'
@@ -85,7 +85,7 @@ const DocumentPage = (props) => {
 
     return (
         //onHeadChange={doRebuild}
-        <SimplePageView page="document">
+        <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE} />}
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
@@ -93,7 +93,7 @@ const DocumentPage = (props) => {
             {happiness && happiness !== true && (
                 <TerminusDBSpeaks failure={happiness} report={report} />
             )}
-        </SimplePageView>
+        </PageView>
     )
 }
 

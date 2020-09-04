@@ -1,7 +1,7 @@
-import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "./utils/dbLifeCircle"
+import { createLocalDB, removeLocalDB, addSchema, addDocuments, createBranch } from "../../fixtures/utils/dbLifeCircle"
 import * as tabs from "../../../src/views/Pages/constants.pages"
-import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "./utils/definedActions"
-import { config } from "./utils/config"
+import { getDocumentsMetaData, clickOnBranch, addNewDocTypes, addSecondNewDocTypes } from "../../fixtures/utils/definedActions"
+import { config } from "../../fixtures/utils/config"
 
 /*
 *	1.	Create a new db
@@ -15,7 +15,7 @@ import { config } from "./utils/config"
 */
 
 context('Test commits and branching', () => {
-   let bid, commit_msg, masterBranchId='master';
+   let bid, commit_msg, masterBranchId='main';
    let database = config[0]
 
    before(() => {
@@ -60,7 +60,7 @@ context('Test commits and branching', () => {
         })
 
       cy.url().then(urlString => {
-          const dbUrl = `#/db/admin/${database.name}`
+          const dbUrl = `/db/admin/${database.name}`
           if(!urlString.endsWith(dbUrl)){
               cy.visit(dbUrl)
           }
@@ -80,7 +80,7 @@ context('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(5000);
-        const dbHomeRef = "#/db/admin/" + database.name + "/"
+        const dbHomeRef = "/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {
@@ -117,7 +117,7 @@ context('Test commits and branching', () => {
         cy.get('.tdb__dropdown')
         .click().then( async() => {
             cy.wait(1000);
-			      await clickOnBranch(bid)
+			    await clickOnBranch(bid)
         })
     })
 
@@ -174,7 +174,7 @@ context('Test commits and branching', () => {
 
 	it('Go to database home page', () => {
         cy.wait(5000);
-        const dbHomeRef = "#/db/admin/" + database.name + "/"
+        const dbHomeRef = "/db/admin/" + database.name + "/"
         cy.get('#terminus-console-page')
         .find('a[href="'+ dbHomeRef +'"]')
         .click().then(() => {

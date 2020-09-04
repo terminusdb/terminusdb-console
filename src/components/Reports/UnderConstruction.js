@@ -21,18 +21,22 @@ export const UnderConstruction = (props) => {
     const color=props.buttonColor || UNDER_CONSTRUCTION_CONST.color;
     const buttonText=props.buttonText || UNDER_CONSTRUCTION_CONST.buttonText
 
-    let introText = props.action + " " + UNDER_CONSTRUCTION_CONST.introText
-    let hdr = props.action + " " + UNDER_CONSTRUCTION_CONST.headerText
+    let introText = props.description || props.action + " " + UNDER_CONSTRUCTION_CONST.introText
+    let hdr = props.headerText || props.action + " " + UNDER_CONSTRUCTION_CONST.headerText
     return (<>        
             <Button className={buttonClassName} outline color={color} onClick={toggle}>
                 {buttonText}
             </Button>
             <Modal isOpen={modal} toggle={toggle} centered={true}>
                 <ModalHeader toggle={toggle} className={UNDER_CONSTRUCTION_CONST.headerClassName}>
-                    <Row>
+                    <Row >
+                        {!props.noIcon && 
                         <Col md={3}>
+                            
                             <FontAwesomeIcon icon={UNDER_CONSTRUCTION_CONST.icon} className={UNDER_CONSTRUCTION_CONST.iconClassName}/>
+                            
                         </Col>
+                        }
                         <Col md={9}>
                             {hdr}
                         </Col>
@@ -43,11 +47,13 @@ export const UnderConstruction = (props) => {
                         <div className={UNDER_CONSTRUCTION_CONST.introClassName}>
                             {introText}
                         </div>
+                        {!props.noEmail &&
                         <div className={UNDER_CONSTRUCTION_CONST.formWrapperClassName}>
                             <a href="mailto:team@terminusdb.com" className={UNDER_CONSTRUCTION_CONST.submitButtonClassName}>
                                {UNDER_CONSTRUCTION_CONST.submitText + " " + "team@terminusdb.com"}
                             </a>
                         </div>
+                        }
                     </Col>
                 </ModalBody>
             </Modal>

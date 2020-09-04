@@ -9,11 +9,31 @@ export const SCHEMA_PAGE_LABEL = 'Schema'
 export const DOCUMENT_PAGE_LABEL = 'Documents'
 export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
-export const LOGIN_LABEL = 'Connect to hub'
+export const LOGIN_LABEL = 'Connect to Terminus Hub'
+
+export const CREATEDB_TITLE = "Create"
+export const DBLIST_TITLE  = "My Databases"
+export const TUTORIALS_TITLE = "Tutorials"
+export const CLONEDB_TITLE = "Clone"
+export const COLLABORATE_TITLE = "Collaborate"
+export const MANAGE_TITLE ="Branch"
+export const SYNCHRONIZE_TITLE = 'Synchronize'
+
 
 export const PAGES_ID={
     NAV_DB_HOME:'nav_db_home',
     NAV_DOCUMENTS:'nav_documents',
     NAV_QUERY:'nav_query',
     NAV_SCHEMA:'nav_schema',
+    NAV_CREATE_DB:'createdb',
+    NAV_DB_LIST:'mydbs',
+    NAV_CLONE:'clonedb',
+    NAV_COLL:'collaborate',
+    NAV_MANAGE:'manage',
+    NAV_SYNCHRONIZE:'synchronize'
+}
+
+export const noHttps={
+	title:'You need to run quickstart in HTTPS mode',
+	description:'To be able to connect to hub you have to start terminusdb-quickstart in HTTPS mode'
 }
