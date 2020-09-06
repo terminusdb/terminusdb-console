@@ -25,14 +25,31 @@ const ServerHome = (props) => {
 
     let active = props.page
 
-    const { woqlClient, contextEnriched } = WOQLClientObj()
+    const { woqlClient, contextEnriched, refreshRemoteURL } = WOQLClientObj()
     
+
+    function load_missing_urls(urls){
+        let promises = urls.map((item) => refreshRemoteURL(item))
+        Promise.all(promises).then((values) => {
+            let mdbs = woqlClient.databases().map((item) => item)
+            setMyDBs(mdbs)
+        })
+    }
 
     useEffect(() => {
         if(woqlClient){
             let mdbs = []
             mdbs = woqlClient.databases().map((item) => item)
+            let missing_urls = []
             setMyDBs(mdbs)
+            for(var i = 0; i<mdbs.length; i++){
+                if(mdbs[i].remote_url && !mdbs[i].remote_record && missing_urls.indexOf(mdbs[i].remote_url) == -1){
+                    missing_urls.push(mdbs[i].remote_url)
+                }
+            }
+            if(missing_urls.length){
+                load_missing_urls(missing_urls)
+            }
             showlist = mdbs.length || false
         }
     }, [woqlClient, contextEnriched])

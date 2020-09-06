@@ -11,6 +11,7 @@ import { AiOutlineCloudUpload, AiOutlineCloudSync, AiOutlineCloudDownload, AiFil
     AiFillWarning, AiFillBuild, AiOutlineInbox} from 'react-icons/ai';
 import { BsFillEnvelopeFill } from 'react-icons/bs';
 import { validURL } from '../../utils/helperFunctions'
+import {WOQLClientObj} from '../../init/woql-client-instance'
 import {CloneProductionCredits, CloneRoleCredits, DBLastCommit, DBBranches, DBPrivacy, DBEmpty, DBTimings} from "../Pages/ClonePage"
 import {DescribeDifferences, AreSynched} from "../DBSynchronize/DBDifferences"
 
@@ -62,7 +63,7 @@ function _user_db_action(meta, user){
 export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
-
+   
     meta.action = (onAction ? _user_db_action(meta, user) : false)
 
     function noGo(report){
@@ -85,6 +86,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
             }
         }
     }
+    
 
     let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
     return (

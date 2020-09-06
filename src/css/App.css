@@ -3580,6 +3580,9 @@ span.delete-modal-label {
         color: #989CA0;
     }
 
+    .database-listing-description {
+        padding-left: 8px;
+    }
 
   .database-listing-description-full {
       margin: 16px 10px 0px 24px;
@@ -4088,6 +4091,8 @@ span.delete-modal-label {
 
 
   .new-branch {
+      margin-top: 2em;
+      margin-bottom: 2em;
   }
 
   .branch-title-col {

@@ -80,7 +80,7 @@ export const DBTitle = ({meta, user, onAction, max}) => {
     let maxtitle = max || 40, author = false
     let title_css = "database-listing-title-nolink"
     if(meta.label && meta.label.length > maxtitle){
-        var str =  meta.label.substring(maxtitle -4) + " ..."
+        var str =  meta.label.substring(0, maxtitle -4) + " ..."
     }
     else str = meta.label || ""
 
@@ -103,7 +103,7 @@ export const DBCredits = ({meta, user}) => {
 
 export const DBDescription = ({meta, user}) => {
     if(meta.comment && meta.comment.length > 400 && !meta.testing){
-        var str =  meta.comment.substring(396) + " ..."
+        var str =  meta.comment.substring(0, 396) + " ..."
     }
     else str = meta.comment || ""
     return (
