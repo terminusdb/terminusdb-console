@@ -3435,6 +3435,7 @@ span.delete-modal-label {
       text-align: center;
       margin: 8px auto;
       border-radius: 6px;
+      max-width: 120px;
   }
 
   .clone-list-control-row {
@@ -3977,6 +3978,10 @@ span.delete-modal-label {
   .db-card-id {
     color: #033684;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
   }
 
 
