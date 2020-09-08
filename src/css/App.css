@@ -2462,14 +2462,15 @@ span.delete-modal-label {
   } 
 
   .dblist-create {
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-left: 12px;
-      float: right;
-      background-color: white;
-      height: 56px;
-      color: #888;
-      padding: 16px;
+    border: 1px solid white;
+    border-radius: 4px;
+    /* margin-left: 12px; */
+    float: right;
+    background-color: white;
+    height: 56px;
+    color: #00C08B;
+    padding: 16px;
+    font-weight: 600;
   }
 
   .dblist-create:hover {
@@ -2836,12 +2837,33 @@ span.delete-modal-label {
     border: 1px solid #ddd;
     margin-top: 10px;
     color: #002856;
-    width: 590px;
-    left: -690px;
-    top: -62px;
+    width: 450px;
+    right:0px;
+    top: -30px;
     padding: 10px 10px 10px 5px;
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
   }
+
+  .home_top_bar{
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  @media only screen and (max-width: 600px) {
+      .action-tooltip{
+        width: 250px;
+      }
+      .home_top_bar{
+        justify-content: center !important;
+      }
+  }
+
+  
+
+
 
   .database-widget-image {
     width: 50px;
@@ -3991,7 +4013,7 @@ span.delete-modal-label {
   }
 
   .db_info_icon_spacing {
-      margin: 0px 0px 0px 15px;
+     /* margin: 0px 0px 0px 15px;*/
       color: #0055bb;
   }
 
