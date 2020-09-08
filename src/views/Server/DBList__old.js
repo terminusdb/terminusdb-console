@@ -19,11 +19,11 @@ export const DBList = ({list, className, user, onAction, filter, sort}) => {
         return null
     }
     return (
-        <div className="tdb__dblist">
+        <Container fluid>
             {list.map((value, index) => {
                 return (<DBSummaryCard key={"sum_" + index} meta={value} user={user} onAction={onAction}/>)
             })}
-        </div>
+        </Container>
     )
 }
 
@@ -77,33 +77,37 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     
 
     return (
-        <div className="tdb__dblist__item">
+        <Row key='r7' className='database-summary-listing database-listing-line'>
             {loading &&
                 <Loading type={TERMINUS_COMPONENT} />
             }
             {!loading && <>
-                <DBControlPanel meta={meta} user={user} />
-                 <div className="tdb__dblist__center">
-                    
-                    <DBTitle meta={meta} user={user} max={title_max} goHubDB={loadHubDB}/>
-
-                    <DBCredits meta={meta}  user={user} />
-                    
-                    <DBDescription meta={meta}  user={user} />
-                    
+                <Col key='r5' md={2} className='database-control-panel'>
+                    <DBControlPanel meta={meta} user={user} />
+                </Col>
+                <Col md={8} className='database-main-content'>
+                    <Row key='r3'>
+                        <DBTitle meta={meta} user={user} max={title_max} goHubDB={loadHubDB}/>
+                    </Row>
+                    <Row key='r4' className="database-listing-credits-row">
+                        <DBCredits meta={meta}  user={user} />
+                    </Row>
+                    <Row key='r8'>
+                        <DBDescription meta={meta}  user={user} />
+                    </Row>
                     {meta.type == "invite" &&
+                    <Row key='r9'>
                         <DBInvite meta={meta}/>
-                    
+                    </Row>
                     }
-                </div>
-
-                <div className="tdb__dblist__action db__dblist__button">
+                </Col>
+                <Col key='r6' md={2} className='database-main-actions'>
                     {user.logged_in &&
                         <DBStatus meta={meta}  user={user}  onAction={onGo}/>
                     }
-                </div>
+                </Col>
             </>}
-        </div>
+        </Row>
     )
 }
 
@@ -146,8 +150,9 @@ export const DBTitle = ({meta, user, goHubDB, max}) => {
 
     return (
         <span>
-            <span onClick={goDB} title={title_html} className="tdb__dblist__title">{str}</span>
-            
+            <span onClick={goDB} title={title_html} className='database-listing-title-row'>
+                <span key='a' className={title_css + " database-listing-title"}>{str}</span>
+            </span>
             {false && <span className="author_info">{author}</span>}
         </span>
     )
@@ -187,7 +192,7 @@ export const DBCredits = ({meta, user}) => {
         )
     }
     return (
-        <div className="tdb__dblist__elements">
+        <div className="database-listing-title-row">
             {res}
         </div>
     )
@@ -196,11 +201,11 @@ export const DBCredits = ({meta, user}) => {
 export const DBID = ({meta}) => {
     if(!(meta && meta.id)) return null
     return (
-        <span className="tdb__dblist__credit">
+        <span className="db-card-credit local-db-id">
             <AiFillInfoCircle className="db_info_icon_spacing"/>
             <span className="db_info">
-                <span className="tdb__dblist__info">ID</span>
-                <span className="tdb__dblist__info tdb__dblist__info--blue"> {meta.id} </span>
+                <span className="db-card-label">ID</span>
+                <span className="db-card-id"> {meta.id} </span>
             </span>
         </span>
     )
@@ -212,17 +217,17 @@ export const DBSize = ({meta, user}) => {
         let bytes = formatBytes(meta.size)
         let tit = meta.size + " bytes";
         return (
-            <span title={tit} className="tdb__dblist__credit">
+            <span title={tit}>
                 <AiFillBuild className="db_info_icon_spacing"/>
-                <span className="tdb__dblist__info">{bytes}</span>
+                <span className="db_info">{bytes}</span>
             </span>
         )
     }
     else {
         return (
-            <span title={"This is an empty database"} className="tdb__dblist__credit">
+            <span title={"This is an empty database"}>
                 <AiOutlineInbox className="db_info_icon_spacing"/>
-                <span className="tdb__dblist__info">empty</span>
+                <span className="db_info">empty</span>
             </span>
         )
     }
@@ -234,9 +239,9 @@ export const DBDescription = ({meta, user}) => {
     }
     else str = meta.comment || ""
     return (
-        <div className='tdb__dblist__description'>
-        {str}
-        </div>
+        <Row key='z' className='database-listing-description-row'>
+            <span className="database-listing-description-summary">{str}</span>
+        </Row>
     )
 }
 
@@ -256,14 +261,16 @@ export const DBControlPanel = ({meta, user}) => {
     let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
 
     if(icon){
-        if(validURL(icon)) disp.push(<img className='tdb__dblist__image' src={icon} title={title} key="xx1"  />)
+        if(validURL(icon)) disp.push(<img className='db-home-listing-image' src={icon} title={title} key="xx1"  />)
         else disp.push(<i key="xx" className={'database-listing-icon ' + icon} title={title}/>)
     }
 
     return (
-        <div className="tdb__dblist__left db__dblist__button" onClick={goDB}>
-            {disp}
-        </div>
+        <Col className='database-left-column'>
+            {<Row key="rr" className="dbicon-container" onClick={goDB}>
+                {disp}
+            </Row>}
+        </Col>
     )
 }
 
@@ -311,6 +318,8 @@ export const DBStatus = ({meta, user, onAction}) => {
     return (
 
         <div className='database-action-column'>
+            <div className="hub-minor-actions">
+            </div>
             <span className='action-tooltip-holder'>
                 {hov &&
                     <div className='action-tooltip'>

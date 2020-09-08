@@ -99,10 +99,14 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     let stats = generateListStats()
     return (<>        
         <div className="dblist-filters">
+            <div className="home_top_bar">
             <DBListStats type={type} stats={stats} filter={listFilter}/>
             <CreateDB type={type} onCreate={showCreate} />
-            <ListFilter type={type} filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-            <ListSorter type={type} sort={listSort} logged_in={user.logged_in} onChange={callSort} />
+            </div>
+            <div className="home_top_bar justify-content-end">
+                <ListFilter type={type} filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
+                <ListSorter type={type} sort={listSort} logged_in={user.logged_in} onChange={callSort} />
+            </div>
         </div>
         <div className="generic-message-holder">
             {report && 
@@ -179,7 +183,7 @@ export const ListFilter = ({filter, type, onChange, logged_in}) => {
 
     return (
         <Select 
-            className="dblist-filter"
+            className="dblist-filter mb-2"
             options={filters}
             placeholder = {ph}
             defaultValue= {filter}
