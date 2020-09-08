@@ -9,7 +9,7 @@ export const SCHEMA_PAGE_LABEL = 'Schema'
 export const DOCUMENT_PAGE_LABEL = 'Documents'
 export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
-export const LOGIN_LABEL = 'Connect'
+export const LOGIN_LABEL = 'Connect to Hub'
 
 export const CREATEDB_TITLE = "Create"
 export const DBLIST_TITLE  = "My Databases"

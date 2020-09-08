@@ -41,6 +41,7 @@ export const ConsoleNavbar = (props) => {
                     </div>
                     <ServerNavbar />
                     <ul className={topmenu}>
+                        {!woqlClient.db() && <HomeMainMenu/>}
                         {woqlClient.db() && (
                             <DBNavbarTop
                                 isOpen={isOpen}
