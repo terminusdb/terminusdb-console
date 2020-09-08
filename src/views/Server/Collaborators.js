@@ -21,85 +21,8 @@ export const Collaborators = ({list, dbs, onComplete}) => {
 
     const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
     if(!bffClient) return null
-    let user = woqlClient.user()
-    const { getTokenSilently } = useAuth0()
-    const [loading, setLoading] = useState()
-    const [report, setReport] = useState()
-    const [orgFilter, setOrgFilter] = useState("")
-    const [dbFilter, setDBFilter] = useState("")
-    const [collabAction, setCollabAction] = useState("my")
-    const allDBs = bffClient.databases()
-    if(allDBs.length == 0) return (
-        <span className="database-list-intro">
-            <TerminusDBSpeaks report={{status: TERMINUS_WARNING, message: "You must add a database to your TerminusHub account before you can invite people to collaborate"}} />
-        </span>
-    )
-    const [xdbs, setDBList] = useState(allDBs)
-    const [subscreen, setSubscreen] = useState("my")
-    const [incoming, setIncoming] = useState()
-    const [outgoing, setOutgoing] = useState()
-
-    const [adding, setAdding] = useState(false)
-
-
-    function createOrg(doc) {
-        doc.status = "active"
-        doc.create = true    
-        //doc.user_name = "admin"
-        //woqlClient.createOrganization(doc.organization_name, doc)    
-        UpdateOrganization(doc, bffClient, getTokenSilently)
-        .then((bla) => {
-            alert(JSON.stringify(bla))
-        })
-        .catch((err) => console.log(err))
-        .finally(() => setLoading(false))            
-    }
     
-    function callOrgFilter(f){
-        setOrgFilter(f.value)
-    }
-
-    function callDBFilter(f){
-        setDBFilter(f.value)
-    }
-
-    function generateListStats(){
-        let stats = {
-            total: list.length,
-        }
-        return stats
-    }
-
-    useEffect(() => {
-        let ndbs = []
-        let inc = []
-        let outg = []
-        for(var i = 0; i<allDBs.length; i++){
-            if(!orgFilter || (orgFilter == allDBs[i].organization)){
-                ndbs.push(allDBs[i])                
-                if(!dbFilter || (dbFilter == allDBs[i].organization + "/" + allDBs[i].id) && !isMyDB(allDBs[i])) {
-                    outg.push(allDBs[i])    
-                }
-            }   
-        }
-        setOutgoing(outg)
-        setDBList(ndbs)
-        let collabs = bffClient.connection.user.collaborators
-        if(collabs && collabs.length){
-            for(var i = 0; i<collabs.length; i++){
-                if(!dbFilter || (dbFilter == collabs[i].organization + "/" + collabs[i].id)) {
-                    inc.push(collabs[i])    
-                }
-            }
-            setIncoming(inc)
-        }
-    }, [orgFilter, dbFilter])
-
-    function callActionSelect(f){
-        setSubscreen(f.value)
-    }
-
-    let stats = generateListStats()
+    const [adding, setAdding] = useState(false)
 
     function showCreate(){
         setAdding(true)
@@ -108,6 +31,7 @@ export const Collaborators = ({list, dbs, onComplete}) => {
     function unShowCreate(){
         setAdding(false)
     }
+
 
 
     if(adding) {
@@ -134,8 +58,27 @@ export const AddCollaborator = ({onCancel, onComplete, uname, collaborators, dbs
     let [ctype, setCtype] = useState()
     let [cid, setCID] = useState()
     const {bffClient} = WOQLClientObj()
-
+    
     let [stage, setStage] = useState()
+    let [ulist, setUlist] = useState()
+
+    useEffect(() => {
+        let xlist = []
+        for(var i = 0; i<collaborators.length; i++){
+            let c = collaborators[i]
+            if(c.uid){
+                let p = c.uid
+                if(xlist.indexOf(p) == -1 && p != uname) xlist.push(p)
+            }
+        }
+        if(!xlist.length){
+            setCtype("new")
+        }
+        setUlist(xlist)
+    }, 
+    [])
+
+    if(!Array.isArray(ulist)) return null
 
     function chooseDB(e){
         setReport()
@@ -157,18 +100,6 @@ export const AddCollaborator = ({onCancel, onComplete, uname, collaborators, dbs
         setCID(e)
     }
 
-    let ulist = []
-    for(var i = 0; i<collaborators.length; i++){
-        let c = collaborators[i]
-        if(c.uid){
-            let p = c.uid
-            if(ulist.indexOf(p) == -1 && p != uname) ulist.push(p)
-        }
-    }
-
-    if(!ulist.length){
-        setCtype("new")
-    }
 
     let showGo = (db && perm && ctype && cid)
 
@@ -209,7 +140,6 @@ export const AddCollaborator = ({onCancel, onComplete, uname, collaborators, dbs
         })
         .finally(() => setLoading(false))
     }
-
     return (
         <div className="pretty-form">
             <div className="create-place-badge remote-badge">
@@ -225,7 +155,7 @@ export const AddCollaborator = ({onCancel, onComplete, uname, collaborators, dbs
                 <Row>
                     <Col><ChooseDatabase dbs={dbs} onChoose={chooseDB} /></Col>
                     <Col><ChoosePermission onChoose={choosePerm} /></Col>
-                    {ulist.length && 
+                    {(ulist.length > 0 ) && 
                         <Col><ChooseCollaboratorType list={ulist} onChoose={chooseCtype} /></Col>
                     }
                     <Col><ChooseCollaborator list={ulist} type={ctype} onChoose={chooseCID} /></Col>
@@ -463,10 +393,15 @@ export const CreateCollaboraor = ({type, onCreate, title}) => {
 export const MyCollaborators = ({collaborators, user}) => {
     const {woqlClient, contextEnriched} = WOQLClientObj()
 
-    if(!collaborators) return null
-    console.log(collaborators)
+    if(!Array.isArray(collaborators)) return null
 
     let [dblist, setList] = useState(loadDBList())
+
+    useEffect(() => {
+        if(contextEnriched){
+            setList(loadDBList())
+        }
+    }, [contextEnriched])
 
     function loadDBList(){
         let mdbs = {}
