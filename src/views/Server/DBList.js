@@ -97,7 +97,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                     }
                 </div>
 
-                <div className="tdb__dblist__action">
+                <div className="tdb__dblist__action db__dblist__button">
                     {user.logged_in &&
                         <DBStatus meta={meta}  user={user}  onAction={onGo}/>
                     }
@@ -261,7 +261,7 @@ export const DBControlPanel = ({meta, user}) => {
     }
 
     return (
-        <div className="tdb__dblist__left" onClick={goDB}>
+        <div className="tdb__dblist__left db__dblist__button" onClick={goDB}>
             {disp}
         </div>
     )
