@@ -8,14 +8,16 @@ import {CommitLog} from "./CommitLog"
 import {ScopedDetails} from "./ScopedDetails"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
 import { goDBHome } from '../../components/Router/ConsoleRouter'
+import { isOnHub } from '../Server/DBList'
 
 export const MonitorDB = (props) => {
-    const {woqlClient, refreshDBRecord} = WOQLClientObj()
+    const {woqlClient, refreshDBRecord, refreshRemoteURL} = WOQLClientObj()
     const {branches, updateBranches} = DBContextObj()
 
     const [cloning, setCloning] = useState()
+    const [bump, setBump] = useState(0)
     let dbmeta = woqlClient.get_database() || {}
-    const [assetRecord, setAssetRecord] = useState(dbmeta)
+    const [assetRecord, setAssetRecord, ] = useState(dbmeta)
 
     let WOQL = TerminusClient.WOQL
 
@@ -24,20 +26,17 @@ export const MonitorDB = (props) => {
     }, [branches])
 
 
-    function load_assets(){
-        let x = woqlClient.resource("db").substring(0, woqlClient.resource("db").length-1)
-        WOQL.lib().assets_overview([x], woqlClient).then((res) => {
-            let nstate = res[0]
-            let ostate = assetRecord
-            var nkstate = {}
-            for(var k in ostate){
-                nkstate[k] = ostate[k]
-            }
-            for(var k in nstate){
-                nkstate[k] = nstate[k]
-            }
+    async function load_assets(){
+        let nkstate = await refreshDBRecord()
+        if(nkstate.remote_url){
+            let rem = await refreshRemoteURL(nkstate.remote_url)
+            let ar = woqlClient.get_database()
+            setBump(bump+1)   
+            setAssetRecord(woqlClient.get_database())
+        }
+        else {
             setAssetRecord(nkstate)
-        })
+        }
     }
 
     function toggle(){
@@ -75,7 +74,7 @@ export const MonitorDB = (props) => {
     return (
         <div>
             <Row key="rr">
-                <DBFullCard meta={assetRecord} onClone={toggle} user={woqlClient.user()}/>
+                <DBFullCard meta={assetRecord} bump={bump} onClone={toggle} user={woqlClient.user()}/>
             </Row>
             {cloning && 
                 <Row key="rc">

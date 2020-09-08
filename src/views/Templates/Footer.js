@@ -1,7 +1,7 @@
 import React from "react";
 
-const Footer = () => (
-	<footer className="footer fstack">
+export const Footer = (props) => {
+	return (<footer className="footer fstack">
 		<div className="wrapper wrapper--increased">
 			<div className="footer__body">
 				<a href="https://terminusdb.com" className="footer__brand" role="button">
@@ -9,12 +9,12 @@ const Footer = () => (
 				</a>
 				<ul className="footer__list">
 					<li className="footer__item">
-						<a href="https://terminusdb.com/docs/" target="_blank" className="footer__link" aria-label="Documentation">
+						<a href="https://terminusdb.com/documentation/" target="_blank" className="footer__link" aria-label="Documentation">
 							Documentation
 						</a>
 					</li>
 					<li className="footer__item">
-						<a href="https://medium.com/terminusdb" target="_blank" className="footer__link" aria-label="Blog">
+						<a href="https://terminusdb.com/blog" target="_blank" className="footer__link" aria-label="Blog">
 							Blog
 						</a>
 					</li>
@@ -25,7 +25,5 @@ const Footer = () => (
 				</ul>
 			</div>
 		</div>
-	</footer>
-);
-
-export default Footer;
+	</footer>)
+}

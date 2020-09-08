@@ -178,6 +178,11 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
     function updateBranches(bid) {
         setBranchesReload(branchesReload + 1)
+        if(bid) {
+            setBranch(bid)
+            woqlClient.ref(false)
+            woqlClient.checkout(bid)
+        }
     }
 
     function updatePrefixes() {
