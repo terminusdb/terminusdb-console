@@ -2,6 +2,7 @@ import React from "react";
 import { DETAILS_TAB } from "./constants.pages"
 import { MonitorDB } from '../DBHome/MonitorDB'
 import {PageView} from '../Templates/PageView'
+import { FeedbackForm } from "../../components/Form/FeedbackForm"
 
 const DatabaseHome = (props) => {
 
@@ -10,10 +11,11 @@ const DatabaseHome = (props) => {
     * move the navbar
     */
 
-    return (  
-        <PageView report={props.report} dbPage={true}>          
+    return (
+        <PageView report={props.report} dbPage={true}>
            <MonitorDB key="monitor" label={DETAILS_TAB} />
-        </PageView>        
+           <FeedbackForm/>
+        </PageView>
 	)
 }
 export default DatabaseHome;

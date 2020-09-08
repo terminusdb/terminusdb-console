@@ -4752,3 +4752,49 @@ button.tdb__button__cancel:hover {
 .clone-widget-title, .share-on-hub-title {
     margin-top: 50px;
 }
+
+.feedbackCard {
+    flex-grow: 9999;
+    margin: 0 12px 0 28px;
+    word-wrap: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 300px;
+}
+
+.feedback-card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    font-weight: 800;
+}
+
+.feedback-text {
+    max-width: 180px;
+    color: #787878;
+    white-space: break-spaces;
+    margin-bottom: 20px;
+    margin-top: 18px;
+}
+
+.feedback-section {
+    margin-bottom: 15px
+}
+
+.feedback-button {
+    margin-top: 10px;
+    float: right;
+}
+
+.feedback-icon {
+    position: absolute;
+    object-fit: contain;
+    object-position: 50% 100%;
+    right: -94px;
+    top: -10px;
+    transform: rotate(0deg);
+    width: 230px;
+    height: 159px;
+}
