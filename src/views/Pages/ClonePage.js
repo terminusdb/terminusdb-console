@@ -35,6 +35,7 @@ const ClonePage = ({organization, db}) => {
     let u = woqlClient.user()
     let hubdbs = _get_my_dbs(woqlClient, u)
     let collabs = _get_my_cdbs(woqlClient, u)
+
     return (
         <SimplePageView id="clonePage">
             <CloneController organization={organization} db={db} list={hubdbs} collaborations={collabs}/>

@@ -44,11 +44,6 @@ export const Login = (props) => {
             returnTo: redirect_uri//window.location.origin+'/console/'
     });
     return (<Fragment>
-            <div className="nav-hub-right">
-                <NavLink to={CLONE_DB_ROUTE} className="nav-hub-logo" onClick={handleClick}>
-                    <img src={HUBLOGO} alt="TerminusHub" />
-                </NavLink>
-            </div>
             {!isAuthenticated && !user &&
                 <button id="login_button" className="tdb__button__base tdb__button__base--green nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}

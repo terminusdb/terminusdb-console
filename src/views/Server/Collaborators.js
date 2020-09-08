@@ -17,7 +17,7 @@ import {FiUsers} from "react-icons/fi"
 import {PAYMENT_ROUTE} from "../../constants/routes"
 
 export const Collaborators = ({list, dbs, onComplete}) => {
-    if(!list || !list.length) return null
+    if(!Array.isArray(list)) return null
 
     const {woqlClient, remoteClient, bffClient, refreshDBRecord } = WOQLClientObj()
     if(!bffClient) return null
