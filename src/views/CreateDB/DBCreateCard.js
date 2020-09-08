@@ -238,7 +238,7 @@ export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) 
                 }
                 {!isEdit &&
                     <Row className="database-create-credits db-create-remote-row">
-                        <DBCredits meta={current} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} isEdit={isEdit}/>
+                        <DBCredits meta={current} type={type} onIDChange={changeID} onPrivacyChange={changePrivacy} onSchemaChange={changeSchema} isEdit={isEdit}/>
                     </Row>
                 }
                 <Row className="database-create-decription-row db-create-remote-row">
@@ -539,17 +539,17 @@ export const InputError = ({problem}) => {
     )
 }
 
-export const DBCredits = ({meta, onPrivacyChange, onSchemaChange, isEdit}) => {
+export const DBCredits = ({meta, type, onPrivacyChange, onSchemaChange, isEdit}) => {
     let res = []
     res.push(<DBRoleCredits key='dbxx' meta={meta} onPrivacyChange={onPrivacyChange} />)
     if(!isEdit){
-        res.push(<DBSchemaCredits key='dbxxs' meta={meta} onSchemaChange={onSchemaChange} />)
-        res.push(<DBProductionCredits key='dbx' meta={meta} />)
+        res.push(<DBSchemaCredits key='dbxxs' meta={meta} type={type} onSchemaChange={onSchemaChange} />)
+        res.push(<DBProductionCredits key='dbx' meta={meta} type={type} />)
     }
     return res
 }
 
-export const DBProductionCredits = ({meta}) => {
+export const DBProductionCredits = ({meta, type}) => {
     if(meta){
         var tit = (meta.organization_type ? meta.organization_type + " Organization" : "")
         let txt = (meta.organization_label ? meta.organization_label  : meta.organization)
@@ -564,7 +564,7 @@ export const DBProductionCredits = ({meta}) => {
     return null
 }
 
-export const DBRoleCredits = ({meta, onPrivacyChange}) => {
+export const DBRoleCredits = ({meta, type, onPrivacyChange}) => {
     if(meta.public){
         return (
             <span title="Click to change to Private" className="privacy-holder">
@@ -595,17 +595,24 @@ export const DBRoleCredits = ({meta, onPrivacyChange}) => {
     )
 }
 
-export const DBSchemaCredits = ({meta, onSchemaChange}) => {
+export const DBSchemaCredits = ({meta, type, onSchemaChange}) => {
+
+    function doSchemaChange(){
+        if(type != "share") onSchemaChange()
+    }
+
     if(meta.schema){
         return (
             <span title="Click to change to schema free" className="privacy-holder">
-                <span className="create-db-privacy" onClick={onSchemaChange}>
+                <span className="create-db-privacy" onClick={doSchemaChange}>
                     <AiOutlineSchedule title="Database has Schema" className="db_info_icon_spacing"/>
                     <span className="db_info">
                         With Schema
-                        <span className="create-change-privacy">
-                            <AiOutlineDown className="db_icons_standard"/>
-                        </span>
+                        {type != "share" &&  
+                            <span className="create-change-privacy">
+                                <AiOutlineDown className="db_icons_standard"/>
+                            </span>
+                        }
                     </span>
                 </span>
             </span>
@@ -613,13 +620,15 @@ export const DBSchemaCredits = ({meta, onSchemaChange}) => {
     }
     return (
         <span title="Click to add schema" className="privacy-holder">
-            <span className="create-db-privacy" onClick={onSchemaChange}>
+            <span className="create-db-privacy" onClick={doSchemaChange}>
                 <AiOutlineThunderbolt title="Schema Free Database" className="db_info_icon_spacing"/>
                 <span className="db_info">
                     Schema Free
-                    <span className="create-change-privacy">
-                        <AiOutlineDown className="db_icons_standard"/>
-                    </span>
+                    {type != "share" &&  
+                        <span className="create-change-privacy">
+                            <AiOutlineDown className="db_icons_standard"/>
+                        </span>
+                    }
                 </span>
             </span>
         </span>

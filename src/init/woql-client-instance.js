@@ -278,6 +278,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 }                
                 setContextEnriched(contextEnriched + 1)
             }
+            return woqlClient.get_database()
         })
     }
 
@@ -345,11 +346,24 @@ export const WOQLClientProvider = ({children, params}) => {
             }
             dbrec = append_remote_record(dbrec, meta.remote_record)
             add_db(dbrec)
-            let dmeta = await RefreshDatabaseRecord({id: meta.remote_record.id, organization: meta.remote_record.organization}, bffClient, getTokenSilently)
-            if(dmeta) updateRemote(dmeta)  
-            setContextEnriched(contextEnriched + 1)
+            let dmeta = await refreshRemote(meta.remote_record.organization, meta.remote_record.id)
             return dbrec
         }
+    }
+
+    const refreshRemote = async (org, id) => {
+        let dmeta = await RefreshDatabaseRecord({id: id, organization: org}, bffClient, getTokenSilently)
+        if(dmeta) updateRemote(dmeta)  
+        setContextEnriched(contextEnriched + 1)
+        return dmeta
+    }
+
+    const refreshRemoteURL = async (url) => {
+        let bits = url.split("/")
+        if(bits.length < 2) return false
+        let org = bits[bits.length-2]
+        let id = bits[bits.length-1]
+        return refreshRemote(org, id)
     }
 
     const addRemote = async (id, org, meta) => {
@@ -360,6 +374,14 @@ export const WOQLClientProvider = ({children, params}) => {
     function is_hub_remote(url, id, org){
         return (url == remoteClient.server() + org + "/" + id)
     }
+
+    function is_hub_url(url){
+        let bits = url.split("/")
+        if(bits.length < 2 || !remoteClient) return false
+        let cand = remoteClient.server() + bits[bits.length-2] + "/" + bits[bits.length-1]
+        return (url == cand)
+    }
+
 
     const updateRemote = (dmeta) => {
         if(dmeta){
@@ -392,11 +414,14 @@ export const WOQLClientProvider = ({children, params}) => {
                 clientError,
                 setKey,
                 bffClient,
+                refreshRemote,
+                refreshRemoteURL,
                 addShare,
                 refreshDBRecord,
                 refreshDBListing, 
                 remoteEnriched,
                 showLogin,
+                is_hub_url,
                 reconnectToServer,
                 addClone,
                 remoteClient,

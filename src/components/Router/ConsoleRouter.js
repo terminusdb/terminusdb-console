@@ -35,7 +35,8 @@ export const getDBRoute = (db, aid) => {
 }
 
 export const getHubRoute = (orgid, dbid) => {
-    let base = `${CLONE_DB_ROUTE}/${orgid}`
+    let base = `${CLONE_DB_ROUTE}`
+    if(orgid) base += `/${orgid}`
     if(dbid) base += `/${dbid}`
     return base
 }
