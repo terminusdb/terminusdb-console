@@ -2392,6 +2392,94 @@ span.delete-modal-label {
 
   .dblist-filters {
       display: inline-block;
+      width: 100%;
+  }
+
+.organization-hub-id {
+    margin-left: 1em;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.pro-badge {
+    color: blue;
+    margin-right: 2px;
+    vertical-align: -4px;
+    font-size: 1.2em;
+}
+
+.organization-hub-description {
+    padding-top: 6px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.organization-hub-name {
+    padding-top: 6px;
+    font-size: 1.1em;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.organization-hub-credits {
+    display: inline-block;
+    }
+
+.collaborators-count {
+    font-size: 1.4em;
+}
+
+  .dbclone-filters {
+    display: inline-block;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.organization-hub-image {
+    margin-left: 6px;
+}
+
+.organization-hub-header {
+    padding: 6px;
+}
+
+.organization-home-listing-image {
+    height: 80px;
+    max-width: 120px;
+    margin-left: 10px;
+}
+
+  .stats-list {
+      display: inline-block;
+      max-width: 500px;
+      height: 56px;
+      padding: 10px 8px 10px 0;
+      font-size: 1.2em;
+  }
+
+  .stats-icon {
+      height: 36px;
+  } 
+
+  .dblist-create {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-left: 12px;
+      float: right;
+      background-color: white;
+      height: 56px;
+      color: #888;
+      padding: 16px;
+  }
+
+  .dblist-create:hover {
+      color:  #00C08B !important;
+      border: 1px solid #00C08B !important;
+  }
+
+  .create-btn-icon {
+      padding-left: 8px;
+      font-size: 2em;
   }
 
   .dbicon-container {
@@ -3240,8 +3328,12 @@ span.delete-modal-label {
       font-size: 1.1em !important;
   }
 
+  .collab-input {
+      height: 54px !important;
+  }
+
   .generic-message-holder {
-      height: 40px;
+      min-height: 40px;
       padding-top: 6px;
       padding-bottom: 4px;
       display: inline-block;
@@ -3700,7 +3792,7 @@ span.delete-modal-label {
   .database-listing-title-nolink,
   .database-listing-title {
       font-size: 40px;
-      line-height: 95%;
+      line-height: 105%;
       padding-top: 10px;
       display: block;
       padding-bottom: 8px;
@@ -4641,10 +4733,20 @@ span.delete-modal-label {
     margin-left: 320px;
 }
 
+.cancel-create-form {
+    color: #666;
+    margin-right: 8px;
+    font-size: 2em;
+}
+
+.cancel-create-form:hover {
+    color: #222;
+    cursor: pointer;
+}
+
 .create-place-badge-hub-img {
-    margin-top: -15px;
-    float: right;
-    margin-left: 10px;
+    margin-top: -4px;
+    margin-left: 8px;
     height: 40px;
     width: 40px;
 }
@@ -4654,29 +4756,23 @@ span.delete-modal-label {
 }
 
 .local-badge {
-    color: #00C08B;
+    color: #888;
     border: 1px solid #ddd;
     border-top: 0;
     width: 300px;
-    padding: 15px;
-    margin-top: -40px;
+    padding: 20px 15px 15px 15px;
+    margin-top: -20px;
     text-align: center;
 }
 
 .remote-badge {
-    color: #856404;
-    border: 1px solid #ddd;
-    border-left: 0;
-    width: 300px;
-    padding: 15px;
-    margin-left: 15px;
-    /* color: #00C08B; */
+    color: #888;
     border: 1px solid #ddd;
     border-top: 0;
-    width: 300px;
-    padding: 15px;
-    margin-top: -40px;
+    padding: 20px 15px 15px 15px;
+    margin-top: -20px;
     text-align: center;
+    width: 350px;
 }
 
 .upload-image-btn {
@@ -4728,6 +4824,11 @@ span.delete-modal-label {
     margin-left: 10px;
 }
 
+.invite-expl {
+    margin-left: 8px;
+    color: #0055bb
+}
+
 .create-db-option-descr{
     margin-top: -10px;
     margin-left: 20px;
@@ -4735,6 +4836,17 @@ span.delete-modal-label {
     width: 350px;
     background-color: #fff;
     color: #787878;
+}
+
+.invite-body {
+    padding: 1em;
+    margin: 6px;
+}
+
+.upgrade-button-holder {
+    width: 100%;
+    display: block !important;
+    text-align: right;
 }
 
 button.tdb__button__cancel {
@@ -4749,6 +4861,80 @@ button.tdb__button__cancel:hover {
     color: white;
 }
 
-.clone-widget-title, .share-on-hub-title {
+.clone-widget-title {
+    margin-top: 30px;
+    margin-bottom: 6px;
+}
+
+.share-on-hub-title {
     margin-top: 50px;
+}
+
+.nav-hub-logo {
+    display: inline-block;
+    width: 160px;
+    margin-right: 4px;
+}
+
+.nav-hub-right {
+}
+
+.clist-holder {
+    width: 100%
+}
+
+.clist-itself {
+    margin: 0 auto;
+}
+
+.empty-clonelist {
+    display: inline-block;
+    padding: 1em;
+}
+
+.empty-clonelist-title {
+    font-size: 1.2em;
+}
+
+.empty-clonelist-icon {
+    color: #888;
+    font-size: 2em;
+}
+
+.empty-clonelist-help {
+    display: block;
+    box-shadow: 0 1px 2px 0 #dfe3ec;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    padding: 2em;
+    margin-top: 1em;
+}
+
+.empty-clonelist-option {   
+    display: block;
+    margin-top: 10px;
+}
+
+.clonelist-option-icon {
+    font-size: 1.2em;
+    color: #0055bb;
+}
+
+.empty-action-title {    
+    color: #0055bb;
+    display: inline-block;
+    width: 100px;
+}
+
+.clonelist-help-icon {
+    color: #0055bb;
+    font-size: 1.4em;
+    margin-right: 6px;
+}
+
+.stats-list-intro {
+    display: inline-block;
+    height: 56px;
+    color: #888;
+    padding: 16px 10px;
 }

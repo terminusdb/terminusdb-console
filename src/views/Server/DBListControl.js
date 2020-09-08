@@ -9,7 +9,10 @@ import { TERMINUS_INFO, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../const
 import { LIST_LOCAL, LIST_REMOTE } from "../Pages/constants.pages"
 import Select from "react-select";
 import Loading from "../../components/Reports/Loading"
-
+import {CreateLocalForm} from "../CreateDB/CreateDatabase"
+import { AiOutlinePlus, AiOutlineLink } from "react-icons/ai";
+import { GRAPHDB, HUBDB } from "../../constants/images"
+import { MdContentCopy } from 'react-icons/md';
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
     if(!list || !user ) return null
@@ -19,6 +22,8 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
     const [loading, setLoading] = useState()
+    const [showingCreate, setShowingCreate] = useState(false)
+    let [report, setReport] = useState()
 
     useEffect(() => {
         if(listSort){
@@ -38,8 +43,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     }, [list])
 
 
-    let message = user.logged_in ?  LIST_REMOTE : LIST_LOCAL 
-    let [report, setReport] = useState({status: TERMINUS_INFO,  message: message})
     
     function setAction(dbmeta){
         let db = _copy_db_card(dbmeta)
@@ -69,21 +72,92 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         setFilter(nfilt.value)
     }
 
+    function showCreate(){
+        setShowingCreate(true)
+    }
+
+    function unshowCreate(){
+        setShowingCreate(false)
+    }
+
+    function generateListStats(){
+        let stats = {
+            total: list.length,
+            showing: sorted.length,
+            remotes: 0
+        }
+        for(var i = 0; i<sorted.length; i++){
+            if(sorted[i].remote_url) stats.remotes++
+        }
+        return stats
+    }
+
     if(!sorted) return null
     if(loading) return (<Loading type={TERMINUS_COMPONENT}/>)
-    return (<>
-        <span className="database-list-intro">
-            <TerminusDBSpeaks report={report} />
-        </span>
-        <span className="dblist-filters">
-            <ListFilter filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
-            <ListSorter sort={listSort} logged_in={user.logged_in} onChange={callSort} />
-        </span>
-        <DBList list={sorted} className={className} user={user} onAction={setAction}/>            
+    if(showingCreate) return (<CreateLocalForm onCancel={unshowCreate}/>)
+
+    let stats = generateListStats()
+    return (<>        
+        <div className="dblist-filters">
+            <DBListStats type={type} stats={stats} filter={listFilter}/>
+            <CreateDB type={type} onCreate={showCreate} />
+            <ListFilter type={type} filter={listFilter} logged_in={user.logged_in} onChange={callFilter} />
+            <ListSorter type={type} sort={listSort} logged_in={user.logged_in} onChange={callSort} />
+        </div>
+        <div className="generic-message-holder">
+            {report && 
+                <TerminusDBSpeaks report={report} />
+            }
+        </div>
+        <DBList type={type} list={sorted} className={className} user={user} onAction={setAction}/>            
     </>)
 }
 
-export const ListFilter = ({filter, onChange, logged_in}) => {
+export const DBListStats = ({type, stats, filter}) => {
+    let txt
+    if(stats.total == 0){
+        txt = "There are no databases on this TerminusDB server"
+    }
+    else if(filter){
+        txt = "Showing " + stats.showing + " of " + stats.total + " local database" + (stats.total != 1 ? "s" : "")
+    }
+    else {
+        txt = stats.total + " local databases"
+    }
+    return (
+        <span className="stats-list">
+            <img src={GRAPHDB} className="stats-icon" /> {txt}
+            {(stats.remotes > 0) && 
+                <DBRemoteCount count={stats.remotes} />
+            }
+        </span>
+    )
+}
+
+
+export const DBRemoteCount = ({count}) => {
+    let txt = (count == 1 ? "1 Clone" : "" + count + " Clones" )
+    return (
+        <span className="db-card-credit">
+            <span className="db_info">
+                {txt} <MdContentCopy />
+            </span>
+        </span>
+    )
+}
+
+export const CreateDB = ({type, onCreate, title}) => {
+    let txt = "Create " + (title ? title : "Database")
+    let ntitle = "Create a new " + title + (type == "clone" ? " on TerminusHub" : "")
+    return ( 
+        <button title={ntitle} type="submit" className="dblist-create" onClick={onCreate}>
+            {txt} <AiOutlinePlus className="create-btn-icon" />
+        </button>
+    )
+}
+
+
+export const ListFilter = ({filter, type, onChange, logged_in}) => {
     if(!logged_in) return null
     let filters = [
         {value: "", label: "Show all"},
@@ -91,9 +165,11 @@ export const ListFilter = ({filter, onChange, logged_in}) => {
         {value: "public", label: "Public Databases"},
         {value: "private", label: "Private Databases"},
         {value: "local", label: "Local Databases"},
-        {value: "missing", label: "Databases Only on Hub"},
         {value: "unsynched", label: "Need Synchronisation"},
     ]
+    if(type == "clone"){
+        filters.push({value: "missing", label: "Databases Only on Hub"})
+    }
 
     let ph = ""
     for(var i = 0; i<filters.length; i++){
@@ -117,7 +193,7 @@ export const ListSorter = ({sort, logged_in, onChange}) => {
         {value: "oldest", label: "Least recent update"},
         {value: "created", label: "Database Creation Time"},
         {value: "name", label: "Database Name (A-Z)"},
-      //  {value: "size", label: "Database Size"}
+        {value: "size", label: "Database Size"}
     ]
 
     let remote_sort_algos = [
@@ -142,7 +218,7 @@ export const ListSorter = ({sort, logged_in, onChange}) => {
         <Select 
             className="dblist-filter"
             options={sorts}
-            placeholder = {ph}
+            placeholder = {"Order by " + ph}
             defaultValue= {sort}
             onChange ={onChange}
         />)

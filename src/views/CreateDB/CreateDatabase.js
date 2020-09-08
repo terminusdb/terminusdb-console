@@ -16,7 +16,7 @@ import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/Co
 import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
-import { AiOutlineRead } from 'react-icons/ai'
+import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
 
 export const CreateDatabase = ({from_local, type, onShare}) => {
     const [loading, setLoading] = useState(false)
@@ -24,7 +24,6 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     let user = woqlClient.user()
     const { getTokenSilently } = useAuth0();
     let update_start = Date.now()
-    const [report, setReport] = useState()
     const [local, setLocal] = useState(true)
 
     let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO
@@ -64,28 +63,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
         .finally(() => setLoading(false))
     }
 
-    async function shareLocal(doc, local, update_start) {
-        setLoading(true)
-        update_start = update_start || Date.now()
-        if(!doc.organization) doc.organization = bffClient.user_organization()
-        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
-        let sclient = woqlClient.copy()
-        if(local) {
-            sclient.organization(local.organization)
-            sclient.db(local.id)
-        }
-        let lid = sclient.db()
-        ShareLocal(doc, sclient, bffClient, getTokenSilently)
-        .then(() => {
-            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Shared Database to Hub"}
-            setReport(rep)
-            return addShare(lid, woqlClient.user_organization(), doc).then((dbrec) => {
-                goHubPage(doc.organization, doc.id)
-            })
-        })
-        .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, lid)))
-        .finally(() => setLoading(false))
-    }
+ 
 
     async function createRemote(doc, update_start) {
         setLoading(true)
@@ -275,7 +253,7 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
                         <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
                     }
                     {!local &&
-                        <DBRemoteForm onSubmit={createRemote}/>
+                        <CreateRemote onSubmit={createRemote}/>
                     }
                 </Row>
             </div>
@@ -284,8 +262,70 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
     )
 }
 
-export const DBShareForm = ({onSubmit, starter}) => {
-    const {remoteClient, bffClient, remoteEnriched } = WOQLClientObj()
+
+export const CreateLocalForm = ({onCancel, from_local}) => {
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState(false)
+    const {woqlClient, refreshDBRecord  } = WOQLClientObj()
+
+    async function onCreate(doc){
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        doc.organization = woqlClient.user_organization()
+        return CreateLocal(doc, woqlClient)
+        .then((local_id) => {
+            after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+        })
+        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
+        .finally(() => setLoading(false))
+    }
+
+    function after_create_db(update_start, message, id, create_or_clone, remote_record, onShare){
+        woqlClient.db(id)
+        let rep = {
+            status: TERMINUS_SUCCESS,
+            message: message,
+            time: Date.now() - update_start,
+        }
+        setReport(rep)
+        refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
+        .then(() => goDBHome(id, woqlClient.user_organization(), report))
+    }
+
+    function get_local_create_message(label, id){
+        return `${CREATE_DB_FORM.createSuccessMessage} ${label}, (id: ${id}) `
+    }
+
+    function create_local_failure(label, id){
+        return`${CREATE_DB_FORM.createFailureMessage} ${label}, (id: ${id}) `
+    }
+
+    
+    return  (<>
+        <Row className="generic-message-holder">
+            {report &&
+                <TerminusDBSpeaks report={report} />
+            }
+        </Row>
+        {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        <div className="pretty-form">
+            <div className="create-place-badge local-badge">
+                <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
+                Creating Local Database
+                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
+            </div>
+            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={false} from_local={from_local} />
+        </div>
+    </>)
+}
+
+export const ShareDBForm = ({onSuccess, starter}) => {
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState(false)
+
+    const { getTokenSilently } = useAuth0()
+    const {woqlClient, remoteClient, bffClient, remoteEnriched, addShare  } = WOQLClientObj()
     if(!remoteEnriched) return null
     let u = bffClient.user()
     let smeta = {}
@@ -293,20 +333,73 @@ export const DBShareForm = ({onSubmit, starter}) => {
         smeta[k] = starter[k]
     }
     smeta.hub_url = remoteClient.server()
+    if(!smeta.icon) smeta.icon = ""
     let o = u.organizations[0]
     for(var k in o){
         smeta[k] = o[k]
     }
     smeta.public = true;
-    function doSubmit(doc){
+
+    async function shareLocal(doc, local, update_start) {
         delete(doc['remote_url'])
-        onSubmit(doc)
+        setLoading(true)
+        update_start = update_start || Date.now()
+        if(!doc.organization) doc.organization = bffClient.user_organization()
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
+        let sclient = woqlClient.copy()
+        if(local) {
+            sclient.organization(local.organization)
+            sclient.db(local.id)
+        }
+        let lid = sclient.db()
+        console.log(doc)
+        ShareLocal(doc, sclient, bffClient, getTokenSilently)
+        .then(() => {
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Pushed Database to TerminusHub"}
+            setReport(rep)
+            return addShare(lid, woqlClient.user_organization(), doc).then((dbrec) => {
+                goHubPage(doc.organization, doc.id)
+                if(onSuccess) onSuccess(doc)
+            })
+        })
+        .catch((err) => process_error(err, update_start, "Push to TerminusHub failed"))
+        .finally(() => setLoading(false))
     }
-    return (<DBCreateCard start={smeta} onSubmit={doSubmit} organizations={u.organizations} databases={bffClient.databases()} type="share"/>)
+    
+    function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
+    }    
+
+    return (
+        <div className="tdb__loading__parent">
+            <Row className="remote-info share-on-hub-title">
+                <DBShareHeader />
+            </Row>
+            <Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            {
+                <DBCreateCard 
+                    start={smeta} onSubmit={shareLocal} organizations={u.organizations} databases={bffClient.databases()} type="share"/>
+            }
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        </div>
+    )
 }
 
-export const DBRemoteForm = ({onSubmit}) => {
-    const {remoteClient, bffClient, remoteEnriched } = WOQLClientObj()
+export const CreateRemoteForm = ({onSubmit, onCancel}) => {
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState(false)
+    const {woqlClient, remoteClient, bffClient, remoteEnriched, addClone } = WOQLClientObj()
+    const { getTokenSilently } = useAuth0();
     if(!remoteEnriched) return null
     let u = bffClient.user()
     let org = u.organizations[0]
@@ -322,9 +415,47 @@ export const DBRemoteForm = ({onSubmit}) => {
         smeta[k] = org[k]
     }
     smeta.hub_url = remoteClient.server()
-    function doSubmit(doc){
-        onSubmit(doc)
+  
+    async function createRemote(doc, update_start) {
+        setLoading(true)
+        if(!doc.organization) doc.organization = bffClient.user_organization()
+        update_start = update_start || Date.now()
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
+        CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
+        .then((local_id) => {
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
+            setReport(rep)
+            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
+            newguy.remote_url = doc.remote_url
+            newguy.remote_record = doc
+            addClone(local_id, woqlClient.user_organization(), newguy)
+            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
+        })
+        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
+        .finally(() => setLoading(false))
     }
 
-    return (<DBCreateCard start={smeta} onSubmit={doSubmit} organizations={u.organizations} databases={bffClient.databases()}  type="create" />)
+
+    function create_remote_failure(label, id){
+        return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
+    }
+
+    return (
+        <div className="pretty-form">
+            <div className="create-place-badge remote-badge">
+                <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
+                Creating Terminus Hub Database
+                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
+            </div>
+            <Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            <Row>
+                <DBCreateCard start={smeta} onSubmit={createRemote} organizations={u.organizations} databases={bffClient.databases()}  type="create" />
+            </Row>
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        </div>
+    )
 }

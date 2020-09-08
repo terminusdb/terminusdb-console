@@ -11,10 +11,8 @@ import { AiOutlineCloudUpload, AiOutlineCloudSync, AiOutlineCloudDownload, AiFil
     AiFillWarning, AiFillBuild, AiOutlineInbox} from 'react-icons/ai';
 import { BsFillEnvelopeFill } from 'react-icons/bs';
 import { validURL } from '../../utils/helperFunctions'
-import {WOQLClientObj} from '../../init/woql-client-instance'
 import {CloneProductionCredits, CloneRoleCredits, DBLastCommit, DBBranches, DBPrivacy, DBEmpty, DBTimings} from "../Pages/ClonePage"
 import {DescribeDifferences, AreSynched} from "../DBSynchronize/DBDifferences"
-
 export const DBList = ({list, className, user, onAction, filter, sort}) => {
     className = className || "database-listing-table"
     if(!list.length){
@@ -62,14 +60,8 @@ function _user_db_action(meta, user){
 
 export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
     const [loading, setLoading] = useState()
-    const [report, setReport] = useState()
    
     meta.action = (onAction ? _user_db_action(meta, user) : false)
-
-    function noGo(report){
-        setLoading(false)
-        if(report) setReport(report)
-    }
 
     function loadHubDB(){
         meta.action = "hub"
@@ -78,17 +70,12 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
 
     function onGo(){
         if(onAction){
-            setReport(false)
             if(!meta.action) return
-            let uerr = onAction(meta, noGo)
-            if(uerr){
-                setReport({status: TERMINUS_ERROR, message: uerr, error: {}})
-            }
+            onAction(meta)
         }
     }
     
 
-    let decr = (report ? (<TerminusDBSpeaks report={report} />) : (<DBDescription meta={meta}  user={user} />))
     return (
         <Row key='r7' className='database-summary-listing database-listing-line'>
             {loading &&
@@ -106,7 +93,7 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                         <DBCredits meta={meta}  user={user} />
                     </Row>
                     <Row key='r8'>
-                        {decr}
+                        <DBDescription meta={meta}  user={user} />
                     </Row>
                     {meta.type == "invite" &&
                     <Row key='r9'>

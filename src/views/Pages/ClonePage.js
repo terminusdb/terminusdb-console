@@ -5,10 +5,10 @@ import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
 import {TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks";
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { SimplePageView} from '../Templates/SimplePageView'
-import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle,
+import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle, AiFillStar,
     AiFillCrown, AiFillEdit, AiOutlineStar, AiOutlineThunderbolt, AiOutlineLink,
-    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell,
-    AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning} from 'react-icons/ai';
+    AiOutlineMail, AiOutlineUser, AiOutlineInbox,  AiOutlineGlobal, AiOutlineBell, AiOutlineCloudSync,
+    AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning, AiOutlineCloud, AiOutlineLogin, AiFillWarning, AiOutlinePlus, AiOutlineQuestion, AiOutlineQuestionCircle} from 'react-icons/ai';
 import { TERMINUS_WARNING, TERMINUS_ERROR, TERMINUS_SUCCESS, TERMINUS_COMPONENT } from "../../constants/identifiers";
 import { CLONEDBS } from "./constants.pages"
 import Loading from "../../components/Reports/Loading"
@@ -23,25 +23,61 @@ import {DBCreateCard} from "../CreateDB/DBCreateCard"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
 import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
 import Select from "react-select"
+import {CreateDB} from "../Server/DBListControl"
+import { isFuture } from 'date-fns';
+import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
+import {Collaborators} from "../Server/Collaborators"
+import {FiUsers} from "react-icons/fi"
 
 const ClonePage = ({organization, db}) => {
-    let org = organization || "recommendations"
-    let list = (organization || db ? false : CLONEDBS)
+    const { woqlClient } = WOQLClientObj()
+
+    let u = woqlClient.user()
+    let hubdbs = _get_my_dbs(woqlClient, u)
+    let collabs = _get_my_cdbs(woqlClient, u)
     return (
         <SimplePageView id="clonePage">
-            <CloneController organization={org} db={db} />
+            <CloneController organization={organization} db={db} list={hubdbs} collaborations={collabs}/>
         </SimplePageView>
     )
 }
 
-export const CloneController = ({list, db, organization, meta}) => {
+function _get_my_dbs(woqlClient, user){
+    let dblist = woqlClient.databases()
+    let mine = {}
+    for(var i = 0; i<dblist.length; i++){
+        if(dblist[i].remote_record && dblist[i].remote_record.organization == user.logged_in){
+            if(typeof mine[dblist[i].remote_record.id] == "undefined"){
+                mine[dblist[i].remote_record.id] = dblist[i].remote_record
+            }
+        }
+    }
+    return Object.values(mine)
+}
+
+function _get_my_cdbs(woqlClient, user){
+    let dblist = woqlClient.databases()
+    let cds = {}
+    for(var i = 0; i<dblist.length; i++){
+        if(dblist[i].remote_record && dblist[i].remote_record.organization != user.logged_in && dblist[i].remote_record.roles && dblist[i].remote_record.roles.length){
+            if(typeof cds[dblist[i].remote_record.organization + "/" + dblist[i].remote_record.id] == "undefined"){
+                cds[dblist[i].remote_record.organization + "/" + dblist[i].remote_record.id] = dblist[i].remote_record
+            }
+        }
+    }
+    return Object.values(cds)
+}
+
+
+export const CloneController = ({list, db, organization, meta, collaborations}) => {
     let [currentDB, setCurrentDB] = useState(meta)
-    let [dbid, setDBid] = useState()
-    let [orgid, setOrgid] = useState()
-    let [currentList, setCurrentList] = useState(list)
+    let [dbid, setDBid] = useState(db)
+    let [orgid, setOrgid] = useState(organization)
+    let [currentList, setCurrentList] = useState()
     let [loading, setLoading] = useState()
     let [report, setReport] = useState()
     let [bump, setBump] = useState(0)
+    let [showingMine, setShowingMine] = useState(true)
 
     const { woqlClient,  refreshDBRecord, bffClient, remoteClient, addClone } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
@@ -51,6 +87,10 @@ export const CloneController = ({list, db, organization, meta}) => {
     useEffect(() => {
         setOrgid(organization)
         setDBid(db)
+        if(organization == ""){
+            alert(orgid)
+            setCurrentList(showingMine ? list : collaborations)
+        }
     }, [organization, db])
 
     function loadNewStuff(org, db){
@@ -60,7 +100,6 @@ export const CloneController = ({list, db, organization, meta}) => {
         setCurrentList()
         setOrgid(org)
         setDBid(db)
-
     }
 
     useEffect(() => {
@@ -83,13 +122,16 @@ export const CloneController = ({list, db, organization, meta}) => {
             .finally(() => setLoading(false))
         }
         else if(!orgid && !dbid){
-            if(list) setCurrentList(list)
+            if(list) {
+                if(showingMine) setCurrentList(list)
+                else setCurrentList(collaborations)
+            }
             else if(meta) setCurrentDB(meta)
         }
     }, [dbid, orgid, bump])
 
     function processOrganizationListing(o, res){
-        if(o == "invitations") {
+        if(o == "invitations" || o == "collaborators") {
             setCurrentList(res)
         }
         else if(res.databases){
@@ -103,7 +145,7 @@ export const CloneController = ({list, db, organization, meta}) => {
     function fireAction(dbmeta){
         let db = _copy_db_card(dbmeta)
         if(db.action == 'load'){
-            loadNewStuff(dbmeta.organization, dbmeta.id)
+            refreshHub(dbmeta.organization, dbmeta.id)
         }
         else if(db.action == 'accept'){
             setLoading(true)
@@ -188,14 +230,37 @@ export const CloneController = ({list, db, organization, meta}) => {
     }
 
     function refreshHub(org, db){
-        setCurrentDB()
-        setCurrentList()
-        if(org == orgid && db == dbid || organization == "recommendations" || organization == "invitations"){
+        if(org == "collaborations"){
+            setCurrentDB()
+            setCurrentList()
+            setOrgid()
+            setDBid()
+            setShowingMine(false)
             setBump(bump+1)
         }
-        setOrgid(org)
-        setDBid(db)
-        goHubPage(org, db)
+        else if(org == ""){
+            setShowingMine(true)
+            setCurrentDB()
+            setCurrentList()
+            setOrgid()
+            setDBid()
+            goHubPage()
+            setBump(bump+1)
+        }
+        else {
+            setCurrentDB()
+            setCurrentList()
+            if(org == orgid && db == dbid || org == "recommendations" || org == "invitations" || org == ""){
+                setBump(bump+1)
+            }
+            setOrgid(org)
+            setDBid(db)
+            goHubPage(org, db)
+        }
+    }
+
+    function reloadCollabs(){
+        refreshHub("collaborators")
     }
 
     if(currentDB){
@@ -203,27 +268,25 @@ export const CloneController = ({list, db, organization, meta}) => {
         return (
             <div className="tdb__loading__parent">
                 <DBHubHeader organization={orgid} url={url} meta={currentDB} onChange={refreshHub} onError={reportComponentError} bump={bump}/>
-                    <Row className="generic-message-holder">
-                        {report &&
-                            <TerminusDBSpeaks report={report} />
-                        }
-                    </Row>
-                    <HubDBCard meta={currentDB} onAction={fireAction}/>
-                    {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+                <HubDBCard report={report} meta={currentDB} onAction={fireAction}/>
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            </div>
+        )
+    }
+    else if(currentList && orgid=="collaborators"){
+        return (
+            <div className="tdb__loading__parent">
+                <CloneHubHeader showingMine={showingMine} organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
+                <Collaborators onComplete={reloadCollabs} report={report} user={woqlClient.user()} dbs={list} list={currentList} />
+                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
     }
     else if(currentList){
         return (
             <div className="tdb__loading__parent">
-                <CloneHubHeader organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
-                <Row className="generic-message-holder">
-                    {report &&
-                        <TerminusDBSpeaks report={report} />
-                    }
-                </Row>
-                {/*loading &&  <Loading type={TERMINUS_COMPONENT} />*/}
-                <CloneListControl list={currentList} onAction={fireAction} />
+                <CloneHubHeader showingMine={showingMine} organization={orgid} list={currentList} onChange={refreshHub} onError={reportComponentError}/>
+                <CloneListControl report={report} organization={orgid} showingMine={showingMine} list={currentList} onAction={fireAction} />
                 {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             </div>
         )
@@ -240,19 +303,86 @@ export const CloneController = ({list, db, organization, meta}) => {
     }
 }
 
-export const CloneHubHeader = ({organization, list, onChange, onError}) => {
-    return ( <Row className="remote-info clone-widget-title">
-                <div className="remote-info-align database-create-header">
-                    <HubPicture />
-                    <span className='database-listing-header-row'>
-                        <span key='a' className="database-header-title remote-info-label">Share, Clone and Collaborate with Terminus Hub</span>
-                    </span>
-                </div>
-                <div className="database-remote-info-row">
-                    <HubToolbar onChange={onChange} onError={onError} organization={organization}/>
-                </div>
+export const CloneHubHeader = ({organization, showingMine, list, onChange, onError}) => {
+    let realorg =  (organization && ["recommendations", "invitations", "collaborators"].indexOf(organization) == -1 ) ? true : false
+
+    return ( 
+        <Row className="remote-info clone-widget-title">
+            <div className="remote-info-align database-create-header">
+                <HubPicture />
+                <span className='database-listing-header-row'>
+                    <span key='a' className="database-header-title remote-info-label">Share, Clone and Collaborate with Terminus Hub</span>
+                </span>
+            </div>
+            <div className="database-remote-info-row">
+                <HubToolbar showingMine={showingMine} onChange={onChange} onError={onError} organization={organization}/>
+            </div>
     </Row>)
 }
+
+export const OrganizationalHeader = ({organization}) => {
+    const {bffClient} = WOQLClientObj()
+    let u = bffClient.user()
+    let orgs = u.organizations
+    let o = false
+    for(var i = 0; i<orgs.length; i++){
+        if(orgs[i].organization == organization){
+            o = orgs[i]
+            break 
+        }
+    }
+    if(!o){
+        o = {
+            organization: organization,
+            organization_type: "Personal",
+            organization_icon: HUBDB,
+            organization_label: "Unknown",
+            organization_comment: "This publisher does not exist"
+        }
+    }
+    else {
+        console.log(o)
+    }
+    
+    return <div className='organization-hub-header'>
+        <span className='organization-hub-image'>
+            <HubOrgImage icon={o.organization_icon} />
+        </span>
+        <span className='organization-hub-credits'>
+            <Row className='organization-hub-name'>
+               <OrgBadge type={o.organization_type} />  {o.organization_label}                 
+            </Row>
+            <Row className='organization-hub-description'>
+                {o.organization_comment}
+            </Row>
+        </span>
+    </div>
+}
+
+export const OrgBadge = ({type}) => {
+    if(type == "Professional"){
+        return <AiFillStar title='Verified Professional Publisher' className="pro-badge" />
+    }
+    return null
+}
+
+
+export const HubOrgImage = ({icon}) => {
+    let vi = validURL(icon)
+    if(vi){
+        return (
+            <img className='organization-home-listing-image' src={icon}/>
+        )
+    }
+    else {
+        return (
+            <i className={'organization-listing-icon ' + icon} />
+        )
+    }
+}
+
+
+
 
 export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
     let text = "This database is stored on Terminus Hub"
@@ -266,10 +396,11 @@ export const DBHubHeader = ({organization, url, meta, onChange, onError}) => {
         <div className="database-remote-info-row">
             <HubToolbar onChange={onChange} onError={onError} url={url} organization={organization}/>
         </div>
-    </Row>)
+    </Row>
+    )
 }
 
-export const HubToolbar = ({onChange, onError, organization, url}) => {
+export const HubToolbar = ({onChange, showingMine, onError, organization, url}) => {
     const { woqlClient, remoteClient } = WOQLClientObj()
 
     const [bump, setBump] = useState(0)
@@ -280,6 +411,19 @@ export const HubToolbar = ({onChange, onError, organization, url}) => {
 
     function goRecommendations(){
         onChange("recommendations")
+    }
+
+    function goHome(){
+        onChange("")
+    }
+
+    function goCollaborators(){
+        onChange("collaborators")
+    }
+
+    
+    function goCollaborations(){
+        onChange("collaborations")
     }
 
     function doURLTry(u){
@@ -307,19 +451,29 @@ export const HubToolbar = ({onChange, onError, organization, url}) => {
         }
     }
 
+    let u = woqlClient.user()
+
     return (
         <Row className="hub-toolbar">
-            <Col md={2}className="hub-toolbar-col hub-recommendations-col">
+            {u.logged_in && <>
+                <Col className="hub-home-col hub-recommendations-col">
+                    <MyDatabasesLinker showingMine={showingMine} bump={bump} organization={organization} onSubmit={goHome}/>
+                </Col>
+                <Col className="hub-toolbar-col hub-collaborations-col">
+                    <CollaborationsLinker showingMine={showingMine} bump={bump} organization={organization} onSubmit={goCollaborations}/>
+                </Col>
+                <Col className="hub-toolbar-col hub-invitations-col">
+                    <InvitationsLinker bump={bump} organization={organization} onSubmit={goInvites}/>
+                </Col>
+                <Col className="hub-home-col hub-recommendations-col">
+                    <CollaboratorsLinker  bump={bump} organization={organization} onSubmit={goCollaborators}/>
+                </Col>
+            </>}
+            <Col className="hub-toolbar-col hub-recommendations-col">
                 <RecommendationsLinker  bump={bump} organization={organization} onSubmit={goRecommendations}/>
             </Col>
-            <Col md={2} className="hub-toolbar-col hub-invitations-col">
-                <InvitationsLinker bump={bump} organization={organization} onSubmit={goInvites}/>
-            </Col>
-            <Col md={3} className="hub-toolbar-col publisher-picker-col">
+            <Col className="hub-toolbar-col publisher-picker-col">
                 <PublisherPicker onSubmit={onChange} organization={organization} />
-            </Col>
-            <Col md={5} className="hub-toolbar-col url-picker-col">
-                <URLPicker url={url} onSubmit={doURLTry} />
             </Col>
         </Row>
     )
@@ -334,7 +488,7 @@ const PublisherPicker = ({onSubmit, organization}) => {
     }
 
     let ph = "Enter Publisher ID"
-    let df = (["recommendations", "invitations"].indexOf(organization) == -1 ) ? organization : null
+    let df = (["recommendations", "invitations", "collaborators"].indexOf(organization) == -1 ) ? organization : null
     return (
         <span className='hub-inputbar publisher-picker'>
             <AiOutlineUser className="hub-bar-spacing"/>
@@ -382,6 +536,51 @@ const InvitationsLinker = ({organization, onSubmit}) => {
     )
 }
 
+const MyDatabasesLinker = ({organization, onSubmit, showingMine}) => {
+    if(!organization && showingMine){
+        return(
+            <span title="My Databases" className='hub-inputbar hub-active-link'>
+                <AiOutlineCloud className="hub-active-icon active-cloud hub-bar-spacing"/> My Databases
+            </span>
+        )
+    }
+    return (
+        <span onClick={onSubmit} title="View your TerminusHub databases" className='hub-inputbar hub-link'>
+            <AiOutlineCloud className="hub-inactive-icon inactive-cloud hub-bar-spacing"/> My Databases
+        </span>
+    )
+}
+
+const CollaborationsLinker = ({organization, onSubmit, showingMine}) => {
+    if(!organization && !showingMine){
+        return(
+            <span title="Collaborations" className='hub-inputbar hub-active-link'>
+                <AiOutlineLogin className="hub-active-icon active-mail hub-bar-spacing"/> Collaborations
+            </span>
+        )
+    }
+    return (
+        <span onClick={onSubmit} title="View your Collaborations" className='hub-inputbar hub-link'>
+            <AiOutlineLogin className="hub-inactive-icon inactive-mail hub-bar-spacing"/> Collaborations
+        </span>
+    )
+}
+
+const CollaboratorsLinker = ({organization, onSubmit}) => {
+    if(organization == "collaborators"){
+        return(
+            <span title="Collaborators" className='hub-inputbar hub-active-link'>
+                <FiUsers className="hub-active-icon active-mail hub-bar-spacing"/> Collaborators
+            </span>
+        )
+    }
+    return (
+        <span onClick={onSubmit} title="View your TerminusHub databases" className='hub-inputbar hub-link'>
+            <FiUsers className="hub-inactive-icon inactive-mail hub-bar-spacing"/> Collaborators
+        </span>
+    )
+}
+
 const RecommendationsLinker = ({organization, onSubmit}) => {
     if(organization == "recommendations"){
         return (
@@ -404,11 +603,12 @@ const HubPicture = ({title}) => {
     return (<img className='database-header-image' src={icon} title={title}  />)
 }
 
-export const CloneListControl = ({list, onAction, organization, sort, filter}) => {
+export const CloneListControl = ({list, onAction, organization, sort, filter, showingMine, report}) => {
     if(!list) return null
     const [listSort, setSort] = useState(sort || "updated")
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
+    const [showingCreate, setShowingCreate] = useState(false)
 
     useEffect(() => {
         if(listSort && list){
@@ -431,18 +631,252 @@ export const CloneListControl = ({list, onAction, organization, sort, filter}) =
         setSort(nsort.value)
     }
 
-    if(!sorted) return null
-    let show_header = list.length > 20;
+    
+ 
+    function showCreate(){
+        setShowingCreate(true)
+    }
 
+    function unshowCreate(){
+        setShowingCreate(false)
+    }
+
+    if(!sorted) return null
+    let show_create = (!organization && showingMine);
+    if(showingCreate) return (<CreateRemoteForm onCancel={unshowCreate}/>)
     return (<>
-        {show_header &&
-            <div className='db-list-filter-bar'>
-                <ListSorter sort={listSort} onChange={callSort}  organization={organization}  />
-            </div>
-        }
+        <div className="dbclone-filters">
+            {(sorted.length == 0 ) && 
+                <EmptyCloneList showingMine={showingMine} organization={organization}/>
+            }
+            {sorted.length > 0 && 
+                <CloneListStats showingMine={showingMine} organization={organization} list={sorted} />
+            }
+            {show_create && 
+                <CreateHubDB onCreate={showCreate} />
+            }
+            { false && 
+                <ListFilter filter={listFilter} onChange={callFilter} />
+            }
+            {list.length > 1 && 
+                <ListSorter sort={listSort} onChange={callSort} organization={organization} />
+            }
+        </div>
+        <Row className="generic-message-holder">
+            {report &&
+                <TerminusDBSpeaks report={report} />
+            }
+        </Row>       
         <CloneList list={sorted} onAction={onAction}/>
   </>)
 }
+
+function _get_pp_stats(list){
+    let s = {
+        total: list.length,
+        public: 0,
+        private: 0
+    }
+    for(var i = 0; i<list.length; i++){
+        if(list[i].public) s.public++
+        else s.private++
+    }
+    return s
+}
+
+export const MyDBStats = ({list}) => {
+    let stats = _get_pp_stats(list)
+    let dbname = stats.total == 1 ? "Database" : "Databases"
+
+    return <span className="stats-list-intro">Your Account Has:
+        <span className="db-card-credit">
+            <AiOutlineCloud className="db_info_icon_spacing"/> 
+            <span className="db_info">{stats.total} {dbname}</span>
+        </span>
+        <PPStats pub={stats.public} pri={stats.private} />
+    </span>
+}
+
+export const PPStats = ({pub, pri}) => {
+    return <span className="db-privacy-stats">
+        <span className="db-card-credit">
+            <AiOutlineGlobal title="Public Databases" className="db_info_icon_spacing"/>
+            <span className="db_info">{pub} Public</span>
+        </span>
+        <span className="db-card-credit" >
+            <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
+            <span className="db_info">{pri} Private</span>
+        </span>
+    </span>    
+}
+
+export const CollaboratorStats = ({list}) => {
+    let stats = _get_pp_stats(list)
+    let dbname = stats.total == 1 ? "Database" : "Databases"
+    return <span className="stats-list-intro">You are a collaborator on:
+        <span className="db-card-credit">
+            <AiOutlineLogin className="db_info_icon_spacing"/> 
+            <span className="db_info">{stats.total} {dbname}</span>
+        </span>
+        <PPStats pub={stats.public} pri={stats.private} />
+    </span>
+}
+
+export const InvitationStats = ({list}) => {
+    return <span className="stats-list">
+        <AiOutlineMail className="hub-active-icon active-star hub-bar-spacing"/> Invitations to collaborate from other users
+    </span>
+}
+
+export const RecommendationStats = ({list}) => {
+    return <span className="stats-list-intro">
+        <AiOutlineStar className="hub-active-icon active-star hub-bar-spacing"/> <strong>Recommendations</strong> Useful and Interesting Databases that you can clone to help you get up and running with TerminusDB
+    </span>
+}
+
+export const OrgDBStats = ({list, organization}) => {
+    let stats = _get_pp_stats(list)
+    let nm = organization
+    let dbname = stats.total == 1 ? "Database" : "Databases"
+    return <span className="stats-list-intro">Available from {nm} :
+        <span className="db-card-credit">
+            <AiOutlineCloud className="db_info_icon_spacing"/> 
+            <span className="db_info">{stats.total} {dbname}</span>
+        </span>
+        <PPStats pub={stats.public} pri={stats.private} />
+    </span>
+}
+
+
+export const CloneListStats = ({showingMine, organization, list}) => {
+    let txt = ""
+    let tit = ""
+    if(!organization && showingMine){
+        return <MyDBStats list={list} />
+    }
+    else if(!organization){
+        return <CollaboratorStats list={list} />
+    }
+    else if(organization == "invitations"){
+        return <InvitationStats />
+    }
+    else if(organization == "recommendations"){
+        return <RecommendationStats />
+    }
+    else {
+        return <OrgDBStats list={list} organization={organization} />
+    }
+}
+
+
+
+export const CreateHubDB = ({onCreate}) => {
+    let txt = "New TerminusHub Database"
+    let title = "Create a new database on TerminusHub"
+    return ( 
+        <button title={title} type="submit" className="dblist-create" onClick={onCreate}>
+            {txt} <AiOutlinePlus className="create-btn-icon" />
+        </button>
+    )
+}
+
+
+
+export const CreateDBOption = () => {
+    return <span className="empty-clonelist-option">
+        <AiOutlinePlus className='clonelist-option-icon'/> <span className="empty-action-title"> Create on Hub</span>
+        <span className="empty-action-explanation"> Create a new database directly on TerminusHub</span>
+    </span>
+}
+
+export const SaveDBOption = () => {
+    return <span className="empty-clonelist-option">
+        <AiOutlineCloudSync className='clonelist-option-icon'/> <span className="empty-action-title"> Save to Hub</span>
+        <span className="empty-action-explanation"> Save to TerminusHub from the synchronize screen</span>
+    </span>
+}
+
+export const ForkDBOption = () => {
+    return <span className="empty-clonelist-option">
+         <AiOutlineFork className='clonelist-option-icon'/> <span className="empty-action-title"> Fork from Hub</span>
+        <span className="empty-action-explanation"> Copy another TerminusHub Database to your Account</span>
+    </span>
+}
+
+export const EmptyMyDBs = () => {
+    return <span className="empty-clonelist">
+        <span className="empty-clonelist-title">
+            <AiOutlineCloud className="empty-clonelist-icon"/> There are no databases saved in your TerminusHub Account
+        </span>
+        <span className="empty-clonelist-help">
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />  To save databases to your TerminusHub account, either:
+                <CreateDBOption />
+                <SaveDBOption /> 
+                <ForkDBOption />
+        </span> 
+    </span>
+}
+
+export const EmptyInvitations = () => {
+    return <span className="empty-clonelist">
+        <span className="empty-clonelist-title">
+            <AiOutlineMail className="empty-clonelist-icon"/> There are no pending invitations
+        </span>
+        <span className="empty-clonelist-help">
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
+            Other TerminusHub users can invite you to view or collaborate their published databases. When you recieve an invitation, you can view it here
+        </span> 
+    </span>
+}
+
+export const EmptyCollaborations = () => {
+    return <span className="empty-clonelist">
+        <span className="empty-clonelist-title">
+            <AiOutlineLogin className="empty-clonelist-icon"/> You are not a collaborator on any TerminusHub Databases
+        </span>
+        <span className="empty-clonelist-help">
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
+            Other TerminusHub users can make you a collaborator on their databases. When you are given collaborator rights to other people's databases, you can access them here 
+        </span> 
+    </span>
+}
+
+export const EmptyRecommendations = () => {
+    return <span className="empty-clonelist">
+        <span className="empty-clonelist-title">
+            <AiFillWarning className="empty-clonelist-icon"/> There are currently no recommendations available
+        </span>
+        <span className="empty-clonelist-help">
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
+            This normally means that there is some communication problem between your local server and TerminusHub. Try pressing Ctrl-R or refreshing your browser 
+            to reconnect to TerminusHub
+        </span> 
+    </span>
+}
+
+
+
+export const EmptyCloneList = ({showingMine, organization, stats, filter}) => {
+    let txt = ""
+    let tit = ""
+    if(!organization && showingMine){
+        return <EmptyMyDBs />
+    }
+    else if(!organization){
+        return <EmptyCollaborations />
+    }
+    else if(organization == "invitations"){
+        return <EmptyInvitations />
+    }
+    else if(organization == "recommendations"){
+        return <EmptyRecommendations />
+    }
+    else {
+        return <span>empty {organization}</span>
+    }
+}
+
+
 
 export const ListFilter = ({filter, onChange, organization}) => {
     if(organization == "invitations") return <InvitationFilter filter={filter} onChange={onChange}/>
@@ -490,6 +924,7 @@ export const InvitationFilter = ({filter, onChange, organization}) => {
 }
 
 function _filter_list(unfiltered, filter){
+    if(!unfiltered.length) return []
     let filtf
     if(filter == ""){
         filtf = function(){return true}
@@ -544,15 +979,19 @@ function _filter_list(unfiltered, filter){
     }
 }
 
-export const ListSorter = ({sort, onChange}) => {
+export const ListSorter = ({sort, onChange, organization}) => {
     sort = sort || "updated"
     let sort_algos = [
         {value: "updated", label: "Most Recently Updated First"},
         {value: "oldest", label: "Least Recently Updated First"},
         {value: "created", label: "Newest Database First"},
-        {value: "name", label: "Database Name (a-z)"},
-        {value: "organization", label: "Publisher"},
+        {value: "name", label: "Database Name (A-Z)"},
+        //{value: "organization", label: "Publisher"},
     ]
+
+    if(organization && (organization == "invitations" ||  organization == "recommendations")){
+        return null
+    }
 
     let ph = ""
     for(var i = 0; i<sort_algos.length; i++){
@@ -580,6 +1019,7 @@ function _sort_str(a, b){
 }
 
 function _sort_list(unsorted, listSort){
+    if(!unsorted.length) return []
     let sortf
     if(listSort == 'updated'){
         sortf = function(a, b){
@@ -646,11 +1086,7 @@ function _copy_db_card(card){
 
 export const CloneList = ({list, onAction}) => {
     if(!list.length){
-        return (
-            <Row className="generic-message-holder">
-                <EmptyResult report={{}} />
-            </Row>
-        )
+        return null
     }
     return (
         <Container fluid>
@@ -661,7 +1097,7 @@ export const CloneList = ({list, onAction}) => {
     )
 }
 
-export const HubDBCard = ({meta, onAction}) => {
+export const HubDBCard = ({meta, onAction, report}) => {
     let [mode, setMode] = useState()
 
     function showSubscreen(ss){
@@ -697,6 +1133,11 @@ export const HubDBCard = ({meta, onAction}) => {
                 <HubStatus meta={meta} onAction={showSubscreen}/>
             </span>
         </Row>
+        {report &&
+            <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={report} />
+            </Row>       
+        }
         <Row key="r88" className='hubdb-main-screen' />
         {(mode == "clone") &&
              <HubClonePage meta={meta} onAction={onAction} onCancel={onCancel}/>
@@ -847,6 +1288,8 @@ export const HubDBImage = ({meta, onAction}) => {
         )
     }
 }
+
+
 
 export const HubCredits = ({meta, onAction}) => {
     return (<>
