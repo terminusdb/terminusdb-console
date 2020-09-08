@@ -30,12 +30,20 @@ import {Collaborators} from "../Server/Collaborators"
 import {FiUsers} from "react-icons/fi"
 
 const ClonePage = ({organization, db}) => {
-    const { woqlClient } = WOQLClientObj()
-
+    const { woqlClient, contextEnriched } = WOQLClientObj()
     let u = woqlClient.user()
-    let hubdbs = _get_my_dbs(woqlClient, u)
-    let collabs = _get_my_cdbs(woqlClient, u)
+    const [hubdbs, setHubDBs] = useState(_get_my_dbs(woqlClient, u))
+    const [collabs, setCollabs] = useState(_get_my_cdbs(woqlClient, u))
+    
+    useEffect(() => {
+        if(contextEnriched){
+            let u = woqlClient.user()
+            setHubDBs(_get_my_dbs(woqlClient, u))
+            setCollabs(_get_my_cdbs(woqlClient, u))
+        }
+    }, [contextEnriched])
 
+  
     return (
         <SimplePageView id="clonePage">
             <CloneController organization={organization} db={db} list={hubdbs} collaborations={collabs}/>
