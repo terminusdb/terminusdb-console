@@ -6,7 +6,7 @@ import {DBRoutes} from './DBRoutes'
 //import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
 import {base_router} from '../../utils/baseRouter'
-
+import {Footer} from '../../views/Templates/Footer'
 import { createBrowserHistory } from "history";
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 
@@ -23,7 +23,10 @@ export const ConsoleRouter = (props) => {
             </Switch>
         )
     }
-    return <Router history={props.history}>{getSwitch()}</Router>
+    return <Router history={props.history}>
+                    {getSwitch()}
+            <Footer/>
+            </Router>
 }
 
 /*
@@ -35,7 +38,8 @@ export const getDBRoute = (db, aid) => {
 }
 
 export const getHubRoute = (orgid, dbid) => {
-    let base = `${CLONE_DB_ROUTE}/${orgid}`
+    let base = `${CLONE_DB_ROUTE}`
+    if(orgid) base += `/${orgid}`
     if(dbid) base += `/${dbid}`
     return base
 }
