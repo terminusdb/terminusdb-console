@@ -13,7 +13,7 @@ import {DBRemotes} from "./DBRemotes"
 import {DBRemoteSummary} from "./DBRemoteSummary"
 import {RefreshDatabaseRecord, removeRemote, addRemote, isLocalURL} from "../../components/Query/CollaborateAPI"
 import {AddRemote} from "./AddRemote"
-import {CreateDatabase} from "../CreateDB/CreateDatabase"
+import {ShareDBForm} from "../CreateDB/CreateDatabase"
 import {goHubPage, goDBHome} from "../../components/Router/ConsoleRouter"
 
 export const Synchronize = () => {
@@ -186,7 +186,7 @@ export const Synchronize = () => {
                 />
             }
             {(operation && operation == "share") && 
-                <CreateDatabase type='share' from_local={meta} onShare={afterShare}/>
+                <ShareDBForm starter={meta} onSuccess={afterShare}/>
             }
             {(operation && operation == "create") && 
                <AddRemote 

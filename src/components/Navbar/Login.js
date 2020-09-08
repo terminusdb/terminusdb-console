@@ -7,10 +7,15 @@ import { PROFILE_ROUTE } from "../../constants/routes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OutsideClickHandler from 'react-outside-click-handler';
 import {redirect_uri} from '../../utils/baseRouter'
+import {CLONE_DB_ROUTE} from '../../constants/routes'
+import {HUBLOGO} from "../../constants/images" 
+import {WOQLClientObj} from '../../init/woql-client-instance'
+
 
 export const Login = (props) => {
     const {isAuthenticated, user, loading,loginWithRedirect,logout } = useAuth0();
     const [isOpen,setOpen] =useState(false);
+    const {woqlClient} = WOQLClientObj()   
 
     const toggle = () => setOpen(prevState => !prevState);
     const dropdownContent = isOpen===true ? "tdb__dropdown__content  tdb__dropdown__content--show" : "tdb__dropdown__content tdb__dropdown__content--hide"
@@ -23,6 +28,10 @@ export const Login = (props) => {
 
     let profile_arg = `?console=console`
 
+    function handleClick(){
+        woqlClient.db(false)
+        woqlClient.organization(false)
+    }
 
     /*
     * TO BE REVIEW TO GET FROM HISTORY BASE NAME
@@ -35,6 +44,11 @@ export const Login = (props) => {
             returnTo: redirect_uri//window.location.origin+'/console/'
     });
     return (<Fragment>
+            <div className="nav-hub-right">
+                <NavLink to={CLONE_DB_ROUTE} className="nav-hub-logo" onClick={handleClick}>
+                    <img src={HUBLOGO} alt="TerminusHub" />
+                </NavLink>
+            </div>
             {!isAuthenticated && !user &&
                 <button id="login_button" className="tdb__button__base tdb__button__base--green nav__main__login" onClick={ () => loginWithRedirect()}>
                     {LOGIN_LABEL}

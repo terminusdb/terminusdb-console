@@ -7,3 +7,6 @@ export const MASCOT_COLOR = TERMINUS_IMAGE_BASE + "Mascot-Color.png"
 export const COMING_SOON = TERMINUS_IMAGE_BASE + "comingSoon.png"
 export const GRAPHDB = TERMINUS_IMAGE_BASE + "create-locally-1.png"
 export const HUBDB = TERMINUS_IMAGE_BASE + "cowduck-space.png"
+export const HUBLOGO = TERMINUS_IMAGE_BASE + "terminushub.png"
+
+//export const HUBLOGO = "file:\\C\Users\kevin\ngit\terminusdb-web-assets\terminusdb-console\images\terminushub.png"
