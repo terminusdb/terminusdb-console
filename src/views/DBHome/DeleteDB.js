@@ -42,7 +42,7 @@ export const DeleteDB = ({meta}) => {
         //if(dbName && dbName === woqlClient.db()){
             let st = Date.now()
             woqlClient
-                .deleteDatabase(data.dbId,  woqlClient.organization())
+                .deleteDatabase(data.dbId,  woqlClient.organization(), true)
                 .then(() => {
                     setReport({
                         message: DELETE_DB_MODAL.deleted + ' ' + data.dbId,
