@@ -4966,30 +4966,47 @@ button.tdb__button__cancel:hover {
     padding: 16px 10px;
 }
 
-.feedbackCard {
-    flex-grow: 9999;
-    margin: 0 12px 0 28px;
-    word-wrap: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 300px;
+.nav-feedback {
+    font-size: 40px;
+    margin-left: 20px;
+    flex-grow: 0.5;
+    cursor: pointer;
 }
 
-.feedback-card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: transparent !important;
-    border-bottom: 1px solid rgba(0,0,0,.125);
-    font-weight: 800;
+.feedbackButton {
+    width: 300px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.feedbackCardButton {
+    min-height: 5px !important;
+    max-height: 60px !important;
+    margin-bottom: 10px;
+}
+
+.feedbackButtonText{
+    width: 200px;
+}
+
+
+.feedbackButtonIcon{
+    margin-left: 120px;
+}
+
+.feedback-modal-head {
+    color: #0055bb;
+    font-size: 30px;
 }
 
 .feedback-text {
-    max-width: 180px;
+    max-width: 370px;
     color: #787878;
     white-space: break-spaces;
     margin-bottom: 20px;
     margin-top: 18px;
+    font-size: 20px;
 }
 
 .feedback-section {
@@ -5001,6 +5018,10 @@ button.tdb__button__cancel:hover {
     float: right;
 }
 
+.feedback-form{
+    overflow: hidden
+}
+
 .feedback-icon {
     position: absolute;
     object-fit: contain;
@@ -5009,5 +5030,13 @@ button.tdb__button__cancel:hover {
     top: -10px;
     transform: rotate(0deg);
     width: 230px;
-    height: 159px;
+    height: 400px;
+    transform: rotate(-45deg);
+    margin-top: -70px;
+    top: -100px;
+    left: 300px;
+}
+
+.feedback-alert {
+    width: 100%;
 }
