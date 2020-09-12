@@ -3516,7 +3516,6 @@ span.delete-modal-label {
 
   .dbcard-creditline {
       flex-grow: 0;
-      margin-left: 14px;
   }
 
   .dbcard-sub-creditline {
@@ -3690,18 +3689,17 @@ span.delete-modal-label {
      }
 
    .database-listing-description-fullrow {
-        margin: 18px 0px 10px 10px !important;
+        margin: 18px 0px 10px 0px !important;
         font-size: 14px;
         flex-grow: 0;
         color: #989CA0;
     }
 
     .database-listing-description {
-        padding-left: 8px;
     }
 
   .database-listing-description-full {
-      margin: 16px 10px 0px 24px;
+      margin: 16px 10px 0px 0px;
       font-size: 14px;
       flex-grow: 0;
       color: #484C47;
@@ -3713,19 +3711,11 @@ span.delete-modal-label {
     font-size: 13px;
   }
 
-  .database-listing-description-row {
-      margin: 10px 10px 0px 0px;
-      font-size: 13px;
-      font-weight: 400;
-      flex-grow: 0;
-      padding-left: 20px;
-      color: #989CA0;
-  }
+
 
   .database-listing-title-row {
       margin: 0;
       display: inline-block;
-      padding-left: 14px;
   }
   .database-listing-credits-row {
       margin: 0px 0px 0px -25px;
@@ -3839,8 +3829,9 @@ span.delete-modal-label {
 
 
   .database-listing-description-row {
-      margin: 10px 10px 0px 15px;
+      margin: 10px 10px 0px 0px;
       font-size: 15px;
+      flex-grow: 0;
       font-weight: 400;
       color: #787878;
   }
@@ -3964,7 +3955,7 @@ span.delete-modal-label {
   .fork-action{
       color: #0366d6;
       background-color: #f1f8ff;
-      border: 1px solid dbcard-creditlinedbcard-creditline;
+      border: 1px solid #0366d6;
       border-radius: 2em;
       margin: auto;
       padding: 0 10px;

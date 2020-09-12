@@ -193,7 +193,7 @@ export const DBCredits = ({meta, user}) => {
 export const DBID = ({meta}) => {
     if(!(meta && meta.id)) return null
     return (
-        <span className="tdb__dblist__credit">
+        <span className="db-card-credit">
             <AiFillInfoCircle className="db_info_icon_spacing"/>
             <span className="db_info">
                 <span className="tdb__dblist__info">ID</span>
@@ -231,7 +231,7 @@ export const DBDescription = ({meta, user}) => {
     }
     else str = meta.comment || ""
     return (
-        <div className='tdb__dblist__description'>
+        <div className='database-listing-description-full'>
         {str}
         </div>
     )
