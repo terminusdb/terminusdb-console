@@ -127,11 +127,10 @@ export const DBTitle = ({meta, user, goHubDB, max}) => {
         else goHubDB(meta)
     }
 
-    let title_css = meta.id ? "database-title-local" : "database-title-missing"
+    let title_css = "database-listing-title"
     let title_html = meta.id ? "Visit database id: " + meta.id : "View on Terminus Hub"
 
     if(meta.remote_record && meta.remote_record.label){
-        title_css = "database-title-remote"
         if(meta.remote_record.label != meta.label) title_html += " Cloned from original with title: " + meta.remote_record.label
     }
 
@@ -146,9 +145,7 @@ export const DBTitle = ({meta, user, goHubDB, max}) => {
 
     return (
         <span>
-            <span onClick={goDB} title={title_html} className="tdb__dblist__title tdb__dblist__button">{str}</span>
-            
-            {false && <span className="author_info">{author}</span>}
+            <span onClick={goDB} title={title_html} className={title_css}>{str}</span>
         </span>
     )
 }
@@ -179,7 +176,7 @@ export const DBCredits = ({meta, user}) => {
         res.push(<DBTimings key='dbt' meta={meta} user={user} />)
     }
     else {
-        res.push(<DBEmpty key='dbt' meta={meta} user={user} />)
+        res.push(<DBEmpty key='dbx' meta={meta} user={user} />)
     }
     if(typeof meta.size != "undefined"){
         res.push(

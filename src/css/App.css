@@ -3516,6 +3516,7 @@ span.delete-modal-label {
 
   .dbcard-creditline {
       flex-grow: 0;
+      margin-left: 14px;
   }
 
   .dbcard-sub-creditline {
@@ -3816,15 +3817,8 @@ span.delete-modal-label {
   .database-listing-title {
       font-size: 40px;
       line-height: 105%;
-      padding-top: 10px;
-      display: block;
-      padding-bottom: 8px;
-  }
-
-  .database-listing-title {
-      padding-left: 14px;
-      padding-right: 14px;
       display: inline-block;
+      padding-bottom: 8px;
   }
 
   .database-listing-id {
@@ -3970,7 +3964,7 @@ span.delete-modal-label {
   .fork-action{
       color: #0366d6;
       background-color: #f1f8ff;
-      border: 1px solid #0366d6;
+      border: 1px solid dbcard-creditlinedbcard-creditline;
       border-radius: 2em;
       margin: auto;
       padding: 0 10px;
@@ -3996,8 +3990,7 @@ span.delete-modal-label {
   }
 
   .database-listing-title:hover {
-      background-color: #eff8ff;
-      border-radius: 12px;
+      color: #0366d6;
   }
 
   .database-action-option {
