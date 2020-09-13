@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Collapse, CardBody, Card, CardHeader, Col, Row } from 'reactstrap';
+import { Button, Collapse, CardBody, Card, CardHeader, Col, Row } from 'reactstrap';
 import {useForm} from 'react-hook-form'
 import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai'
 import {SendEmailHook} from  "../../init/SendEmailHook"
@@ -27,10 +27,12 @@ export const FeedbackForm = (props) => {
 	return (<>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div key="rr" className="feedback-section">
-						{!userName && <div className="feedback-text">Please use this form to provide feedback about our service</div>}
-						{userName && <h3 class="h3 box__text">Hi {userName},send us your feedback?</h3>}
+                        {userName && <><h3 class="h3 box__text">Hi {userName}</h3>
+                            <div className="feedback-text">If you notice any bugs or have any suggestions about how we can improve the service, please let us know</div>
+                        </>}
+						
 					</div>
-					<img className="feedback-icon" src="https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color.png"/>
+					<img className="feedback-icon" src="https://assets.terminusdb.com/terminusdb-console/images/Mascot-Color-Tight.png"/>
 					{!userName && <div className="feedback-section">
 						<label>Email</label>
 						<input type="email"
@@ -57,9 +59,12 @@ export const FeedbackForm = (props) => {
 						{emailResult && <div className="feedback-alert alert alert-success">Your message was succesfully submitted</div>}
 						{emailError &&  <div className="feedback-alert alert alert-danger">Error: there was a problem sending your message</div>}
 					</div>
-					<div className="feedback-button">
+					<div className="feedback-button">          
 						<button type="submit" className="tdb__button__base tdb__button__base--green tdb__commit__bar--button">Send
 						</button>
+                        <button onClick={props.toggle} className="tdb__button__base tdb__button__base--gray tdb__commit__bar--button">
+                            Cancel
+                        </button>
 					</div>
 				</form>
     </>)

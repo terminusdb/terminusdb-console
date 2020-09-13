@@ -19,7 +19,12 @@ export const ConsoleNavbar = (props) => {
 
     const [feedbackModal, setFeedbackModal] = useState(false);
 
-    const feedbackToggle = () => setFeedbackModal(!feedbackModal);
+    const feedbackToggle = () => {
+        setFeedbackModal(!feedbackModal)
+    }
+    if(!woqlClient) return null
+
+    let u = woqlClient.user()
 
     const toggleNavBar = () => setIsOpen(!isOpen)
     const [isTopOpen, setTopDropdownOpen] = useState(false)
@@ -57,34 +62,24 @@ export const ConsoleNavbar = (props) => {
                             />
                         )}
                     </ul>
-                    <span title="Send us a feedback" onClick={feedbackToggle}>
-                        <AiOutlineMail className="nav-feedback"/>
-                    </span>
-                    <Modal isOpen={feedbackModal} toggle={feedbackToggle} className="feedback-form">
-                        <ModalHeader toggle={feedbackToggle} className="feedback-modal-head">Send us your feedback</ModalHeader>
-                        <ModalBody>
-                            <FeedbackForm/>
-                        </ModalBody>
-                    </Modal>
                     <div className="nav__main__right">
-                        {showUnderCostruction && (
-                            <UnderConstruction
-                                buttonClassName="tdb__button__base tdb__button__base--green nav__main__login"
-                                buttonColor={'white'}
-                                buttonText={LOGIN_LABEL}
-                                action="Login in HUB"
-                                headerText={noHttps.title}
-                                description={noHttps.description}
-                                noEmail={true}
-                                noIcon={true}
-                            />
-                        )}
-                        {showUnderCostruction === false && <Login />}
+                        {u.logged_in && 
+                            <span title="Send us your feedback" onClick={feedbackToggle}>
+                                <AiOutlineMail className="nav-feedback"/>
+                            </span>
+                        }
+                        <Login />
                     </div>
                 </nav>
             </header>
             {woqlClient.db() && <DBNavbar />}
             {isOpen && woqlClient.db() && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
+            <Modal isOpen={feedbackModal} toggle={feedbackToggle} className="feedback-form">
+                <ModalHeader toggle={feedbackToggle} className="feedback-modal-head">Send us your feedback</ModalHeader>
+                <ModalBody>
+                    <FeedbackForm toggle={feedbackToggle}/>
+                </ModalBody>
+            </Modal>
         </Fragment>
     )
 }

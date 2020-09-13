@@ -1386,16 +1386,23 @@ span.delete-modal-label {
   }
 
 
-  @media (min-width:992px) {
-    .container {
-      max-width: 960px;
-      word-wrap: break-word;
+  @media (max-width: 1000px) {
+    .nav__main__title {
+        display: none;
     }
   }
 
+
+  @media (max-width: 1200px) {
+    .nav__main__title {
+        max-width: 200px !important;
+    }
+  }
+
+
   @media (min-width:1000px) {
     .container {
-      max-width: 1440px;
+        max-width: 1440px;
       word-wrap: break-word;
     }
   }
@@ -3771,7 +3778,6 @@ span.delete-modal-label {
        font-size: 3em;
        border-radius: 10px;
        float: left;
-       margin-left: -10px;
        margin-top: -14px;
        padding-right: 8px;
        text-align: left;
@@ -3810,6 +3816,15 @@ span.delete-modal-label {
       display: inline-block;
       padding-bottom: 8px;
   }
+
+  .database-listing-title-front-page {
+      font-size: 32px;
+      line-height: 105%;
+      display: inline-block;
+      padding-top: 8px;
+      padding-bottom: 8px;
+  }
+
 
   .database-listing-id {
       font-size: 10px;
@@ -3974,14 +3989,15 @@ span.delete-modal-label {
   }
 
   .database-listing-icon:hover,
-  .database-listing-title:hover,
   .minor-control:hover,
   .database-action:hover {
       cursor: pointer
   }
 
+  .database-listing-title-front-page:hover,
   .database-listing-title:hover {
       color: #0366d6;
+      cursor: pointer;
   }
 
   .database-action-option {
@@ -4806,29 +4822,20 @@ span.delete-modal-label {
 }
 
 .create-db-options {
-    font-size: 20px;
+    font-size: 16px;
+    display: inline-block;
     background-color: #fff;
     margin-left: 15px;
-    margin-top: -8px;
 }
 
-.create-db-select {
-    /*border: 1px solid #ddd;
-    border-radius: 6px;
-    height: 100px;
-    padding: 30px;*/
-    height: 80px;
-    padding: 30px 30px 20px 30px;
-    cursor: pointer;
-    cursor: pointer;
-}
-
-.create-db-select:hover {
-    border-bottom: 5px solid #00C08B;
+.create-db-span:hover {
+    border-bottom: 5px solid #00C08B !important;
 }
 
 .create-db-span {
-    display:flex;
+    border-bottom: 5px solid white; 
+    display:inline-block;
+    padding: 30px 30px 4px 30px;
 }
 
 .database-listing-description-header{
@@ -4951,8 +4958,8 @@ button.tdb__button__cancel:hover {
 }
 
 .nav-feedback {
-    font-size: 40px;
-    margin-left: 20px;
+    font-size: 30px;
+    margin-right: 10px;
     flex-grow: 0.5;
     cursor: pointer;
 }
@@ -4990,7 +4997,7 @@ button.tdb__button__cancel:hover {
     white-space: break-spaces;
     margin-bottom: 20px;
     margin-top: 18px;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .feedback-section {
@@ -5010,15 +5017,12 @@ button.tdb__button__cancel:hover {
     position: absolute;
     object-fit: contain;
     object-position: 50% 100%;
-    right: -94px;
-    top: -10px;
     transform: rotate(0deg);
-    width: 230px;
-    height: 400px;
+    height: 280px;
     transform: rotate(-45deg);
     margin-top: -70px;
-    top: -100px;
-    left: 300px;
+    top: 40px;
+    left: 400px;
 }
 
 .feedback-alert {
