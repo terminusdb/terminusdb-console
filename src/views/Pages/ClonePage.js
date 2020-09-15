@@ -864,6 +864,15 @@ export const EmptyRecommendations = () => {
 }
 
 
+export const EmptyPublisher = ({publisher}) => {
+    return <span className="empty-clonelist">
+        <span className="empty-clonelist-title">
+            <AiFillWarning className="empty-clonelist-icon"/> There are currently no database available from publisher {publisher}
+        </span>
+    </span>
+}
+
+
 
 export const EmptyCloneList = ({showingMine, organization, stats, filter}) => {
     let txt = ""
@@ -881,7 +890,7 @@ export const EmptyCloneList = ({showingMine, organization, stats, filter}) => {
         return <EmptyRecommendations />
     }
     else {
-        return <span>empty {organization}</span>
+        return <EmptyPublisher publisher={organization} />
     }
 }
 
@@ -1108,8 +1117,10 @@ export const CloneList = ({list, onAction}) => {
 
 export const HubDBCard = ({meta, onAction, report}) => {
     let [mode, setMode] = useState()
+    let [bump, setBump] = useState(0)
 
     function showSubscreen(ss){
+        if(ss == "delete") setBump(bump+1)
         setMode(ss)
     }
 
@@ -1155,7 +1166,7 @@ export const HubDBCard = ({meta, onAction, report}) => {
              <HubForkPage meta={meta} onAction={onFork} onCancel={onCancel}/>
         }
         {(mode == "delete") &&
-            <DeleteHubDB meta={meta} />
+            <DeleteHubDB meta={meta} isOpen={bump}/>
         }
         {(mode == "edit") &&
             <EditHubPage meta={meta} onSuccess={onEditSuccess}/>
@@ -1892,7 +1903,7 @@ export const EditControl = ({meta}) => {
     return <span className="edit-hub-action" title="Edit Hub Database Details"><AiFillEdit className='database-action database-listing-edit' /> Edit</span>
 }
 
-export const DeleteHubDB = ({meta}) => {
+export const DeleteHubDB = ({meta, isOpen}) => {
     const {woqlClient, bffClient, reconnectToServer} = WOQLClientObj()
     const {getTokenSilently} = useAuth0()
     const [rep, setReport] = useState()
@@ -1901,12 +1912,18 @@ export const DeleteHubDB = ({meta}) => {
     const [disabled, setDisabled] = useState(true)
     const [loading, setLoading] = useState()
 
+    useEffect(() => setModal(true), [isOpen])
+
     function removeDBCard(dbid, orgid){
         let dbs =  woqlClient.databases()
         let ndbs = []
         for(var i = 0; i<dbs.length; i++){
             if(dbs[i].id == "" && dbs[i].remote_record && dbs[i].remote_record.organization == orgid && dbs[i].remote_record.id == dbid ){
 
+            }
+            else if(dbs[i].remote_record && dbs[i].remote_record.organization == orgid && dbs[i].remote_record.id == dbid){
+                delete(dbs[i]["remote_record"])
+                ndbs.push(dbs[i])
             }
             else {
                 ndbs.push(dbs[i])
@@ -1925,7 +1942,7 @@ export const DeleteHubDB = ({meta}) => {
                 status: TERMINUS_SUCCESS,
             })
             removeDBCard(meta.id, meta.organization)
-            goHubPage(meta.organization)
+            goHubPage()
         })
         .catch((err) => {
             setDisabled(false)
