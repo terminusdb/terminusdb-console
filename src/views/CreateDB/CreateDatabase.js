@@ -18,176 +18,30 @@ import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
 
-export const CreateDatabase = ({from_local, type, onShare}) => {
-    const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, refreshDBRecord, addClone, addShare } = WOQLClientObj()
-    let user = woqlClient.user()
-    const { getTokenSilently } = useAuth0();
-    let update_start = Date.now()
-    const [local, setLocal] = useState(true)
+export const CreateDatabase = () => {
 
-    let message = user.logged_in ?  CREATE_REMOTE_INTRO : CREATE_LOCAL_INTRO
-    if(from_local) message = "Share your local databases on terminus hub"
-    /**
-     * Creates a database and, if a schema graph is set, creates the main schema graph
-     * On success, it fires up the home page of the database and rebuilds the list of databases
-     */
-    function onCreate(doc) {
-        update_start = Date.now()
-        if(doc.sharing != "local"){
-            if(!user.logged_in){
-                setReport({status: TERMINUS_WARNING, message: "If you are not logged in to terminusHub, you can only create local databases"})
-                return false;
-            }
-            else {
-                if(doc.sharing == 'public' || doc.sharing == "") doc.public = true
-                delete(doc['sharing'])
-                setLoading(true)
-                if(from_local) return shareLocal(doc, from_local, update_start)
-                return createRemote(doc, update_start)
-            }
-        }
-        setLoading(true)
-        return createLocal(doc, update_start)
-    }
+    const {woqlClient} = WOQLClientObj()
 
-    async function createLocal(doc, update_start){
-        setLoading(true)
-        update_start = update_start || Date.now()
-        doc.organization = woqlClient.user_organization()
-        return CreateLocal(doc, woqlClient)
-        .then((local_id) => {
-            after_create_db(update_start, get_remote_create_message(doc.label, doc.id), local_id, "create", doc)
-        })
-        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
-        .finally(() => setLoading(false))
-    }
-
- 
-
-    async function createRemote(doc, update_start) {
-        setLoading(true)
-        if(!doc.organization) doc.organization = bffClient.user_organization()
-        update_start = update_start || Date.now()
-        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
-        CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
-        .then((local_id) => {
-            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
-            setReport(rep)
-            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
-            newguy.remote_url = doc.remote_url
-            newguy.remote_record = doc
-            addClone(local_id, woqlClient.user_organization(), newguy)
-            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
-        })
-        .catch((err) => process_error(err, update_start, clone_remote_failure(doc.label, doc.id)))
-        .finally(() => setLoading(false))
-    }
-
-    function after_create_db(update_start, message, id, create_or_clone, remote_record, onShare){
-        woqlClient.db(id)
-        let rep = {
-            status: TERMINUS_SUCCESS,
-            message: message,
-            time: Date.now() - update_start,
-        }
-        setReport(rep)
-        if(create_or_clone == 'share'){
-            if(onShare){
-                onShare(remote_record)
-            }
-            else {
-                return refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
-                .then(() => goDBHome(id, woqlClient.user_organization(), report))
-            }
-        }
-        else {
-            refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
-            .then(() => goDBHome(id, woqlClient.user_organization(), report))
-        }
-    }
-
-    function get_local_create_message(label, id){
-        return `${CREATE_DB_FORM.createSuccessMessage} ${label}, (id: ${id}) `
-    }
-
-    function get_remote_create_message(label, id){
-        return `${CREATE_DB_FORM.createRemoteSuccessMessage} ${label}, (id: ${id}) `
-    }
-
-    function create_local_failure(label, id){
-        return`${CREATE_DB_FORM.createFailureMessage} ${label}, (id: ${id}) `
-    }
-
-    function clone_remote_failure(label, id){
-        return `${CREATE_DB_FORM.cloneRemoteFailureMessage} ${label}, (id: ${id}) `
-    }
-
-    function create_remote_failure(label, id){
-        return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
-    }
-
-    function process_error(err, update_start, message){
-        setReport({
-            error: err,
-            status: TERMINUS_ERROR,
-            message: message,
-            time: Date.now() - update_start,
-        })
-        console.log(err)
-    }
+    if(!woqlClient) return null
+    let u = woqlClient.user()
+    let allow_remote = u.logged_in
 
     function toggleLocal(){
         setLocal(!local)
     }
 
-    if(type && type == "share"){
-        return (
-            <div className="tdb__loading__parent">
-                <Row className="remote-info share-on-hub-title">
-                    <DBShareHeader />
-                </Row>
-                <Row className="generic-message-holder">
-                    {report &&
-                        <TerminusDBSpeaks report={report} />
-                    }
-                </Row>
-                {
-                    <DBShareForm starter={from_local} onSubmit={shareLocal} />
-                }
-                {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            </div>
-        )
-    }
-
-    let buttons = (from_local ? SHARE_DB_FORM.buttons : CREATE_DB_FORM.buttons)
-    let allow_remote = (user.logged_in || from_local)
-    let show_fancy = (user.logged_in && from_local)
     let local_text = "Create a new database on your local TerminusDB - only accessible locally"
     let remote_text = "Create a new database on Terminus Hub where you can share it with collaborators"
 
-    const [localCreate, setLocalCreate] = useState(true)
-    const [hubCreate, setHubCreate] = useState(false)
-    const [createType, setCreateType] = useState(CREATE_DATABASE_LOCALLY)
+    const [local, setLocal] = useState(true)
 
     const handleLocal = () => {
-        setLocalCreate(true)
-        setHubCreate(false)
-        setCreateType(CREATE_DATABASE_LOCALLY)
+        setLocal(true)
     }
 
     const handleHub = () => {
-        setLocalCreate(false)
-        setHubCreate(true)
-        setCreateType(CREATE_DATABASE_HUB)
+        setLocal(false)
     }
-
-    useEffect(() => {
-        if(createType === CREATE_DATABASE_LOCALLY)
-            setLocal(true)
-        else setLocal(false)
-    }, [createType])
-
     return (
         <div className="tdb__loading__parent">
             <div className="create-section">
@@ -195,69 +49,31 @@ export const CreateDatabase = ({from_local, type, onShare}) => {
 
                 {allow_remote && <>
                     <div className="create-db-option-descr">Choose where you want to create your database</div>
-                    <Row>
-                    <Col md={4} className="create-db-select" onClick={handleLocal} active>
-                        <Row key="rr">
-                            <span className="create-db-span">
-                                <input type="radio" id={CREATE_DATABASE_LOCALLY}
-                                    name={CREATE_DATABASE_LOCALLY}
-                                    value={CREATE_DATABASE_LOCALLY}
-                                    checked={localCreate}/>
-                                <label className="create-db-options" for={CREATE_DATABASE_LOCALLY}>Local Database</label>
-                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
-                            </span>
-                        </Row>
-                        {/*<Row key="rd">
-                            <span className="database-listing-description-header">
-                                <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
-                                <span className="database-listing-description ">{local_text}</span>
-                            </span>
-                        </Row>*/}
-                    </Col>
-                    <Col md={4} className="create-db-select" onClick={handleHub}>
-                        <Row key="rk">
-                            <span className="create-db-span">
-                                <input type="radio" id={CREATE_DATABASE_HUB}
-                                    name={CREATE_DATABASE_HUB}
-                                    value={CREATE_DATABASE_HUB}
-                                    checked={hubCreate}/>
-                                <label className="create-db-options" for={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
-                                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                            </span>
-                        </Row>
-                        {/*<Row key="rm">
-                            <span className="database-listing-description-header">
-                                <AiOutlineRead className="db_info_icon_spacing" color="#787878" style={{"fontSize": "20px"}}/>
-                                <span className="database-listing-description ">{remote_text}</span>
-                            </span>
-                        </Row>*/}
-                    </Col>
-                </Row></>}
+                        <span className="create-db-span" onClick={handleLocal}>
+                            <input type="radio" id={CREATE_DATABASE_LOCALLY}
+                                name={CREATE_DATABASE_LOCALLY}
+                                value={CREATE_DATABASE_LOCALLY}
+                                checked={local}/>
+                            <label className="create-db-options" htmlFor={CREATE_DATABASE_LOCALLY}>Local Database</label>
+                            <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
+                        </span>
+                        <span className="create-db-span" onClick={handleHub}>
+                            <input type="radio" id={CREATE_DATABASE_HUB}
+                                name={CREATE_DATABASE_HUB}
+                                value={CREATE_DATABASE_HUB}
+                                checked={!local}/>
+                            <label className="create-db-options" htmlFor={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
+                            <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
+                        </span>
+                </>}
             </div>
 
-            <div className="pretty-form">
-
-                {/*local && allow_remote && <div className="create-place-badge local-badge">
-                    Create a Local Database
-                </div>*/}
-                {/*!local && allow_remote && <div className="create-place-badge remote-badge">
-                    Create a Terminus Hub Database
-                </div>*/}
-                <Row className="generic-message-holder">
-                    {report &&
-                        <TerminusDBSpeaks report={report} />
-                    }
-                </Row>
-                <Row>
-                    {local &&
-                        <DBDetailsForm buttons={buttons} onSubmit={onCreate} logged_in={show_fancy} from_local={from_local} />
-                    }
-                    {!local &&
-                        <CreateRemote onSubmit={createRemote}/>
-                    }
-                </Row>
-            </div>
-             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            {local &&
+                <CreateLocalForm />
+            }
+            {!local &&
+                <CreateRemoteForm />
+            }
         </div>
     )
 }
@@ -303,22 +119,94 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
 
     
     return  (<>
-        <Row className="generic-message-holder">
-            {report &&
-                <TerminusDBSpeaks report={report} />
-            }
-        </Row>
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <div className="pretty-form">
+        {onCancel && 
             <div className="create-place-badge local-badge">
                 <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
                 Creating Local Database
                 <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
             </div>
+        }
+            <Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
             <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={false} from_local={from_local} />
         </div>
     </>)
 }
+
+
+export const CreateRemoteForm = ({onSubmit, onCancel}) => {
+    const [report, setReport] = useState()
+    const [loading, setLoading] = useState(false)
+    const {woqlClient, remoteClient, bffClient, remoteEnriched, addClone } = WOQLClientObj()
+    const { getTokenSilently } = useAuth0();
+    if(!remoteEnriched) return null
+    let u = bffClient.user()
+    let org = u.organizations[0]
+    let smeta = {
+        id: "",
+        label: "",
+        comment: "",
+        icon: "",
+        schema: true,
+        public: true,
+    }
+    for(var k in org){
+        smeta[k] = org[k]
+    }
+    smeta.hub_url = remoteClient.server()
+  
+    async function createRemote(doc, update_start) {
+        setLoading(true)
+        if(!doc.organization) doc.organization = bffClient.user_organization()
+        update_start = update_start || Date.now()
+        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
+        CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
+        .then((local_id) => {
+            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
+            setReport(rep)
+            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
+            newguy.remote_url = doc.remote_url
+            newguy.remote_record = doc
+            addClone(local_id, woqlClient.user_organization(), newguy)
+            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
+        })
+        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
+        .finally(() => setLoading(false))
+    }
+
+
+    function create_remote_failure(label, id){
+        return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
+    }
+
+    return (
+        <div className="pretty-form">
+            {onCancel && 
+                <div className="create-place-badge remote-badge">
+                        <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
+                    Creating Terminus Hub Database
+                    <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
+                </div>
+            }
+            <Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+            <Row>
+                <DBCreateCard start={smeta} onSubmit={createRemote} organizations={u.organizations} databases={bffClient.databases()}  type="create" />
+            </Row>
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        </div>
+    )
+}
+
+
 
 export const ShareDBForm = ({onSuccess, starter}) => {
     const [report, setReport] = useState()
@@ -390,71 +278,6 @@ export const ShareDBForm = ({onSuccess, starter}) => {
                 <DBCreateCard 
                     start={smeta} onSubmit={shareLocal} organizations={u.organizations} databases={bffClient.databases()} type="share"/>
             }
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-        </div>
-    )
-}
-
-export const CreateRemoteForm = ({onSubmit, onCancel}) => {
-    const [report, setReport] = useState()
-    const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, remoteEnriched, addClone } = WOQLClientObj()
-    const { getTokenSilently } = useAuth0();
-    if(!remoteEnriched) return null
-    let u = bffClient.user()
-    let org = u.organizations[0]
-    let smeta = {
-        id: "",
-        label: "",
-        comment: "",
-        icon: "",
-        schema: true,
-        public: true,
-    }
-    for(var k in org){
-        smeta[k] = org[k]
-    }
-    smeta.hub_url = remoteClient.server()
-  
-    async function createRemote(doc, update_start) {
-        setLoading(true)
-        if(!doc.organization) doc.organization = bffClient.user_organization()
-        update_start = update_start || Date.now()
-        doc.remote_url = remoteClient.server() + doc.organization + "/" + doc.id
-        CreateRemote(doc, woqlClient, bffClient, getTokenSilently)
-        .then((local_id) => {
-            let rep = {status: TERMINUS_SUCCESS, message: "Successfully Created Remote"}
-            setReport(rep)
-            let newguy = {id: local_id, organization: woqlClient.user_organization(), label: doc.label || "", comment: doc.comment || ""}
-            newguy.remote_url = doc.remote_url
-            newguy.remote_record = doc
-            addClone(local_id, woqlClient.user_organization(), newguy)
-            .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
-        })
-        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
-        .finally(() => setLoading(false))
-    }
-
-
-    function create_remote_failure(label, id){
-        return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
-    }
-
-    return (
-        <div className="pretty-form">
-            <div className="create-place-badge remote-badge">
-                <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
-                Creating Terminus Hub Database
-                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-            </div>
-            <Row className="generic-message-holder">
-                {report &&
-                    <TerminusDBSpeaks report={report} />
-                }
-            </Row>
-            <Row>
-                <DBCreateCard start={smeta} onSubmit={createRemote} organizations={u.organizations} databases={bffClient.databases()}  type="create" />
-            </Row>
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         </div>
     )

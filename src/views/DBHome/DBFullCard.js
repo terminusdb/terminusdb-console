@@ -77,7 +77,7 @@ export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
 }
 
 export const DBTitle = ({meta, user, onAction, max}) => {
-    let maxtitle = max || 40, author = false
+    let maxtitle = max || 60, author = false
     let title_css = "database-listing-title-nolink"
     if(meta.label && meta.label.length > maxtitle){
         var str =  meta.label.substring(0, maxtitle -4) + " ..."

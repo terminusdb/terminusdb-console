@@ -10,10 +10,10 @@ const DatabaseHome = (props) => {
     * move the navbar
     */
 
-    return (  
-        <PageView report={props.report} dbPage={true}>          
+    return (
+        <PageView report={props.report} dbPage={true}>
            <MonitorDB key="monitor" label={DETAILS_TAB} />
-        </PageView>        
+        </PageView>
 	)
 }
 export default DatabaseHome;

@@ -30,7 +30,7 @@ export const ConsoleRouter = (props) => {
 }
 
 /*
-* for page navigation, create dinamically the /db/username/dbname 
+* for page navigation, create dinamically the /db/username/dbname
 */
 export const getDBRoute = (db, aid) => {
     if (db == '_system') return DB_ROUTE + TERMINUS_ROUTE

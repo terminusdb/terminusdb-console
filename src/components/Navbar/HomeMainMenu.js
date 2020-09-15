@@ -32,6 +32,18 @@ export const HomeMainMenu = (props) => {
 		                tag={NavLink}
 		                className="nav__main__link"
 		                activeClassName="nav__main__link--selected"
+		                to={CREATE_DB_ROUTE}
+		                exact
+		                id={PAGES_ID.NAV_CREATE_DB}
+		            >
+		             {CREATEDB_TITLE}
+		            </NavLink>
+		        </li>
+		        <li className="nav__main__item">
+		            <NavLink
+		                tag={NavLink}
+		                className="nav__main__link"
+		                activeClassName="nav__main__link--selected"
 		                to={CLONE_DB_ROUTE}
 		                exact
 		                id={PAGES_ID.NAV_COLL}

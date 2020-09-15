@@ -2,11 +2,9 @@
 /* eslint-disable no-empty */
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
-import {Row, Col, Container} from "reactstrap"
 import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
 import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import Loading from "../../components/Reports/Loading"
-import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import { AiOutlineCloudUpload, AiOutlineCloudSync, AiOutlineCloudDownload, AiFillInfoCircle,
     AiFillWarning, AiFillBuild, AiOutlineInbox} from 'react-icons/ai';
 import { BsFillEnvelopeFill } from 'react-icons/bs';
@@ -39,7 +37,7 @@ function _user_db_action(meta, user){
             if(meta.type == 'local_clone'){
                 return 'synchronise'
             }
-            else if(meta.type == 'remote' && meta.remote_record.actions && meta.remote_record.actions.indexOf("pull") != -1){
+            else if(meta.type == 'remote' && meta.remote_record && meta.remote_record.actions && meta.remote_record.actions.indexOf("pull") != -1){
                 return 'synchronise'
             }
         }
@@ -120,23 +118,23 @@ export const DBInvite = ({meta}) => {
 
 
 export const DBTitle = ({meta, user, goHubDB, max}) => {
-    let maxtitle = max || 40, author = false
+    let maxtitle = max || 60, author = false
 
     function goDB(){
         if(meta.id) goDBHome(meta.id, meta.organization)
         else goHubDB(meta)
     }
 
-    let title_css = meta.id ? "database-title-local" : "database-title-missing"
+    let title_css = "database-listing-title-front-page"
     let title_html = meta.id ? "Visit database id: " + meta.id : "View on Terminus Hub"
 
     if(meta.remote_record && meta.remote_record.label){
-        title_css = "database-title-remote"
         if(meta.remote_record.label != meta.label) title_html += " Cloned from original with title: " + meta.remote_record.label
     }
 
     if(meta.label && meta.label.length > maxtitle){
         var str =  meta.label.substring(0, maxtitle -4) + " ..."
+        title_html = meta.label + " " + title_html
     }
     else str = meta.label || ""
 
@@ -146,9 +144,7 @@ export const DBTitle = ({meta, user, goHubDB, max}) => {
 
     return (
         <span>
-            <span onClick={goDB} title={title_html} className="tdb__dblist__title tdb__dblist__button">{str}</span>
-            
-            {false && <span className="author_info">{author}</span>}
+            <span onClick={goDB} title={title_html} className={title_css}>{str}</span>
         </span>
     )
 }
@@ -179,7 +175,7 @@ export const DBCredits = ({meta, user}) => {
         res.push(<DBTimings key='dbt' meta={meta} user={user} />)
     }
     else {
-        res.push(<DBEmpty key='dbt' meta={meta} user={user} />)
+        res.push(<DBEmpty key='dbx' meta={meta} user={user} />)
     }
     if(typeof meta.size != "undefined"){
         res.push(
@@ -196,11 +192,10 @@ export const DBCredits = ({meta, user}) => {
 export const DBID = ({meta}) => {
     if(!(meta && meta.id)) return null
     return (
-        <span className="tdb__dblist__credit">
+        <span className="db-card-credit">
             <AiFillInfoCircle className="db_info_icon_spacing"/>
             <span className="db_info">
-                <span className="tdb__dblist__info">ID</span>
-                <span className="tdb__dblist__info tdb__dblist__info--blue"> {meta.id} </span>
+                <span className="tdb__dblist__info--blue">{meta.id}</span>
             </span>
         </span>
     )
@@ -234,7 +229,7 @@ export const DBDescription = ({meta, user}) => {
     }
     else str = meta.comment || ""
     return (
-        <div className='tdb__dblist__description'>
+        <div className='database-listing-description-full'>
         {str}
         </div>
     )
