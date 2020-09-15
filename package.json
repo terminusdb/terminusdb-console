@@ -1,6 +1,6 @@
 {
   "name": "@terminusdb/terminusdb-console",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "homepage": "./",
   "description": "console for terminusdb",
   "main": "src/index",
@@ -55,8 +55,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@o2xp/react-datatable": "^1.1.59",
-    "@terminusdb/terminusdb-client": "^3.0.1",
-    "@terminusdb/terminusdb-react-components": "^0.0.2",
+    "@terminusdb/terminusdb-client": "^3.0.2",
+    "@terminusdb/terminusdb-react-components": "^0.0.3",
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "codemirror": "^5.56.0",
@@ -89,7 +89,6 @@
     "react-select": "^3.1.0",
     "react-simple-code-editor": "^0.11.0",
     "react-slick": "^0.25.2",
-    "react-sliding-pane": "^6.1.0",
     "react-tabs": "^3.1.1",
     "react-toggle-button": "^2.2.0",
     "react-tooltip": "^4.2.7",
@@ -97,8 +96,6 @@
     "react-unsplash-wrapper": "^1.1.5",
     "reactstrap": "^8.5.1",
     "recharts": "^2.0.0-beta.5",
-    "rn-bottom-drawer": "^1.4.3",
-    "sendgrid-mail": "0.0.2",
     "simple-react-notifications": "^1.2.15"
   },
   "devDependencies": {
