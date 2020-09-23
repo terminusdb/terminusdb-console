@@ -2,8 +2,8 @@ import React, {useState} from 'react'
 import {TCForm} from '../../components/Form/FormComponents'
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
-
-
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { DataViewer } from "./DataViewer"
 
 /**
  * Form for viewing and editing database meta data
@@ -45,6 +45,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     const [values, setValues] = useState(dbInfo)
     const [advanced, setAdvanced] = useState(advancedInfo)
     const [advancedSettings, setAdvancedSettings] = useState(false)
+    const [file, setFiles] = useState("");
+    const [uploaded, setUploaded] = useState(false)
 
     function toggleAdvanced() {
         setAdvancedSettings(!advancedSettings)
@@ -87,6 +89,18 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         onSubmit(dbdoc)
     }
 
+    function loadFiles(e) {
+        let files = e.target.files, value = e.target.value, message;
+        if( files && files.length > 1 )
+            message = `${files.length} files selected`;
+        else message = value.split( '\\' ).pop();
+        if(message) setFiles(message)
+    }
+
+    function uploadData() {
+        setUploaded(true)
+    }
+
     return (
         <>
             <TCForm
@@ -96,6 +110,28 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 values={values}
                 buttons={buttons}
             />
+
+            <div className="load-data-section">
+                <div>
+                    <AiOutlineInfoCircle color="#787878" className="intro_text_icon"/>
+                    <span class="intro_text">Click here to import CSV or Json file to create a database with data (Optional)</span>
+                </div>
+
+                <span className="upload-data-align">
+        			<input type="file"
+                        name="file-7[]"
+                        id="file-7"
+                        class="inputfile inputfile-6"
+                        data-multiple-caption={file} multiple
+                        onChange={loadFiles}
+                        accept=".csv,.json"/>
+        			<label for="file-7"><span>{file}</span> <strong>Add Data</strong></label>
+                    {file && <button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={uploadData}>Upload Data</button>}
+                </span>
+
+                {uploaded && <DataViewer file={file}/>}
+            </div>
+
 
             <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
                 {(!advancedSettings && !from_local) && (

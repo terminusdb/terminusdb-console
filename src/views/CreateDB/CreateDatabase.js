@@ -17,6 +17,8 @@ import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 export const CreateDatabase = () => {
 
@@ -44,39 +46,71 @@ export const CreateDatabase = () => {
     }
     return (
         <div className="tdb__loading__parent">
-            <div className="create-section">
-                <hr/>
 
-                {allow_remote && <>
-                    <div className="create-db-option-descr">Choose where you want to create your database</div>
-                        <span className="create-db-span" onClick={handleLocal}>
-                            <input type="radio" id={CREATE_DATABASE_LOCALLY}
-                                name={CREATE_DATABASE_LOCALLY}
-                                value={CREATE_DATABASE_LOCALLY}
-                                checked={local}/>
-                            <label className="create-db-options" htmlFor={CREATE_DATABASE_LOCALLY}>Local Database</label>
-                            <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
-                        </span>
-                        <span className="create-db-span" onClick={handleHub}>
-                            <input type="radio" id={CREATE_DATABASE_HUB}
-                                name={CREATE_DATABASE_HUB}
-                                value={CREATE_DATABASE_HUB}
-                                checked={!local}/>
-                            <label className="create-db-options" htmlFor={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
-                            <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                        </span>
-                </>}
-            </div>
+                <div className="create-db-items">
+                    <Tabs selectedTabClassName="create-db-tabs-selected">
+                        <TabList className="create-db-tabs">
+                          <Tab className="create-db-tabs-title">
+                            <span className="create-db-tabs-icon">
+                                <img className="create-place-badge-hub-img create-db-local-img" title="Terminus Local Database"/>
+                                {CREATE_DATABASE_LOCALLY}
+                            </span>
+                          </Tab>
+                          {allow_remote && <Tab className="create-db-tabs-title">
+                            <span className="create-db-tabs-icon">
+                                <img className="create-place-badge-hub-img create-db-local-hub" title="Terminus Hub Database"/>
+                                {CREATE_DATABASE_HUB}
+                            </span>
+                          </Tab>}
+                        </TabList>
+                        <TabPanel className="create-db-tabs-panel">
+                            <CreateLocalForm />
+                        </TabPanel>
+                        {allow_remote && <TabPanel className="create-db-tabs-panel">
+                          <CreateRemoteForm />
+                        </TabPanel>}
+                    </Tabs>
+                </div>
+           </div>
 
-            {local &&
-                <CreateLocalForm />
-            }
-            {!local &&
-                <CreateRemoteForm />
-            }
-        </div>
+
     )
 }
+
+/*
+
+<div className="create-section">
+    <hr/>
+    {allow_remote && <>
+        <div className="create-db-option-descr">Choose where you want to create your database</div>
+            <span className="create-db-span" onClick={handleLocal}>
+                <input type="radio" id={CREATE_DATABASE_LOCALLY}
+                    name={CREATE_DATABASE_LOCALLY}
+                    value={CREATE_DATABASE_LOCALLY}
+                    checked={local}/>
+                <label className="create-db-options" htmlFor={CREATE_DATABASE_LOCALLY}>Local Database</label>
+                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
+            </span>
+            <span className="create-db-span" onClick={handleHub}>
+                <input type="radio" id={CREATE_DATABASE_HUB}
+                    name={CREATE_DATABASE_HUB}
+                    value={CREATE_DATABASE_HUB}
+                    checked={!local}/>
+                <label className="create-db-options" htmlFor={CREATE_DATABASE_HUB}>Terminus Hub Database</label>
+                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
+            </span>
+    </>}
+</div>
+
+{local &&
+    <CreateLocalForm />
+}
+{!local &&
+    <CreateRemoteForm />
+}
+</div>
+
+*/
 
 
 export const CreateLocalForm = ({onCancel, from_local}) => {
@@ -117,11 +151,10 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         return`${CREATE_DB_FORM.createFailureMessage} ${label}, (id: ${id}) `
     }
 
-    
+
     return  (<>
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-        <div className="pretty-form">
-        {onCancel && 
+        {onCancel &&
             <div className="create-place-badge local-badge">
                 <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
                 Creating Local Database
@@ -134,7 +167,6 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
                 }
             </Row>
             <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={false} from_local={from_local} />
-        </div>
     </>)
 }
 
@@ -159,7 +191,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
         smeta[k] = org[k]
     }
     smeta.hub_url = remoteClient.server()
-  
+
     async function createRemote(doc, update_start) {
         setLoading(true)
         if(!doc.organization) doc.organization = bffClient.user_organization()
@@ -183,10 +215,11 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     function create_remote_failure(label, id){
         return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
     }
-
+/*<div className="pretty-form">*/
     return (
-        <div className="pretty-form">
-            {onCancel && 
+
+        <>
+            {onCancel &&
                 <div className="create-place-badge remote-badge">
                         <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
                     Creating Terminus Hub Database
@@ -202,7 +235,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
                 <DBCreateCard start={smeta} onSubmit={createRemote} organizations={u.organizations} databases={bffClient.databases()}  type="create" />
             </Row>
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-        </div>
+        </>
     )
 }
 
@@ -253,7 +286,7 @@ export const ShareDBForm = ({onSuccess, starter}) => {
         .catch((err) => process_error(err, update_start, "Push to TerminusHub failed"))
         .finally(() => setLoading(false))
     }
-    
+
     function process_error(err, update_start, message){
         setReport({
             error: err,
@@ -262,7 +295,7 @@ export const ShareDBForm = ({onSuccess, starter}) => {
             time: Date.now() - update_start,
         })
         console.log(err)
-    }    
+    }
 
     return (
         <div className="tdb__loading__parent">
@@ -275,7 +308,7 @@ export const ShareDBForm = ({onSuccess, starter}) => {
                 }
             </Row>
             {
-                <DBCreateCard 
+                <DBCreateCard
                     start={smeta} onSubmit={shareLocal} organizations={u.organizations} databases={bffClient.databases()} type="share"/>
             }
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
