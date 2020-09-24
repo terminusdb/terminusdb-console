@@ -1,3 +1,13 @@
+# TerminusDB Console v3.0.4 Release Notes
+
+Bug fix release mostly!
+
+* Add ability to force delete
+* Add feedback form
+* Updated dependencies
+* Lots of small fixes!
+
+
 # TerminusDB Console v3.0.0 Release Notes
 
 The Emancipation Release
