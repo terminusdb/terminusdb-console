@@ -9,7 +9,6 @@ The Emancipation Release
 * Time travel & Commit navigator tools
 * Synchronization management tool
 * Branch & Merge management tool
->>>>>>> dev
 
 # TerminusDB Console v2.0.7 Release Notes
 
