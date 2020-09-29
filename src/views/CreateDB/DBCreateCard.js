@@ -323,12 +323,9 @@ export const DBControlPanel = ({meta, onChange}) => {
 
     let disp = "", isIcon=false;
 
-    const [modal, setModal] = useState(false);
-    const imagePickerToggle = () => setModal(!modal);
+    //const [imageUrl, setImageUrl] = useState(icon);
 
-    const [imageUrl, setImageUrl] = useState(icon);
-
-    const [dbDetailsImage, setdbDetailsImage] = useState(icon);
+    //const [dbDetailsImage, setdbDetailsImage] = useState(icon);
 
     if(icon){
         if(validURL(icon)) {
@@ -341,7 +338,7 @@ export const DBControlPanel = ({meta, onChange}) => {
         }
     }
 
-    const [iconImg, setIconImg] = useState(isIcon);
+    /*const [iconImg, setIconImg] = useState(isIcon);
     const [val, setIcon] = useState(isIcon)
 
     const showPexels = false; // nuking pexels temporarily
@@ -364,6 +361,7 @@ export const DBControlPanel = ({meta, onChange}) => {
             onChange(val)
             setdbDetailsImage(false);
     }, [val])
+
     let vchange = function(selval){
         setIcon(selval)
         setdbDetailsImage(false)
@@ -433,6 +431,94 @@ export const DBControlPanel = ({meta, onChange}) => {
                     </Row>
                 </ModalBody>
             </Modal>
+        </div>
+    )*/
+
+
+    const [dbImage, setDbImage] = useState({pexelImage: false, imageUrl: false, iconImage: false});
+
+    const [modal, setModal] = useState(false);
+    const imagePickerToggle = () => {
+        setModal(!modal);
+    }
+
+    const uploadPexelImage = () => {
+        setModal(false)
+        document.getElementById("imageUrlInput").value = "";
+    }
+
+    const removeImage = () => {
+        setDbImage({pexelImage: false, imageUrl: false, iconImage: false})
+    }
+
+    let vchange = function(selval){
+        setDbImage({pexelImage: false, imageUrl: false, iconImage: selval})
+        document.getElementById("imageUrlInput").value = "";
+    }
+
+    useEffect(() => {
+        if(dbImage.imageUrl) onChange(dbImage.imageUrl);
+        if(dbImage.pexelImage) onChange(dbImage.pexelImage);
+        if(dbImage.iconImage) onChange(dbImage.iconImage);
+    }, [dbImage]);
+
+    return (
+        <div className="upload-pic">
+            <div onClick={removeImage} className="upload-image-clear">Clear</div>
+            <div className="add-image-control-text">
+
+                <div className="db-details-image">
+                    {!dbImage.imageUrl && !dbImage.pexelImage && !dbImage.iconImage && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
+                    {dbImage.imageUrl && <img src={dbImage.imageUrl} className="image-picker"/>}
+                    {dbImage.pexelImage && <img src={dbImage.pexelImage} className="image-picker"/>}
+                    {dbImage.iconImage && <i class={dbImage.iconImage + " add-image-control"}/>}
+                </div>
+
+                <div className="image-picker-link image-align" onClick={imagePickerToggle}> Click here to choose a picture </div>
+                <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+
+                <div className="image-align">
+                    <input type="text"
+                        id="imageUrlInput"
+                        placeholder="Paste an Image URL"
+                        className="database-create-id-input database-input-empty db-create-image-url"
+                        onChange={  (e) =>{
+                            setDbImage({pexelImage: false, imageUrl: e.target.value, iconImage: false})
+                    }}/>
+                </div>
+                <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
+
+                <div className="image-align">
+                    <FontIconPicker icons={ICONS_PICKER}
+                        onChange={value => vchange(value)}
+                        appendTo="body"
+                        showSearch={true}
+                        closeOnSelect={true}
+                        renderUsing='class'
+                        value={dbImage.iconImage}
+                    />
+                </div>
+
+            </div>
+
+            <Modal isOpen={modal} toggle={imagePickerToggle} contentClassName="custom-modal-style" size="lg">
+                <ModalHeader toggle={imagePickerToggle}/>
+                <ModalBody>
+                    <Row key="mr">
+                        <span className="upload-image-btn">
+                            <button className="tdb__button__base tdb__button__base--bgreen delete-modal-button upload-image-align"
+                                onClick={uploadPexelImage}>
+                                <IoMdImages className="delete-modal-icon"/>
+                                Upload Image
+                            </button>
+                        </span>
+                    </Row>
+                    <Row key="re">
+                        <Pexels setDbImage={setDbImage}/>
+                    </Row>
+                </ModalBody>
+            </Modal>
+
         </div>
     )
 }
@@ -608,7 +694,7 @@ export const DBSchemaCredits = ({meta, type, onSchemaChange}) => {
                     <AiOutlineSchedule title="Database has Schema" className="db_info_icon_spacing"/>
                     <span className="db_info">
                         With Schema
-                        {type != "share" &&  
+                        {type != "share" &&
                             <span className="create-change-privacy">
                                 <AiOutlineDown className="db_icons_standard"/>
                             </span>
@@ -624,7 +710,7 @@ export const DBSchemaCredits = ({meta, type, onSchemaChange}) => {
                 <AiOutlineThunderbolt title="Schema Free Database" className="db_info_icon_spacing"/>
                 <span className="db_info">
                     Schema Free
-                    {type != "share" &&  
+                    {type != "share" &&
                         <span className="create-change-privacy">
                             <AiOutlineDown className="db_icons_standard"/>
                         </span>

@@ -3,7 +3,7 @@ import {TCForm} from '../../components/Form/FormComponents'
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { DataViewer } from "./DataViewer"
+import { DataViewer } from "../../components/Table/DataViewer"
 
 /**
  * Form for viewing and editing database meta data
@@ -111,7 +111,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 buttons={buttons}
             />
 
-            <div className="load-data-section">
+            {/*<div className="load-data-section">
                 <div>
                     <AiOutlineInfoCircle color="#787878" className="intro_text_icon"/>
                     <span class="intro_text">Click here to import CSV or Json file to create a database with data (Optional)</span>
@@ -130,7 +130,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 </span>
 
                 {uploaded && <DataViewer file={file}/>}
-            </div>
+            </div>*/}
 
 
             <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>

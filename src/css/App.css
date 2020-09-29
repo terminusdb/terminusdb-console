@@ -3087,6 +3087,10 @@ span.delete-modal-label {
       background-color: #fafbfe !important;
   }
 
+  .pexel-img-container {
+      text-align: center;
+  }
+
   textarea.database-description-input:hover,
   .database-create-title-input:hover,
   .pexel-search-input:hover,
@@ -4616,8 +4620,32 @@ span.delete-modal-label {
       border: 1px solid #ddd;
       min-height: 200px;
       width: 300px;
-      height: 360px;
+      height: 380px;
       border-radius: 8px;
+  }
+
+  div.pexels-container {
+      margin-top: 50px;
+      width: 100%;
+  }
+
+  span.pexel-search-field {
+      width: 100%;
+  }
+
+  div.pexels-controls {
+      margin: 10px 0px 10px 0px;
+  }
+
+  span.pexels-controls {
+      font-size: 20px;
+      color: rgb(0, 92, 191);
+      margin: 10px;
+  }
+
+  span.pexels-controls:hover {
+      color: #00C08B;
+      cursor: pointer;
   }
 
   .add-image-control {
@@ -4675,9 +4703,19 @@ span.delete-modal-label {
       margin: 10px;
   }
 
-  .image-picker-link:hover {
+  div.upload-image-clear {
+      float: right;
+      width: 100%;
+      margin: 5px 20px 5px 10px;
+      text-align: right;
+      font-size: 12px;
+      text-decoration: underline;
+  }
+
+  .image-picker-link:hover, div.upload-image-clear:hover {
       color: #005cbf;
       text-decoration: underline;
+      cursor: pointer;
   }
 
   .db-create-image-url {
@@ -4817,8 +4855,14 @@ span.delete-modal-label {
     margin-left: 15px;
 }
 
+
+.create-db-options:hover {
+    cursor: pointer;
+}
+
 .create-db-span:hover {
     border-bottom: 5px solid #00C08B !important;
+    cursor: pointer;
 }
 
 .create-db-span {
@@ -5180,7 +5224,7 @@ div.extacted-file {
 
 div.header-row {
     width: 100%;
-    margin: 20px 10px 20px 10px;
+    margin: 20px 0px 20px 0px;
 }
 
 span.extracted-file-info {
@@ -5196,4 +5240,33 @@ span.extracted-file-info {
 .header-edit-icon:hover {
     color: #00C08B;
     cursor: pointer;
+    text-decoration: underline;
+}
+
+span.delete-file {
+    color: #dc3545;
+    width: 100%;
+    text-align:right;
+}
+
+span.delete-file:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.header-controls {
+    width: 100%;
+    text-align:right;
+    margin-right: 30px;
+}
+input.file-header-values {
+    border: 1px solid #f2f3fa;
+    background-color: #fafbfe !important;
+    padding: 0;
+    border-radius: 4px;
+}
+
+span.header-control-panel {
+    text-align: right;
+    width: 100%;
 }
