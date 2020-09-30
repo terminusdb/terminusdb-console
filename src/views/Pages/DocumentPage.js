@@ -88,7 +88,7 @@ const DocumentPage = (props) => {
         //onHeadChange={doRebuild}
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE} />}
-            {/*<DataLoader/>*/}
+            {<DataLoader/>}
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
