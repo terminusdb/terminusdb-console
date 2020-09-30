@@ -3,7 +3,6 @@ import {TCForm} from '../../components/Form/FormComponents'
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { DataViewer } from "../../components/Table/DataViewer"
 
 /**
  * Form for viewing and editing database meta data
@@ -45,8 +44,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     const [values, setValues] = useState(dbInfo)
     const [advanced, setAdvanced] = useState(advancedInfo)
     const [advancedSettings, setAdvancedSettings] = useState(false)
-    const [file, setFiles] = useState("");
-    const [uploaded, setUploaded] = useState(false)
+    const [files, setFiles] = useState(false);
+    const [fileName, setFileName] = useState("")
 
     function toggleAdvanced() {
         setAdvancedSettings(!advancedSettings)
@@ -64,7 +63,10 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         let dbdoc = {
             id: extract.dbid,
             label: extract.dbname,
-            comment: extract.description,
+            comment: extract.description
+        }
+        if(files){
+            dbdoc.files = files
         }
         if(advanced.schema){
             dbdoc.schema = true
@@ -89,16 +91,15 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         onSubmit(dbdoc)
     }
 
-    function loadFiles(e) {
+    const loadFiles = (e) => {
         let files = e.target.files, value = e.target.value, message;
         if( files && files.length > 1 )
             message = `${files.length} files selected`;
         else message = value.split( '\\' ).pop();
-        if(message) setFiles(message)
-    }
-
-    function uploadData() {
-        setUploaded(true)
+		if(message) {
+			setFileName(message)
+			setFiles(e.target.files)
+		}
     }
 
     return (
@@ -111,27 +112,15 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 buttons={buttons}
             />
 
-            {/*<div className="load-data-section">
-                <div>
-                    <AiOutlineInfoCircle color="#787878" className="intro_text_icon"/>
-                    <span class="intro_text">Click here to import CSV or Json file to create a database with data (Optional)</span>
-                </div>
+            <input type="file"
+                name="file-7[]"
+                id="file-7"
+                class="inputfile inputfile-6"
+                data-multiple-caption={fileName}
+                onChange={loadFiles}
+                accept=".csv,.json"/>
 
-                <span className="upload-data-align">
-        			<input type="file"
-                        name="file-7[]"
-                        id="file-7"
-                        class="inputfile inputfile-6"
-                        data-multiple-caption={file} multiple
-                        onChange={loadFiles}
-                        accept=".csv,.json"/>
-        			<label for="file-7"><span>{file}</span> <strong>Add Data</strong></label>
-                    {file && <button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={uploadData}>Upload Data</button>}
-                </span>
-
-                {uploaded && <DataViewer file={file}/>}
-            </div>*/}
-
+            <label for="file-7"><span>{fileName}</span> <strong>Add Data</strong></label>
 
             <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
                 {(!advancedSettings && !from_local) && (

@@ -87,13 +87,13 @@ const DocumentPage = (props) => {
     return (
         //onHeadChange={doRebuild}
         <PageView page="document" dbPage={true}>
-            {!happiness && <Loading type={TERMINUS_PAGE} />}
+            {!happiness && <Loading type={TERMINUS_PAGE}/>}
             {<DataLoader/>}
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
             {happiness && happiness !== true && (
-                <TerminusDBSpeaks failure={happiness} report={report} />
+                <TerminusDBSpeaks failure={happiness} report={report}/>
             )}
         </PageView>
     )

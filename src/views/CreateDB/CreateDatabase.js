@@ -126,6 +126,12 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         return CreateLocal(doc, woqlClient)
         .then((local_id) => {
             after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+            if(doc.files) {
+                woqlClient.addCSV(null, null, doc.files, 'testing').then((results) => {
+                    console.log('results', results)
+                })
+                .catch((err) => console.log('sdsd', asdasd))
+            }
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
         .finally(() => setLoading(false))
@@ -142,6 +148,14 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
         .then(() => goDBHome(id, woqlClient.user_organization(), report))
     }
+
+    /*
+    if(meta.files) {
+        client.addCSV(null, null, meta.files, 'testing').then((results) => {
+            console.log('results', results)
+        })
+    }
+    */
 
     function get_local_create_message(label, id){
         return `${CREATE_DB_FORM.createSuccessMessage} ${label}, (id: ${id}) `
@@ -232,7 +246,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     function create_remote_failure(label, id){
         return `${CREATE_DB_FORM.createRemoteFailureMessage} ${label}, (id: ${id}) `
     }
-    
+
     return (
         <div className="pretty-form">
             {onCancel &&
