@@ -5,15 +5,28 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {Col, Row} from "reactstrap"
 import { readString  } from 'react-papaparse'
 import { WOQLTable } from '@terminusdb/terminusdb-react-components';
+import { TerminusDBSpeaks } from '../Reports/TerminusDBSpeaks'
+import {
+    TERMINUS_SUCCESS,
+    TERMINUS_ERROR,
+    TERMINUS_WARNING,
+    TERMINUS_COMPONENT,
+} from '../../constants/identifiers'
 
 export const DataLoader = (props) => {
 
-	const [files, setFiles] = useState(false);
-	const [fileName, setFileName] = useState("")
+	//const [files, setFiles] = useState(false);
+	//const [fileName, setFileName] = useState("")
     const [uploaded, setUploaded] = useState(false)
-	const [commitMsg, setCommitMsg] = useState(false)
+	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
+
+	const [files, setFiles] = useState({name: false, file: {}})
+
 	const {woqlClient} = WOQLClientObj()
 	const [bindings, setbindings] = useState(false)
+
+	const [report, setReport] = useState()
+    const [loading, setLoading] = useState(false)
 
 	const loadFiles = (e) => {
         let files = e.target.files, value = e.target.value, message;
@@ -21,21 +34,35 @@ export const DataLoader = (props) => {
             message = `${files.length} files selected`;
         else message = value.split( '\\' ).pop();
 		if(message) {
-			setFileName(message)
-			setFiles(e.target.files)
+			setFiles({name: message, files:e.target.files})
 		}
     }
 
+	function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
+    }
+
+
 	const handleUpload = (e) => {
-		woqlClient.addCSV(null, null, files, commitMsg).then((results) => {
-			console.log('results', results)
+		let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+		woqlClient.insertCSV(files.files, commitMsg, null, null).then((results) => {
+			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded " + files.name}
+            setReport(rep)
 		})
+		.catch((err) => process_error(err, update_start, "Failed to upload file"))
+        .finally(() => setLoading(false))
 	}
 
 	const updateCommitMsg = (e) => {
-		if (e.target.value != "")
-			setCommitMsg(e.target.value)
-		else setCommitMsg("Adding csvs ...")
+		setCommitMsg(e.target.value)
 	}
 
 
@@ -68,13 +95,13 @@ export const DataLoader = (props) => {
 						name="file-7[]"
 						id="file-7"
 						class="inputfile inputfile-6"
-						data-multiple-caption={fileName}
+						data-multiple-caption={files.name}
 						onChange={loadFiles}
 						accept=".csv,.json"/>
 
-					<label for="file-7"><span>{fileName}</span> <strong>Add Data</strong></label>
+					<label for="file-7"><span>{files.name}</span> <strong>Add Data</strong></label>
 					</Col>
-				{fileName && <>
+				{files.name && <>
 					<Col md={5}>
 						<input class="commit-log-input" type="text" placeholder="Enter message for commit log" width="40" onChange={updateCommitMsg}/>
 					</Col>
@@ -83,6 +110,13 @@ export const DataLoader = (props) => {
 					</Col>
 				</>}
 			</Row>
+
+			<Row className="generic-message-holder">
+                {report &&
+                    <TerminusDBSpeaks report={report} />
+                }
+            </Row>
+
 			<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={viewCsv}>View Csv</button>
 
 			{bindings && <WOQLTable bindings={bindings}/>}

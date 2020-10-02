@@ -84,6 +84,7 @@ const DocumentPage = (props) => {
         }
     }, [report])
 
+
     return (
         //onHeadChange={doRebuild}
         <PageView page="document" dbPage={true}>

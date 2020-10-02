@@ -127,10 +127,10 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         .then((local_id) => {
             after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
             if(doc.files) {
-                woqlClient.addCSV(null, null, doc.files, 'testing').then((results) => {
+                woqlClient.insertCSV(doc.files, 'adding a csv on create', null, null).then((results) => {
                     console.log('results', results)
                 })
-                .catch((err) => console.log('sdsd', asdasd))
+                .catch((err) => console.log('sdsd', err))
             }
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
@@ -325,7 +325,6 @@ export const ShareDBForm = ({onSuccess, starter}) => {
             sclient.db(local.id)
         }
         let lid = sclient.db()
-        console.log(doc)
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
             let rep = {status: TERMINUS_SUCCESS, message: "Successfully Pushed Database to TerminusHub"}
