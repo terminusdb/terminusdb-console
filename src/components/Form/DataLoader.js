@@ -47,16 +47,23 @@ export const DataLoader = (props) => {
     }
 
 
-	const handleUpload = (e) => {
-		let update_start = Date.now()
-        setLoading(true)
-        update_start = update_start || Date.now()
-		woqlClient.insertCSV(files, commitMsg, null, null).then((results) => {
+    const insertSingleFile = async(file) => {
+        return await woqlClient.insertCSV(file, commitMsg, null, null).then((results) => {
 			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files"}
             setReport(rep)
 		})
 		.catch((err) => process_error(err, update_start, "Failed to upload file"))
         .finally(() => setLoading(false))
+    }
+
+	const handleUpload = (e) => {
+		let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        for (var i = 0; i < files.length; i++) {
+            insertSingleFile(files[i])
+        }
+
 	}
 
 	const updateCommitMsg = (e) => {
