@@ -15,12 +15,9 @@ import {
 
 export const DataLoader = (props) => {
 
-	//const [files, setFiles] = useState(false);
-	//const [fileName, setFileName] = useState("")
-    const [uploaded, setUploaded] = useState(false)
+	const [files, setFiles] = useState({})
 	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
-
-	const [files, setFiles] = useState({name: false, file: {}})
+	const [input, setInput] = useState(false)
 
 	const {woqlClient} = WOQLClientObj()
 	const [bindings, setbindings] = useState(false)
@@ -29,12 +26,13 @@ export const DataLoader = (props) => {
     const [loading, setLoading] = useState(false)
 
 	const loadFiles = (e) => {
-        let files = e.target.files, value = e.target.value, message;
+        let files = e.target.files, value = e.target.value, text;
         if( files && files.length > 1 )
-            message = `${files.length} files selected`;
-        else message = value.split( '\\' ).pop();
-		if(message) {
-			setFiles({name: message, files:e.target.files})
+            text = `${files.length} files selected`;
+        else text = value.split( '\\' ).pop();
+		if(text) {
+			setFiles(e.target.files)
+			setInput(text)
 		}
     }
 
@@ -53,8 +51,8 @@ export const DataLoader = (props) => {
 		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-		woqlClient.insertCSV(files.files, commitMsg, null, null).then((results) => {
-			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded " + files.name}
+		woqlClient.insertCSV(files, commitMsg, null, null).then((results) => {
+			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files"}
             setReport(rep)
 		})
 		.catch((err) => process_error(err, update_start, "Failed to upload file"))
@@ -95,13 +93,13 @@ export const DataLoader = (props) => {
 						name="file-7[]"
 						id="file-7"
 						class="inputfile inputfile-6"
-						data-multiple-caption={files.name}
+						data-multiple-caption={input} multiple
 						onChange={loadFiles}
 						accept=".csv,.json"/>
 
-					<label for="file-7"><span>{files.name}</span> <strong>Add Data</strong></label>
+					<label for="file-7"><span>{input}</span> <strong>Add Data</strong></label>
 					</Col>
-				{files.name && <>
+				{files.length && <>
 					<Col md={5}>
 						<input class="commit-log-input" type="text" placeholder="Enter message for commit log" width="40" onChange={updateCommitMsg}/>
 					</Col>
