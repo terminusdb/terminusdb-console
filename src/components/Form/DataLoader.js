@@ -6,6 +6,7 @@ import {Col, Row} from "reactstrap"
 import { readString  } from 'react-papaparse'
 import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 import { TerminusDBSpeaks } from '../Reports/TerminusDBSpeaks'
+import { CSVLink, CSVDownload   } from "react-csv";
 import {
     TERMINUS_SUCCESS,
     TERMINUS_ERROR,
@@ -15,9 +16,14 @@ import {
 
 export const DataLoader = (props) => {
 
-	const [files, setFiles] = useState({})
-	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
-	const [input, setInput] = useState(false)
+	const [insertFiles, setInsertFiles] = useState({})
+	const [insertCommitMsg, setInsertCommitMsg] = useState("Adding csvs ...")
+
+    const [updateFiles, setUpdateFiles] = useState({})
+	const [updateCommitMsg, setUpdateCommitMsg] = useState("Update csvs ...")
+
+	const [insertInput, setInsertInput] = useState(false)
+    const [updateInput, setUpdateInput] = useState(false)
 
 	const {woqlClient} = WOQLClientObj()
 	const [bindings, setbindings] = useState(false)
@@ -25,14 +31,25 @@ export const DataLoader = (props) => {
 	const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
 
-	const loadFiles = (e) => {
+	const loadInsertFiles = (e) => {
         let files = e.target.files, value = e.target.value, text;
         if( files && files.length > 1 )
             text = `${files.length} files selected`;
         else text = value.split( '\\' ).pop();
 		if(text) {
-			setFiles(e.target.files)
-			setInput(text)
+			setInsertFiles(e.target.files)
+			setInsertInput(text)
+		}
+    }
+
+    const loadUpdateFiles = (e) => {
+        let files = e.target.files, value = e.target.value, text;
+        if( files && files.length > 1 )
+            text = `${files.length} files selected`;
+        else text = value.split( '\\' ).pop();
+		if(text) {
+			setUpdateFiles(e.target.files)
+			setUpdateInput(text)
 		}
     }
 
@@ -47,8 +64,8 @@ export const DataLoader = (props) => {
     }
 
 
-    const insertSingleFile = async(file) => {
-        return await woqlClient.insertCSV(file, commitMsg, null, null).then((results) => {
+    const insertSingleFile = async(file, update_start) => {
+        return await woqlClient.insertCSV(file, insertCommitMsg, null, null).then((results) => {
 			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files"}
             setReport(rep)
 		})
@@ -56,23 +73,17 @@ export const DataLoader = (props) => {
         .finally(() => setLoading(false))
     }
 
-	const handleUpload = (e) => {
+	const handleInsert = (e) => {
 		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-        for (var i = 0; i < files.length; i++) {
-            insertSingleFile(files[i])
+        for (var i = 0; i < insertFiles.length; i++) {
+            insertSingleFile(insertFiles[i], update_start)
         }
-
 	}
 
-	const updateCommitMsg = (e) => {
-		setCommitMsg(e.target.value)
-	}
-
-
-	const viewCsv = (e) => {
-		woqlClient.getCSV(null, null).then((results) =>{
+	const viewCsv = async (e) => {
+		return await woqlClient.getCSV(null, null).then((results) =>{
 			const csvRes = readString(results, {quotes: false,
 							  quoteChar: '"',
 							  escapeChar: '"',
@@ -85,6 +96,24 @@ export const DataLoader = (props) => {
 			const jsonRes = csvRes.data
 			setbindings(jsonRes)
 		})
+	}
+
+    const updateCsv = async(file, update_start) => {
+        return await woqlClient.updateCSV(file, updateCommitMsg, null, null).then((results) => {
+			let rep = {status: TERMINUS_SUCCESS, message: "Successfully updated files"}
+            setReport(rep)
+		})
+		.catch((err) => process_error(err, update_start, "Failed to upload file"))
+        .finally(() => setLoading(false))
+    }
+
+    const handleUpdate = (e) => {
+		let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        for (var i = 0; i < updateFiles.length; i++) {
+            updateCsv(updateFiles[i], update_start)
+        }
 	}
 
 	return ( <>
@@ -100,18 +129,20 @@ export const DataLoader = (props) => {
 						name="file-7[]"
 						id="file-7"
 						class="inputfile inputfile-6"
-						data-multiple-caption={input} multiple
-						onChange={loadFiles}
+						data-multiple-caption={insertInput}
+						onChange={loadInsertFiles}
 						accept=".csv,.json"/>
 
-					<label for="file-7"><span>{input}</span> <strong>Add Data</strong></label>
+					<label for="file-7"><span>{insertInput}</span> <strong>Add Data</strong></label>
 					</Col>
-				{files.length && <>
+				{insertFiles.length && <>
 					<Col md={5}>
-						<input class="commit-log-input" type="text" placeholder="Enter message for commit log" width="40" onChange={updateCommitMsg}/>
+						<input class="commit-log-input" type="text"
+                            placeholder="Enter message for commit log" width="40"
+                            onChange={(e) => setInsertCommitMsg(e.target.value)}/>
 					</Col>
 					<Col md={3}>
-						<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={handleUpload}>Upload Data</button>
+						<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={handleInsert}>Upload Data</button>
 					</Col>
 				</>}
 			</Row>
@@ -124,9 +155,39 @@ export const DataLoader = (props) => {
 
 			<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={viewCsv}>View Csv</button>
 
+            {bindings &&<CSVLink
+              data={bindings}
+              onClick={() => {
+                console.log("You click the link");
+            }}>Download me</CSVLink>}
+
 			{bindings && <WOQLTable bindings={bindings}/>}
 
-			{/*<DataViewer file={files}/>*/}
+            <Row className="upload-data-align">
+				<Col md={4}>
+					<input type="file"
+						name="file-8[]"
+						id="file-8"
+						class="inputfile inputfile-6"
+						data-multiple-caption={updateInput}
+						onChange={loadUpdateFiles}
+						accept=".csv,.json"/>
+
+					<label for="file-8"><span>{updateInput}</span> <strong>Update Data</strong></label>
+					</Col>
+				{updateFiles.length && <>
+					<Col md={5}>
+						<input class="commit-log-input" type="text"
+                            placeholder="Enter message for commit log" width="40"
+                            onChange={(e) => setUpdateCommitMsg(e.target.value)}/>
+					</Col>
+					<Col md={3}>
+						<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={handleUpdate}>Update Data</button>
+					</Col>
+				</>}
+			</Row>
+
+			{/*<DataViewer file={insertFiles}/>*/}
 		</div>
 
 		</>
