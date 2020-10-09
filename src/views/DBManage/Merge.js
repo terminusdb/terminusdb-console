@@ -176,8 +176,9 @@ export const Merge = () => {
         return {label: item.id, value: item.id}
     }) : [])
     return (<>
-            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+            <div className="tdb__loading__parent">
             <Container>
+
                 <Row>
                     <CommitSelector
                         branch={starterBranch}
@@ -240,6 +241,8 @@ export const Merge = () => {
                     </button>
                 </div>
             </Container>
+            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+            </div>
         </>
     )
 }
