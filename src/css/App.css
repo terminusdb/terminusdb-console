@@ -2584,6 +2584,7 @@ span.delete-modal-label {
       margin-top: -8px;
       text-align: right;
       padding-right: 10px;
+      min-width: 100px;
   }
 
   .ros-close-icon:hover {
