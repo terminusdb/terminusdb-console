@@ -63,23 +63,16 @@ export const DataLoader = (props) => {
         console.log(err)
     }
 
-
-    const insertSingleFile = async(file, update_start) => {
-        return await woqlClient.insertCSV(file, insertCommitMsg, null, null).then((results) => {
+	const handleInsert = (e) => {
+		let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        return woqlClient.insertCSV(insertFiles, insertCommitMsg, null, null).then((results) => {
 			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files"}
             setReport(rep)
 		})
 		.catch((err) => process_error(err, update_start, "Failed to upload file"))
         .finally(() => setLoading(false))
-    }
-
-	const handleInsert = (e) => {
-		let update_start = Date.now()
-        setLoading(true)
-        update_start = update_start || Date.now()
-        for (var i = 0; i < insertFiles.length; i++) {
-            insertSingleFile(insertFiles[i], update_start)
-        }
 	}
 
 	const viewCsv = async (e) => {
@@ -128,7 +121,7 @@ export const DataLoader = (props) => {
 					<input type="file"
 						name="file-7[]"
 						id="file-7"
-						class="inputfile inputfile-6"
+						class="inputfile inputfile-6" multiple
 						data-multiple-caption={insertInput}
 						onChange={loadInsertFiles}
 						accept=".csv,.json"/>
