@@ -14,6 +14,7 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
     const updateQuery = (nwoql, commitMsg) => {
         setCMsg(commitMsg)
         setWoqlQuery(nwoql)
+        if(nwoql) executeQuery(nwoql)
     }
 
     function processSuccessfulResult(response) {
@@ -37,9 +38,9 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
         setReport({error: e})
     }
 
-    function executeQuery() {
+    function executeQuery(q) {
         setLoading(true)
-        woql.execute(woqlClient, cmsg)
+        q.execute(woqlClient, cmsg)
             .then((response) => {
                 processSuccessfulResult(response) //, start, Date.now())
             })
@@ -55,8 +56,8 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
      * the query have to change if branch or commit refId change
      */
     useEffect(() => {
-        if (woql !== false) executeQuery()
-    }, [woql, branch, ref])
+        if (woql !== false && !woql.containsUpdate()) executeQuery(woql)
+    }, [branch, ref])
 
     return [updateQuery, report, bindings, woql, loading]
 }
