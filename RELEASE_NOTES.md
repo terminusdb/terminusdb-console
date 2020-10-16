@@ -1,3 +1,10 @@
+# TerminusDB Console v4.0.0 Release Notes
+
+## New
+
+* The ability to upload CSVs
+* add new terminusdb-client 4.0.0 with update_triple and update_quad
+
 # TerminusDB Console v3.0.4 Release Notes
 
 Bug fix release mostly!
