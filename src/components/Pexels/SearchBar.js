@@ -19,7 +19,7 @@ const  SearchBar = (props) => {
                         placeholder="Search for photos on Pexels..."
                         value={searchText}
                         onChange={  (e) =>{
-                            console.log('val',  e.target.value)
+                            //console.log('val',  e.target.value)
                             setSearchText(e.target.value)
                             //this.setState({ term: e.target.value})
                         } }/>

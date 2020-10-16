@@ -28,7 +28,7 @@ const copyLocallyImg = TERMINUS_IMAGE_BASE + "copy-locally.png"
 const copyRemoteImg = TERMINUS_IMAGE_BASE + "copy-remote.png"
 
 export const CREATE_DATABASE_LOCALLY = "Local Database"
-export const CREATE_DATABASE_HUB = "Terminus Hub Database"
+export const CREATE_DATABASE_HUB = "TerminusHUB Database"
 
 //const cloneImg = TERMINUS_IMAGE_BASE + "clone.png"
 //const forkImg = TERMINUS_IMAGE_BASE + "fork.png"
@@ -159,6 +159,10 @@ export const DB_DETAILS_FORM = {
             },
         },
     ],
+}
+
+export const DB_LOAD_DATA_FORM = {
+    importButton: "Load Data"
 }
 
 export const DB_ADVANCED_FORM = {

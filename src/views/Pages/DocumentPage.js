@@ -9,6 +9,7 @@ import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS} from '
 import {DocumentList} from '../Tables/DocumentList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_PAGE} from '../../constants/identifiers'
+import {DataLoader} from "../../components/Form/DataLoader"
 
 const DocumentPage = (props) => {
     /*
@@ -83,15 +84,17 @@ const DocumentPage = (props) => {
         }
     }, [report])
 
+
     return (
         //onHeadChange={doRebuild}
         <PageView page="document" dbPage={true}>
-            {!happiness && <Loading type={TERMINUS_PAGE} />}
+            {!happiness && <Loading type={TERMINUS_PAGE}/>}
+            {<DataLoader/>}
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
             {happiness && happiness !== true && (
-                <TerminusDBSpeaks failure={happiness} report={report} />
+                <TerminusDBSpeaks failure={happiness} report={report}/>
             )}
         </PageView>
     )

@@ -100,6 +100,7 @@ export const Merge = () => {
                 setReport(rep)
             })
             .catch((err) => {
+                alert("yo")
                 let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${targetBranch} `
                 setReport({error: err, status: TERMINUS_ERROR, message: message})
             })
@@ -141,6 +142,7 @@ export const Merge = () => {
 
 
     function checkSubmission(){
+        setReport()
         if(!sourceCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
@@ -176,8 +178,9 @@ export const Merge = () => {
         return {label: item.id, value: item.id}
     }) : [])
     return (<>
-            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+            <div className="tdb__loading__parent">
             <Container>
+
                 <Row>
                     <CommitSelector
                         branch={starterBranch}
@@ -196,6 +199,9 @@ export const Merge = () => {
                         {submissionProblem || 'noValue'}
                     </Alert>
                 </div>
+                {report && 
+                    <TerminusDBSpeaks report={report} />
+                }
                 <Col className="merge-inputs">
                     <Row className="merge-branch">
                         <Col className="branch-selector-title-col" md={2}>
@@ -240,6 +246,8 @@ export const Merge = () => {
                     </button>
                 </div>
             </Container>
+            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+            </div>
         </>
     )
 }
