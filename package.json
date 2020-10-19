@@ -55,7 +55,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@o2xp/react-datatable": "^1.1.62",
-    "@terminusdb/terminusdb-client": "^3.0.3",
+    "@terminusdb/terminusdb-client": "file:../terminusdb-client",
     "@terminusdb/terminusdb-react-components": "^0.0.4",
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
