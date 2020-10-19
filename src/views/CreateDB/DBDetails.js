@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {TCForm} from '../../components/Form/FormComponents'
 import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CREATE_FORM,
-    ADD_MORE_CSV, CREATE_BREADCRUMB} from './constants.createdb'
+    ADD_MORE_CSV, } from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import {CsvLoader} from "../../components/Form/CsvLoader"
@@ -48,18 +48,10 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     const [advanced, setAdvanced] = useState(advancedInfo)
     const [advancedSettings, setAdvancedSettings] = useState(false)
 
-    const [csvSettings, showCsvSettings]=useState(false)
-
-    const [csvs, handleCsvs]=useState([])
+    const [csvs, setCsvs]=useState([])
 
     function toggleAdvanced() {
         setAdvancedSettings(!advancedSettings)
-        showCsvSettings(false)
-    }
-
-    function toggleCsv() {
-        showCsvSettings(!csvSettings)
-        setAdvancedSettings(false)
     }
 
     //advanced field we just harvest as it changes
@@ -78,8 +70,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         }
         if (Array.isArray(csvs) && csvs.length){
             dbdoc.files = []
-            for(var item in csvs)
-                dbdoc.files.push(csvs[item].fileInfo)
+            dbdoc.files = csvs
         }
         if(advanced.schema){
             dbdoc.schema = true
@@ -104,6 +95,14 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         onSubmit(dbdoc)
     }
 
+    const insertCsvs = (e) => {
+	   for(var i=0; i<e.target.files.length; i++){
+		   let files = {};
+           files = e.target.files[i]
+		   setCsvs( arr => [...arr, files]);
+	   }
+    }
+
     return (
         <>
             <TCForm
@@ -114,8 +113,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 buttons={buttons}
             />
 
-            {/*<CsvLoader handleCsvs={handleCsvs} actionText={CREATE_WITH_CSV} secondActionText={ADD_MORE_CSV} page={CREATE_BREADCRUMB}/>
-*/}
+            {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="create"/>}
+
             <Row>
 
                 <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
@@ -139,7 +138,15 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 </span>
 
                 <span className={DB_CREATE_FORM.csvWrapperClassName}>
-                    <CsvLoader handleCsvs={handleCsvs} actionText={CREATE_WITH_CSV} secondActionText={ADD_MORE_CSV} page={CREATE_BREADCRUMB}/>
+                    <input type="file"
+                        name="addCss"
+                        id="addCss"
+                        class="inputfile inputfile-6" multiple
+                        onChange={insertCsvs}
+                        accept=".csv"/>
+
+                    {(!csvs.length) && <label for="addCss">{CREATE_WITH_CSV}</label>}
+                    {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
                 </span>
 
             </Row>

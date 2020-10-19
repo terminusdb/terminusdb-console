@@ -10,7 +10,6 @@ import {DocumentList} from '../Tables/DocumentList'
 import {CsvList} from '../Tables/CsvList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_PAGE} from '../../constants/identifiers'
-import {DataLoader} from "../../components/Form/DataLoader"
 import {CsvLoader} from "../../components/Form/CsvLoader"
 import {
     TERMINUS_SUCCESS,
@@ -25,11 +24,10 @@ const DocumentPage = (props) => {
      * global woqlClient obj
      */
     const {woqlClient} = WOQLClientObj()
-    const {ref, branch} = DBContextObj()
+    const {ref, branch, graphs} = DBContextObj()
 
     const [happiness, setHappiness]=useState(false)
-    const [csvs, handleCsvs]=useState([])
-	const [csvCommit, setCsvCommit] = useState("Adding csvs ...")
+    const [csvs, setCsvs]=useState([])
 
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
@@ -38,9 +36,7 @@ const DocumentPage = (props) => {
         branch,
         ref,
     )
-
-    const [csvReport, setCsvReport] = useState()
-    const [loading, setLoading] = useState(false)
+    const [isSchema, setIsSchema] = useState(false)
 
     function interpretQueryError(report) {
         setHappiness(NO_DOCUMENT)
@@ -95,70 +91,48 @@ const DocumentPage = (props) => {
                 interpretEmptyResult()
             } else {
                 setHappiness(true)
+                for(var key in graphs) {
+					if(graphs[key].type == "schema"){
+						setIsSchema(true)
+						break;
+					}
+				}
             }
         }
     }, [report])
 
-
-    function process_error(err, update_start, message){
-        setCsvReport({
-            error: err,
-            status: TERMINUS_ERROR,
-            message: message,
-            time: Date.now() - update_start,
-        })
-        console.log(err)
-    }
-
-    const handleUpload = () => {
-        let update_start = Date.now()
-        setLoading(true)
-        update_start = update_start || Date.now()
-        //console.log('csvs on upload', csvs)
-        return woqlClient.insertCSV(csvs, csvCommit, null, null).then((results) => {
-			let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files"}
-            setCsvReport(rep)
-		})
-		.catch((err) => process_error(err, update_start, "Failed to upload file"))
-        .finally(() => setLoading(false))
+    const insertCsvs = (e) => {
+	   for(var i=0; i<e.target.files.length; i++){
+		   let files = {};
+           files = e.target.files[i]
+		   setCsvs( arr => [...arr, files]);
+	   }
     }
 
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
 
-            <CsvLoader actionText={ADD_CSV} secondActionText={ADD_MORE_CSV} handleCsvs={handleCsvs} page="document"/>
+                {!isSchema && <><div>
+                    <span className="add-csv">
+                        <input type="file"
+                            name="addCss"
+                            id="addCss"
+                            class="inputfile add-files" multiple
+                            onChange={insertCsvs}
+                            accept=".csv"/>
 
-            {(csvs.length>0) && <>
-                <Col md={5}>
-                    <input class="commit-log-input" type="text"
-                        placeholder="Enter message for commit log" width="40"
-                        onChange={(e) => setCsvCommit(e.target.value)}/>
-                </Col>
-                {/*<Col md={3}>
-                    <button className="tdb__button__base tdb__button__base--bgreen upload-file"
-                        onClick={handleUpload}>Upload Data</button>
-                </Col>*/}
-            </>}
-
-            <Row className="generic-message-holder">
-                {csvReport &&
-                    <TerminusDBSpeaks report={csvReport} />
-                }
-            </Row>
-
-            <hr/>
-
-            {/*<DataLoader/>*/}
-
-            <CsvList/>
-
+                        {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
+                        {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                    </span>
+                </div>
+                {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document"/> }
+                <CsvList/>
+                </>
+            }
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
-            {/*happiness && happiness !== true && (
-                <TerminusDBSpeaks failure={happiness} report={report}/>
-            )*/}
         </PageView>
     )
 }
