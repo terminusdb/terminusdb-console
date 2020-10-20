@@ -4023,6 +4023,10 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  .csv_title {
+      margin-top: 10px;
+  }
+
   .csv_icon_spacing {
       margin: 0px 0px 0px 15px;
   }

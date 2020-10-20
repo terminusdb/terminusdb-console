@@ -199,9 +199,9 @@ export const CsvList = () => {
 		{contents.show && <>
 			<Row key="rr">
 				<AiOutlineInfoCircle color={"#787878"} className={"intro_text_icon"}/>
-				<span className="intro_text">Contents of <strong>{contents.name}</strong></span>
+				<span className="intro_text csv_title">Contents of <strong>{contents.name}</strong></span>
 			</Row>
-			<Row key="re" className="upload-data-align">
+			<Row key="re" className="upload-data-align csv-rows">
 				<Col md={1}><CSVLink data={contents.data}>Download me</CSVLink></Col>
 				<Col md={2}>
 					<input type="file"
