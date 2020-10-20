@@ -7,6 +7,15 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {CSVLink, CSVDownload} from "react-csv";
 import {Row, Col} from "reactstrap";
 import {readString} from 'react-papaparse';
+import {BiShow} from 'react-icons/bi'
+import Loading from '../../components/Reports/Loading'
+import {AiOutlineInfoCircle} from "react-icons/ai"
+import {
+    TERMINUS_SUCCESS,
+    TERMINUS_ERROR,
+    TERMINUS_WARNING,
+    TERMINUS_COMPONENT,
+} from '../../constants/identifiers'
 
 export const CsvList = () => {
 	const {woqlClient} = WOQLClientObj()
@@ -15,9 +24,11 @@ export const CsvList = () => {
 	const [happiness, setHappiness] = useState(false)
 	const [updateFiles, setUpdateFiles] = useState([])
     const [updateCommitMsg, setUpdateCommitMsg] = useState("Update csvs ...")
-    const [updateInput, setUpdateInput] = useState(false)
 
 	const [loading, setLoading] = useState(false)
+	//const [csvReport, setReport] = useState()
+
+	const [contents, setContents]=useState({show:false, name: false, data:[]})
 
 	//const csvQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.triple('v:Type', 'type', TerminusClient.WOQL.iri('csv:///schema#Csv'))
     //    .triple('v:Type', 'label', 'v:File Name'))
@@ -73,7 +84,6 @@ export const CsvList = () => {
 					accept=".csv"/>
 
 				<label for="updateCss">Update Csv</label>
-
 			</Col>
 		</Row>)
 	}
@@ -120,11 +130,51 @@ export const CsvList = () => {
 		}}>Download me</CSVLink>)
 	}
 
+	function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
+    }
+
+	const getCsv = async(e) => {
+		let fileName=e.target.id, update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+		return await woqlClient.getCSV(fileName, null).then((results) =>{
+			const res = readString(results, {quotes: false,
+							  quoteChar: '"',
+							  escapeChar: '"',
+							  delimiter: ",",
+							  header: true,
+							  newline: "{",
+							  skipEmptyLines: false,
+							  columns: null
+							})
+			const jsonRes = res.data
+			setContents({show:true, name:fileName, data:jsonRes})
+			//setReport(rep)
+		})
+		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + fileName))
+		.finally(() => setLoading(false))
+	}
+
+	const getShowContents = (fileInfo) => {
+		const fileName = fileInfo.name['@value']
+		return (
+			<span id={fileName} onClick={getCsv} className="db-card-credit csv-act">
+				<BiShow id={fileName} color="#0055bb" className='db_info_icon_spacing csv_icon_spacing '/>
+				<span className="db_info" id={fileName}>Show Contents</span>
+			</span>
+		)}
+
 
 	const constructCsvBindings = (bindings) => {
 		for(var item in bindings) {
-			bindings[item].Download = getDownloadButton(bindings)
-			bindings[item].Update = getUpdateButton()
+			bindings[item].Contents = getShowContents(bindings[item])
 		}
 		setCsvBindings(bindings)
 		setHappiness(true)
@@ -142,7 +192,39 @@ export const CsvList = () => {
     }, [report, bindings])
 
     return (<>
-		{happiness && csvBindings && 
+		{loading &&  <Loading type={TERMINUS_COMPONENT} />}
+		{happiness && csvBindings &&
 			<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>}
+		<br/>
+		{contents.show && <>
+			<Row key="rr">
+				<AiOutlineInfoCircle color={"#787878"} className={"intro_text_icon"}/>
+				<span className="intro_text">Contents of <strong>{contents.name}</strong></span>
+			</Row>
+			<Row key="re" className="upload-data-align">
+				<Col md={1}><CSVLink data={contents.data}>Download me</CSVLink></Col>
+				<Col md={2}>
+					<input type="file"
+						name="addCss"
+						id="updateCss"
+						class="inputfile add-files"
+						onChange={loadUpdateFiles}
+						accept=".csv"/>
+
+					<label for="updateCss">Update Csv</label>
+				</Col>
+				{(updateFiles.length > 0) && <>
+					<Col md={6}>
+						<input class="commit-log-input" type="text"
+							placeholder="Enter message for commit log" width="40"
+							onChange={(e) => setUpdateCommitMsg(e.target.value)}/>
+					</Col>
+					<Col md={3}>
+						<button className="tdb__button__base tdb__button__base--bgreen upload-file" onClick={updateCsv}>Update</button>
+					</Col>
+				</>}
+			</Row>
+			<ResultViewer type ="table" bindings= {contents.data}/>
+		</>}
 	</>)
 }

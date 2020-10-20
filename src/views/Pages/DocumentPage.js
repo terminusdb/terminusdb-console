@@ -112,22 +112,22 @@ const DocumentPage = (props) => {
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
+                {!isSchema && <>
+                    <div>
+                        <span className="add-csv">
+                            <input type="file"
+                                name="addCss"
+                                id="addCss"
+                                class="inputfile add-files" multiple
+                                onChange={insertCsvs}
+                                accept=".csv"/>
 
-                {!isSchema && <><div>
-                    <span className="add-csv">
-                        <input type="file"
-                            name="addCss"
-                            id="addCss"
-                            class="inputfile add-files" multiple
-                            onChange={insertCsvs}
-                            accept=".csv"/>
-
-                        {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
-                        {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
-                    </span>
-                </div>
-                {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document"/> }
-                <CsvList/>
+                            {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
+                            {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                        </span>
+                    </div>
+                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document"/> }
+                    <CsvList/>
                 </>
             }
             {happiness === true && (
