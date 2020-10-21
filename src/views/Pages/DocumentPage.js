@@ -28,6 +28,7 @@ const DocumentPage = (props) => {
 
     const [happiness, setHappiness]=useState(false)
     const [csvs, setCsvs]=useState([])
+    const [refreshCsvs, setRefreshCsvs]=useState([])
 
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
@@ -123,10 +124,10 @@ const DocumentPage = (props) => {
                                 accept=".csv"/>
 
                             {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
-                            {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                            {(refreshCsvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
                         </span>
                     </div>
-                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document"/> }
+                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> }
                     <CsvList/>
                 </>
             }

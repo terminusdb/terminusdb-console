@@ -5,6 +5,7 @@ import {readString} from 'react-papaparse';
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {MdSlideshow} from 'react-icons/md'
 import {TiDeleteOutline} from 'react-icons/ti'
+import Loading from '../../components/Reports/Loading'
 import {BiUpload} from 'react-icons/bi'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {
@@ -19,7 +20,7 @@ export const CsvLoader = (props) => {
 	const csvs = props.csvs || []
 	const setCsvs=props.setCsvs
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
-	let fileReader, headerReader, focusFile={};
+	let fileReader, headerReader, focusFile={}, setRefreshCsvs;
 	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
 	const page=props.page || 'document'
 
@@ -87,6 +88,7 @@ export const CsvLoader = (props) => {
 					.then((results) => {
 						let rep = {status: TERMINUS_SUCCESS, message: "Successfully uploaded files "+fileName}
 			            setReport(rep)
+						setCsvs(csvs.filter(item => item.name !== fileName)); //refresh csv list
 				})
 				.catch((err) => process_error(err, update_start, "Failed to upload file"))
 		        .finally(() => setLoading(false))
@@ -94,15 +96,8 @@ export const CsvLoader = (props) => {
 		})
 	}
 
-	return ( <div>
-
-		<Row className="generic-message-holder">
-			{report &&
-				<TerminusDBSpeaks report={report} />
-			}
-		</Row>
-
-		{csvs.map( item =>
+	const LoadedCsvs = () => {
+		return csvs.map( item =>
 			<Row style={{width: "100%"}} key={item} className="csv-rows">
 				<Col md={3}> {item.name} </Col>
 				<Col md={2}>
@@ -122,7 +117,7 @@ export const CsvLoader = (props) => {
 						<Col md={8}>
 							<input class="commit-log-input" type="text"
 								placeholder="Enter message for commit log" width="40"
-								onChange={(e) => setCommitMsg(e.target.value)}/>
+								onchange={(e) => setCommitMsg(e.target.value)}/>
 						</Col>
 						<Col md={4}>
 							<span id={item.name} onClick={singleUploads} className="db-card-credit csv-act">
@@ -133,24 +128,39 @@ export const CsvLoader = (props) => {
 					</Row>}
 				</Col>
 			</Row>
-		)}
+		)
+	}
 
-		{preview.show && <>
-			<Row className='csv-preview-header' key="re">
-				<Col md={10}>
-					<MdSlideshow color="#0055bb" className="csv-preview-icon db_info_icon_spacing"/>
-						Showing preview of file  <strong>{preview.fileName} </strong>
-				</Col>
-				<Col md={2}>
-					<span onClick={()=> setPreview({show: false, fileName:false, data:[]})}
-						className="db-card-credit csv-act">
-						<TiDeleteOutline color="#721c24" className='db_info_icon_spacing csv_icon_spacing '/>
-						<span className="db_info"> Close Preview</span>
-					</span>
-				</Col>
+	const PreviewCsv = () => {
+		return (<>
+			{preview.show && <>
+				<Row className='csv-preview-header' key="re">
+					<Col md={10}>
+						<MdSlideshow color="#0055bb" className="csv-preview-icon db_info_icon_spacing"/>
+							Showing preview of file  <strong>{preview.fileName} </strong>
+					</Col>
+					<Col md={2}>
+						<span onClick={()=> setPreview({show: false, fileName:false, data:[]})}
+							className="db-card-credit csv-act">
+							<TiDeleteOutline color="#721c24" className='db_info_icon_spacing csv_icon_spacing '/>
+							<span className="db_info"> Close Preview</span>
+						</span>
+					</Col>
+				</Row>
+				<ResultViewer type ="table" bindings= {preview.data}/>
+			</>}
+		</>)
+	}
+
+	return ( <div>
+			{loading &&  <Loading type={TERMINUS_COMPONENT} />}
+			<Row className="generic-message-holder">
+				{report &&
+					<TerminusDBSpeaks report={report} />
+				}
 			</Row>
-			<ResultViewer type ="table" bindings= {preview.data}/>
-		</>}
+			<LoadedCsvs/>
+			<PreviewCsv/>
 	    </div>
 	)
 }
