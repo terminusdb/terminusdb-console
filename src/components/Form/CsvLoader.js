@@ -18,6 +18,7 @@ import {
 export const CsvLoader = (props) => {
 
 	const csvs = props.csvs || []
+	var test = ''
 	const setCsvs=props.setCsvs
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
 	let fileReader, headerReader, focusFile={}, setRefreshCsvs;
@@ -31,6 +32,7 @@ export const CsvLoader = (props) => {
 
 	const viewPreview = (e) => {
 		const fileName = e.target.id
+		setLoading(true)
 	    handleFileRead(fileName)
 	}
 
@@ -52,7 +54,7 @@ export const CsvLoader = (props) => {
 	}
 
 	const convertToJson = (e) => {
-	    const content = fileReader.result;
+		const content = fileReader.result;
 		const parsedContent = readString(content, {quotes: false,
 						  quoteChar: '"',
 						  escapeChar: '"',
@@ -62,8 +64,14 @@ export const CsvLoader = (props) => {
 						  skipEmptyLines: false,
 						  columns: null
 						})
-		focusFile.data=parsedContent.data
-		setPreview({show: true, fileName: focusFile.fileName, data: focusFile.data});
+		let limitedData = []
+		for(var item in parsedContent.data) {
+			limitedData.push(parsedContent.data[item])
+			if(item > 5) break;
+		}
+		focusFile.data=limitedData
+		setLoading(false)
+		setPreview({show: true, fileName: focusFile.fileName, data: limitedData});
 	};
 
 	function process_error(err, update_start, message){
