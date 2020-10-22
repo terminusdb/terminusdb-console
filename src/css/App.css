@@ -649,10 +649,11 @@ span.delete-modal-label {
 
   .advanced-settings-create-form {
       margin-top: -20px;
-      width: 100%;
+      /*width: 100%;*/
       display: block;
       height: 70px;
       margin-bottom: 10px;
+      margin: 0px 10px 0px 10px;
   }
 
   p.create-form-helptext::before {
@@ -4022,6 +4023,18 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  .csv_title {
+      margin-top: 10px;
+  }
+
+  .csv_icon_spacing {
+      margin: 0px 0px 0px 15px;
+  }
+
+  .csv-rows {
+      margin: 20px 0px 20px 0px;
+  }
+
   .invitation_info_icon_spacing {
       margin: 0px;
       color: #0055bb;
@@ -4119,7 +4132,7 @@ span.delete-modal-label {
       font-weight: 500;
   }
 
-  .hub-organization-link {
+  .hub-organization-link, .csv-act {
       border: 1px solid white;
       border-radius: 4px;
   }
@@ -4128,7 +4141,7 @@ span.delete-modal-label {
     font-weight: 500;
 }
 
-  .hub-organization-link:hover {
+  .hub-organization-link:hover, .csv-act:hover {
       cursor: pointer;
       color: #033684;
       border-radius: 12px;
@@ -5139,7 +5152,7 @@ button.tdb__button__cancel:hover {
     content: url("https://assets.terminusdb.com/terminusdb-console/images/Cow-duck-avatar-terminus-color.png");
 }
 
-.inputfile {
+.inputfile, .csv-input {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -5148,25 +5161,54 @@ button.tdb__button__cancel:hover {
     z-index: -1;
 }
 
-.inputfile {
+.csv-preview-header {
+    margin-top: 50px;
+}
+
+span.add-csv {
+    float: right;
+}
+
+.csv-preview-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.inputfile, .csv-input {
     cursor: pointer;
 }
 
-.inputfile + label {
-    max-width: 80%;
+.inputfile + label, .csv-label {
+    /*max-width: 80%;*/
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: pointer;
     display: inline-block;
     overflow: hidden;
-    padding: 0.625rem 1.25rem;
+    padding: .375rem .75rem;
 }
 
-.inputfile-6 + label strong {
-    height: 100%;
+.inputfile-6 + label strong, .csv-label {
+    /*height: 100%;
     color: #e2e8f0;
     background-color: #00C08B;
-    display: inline-block;
+    display: inline-block;*/
+    border-radius: 4px;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+}
+
+.add-files + label {
+    border: 1px solid #00C08B;
+    color: #00C08B;
+}
+
+.add-files + label:hover {
+    border: 1px solid #00C08B;
+    color: white;
+    background-color: #00C08B;
 }
 
 .inputfile-6 + label span, .inputfile-6 + label strong {
@@ -5184,10 +5226,19 @@ button.tdb__button__cancel:hover {
 }
 
 .inputfile-6 + label {
-    border: 1px solid #f2f3fa;
-    background-color: #fafbfe !important;
-    padding: 0;
-    border-radius: 4px;
+    border-radius: 0;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+    margin-top: 1.5rem;
+}
+
+.inputfile-6 + label:hover {
+    background-color: #00C08B;
+    color: #fff;
+    opacity: 0.8;
+    border: 1px solid #fff;
 }
 
 div.load-data-section {

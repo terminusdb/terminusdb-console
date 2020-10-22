@@ -5,20 +5,31 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {PageView} from '../Templates/PageView'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS} from './constants.pages'
+import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS, ADD_CSV, ADD_MORE_CSV} from './constants.pages'
 import {DocumentList} from '../Tables/DocumentList'
+import {CsvList} from '../Tables/CsvList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_PAGE} from '../../constants/identifiers'
-import {DataLoader} from "../../components/Form/DataLoader"
+import {CsvLoader} from "../../components/Form/CsvLoader"
+import {
+    TERMINUS_SUCCESS,
+    TERMINUS_ERROR,
+    TERMINUS_WARNING,
+    TERMINUS_COMPONENT,
+} from '../../constants/identifiers'
+import {Row, Col} from "reactstrap"
 
 const DocumentPage = (props) => {
     /*
      * global woqlClient obj
      */
     const {woqlClient} = WOQLClientObj()
-    const {ref, branch} = DBContextObj()
+    const {ref, branch, graphs} = DBContextObj()
 
-    const [happiness, setHappiness] = useState(false)
+    const [happiness, setHappiness]=useState(false)
+    const [csvs, setCsvs]=useState([])
+    const [refreshCsvs, setRefreshCsvs]=useState([])
+
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
     const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
         woqlClient,
@@ -26,6 +37,7 @@ const DocumentPage = (props) => {
         branch,
         ref,
     )
+    const [isSchema, setIsSchema] = useState(false)
 
     function interpretQueryError(report) {
         setHappiness(NO_DOCUMENT)
@@ -80,21 +92,47 @@ const DocumentPage = (props) => {
                 interpretEmptyResult()
             } else {
                 setHappiness(true)
+                for(var key in graphs) {
+					if(graphs[key].type == "schema"){
+						setIsSchema(true)
+						break;
+					}
+				}
             }
         }
     }, [report])
 
+    const insertCsvs = (e) => {
+	   for(var i=0; i<e.target.files.length; i++){
+		   let files = {};
+           files = e.target.files[i]
+		   setCsvs( arr => [...arr, files]);
+	   }
+    }
 
     return (
-        //onHeadChange={doRebuild}
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
-            {<DataLoader/>}
+                {!isSchema && <>
+                    <div>
+                        <span className="add-csv">
+                            <input type="file"
+                                name="addCss"
+                                id="addCss"
+                                class="inputfile add-files" multiple
+                                onChange={insertCsvs}
+                                accept=".csv"/>
+
+                            {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
+                            {(refreshCsvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                        </span>
+                    </div>
+                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> }
+                    <CsvList/>
+                </>
+            }
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
-            )}
-            {happiness && happiness !== true && (
-                <TerminusDBSpeaks failure={happiness} report={report}/>
             )}
         </PageView>
     )

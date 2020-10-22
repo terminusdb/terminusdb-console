@@ -125,7 +125,6 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     if(meta.schema) delete meta['schema']
     //meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
     let resp = await remoteClient.createDatabase(meta.id, meta, meta.organization)
-    console.log(resp, " is the response")
     let rem = meta.remote_url
     let using = client.user_organization() + "/" + client.db() + "/_meta"
     let q = WOQL.lib().add_remote(using, rem, remote_name)

@@ -17,7 +17,8 @@ export const MANAGE_SERVER_TITLE = "Server Configuration"
 export const MANAGE_SERVER_CSS = ""
 export const CLONEDB_TITLE = "Clone"
 
-
+export const ADD_CSV = "Add Csvs"
+export const ADD_MORE_CSV = "Add More Csvs"
 
 
 //Terminus DB Home Page
@@ -26,39 +27,39 @@ export const TERMINUS_HOME_ADVICE = "This is the TerminusDB Terminus Database. I
 
 
 //Document Page Level Error Messages
-export const DOCUMENT_NO_SCHEMA = { 
+export const DOCUMENT_NO_SCHEMA = {
     id: "DOCUMENT_NO_SCHEMA",
     color: "info",
     title: "Missing Schema Graph",
-    message: "There is no schema defined for this database - before you can define and use documents, you need to create a schema for this database"    
+    message: "There is no schema defined for this database - before you can define and use documents, you need to create a schema for this database"
 }
 
-export const SYSTEM_ERROR = { 
+export const SYSTEM_ERROR = {
     id: "SYSTEM_ERROR",
     title: "System Error",
     color: "error",
-    message: "Failed to load documents from database"    
+    message: "Failed to load documents from database"
 }
 
-export const NO_DOCUMENT = { 
+export const NO_DOCUMENT = {
     id: "NO_DOCUMENT",
     title: "Empty Database",
     color: "info",
-    message: "No documents have been added to this database yet. "    
+    message: "No documents have been added to this database yet. "
 }
 
-export const NO_DOCUMENT_CLASS = { 
+export const NO_DOCUMENT_CLASS = {
     id: "NO_DOCUMENT_CLASS",
     title: "Missing Document Class",
     color: "info",
-    message: "No document classes have been defined in the schema. Before you can view and create documents, you must define at least one document class in the database schema. "    
+    message: "No document classes have been defined in the schema. Before you can view and create documents, you must define at least one document class in the database schema. "
 }
 
-export const GRAPHS_LOAD_ERROR = { 
+export const GRAPHS_LOAD_ERROR = {
     id: "GRAPHS_LOAD_ERROR",
     color: "danger",
     title: "Failed to load graphs",
-    message: "An error occurred while loading the list of database graphs"    
+    message: "An error occurred while loading the list of database graphs"
 }
 
 
@@ -83,10 +84,10 @@ export const GET_COMMITS = 'GET_COMMITS'
 //Query Page
 export const NEW_QUERY_BUTTON_TEXT = "Add New Query Pane"
 
-//Profile Page 
+//Profile Page
 export const PROFILE_BG_IMAGE = "https://terminusdb.com/img/placeholders/half-background-mobile.png"
 export const USER_CARD_CSS = "user-card"
-export const USER_DESCRIPTION_FILLER = "..." 
+export const USER_DESCRIPTION_FILLER = "..."
 export const PROFILE_TITLE = "Profile"
 export const PROFILE_CONTENT_CSS = "some-css"
 
@@ -133,7 +134,7 @@ export const CLONEDBS = [{
         label: "TerminusDB Politicians Tutorial",
         organization_type: "Terminators",
         organization_label: "TerminusDB Politicians Tutorials",
-    } 
+    }
 }]
 
 

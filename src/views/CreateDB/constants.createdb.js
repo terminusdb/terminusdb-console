@@ -165,6 +165,13 @@ export const DB_LOAD_DATA_FORM = {
     importButton: "Load Data"
 }
 
+export const DB_CREATE_FORM = {
+    csvWrapperClassName: "advanced-settings-create-form",
+    csvButtonClassName: "advanced-button btn-minor lead mt-4 btn",
+    csvSectionClassName: "advanced-section-create-form",
+    showCsv: "Create Database From CSVs",
+}
+
 export const DB_ADVANCED_FORM = {
     advancedWrapperClassName: "advanced-settings-create-form",
     advancedButtonClassName: "advanced-button btn-minor lead mt-4 btn",
@@ -463,3 +470,6 @@ export const CREATE_REMOTE_FORM = {
 
 export const CREATE_LOCAL_INTRO = "Create a new database on your local TerminusDB server"
 export const CREATE_REMOTE_INTRO = "You can choose to create a new database on your local server, or save it directly to your TerminusHub account for sharing with others"
+
+export const CREATE_WITH_CSV="Create Database From CSVs"
+export const ADD_MORE_CSV="Add More Csvs"
