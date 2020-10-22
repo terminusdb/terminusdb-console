@@ -2,9 +2,11 @@ import React, {Fragment,useState} from 'react'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {NavLink} from 'react-router-dom'
 import {getDBPageRoute} from '../Router/ConsoleRouter'
+import {SchemaSelector} from './SchemaSelector'
 import {
     DOCUMENT_PAGE_LABEL,
     SCHEMA_PAGE_LABEL,
+    MODEL_PAGE_LABEL,
     QUERY_PAGE_LABEL,
     PAGES_ID,
     MANAGE_TITLE,
@@ -110,16 +112,7 @@ const GuardedDBNavbar = (props) => {
                         </NavLink>
                     </li>
                     <li className="nav__main__item nav__main__item--sub">
-                        <NavLink
-                            className="nav__main__link nav__main__link--sub"
-                            tag={NavLink}
-                            to={getNavURL('schema')}
-                            activeClassName="nav__main__link--subselected"
-                            exact
-                            id={PAGES_ID.NAV_SCHEMA}
-                        >
-                            {SCHEMA_PAGE_LABEL}
-                        </NavLink>
+                       <SchemaSelector getNavURL={getNavURL}/>
                     </li>
                     </ul>
                     <div className="nav__main__menu">

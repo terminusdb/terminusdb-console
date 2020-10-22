@@ -20,12 +20,15 @@ export const DB_SCHEMA_ROUTE = '/schema'
 export const DB_DOCUMENT_ROUTE = '/document'
 export const DB_QUERY_ROUTE = '/query'
 
+export const DB_SCHEMA_BUILD_ROUTE = '/model'
+
 //sub routes of schema
 export const SCHEMA_PROPERTIES_ROUTE = '/properties'
 export const SCHEMA_OWL_ROUTE = '/owl'
 export const SCHEMA_GRAPHS_ROUTE = '/graphs'
 export const SCHEMA_PREFIXES_ROUTE = '/prefixes'
-export const SCHEMA_CLASSES_ROUTE = '/'
+export const SCHEMA_CLASSES_ROUTE = '/classes'
+export const SCHEMA_MODEL_ROUTE = '/'
 
 //sub routes of db home
 export const DB_MANAGE = '/manage'

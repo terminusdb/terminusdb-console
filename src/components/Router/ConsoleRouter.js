@@ -25,9 +25,10 @@ export const ConsoleRouter = (props) => {
     }
     return <Router history={props.history}>
                     {getSwitch()}
-            <Footer/>
+            
             </Router>
 }
+//<Footer/>
 
 /*
 * for page navigation, create dinamically the /db/username/dbname

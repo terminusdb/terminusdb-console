@@ -21,14 +21,14 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
     }, [isAuthenticated, loginWithRedirect, path])*/
 
     const render = props =>     
-        isAuthenticated !== true ? <NoLoginLayout loginWithRedirect={loginWithRedirect}/> :  <Component {...props} />;
+        isAuthenticated !== true ? <NoPageLayout loginWithRedirect={loginWithRedirect}/> :  <Component {...props} />;
         return <Route path={path} render={render} {...rest} />;
 }
 
-export const NoLoginLayout = (props) =>{
+export const NoPageLayout = (props) =>{
 
     let text = props.text ? props.text: "Log in to Terminus Hub, where you can share your databases and collaborate with others"
-
+    const noLoginButton= props.noLoginButton===true ? true : false
     return (
             <PageView >
                 <div className="console__page__box">
@@ -36,9 +36,10 @@ export const NoLoginLayout = (props) =>{
                     <div className="console__page__title"  style={{fontSize: "20px !important;"}}>
                         <img className='db-home-listing-image' src={HUBDB}/> {text}
                     </div>
+                    {noLoginButton===false && 
                     <button id="login_clone_button" className="tdb__button__base nav__main__login" onClick={ () => props.loginWithRedirect()}>
                         {LOGIN_LABEL}
-                    </button>
+                    </button>}
                 </div>
             </PageView>
         )
