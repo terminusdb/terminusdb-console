@@ -20,13 +20,14 @@ export const ModelBuilder = (props) =>{
       saveGraphChanges(query)
     }
 
+    if(!graphs || graphs['schema/main']===undefined){
+      return  <NoPageLayout noLoginButton={true} text="There is no schema graph." />
+    }
+
     return (
        <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">           
             <ConsoleNavbar onHeadChange={props.onHeadChange} />             
             <div>
-            {!graphs || graphs['schema/main']===undefined && 
-                <NoPageLayout noLoginButton={true} text="There is no schema graph." />
-            }
             {graphs && graphs['schema/main']!==undefined && 
             <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
               <SchemaBuilder saveGraph={saveData}/>
