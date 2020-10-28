@@ -33,7 +33,7 @@ export const NoPageLayout = (props) =>{
             <PageView >
                 <div className="console__page__box">
 
-                    <div className="console__page__title"  style={{fontSize: "20px !important;"}}>
+                    <div className="console__page__title console__page__title--fbig" >
                         <img className='db-home-listing-image' src={HUBDB}/> {text}
                     </div>
                     {noLoginButton===false && 
