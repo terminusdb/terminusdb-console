@@ -9,12 +9,12 @@ import {NoPageLayout} from '../../components/Router/PrivateRoute'
 
 export const ModelBuilder = (props) =>{   
     const { woqlClient, contextEnriched } = WOQLClientObj()
-    const {graphs, setHead, branch, report} = DBContextObj()
+    const {graphs, setHead, branch, report, ref} = DBContextObj()
 
     const {mainGraphDataProvider,
           saveGraphChanges,
           callServerError,
-          callServerLoading} = modelCallServerHook(woqlClient)
+          callServerLoading} = modelCallServerHook(woqlClient,branch,ref)
     
     const saveData=(query)=>{
       saveGraphChanges(query)
