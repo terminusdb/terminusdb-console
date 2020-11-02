@@ -21,12 +21,12 @@ class ImageCard extends React.Component {
         const {photographer, src} = this.props.image;
 
         return (
-            <div style={{ cursor:'pointer', gridRowEnd: `span ${this.state.spans}`}}>
-                <img
+            <div style={{ cursor:'pointer', gridRowEnd: `span ${this.state.spans}`}} className="pexel-img-container">
+                <img className="pexel-image"
                     ref={this.imageRef}
                     alt={photographer}
                     src={src.medium}
-                    onClick={() => this.props.setImageUrl(this.imageRef.current.currentSrc)}
+                    onClick={() => this.props.setImageUrl({pexelImage: this.imageRef.current.currentSrc, imageUrl: false, iconImage: false})}
                 />
             </div>
         );

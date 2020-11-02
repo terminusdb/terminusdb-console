@@ -649,10 +649,11 @@ span.delete-modal-label {
 
   .advanced-settings-create-form {
       margin-top: -20px;
-      width: 100%;
+      /*width: 100%;*/
       display: block;
       height: 70px;
       margin-bottom: 10px;
+      margin: 0px 10px 0px 10px;
   }
 
   p.create-form-helptext::before {
@@ -2584,6 +2585,7 @@ span.delete-modal-label {
       margin-top: -8px;
       text-align: right;
       padding-right: 10px;
+      min-width: 100px;
   }
 
   .ros-close-icon:hover {
@@ -3085,6 +3087,10 @@ span.delete-modal-label {
       font-size: 17px;
       border:1px solid #f2f3fa;
       background-color: #fafbfe !important;
+  }
+
+  .pexel-img-container {
+      text-align: center;
   }
 
   textarea.database-description-input:hover,
@@ -4017,6 +4023,18 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  .csv_title {
+      margin-top: 10px;
+  }
+
+  .csv_icon_spacing {
+      margin: 0px 0px 0px 15px;
+  }
+
+  .csv-rows {
+      margin: 20px 0px 20px 0px;
+  }
+
   .invitation_info_icon_spacing {
       margin: 0px;
       color: #0055bb;
@@ -4114,7 +4132,7 @@ span.delete-modal-label {
       font-weight: 500;
   }
 
-  .hub-organization-link {
+  .hub-organization-link, .csv-act {
       border: 1px solid white;
       border-radius: 4px;
   }
@@ -4123,7 +4141,7 @@ span.delete-modal-label {
     font-weight: 500;
 }
 
-  .hub-organization-link:hover {
+  .hub-organization-link:hover, .csv-act:hover {
       cursor: pointer;
       color: #033684;
       border-radius: 12px;
@@ -4616,8 +4634,32 @@ span.delete-modal-label {
       border: 1px solid #ddd;
       min-height: 200px;
       width: 300px;
-      height: 360px;
+      height: 380px;
       border-radius: 8px;
+  }
+
+  div.pexels-container {
+      margin-top: 50px;
+      width: 100%;
+  }
+
+  span.pexel-search-field {
+      width: 100%;
+  }
+
+  div.pexels-controls {
+      margin: 10px 0px 10px 0px;
+  }
+
+  span.pexels-controls {
+      font-size: 20px;
+      color: rgb(0, 92, 191);
+      margin: 10px;
+  }
+
+  span.pexels-controls:hover {
+      color: #00C08B;
+      cursor: pointer;
   }
 
   .add-image-control {
@@ -4675,9 +4717,19 @@ span.delete-modal-label {
       margin: 10px;
   }
 
-  .image-picker-link:hover {
+  div.upload-image-clear {
+      float: right;
+      width: 100%;
+      margin: 5px 20px 5px 10px;
+      text-align: right;
+      font-size: 12px;
+      text-decoration: underline;
+  }
+
+  .image-picker-link:hover, div.upload-image-clear:hover {
       color: #005cbf;
       text-decoration: underline;
+      cursor: pointer;
   }
 
   .db-create-image-url {
@@ -4771,17 +4823,6 @@ span.delete-modal-label {
     cursor: pointer;
 }
 
-.create-place-badge-hub-img {
-    margin-top: -4px;
-    margin-left: 8px;
-    height: 40px;
-    width: 40px;
-}
-
-.create-place-badge {
-
-}
-
 .local-badge {
     color: #888;
     border: 1px solid #ddd;
@@ -4828,12 +4869,18 @@ span.delete-modal-label {
     margin-left: 15px;
 }
 
+
+.create-db-options:hover {
+    cursor: pointer;
+}
+
 .create-db-span:hover {
     border-bottom: 5px solid #00C08B !important;
+    cursor: pointer;
 }
 
 .create-db-span {
-    border-bottom: 5px solid white; 
+    border-bottom: 5px solid white;
     display:inline-block;
     padding: 30px 30px 4px 30px;
 }
@@ -5026,5 +5073,252 @@ button.tdb__button__cancel:hover {
 }
 
 .feedback-alert {
+    width: 100%;
+}
+
+.create-db-items {
+    /*box-shadow: 0 10px 20px 6px rgba(0,0,0,0.10);*/
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    min-height: 700px;
+}
+.create-db-tabs {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.create-db-tabs-panel {
+    background-color: #fff;
+    margin: 0 30px;
+}
+
+.create-db-tabs-title {
+    transition: ease-in-out all .3s;
+    width: calc(98%/3);
+    border-radius: 5px;
+    font-size: 18px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #787878;
+}
+
+.create-db-tabs-title:hover {
+	color: #00C08B;
+	background-color: #ededed;
+	border-radius: 5px
+}
+
+.create-db-tabs-selected {
+    color: #00C08B;
+    background-color: #fff !important;
+    border-radius: 5px;
+}
+
+.create-place-badge-hub-img {
+    margin-top: -4px;
+    margin-left: 8px;
+    height: 40px;
+    width: 40px;
+}
+
+.create-db-local-img {
+    transition: ease-in-out all .3s;
+    margin-right: 10px;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/create-locally-shaded-out-color.png");
+}
+
+.create-db-tabs-selected .create-db-tabs-icon .create-db-local-img,
+.create-db-tabs-title:hover .create-db-tabs-icon .create-db-local-img {
+    transition: ease-in-out all .3s;
+    margin-right: 10px;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/create-locally-terminus-color.png");
+}
+
+.create-db-local-hub {
+    transition: ease-in-out all .3s;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/Cow-duck-avatar-shaded-out-color.png");
+}
+
+.create-db-tabs-selected .create-db-tabs-icon .create-db-local-hub,
+.create-db-tabs-title:hover .create-db-tabs-icon .create-db-local-hub {
+    transition: ease-in-out all .3s;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/Cow-duck-avatar-terminus-color.png");
+}
+
+.inputfile, .csv-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.csv-preview-header {
+    margin-top: 50px;
+}
+
+span.add-csv {
+    float: right;
+}
+
+.csv-preview-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.inputfile, .csv-input {
+    cursor: pointer;
+}
+
+.inputfile + label, .csv-label {
+    /*max-width: 80%;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: .375rem .75rem;
+}
+
+.inputfile-6 + label strong, .csv-label {
+    /*height: 100%;
+    color: #e2e8f0;
+    background-color: #00C08B;
+    display: inline-block;*/
+    border-radius: 4px;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+}
+
+.add-files + label {
+    border: 1px solid #00C08B;
+    color: #00C08B;
+}
+
+.add-files + label:hover {
+    border: 1px solid #00C08B;
+    color: white;
+    background-color: #00C08B;
+}
+
+.inputfile-6 + label span, .inputfile-6 + label strong {
+    padding: 0.625rem 1.25rem;
+}
+
+.inputfile-6 + label span {
+    width: 200px;
+    min-height: 2em;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.inputfile-6 + label {
+    border-radius: 0;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+    margin-top: 1.5rem;
+}
+
+.inputfile-6 + label:hover {
+    background-color: #00C08B;
+    color: #fff;
+    opacity: 0.8;
+    border: 1px solid #fff;
+}
+
+div.load-data-section {
+    margin: 0 30px;
+    margin-bottom: 30px;
+}
+
+span.upload-data-align{
+    display: flex;
+    white-space: nowrap;
+    width: 100%;
+}
+
+button.upload-file {
+    margin-left: 30px;
+    height: 42px;
+}
+
+div.file-info-containers {
+    display: block;
+    background-color: #fff;
+    border: 0.5px solid #ddd;
+    border-radius: 4px;
+}
+
+span.remote-info-label {
+    font-size: 15px;
+    color: #787878;
+    font-weight: 600;
+}
+
+div.extacted-file {
+    margin-top: 30px;
+}
+
+div.header-row {
+    width: 100%;
+    margin: 20px 0px 20px 0px;
+}
+
+span.extracted-file-info {
+    display: inline-block;
+    text-align: center;
+    padding: 8px 16px 8px 8px;
+}
+
+.header-edit-icon {
+    color: #0055bb;
+}
+
+.header-edit-icon:hover {
+    color: #00C08B;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.delete-file {
+    color: #dc3545;
+    width: 100%;
+    text-align:right;
+}
+
+span.delete-file:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.header-controls {
+    width: 100%;
+    text-align:right;
+    margin-right: 30px;
+}
+input.file-header-values {
+    border: 1px solid #f2f3fa;
+    background-color: #fafbfe !important;
+    padding: 0;
+    border-radius: 4px;
+}
+
+span.header-control-panel {
+    text-align: right;
     width: 100%;
 }

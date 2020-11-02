@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 import {TCForm} from '../../components/Form/FormComponents'
-import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
+import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CREATE_FORM,
+    ADD_MORE_CSV, } from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
-
-
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import {CsvLoader} from "../../components/Form/CsvLoader"
+import {Row, Col} from "reactstrap"
 
 /**
  * Form for viewing and editing database meta data
@@ -46,6 +48,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     const [advanced, setAdvanced] = useState(advancedInfo)
     const [advancedSettings, setAdvancedSettings] = useState(false)
 
+    const [csvs, setCsvs]=useState([])
+
     function toggleAdvanced() {
         setAdvancedSettings(!advancedSettings)
     }
@@ -62,7 +66,11 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         let dbdoc = {
             id: extract.dbid,
             label: extract.dbname,
-            comment: extract.description,
+            comment: extract.description
+        }
+        if (Array.isArray(csvs) && csvs.length){
+            dbdoc.files = []
+            dbdoc.files = csvs
         }
         if(advanced.schema){
             dbdoc.schema = true
@@ -87,6 +95,14 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         onSubmit(dbdoc)
     }
 
+    const insertCsvs = (e) => {
+	   for(var i=0; i<e.target.files.length; i++){
+		   let files = {};
+           files = e.target.files[i]
+		   setCsvs( arr => [...arr, files]);
+	   }
+    }
+
     return (
         <>
             <TCForm
@@ -97,24 +113,43 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 buttons={buttons}
             />
 
-            <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
-                {(!advancedSettings && !from_local) && (
-                    <button
-                        className={DB_ADVANCED_FORM.advancedButtonClassName}
-                        onClick={toggleAdvanced}
-                    >
-                        {DB_ADVANCED_FORM.showAdvanced}
-                    </button>
-                )}
-                {advancedSettings && (
-                    <button
-                        className={DB_ADVANCED_FORM.advancedButtonClassName}
-                        onClick={toggleAdvanced}
-                    >
-                        {DB_ADVANCED_FORM.hideAdvanced}
-                    </button>
-                )}
-            </span>
+            {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="create"/>}
+
+            <Row>
+
+                <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
+
+                    {(!advancedSettings && !from_local) && (
+                        <button
+                            className={DB_ADVANCED_FORM.advancedButtonClassName}
+                            onClick={toggleAdvanced}
+                        >
+                            {DB_ADVANCED_FORM.showAdvanced}
+                        </button>
+                    )}
+                    {advancedSettings && (
+                        <button
+                            className={DB_ADVANCED_FORM.advancedButtonClassName}
+                            onClick={toggleAdvanced}
+                        >
+                            {DB_ADVANCED_FORM.hideAdvanced}
+                        </button>
+                    )}
+                </span>
+
+                <span className={DB_CREATE_FORM.csvWrapperClassName}>
+                    <input type="file"
+                        name="addCss"
+                        id="addCss"
+                        class="inputfile inputfile-6" multiple
+                        onChange={insertCsvs}
+                        accept=".csv"/>
+
+                    {(!csvs.length) && <label for="addCss">{CREATE_WITH_CSV}</label>}
+                    {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                </span>
+
+            </Row>
             {advancedSettings && (
                 <TCForm
                     fields={DB_ADVANCED_FORM.fields}

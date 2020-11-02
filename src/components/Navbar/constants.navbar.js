@@ -6,6 +6,7 @@ export const NEW_TEAM_PAGE_LABEL = 'New Team'
 export const DOWNLOAD_PAGE_LABEL = 'DOWNLOAD TerminusDB'
 export const DB_HOME_PAGE_LABEL = "DB Home"
 export const SCHEMA_PAGE_LABEL = 'Schema'
+export const MODEL_PAGE_LABEL = 'Schema Builder'
 export const DOCUMENT_PAGE_LABEL = 'Documents'
 export const QUERY_PAGE_LABEL = 'Query'
 export const LOGOUT_LABEL = 'Logout'
@@ -21,6 +22,7 @@ export const SYNCHRONIZE_TITLE = 'Synchronize'
 
 
 export const PAGES_ID={
+    NAV_MODEL_BUILDER:'nav_model_builder',
     NAV_DB_HOME:'nav_db_home',
     NAV_DOCUMENTS:'nav_documents',
     NAV_QUERY:'nav_query',

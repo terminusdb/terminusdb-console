@@ -1,3 +1,20 @@
+# TerminusDB Console v4.0.0 Release Notes
+
+## New
+
+* The ability to upload CSVs
+* add new terminusdb-client 4.0.0 with update_triple and update_quad
+
+# TerminusDB Console v3.0.4 Release Notes
+
+Bug fix release mostly!
+
+* Add ability to force delete
+* Add feedback form
+* Updated dependencies
+* Lots of small fixes!
+
+
 # TerminusDB Console v3.0.0 Release Notes
 
 The Emancipation Release
@@ -9,7 +26,6 @@ The Emancipation Release
 * Time travel & Commit navigator tools
 * Synchronization management tool
 * Branch & Merge management tool
->>>>>>> dev
 
 # TerminusDB Console v2.0.7 Release Notes
 
