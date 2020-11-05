@@ -34,7 +34,7 @@ const ClonePage = ({organization, db}) => {
     let u = woqlClient.user()
     const [hubdbs, setHubDBs] = useState(_get_my_dbs(woqlClient, u))
     const [collabs, setCollabs] = useState(_get_my_cdbs(woqlClient, u))
-    
+
     useEffect(() => {
         if(contextEnriched){
             let u = woqlClient.user()
@@ -43,7 +43,7 @@ const ClonePage = ({organization, db}) => {
         }
     }, [contextEnriched])
 
-  
+
     return (
         <SimplePageView id="clonePage">
             <CloneController organization={organization} db={db} list={hubdbs} collaborations={collabs}/>
@@ -315,7 +315,7 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
 export const CloneHubHeader = ({organization, showingMine, list, onChange, onError}) => {
     let realorg =  (organization && ["recommendations", "invitations", "collaborators"].indexOf(organization) == -1 ) ? true : false
 
-    return ( 
+    return (
         <Row className="remote-info clone-widget-title">
             <div className="remote-info-align database-create-header">
                 <HubPicture />
@@ -337,7 +337,7 @@ export const OrganizationalHeader = ({organization}) => {
     for(var i = 0; i<orgs.length; i++){
         if(orgs[i].organization == organization){
             o = orgs[i]
-            break 
+            break
         }
     }
     if(!o){
@@ -352,14 +352,14 @@ export const OrganizationalHeader = ({organization}) => {
     else {
         console.log(o)
     }
-    
+
     return <div className='organization-hub-header'>
         <span className='organization-hub-image'>
             <HubOrgImage icon={o.organization_icon} />
         </span>
         <span className='organization-hub-credits'>
             <Row className='organization-hub-name'>
-               <OrgBadge type={o.organization_type} />  {o.organization_label}                 
+               <OrgBadge type={o.organization_type} />  {o.organization_label}
             </Row>
             <Row className='organization-hub-description'>
                 {o.organization_comment}
@@ -430,7 +430,7 @@ export const HubToolbar = ({onChange, showingMine, onError, organization, url}) 
         onChange("collaborators")
     }
 
-    
+
     function goCollaborations(){
         onChange("collaborations")
     }
@@ -640,8 +640,8 @@ export const CloneListControl = ({list, onAction, organization, sort, filter, sh
         setSort(nsort.value)
     }
 
-    
- 
+
+
     function showCreate(){
         setShowingCreate(true)
     }
@@ -655,19 +655,19 @@ export const CloneListControl = ({list, onAction, organization, sort, filter, sh
     if(showingCreate) return (<CreateRemoteForm onCancel={unshowCreate}/>)
     return (<>
         <div className="dbclone-filters">
-            {(sorted.length == 0 ) && 
+            {(sorted.length == 0 ) &&
                 <EmptyCloneList showingMine={showingMine} organization={organization}/>
             }
-            {sorted.length > 0 && 
+            {sorted.length > 0 &&
                 <CloneListStats showingMine={showingMine} organization={organization} list={sorted} />
             }
-            {show_create && 
+            {show_create &&
                 <CreateHubDB onCreate={showCreate} />
             }
-            { false && 
+            { false &&
                 <ListFilter filter={listFilter} onChange={callFilter} />
             }
-            {list.length > 1 && 
+            {list.length > 1 &&
                 <ListSorter sort={listSort} onChange={callSort} organization={organization} />
             }
         </div>
@@ -675,7 +675,7 @@ export const CloneListControl = ({list, onAction, organization, sort, filter, sh
             {report &&
                 <TerminusDBSpeaks report={report} />
             }
-        </Row>       
+        </Row>
         <CloneList list={sorted} onAction={onAction}/>
   </>)
 }
@@ -699,7 +699,7 @@ export const MyDBStats = ({list}) => {
 
     return <span className="stats-list-intro">Your Account Has:
         <span className="db-card-credit">
-            <AiOutlineCloud className="db_info_icon_spacing"/> 
+            <AiOutlineCloud className="db_info_icon_spacing"/>
             <span className="db_info">{stats.total} {dbname}</span>
         </span>
         <PPStats pub={stats.public} pri={stats.private} />
@@ -716,7 +716,7 @@ export const PPStats = ({pub, pri}) => {
             <AiFillLock title="Private Database" className="db_info_icon_spacing"/>
             <span className="db_info">{pri} Private</span>
         </span>
-    </span>    
+    </span>
 }
 
 export const CollaboratorStats = ({list}) => {
@@ -724,7 +724,7 @@ export const CollaboratorStats = ({list}) => {
     let dbname = stats.total == 1 ? "Database" : "Databases"
     return <span className="stats-list-intro">You are a collaborator on:
         <span className="db-card-credit">
-            <AiOutlineLogin className="db_info_icon_spacing"/> 
+            <AiOutlineLogin className="db_info_icon_spacing"/>
             <span className="db_info">{stats.total} {dbname}</span>
         </span>
         <PPStats pub={stats.public} pri={stats.private} />
@@ -749,7 +749,7 @@ export const OrgDBStats = ({list, organization}) => {
     let dbname = stats.total == 1 ? "Database" : "Databases"
     return <span className="stats-list-intro">Available from {nm} :
         <span className="db-card-credit">
-            <AiOutlineCloud className="db_info_icon_spacing"/> 
+            <AiOutlineCloud className="db_info_icon_spacing"/>
             <span className="db_info">{stats.total} {dbname}</span>
         </span>
         <PPStats pub={stats.public} pri={stats.private} />
@@ -782,7 +782,7 @@ export const CloneListStats = ({showingMine, organization, list}) => {
 export const CreateHubDB = ({onCreate}) => {
     let txt = "New TerminusHub Database"
     let title = "Create a new database on TerminusHub"
-    return ( 
+    return (
         <button title={title} type="submit" className="dblist-create" onClick={onCreate}>
             {txt} <AiOutlinePlus className="create-btn-icon" />
         </button>
@@ -820,9 +820,9 @@ export const EmptyMyDBs = () => {
         <span className="empty-clonelist-help">
             <AiOutlineQuestionCircle className="clonelist-help-icon" />  To save databases to your TerminusHub account, either:
                 <CreateDBOption />
-                <SaveDBOption /> 
+                <SaveDBOption />
                 <ForkDBOption />
-        </span> 
+        </span>
     </span>
 }
 
@@ -832,9 +832,9 @@ export const EmptyInvitations = () => {
             <AiOutlineMail className="empty-clonelist-icon"/> There are no pending invitations
         </span>
         <span className="empty-clonelist-help">
-            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />
             Other TerminusHub users can invite you to view or collaborate their published databases. When you recieve an invitation, you can view it here
-        </span> 
+        </span>
     </span>
 }
 
@@ -844,9 +844,9 @@ export const EmptyCollaborations = () => {
             <AiOutlineLogin className="empty-clonelist-icon"/> You are not a collaborator on any TerminusHub Databases
         </span>
         <span className="empty-clonelist-help">
-            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
-            Other TerminusHub users can make you a collaborator on their databases. When you are given collaborator rights to other people's databases, you can access them here 
-        </span> 
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />
+            Other TerminusHub users can make you a collaborator on their databases. When you are given collaborator rights to other people's databases, you can access them here
+        </span>
     </span>
 }
 
@@ -856,10 +856,10 @@ export const EmptyRecommendations = () => {
             <AiFillWarning className="empty-clonelist-icon"/> There are currently no recommendations available
         </span>
         <span className="empty-clonelist-help">
-            <AiOutlineQuestionCircle className="clonelist-help-icon" />  
-            This normally means that there is some communication problem between your local server and TerminusHub. Try pressing Ctrl-R or refreshing your browser 
+            <AiOutlineQuestionCircle className="clonelist-help-icon" />
+            This normally means that there is some communication problem between your local server and TerminusHub. Try pressing Ctrl-R or refreshing your browser
             to reconnect to TerminusHub
-        </span> 
+        </span>
     </span>
 }
 
@@ -1156,7 +1156,7 @@ export const HubDBCard = ({meta, onAction, report}) => {
         {report &&
             <Row className="generic-message-holder">
                     <TerminusDBSpeaks report={report} />
-            </Row>       
+            </Row>
         }
         <Row key="r88" className='hubdb-main-screen' />
         {(mode == "clone") &&

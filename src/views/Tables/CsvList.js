@@ -85,7 +85,7 @@ export const CsvList = () => {
 		let fileName=e.target.id, update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-		return await woqlClient.getCSV(fileName, null).then((results) =>{
+		return await woqlClient.getCSV(fileName).then((results) =>{
 			const res = readString(results, {quotes: false,
 							  quoteChar: '"',
 							  escapeChar: '"',

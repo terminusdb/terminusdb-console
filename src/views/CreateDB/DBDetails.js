@@ -4,8 +4,9 @@ import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CREATE_FORM,
     ADD_MORE_CSV, } from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import {CsvLoader} from "../../components/Form/CsvLoader"
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {Row, Col} from "reactstrap"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 
 /**
  * Form for viewing and editing database meta data
@@ -105,20 +106,21 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
 
     return (
         <>
-            <TCForm
-                onSubmit={onExtract}
+            <TCForm onSubmit={onExtract}
                 layout={layout}
                 fields={detfields}
                 values={values}
                 buttons={buttons}
             />
-
-            {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="create"/>}
-
+            {(csvs.length>0) && <CSVLoader
+                csvs={csvs}
+                title={DB_CREATE_FORM.title}
+                addButton={DB_CREATE_FORM.addButton}
+                setCsvs={setCsvs}
+                insertCsvs={insertCsvs}
+                page="create"/>}
             <Row>
-
                 <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
-
                     {(!advancedSettings && !from_local) && (
                         <button
                             className={DB_ADVANCED_FORM.advancedButtonClassName}
@@ -136,8 +138,13 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                         </button>
                     )}
                 </span>
-
-                <span className={DB_CREATE_FORM.csvWrapperClassName}>
+                {(csvs.length==0) && <CSVInput css={DB_CREATE_FORM.csvWrapperClassName}
+                    text={DB_CREATE_FORM.createButton}
+                    onChange={insertCsvs}
+                    inputCss={'create-db-file'}
+                    multiple={true}/>
+                }
+                {/*<span className={DB_CREATE_FORM.csvWrapperClassName}>
                     <input type="file"
                         name="addCss"
                         id="addCss"
@@ -147,8 +154,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
 
                     {(!csvs.length) && <label for="addCss">{CREATE_WITH_CSV}</label>}
                     {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
-                </span>
-
+                </span>*/}
             </Row>
             {advancedSettings && (
                 <TCForm

@@ -10,7 +10,8 @@ import {DocumentList} from '../Tables/DocumentList'
 import {CsvList} from '../Tables/CsvList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_PAGE} from '../../constants/identifiers'
-import {CsvLoader} from "../../components/Form/CsvLoader"
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {
     TERMINUS_SUCCESS,
     TERMINUS_ERROR,
@@ -113,8 +114,8 @@ const DocumentPage = (props) => {
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
-                {!isSchema && <>
-                    <div>
+                <>
+                    {/*<div>
                         <span className="add-csv">
                             <input type="file"
                                 name="addCss"
@@ -126,11 +127,18 @@ const DocumentPage = (props) => {
                             {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
                             {(refreshCsvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
                         </span>
-                    </div>
-                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> }
-                    <CsvList/>
+                    </div>*/}
+
+                    {(csvs.length==0) && <span>
+                        <CSVInput css={'add-csv'} text={ADD_CSV} onChange={insertCsvs} inputCss="add-files" multiple={true}/>
+                        </span>
+                    }
+                    {(csvs.length>0) && <CSVLoader csvs={csvs} title={ADD_MORE_CSV} addButton={ADD_MORE_CSV} setCsvs={setCsvs}
+                        insertCsvs={'add-files'} page="create"/>}
+
+                    {(csvs.length > 0) && <CSVLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/>}
+                    {!isSchema && <CsvList/>}
                 </>
-            }
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
