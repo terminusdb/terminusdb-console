@@ -141,7 +141,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                     <input type="file"
                         name="addCss"
                         id="addCss"
-                        class="inputfile inputfile-6" multiple
+                        className="inputfile inputfile-6" multiple
                         onChange={insertCsvs}
                         accept=".csv"/>
 
