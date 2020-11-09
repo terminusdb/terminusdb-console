@@ -9,30 +9,30 @@ import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
 import {readString} from 'react-papaparse'
 import {DOCUMENT_VIEW} from "./constants.csv"
+import {readLines} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs}) => {
-	let fileReader, currentFile={}
+	let currentFile={}
 	const [commitMsg, setCommitMsg]=useState(false)
 	const [report, setReport]=useState(false)
 	const {woqlClient} = WOQLClientObj()
 
 	const viewPreview=(e)=>{
+		let maxlines=6, buff=[] // read 6 lines
 		const fileName = e.target.id
-		setLoading(true)
-	    handleFileRead(fileName)
+		currentFile.fileName=fileName
+		const file = csvs.filter(item => item.name == fileName)
+	    readLines(file[0], maxlines, function(line) {
+			buff+=line
+	    }, function onComplete() {
+			convertToJson(buff)
+	    });
 	}
 
-	const handleFileRead = (selectedFile) => {
-		const file = csvs.filter(item => item.name == selectedFile)
-		currentFile.fileName=selectedFile
-		fileReader = new FileReader();
-		fileReader.onloadend = convertToJson;
-		fileReader.readAsText(file[0]);
-	}
 
-	const convertToJson = (e) => {
-		const content = fileReader.result;
+
+	const convertToJson = (content) => {
 		const parsedContent = readString(content, {quotes: false,
 						  quoteChar: '"',
 						  escapeChar: '"',
@@ -45,12 +45,11 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		let limitedData = []
 		for(var item in parsedContent.data) {
 			limitedData.push(parsedContent.data[item])
-			if(item > 5) break;
 		}
-		currentFile.data=limitedData
 		setLoading(false)
 		setPreview({show: true, fileName: currentFile.fileName, data: limitedData});
 	};
+
 
 	const removeCsv=(e)=>{
 		const fileName = e.target.id
