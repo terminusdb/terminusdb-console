@@ -1,5 +1,7 @@
 export const PREVIEW='Preview Csv'
-export const REMOVE='Remove Csv'
+export const REMOVE='Remove'
+export const SHOW='Show Contents'
+export const DOWNLOAD='Download'
 export const UPLOAD='Upload Csv'
 
 export const CSV_ROWS="csv-rows"
