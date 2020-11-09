@@ -4039,6 +4039,7 @@ span.delete-modal-label {
       border-radius: 3px;
       padding: 40px;
       max-width: 1800px;
+      min-width: 1180px;
       overflow-x: scroll;
   }
 
