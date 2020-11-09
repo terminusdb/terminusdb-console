@@ -9,24 +9,25 @@ import {NoPageLayout} from '../../components/Router/PrivateRoute'
 
 export const ModelBuilder = (props) =>{   
     const { woqlClient, contextEnriched } = WOQLClientObj()
-    const {graphs, setHead, branch, report} = DBContextObj()
+    const {graphs, setHead, branch, report, ref} = DBContextObj()
 
     const {mainGraphDataProvider,
           saveGraphChanges,
           callServerError,
-          callServerLoading} = modelCallServerHook(woqlClient)
+          callServerLoading} = modelCallServerHook(woqlClient,branch,ref)
     
     const saveData=(query)=>{
       saveGraphChanges(query)
+    }
+
+    if(!graphs || graphs['schema/main']===undefined){
+      return  <NoPageLayout noLoginButton={true} text="There is no schema graph." />
     }
 
     return (
        <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">           
             <ConsoleNavbar onHeadChange={props.onHeadChange} />             
             <div>
-            {!graphs || graphs['schema/main']===undefined && 
-                <NoPageLayout noLoginButton={true} text="There is no schema graph." />
-            }
             {graphs && graphs['schema/main']!==undefined && 
             <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
               <SchemaBuilder saveGraph={saveData}/>
