@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {TCForm} from '../../components/Form/FormComponents'
-import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CREATE_FORM,
+import {TCForm, JSONTCButtons} from '../../components/Form/FormComponents'
+import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CSV_CREATE_FORM, CREATE_DB_FORM,
     ADD_MORE_CSV, } from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -112,13 +112,8 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 values={values}
                 buttons={buttons}
             />
-            {(csvs.length>0) && <CSVLoader
-                csvs={csvs}
-                title={DB_CREATE_FORM.title}
-                addButton={DB_CREATE_FORM.addButton}
-                setCsvs={setCsvs}
-                insertCsvs={insertCsvs}
-                page="create"/>}
+            {(csvs.length>0) && <CSVLoader csvs={csvs} title={DB_CSV_CREATE_FORM.title} addButton={DB_CSV_CREATE_FORM.addButton}
+                setCsvs={setCsvs} insertCsvs={insertCsvs} page="create"/>}
             <Row>
                 <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
                     {(!advancedSettings && !from_local) && (
@@ -138,23 +133,10 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                         </button>
                     )}
                 </span>
-                {(csvs.length==0) && <CSVInput css={DB_CREATE_FORM.csvWrapperClassName}
-                    text={DB_CREATE_FORM.createButton}
-                    onChange={insertCsvs}
-                    inputCss={'create-db-file'}
-                    multiple={true}/>
+                {(csvs.length==0) && <CSVInput css={DB_CSV_CREATE_FORM.csvWrapperClassName} text={DB_CSV_CREATE_FORM.createButton} onChange={insertCsvs}
+                    inputCss={'create-db-file'} multiple={true}/>
                 }
-                {/*<span className={DB_CREATE_FORM.csvWrapperClassName}>
-                    <input type="file"
-                        name="addCss"
-                        id="addCss"
-                        class="inputfile inputfile-6" multiple
-                        onChange={insertCsvs}
-                        accept=".csv"/>
-
-                    {(!csvs.length) && <label for="addCss">{CREATE_WITH_CSV}</label>}
-                    {(csvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
-                </span>*/}
+                {/*<JSONTCButtons buttons={{className:"create-with-adv-btns-align", submitText:CREATE_DB_FORM.createButtonText}}/>*/}
             </Row>
             {advancedSettings && (
                 <TCForm

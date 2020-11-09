@@ -165,7 +165,7 @@ export const DB_LOAD_DATA_FORM = {
     importButton: "Load Data"
 }
 
-export const DB_CREATE_FORM = {
+export const DB_CSV_CREATE_FORM = {
     csvWrapperClassName: "advanced-settings-create-form",
     title: "Create Database From CSVs",
     createButton: "Create Database From CSVs",

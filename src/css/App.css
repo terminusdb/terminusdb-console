@@ -4038,6 +4038,8 @@ span.delete-modal-label {
       border: 1px solid #ddd;
       border-radius: 3px;
       padding: 40px;
+      max-width: 1800px;
+      overflow-x: scroll;
   }
 
   .csv-title-align{
@@ -4052,6 +4054,30 @@ span.delete-modal-label {
   .csv_title {
       font-size: 16px;
       color: #000 !important;
+  }
+
+  .create-with-adv-btns-align{
+      margin: 10px 0px 0px 0px;
+  }
+
+  .upload-row{
+      width: 100%;
+      margin: 50px 0px 10px 0px;
+  }
+
+  button.upload-csv-btn{
+      font-size: 12px;
+      font-weight: 600;
+  }
+
+  input.commit-log-input{
+      border-radius: 3px;
+  }
+
+  .csv_content_title{
+      font-size: 16px;
+      color: #000 !important;
+      margin-top: 10px
   }
 
   .csv_icon_spacing {
