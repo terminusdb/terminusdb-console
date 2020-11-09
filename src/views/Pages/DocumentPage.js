@@ -111,6 +111,8 @@ const DocumentPage = (props) => {
 	   }
     }
 
+    console.log('csvs', csvs)
+
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
@@ -120,7 +122,7 @@ const DocumentPage = (props) => {
                         </span>
                     }
                     {(csvs.length>0) && <CSVLoader csvs={csvs} title={ADD_MORE_CSV_TITLE} addButton={ADD_MORE_CSV} setCsvs={setCsvs}
-                        insertCsvs={'add-files'} page="document"/>}
+                        insertCsvs={insertCsvs} page="document"/>}
                     {!isSchema && <CSVList/>}
                 </>
             {happiness === true && (
