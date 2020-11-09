@@ -111,8 +111,6 @@ const DocumentPage = (props) => {
 	   }
     }
 
-    console.log('csvs', csvs)
-
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}

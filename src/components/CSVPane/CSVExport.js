@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from "react"
-import {CSVLink, CSVDownload} from "react-csv";
+import {WOQLClientObj} from '../../init/woql-client-instance'
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
+import {readString} from 'react-papaparse';
+import Loading from '../../components/Reports/Loading'
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 
-export const CSVExport=()=>{
-	const [active, setActive]=useState(false)
-
-	const getData=()=>{
-		setActive(true)
-	}
+export const CSVExport=({fileName, getCsv, loading})=>{
+	const {woqlClient}=WOQLClientObj()
 
 	return (<>
-		<button onClick={getData}>Download</button>
-		{active && <CSVLink data={data}>Download me</CSVLink>}
+		{loading &&  <Loading type={TERMINUS_COMPONENT} />}
+		<button onClick={(e)=>getCsv(e, true)} id={fileName}>Download</button>
 	</>)
 }

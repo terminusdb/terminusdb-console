@@ -41,11 +41,11 @@ export const CSVList=()=>{
         console.log(err)
     }
 
-	const getCsv=async(e) => {
+	const getCsv=async(e, download) => {
 		let name=e.target.id, update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-		return await woqlClient.getCSV(name).then((results) =>{
+		return await woqlClient.getCSV(name, download).then((results) =>{
 			const res = readString(results, {quotes: false,
 							  quoteChar: '"',
 							  escapeChar: '"',
@@ -56,7 +56,7 @@ export const CSVList=()=>{
 							  columns: null
 							})
 			const jsonRes = res.data
-			setPreview({show: true, fileName: name, data: jsonRes});
+			if(!download) setPreview({show: true, fileName: name, data: jsonRes});
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
 		.finally(() => setLoading(false))
@@ -65,7 +65,7 @@ export const CSVList=()=>{
 	const constructCsvBindings=(bindings)=>{
 		for(var item in bindings) {
 			bindings[item].Contents=<CSVContents getCsv={getCsv} fileName={bindings[item].name['@value']}/>
-			bindings[item].Download=<CSVExport getCsv={getCsv} fileName={bindings[item].name['@value']}/>
+			bindings[item].Download=<CSVExport fileName={bindings[item].name['@value']} getCsv={getCsv} loading={loading}/>
 		}
 		setCsvBindings(bindings)
 		setHappiness(true)
