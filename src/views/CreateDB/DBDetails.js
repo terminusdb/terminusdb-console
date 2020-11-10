@@ -133,6 +133,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                         </button>
                     )}
                 </span>
+
                 {(csvs.length==0) && <CSVInput css={DB_CSV_CREATE_FORM.csvWrapperClassName} text={DB_CSV_CREATE_FORM.createButton} onChange={insertCsvs}
                     inputCss={'create-db-file'} multiple={true}/>
                 }
