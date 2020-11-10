@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import * as action from "./constants.csv"
 import {Row, Col} from "reactstrap"
 import {WOQLClientObj} from '../../init/woql-client-instance'
@@ -15,6 +15,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs}) => {
 	let currentFile={}
 	const [commitMsg, setCommitMsg]=useState(false)
+	const [message, setMessage]=useState(false)
 	const [report, setReport]=useState(false)
 	const {woqlClient} = WOQLClientObj()
 
@@ -29,8 +30,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			convertToJson(buff)
 	    });
 	}
-
-
 
 	const convertToJson = (content) => {
 		const parsedContent = readString(content, {quotes: false,
@@ -68,20 +67,22 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         console.log(err)
     }
 
+	useEffect(() => {
+        if (report.status==TERMINUS_SUCCESS) {
+            setMessage(report)
+        }
+    }, [report])
+
 	const handleUpload = (e) => {
 		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-		let file = []
-		csvs.map( item => {
-			file.push(item)
-			return woqlClient.insertCSV(file , commitMsg, null, null).then((results) => {
-		            setReport({status: TERMINUS_SUCCESS, message: "Successfully uploaded files "})
-					setCsvs([]);
-			})
-			.catch((err) => process_error(err, update_start, "Failed to upload file"))
-	        .finally(() => setLoading(false))
+		return woqlClient.insertCSV(csvs , commitMsg, null, null).then((results) => {
+	            setReport({status: TERMINUS_SUCCESS, message: "Successfully uploaded files "})
+				setCsvs([]);
 		})
+		.catch((err) => process_error(err, update_start, "Failed to upload file"))
+        .finally(() => setLoading(false))
 	}
 
 	const List=()=>{
@@ -110,7 +111,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 
 	return(<>
 			<Row className="generic-message-holder">
-				{report && <TerminusDBSpeaks report={report} />}
+				{message && <TerminusDBSpeaks report={message} />}
 			</Row>
 			<List/>
 			{(page==DOCUMENT_VIEW) && <Row className="upload-row">
