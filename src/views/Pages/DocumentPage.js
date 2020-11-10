@@ -5,12 +5,13 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {PageView} from '../Templates/PageView'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS, ADD_CSV, ADD_MORE_CSV} from './constants.pages'
+import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS, ADD_CSV, ADD_MORE_CSV, ADD_MORE_CSV_TITLE} from './constants.pages'
 import {DocumentList} from '../Tables/DocumentList'
-import {CsvList} from '../Tables/CsvList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {TERMINUS_PAGE} from '../../constants/identifiers'
-import {CsvLoader} from "../../components/Form/CsvLoader"
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
+import {CSVList} from "../../components/CSVPane/CSVList"
 import {
     TERMINUS_SUCCESS,
     TERMINUS_ERROR,
@@ -113,24 +114,15 @@ const DocumentPage = (props) => {
     return (
         <PageView page="document" dbPage={true}>
             {!happiness && <Loading type={TERMINUS_PAGE}/>}
-                {!isSchema && <>
-                    <div>
-                        <span className="add-csv">
-                            <input type="file"
-                                name="addCss"
-                                id="addCss"
-                                class="inputfile add-files" multiple
-                                onChange={insertCsvs}
-                                accept=".csv"/>
-
-                            {(csvs.length == 0) && <label for="addCss">{ADD_CSV}</label>}
-                            {(refreshCsvs.length > 0) && <label for="addCss">{ADD_MORE_CSV}</label>}
+                <>
+                    {(csvs.length==0) && <span>
+                            <CSVInput css={'add-csv'} text={ADD_CSV} onChange={insertCsvs} inputCss="add-files" multiple={true}/>
                         </span>
-                    </div>
-                    {(csvs.length > 0) && <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> }
-                    <CsvList/>
+                    }
+                    {(csvs.length>0) && <CSVLoader csvs={csvs} title={ADD_MORE_CSV_TITLE} addButton={ADD_MORE_CSV} setCsvs={setCsvs}
+                        insertCsvs={insertCsvs} page="document"/>}
+                    {!isSchema && <CSVList/>}
                 </>
-            }
             {happiness === true && (
                 <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
             )}
