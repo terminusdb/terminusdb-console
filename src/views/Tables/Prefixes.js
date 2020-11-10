@@ -1,6 +1,8 @@
 import React from "react"
 import RenderTable from "../../components/Table/RenderTable"
 import { ResultViewer } from "../../components/QueryPane/ResultViewer"
+import { WOQLTable } from '@terminusdb/terminusdb-react-components';
+import TerminusClient from '@terminusdb/terminusdb-client';
 
 export const BuiltInPrefixes = ({prefixes}) => {
     const cols = [
@@ -17,12 +19,12 @@ export const BuiltInPrefixes = ({prefixes}) => {
     
 export const CustomPrefixes = ({prefixes, query, updateQuery}) => {
     if(!prefixes || !prefixes.length) return null
+    const tabConfig= TerminusClient.View.table();
+    tabConfig.column_order("Prefix", "IRI")
     return (
         <div style={{"marginBottom": "40px"}} >
-            <ResultViewer type ="table" query={query} updateQuery={updateQuery} bindings= {prefixes}/>
+            <WOQLTable bindings={prefixes} view={tabConfig.json()} query={query}/>
         </div>
     )
 } 
-
-    
     

@@ -24,6 +24,7 @@ export const CsvLoader = (props) => {
 	let fileReader, headerReader, focusFile={}, setRefreshCsvs;
 	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
 	const page=props.page || 'document'
+    const [fileName, setFileName] = useState()
 
 	const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
@@ -31,9 +32,10 @@ export const CsvLoader = (props) => {
 	const {woqlClient} = WOQLClientObj()
 
 	const viewPreview = (e) => {
-		const fileName = e.target.id
+        const fn = e.target.id
+        setFileName(fn)
 		setLoading(true)
-	    handleFileRead(fileName)
+	    handleFileRead(fn)
 	}
 
 	const removeCsv = (e) => {

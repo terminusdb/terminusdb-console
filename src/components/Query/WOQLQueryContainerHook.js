@@ -7,6 +7,7 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
     const [woql, setWoqlQuery] = useState(query)
     const [report, setReport] = useState()
     const [bindings, setBindings] = useState()
+    const [result, setResult] = useState()
     const [loading, setLoading] = useState()
 
     const [cmsg, setCMsg] = useState('Update Query from Console Query Page')
@@ -20,7 +21,8 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
     function processSuccessfulResult(response) {
         if (response && response.metadata) {
             setReport(response.metadata)
-            if (typeof response.bindings != 'undefined') setBindings(response.bindings)
+            //if (typeof response.bindings != 'undefined') setBindings(response.bindings)
+            setResult(response)
         }
     }
 
@@ -59,7 +61,7 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
         if (woql !== false && !woql.containsUpdate()) executeQuery(woql)
     }, [branch, ref])
 
-    return [updateQuery, report, bindings, woql, loading]
+    return [updateQuery, report, result, woql, loading]
 }
 
 export {WOQLQueryContainerHook}

@@ -24,9 +24,9 @@ import {GraphFilter} from './GraphFilter'
 
 export const Properties = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, ref} = DBContextObj()
+    const {branch, ref, prefixes} = DBContextObj()
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
+    const [updateQuery, report, qresult, woql, loading] = WOQLQueryContainerHook(
         woqlClient,
         getPropertiesQuery(props.graph),
         branch,
@@ -66,12 +66,12 @@ export const Properties = (props) => {
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            {(bindings && bindings.length > 0) && 
+            {(qresult && qresult.bindings && qresult.bindings.length > 0) && 
                <span className="graphs-listing">
-                    <PropertyList query={woql} properties={bindings} updateQuery={updateQuery} />
+                    <PropertyList prefixes={prefixes} query={woql} result={qresult} updateQuery={updateQuery} />
                 </span>  
             }
-            {(!(bindings && bindings.length > 0)) &&
+            {(qresult && qresult.bindings && qresult.bindings.length == 0) &&
                 <Row className="generic-message-holder">
                     <EmptyResult report={report} />
                 </Row>

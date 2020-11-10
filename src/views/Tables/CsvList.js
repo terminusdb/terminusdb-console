@@ -34,7 +34,7 @@ export const CsvList = () => {
 	const csvQuery = TerminusClient.WOQL.limit(50,
 		TerminusClient.WOQL.triple('v:Type', 'type', 'scm:CSV').triple('v:Type', 'label', 'v:name'))
 
-	const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
+	const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
         woqlClient,
         csvQuery,
         branch,
@@ -120,15 +120,15 @@ export const CsvList = () => {
 	}
 
 	useEffect(() => {
-		if (report) {
-			if (report.error || report == 'error') {
+        if(qresult){
+			if (report && report.error || report == 'error') {
 				console.log(report.error)
 			}
 			else {
-				constructCsvBindings(bindings)
+				constructCsvBindings(qresult.bindings)
 			}
 		}
-    }, [report, bindings])
+    }, [report, qresult])
 
 	const ShowContents = () => {
 		return (<>

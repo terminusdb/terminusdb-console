@@ -187,8 +187,6 @@ export const UpgradeToPro = ({}) => {
         <a target="_blank" href={PAYMENT_ROUTE} className="mt-1 tdb__button__base tdb__button__base--green">
         Upgrade To Pro
     </a></div>
-
-    
 }
 
 

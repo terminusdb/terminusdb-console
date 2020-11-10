@@ -8,7 +8,7 @@ import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 
 export const CommitLog = () => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, consoleTime} = DBContextObj()
+    const {branch, branches, ref, consoleTime, prefixes} = DBContextObj()
     const [latest, setLatest] = useState()
 
     function getLatestTitle(){
@@ -44,7 +44,7 @@ export const CommitLog = () => {
         }
         let woql = WOQL.select("v:Author", "v:Commit ID", "v:Message", "v:Time", q)
         woqlClient.query(woql).then((result) => {
-            if (result.bindings) setLatest(result.bindings)
+            if (result.bindings) setLatest(result)
         })
     }
 
@@ -55,5 +55,5 @@ export const CommitLog = () => {
     }, [branch, ref, branches])
 
     if(!latest) return null
-    return (<LatestUpdates latests={latest} title={getLatestTitle()}/>)
+    return (<LatestUpdates result={latest} title={getLatestTitle()} prefixes={prefixes}/>)
 }
