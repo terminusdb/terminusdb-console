@@ -19,6 +19,7 @@ import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import {DB_CSV_CREATE_FORM} from "./constants.createdb"
 
 export const CreateDatabase = () => {
 
@@ -81,38 +82,6 @@ export const CreateDatabase = () => {
     )
 }
 
-
-/*
-
-<div className="create-db-items">
-    <Tabs selectedTabClassName="create-db-tabs-selected">
-        <TabList className="create-db-tabs">
-          <Tab className="create-db-tabs-title">
-            <span className="create-db-tabs-icon">
-                <img className="create-place-badge-hub-img create-db-local-img" title="Terminus Local Database"/>
-                {CREATE_DATABASE_LOCALLY}
-            </span>
-          </Tab>
-          {allow_remote && <Tab className="create-db-tabs-title">
-            <span className="create-db-tabs-icon">
-                <img className="create-place-badge-hub-img create-db-local-hub" title="Terminus Hub Database"/>
-                {CREATE_DATABASE_HUB}
-            </span>
-          </Tab>}
-        </TabList>
-        <TabPanel className="create-db-tabs-panel">
-            <CreateLocalForm />
-        </TabPanel>
-        {allow_remote && <TabPanel className="create-db-tabs-panel">
-          <CreateRemoteForm />
-        </TabPanel>}
-    </Tabs>
-</div>
-
-
-*/
-
-
 export const CreateLocalForm = ({onCancel, from_local}) => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
@@ -127,10 +96,12 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         .then((local_id) => {
             after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
             if(doc.files) {
-                woqlClient.insertCSV(doc.files, 'create database with csvs', null, null).then((results) => {
-                    console.log('results', results)
+                setLoading(true)
+                woqlClient.insertCSV(doc.files, DB_CSV_CREATE_FORM.defaultCommitMsg, null, null).then((results) => {
+                    setReport({status: TERMINUS_SUCCESS, message: DB_CSV_CREATE_FORM.csvSuccess, time: Date.now() - update_start})
                 })
-                .catch((err) => console.log('sdsd', err))
+                .catch((err) => process_error(err, update_start, DB_CSV_CREATE_FORM.csvError))
+                .finally(() => setLoading(false))
             }
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
@@ -148,14 +119,6 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         refreshDBRecord(id, woqlClient.user_organization(), create_or_clone, remote_record)
         .then(() => goDBHome(id, woqlClient.user_organization(), report))
     }
-
-    /*
-    if(meta.files) {
-        client.addCSV(null, null, meta.files, 'testing').then((results) => {
-            console.log('results', results)
-        })
-    }
-    */
 
     function get_local_create_message(label, id){
         return `${CREATE_DB_FORM.createSuccessMessage} ${label}, (id: ${id}) `
@@ -183,22 +146,6 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
             <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={false} from_local={from_local} />
         </div>
     </>)
-    /*return  (<>
-        {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-        {onCancel &&
-            <div className="create-place-badge local-badge">
-                <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
-                Creating Local Database
-                <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/create-locally-1.png" title="Terminus Hub Database"/>
-            </div>
-        }
-            <Row className="generic-message-holder">
-                {report &&
-                    <TerminusDBSpeaks report={report} />
-                }
-            </Row>
-            <DBDetailsForm buttons={CREATE_DB_FORM.buttons} onSubmit={onCreate} logged_in={false} from_local={from_local} />
-    </>) */
 }
 
 

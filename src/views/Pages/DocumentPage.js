@@ -29,6 +29,7 @@ const DocumentPage = (props) => {
 
     const [happiness, setHappiness]=useState(false)
     const [csvs, setCsvs]=useState([])
+    const [availableCsvs, setAvailableCsvs]=useState([])
     const [refreshCsvs, setRefreshCsvs]=useState([])
 
     const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
@@ -104,11 +105,22 @@ const DocumentPage = (props) => {
     }, [report])
 
     const insertCsvs = (e) => {
-	   for(var i=0; i<e.target.files.length; i++){
-		   let files = {};
-           files = e.target.files[i]
-		   setCsvs( arr => [...arr, files]);
-	   }
+        for(var i=0; i<e.target.files.length; i++){
+            let files = {};
+            files = e.target.files[i]
+            const q=TerminusClient.WOQL.limit(50,
+                TerminusClient.WOQL.triple('v:Type', 'type', 'scm:CSV').triple('v:Type', 'label', 'v:name'))
+            woqlClient.query(q).then((results) => {
+                setAvailableCsvs([])
+                let res = new TerminusClient.WOQLResult(results, q)
+        		const cBindings=res.getBindings()
+        		for(var item in cBindings) {
+                    let names=cBindings[item].name['@value']
+                    setAvailableCsvs(arr => [...arr, names])
+        		}
+                setCsvs( arr => [...arr, files]);
+            })
+        }
     }
 
     return (
@@ -120,7 +132,7 @@ const DocumentPage = (props) => {
                         </span>
                     }
                     {(csvs.length>0) && <CSVLoader csvs={csvs} title={ADD_MORE_CSV_TITLE} addButton={ADD_MORE_CSV} setCsvs={setCsvs}
-                        insertCsvs={insertCsvs} page="document"/>}
+                        insertCsvs={insertCsvs} page="document" availableCsvs={availableCsvs}/>}
                     {!isSchema && <CSVList/>}
                 </>
             {happiness === true && (

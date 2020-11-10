@@ -1,3 +1,5 @@
+import {readString} from 'react-papaparse';
+
 export const isObject = (obj) => {
     for (var key in obj) {
         if (hasOwnProperty.call(obj, key)) return true
@@ -88,38 +90,51 @@ export const validURL = (url) => {
  }
 
 export const readLines = (file, maxlines, forEachLine, onComplete)=>{
-     let CHUNK_SIZE=50000, offset=0, linecount=0, results=''
-     let decoder=new TextDecoder();
-     let fileReader=new FileReader();
-     fileReader.onload=function() {
-         results+=decoder.decode(fileReader.result, {stream: true});
-         let lines=results.split('\n');
-         results=lines.pop();
-         linecount+=lines.length;
-         if(linecount > maxlines) {
-             lines.length -= linecount - maxlines;
-             linecount = maxlines;
-         }
-         for (var i=0;i<lines.length;++i)
-             forEachLine(lines[i] + '\n');
-         offset += CHUNK_SIZE;
-         seek();
-     };
-     fileReader.onerror = function() {
-         console.log(fileReader.error);
-     };
-     seek();
-     function seek() {
-         if (linecount===maxlines){
-             onComplete();
-             return;
-         }
-         if(offset !== 0 && offset >= file.size){
-             forEachLine(results);
-             onComplete();
-             return;
-         }
-         var slice = file.slice(offset, offset + CHUNK_SIZE);
-         fileReader.readAsArrayBuffer(slice);
-     }
- }
+    let CHUNK_SIZE=50000, offset=0, linecount=0, results=''
+    let decoder=new TextDecoder();
+    let fileReader=new FileReader();
+    fileReader.onload=function() {
+        results+=decoder.decode(fileReader.result, {stream: true});
+        let lines=results.split('\n');
+        results=lines.pop();
+        linecount+=lines.length;
+        if(linecount > maxlines) {
+         lines.length -= linecount - maxlines;
+         linecount = maxlines;
+        }
+        for (var i=0;i<lines.length;++i)
+         forEachLine(lines[i] + '\n');
+        offset += CHUNK_SIZE;
+        seek();
+    };
+    fileReader.onerror = function() {
+        console.log(fileReader.error);
+    };
+    seek();
+    function seek() {
+        if (linecount===maxlines){
+            onComplete();
+            return;
+        }
+        if(offset !== 0 && offset >= file.size){
+            forEachLine(results);
+            onComplete();
+            return;
+        }
+        var slice = file.slice(offset, offset + CHUNK_SIZE);
+        fileReader.readAsArrayBuffer(slice);
+    }
+}
+
+export const convertStringsToJson=(str)=>{
+    const res = readString(str, {quotes: false,
+        quoteChar: '"',
+        escapeChar: '"',
+        delimiter: ",",
+        header: true,
+        newline: "{",
+        skipEmptyLines: false,
+        columns: null
+        })
+    return res.data
+}

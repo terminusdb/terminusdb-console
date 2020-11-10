@@ -8,12 +8,9 @@ import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} 
 import {SelectedCSVList} from "./SelectedCSVList"
 import {CSVPreview} from "./CSVPreview"
 
-export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page}) => {
+export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, availableCsvs}) => {
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
-	let fileReader, headerReader, focusFile={}, setRefreshCsvs;
-	const [commitMsg, setCommitMsg] = useState("Adding csvs ...")
 
-	const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
 
 	return (
@@ -29,7 +26,8 @@ export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page}) =
                     {/*<Row className="generic-message-holder">
                         {report && <TerminusDBSpeaks report={report}/>}
                     </Row>*/}
-                    <SelectedCSVList setLoading={setLoading} csvs={csvs} page={page} preview={preview} setPreview={setPreview} setCsvs={setCsvs}/>
+                    <SelectedCSVList setLoading={setLoading} csvs={csvs} page={page} preview={preview}
+						setPreview={setPreview} setCsvs={setCsvs} availableCsvs={availableCsvs}/>
                     <CSVPreview preview={preview} setPreview={setPreview}/>
                 </Row>
             </div>

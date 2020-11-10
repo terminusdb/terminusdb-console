@@ -169,7 +169,10 @@ export const DB_CSV_CREATE_FORM = {
     csvWrapperClassName: "advanced-settings-create-form",
     title: "Create Database From CSVs",
     createButton: "Create Database From CSVs",
-    addButton: "Add More CSVs"
+    addButton: "Add More CSVs",
+    csvError: "Error in inserting Csv",
+    csvSuccess: "Successfully inserted Csv",
+    defaultCommitMsg: "create database with csvs"
 }
 
 export const DB_ADVANCED_FORM = {
