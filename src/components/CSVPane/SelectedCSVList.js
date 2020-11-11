@@ -3,7 +3,7 @@ import * as action from "./constants.csv"
 import {Row, Col} from "reactstrap"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
-import {AiOutlineFolderView, AiOutlineExclamationCircle} from "react-icons/ai"
+import {AiOutlineFolderView} from "react-icons/ai"
 import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
@@ -11,7 +11,7 @@ import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG} from "./constants.csv"
 import {readLines, isObject} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-
+import {ManageDuplicateCsv} from "./ManageDuplicateCsv"
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
 	let currentFile={}, availableCsvList=[]
@@ -59,7 +59,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         console.log(err)
     }
 
-	const handleUpload = (e) => {
+	const handleInsert=(e) => {
 		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
@@ -69,10 +69,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		})
 		.catch((err) => process_error(err, update_start, "Failed to upload file"))
         .finally(() => setLoading(false))
-	}
-
-	const duplicateActions=()=>{
-		return <div>this is duplicate</div>
 	}
 
 	const List=()=>{
@@ -96,12 +92,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						</Col>
 					</Row>
 					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
-						{acv==item.name && <Row>
-							<span id={item.name} className={action.DUPLICATE_SPAN_CSS}>
-								<AiOutlineExclamationCircle id={item.name} color="#856404" className={action.CONTROLS_ICONS}/>
-								<span className={action.CONTROLS_TEXT}>This CSV was already added</span>
-							</span>
-						</Row>}
+						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
 					</>)}
 				</>))
 	}
@@ -119,7 +110,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						onChange={(e) => setCommitMsg(e.target.value)}/>
 				</Col>
 				<Col md={2}>
-					<button onClick={handleUpload} class="tdb__button__base tdb__button__base--bgreen upload-csv-btn">
+					<button onClick={handleInsert} class={action.CSV_MAIN_ACTION_CSS}>
 						{action.UPLOAD}
 					</button>
 				</Col>
