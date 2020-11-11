@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react"
+import {WOQLTable} from '@terminusdb/terminusdb-react-components';
 import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
@@ -23,7 +24,7 @@ export const CSVList=()=>{
     const {ref, branch} = DBContextObj()
 
 	const csvQuery = TerminusClient.WOQL.limit(50,
-		TerminusClient.WOQL.triple('v:Type', 'type', 'scm:CSV').triple('v:Type', 'label', 'v:name'))
+		TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:Name'))
 	const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
         woqlClient,
         csvQuery,
@@ -66,7 +67,7 @@ export const CSVList=()=>{
 
 	const constructCsvBindings=(bindings)=>{
 		for(var item in bindings) {
-			let fileName=bindings[item].name['@value']
+			let fileName=bindings[item].Name['@value']
 			bindings[item].Contents=<CSVControls action={action.SHOW} color={"#0055bb"} onClick={getCsv} fileName={fileName} loading={loading}/>
 			bindings[item].Download=<CSVControls action={action.DOWNLOAD} color={"#0055bb"} fileName={fileName} onClick={getCsv} loading={loading}/>
 			bindings[item].Delete=<CSVControls action={action.REMOVE} color={"#721c24"} fileName={fileName} onClick={handleDelete} loading={loading}/>
@@ -86,6 +87,13 @@ export const CSVList=()=>{
 		}
     }, [qresult])
 
+	const tabConfig= TerminusClient.View.table();
+    tabConfig.column_order("Document ID", "Name")
+    //tabConfig.column("Abstract").minWidth(50).width(80)
+    tabConfig.column("Document ID", "Name").width(200)
+    tabConfig.pager("remote")
+    tabConfig.pagesize(10)
+
 	return (<>
 			{loading &&  <Loading type={TERMINUS_COMPONENT} />}
 			<Row className="generic-message-holder">
@@ -93,7 +101,8 @@ export const CSVList=()=>{
 			</Row>
 			{happiness && csvBindings && <>
 				<div className="sub-headings">CSV Documents</div>
-				<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/></>}
+				{/*<ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/>*/}
+				{<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>}</>}
 			<br/>
 			<CSVPreview preview={preview} setPreview={setPreview}/>
 	</>)

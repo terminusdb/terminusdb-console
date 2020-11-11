@@ -6,17 +6,26 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import {ControlledTable} from '../Tables/ControlledTable'
 import {Row, Col} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {FileLoader} from "./FileLoader"
 import {CSVList} from '../../Components/CSVPane/CSVList'
 import {TypeStats} from "./TypeStats"
+import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
+import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
 export const DocumentListView = ({doctype, total, types, selectDocument, createDocument}) => {
     const [docType, setDocType] = useState(doctype)
     const [docCount, setDocCount] = useState()
     const [current, setCurrent] = useState(doctype)
     const [isAdding, setIsAdding] = useState(false)
+
+    const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
+    const [loading, setLoading]=useState(false)
+    const [report, setReport]=useState(false)
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
@@ -59,9 +68,34 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         if(createDocument) createDocument(docType)
     }
 
+    function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
+    }
+
+    function csvRowClick(name){
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        return woqlClient.getCSV(name, false).then((results) =>{
+            const jsonRes=convertStringsToJson(results)
+            setPreview({show: true, fileName: name, data: jsonRes});
+        })
+        .catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
+        .finally(() => setLoading(false))
+    }
+
     let onRowClick = function(row){
         if(selectDocument) {
-            selectDocument(row.original["Document ID"], row.original["Type ID"])
+            if(row.original["Type ID"]==DOCTYPE_CSV){
+                csvRowClick(row.original.Name["@value"])
+            }
+            else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
     }
 
@@ -78,10 +112,11 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
 
 
     return (<>
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             <FileLoader adding={adding} />
-            {isAdding &&
+            {/*isAdding &&
                 <CSVList/>
-            }
+            */}
             {!isAdding &&
             <Row>
                 <Col>
@@ -115,6 +150,11 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
                 limit={tabConfig.pagesize()}
             />
         }
+        {!isAdding && (docType==DOCTYPE_CSV) && <> <Row className="generic-message-holder">
+                {report && <TerminusDBSpeaks report={report}/>}
+            </Row>
+            <CSVPreview preview={preview} setPreview={setPreview}/>
+        </>}
     </>)
 }
 
