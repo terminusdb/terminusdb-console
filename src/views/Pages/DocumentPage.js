@@ -119,6 +119,7 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
         }
     }, [qresult2])
 
+
     function closeDV(){
         setIsCreating(false)
         setDocument()

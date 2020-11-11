@@ -7,17 +7,17 @@ import {AiOutlineFolderView} from "react-icons/ai"
 import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
-import {readString} from 'react-papaparse'
-import {DOCUMENT_VIEW} from "./constants.csv"
-import {readLines} from "../../utils/helperFunctions"
+import {convertStringsToJson} from '../../utils/helperFunctions';
+import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG} from "./constants.csv"
+import {readLines, isObject} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
+import {ManageDuplicateCsv} from "./ManageDuplicateCsv"
 
-export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs}) => {
-	let currentFile={}
-	const [commitMsg, setCommitMsg]=useState(false)
-	const [message, setMessage]=useState(false)
+export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
+	let currentFile={}, availableCsvList=[]
+	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
-	const {woqlClient} = WOQLClientObj()
+	const {woqlClient}=WOQLClientObj()
 
 	const viewPreview=(e)=>{
 		let maxlines=6, buff=[] // read 6 lines
@@ -32,18 +32,10 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	const convertToJson = (content) => {
-		const parsedContent = readString(content, {quotes: false,
-						  quoteChar: '"',
-						  escapeChar: '"',
-						  delimiter: ",",
-						  header: true,
-						  newline: "{",
-						  skipEmptyLines: false,
-						  columns: null
-						})
 		let limitedData = []
-		for(var item in parsedContent.data) {
-			limitedData.push(parsedContent.data[item])
+		const jsonRes=convertStringsToJson(content)
+		for(var item in jsonRes) {
+			limitedData.push(jsonRes[item])
 		}
 		setLoading(false)
 		setPreview({show: true, fileName: currentFile.fileName, data: limitedData});
@@ -67,19 +59,13 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         console.log(err)
     }
 
-	useEffect(() => {
-        if (report.status==TERMINUS_SUCCESS) {
-            setMessage(report)
-        }
-    }, [report])
-
-	const handleUpload = (e) => {
+	const handleInsert=(e) => {
 		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
 		return woqlClient.insertCSV(csvs , commitMsg, null, null).then((results) => {
-	            setReport({status: TERMINUS_SUCCESS, message: "Successfully uploaded files "})
-				setCsvs([]);
+            setReport({status: TERMINUS_SUCCESS, message: "Successfully uploaded files "})
+			setCsvs([]);
 		})
 		.catch((err) => process_error(err, update_start, "Failed to upload file"))
         .finally(() => setLoading(false))
@@ -104,14 +90,16 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>
 							</span>
 						</Col>
-
 					</Row>
+					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
+						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
+					</>)}
 				</>))
 	}
 
 	return(<>
 			<Row className="generic-message-holder">
-				{message && <TerminusDBSpeaks report={message} />}
+				{report && <TerminusDBSpeaks report={report}/>}
 			</Row>
 			<List/>
 			{(page==DOCUMENT_VIEW) && <Row className="upload-row">
@@ -122,7 +110,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						onChange={(e) => setCommitMsg(e.target.value)}/>
 				</Col>
 				<Col md={2}>
-					<button onClick={handleUpload} class="tdb__button__base tdb__button__base--bgreen upload-csv-btn">
+					<button onClick={handleInsert} class={action.CSV_MAIN_ACTION_CSS}>
 						{action.UPLOAD}
 					</button>
 				</Col>
