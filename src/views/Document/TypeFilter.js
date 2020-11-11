@@ -7,6 +7,13 @@ import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerH
 
 
 export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
+    const [docType, setDocType] = useState(doctype)
+    useEffect(() => {
+        if(doctype){
+            setDocType(doctype)
+        }
+    }, [doctype])
+
     function typeOptions(){
         let to = [{value: "", label: "Show All Document Types"}]
         for(var i = 0; i<types.length; i++){
@@ -22,18 +29,18 @@ export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
 
     function getTypeSelector(){
         let ph = "Show All " + types.length + " Document Types"
-        if(doctype && meta){
+        if(docType && meta){
             ph = "Show " + meta.label + " Documents"
         }
-        else if(doctype){
-            ph = "Show " + doctype + " Documents"
+        else if(docType){
+            ph = "Show " + docType + " Documents"
         }
         else if(types.length == 1){
             ph = "1 Document Type"
         }
         return <Select 
             placeholder={ph}
-            defaultValue = {doctype}
+            value = {docType}
             onChange = {changeFilter}
             options = {typeOptions()}
         />

@@ -21,7 +21,7 @@
   .detail-credits{
       display: flex;
       flex-grow: 1;
-      flex-wrap: wrap-reverse;
+      /*flex-wrap: wrap-reverse;*/
       padding: 0px 20px 0 20px;
       align-items: center;
       /* justify-content: center; */
@@ -645,6 +645,7 @@ span.delete-modal-label {
 
   .advanced-button {
       float: right !important;
+      border-radius: 3px !important;
   }
 
   .advanced-settings-create-form {
@@ -1967,6 +1968,7 @@ span.delete-modal-label {
       color: #fff;
       opacity: 0.8;
       border: 1px solid #fff;
+      border-radius: 3px !important;
   }
 
   div.advanced-section-create-form {
@@ -4023,8 +4025,60 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  .csv-control-spacing {
+      margin: 10px;
+  }
+
+  .csv-item-title{
+      font-size: 14px;
+  }
+
+  .csv-preview-results {
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 40px;
+      max-width: 1800px;
+      min-width: 1180px;
+      overflow-x: scroll;
+  }
+
+  .csv-title-align{
+    margin-top: 30px;
+  }
+
+  .csv-container {
+      margin: 0px 68px 0px 10px;
+      color: #000;
+  }
+
   .csv_title {
-      margin-top: 10px;
+      font-size: 16px;
+      color: #000 !important;
+  }
+
+  .create-with-adv-btns-align{
+      margin: 10px 0px 0px 0px;
+  }
+
+  .upload-row{
+      width: 100%;
+      margin: 50px 0px 10px 0px;
+  }
+
+  button.upload-csv-btn{
+      font-size: 12px;
+      font-weight: 600;
+  }
+
+  input.commit-log-input{
+      border-radius: 3px;
+  }
+
+  .csv_content_title{
+      font-size: 16px;
+      color: #000 !important;
+      margin-top: 10px
   }
 
   .csv_icon_spacing {
@@ -4032,7 +4086,8 @@ span.delete-modal-label {
   }
 
   .csv-rows {
-      margin: 20px 0px 20px 0px;
+      margin-left: -40px;
+      margin-bottom: 20px;
   }
 
   .invitation_info_icon_spacing {
@@ -5162,7 +5217,13 @@ button.tdb__button__cancel:hover {
 }
 
 .csv-preview-header {
-    margin-top: 50px;
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    background-color: #ddd;
+    padding: 10px 0px 10px 0px;
+    border-radius: 3px;
+    margin-top: 10px;
 }
 
 span.add-csv {
@@ -5186,23 +5247,25 @@ span.add-csv {
     display: inline-block;
     overflow: hidden;
     padding: .375rem .75rem;
+    font-size: 14px;
 }
 
-.inputfile-6 + label strong, .csv-label {
+.create-db-file + label strong, .csv-label {
     /*height: 100%;
     color: #e2e8f0;
     background-color: #00C08B;
     display: inline-block;*/
-    border-radius: 4px;
+    border-radius: 3px;
     color: #000;
     background-color: #f5f5f5;
-    font-size: 1.1rem;
+    font-size: 14px;
     border: 1px solid #e5e5e5;
 }
 
 .add-files + label {
     border: 1px solid #00C08B;
     color: #00C08B;
+    border-radius: 3px;
 }
 
 .add-files + label:hover {
@@ -5211,11 +5274,11 @@ span.add-csv {
     background-color: #00C08B;
 }
 
-.inputfile-6 + label span, .inputfile-6 + label strong {
+.create-db-file + label span, .create-db-file + label strong {
     padding: 0.625rem 1.25rem;
 }
 
-.inputfile-6 + label span {
+.create-db-file + label span {
     width: 200px;
     min-height: 2em;
     display: inline-block;
@@ -5225,20 +5288,22 @@ span.add-csv {
     vertical-align: top;
 }
 
-.inputfile-6 + label {
+.create-db-file + label {
     border-radius: 0;
     color: #000;
     background-color: #f5f5f5;
     font-size: 1.1rem;
     border: 1px solid #e5e5e5;
     margin-top: 1.5rem;
+    border-radius: 3px !important;
 }
 
-.inputfile-6 + label:hover {
+.create-db-file + label:hover {
     background-color: #00C08B;
     color: #fff;
     opacity: 0.8;
     border: 1px solid #fff;
+    border-radius: 3px !important;
 }
 
 div.load-data-section {

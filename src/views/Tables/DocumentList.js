@@ -16,13 +16,16 @@ export const DocumentList = ({result, query, limit, start, orderBy, prefixes, on
     tabConfig.pagesize(limit)
     tabConfig.pager("remote")
     tabConfig.row().click(onRowClick)
-    tabConfig.column().minWidth(150).width(0)
-    tabConfig.column("Type Name").header("Type").minWidth(100)
-    tabConfig.column("Description").width(300)
+    tabConfig.column("Document ID", "Name").minWidth(100)
+    //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
+    tabConfig.column("Type Name").header("Type").minWidth(80)
+    //tabConfig.column("Description").width(0)
     return (
         <WOQLTable 
             result={result} 
             view={tabConfig.json()} 
+            freewidth={true}
+            limit={limit}
             query={query}
             start={start}
             orderBy={orderBy}

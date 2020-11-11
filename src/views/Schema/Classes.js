@@ -11,7 +11,7 @@ import {
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {ClassList} from '../Tables/ClassList'
+import {ControlledTable} from '../Tables/ControlledTable'
 import {SCHEMA_CLASSES_ROUTE} from '../../constants/routes'
 import {Col, Row, Button} from "reactstrap"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
@@ -19,38 +19,35 @@ import {GraphFilter} from './GraphFilter'
 
 
 export const Classes = (props) => {
-    const {woqlClient} = WOQLClientObj()
-    const {ref, branch, graphs, prefixes} = DBContextObj()
-
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, qresult, woql, loading] = WOQLQueryContainerHook(
-        woqlClient,
-        getClassQuery(props.graph),
-        branch,
-        ref,
-    )
-
+    const [query, setQuery] = useState(getClassQuery(props.graph))
+    const [report, setReport] = useState()
+    const [empty, setEmpty] = useState(false)
     useEffect(() => {
         if (
             props.graph &&
             (!filter || filter.id != props.graph.id || filter.type != props.graph.type)
         ) {
-            if (filter) updateQuery(getClassQuery(props.graph))
+            if (filter) setQuery(getClassQuery(props.graph))
             setFilter(props.graph)
         }
     }, [props.graph])
 
     function getClassQuery(gfilter) {
         let gstr = gfilter.type + '/' + gfilter.id
-        return TerminusClient.WOQL.limit(
-            CLASSES_QUERY_LIMIT,
-            TerminusClient.WOQL.lib().classes(null, null, gstr),
-        )
+        return TerminusClient.WOQL.lib().classes(null, null, gstr)
     }
+
+    const tabConfig= TerminusClient.View.table();
+    tabConfig.column_order("Class ID", "Class Name", "Parents", "Children", "Abstract", "Description")
+    tabConfig.column("Abstract").minWidth(50).width(80)
+    tabConfig.column("Parents", "Children", "Description").width(200)
+    tabConfig.pager("remote")
+    tabConfig.pagesize(10)
+
 
     return (
         <div className={TAB_SCREEN_CSS}>
-            {loading && <Loading />}
             <Row className={TOOLBAR_CSS.container}>
                 <Col key='m1' md={9} className="schema-toolbar-title">
                     Classes define the permitted shapes of documents and data-objects stored in your database
@@ -64,12 +61,10 @@ export const Classes = (props) => {
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            {(qresult && qresult.bindings && qresult.bindings.length > 0) && 
-               <span className="graphs-listing">
-                    <ClassList query={woql} result={qresult} updateQuery={updateQuery} prefixes={prefixes}/>
-                </span>  
-            }
-            {(qresult && qresult.bindings && qresult.bindings.length == 0) &&
+            <span className="graphs-listing">
+                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/> 
+            </span>  
+            {empty &&
                 <Row className="generic-message-holder">
                     <EmptyResult report={report} />
                 </Row>

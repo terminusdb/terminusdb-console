@@ -6,6 +6,8 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 import {DBContextObj} from '../../components/Query/DBContext'
 import {NoPageLayout} from '../../components/Router/PrivateRoute'
+import Loading from '../../components/Reports/Loading'
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 
 export const ModelBuilder = (props) =>{   
     const { woqlClient, contextEnriched } = WOQLClientObj()
@@ -13,7 +15,7 @@ export const ModelBuilder = (props) =>{
 
     const {mainGraphDataProvider,
           saveGraphChanges,
-          callServerError,
+          reportMessage,
           callServerLoading} = modelCallServerHook(woqlClient,branch,ref)
     
     const saveData=(query)=>{
@@ -26,18 +28,22 @@ export const ModelBuilder = (props) =>{
 
     return (
        <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">           
-            <ConsoleNavbar onHeadChange={props.onHeadChange} />             
-            <div>
-            {graphs && graphs['schema/main']!==undefined && 
-            <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
-              <SchemaBuilder saveGraph={saveData}/>
-            </GraphObjectProvider>}
+            <ConsoleNavbar onHeadChange={props.onHeadChange} />
+            {reportMessage && 
+              <div className="tdb__model__message">
+                <TerminusDBSpeaks  report={reportMessage} />
+              </div>}                      
+            <div >
+              {graphs && graphs['schema/main']!==undefined && 
+                <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
+                  <SchemaBuilder saveGraph={saveData}/>
+                </GraphObjectProvider>
+              }
+              {callServerLoading && <Loading/>}
             </div>
         </div>           
       )
 }
 
-/*
- {callServerLoading && <div className="tdb__loading">loading !!!!</div>}
-            {callServerError && <div > ERROR {callServerError}</div>}*/
+
                    

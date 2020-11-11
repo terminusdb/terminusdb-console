@@ -182,17 +182,14 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
     function getEditModeBar() {
         return (
             <Row className={TOOLBAR_CSS.updateContainer}>
-                <Col md={1} className={TOOLBAR_CSS.commitLabelCol}>
-                    {SUBMIT_INPUT_LABEL}
-                </Col>
-                <Col md={8} className={TOOLBAR_CSS.commitMsgCol}>
+                <Col md={7} className={TOOLBAR_CSS.commitMsgCol}>
                     <input
                         className={TOOLBAR_CSS.commitInput}
                         onChange={updateCommit}
                         placeholder={COMMIT_PLACEHOLDER}
                     />
                 </Col>
-                <Col md={3} className={TOOLBAR_CSS.submitButtonsCol}>
+                <Col md={5} className={TOOLBAR_CSS.submitButtonsCol}>
                     {but}
                 </Col>
             </Row>

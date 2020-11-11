@@ -1,6 +1,6 @@
-import {CsvLoader} from "../../components/Form/CsvLoader"
-import {ADD_CSV, ADD_MORE_CSV} from './constants.document'
 import React, {useState, useEffect} from 'react'
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
+import {ADD_CSV, ADD_MORE_CSV} from './constants.document'
 
 export const FileLoader = ({adding}) => {
     const [csvs, setCsvs]=useState([])
@@ -34,7 +34,7 @@ export const FileLoader = ({adding}) => {
         </span>
         </div>
         {(csvs.length > 0) && 
-            <CsvLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> 
+            <CSVLoader csvs={csvs} setCsvs={setCsvs} page="document" setRefreshCsvs={setRefreshCsvs}/> 
         }
     </>
     )

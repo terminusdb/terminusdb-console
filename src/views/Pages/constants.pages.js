@@ -19,6 +19,7 @@ export const CLONEDB_TITLE = "Clone"
 
 export const ADD_CSV = "Add Csvs"
 export const ADD_MORE_CSV = "Add More Csvs"
+export const ADD_MORE_CSV_TITLE = "Add Csvs as Documents"
 
 
 //Terminus DB Home Page

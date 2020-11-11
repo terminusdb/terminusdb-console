@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Fragment} from 'react'
 import {Row, Col, Container} from 'reactstrap'
 import Loading from '../../components/Reports/Loading'
 import { WOQLClientObj } from '../../init/woql-client-instance'
@@ -38,7 +38,7 @@ export const Collaborators = ({list, dbs, onComplete}) => {
         return <AddCollaborator onComplete={onComplete} uname={woqlClient.user().logged_in} collaborators={list} dbs={dbs} onCancel={unShowCreate}/>
     }
 
-    return (<>
+    return (<Fragment>
             <div className="dbclone-filters">
                 <CollaboratorListStats uname={woqlClient.user().logged_in} collaborators={list} dbs={dbs} />
                 <CreateCollaboraor type="clone" onCreate={showCreate} />
@@ -47,7 +47,7 @@ export const Collaborators = ({list, dbs, onComplete}) => {
             <Row>
                 <MyCollaborators collaborators={list} user={woqlClient.user()} />
             </Row>
-    </>)
+    </Fragment>)
 }
 
 export const AddCollaborator = ({onCancel, onComplete, uname, collaborators, dbs}) => {
@@ -202,7 +202,7 @@ export const ConfirmAddition = ({type, role, user, db, org, onSubmit}) => {
     }
 
     let btxt = (type == "invite" ? "Send Invitation Email" : "Confirm New Collaborator")
-    return <>
+    return <Fragment>
         <Row className="role-grant-details">
             Granting {role} to {user} for database {org}/{db}
             {type == "invite" &&
@@ -224,7 +224,7 @@ export const ConfirmAddition = ({type, role, user, db, org, onSubmit}) => {
                 {btxt}
             </button>
         </div>
-    </>
+    </Fragment>
 }
 
 

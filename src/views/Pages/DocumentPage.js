@@ -7,9 +7,18 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {DocumentListView} from '../Document/DocumentList'
 import {DocumentView, NewDocumentView} from '../Document/DocumentView'
-import {CsvList} from '../Tables/CsvList'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {FileLoader} from "../Document/FileLoader"
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
+import {CSVList} from "../../components/CSVPane/CSVList"
+import {
+    TERMINUS_SUCCESS,
+    TERMINUS_ERROR,
+    TERMINUS_WARNING,
+    TERMINUS_COMPONENT,
+} from '../../constants/identifiers'
+import {Row, Col} from "reactstrap"
 
 const DocumentPage = (props) => {
     const {graphs} = DBContextObj()
@@ -150,7 +159,7 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
 const NoSchemaDocumentPage = ({doctype, docid, setDocument}) => {
     return <>
         <FileLoader docid={docid} />
-        <CsvList />
+        <CSVList />
     </>
 }
 
