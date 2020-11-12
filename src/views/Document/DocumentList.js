@@ -7,8 +7,6 @@ import {ControlledTable} from '../Tables/ControlledTable'
 import {Row, Col} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {FileLoader} from "./FileLoader"
-import {CSVList} from '../../Components/CSVPane/CSVList'
 import {TypeStats} from "./TypeStats"
 import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
@@ -17,8 +15,7 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT}
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, tabConfig}) => {
-
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, tabConfig, csvs, setCsvs}) => {
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -96,15 +93,14 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     //tabConfig.column("Description").width(0)
 
     return (<>
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            <FileLoader adding={adding} />
-            {isAdding && <CSVList/>}
-            {!isAdding && <ControlledTable
-                query={query}
-                freewidth={true}
-                view={tabConfig}
-                limit={tabConfig.pagesize()}/>}
-            {!isAdding && (docType==DOCTYPE_CSV) && <> <Row className="generic-message-holder">
+        {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        {!isAdding && <ControlledTable
+            query={query}
+            freewidth={true}
+            view={tabConfig}
+            limit={tabConfig.pagesize()}/>}
+        {!isAdding && (docType==DOCTYPE_CSV) && <>
+            <Row className="generic-message-holder">
                 {report && <TerminusDBSpeaks report={report}/>}
             </Row>
             <CSVPreview preview={preview} setPreview={setPreview}/>

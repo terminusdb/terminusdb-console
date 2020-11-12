@@ -91,9 +91,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 							</span>
 						</Col>
 					</Row>
-					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
+					{/*(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
 						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
-					</>)}
+					</>)*/}
 				</>))
 	}
 

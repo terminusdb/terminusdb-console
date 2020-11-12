@@ -17,7 +17,7 @@ export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
     function typeOptions(){
         let to = [{value: "", label: "Show All Document Types"}]
         for(var i = 0; i<types.length; i++){
-            let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID']) 
+            let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID'])
             to.push({label: lab, value: types[i]['Class ID']})
         }
         return to
@@ -38,7 +38,7 @@ export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
         else if(types.length == 1){
             ph = "1 Document Type"
         }
-        return <Select 
+        return <Select
             placeholder={ph}
             value = {docType}
             onChange = {changeFilter}
@@ -47,7 +47,7 @@ export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
     }
 
     return <span>
-        {types && types.length > 0 &&  
+        {types && types.length > 0 &&
             <span> {getTypeSelector()} </span>
         }
     </span>
@@ -78,7 +78,7 @@ export const DocumentSubTypeFilter = ({doctype, setType}) => {
             updateQuery(docQuery())
         }
     }, [doctype])
-    
+
     useEffect(() => {
         if(qresult){
             setTypes(qresult.bindings)
@@ -89,7 +89,7 @@ export const DocumentSubTypeFilter = ({doctype, setType}) => {
         let to = []
         for(var i = 0; i<types.length; i++){
             if(types[i]['Class ID'] != doctype){
-                let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID']) 
+                let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID'])
                 to.push({label: lab, value: types[i]['Class ID']})
             }
         }
@@ -102,10 +102,18 @@ export const DocumentSubTypeFilter = ({doctype, setType}) => {
 
     function getTypeSelector(){
         let ph = types.length - 1 + " sub-types"
-        return <Select 
+        const customStyles = {
+            control: base => ({
+                ...base,
+                height: 35,
+                minHeight: 35
+                })
+            };
+        return <Select
             placeholder={ph}
             defaultValue = {doctype}
             onChange = {changeFilter}
+            styles={customStyles}
             options = {typeOptions()}
         />
     }
