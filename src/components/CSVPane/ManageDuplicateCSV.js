@@ -65,7 +65,7 @@ export const ManageDuplicateCsv=({fileName, setLoading, csvs, setCsvs})=>{
 				<span className={action.CONTROLS_TEXT}>This CSV was already added, you can update or create a new Csv</span>
 			</span>
 		</Col>
-		<Col md={2}>
+		{/*<><Col md={2}>
 			<span onClick={handleSingleUpdate} className={action.CONTROLS_SPAN_CSS}>
 				<AiOutlineArrowUp color="#0055bb" className={action.CONTROLS_ICONS}/>
 				<span className={action.CONTROLS_TEXT}>{action.UPDATE}</span>
@@ -76,6 +76,6 @@ export const ManageDuplicateCsv=({fileName, setLoading, csvs, setCsvs})=>{
 				<AiOutlinePlus color="#0055bb" className={action.CONTROLS_ICONS}/>
 				<span className={action.CONTROLS_TEXT}>{action.CREATE_NEW}</span>
 			</span>
-		</Col>
+		</Col></>*/}
 	</Row>)
 }

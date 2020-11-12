@@ -267,8 +267,8 @@ const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, inser
             <CSVLoader csvs={csvs} setCsvs={setCsvs}
                 insertCsvs={insertCsvs} page={DOCUMENT_VIEW} availableCsvs={availableCsvs}/>
             <p>List of exiting Csvs</p>
-            <CSVList/>
         </>}
+        <CSVList/>
     </>)
     /*return <>
         <FileLoader docid={docid} />
