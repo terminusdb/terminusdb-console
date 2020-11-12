@@ -9,9 +9,11 @@ import { ResultViewer } from "../QueryPane/ResultViewer"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {CSVPreview} from "./CSVPreview"
 import {CSVControls} from "./CSVControls"
-import * as action from "./constants.csv"
+import {DOCTYPE_CSV, SHOW, REMOVE, DOWNLOAD} from "./constants.csv"
 import {convertStringsToJson} from '../../utils/helperFunctions';
 import {Row, Col} from "reactstrap"
+import {ControlledTable} from '../../views/Tables/ControlledTable'
+
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 
 export const CSVList=()=>{
@@ -19,18 +21,27 @@ export const CSVList=()=>{
 	const [happiness, setHappiness]=useState(false)
 	const [csvBindings, setCsvBindings] = useState(false)
 	const [rep, setReport]=useState(false)
+	let WOQL = TerminusClient.WOQL
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
 	const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
 
-	const csvQuery = TerminusClient.WOQL.limit(50,
+	/*const csvQuery = TerminusClient.WOQL.limit(50,
 		TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:Name'))
 	const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
         woqlClient,
         csvQuery,
         branch,
         ref,
-    )
+    )*/
+
+	const csvQuery = () => {
+        let q = WOQL.and(WOQL.lib().document_metadata())
+        q.sub(DOCTYPE_CSV, "v:Type ID")
+        return q
+    }
+
+	const [query, setQuery]=useState(csvQuery)
 
 	function process_error(err, update_start, message){
         setReport({
@@ -42,8 +53,8 @@ export const CSVList=()=>{
         console.log(err)
     }
 
-	const getCsv=async(e, download) => {
-		let name=e.target.id, update_start = Date.now()
+	const getCsv=async(name, download) => {
+		let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
 		return await woqlClient.getCSV(name, download).then((results) =>{
@@ -68,15 +79,15 @@ export const CSVList=()=>{
 	const constructCsvBindings=(bindings)=>{
 		for(var item in bindings) {
 			let fileName=bindings[item].Name['@value']
-			bindings[item].Contents=<CSVControls action={action.SHOW} color={"#0055bb"} onClick={getCsv} fileName={fileName} loading={loading}/>
-			bindings[item].Download=<CSVControls action={action.DOWNLOAD} color={"#0055bb"} fileName={fileName} onClick={getCsv} loading={loading}/>
-			bindings[item].Delete=<CSVControls action={action.REMOVE} color={"#721c24"} fileName={fileName} onClick={handleDelete} loading={loading}/>
+			bindings[item].Contents=<CSVControls action={SHOW} color={"#0055bb"} onClick={getCsv} fileName={fileName} loading={loading}/>
+			bindings[item].Download=<CSVControls action={DOWNLOAD} color={"#0055bb"} fileName={fileName} onClick={getCsv} loading={loading}/>
+			bindings[item].Delete=<CSVControls action={REMOVE} color={"#721c24"} fileName={fileName} onClick={handleDelete} loading={loading}/>
 		}
 		setCsvBindings(bindings)
 		setHappiness(true)
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		if (report) {
 			if (report.error || report == 'error') {
 				console.log(report.error)
@@ -85,12 +96,17 @@ export const CSVList=()=>{
 				constructCsvBindings(qresult.bindings)
 			}
 		}
-    }, [qresult])
+    }, [qresult]) */
+
+	let onRowClick = function(row){
+		const name=row.original.Name["@value"]
+        getCsv(name, false)
+    }
 
 	const tabConfig= TerminusClient.View.table();
-    tabConfig.column_order("Document ID", "Name")
-    //tabConfig.column("Abstract").minWidth(50).width(80)
+    tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.column("Document ID", "Name").width(200)
+	tabConfig.row().click(onRowClick)
     tabConfig.pager("remote")
     tabConfig.pagesize(10)
 
@@ -101,8 +117,8 @@ export const CSVList=()=>{
 			</Row>
 			{happiness && csvBindings && <>
 				<div className="sub-headings">CSV Documents</div>
-				{/*<ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/>*/}
-				{<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>}</>}
+				{/*<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>*/}</>}
+			<ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onError={setReport}/>
 			<br/>
 			<CSVPreview preview={preview} setPreview={setPreview}/>
 	</>)

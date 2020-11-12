@@ -17,11 +17,7 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT}
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
-export const DocumentListView = ({doctype, total, types, selectDocument, createDocument}) => {
-    const [docType, setDocType] = useState(doctype)
-    const [docCount, setDocCount] = useState()
-    const [current, setCurrent] = useState(doctype)
-    const [isAdding, setIsAdding] = useState(false)
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, tabConfig}) => {
 
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
     const [loading, setLoading]=useState(false)
@@ -31,7 +27,6 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     const {ref, branch, prefixes} = DBContextObj()
 
     let WOQL = TerminusClient.WOQL
-
 
     const docQuery = () => {
         let q = WOQL.and(
@@ -50,12 +45,6 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         else setIsAdding(false)
     }
 
-    const changeDocType = (dt) => {
-        if(dt !== docType) {
-            setDocType(dt)
-        }
-    }
-
     useEffect(() => {
         setQuery(docQuery())
         if(docType){
@@ -63,10 +52,6 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         }
     }, [docType])
 
-
-    const doCreate = () => {
-        if(createDocument) createDocument(docType)
-    }
 
     function process_error(err, update_start, message){
         setReport({
@@ -99,8 +84,8 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         }
     }
 
-    let docs = (docType ? (docCount || 0) : total)
-    const tabConfig= TerminusClient.View.table();
+    //let docs = (docType ? (docCount || 0) : total)
+    //const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
@@ -110,62 +95,22 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     tabConfig.column("Type Name").header("Type").minWidth(80)
     //tabConfig.column("Description").width(0)
 
-
     return (<>
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             <FileLoader adding={adding} />
-            {/*isAdding &&
-                <CSVList/>
-            */}
-            {!isAdding &&
-            <Row>
-                <Col>
-                    <TotalStats total={total} />
-                </Col>
-                <Col>
-                    <DocumentTypeFilter types={types} meta={current} doctype={docType} setType={changeDocType} />
-                </Col>
-                <Col>
-                    {docType &&
-                        <TypeStats
-                            total={total}
-                            meta={current}
-                            doctype={docType}
-                            limit={tabConfig.pagesize()}
-                            setTotal={setDocCount}
-                        />
-                    }
-                    <DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={doCreate} />
-                </Col>
-                <Col>
-                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
-                </Col>
-            </Row>
-            }
-        {!isAdding &&
-            <ControlledTable
+            {isAdding && <CSVList/>}
+            {!isAdding && <ControlledTable
                 query={query}
                 freewidth={true}
                 view={tabConfig}
-                limit={tabConfig.pagesize()}
-            />
-        }
-        {!isAdding && (docType==DOCTYPE_CSV) && <> <Row className="generic-message-holder">
+                limit={tabConfig.pagesize()}/>}
+            {!isAdding && (docType==DOCTYPE_CSV) && <> <Row className="generic-message-holder">
                 {report && <TerminusDBSpeaks report={report}/>}
             </Row>
             <CSVPreview preview={preview} setPreview={setPreview}/>
         </>}
     </>)
 }
-
-
-
-
-const TotalStats = ({total}) => {
-    if(typeof total != "number") return null
-    return <span>{total} Document{(total === 1 ? "" : "s")} </span>
-}
-
 
 const DocumentTypeMeta = ({doctype, meta,count,  onCreate}) => {
     if(!doctype || !meta) return null

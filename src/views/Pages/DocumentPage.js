@@ -9,6 +9,8 @@ import {DocumentListView} from '../Document/DocumentList'
 import {DocumentView, NewDocumentView} from '../Document/DocumentView'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {FileLoader} from "../Document/FileLoader"
+import {DocumentNavTab} from "./DocumentNavTab"
+import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from "../../components/CSVPane/CSVList"
@@ -24,6 +26,28 @@ const DocumentPage = (props) => {
     const {graphs} = DBContextObj()
     const [mode, setMode] = useState(false)
     const [docID, setDocID] = useState(props.docid)
+    const [isAdding, setIsAdding] = useState(false)
+    const [cnt, setCount] = useState()
+    const [types, setTypes] = useState()
+    const [current, setCurrent] = useState(props.doctype)
+    const [docType, setDocType] = useState(props.doctype)
+    const [docCount, setDocCount] = useState()
+    const [isCreating, setIsCreating] = useState(false)
+    const tabConfig= TerminusClient.View.table();
+
+    const changeDocType = (dt) => {
+        if(dt !== docType) {
+            setDocType(dt)
+        }
+    }
+
+    const setCreating = (type) => {
+        setIsCreating(type)
+    }
+
+    const doCreate = () => {
+        setCreating(docType)
+    }
 
     useEffect(() => {
         if(graphs){
@@ -43,25 +67,45 @@ const DocumentPage = (props) => {
     }
 
     return (
-        <PageView page="document" dbPage={true}>
-            {!mode &&
-                <Loading />
-            }
-            {mode == "schema" &&
-                <DocumentPageWithSchema
-                    docid={docID}
-                    doctype={props.doctype}
-                    setDocument={setDocument}
-                />
-            }
-            {mode == "instance" &&
-                <NoSchemaDocumentPage
-                    docid={docID}
-                    doctype={props.doctype}
-                    setDocument={setDocument}
-                />
-            }
-        </PageView>
+        <>
+            <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">
+                <ConsoleNavbar onHeadChange={props.onHeadChange}/>
+                <DocumentNavTab total={cnt}
+                    isAdding={isAdding}
+                    types={types}
+                    current={current}
+                    doCreate={doCreate}
+                    docCount={docCount}
+                    docType={docType}
+                    changeDocType={changeDocType}
+                    limit={tabConfig.pagesize()}
+                    setDocCount={setDocCount} />
+                <main className="console__page__container console__page__container--width">
+                    {!mode &&
+                        <Loading/>
+                    }
+                    {mode == "schema" && <DocumentPageWithSchema
+                        docid={docID}
+                        setIsAdding={setIsAdding}
+                        cnt={cnt}
+                        setCount={setCount}
+                        isAdding={isAdding}
+                        setTypes={setTypes}
+                        types={types}
+                        setCurrent={setCurrent}
+                        docType={docType}
+                        setDocType={setDocType}
+                        tabConfig={tabConfig}
+                        setIsCreating={setIsCreating}
+                        isCreating={isCreating}
+                        setDocument={setDocument}/>}
+                    {mode == "instance" && <NoSchemaDocumentPage
+                        docid={docID}
+                        doctype={props.doctype}
+                        setDocument={setDocument}/>}
+                </main>
+            </div>
+        </>
     )
 }
 
@@ -69,13 +113,10 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
+const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating}) => {
     let WOQL = TerminusClient.WOQL
     const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
-    const [cnt, setCount] = useState()
-    const [types, setTypes] = useState()
-    const [isCreating, setIsCreating] = useState(false)
 
     const docQuery = () => {
         return WOQL.order_by("v:Class Name", WOQL.lib().document_classes())
@@ -147,10 +188,13 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
             {!isCreating && !docid &&
                 <DocumentListView
                     selectDocument={setDocument}
-                    createDocument={setCreating}
                     types={types}
-                    total={cnt}
-                    doctype={doctype}
+                    setCurrent={setCurrent}
+                    setIsAdding={setIsAdding}
+                    isAdding={isAdding}
+                    setDocType={setDocType}
+                    docType={docType}
+                    tabConfig={tabConfig}
                 />
             }
         </>
