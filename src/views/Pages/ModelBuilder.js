@@ -33,14 +33,16 @@ export const ModelBuilder = (props) =>{
               <div className="tdb__model__message">
                 <TerminusDBSpeaks  report={reportMessage} />
               </div>}                      
-            <div >
-              {graphs && graphs['schema/main']!==undefined && 
+            
+              {graphs && graphs['schema/main']!==undefined &&
+                <> 
                 <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
                   <SchemaBuilder saveGraph={saveData}/>
                 </GraphObjectProvider>
+                </>
               }
               {callServerLoading && <Loading/>}
-            </div>
+            
         </div>           
       )
 }

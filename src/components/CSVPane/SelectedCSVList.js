@@ -11,7 +11,7 @@ import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG} from "./constants.csv"
 import {readLines, isObject} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {ManageDuplicateCsv} from "./ManageDuplicateCsv"
+import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
 	let currentFile={}, availableCsvList=[]
