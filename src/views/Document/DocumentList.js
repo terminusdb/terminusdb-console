@@ -65,12 +65,19 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         }
     }
 
+    let any_old_rendering_function = (cell) => {
+        return <span>Delete Me Buddy</span>
+        //cell.row.original
+    }
+
     let docs = (docType ? (docCount || 0) : total)
     const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
     tabConfig.row().click(onRowClick)
+    //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
+    
     tabConfig.column("Document ID", "Name").minWidth(100)
     //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
     tabConfig.column("Type Name").header("Type").minWidth(80)
