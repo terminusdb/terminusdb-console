@@ -7,7 +7,7 @@ import {ControlledTable} from '../Tables/ControlledTable'
 import {Row, Col} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {FileLoader} from "./FileLoader"
-import {CSVList} from '../../Components/CSVPane/CSVList'
+import {CSVList} from '../../components/CSVPane/CSVList'
 import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
