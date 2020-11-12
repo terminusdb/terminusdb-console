@@ -20,7 +20,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
     const {woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
+    const [updateQuery, report, qresult, woql, loading] = WOQLQueryContainerHook(
         woqlClient,
         query,
         branch,
@@ -39,11 +39,11 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
     let initcontent = queryText || ''
 
     const [disabled] = useMemo(() => {
-        if (bindings) {
+        if (qresult && qresult.bindings && qresult.bindings.length) {
             changeTab(1)
             return [{}]
         } else return [{disabled: true}]
-    }, [bindings])
+    }, [qresult])
 
     const onSelect = (k) => {
         changeTab(k)
@@ -104,7 +104,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                 <Tab label="Result Viewer" {...disabled}>
                     <ResultQueryPane
                         resultView={resultView}
-                        bindings={bindings || []}
+                        bindings={(qresult && qresult.bindings ? qresult.bindings : [])}
                         query={woql}
                         prefixes={prefixes}
                         updateQuery={updateQuery}

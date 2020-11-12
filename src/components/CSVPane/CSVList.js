@@ -9,7 +9,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {CSVPreview} from "./CSVPreview"
 import {CSVControls} from "./CSVControls"
 import * as action from "./constants.csv"
-import {readString} from 'react-papaparse';
+import {convertStringsToJson} from '../../utils/helperFunctions';
 import {Row, Col} from "reactstrap"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 
@@ -24,7 +24,7 @@ export const CSVList=()=>{
 
 	const csvQuery = TerminusClient.WOQL.limit(50,
 		TerminusClient.WOQL.triple('v:Type', 'type', 'scm:CSV').triple('v:Type', 'label', 'v:name'))
-	const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
+	const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
         woqlClient,
         csvQuery,
         branch,
@@ -46,16 +46,7 @@ export const CSVList=()=>{
         setLoading(true)
         update_start = update_start || Date.now()
 		return await woqlClient.getCSV(name, download).then((results) =>{
-			const res = readString(results, {quotes: false,
-							  quoteChar: '"',
-							  escapeChar: '"',
-							  delimiter: ",",
-							  header: true,
-							  newline: "{",
-							  skipEmptyLines: false,
-							  columns: null
-							})
-			const jsonRes = res.data
+			const jsonRes=convertStringsToJson(results)
 			if(!download) setPreview({show: true, fileName: name, data: jsonRes});
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
@@ -90,10 +81,10 @@ export const CSVList=()=>{
 				console.log(report.error)
 			}
 			else {
-				constructCsvBindings(bindings)
+				constructCsvBindings(qresult.bindings)
 			}
 		}
-    }, [bindings])
+    }, [qresult])
 
 	return (<>
 			{loading &&  <Loading type={TERMINUS_COMPONENT} />}

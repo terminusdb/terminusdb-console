@@ -23,7 +23,7 @@ export const ModelBuilder = (props) =>{
     }
 
     if(!graphs || graphs['schema/main']===undefined){
-      return  <NoPageLayout noLoginButton={true} text="There is no schema graph." />
+      return  <NoPageLayout noLoginButton={true} text="There is no main schema graph." />
     }
 
     return (

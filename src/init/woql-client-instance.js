@@ -81,7 +81,7 @@ export const WOQLClientProvider = ({children, params}) => {
 
      async function initRemoteConnection(remote_user) {
         const jwtoken = await getTokenSilently()
-        console.log(remote_user)
+        //console.log(remote_user)
         let hub_org = remote_user['http://terminusdb.com/schema/system#agent_name']
         let hubcreds = {type: "jwt", key: jwtoken}
         const hubClient = new TerminusClient.WOQLClient(params.remote)

@@ -5,10 +5,10 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {PageView} from '../Templates/PageView'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {DOCUMENT_NO_SCHEMA, SYSTEM_ERROR, NO_DOCUMENT, NO_DOCUMENT_CLASS, ADD_CSV, ADD_MORE_CSV, ADD_MORE_CSV_TITLE} from './constants.pages'
-import {DocumentList} from '../Tables/DocumentList'
+import {DocumentListView} from '../Document/DocumentList'
+import {DocumentView, NewDocumentView} from '../Document/DocumentView'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {TERMINUS_PAGE} from '../../constants/identifiers'
+import {FileLoader} from "../Document/FileLoader"
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from "../../components/CSVPane/CSVList"
@@ -21,113 +21,150 @@ import {
 import {Row, Col} from "reactstrap"
 
 const DocumentPage = (props) => {
-    /*
-     * global woqlClient obj
-     */
-    const {woqlClient} = WOQLClientObj()
-    const {ref, branch, graphs} = DBContextObj()
-
-    const [happiness, setHappiness]=useState(false)
-    const [csvs, setCsvs]=useState([])
-    const [refreshCsvs, setRefreshCsvs]=useState([])
-
-    const docQuery = TerminusClient.WOQL.limit(50, TerminusClient.WOQL.lib().document_metadata())
-    const [updateQuery, report, bindings, woql] = WOQLQueryContainerHook(
-        woqlClient,
-        docQuery,
-        branch,
-        ref,
-    )
-    const [isSchema, setIsSchema] = useState(false)
-
-    function interpretQueryError(report) {
-        setHappiness(NO_DOCUMENT)
-        const hasSchemaGraph = TerminusClient.WOQL.lib().loadBranchGraphNames(woqlClient)
-        woqlClient
-            .query(hasSchemaGraph)
-            .then((results) => {
-                if (results.bindings && results.bindings.length) {
-                    let found = false
-                    for (var i = 0; i < results.bindings.length; i++) {
-                        let res = results.bindings[0]
-                        if (res['SchemaName']['@value']) {
-                            found = true
-                            continue
-                        }
-                    }
-                    if (!found) {
-                        setHappiness(DOCUMENT_NO_SCHEMA)
-                    }
-                }
-            })
-            .catch((e) => {
-                setHappiness(SYSTEM_ERROR)
-            })
-    }
-
-    /*function doRebuild(){
-        updateQuery(docQuery)
-    }*/
-
-    function interpretEmptyResult() {
-        const hasClasses = TerminusClient.WOQL.lib().concrete_document_classes()
-        woqlClient
-            .query(hasClasses)
-            .then((dresults) => {
-                if (dresults.bindings && dresults.bindings.length > 1) {
-                    setHappiness(NO_DOCUMENT)
-                } else {
-                    setHappiness(NO_DOCUMENT_CLASS)
-                }
-            })
-            .catch((e) => {
-                setHappiness(SYSTEM_ERROR)
-            })
-    }
+    const {graphs} = DBContextObj()
+    const [mode, setMode] = useState(false)
+    const [docID, setDocID] = useState(props.docid)
 
     useEffect(() => {
-        if (report) {
-            if (report.error || report == 'error') {
-                interpretQueryError(report)
-            } else if (report.rows == 0) {
-                interpretEmptyResult()
-            } else {
-                setHappiness(true)
-                for(var key in graphs) {
-					if(graphs[key].type == "schema"){
-						setIsSchema(true)
-						break;
-					}
-				}
+        if(graphs){
+            let iss = "instance"
+            for(var key in graphs) {
+                if(graphs[key].type == "schema"){
+                    iss = "schema"
+                    break;
+                }
             }
+            setMode(iss)
         }
-    }, [report])
+    }, [graphs])
 
-    const insertCsvs = (e) => {
-	   for(var i=0; i<e.target.files.length; i++){
-		   let files = {};
-           files = e.target.files[i]
-		   setCsvs( arr => [...arr, files]);
-	   }
+    function setDocument(docid){
+        setDocID(docid)
     }
 
     return (
         <PageView page="document" dbPage={true}>
-            {!happiness && <Loading type={TERMINUS_PAGE}/>}
-                <>
-                    {(csvs.length==0) && <span>
-                            <CSVInput css={'add-csv'} text={ADD_CSV} onChange={insertCsvs} inputCss="add-files" multiple={true}/>
-                        </span>
-                    }
-                    {(csvs.length>0) && <CSVLoader csvs={csvs} title={ADD_MORE_CSV_TITLE} addButton={ADD_MORE_CSV} setCsvs={setCsvs}
-                        insertCsvs={insertCsvs} page="document"/>}
-                    {!isSchema && <CSVList/>}
-                </>
-            {happiness === true && (
-                <DocumentList query={woql} updateQuery={updateQuery} documents={bindings} />
-            )}
+            {!mode &&
+                <Loading />
+            }
+            {mode == "schema" &&
+                <DocumentPageWithSchema
+                    docid={docID}
+                    doctype={props.doctype}
+                    setDocument={setDocument}
+                />
+            }
+            {mode == "instance" &&
+                <NoSchemaDocumentPage
+                    docid={docID}
+                    doctype={props.doctype}
+                    setDocument={setDocument}
+                />
+            }
         </PageView>
     )
 }
+
+/**
+ * Loads full list of document types and total count of documents to make them available to all sub-parts
+ */
+
+const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
+    let WOQL = TerminusClient.WOQL
+    const {woqlClient} = WOQLClientObj()
+    const {ref, branch} = DBContextObj()
+    const [cnt, setCount] = useState()
+    const [types, setTypes] = useState()
+    const [isCreating, setIsCreating] = useState(false)
+
+    const docQuery = () => {
+        return WOQL.order_by("v:Class Name", WOQL.lib().document_classes())
+    }
+
+    const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
+        woqlClient,
+        docQuery(),
+        branch,
+        ref,
+    )
+
+    const cntQuery = () => {
+        return WOQL.count("v:Documents").distinct("v:docid")
+            .triple("v:docid", "type", "v:dtype").sub("system:Document", "v:dtype")
+    }
+
+    const [updateQuery2, report2, qresult2, woql2] = WOQLQueryContainerHook(
+        woqlClient,
+        cntQuery(),
+        branch,
+        ref,
+    )
+
+    const setCreating = (type) => {
+        setIsCreating(type)
+    }
+
+    useEffect(() => {
+        if(qresult){
+            setTypes(qresult.bindings)
+        }
+    }, [qresult])
+
+    useEffect(() => {
+        if(qresult2){
+            let v = 0
+            if(qresult2.bindings && qresult2.bindings[0] && qresult2.bindings[0]['Documents'] && qresult2.bindings[0]['Documents']['@value'])
+                v = qresult2.bindings[0]['Documents']['@value']
+            setCount(v)
+        }
+    }, [qresult2])
+
+
+    function closeDV(){
+        setIsCreating(false)
+        setDocument()
+    }
+
+    return (
+        <>
+            {isCreating &&
+                <NewDocumentView
+                    selectDocument={setDocument}
+                    close={closeDV}
+                    doctype={isCreating}
+                    types={types}
+                    total={cnt}
+                />
+            }
+            {!isCreating && docid &&
+                <DocumentView
+                    close={closeDV}
+                    docid={docid}
+                    types={types}
+                    total={cnt}
+                />
+            }
+            {!isCreating && !docid &&
+                <DocumentListView
+                    selectDocument={setDocument}
+                    createDocument={setCreating}
+                    types={types}
+                    total={cnt}
+                    doctype={doctype}
+                />
+            }
+        </>
+    )
+}
+
+const NoSchemaDocumentPage = ({doctype, docid, setDocument}) => {
+    return <>
+        <FileLoader docid={docid} />
+        <CSVList/>
+    </>
+}
+
+
+
 
 export default DocumentPage
