@@ -44,19 +44,19 @@ const DocumentPage = (props) => {
 
     return (
         <PageView page="document" dbPage={true}>
-            {!mode && 
+            {!mode &&
                 <Loading />
             }
-            {mode == "schema" && 
-                <DocumentPageWithSchema 
+            {mode == "schema" &&
+                <DocumentPageWithSchema
                     docid={docID}
                     doctype={props.doctype}
                     setDocument={setDocument}
                 />
             }
-            {mode == "instance" && 
-                <NoSchemaDocumentPage 
-                    docid={docID} 
+            {mode == "instance" &&
+                <NoSchemaDocumentPage
+                    docid={docID}
                     doctype={props.doctype}
                     setDocument={setDocument}
                 />
@@ -77,7 +77,7 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
     const [types, setTypes] = useState()
     const [isCreating, setIsCreating] = useState(false)
 
-    const docQuery = () => { 
+    const docQuery = () => {
         return WOQL.order_by("v:Class Name", WOQL.lib().document_classes())
     }
 
@@ -88,7 +88,7 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
         ref,
     )
 
-    const cntQuery = () => { 
+    const cntQuery = () => {
         return WOQL.count("v:Documents").distinct("v:docid")
             .triple("v:docid", "type", "v:dtype").sub("system:Document", "v:dtype")
     }
@@ -100,10 +100,10 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
         ref,
     )
 
-    const setCreating = (type) => {        
+    const setCreating = (type) => {
         setIsCreating(type)
     }
-    
+
     useEffect(() => {
         if(qresult){
             setTypes(qresult.bindings)
@@ -124,33 +124,33 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
         setIsCreating(false)
         setDocument()
     }
-    
+
     return (
         <>
-            {isCreating && 
-                <NewDocumentView 
-                    selectDocument={setDocument} 
-                    close={closeDV} 
-                    doctype={isCreating} 
-                    types={types} 
-                    total={cnt} 
+            {isCreating &&
+                <NewDocumentView
+                    selectDocument={setDocument}
+                    close={closeDV}
+                    doctype={isCreating}
+                    types={types}
+                    total={cnt}
                 />
             }
-            {!isCreating && docid && 
-                <DocumentView 
-                    close={closeDV} 
-                    docid={docid} 
-                    types={types} 
-                    total={cnt} 
+            {!isCreating && docid &&
+                <DocumentView
+                    close={closeDV}
+                    docid={docid}
+                    types={types}
+                    total={cnt}
                 />
             }
-            {!isCreating && !docid && 
-                <DocumentListView 
-                    selectDocument={setDocument} 
-                    createDocument={setCreating} 
-                    types={types} 
-                    total={cnt} 
-                    doctype={doctype} 
+            {!isCreating && !docid &&
+                <DocumentListView
+                    selectDocument={setDocument}
+                    createDocument={setCreating}
+                    types={types}
+                    total={cnt}
+                    doctype={doctype}
                 />
             }
         </>
@@ -160,7 +160,7 @@ const DocumentPageWithSchema = ({doctype, docid, setDocument}) => {
 const NoSchemaDocumentPage = ({doctype, docid, setDocument}) => {
     return <>
         <FileLoader docid={docid} />
-        <CSVList />
+        <CSVList/>
     </>
 }
 

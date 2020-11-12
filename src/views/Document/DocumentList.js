@@ -17,10 +17,10 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     const [docCount, setDocCount] = useState()
     const [current, setCurrent] = useState(doctype)
     const [isAdding, setIsAdding] = useState(false)
-    
+
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
-    
+
     let WOQL = TerminusClient.WOQL
 
 
@@ -35,7 +35,7 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     }
 
     const [query, setQuery] = useState(docQuery())
-    
+
     const adding = (isadd) => {
         if(isadd) setIsAdding(true)
         else setIsAdding(false)
@@ -87,9 +87,9 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     return (<>
             <FileLoader adding={adding} />
             {isAdding &&
-                <CSVList />
-            } 
-            {!isAdding && 
+                <CSVList/>
+            }
+            {!isAdding &&
             <Row>
                 <Col>
                     <TotalStats total={total} />
@@ -98,12 +98,12 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
                     <DocumentTypeFilter types={types} meta={current} doctype={docType} setType={changeDocType} />
                 </Col>
                 <Col>
-                    {docType && 
-                        <TypeStats 
-                            total={total} 
-                            meta={current} 
-                            doctype={docType} 
-                            limit={tabConfig.pagesize()} 
+                    {docType &&
+                        <TypeStats
+                            total={total}
+                            meta={current}
+                            doctype={docType}
+                            limit={tabConfig.pagesize()}
                             setTotal={setDocCount}
                         />
                     }
@@ -115,40 +115,40 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
             </Row>
             }
         {!isAdding &&
-            <ControlledTable 
-                query={query} 
+            <ControlledTable
+                query={query}
                 freewidth={true}
                 view={tabConfig}
                 limit={tabConfig.pagesize()}
-            /> 
+            />
         }
     </>)
 }
 
- 
+
 
 
 const TotalStats = ({total}) => {
     if(typeof total != "number") return null
-    return <span>{total} Document{(total === 1 ? "" : "s")} </span>   
+    return <span>{total} Document{(total === 1 ? "" : "s")} </span>
 }
 
 
 const DocumentTypeMeta = ({doctype, meta,count,  onCreate}) => {
     if(!doctype || !meta) return null
     return <span>
-            <span title={doctype + ": " + meta.description}>{count} {meta.label} Document{(count === 1 ? "" : "s")} </span> 
-            {!meta.abstract && 
+            <span title={doctype + ": " + meta.description}>{count} {meta.label} Document{(count === 1 ? "" : "s")} </span>
+            {!meta.abstract &&
                 <button onClick={onCreate}> Create New </button>
             }
-        </span>    
+        </span>
 }
 
 
 const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
     const [mstart, setMstart] = useState(start)
     const [mlimit, setMlimit] = useState(limit)
-    
+
     function doChange(){
         if(mstart != start || mlimit != limit) setLimit(mlimit, mstart)
     }
@@ -166,7 +166,7 @@ const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
         Limit <input type="text" defaultValue={mlimit} onChange={chLimit}/>
         Start <input type="text" defaultValue={mstart} onChange={chStart}/>
         <button onClick={doChange}>Update</button>
-    </span>    
+    </span>
 }
 
 
@@ -174,13 +174,13 @@ function getTypeMetadata(types, de){
     for(var i = 0; i<types.length; i++){
         if(types[i]['Class ID'] == de){
             let tm = {
-                id: types[i]['Class ID'], 
+                id: types[i]['Class ID'],
                 label: types[i]['Class Name']['@value'],
                 description: types[i]['Description']['@value']
             }
             if(types[i]['Abstract'] && types[i]['Abstract']['@value'] && types[i]['Abstract']['@value'] == "Yes")
                 tm.abstract = true
             return tm
-        } 
+        }
     }
 }
