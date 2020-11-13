@@ -15,7 +15,7 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT}
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, tabConfig, csvs, setCsvs}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, csvs, setCsvs}) => {
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -88,12 +88,19 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }
     }
 
-    //let docs = (docType ? (docCount || 0) : total)
-    //const tabConfig= TerminusClient.View.table();
+    let any_old_rendering_function = (cell) => {
+        return <span>Delete Me Buddy</span>
+        //cell.row.original
+    }
+
+    //let docs = (docType ? (docCount || 0) : 0)
+    const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
     tabConfig.row().click(onRowClick)
+    //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
+    
     tabConfig.column("Document ID", "Name").minWidth(100)
     //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
     tabConfig.column("Type Name").header("Type").minWidth(80)

@@ -6,7 +6,7 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 
-export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty}) => {
+export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty, onResults, onRowCount}) => {
     const [mlimit, setLimit] = useState(limit || 0)
     const [start, setStart] = useState(0)
     const [rowCount, setRowCount] = useState()
@@ -84,8 +84,15 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         if(cresult){
             let val = ((cresult && cresult.bindings && cresult.bindings.length) ? cresult.bindings[0]['Count']['@value'] : 0)
             setRowCount(val)
+            if(onRowCount) onRowCount(val)
         }
     }, [cresult])
+
+    useEffect(() => {
+        if(onResults && qresult && qresult.bindings && qresult.bindings.length){
+            onResults(qresult)
+        }
+    }, [qresult])
 
     const changeOrder = (ord) => {
         if(JSON.stringify(orderBy) != JSON.stringify(ord)){
