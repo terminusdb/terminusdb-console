@@ -15,7 +15,7 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT}
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, tabConfig, csvs, setCsvs}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, csvs, setCsvs}) => {
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -86,7 +86,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         //cell.row.original
     }
 
-    let docs = (docType ? (docCount || 0) : total)
+    //let docs = (docType ? (docCount || 0) : 0)
     const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
