@@ -82,7 +82,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     let onRowClick = function(row){
         if(selectDocument) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
-                csvRowClick(row.original["Document ID"])
+                csvRowClick(row.original.Name["@value"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
@@ -100,7 +100,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.pager("remote")
     tabConfig.row().click(onRowClick)
     //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
-    
+
     tabConfig.column("Document ID", "Name").minWidth(100)
     //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
     tabConfig.column("Type Name").header("Type").minWidth(80)
@@ -113,7 +113,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             freewidth={true}
             view={tabConfig}
             limit={tabConfig.pagesize()}/>}
-        {!isAdding && (docType==DOCTYPE_CSV) && <>
+        {!isAdding && preview  && <>
             <Row className="generic-message-holder">
                 {report && <TerminusDBSpeaks report={report}/>}
             </Row>

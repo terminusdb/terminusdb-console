@@ -93,7 +93,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					insertFiles.push(item)
 			})
 		})
-
 		if(updateFiles.length>0){
 			woqlClient.updateCSV(updateFiles , commitMsg, null, null).then((results) => {
 				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
