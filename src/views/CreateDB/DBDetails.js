@@ -104,6 +104,11 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
 	   }
     }
 
+    function onCsvCancel() {
+        setCsvs([])
+    }
+
+
     return (
         <>
             <TCForm onSubmit={onExtract}
@@ -113,7 +118,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 buttons={buttons}
             />
             {(csvs.length>0) && <CSVLoader csvs={csvs} title={DB_CSV_CREATE_FORM.title} addButton={DB_CSV_CREATE_FORM.addButton}
-                setCsvs={setCsvs} insertCsvs={insertCsvs} page="create"/>}
+                setCsvs={setCsvs} insertCsvs={insertCsvs} page="create" onCsvCancel={onCsvCancel}/>}
             <Row>
                 <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
                     {(!advancedSettings && !from_local) && (

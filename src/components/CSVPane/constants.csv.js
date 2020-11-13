@@ -18,3 +18,5 @@ export const CREATE_DB_VIEW="create"
 export const DOCUMENT_VIEW="document"
 
 export const DEFAULT_COMMIT_MSG="Adding a csv to database"
+
+export const DOCTYPE_CSV="terminusdb:///schema#CSV"
