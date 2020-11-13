@@ -4,10 +4,11 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts, DATETIME_COMPLETE} from '../../constants/dates'
-import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList, 
+import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList,
     AiFillEdit, AiOutlinePushpin, AiOutlineEdit, AiFillBuild, AiOutlineBuild} from 'react-icons/ai';
 import { FiBox } from 'react-icons/fi'
 import { parseTwoDigitYear } from 'moment'
+import {formatBytes} from "../../utils/format"
 
 export const ScopedDetails = () => {
 
@@ -192,15 +193,6 @@ function formatTripleCount(tc){
     return tc.toLocaleString() + " triples"
 }
 
-
-function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return '0 Bytes'
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-}
 
 export const DBDocs= ({meta}) => {
     if(meta && meta['Documents']){

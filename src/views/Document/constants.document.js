@@ -1,5 +1,5 @@
-export const ADD_CSV = "Add Csvs"
-export const ADD_MORE_CSV = "Add More Csvs"
+export const ADD_CSV = "Add CSVs"
+export const ADD_MORE_CSV = "Add More CSVs"
 export const OWL_CSS = {
     readContainer: "owl-editor-read",
     writeContainer: "owl-editor-write"

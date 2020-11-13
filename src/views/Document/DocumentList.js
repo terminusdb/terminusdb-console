@@ -72,10 +72,17 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         .finally(() => setLoading(false))
     }
 
+    /*function csvRowClick(id){
+        const q=limit(50).triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id)
+            .triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows').triple('v:CSV Rows', 'v:Properties', 'v:Value')
+            .quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
+        setPreview({show: true, fileName: name, query:q})
+    }*/
+
     let onRowClick = function(row){
         if(selectDocument) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
-                csvRowClick(row.original.Name["@value"])
+                csvRowClick(row.original["Document ID"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
