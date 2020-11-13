@@ -13,6 +13,7 @@ import {readLines, isObject} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
 import {formatBytes} from "../../utils/format"
+import Select from 'react-select'
 import {printts, DATETIME_DATE} from '../../constants/dates'
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
@@ -21,6 +22,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
 	const {woqlClient}=WOQLClientObj()
+	const [optAction, setOptAction]=useState({})
 
 	function constructActionForFiles(csvs){
 		const fArr=[]
@@ -120,38 +122,55 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		})
 	}
 
-	const handleInsertChange = (e) => {
-		let el=document.getElementById(e.target.id)
-		el.checked=true
+
+	/*const handleInsertChange = (e) => {
+		setOptAction({id:e.target.id, action:action.CREATE_NEW})
+		//let el=document.getElementById(e.target.id)
+		//el.checked=true
 		handleAction(e)
 	}
 
 	const handleUpdateChange = (e) => {
-		let el=document.getElementById(e.target.id)
-		el.checked=true
+		setOptAction({id:e.target.id, action:action.UPDATE})
+		//let el=document.getElementById(e.target.id)
+		//el.checked=true
 		handleAction(e)
+	}*/
+
+	/*const actionTypes = [
+		{ value: action.CREATE_NEW, label: action.CREATE_NEW},
+		{ value: action.UPDATE, label: action.UPDATE}
+	]*/
+
+	const changeFilter=(e)=>{
+		actionFiles.map(item=>{
+			if(item.name==e.id){
+				item.action=e.value
+			}
+		})
 	}
 
 	const List=()=>{
 		return (csvs.map( item => <>
 					<Row style={{width: "100%"}} className={action.CSV_ROWS}>
-						<Col md={3}>
+						<Col md={2}>
 							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
 						</Col>
-						<Col md={1}>
+						<Col md={2}>
 							<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatBytes(item.size)}</span>
 						</Col>
-						<Col md={1}>
+						<Col md={2}>
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{printts(item.lastModified, DATETIME_DATE)}</span>
 						</Col>
-						{(page==DOCUMENT_VIEW) && <>
+						{/*(page==DOCUMENT_VIEW) && <> //optAction.action==action.CREATE_NEW
 							<Col md={2}>
 								<label className={action.CONTROLS_TEXT}>
 									<input type="radio" value={action.CREATE_NEW}
 										name={item.name}
+										checked={optAction.id==(item.name + '/' + action.CREATE_NEW)?true:false}
 										id={item.name + '/' + action.CREATE_NEW}
 										onChange={handleInsertChange}/>
 										{action.CREATE_NEW}
@@ -161,10 +180,25 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 								<label className={action.CONTROLS_TEXT}>
 									<input type="radio" value={action.UPDATE}
 										name={item.name}
+										checked={optAction.id==(item.name + '/' + action.UPDATE)?true:false}
 										onChange={handleUpdateChange}
 										id={item.name + '/' + action.UPDATE}/>
 										{action.UPDATE}
 								</label>
+							</Col>
+						</>*/}
+						{(page==DOCUMENT_VIEW) && <>
+							<Col md={2}>
+								<label htmlFor={item.name}/>
+								<Select placeholder={"Choose an action"}
+									className={action.CONTROLS_TEXT}
+									defaultValue={{value: action.CREATE_NEW, label: action.CREATE_NEW}}
+									onChange = {changeFilter}
+									options = {[
+										{ value: action.CREATE_NEW, label: action.CREATE_NEW, id: item.name},
+										{ value: action.UPDATE, label: action.UPDATE, id: item.name}
+									]}
+								/>
 							</Col>
 						</>}
 						<Col md={2}>

@@ -35,39 +35,43 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
-				<div class="tdb__model__hright"></div>
-				<div class="tdb__model__hright">
-					{!isAdding && <Row style={{width:"100%"}}>
-						<Col md={2}>
-							<span className="db-card-credit subheader-spacing">
-								<BsBook className="db_info_icon_spacing"/>
-								<span className="db_info">
-									<span className="tdb__dblist__info--blue"><TotalStats total={total} /></span>
+				{/*<div class="tdb__model__hright"></div>*/}
+				<Col md={2}></Col>
+				<Col md={8}>
+					<div class="tdb__model__hright">
+						{!isAdding && <Row style={{width:"100%"}}>
+							<Col md={2}>
+								<span className="db-card-credit subheader-spacing">
+									<BsBook className="db_info_icon_spacing"/>
+									<span className="db_info">
+										<span className="tdb__dblist__info--blue"><TotalStats total={total} /></span>
+									</span>
 								</span>
-							</span>
-						</Col>
-						<Col md={3}>
-							{<DocumentTypeFilter types={types} meta={current} doctype={docType} setType={changeDocType} />}
-						</Col>
-						<Col md={4}>
-							{docType &&
-		                        <TypeStats
-		                            total={total}
-		                            meta={current}
-		                            doctype={docType}
-		                            limit={limit}
-		                            setTotal={setDocCount}/>}
-							<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={doCreate}/>
-						</Col>
-						<Col md={2}>
-		                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
-		                </Col>
-						<Col md={1}>
-							<FileLoader csvs={csvs} setCsvs={setCsvs} insertCsvs={insertCsvs}/>
-						</Col>
-					</Row>}
-				</div>
-				<div class="tdb__model__hright"></div>
+							</Col>
+							<Col md={3}>
+								{<DocumentTypeFilter types={types} meta={current} doctype={docType} setType={changeDocType} />}
+							</Col>
+							<Col md={4}>
+								{docType &&
+			                        <TypeStats
+			                            total={total}
+			                            meta={current}
+			                            doctype={docType}
+			                            limit={limit}
+			                            setTotal={setDocCount}/>}
+								<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={doCreate}/>
+							</Col>
+							<Col md={2}>
+			                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
+			                </Col>
+							<Col md={1}>
+								<FileLoader csvs={csvs} setCsvs={setCsvs} insertCsvs={insertCsvs}/>
+							</Col>
+						</Row>}
+					</div>
+				</Col>
+				<Col md={2}></Col>
+				{/*<div class="tdb__model__hright"></div>*/}
 			</div>
 		</div>
 	)
