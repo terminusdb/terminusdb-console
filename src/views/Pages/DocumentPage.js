@@ -245,6 +245,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
             {!isCreating && !docid && (csvs.length==0) &&
                 <DocumentListView
                     selectDocument={setDocument}
+                    setDocType={setDocType}
                     types={types}
                     setCurrent={setCurrent}
                     setIsAdding={setIsAdding}

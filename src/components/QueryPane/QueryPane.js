@@ -42,7 +42,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
         if (qresult && qresult.bindings && qresult.bindings.length) {
             changeTab(1)
             return [{}]
-        } else return [{disabled: true}]
+        } else return [{}]
     }, [qresult])
 
     const onSelect = (k) => {

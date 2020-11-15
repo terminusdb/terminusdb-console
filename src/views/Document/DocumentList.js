@@ -15,7 +15,7 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT}
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, csvs, setCsvs}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs}) => {
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -72,14 +72,22 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         .finally(() => setLoading(false))
     }
 
-    let onRowClick = function(row){
-        if(selectDocument) {
+    let onDocClick = function(cell){
+        let row = cell.row
+        if(selectDocument && row) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
                 csvRowClick(row.original.Name["@value"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
     }
+
+    let onClassClick = function(cell){
+        if(setDocType && cell && cell.row) {
+            setDocType(cell.row.original["Type ID"])
+        }
+    }
+
 
     let any_old_rendering_function = (cell) => {
         return <span>Delete Me Buddy</span>
@@ -91,13 +99,11 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
-    tabConfig.row().click(onRowClick)
+    //tabConfig.row().click(onRowClick)
     //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
     
-    tabConfig.column("Document ID", "Name").minWidth(100)
-    //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
-    tabConfig.column("Type Name").header("Type").minWidth(80)
-    //tabConfig.column("Description").width(0)
+    tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
+    tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}

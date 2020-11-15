@@ -25,7 +25,7 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 					</span>
 				</span>
 				{!meta.abstract && <span className="create-new-button">
-					<button class="tdb__button__base tdb__button__base--bgreen create-new-button-spacing subheader-btns" onClick={onCreate}>
+					<button className="tdb__button__base tdb__button__base--bgreen create-new-button-spacing subheader-btns" onClick={onCreate}>
 						Create New
 					</button>
 				</span>}
@@ -35,8 +35,8 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
-				<div class="tdb__model__hright"></div>
-				<div class="tdb__model__hright">
+				<div className="tdb__model__hright"></div>
+				<div className="tdb__model__hright">
 					{!isAdding && <Row style={{width:"100%"}}>
 						<Col md={2}>
 							<span className="db-card-credit subheader-spacing">
@@ -67,7 +67,7 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 						</Col>
 					</Row>}
 				</div>
-				<div class="tdb__model__hright"></div>
+				<div className="tdb__model__hright"></div>
 			</div>
 		</div>
 	)

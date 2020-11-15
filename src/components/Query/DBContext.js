@@ -38,6 +38,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [graphsReload, setGraphsReload] = useState(0)
     const [branchesReload, setBranchesReload] = useState(0)
     const [prefixesReload, setPrefixesReload] = useState(0)
+    const [prefixesLoaded, setPrefixesLoaded] = useState(false)
 
     const WOQL = TerminusClient.WOQL
 
@@ -108,6 +109,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
             }   
         }
         woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
+        setPrefixesLoaded(true)
     }
 
 
@@ -283,6 +285,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 repos,
                 prefixes,
                 loading,
+                prefixesLoaded
             }}
         >
             {children}
@@ -310,6 +313,7 @@ export const TerminusDBProvider = (woqlClient) => {
     let ref = false
     let loading = false
     let consoleTime = false
+    let prefixesLoaded = true
     let prefixes = []
     return {
         setConsoleTime,
@@ -325,6 +329,7 @@ export const TerminusDBProvider = (woqlClient) => {
         branch,
         refObject,
         loading,
+        prefixesLoaded,
     }
 }
 
@@ -341,6 +346,7 @@ export const NullDBProvider = (woqlClient) => {
     let loading = false
     let consoleTime = false
     let prefixes = []
+    let prefixesLoaded = true
     return {
         setConsoleTime,
         setHead,
@@ -354,6 +360,7 @@ export const NullDBProvider = (woqlClient) => {
         consoleTime,
         ref,
         loading,
+        prefixesLoaded
     }
 
 }

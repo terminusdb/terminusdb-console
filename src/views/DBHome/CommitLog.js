@@ -59,7 +59,7 @@ export const CommitLog = () => {
     }, [branch, ref, branches])
     const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Time", "Author", "Commit ID", "Message")
-    tabConfig.column("Time").width(180)
+    tabConfig.column("Time").width(180).renderer({type: "time"})
     tabConfig.column("Message").width(300)
     tabConfig.pager("remote")
     tabConfig.pagesize(limit)
