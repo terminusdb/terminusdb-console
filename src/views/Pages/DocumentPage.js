@@ -14,6 +14,7 @@ import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../Components/CSVPane/CSVList'
+import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
 import {BsCardList} from "react-icons/bs"
 import {
@@ -93,7 +94,7 @@ const DocumentPage = (props) => {
 
     return (
         <>
-            <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">
+            <div id={props.id} className="console__page h-100" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
                 <DocumentNavTab total={cnt}
                     isAdding={isAdding}
@@ -140,6 +141,7 @@ const DocumentPage = (props) => {
                         availableCsvs={availableCsvs}
                         setDocument={setDocument}/>}
                 </main>
+                <Footer/>
             </div>
         </>
     )
@@ -234,7 +236,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
 				</span>
                 <CSVList/>
             </>}
-            {!isCreating && docid &&
+            {!isCreating && docid && (docType==DOCTYPE_CSV) &&
                 <DocumentView
                     close={closeDV}
                     docid={docid}

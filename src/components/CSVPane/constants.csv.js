@@ -1,10 +1,10 @@
-export const PREVIEW='Preview Csv'
+export const PREVIEW='Preview CSV'
 export const REMOVE='Remove'
 export const SHOW='Show Contents'
 export const DOWNLOAD='Download'
-export const UPLOAD='Upload Csv'
+export const UPLOAD='Upload CSV'
 export const UPDATE='Update'
-export const CREATE_NEW='Create New Csv'
+export const CREATE_NEW='Create New CSV'
 
 export const CSV_ROWS="csv-rows"
 

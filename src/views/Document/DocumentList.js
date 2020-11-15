@@ -112,7 +112,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             freewidth={true}
             view={tabConfig}
             limit={tabConfig.pagesize()}/>}
-        {!isAdding && (docType==DOCTYPE_CSV) && <>
+        {!isAdding && preview  && <>
             <Row className="generic-message-holder">
                 {report && <TerminusDBSpeaks report={report}/>}
             </Row>
