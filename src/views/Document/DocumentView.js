@@ -51,7 +51,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             for(var k in jsonld){
                 if(k != "@context") nc[k] = jsonld[k]
             }
-            setContent(JSON.stringify(nc, false, 2))    
+            setContent(JSON.stringify(nc, false, 2)) 
         }
         else if(jsonld) {
             setContent(JSON.stringify(jsonld, false, 2))    
@@ -152,6 +152,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
     const chooseIn = function(cell){
         selectDocument(cell.row.original['Source'])
     }
+
     const outtab= TerminusClient.View.table();
     outtab.column("Target").click(chooseOut)
     const intab = TerminusClient.View.table();
