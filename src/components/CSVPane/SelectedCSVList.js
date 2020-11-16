@@ -122,26 +122,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		})
 	}
 
-
-	/*const handleInsertChange = (e) => {
-		setOptAction({id:e.target.id, action:action.CREATE_NEW})
-		//let el=document.getElementById(e.target.id)
-		//el.checked=true
-		handleAction(e)
-	}
-
-	const handleUpdateChange = (e) => {
-		setOptAction({id:e.target.id, action:action.UPDATE})
-		//let el=document.getElementById(e.target.id)
-		//el.checked=true
-		handleAction(e)
-	}*/
-
-	/*const actionTypes = [
-		{ value: action.CREATE_NEW, label: action.CREATE_NEW},
-		{ value: action.UPDATE, label: action.UPDATE}
-	]*/
-
 	const changeFilter=(e)=>{
 		actionFiles.map(item=>{
 			if(item.name==e.id){
@@ -165,28 +145,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{printts(item.lastModified, DATETIME_DATE)}</span>
 						</Col>
-						{/*(page==DOCUMENT_VIEW) && <> //optAction.action==action.CREATE_NEW
-							<Col md={2}>
-								<label className={action.CONTROLS_TEXT}>
-									<input type="radio" value={action.CREATE_NEW}
-										name={item.name}
-										checked={optAction.id==(item.name + '/' + action.CREATE_NEW)?true:false}
-										id={item.name + '/' + action.CREATE_NEW}
-										onChange={handleInsertChange}/>
-										{action.CREATE_NEW}
-								</label>
-							</Col>
-							<Col md={1.5}>
-								<label className={action.CONTROLS_TEXT}>
-									<input type="radio" value={action.UPDATE}
-										name={item.name}
-										checked={optAction.id==(item.name + '/' + action.UPDATE)?true:false}
-										onChange={handleUpdateChange}
-										id={item.name + '/' + action.UPDATE}/>
-										{action.UPDATE}
-								</label>
-							</Col>
-						</>*/}
 						{(page==DOCUMENT_VIEW) && <>
 							<Col md={2}>
 								<label htmlFor={item.name}/>

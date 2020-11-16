@@ -35,7 +35,6 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
-				{/*<div class="tdb__model__hright"></div>*/}
 				<Col md={2}></Col>
 				<Col md={8}>
 					<div class="tdb__model__hright">
@@ -71,7 +70,6 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 					</div>
 				</Col>
 				<Col md={2}></Col>
-				{/*<div class="tdb__model__hright"></div>*/}
 			</div>
 		</div>
 	)
