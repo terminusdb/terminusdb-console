@@ -6,7 +6,7 @@ import {TiDeleteOutline} from "react-icons/ti"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const CSVPreview=({preview, setPreview})=>{
-	const {woqlClient} = WOQLClientObj()
+    const {woqlClient} = WOQLClientObj()
 
 	return <>
 		{preview.show && <>
@@ -24,7 +24,9 @@ export const CSVPreview=({preview, setPreview})=>{
 				</Col>
 			</Row>
 			<Row className="csv-preview-results">
-				<ResultViewer type="table" bindings={preview.data}/>
+                {preview.data && preview.data.length &&  
+    				<ResultViewer type="table" bindings={preview.data}/>
+                }
 			</Row>
 		</>}
 	</>

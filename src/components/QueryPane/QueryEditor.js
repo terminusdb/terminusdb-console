@@ -134,7 +134,7 @@ export const QueryEditor = ({query, setMainError, mainError, baseLanguage, setBa
            </div>
 
         {(!showLanguage && editable) &&
-            <CodeEditor  onBlur={onBlur} text={content} language={baseLanguage}/>
+            <CodeEditor onSubmit={sendQuery} onBlur={onBlur} text={content} language={baseLanguage}/>
         }
 
         {!editable && !showLanguage &&

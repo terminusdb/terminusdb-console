@@ -231,14 +231,15 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
                 <span className="db-card-credit csv_subheader_section">
 					<BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
 					<span className="db_info existing_csv_subheader">
-						Csv Documents
+						CSV Documents
 					</span>
 				</span>
                 <CSVList/>
             </>}
-            {!isCreating && docid && (docType==DOCTYPE_CSV) &&
+            {!isCreating && docid &&
                 <DocumentView
                     close={closeDV}
+                    selectDocument={setDocument}
                     docid={docid}
                     types={types}
                     total={cnt}
@@ -273,10 +274,6 @@ const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, inser
         </>}
         <CSVList/>
     </>)
-    /*return <>
-        <FileLoader docid={docid} />
-        <CSVList/>
-    </>*/
 }
 
 

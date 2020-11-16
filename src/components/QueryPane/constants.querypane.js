@@ -25,7 +25,12 @@ export const EDITOR_WRITE_OPTIONS = {
     noHScroll: false,
     autoCursor:false,
     theme: "mdn-like",
-    lineNumbers: true
+    matchBrackets: true,
+    lineNumbers: true,
+    extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+    },
+    tabSize: 2
 }
 
 export const QUERY_PANEL_TITLE = "Query"

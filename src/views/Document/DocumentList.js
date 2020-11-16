@@ -60,11 +60,11 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         console.log(err)
     }
 
-    function csvRowClick(name){
+    let csvRowClick = function(name){
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-        return woqlClient.getCSV(name, false).then((results) =>{
+        woqlClient.getCSV(name, false).then((results) =>{
             const jsonRes=convertStringsToJson(results)
             setPreview({show: true, fileName: name, data: jsonRes});
         })
@@ -86,12 +86,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         if(setDocType && cell && cell.row) {
             setDocType(cell.row.original["Type ID"])
         }
-    }
-
-
-    let any_old_rendering_function = (cell) => {
-        return <span>Delete Me Buddy</span>
-        //cell.row.original
     }
 
     //let docs = (docType ? (docCount || 0) : 0)
