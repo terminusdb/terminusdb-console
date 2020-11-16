@@ -102,18 +102,10 @@ export const DocumentSubTypeFilter = ({doctype, setType}) => {
 
     function getTypeSelector(){
         let ph = types.length - 1 + " sub-types"
-        const customStyles = {
-            control: base => ({
-                ...base,
-                height: 35,
-                minHeight: 35
-                })
-            };
         return <Select
             placeholder={ph}
             defaultValue = {doctype}
             onChange = {changeFilter}
-            styles={customStyles}
             options = {typeOptions()}
         />
     }

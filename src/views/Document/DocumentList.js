@@ -60,7 +60,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         console.log(err)
     }
 
-    function csvRowClick(name){
+    /*function csvRowClick(name){
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
@@ -70,13 +70,20 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         })
         .catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
         .finally(() => setLoading(false))
+    }*/
+
+    function csvRowClick(id, name){
+        const q=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
+            .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
+        setPreview({show: true, fileName: name, data:[], query: q});
     }
 
     let onDocClick = function(cell){
         let row = cell.row
         if(selectDocument && row) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
-                csvRowClick(row.original.Name["@value"])
+                //csvRowClick(row.original.Name["@value"])
+                csvRowClick(row.original["Document ID"], row.original.Name["@value"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
@@ -101,7 +108,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.pager("remote")
     //tabConfig.row().click(onRowClick)
     //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
-    
+
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
