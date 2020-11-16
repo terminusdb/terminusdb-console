@@ -14,7 +14,8 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
 import {formatBytes} from "../../utils/format"
 import Select from 'react-select'
-import {printts, DATETIME_DATE} from '../../constants/dates'
+import { format } from "date-fns";
+import {printts, DATETIME_DB_UPDATED} from '../../constants/dates'
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
 	let currentFile={}, availableCsvList=[]
@@ -144,6 +145,11 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         }
     }
 
+	const formatFileDate=(d)=>{
+		let dt=format(new Date(d), DATETIME_DB_UPDATED)
+		return dt
+	}
+
 	const List=()=>{
 		return (csvs.map( item => <>
 					<Row style={{width: "100%"}} className={action.CSV_ROWS}>
@@ -157,9 +163,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						</Col>
 						<Col md={2}>
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
-							<span className="csv-item-title">{printts(item.lastModified, DATETIME_DATE)}</span>
+							<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
 						</Col>
-						{(page==DOCUMENT_VIEW) && <>
+						{(page==DOCUMENT_VIEW) && (availableCsvs.length>0) && <>
 							<Col md={2}>
 								<label htmlFor={item.name}/>
 								<Select placeholder={"Choose an action"}
@@ -168,10 +174,15 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 									onChange = {changeFilter}
 									styles={customStyles}
 									options = {[
-										{ value: action.CREATE_NEW, label: action.CREATE_NEW, id: item.name},
-										{ value: action.UPDATE, label: action.UPDATE, id: item.name}
+										{value: action.CREATE_NEW, label: action.CREATE_NEW, id: item.name},
+										{value: action.UPDATE, label: action.UPDATE, id: item.name}
 									]}
 								/>
+							</Col>
+						</>}
+						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
+							<Col md={2}>
+								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
 							</Col>
 						</>}
 						<Col md={2}>
@@ -202,11 +213,11 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				<Col md={6}>
 				</Col>
 				<Col md={4}>
-					<input class="commit-log-input" type="text" placeholder="Enter message for commit log" width="40"
+					<input className="commit-log-input" type="text" placeholder="Enter message for commit log" width="40"
 						onChange={(e) => setCommitMsg(e.target.value)}/>
 				</Col>
 				<Col md={2}>
-					<button onClick={handleUpload} class={action.CSV_MAIN_ACTION_CSS}>
+					<button onClick={handleUpload} className={action.CSV_MAIN_ACTION_CSS}>
 						{action.UPLOAD}
 					</button>
 				</Col>
