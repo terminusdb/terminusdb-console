@@ -31,7 +31,6 @@ export const CSVPreview=({preview, setPreview})=>{
 					</span>
 				</Col>
 			</Row>
-<<<<<<< HEAD
 			{isArray(preview.data) && <Row className="csv-preview-results">
 				<ResultViewer type="table" bindings={preview.data}/>
 			</Row>}
@@ -42,13 +41,6 @@ export const CSVPreview=({preview, setPreview})=>{
 					view={tabConfig}
 					limit={tabConfig.pagesize()}/>
 			</Row>}
-=======
-			<Row className="csv-preview-results">
-                {preview.data && preview.data.length &&  
-    				<ResultViewer type="table" bindings={preview.data}/>
-                }
-			</Row>
->>>>>>> b94c5cfcdd0782940c07e8182f8f9c6bc204cbb8
 		</>}
 	</>
 }
