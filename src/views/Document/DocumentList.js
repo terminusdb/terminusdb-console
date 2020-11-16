@@ -117,7 +117,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 	}
 
     const getDeleteButton=()=>{
-		return <span className="schema-toolbar-delete-holder" title={"Delete "}>
+		return <span className="schema-toolbar-delete-holder" title={"Delete CSV"}>
             <RiDeleteBin5Line color="#721c24" className='schema-toolbar-delete'/>
         </span>
 	}

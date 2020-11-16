@@ -16,6 +16,10 @@ export const JSONEditor = ({dataProvider, prefixes, edit, onChange}) => {
         setContent(dataProvider)
     }, [edit])
 
+    useEffect(() => {
+        setContent(dataProvider)
+    }, [dataProvider])
+
     const readMode = {
         mode: {
             name: "javascript",

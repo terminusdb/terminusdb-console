@@ -152,6 +152,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
     const chooseIn = function(cell){
         selectDocument(cell.row.original['Source'])
     }
+
     const outtab= TerminusClient.View.table();
     outtab.column("Target").click(chooseOut)
     const intab = TerminusClient.View.table();
