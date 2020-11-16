@@ -60,11 +60,12 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         console.log(err)
     }
 
-    /*function csvRowClick(name){
+
+    /*let csvRowClick = function(name){
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-        return woqlClient.getCSV(name, false).then((results) =>{
+        woqlClient.getCSV(name, false).then((results) =>{
             const jsonRes=convertStringsToJson(results)
             setPreview({show: true, fileName: name, data: jsonRes});
         })
@@ -72,7 +73,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         .finally(() => setLoading(false))
     }*/
 
-    function csvRowClick(id, name){
+    let csvRowClick = function csvRowClick(id, name){
         const q=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
             .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
         setPreview({show: true, fileName: name, data:[], query: q});
@@ -93,12 +94,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         if(setDocType && cell && cell.row) {
             setDocType(cell.row.original["Type ID"])
         }
-    }
-
-
-    let any_old_rendering_function = (cell) => {
-        return <span>Delete Me Buddy</span>
-        //cell.row.original
     }
 
     //let docs = (docType ? (docCount || 0) : 0)

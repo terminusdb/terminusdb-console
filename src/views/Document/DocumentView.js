@@ -9,6 +9,8 @@ import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_JSON_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER, 
     SUBMIT_INPUT_LABEL} from "./constants.document"
+import {ControlledTable} from '../Tables/ControlledTable'
+
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
     const [edit, setEdit] = useState(false)
@@ -129,12 +131,42 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         {content && 
             <JSONEditor 
                 dataProvider={content} 
-                edit={edit} 
+                edit={edit}
                 onChange={getContents} 
                 prefixes={prefixes}
             />
         }
+        {!edit && docid && 
+            <DocumentLinks docid={docid} selectDocument={selectDocument} />
+        }
     </span>
+}
+
+export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) => {
+    let WOQL = TerminusClient.WOQL
+    let outs = WOQL.triple(docid, "v:Property", "v:Target").triple("v:Target", "type", "v:Type").sub("system:Document", "v:Type")
+    let ins = WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type")
+    const chooseOut = function(cell){
+        selectDocument(cell.row.original['Target'])
+    }
+    const chooseIn = function(cell){
+        selectDocument(cell.row.original['Source'])
+    }
+    const outtab= TerminusClient.View.table();
+    outtab.column("Target").click(chooseOut)
+    const intab = TerminusClient.View.table();
+    intab.column_order("Source", "Type", "Property")
+    intab.column("Source").click(chooseIn)
+    return (<Row>
+        <Col>
+            <div className="sub-headings latest-update-heading">Incoming Links</div>
+            <ControlledTable query={ins} view={intab} limit={20}/>
+        </Col>
+        <Col>
+            <div className="sub-headings latest-update-heading">Outgoing Links</div>
+            <ControlledTable query={outs} view={outtab} limit={20}/>
+        </Col>
+    </Row>)
 }
 
 export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCancel,  onUpdate}) => {
