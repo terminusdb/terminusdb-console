@@ -8,7 +8,7 @@ import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {isArray} from "../../utils/helperFunctions"
 
-export const CSVPreview=({preview, setPreview})=>{
+export const CSVPreview=({preview, setPreview, previewCss})=>{
     const {woqlClient} = WOQLClientObj()
 
 	const tabConfig= TerminusClient.View.table();
@@ -34,7 +34,7 @@ export const CSVPreview=({preview, setPreview})=>{
 			{isArray(preview.data) && <Row className="csv-preview-results">
 				<ResultViewer type="table" bindings={preview.data}/>
 			</Row>}
-			{preview.query && <Row className="csv-preview-results">
+			{preview.query && <Row className={previewCss}>
 				<ControlledTable
 					query={preview.query}
 					freewidth={true}

@@ -8,12 +8,13 @@ import {Row, Col} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {TypeStats} from "./TypeStats"
-import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
-import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
+import {DOCTYPE_CSV, DOWNLOAD, DELETE} from '../../Components/CSVPane/constants.csv'
+import {BiDownload} from "react-icons/bi"
+import {RiDeleteBin5Line} from "react-icons/ri"
 
 export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs}) => {
     const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
@@ -60,19 +61,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         console.log(err)
     }
 
-
-    /*let csvRowClick = function(name){
-        let update_start = Date.now()
-        setLoading(true)
-        update_start = update_start || Date.now()
-        woqlClient.getCSV(name, false).then((results) =>{
-            const jsonRes=convertStringsToJson(results)
-            setPreview({show: true, fileName: name, data: jsonRes});
-        })
-        .catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
-        .finally(() => setLoading(false))
-    }*/
-
     let csvRowClick = function csvRowClick(id, name){
         const q=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
             .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
@@ -96,30 +84,68 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }
     }
 
-    //let docs = (docType ? (docCount || 0) : 0)
-    const tabConfig= TerminusClient.View.table();
-    tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
+    const downloadCSV=async(cell)=>{
+		let row=cell.row
+		let name=row.original.Name["@value"]
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+		return await woqlClient.getCSV(name, true).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully downloaded file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
+		.finally(() => setLoading(false))
+	}
+
+    const deleteCSV=async(cell)=>{
+        let row=cell.row
+		let name=row.original.Name["@value"]
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        return await woqlClient.deleteCSV(name).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
+		.finally(() => setLoading(false))
+    }
+
+	const getDownloadButton=()=>{
+		return <span className="csv-toolbar-holder" title={"Download CSV "}>
+            <BiDownload color="#0055bb" className='schema-toolbar-delete'/>
+        </span>
+	}
+
+    const getDeleteButton=()=>{
+		return <span className="schema-toolbar-delete-holder" title={"Delete "}>
+            <RiDeleteBin5Line color="#721c24" className='schema-toolbar-delete'/>
+        </span>
+	}
+
+    const tabConfig=TerminusClient.View.table();
+    if(docType==DOCTYPE_CSV) {
+        tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Download", "Delete")
+        tabConfig.column("Download").click(downloadCSV).render(getDownloadButton)
+        tabConfig.column("Delete").click(deleteCSV).render(getDeleteButton)
+    }
+    else tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
-    //tabConfig.row().click(onRowClick)
-    //tabConfig.column("Delete").click(function(){alert("del")}).render(any_old_rendering_function)
-
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        <Row className="generic-message-holder">
+            {report && <TerminusDBSpeaks report={report}/>}
+        </Row>
         {!isAdding && <ControlledTable
             query={query}
             freewidth={true}
             view={tabConfig}
             limit={tabConfig.pagesize()}/>}
-        {!isAdding && preview  && <>
-            <Row className="generic-message-holder">
-                {report && <TerminusDBSpeaks report={report}/>}
-            </Row>
-            <CSVPreview preview={preview} setPreview={setPreview}/>
-        </>}
+        {!isAdding && preview  && <CSVPreview preview={preview} setPreview={setPreview}
+            previewCss={"csv-preview-results csv-preview-results-border "}/>}
     </>)
 }
 

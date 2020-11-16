@@ -130,6 +130,20 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		})
 	}
 
+	const customStyles = (width = 100, height = 20) => {
+        return {
+            container: (base) => ({
+                ...base,
+                display:'inline-block',
+                width: width,
+            }),
+            valueContainer: (base) => ({
+                ...base,
+                minHeight: height,
+            })
+        }
+    }
+
 	const List=()=>{
 		return (csvs.map( item => <>
 					<Row style={{width: "100%"}} className={action.CSV_ROWS}>
@@ -152,6 +166,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 									className={action.CONTROLS_TEXT}
 									defaultValue={{value: action.CREATE_NEW, label: action.CREATE_NEW}}
 									onChange = {changeFilter}
+									styles={customStyles}
 									options = {[
 										{ value: action.CREATE_NEW, label: action.CREATE_NEW, id: item.name},
 										{ value: action.UPDATE, label: action.UPDATE, id: item.name}

@@ -3337,12 +3337,12 @@ span.delete-modal-label {
       cursor: pointer;
   }
 
-  .schema-toolbar-delete-holder {
+  .schema-toolbar-delete-holder, .csv-toolbar-holder {
       margin-left: 6px;
       font-size: 1.2em;
   }
 
-  .schema-toolbar-delete-holder:hover {
+  .schema-toolbar-delete-holder:hover, .csv-toolbar-holder:hover {
       cursor: pointer;
   }
 
@@ -4059,12 +4059,24 @@ span.delete-modal-label {
 
   .csv-preview-results {
       font-size: 14px;
-      border: 1px solid #ddd;
       border-radius: 3px;
       padding: 40px;
       max-width: 1800px;
       min-width: 1180px;
       overflow-x: scroll;
+  }
+
+  .csv-download-link{
+      color: #0066f9;
+  }
+
+  .csv-download-link:hover{
+      color: #0066f9;
+      text-decoration: underline;
+  }
+
+  .csv-preview-results-border {
+      border: 1px solid #ddd;
   }
 
   .csv-title-align{

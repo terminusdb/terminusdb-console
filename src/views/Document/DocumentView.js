@@ -7,7 +7,7 @@ import {Row, Col, Button} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
-import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_JSON_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER, 
+import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_JSON_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER,
     SUBMIT_INPUT_LABEL} from "./constants.document"
 import {ControlledTable} from '../Tables/ControlledTable'
 
@@ -23,11 +23,11 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
-    
+
     const docQuery = () => {
         return WOQL.read_object(docid, "v:Object")
     }
-    
+
     const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
         woqlClient,
         docQuery(),
@@ -38,7 +38,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     useEffect(() => {
         if(qresult){
             let vb = (qresult && qresult.bindings && qresult.bindings[0] && qresult.bindings[0]['Object'] ? qresult.bindings[0]['Object'] : false)
-            setJsonld(vb)    
+            setJsonld(vb)
         }
     }, [qresult])
 
@@ -51,10 +51,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             for(var k in jsonld){
                 if(k != "@context") nc[k] = jsonld[k]
             }
-            setContent(JSON.stringify(nc, false, 2))    
+            setContent(JSON.stringify(nc, false, 2))
         }
         else if(jsonld) {
-            setContent(JSON.stringify(jsonld, false, 2))    
+            setContent(JSON.stringify(jsonld, false, 2))
         }
     }, [jsonld])
 
@@ -62,7 +62,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         updateQuery(docQuery())
     }, [docid])
 
-    
+
     function setEditMode() {
         //setReport()
         setEdit(true)
@@ -100,7 +100,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             })
         }
     }
-    
+
     function parseOutput(json){
         try {
             let mj = JSON.parse(json)
@@ -119,24 +119,24 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     }
 
     return <span>
-        <ViewToolbar 
-            editmode={edit} 
-            docid={docid} 
-            toggle={toggleEdit} 
-            types={types} 
-            type={doctype} 
+        <ViewToolbar
+            editmode={edit}
+            docid={docid}
+            toggle={toggleEdit}
+            types={types}
+            type={doctype}
             onCancel={cancel}
             onUpdate={updateDocument}
         />
-        {content && 
-            <JSONEditor 
-                dataProvider={content} 
+        {content &&
+            <JSONEditor
+                dataProvider={content}
                 edit={edit}
-                onChange={getContents} 
+                onChange={getContents}
                 prefixes={prefixes}
             />
         }
-        {!edit && docid && 
+        {!edit && docid &&
             <DocumentLinks docid={docid} selectDocument={selectDocument} />
         }
     </span>
@@ -172,7 +172,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
 export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCancel,  onUpdate}) => {
     const {consoleTime} = DBContextObj()
     const [commit, setCommit] = useState()
-    let msg = "Document " + docid 
+    let msg = "Document " + docid
     function updateCommit(e) {
         if (e.target.value != commit) {
             setCommit(e.target.value)
@@ -182,14 +182,14 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
     function getCreateForPage(p) {
         if (!consoleTime) {
             return [
-                <Button className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
+                <Button key="json" className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
                     {EDIT_JSON_BUTTON}
                 </Button>,
-                <Button className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
+                <Button key="Close" className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
                     Close
                 </Button>
             ]
-        } 
+        }
         return null
     }
 
@@ -254,7 +254,7 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
                 {cr}
             </Col>
         </Row>
-        {report && 
+        {report &&
             <Row className="generic-message-holder" style={{marginBottom: "1.4em"}}>
                  <TerminusDBSpeaks report={report} />
             </Row>
@@ -270,8 +270,8 @@ export const NewDocumentView = ({doctype, close, prefixes, types, selectDocument
     const { woqlClient} = WOQLClientObj()
 
     function getStarterContent(dt){
-        return JSON.stringify({ 
-            "@type": dt, 
+        return JSON.stringify({
+            "@type": dt,
             "@id": "doc:NEW_ID",
             "rdfs:label": {"@value": "Document Name", "@type": "xsd:string"}
         }, false, 2)
@@ -314,17 +314,17 @@ export const NewDocumentView = ({doctype, close, prefixes, types, selectDocument
     }
 
     return <span>
-        <CreateToolbar 
-            types={types} 
-            type={doctype} 
+        <CreateToolbar
+            types={types}
+            type={doctype}
             onCancel={cancel}
             onCreate={createDocument}
         />
-        {content && 
-            <JSONEditor 
-                dataProvider={content} 
-                edit={true} 
-                onChange={getContents} 
+        {content &&
+            <JSONEditor
+                dataProvider={content}
+                edit={true}
+                onChange={getContents}
                 prefixes={prefixes}
             />
         }
@@ -333,8 +333,8 @@ export const NewDocumentView = ({doctype, close, prefixes, types, selectDocument
 
 export const CreateToolbar = ({types, type, onCancel, onCreate, report}) => {
     const [commit, setCommit] = useState()
-    let msg = "Create New " + type + " Document" 
-    
+    let msg = "Create New " + type + " Document"
+
     function updateCommit(e) {
         if (e.target.value != commit) {
             setCommit(e.target.value)

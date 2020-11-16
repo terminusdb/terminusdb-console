@@ -3,7 +3,7 @@ import {Row, Col} from "reactstrap"
 import {ResultViewer} from "../../components/QueryPane/ResultViewer"
 import Loading from '../../components/Reports/Loading'
 import {CSVInput} from "./CSVInput"
-import { TERMINUS_COMPONENT} from '../../constants/identifiers'
+import {TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {SelectedCSVList} from "./SelectedCSVList"
 import {CSVPreview} from "./CSVPreview"
 import {CREATE_DB_VIEW} from "./constants.csv"
@@ -11,7 +11,7 @@ import {TOOLBAR_CSS} from "../../views/Document/constants.document"
 
 export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, availableCsvs, setIsAdding, onCsvCancel}) => {
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
-
+	let css="csv-preview-results"
     const [loading, setLoading] = useState(false)
 
 	return (
@@ -31,7 +31,7 @@ export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, av
 					</Col>
                     <SelectedCSVList setLoading={setLoading} csvs={csvs} page={page} preview={preview}
 						setPreview={setPreview} setCsvs={setCsvs} availableCsvs={availableCsvs}/>
-                    <CSVPreview preview={preview} setPreview={setPreview}/>
+                    <CSVPreview preview={preview} setPreview={setPreview} previewCss={css}/>
                 </Row>
             </div>
 	)

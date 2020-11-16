@@ -117,9 +117,13 @@ export const CSVList=()=>{
 			</Row>
 			{happiness && csvBindings && <>
 				<div className="sub-headings">CSV Documents</div>
-				{/*<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>*/}</>}
-			<ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onError={setReport}/>
+				{/*<ResultViewer type ="table" query={woql} updateQuery={updateQuery} bindings= {csvBindings}/>*/}
+			</>}
+			<ControlledTable limit={tabConfig.pagesize()}
+				query={query}
+				view={tabConfig}
+				onError={setReport}/>
 			<br/>
-			<CSVPreview preview={preview} setPreview={setPreview}/>
+			<CSVPreview preview={preview} setPreview={setPreview} previewCss={"csv-preview-results csv-preview-results-border "}/>
 	</>)
 }
