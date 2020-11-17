@@ -47,19 +47,22 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
         woqlClient.query(q).then((results) => {
 			let propertyColumnNames=[]
 			let wr = new TerminusClient.WOQLResult(results, q)
+			let vars=[]
 			for(var key in wr.bindings){
-				propertyColumnNames.push(wr.bindings[key]["Property Name"]["@value"])
+				vars.push(...wr.bindings[key]["Property Name"]["@value"])
 			}
+			console.log('vars', vars)
 			const propertyQuery=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
 			   .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
 			setQuery(propertyQuery)
+			/*tabConfig.column_order('v:CSV Rows', 'v:Properties')
+			tabConfig.pagesize(100)
+			tabConfig.pager("remote")
+			tabConfig.bindings(formatData)*/
 		})
 	}
 
-	tabConfig.column_order('v:CSV Rows', 'v:Properties')
-	tabConfig.pagesize(100)
-	tabConfig.pager("remote")
-	tabConfig.bindings(formatData)
+
 
 	return <>
 		{preview.show && <>

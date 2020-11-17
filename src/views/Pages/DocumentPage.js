@@ -221,7 +221,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
                     total={cnt}
                 />
             }
-            {(csvs.length>0) && <>
+            {(csvs.length>0) &&  <main className="console__page__container console__page__container--width">
                 <CSVLoader csvs={csvs}
                     setCsvs={setCsvs}
                     insertCsvs={insertCsvs}
@@ -236,7 +236,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
 					</span>
 				</span>
                 <CSVList/>
-            </>}
+            </main>}
             {!isCreating && docid &&
                 <DocumentView
                     close={closeDV}

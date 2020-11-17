@@ -5,12 +5,13 @@ import {DocumentTypeFilter, DocumentSubTypeFilter} from "../Document/TypeFilter"
 import {TypeStats} from "../Document/TypeStats"
 import {Row, Col} from "reactstrap"
 import {FileLoader} from "../Document/FileLoader"
+import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
 
 export const DocumentNavTab = ({isAdding, total, types, current, docType, changeDocType, limit, setDocCount, docCount, doCreate, csvs, setCsvs, insertCsvs}) => {
 
 	const TotalStats = ({total}) => {
 	    if(typeof total != "number") return null
-	    return <span>{total} Document{(total === 1 ? "" : "s")} </span>
+	    return <span className="d-icons-text">{total} Document{(total === 1 ? "" : "s")} </span>
 	}
 
 	const DocumentTypeMeta = ({doctype, meta, count, onCreate}) => {
@@ -19,12 +20,12 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 				<span className="db-card-credit subheader-spacing">
 					<BsBookHalf className="db_info_icon_spacing"/>
 					<span className="db_info">
-						<span className="tdb__dblist__info--blue" title={doctype + ": " + meta.description}>
+						<span className="tdb__dblist__info--blue d-icons-text" title={doctype + ": " + meta.description}>
 							{count} {meta.label} Document{(count === 1 ? "" : "s")}
 						</span>
 					</span>
 				</span>
-				{!meta.abstract && <span className="create-new-button">
+				{!meta.abstract && (docType!==DOCTYPE_CSV) && <span className="create-new-button">
 					<button className="tdb__button__base tdb__button__base--bgreen create-new-button-spacing subheader-btns" onClick={onCreate}>
 						Create New
 					</button>
