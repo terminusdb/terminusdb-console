@@ -32,3 +32,4 @@ export const UPDATE_JSON_BUTTON = "Save Changes"
 export const COMMIT_PLACEHOLDER = "What is the purpose of this update?"
 export const DEFAULT_PAGE_SIZE = 20
 export const DEFAULT_ORDER_BY = ["Name", "asc"]
+export const GO_BACK="Click to go back"

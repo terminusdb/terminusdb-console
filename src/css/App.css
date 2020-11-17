@@ -5308,6 +5308,18 @@ span.csv_subheader_section{
     margin-top: 10px;
 }
 
+.d-icon-header{
+    padding:10px;
+    font-size: 1.6em !important;
+    cursor: pointer;
+    color:#0055bb;
+}
+
+.d-icon-header:hover{
+  background-color: #ddd !important;
+  border-radius: 50%;
+}
+
 span.add-csv {
     float: right;
 }
@@ -5330,6 +5342,10 @@ span.add-csv {
     overflow: hidden;
     padding: .375rem .75rem;
     font-size: 14px;
+    letter-spacing: 0.88px;
+}
+
+.d-icons-text {
     letter-spacing: 0.88px;
 }
 

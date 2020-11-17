@@ -8,8 +8,10 @@ import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerH
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_JSON_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER,
-    SUBMIT_INPUT_LABEL} from "./constants.document"
+    SUBMIT_INPUT_LABEL, GO_BACK} from "./constants.document"
 import {ControlledTable} from '../Tables/ControlledTable'
+import {BsBookHalf} from "react-icons/bs"
+import {BiArrowBack, BiEdit, BiSave} from "react-icons/bi"
 
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
@@ -175,7 +177,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
 export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCancel,  onUpdate}) => {
     const {consoleTime} = DBContextObj()
     const [commit, setCommit] = useState()
-    let msg = "Document " + docid
+    let msg = docid
     function updateCommit(e) {
         if (e.target.value != commit) {
             setCommit(e.target.value)
@@ -183,51 +185,79 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
     }
 
     function getCreateForPage(p) {
-        if (!consoleTime) {
+        if (!consoleTime) { ////eef6ff
             return [
-                <Button key="json" className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
-                    {EDIT_JSON_BUTTON}
-                </Button>,
-                <Button key="Close" className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
-                    Close
-                </Button>
+                <span className="d-icon-header" key="Close" title={GO_BACK} onClick={onCancel}>
+                    <BiArrowBack className="db_info_icon_spacing"/>
+                </span>,
+                <span className="d-icon-header" key="json" title={EDIT_JSON_BUTTON} onClick={toggle}>
+                    <BiEdit className="db_info_icon_spacing"/>
+                </span>
             ]
         }
         return null
     }
 
+/*
+<Button key="json" className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
+    {EDIT_JSON_BUTTON}
+</Button>
+<Button key="Close" className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
+    Close
+</Button>
+
+*/
     function extractInput() {
         return onUpdate(commit)
     }
 
     function getSubmitButtons() {
         return [
-            <Button key="cancel" className={TOOLBAR_CSS.cancelOWLButton} onClick={toggle}>
-                {CANCEL_EDIT_BUTTON}
-            </Button>,
-            <Button key="sub" className={TOOLBAR_CSS.updateOWLButton} onClick={extractInput}>
-                {UPDATE_JSON_BUTTON}
-            </Button>,
+            <span className="d-icon-header" key="cancel" title={GO_BACK} onClick={toggle}>
+                <BiArrowBack className="db_info_icon_spacing"/>
+            </span>,
+            <span className="d-icon-header" key="sub" title={UPDATE_JSON_BUTTON} onClick={extractInput}>
+                <BiSave className="db_info_icon_spacing"/>
+            </span>
         ]
     }
+
+    /*
+
+    <Button key="cancel" className={TOOLBAR_CSS.cancelOWLButton} onClick={toggle}>
+        {CANCEL_EDIT_BUTTON}
+    </Button>
+    <Button key="sub" className={TOOLBAR_CSS.updateOWLButton} onClick={extractInput}>
+        {UPDATE_JSON_BUTTON}
+    </Button>
+
+    */
 
     let cr = getCreateForPage()
     let but = getSubmitButtons()
 
     function getEditModeBar() {
         return (
-            <Row className={TOOLBAR_CSS.updateContainer}>
-                <Col md={7} className={TOOLBAR_CSS.commitMsgCol}>
-                    <input
-                        className={TOOLBAR_CSS.commitInput}
-                        onChange={updateCommit}
-                        placeholder={COMMIT_PLACEHOLDER}
-                    />
-                </Col>
-                <Col md={5} className={TOOLBAR_CSS.submitButtonsCol}>
-                    {but}
-                </Col>
-            </Row>
+            <div className="nav__main__wrap">
+                <div className="tdb__model__header">
+                    <Col md={2}></Col>
+                    <Col md={8}>
+                        <Row className={TOOLBAR_CSS.updateContainer}>
+                            <Col md={7} className={TOOLBAR_CSS.commitMsgCol}>
+                                <input
+                                    className={TOOLBAR_CSS.commitInput}
+                                    onChange={updateCommit}
+                                    placeholder={COMMIT_PLACEHOLDER}
+                                />
+                            </Col>
+                            <Col md={5} className={TOOLBAR_CSS.submitButtonsCol}>
+                                {but}
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col md={2}></Col>
+                </div>
+            </div>
         )
     }
 
@@ -255,7 +285,14 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
                 <Col md={8}>
                     <Row className={TOOLBAR_CSS.container}>
                         <Col md={8} className="schema-toolbar-title">
-                            {msg}
+                            <span className="db-card-credit subheader-spacing">
+                                <BsBookHalf className="db_info_icon_spacing"/>
+                                <span className="db_info">
+                                    <span className="tdb__dblist__info--blue d-icons-text" title={msg}>
+                                        <b>Document </b> {msg}
+                                    </span>
+                                </span>
+                            </span>
                         </Col>
                         <Col md={4} className={TOOLBAR_CSS.createCol}>
                             {cr}
@@ -360,14 +397,24 @@ export const CreateToolbar = ({types, type, onCancel, onCreate, report}) => {
 
     function getSubmitButtons() {
         return [
-            <Button key="cancel" className={TOOLBAR_CSS.cancelOWLButton} onClick={onCancel}>
-                {CANCEL_EDIT_BUTTON}
-            </Button>,
-            <Button key="sub" className={TOOLBAR_CSS.updateOWLButton} onClick={extractInput}>
-                {UPDATE_JSON_BUTTON}
-            </Button>,
+            <span className="d-icon-header" key="cancel" title={GO_BACK} onClick={onCancel}>
+                <BiArrowBack className="db_info_icon_spacing"/>
+            </span>,
+            <span className="d-icon-header" key="sub" title={UPDATE_JSON_BUTTON} onClick={extractInput}>
+                <BiSave className="db_info_icon_spacing"/>
+            </span>
         ]
     }
+
+    /*
+
+    <Button key="cancel" className={TOOLBAR_CSS.cancelOWLButton} onClick={onCancel}>
+        {CANCEL_EDIT_BUTTON}
+    </Button>,
+    <Button key="sub" className={TOOLBAR_CSS.updateOWLButton} onClick={extractInput}>
+        {UPDATE_JSON_BUTTON}
+    </Button>,
+    */
 
     let but = getSubmitButtons()
 
