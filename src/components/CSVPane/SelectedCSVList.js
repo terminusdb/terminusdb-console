@@ -9,35 +9,18 @@ import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
 import {convertStringsToJson} from '../../utils/helperFunctions';
 import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG} from "./constants.csv"
-import {readLines, isObject} from "../../utils/helperFunctions"
+import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
 import {formatBytes} from "../../utils/format"
 import Select from 'react-select'
-import { format } from "date-fns";
-import {printts, DATETIME_DB_UPDATED} from '../../constants/dates'
+import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
 	let currentFile={}, availableCsvList=[]
-	const [actionFiles, setActionFiles]=useState([])
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
 	const {woqlClient}=WOQLClientObj()
-	const [optAction, setOptAction]=useState({})
-
-	function constructActionForFiles(csvs){
-		const fArr=[]
-		csvs.map(item=>{
-			fArr.push({name: item.name, action:action.CREATE_NEW})
-		})
-		return fArr
-	}
-
-	useEffect(() => {
-		const fArr=constructActionForFiles(csvs)
-		setActionFiles(fArr)
-	}, [csvs])
-
 
 	const viewPreview=(e)=>{
 		let maxlines=6, buff=[] // read 6 lines
@@ -80,31 +63,27 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
     }
 
 	const handleUpload=(e) => {
-		let update_start = Date.now(), updateFiles=[], insertFiles=[]
+		let update_start = Date.now(), upFormatted=[]
         update_start = update_start || Date.now()
-		let chonsenUpdates=actionFiles.filter(item => item.action === action.UPDATE)
-		let chosenInserts=actionFiles.filter(item => item.action === action.CREATE_NEW)
-		csvs.map(item=>{
-			chonsenUpdates.map(el=>{
-				if(item.name === el.name)
-					updateFiles.push(item)
-			})
+		let updateFiles=csvs.filter(item => { // filter csvs for update
+			let act=item.action.split(" ")
+			if(act[0]==action.UPDATE){
+				upFormatted.push({fileToBeUpdated:item.fileToUpdate, updateWith:item})
+				return true
+			}
+			else false
 		})
-		csvs.map(item=>{
-			chosenInserts.map(el=>{
-				if(item.name === el.name)
-					insertFiles.push(item)
-			})
-		})
-		if(updateFiles.length>0){
-			woqlClient.updateCSV(updateFiles , commitMsg, null, null).then((results) => {
+
+		let insertFiles=csvs.filter(item => item.action === action.CREATE_NEW) // filter csvs for create
+		if(isArray(upFormatted)){
+			woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
 				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
 				setCsvs([]);
 			})
 			.catch((err) => process_error(err, update_start, "Failed to update file"))
 			.finally(() => setLoading(false))
 		}
-		if(insertFiles.length>0){
+		if(isArray(insertFiles)){
 			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {
 				setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
 				setCsvs([]);
@@ -114,21 +93,22 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 	}
 
-	function handleAction(changeEvent){
-		const [chosenFileName, chosenAction]=changeEvent.target.id.split('/')
-		actionFiles.map(item=>{
-			if(item.name==chosenFileName){
-				item.action=chosenAction
+	const changeAction=(e)=>{
+		csvs.map(item=>{
+			if(item.name==e.id){
+				item.action=e.value
+				item.fileToUpdate=e.fileToUpdate
 			}
 		})
 	}
 
-	const changeFilter=(e)=>{
-		actionFiles.map(item=>{
-			if(item.name==e.id){
-				item.action=e.value
-			}
+	const getSelectOptions=(id)=>{
+		let opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
+		availableCsvs.map(names=>{
+			let updateOpt=action.UPDATE+" "+names
+			opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
 		})
+		return opts
 	}
 
 	const customStyles = (width = 100, height = 20) => {
@@ -145,53 +125,45 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         }
     }
 
-	const formatFileDate=(d)=>{
-		let dt=format(new Date(d), DATETIME_DB_UPDATED)
-		return dt
-	}
-
 	const List=()=>{
 		return (csvs.map( item => <>
-					<Row style={{width: "100%"}} className={action.CSV_ROWS}>
-						<Col md={2}>
+					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={item.name}>
+						<Col md={2} key={item.name}>
 							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
 						</Col>
-						<Col md={2}>
+						<Col md={2} key={item.name}>
 							<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatBytes(item.size)}</span>
 						</Col>
-						<Col md={2}>
+						<Col md={2} key={item.name}>
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
 						</Col>
-						{(page==DOCUMENT_VIEW) && (availableCsvs.length>0) && <>
-							<Col md={2}>
+						{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <>
+							<Col md={2} key={item.name}>
 								<label htmlFor={item.name}/>
 								<Select placeholder={"Choose an action"}
 									className={action.CONTROLS_TEXT}
-									defaultValue={{value: action.CREATE_NEW, label: action.CREATE_NEW}}
-									onChange = {changeFilter}
+									defaultValue={{value: item.action, label: item.action}}
+									onChange = {changeAction}
 									styles={customStyles}
-									options = {[
-										{value: action.CREATE_NEW, label: action.CREATE_NEW, id: item.name},
-										{value: action.UPDATE, label: action.UPDATE, id: item.name}
-									]}
+									options = {getSelectOptions(item.name)}
 								/>
 							</Col>
 						</>}
 						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
-							<Col md={2}>
+							<Col md={2} key={item.name}>
 								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
 							</Col>
 						</>}
-						<Col md={2}>
+						<Col md={2} key={item.name}>
 							<span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
 								<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
 							</span>
 						</Col>
-						<Col md={2}>
+						<Col md={2} key={item.name}>
 							<span id={item.name} onClick={removeCsv} className={action.CONTROLS_SPAN_CSS}>
 								<TiDeleteOutline id={item.name} color="#721c24" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>

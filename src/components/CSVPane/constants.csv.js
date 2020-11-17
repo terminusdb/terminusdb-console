@@ -1,3 +1,5 @@
+import TerminusClient from '@terminusdb/terminusdb-client'
+
 export const PREVIEW='Preview'
 export const REMOVE='Remove'
 export const SHOW='Show Contents'

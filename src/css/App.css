@@ -2697,6 +2697,7 @@ span.delete-modal-label {
       margin: 0px 0px 0px 0px;
       border-bottom: 1px solid #00C08B;
       padding: 2px 2px 8px 2px;
+      width: 100%;
   }
 
   .schema-edit-toolbar {
@@ -2705,6 +2706,10 @@ span.delete-modal-label {
       background-color: #002856;
       margin: 0px 0px 0px 0px;
       padding: 2px;
+  }
+
+  .document-edit-toolbar {
+      background-color: #f4f4f4 !important;
   }
 
   .schema-edit-report {

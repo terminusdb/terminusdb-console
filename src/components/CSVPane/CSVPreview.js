@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { ResultViewer } from "..//QueryPane/ResultViewer"
 import {Row, Col} from "reactstrap"
 import {MdSlideshow} from "react-icons/md"
@@ -7,34 +7,17 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {isArray} from "../../utils/helperFunctions"
+import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
+import {DBContextObj} from '../../components/Query/DBContext'
 
 export const CSVPreview=({preview, setPreview, previewCss})=>{
-    const {woqlClient} = WOQLClientObj()
-
-	const tabConfig= TerminusClient.View.table();
-
-    //tabConfig.column_order("Column Duration", "Column Start date", "Column End date", "Column Start station number", "Column Start station",
-	//	"Column	End station number", "Column End station", "Column Bike number", "Column Member type")
-	//tabConfig.column_order("v:CSV ID", "v:CSV Rows", "v:Properties", "v:Property Name" , "v:Value")
-    tabConfig.pagesize(100)
-    tabConfig.pager("remote")
-
-	function getColumns(bindings){
-		let row=bindings[0]["CSV Rows"], cArr=[]
-		for(var x=0; x<bindings.length; x++){
-			if(row===bindings[x]["CSV Rows"]){
-				let str= bindings[x]["Property Name"]["@value"]
-				cArr.push(str)
-			}
-			else break;
-		}
-		//console.log('cArr', cArr)
-		tabConfig.column_order(...cArr)
-	}
+	const {woqlClient} = WOQLClientObj()
+	const [query, setQuery] = useState(false)
+	const tabConfig=TerminusClient.View.table();
 
 	function formatData(bindings) {
 		let row=bindings[0]["CSV Rows"], colName, nBindings=[], json={}
-		for(var x=0; x<bindings.length; x++){
+		/*for(var x=0; x<bindings.length; x++){
 			if(row===bindings[x]["CSV Rows"]){
 				colName=bindings[x]["Property Name"]["@value"]
 				json[colName]=bindings[x]["Value"]["@value"]
@@ -46,21 +29,37 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 				colName=bindings[x]["Property Name"]["@value"]
 				json[colName]=bindings[x]["Value"]["@value"]
 			}
+		}*/
+		for(var x=0; x<bindings.length; x++){
+			if(row===bindings[x]["Properties"]){
+				bindings[x]["Properties"] = "hellowWorld"
+			}
 		}
-		//console.log('nBindings', nBindings)
+		nBindings = bindings
+		console.log('nBindings', nBindings)
 		return nBindings
 	}
 
-	let formatBindings=(bindings)=>{
-		getColumns(bindings)
-		const nBindings=formatData(bindings)
-		//console.log('tabConfig',tabConfig)
-		return nBindings
+	if(preview.selectedCSV){
+		let id=preview.selectedCSV
+		// get property names from graph
+        const q=TerminusClient.WOQL.triple(id, "scm:csv_column", "v:Column Obj").triple("v:Column Obj", "scm:csv_column_name", "v:Property Name")
+        woqlClient.query(q).then((results) => {
+			let propertyColumnNames=[]
+			let wr = new TerminusClient.WOQLResult(results, q)
+			for(var key in wr.bindings){
+				propertyColumnNames.push(wr.bindings[key]["Property Name"]["@value"])
+			}
+			const propertyQuery=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
+			   .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
+			setQuery(propertyQuery)
+		})
 	}
 
-	if(preview.query){
-		tabConfig.bindings(formatBindings)
-	}
+	tabConfig.column_order('v:CSV Rows', 'v:Properties')
+	tabConfig.pagesize(100)
+	tabConfig.pager("remote")
+	tabConfig.bindings(formatData)
 
 	return <>
 		{preview.show && <>
@@ -80,13 +79,14 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 			{isArray(preview.data) && <Row className="csv-preview-results">
 				<ResultViewer type="table" bindings={preview.data}/>
 			</Row>}
-			{preview.query && <Row className={previewCss}>
-				<ControlledTable
-					query={preview.query}
+			{/*<Row className={previewCss}>
+				{<ControlledTable
+					query={query}
 					freewidth={true}
 					view={tabConfig}
-					limit={tabConfig.pagesize()}/>
-			</Row>}
+					limit={tabConfig.pagesize()}/>}
+			</Row>*/}
 		</>}
 	</>
+
 }

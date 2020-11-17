@@ -13,7 +13,7 @@ export const TOOLBAR_CSS = {
     actionButton: "schema-toolbar-action",
     editOWLButton: "schema-toolbar-edit schema-toolbar-action",
     createGraphButton: "schema-toolbar-create-button schema-toolbar-action",
-    updateContainer: "schema-edit-toolbar",
+    updateContainer: "schema-edit-toolbar document-edit-toolbar",
     updateReportContainer: "schema-edit-report",
     cancelOWLButton: "schema-toolbar-cancel",
     updateOWLButton: "schema-toolbar-update",

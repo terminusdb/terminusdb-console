@@ -128,17 +128,19 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             onCancel={cancel}
             onUpdate={updateDocument}
         />
-        {content &&
-            <JSONEditor
-                dataProvider={content}
-                edit={edit}
-                onChange={getContents}
-                prefixes={prefixes}
-            />
-        }
-        {!edit && docid &&
-            <DocumentLinks docid={docid} selectDocument={selectDocument} />
-        }
+        <main className="console__page__container console__page__container--width">
+            {content &&
+                    <JSONEditor
+                        dataProvider={content}
+                        edit={edit}
+                        onChange={getContents}
+                        prefixes={prefixes}
+                    />
+            }
+            {!edit && docid &&
+                <DocumentLinks docid={docid} selectDocument={selectDocument} />
+            }
+        </main>
     </span>
 }
 
@@ -247,19 +249,27 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
     }
 
     return (<>
-        <Row className={TOOLBAR_CSS.container}>
-            <Col md={8} className="schema-toolbar-title">
-                {msg}
-            </Col>
-            <Col md={4} className={TOOLBAR_CSS.createCol}>
-                {cr}
-            </Col>
-        </Row>
-        {report &&
-            <Row className="generic-message-holder" style={{marginBottom: "1.4em"}}>
-                 <TerminusDBSpeaks report={report} />
-            </Row>
-        }
+        <div className="nav__main__wrap">
+			<div className="tdb__model__header">
+                <Col md={2}></Col>
+                <Col md={8}>
+                    <Row className={TOOLBAR_CSS.container}>
+                        <Col md={8} className="schema-toolbar-title">
+                            {msg}
+                        </Col>
+                        <Col md={4} className={TOOLBAR_CSS.createCol}>
+                            {cr}
+                        </Col>
+                    </Row>
+                    {report &&
+                        <Row className="generic-message-holder" style={{marginBottom: "1.4em"}}>
+                             <TerminusDBSpeaks report={report} />
+                        </Row>
+                    }
+                </Col>
+                <Col md={2}></Col>
+            </div>
+        </div>
     </>)
 }
 
@@ -321,14 +331,16 @@ export const NewDocumentView = ({doctype, close, prefixes, types, selectDocument
             onCancel={cancel}
             onCreate={createDocument}
         />
-        {content &&
-            <JSONEditor
-                dataProvider={content}
-                edit={true}
-                onChange={getContents}
-                prefixes={prefixes}
-            />
-        }
+        <main className="console__page__container console__page__container--width">
+            {content &&
+                <JSONEditor
+                    dataProvider={content}
+                    edit={true}
+                    onChange={getContents}
+                    prefixes={prefixes}
+                />
+            }
+        </main>
     </span>
 }
 
@@ -361,35 +373,50 @@ export const CreateToolbar = ({types, type, onCancel, onCreate, report}) => {
 
     function getEditModeBar() {
         return (
-            <Row className={TOOLBAR_CSS.updateContainer}>
-                <Col md={1} className={TOOLBAR_CSS.commitLabelCol}>
-                    {SUBMIT_INPUT_LABEL}
-                </Col>
-                <Col md={8} className={TOOLBAR_CSS.commitMsgCol}>
-                    <input
-                        className={TOOLBAR_CSS.commitInput}
-                        onChange={updateCommit}
-                        placeholder={COMMIT_PLACEHOLDER}
-                    />
-                </Col>
-                <Col md={3} className={TOOLBAR_CSS.submitButtonsCol}>
-                    {but}
-                </Col>
-            </Row>
+            <div className="nav__main__wrap">
+    			<div className="tdb__model__header">
+                    <Col md={2}></Col>
+                    <Col md={8}>
+                        <Row className={TOOLBAR_CSS.updateContainer}>
+                            <Col md={1} className={TOOLBAR_CSS.commitLabelCol}>
+                                {SUBMIT_INPUT_LABEL}
+                            </Col>
+                            <Col md={8} className={TOOLBAR_CSS.commitMsgCol}>
+                                <input
+                                    className={TOOLBAR_CSS.commitInput}
+                                    onChange={updateCommit}
+                                    placeholder={COMMIT_PLACEHOLDER}
+                                />
+                            </Col>
+                            <Col md={3} className={TOOLBAR_CSS.submitButtonsCol}>
+                                {but}
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col md={2}></Col>
+                </div>
+            </div>
+
         )
     }
 
     let bar = getEditModeBar()
     if (report) {
         return (
-            <>
-                {bar}
-                <Row className={TOOLBAR_CSS.updateReportContainer}>
-                    <span className={TOOLBAR_CSS.messageContainer}>
-                        <TerminusDBSpeaks report={report} />
-                    </span>
-                </Row>
-            </>
+            <div className="nav__main__wrap">
+    			<div className="tdb__model__header">
+                    <Col md={2}></Col>
+                    <Col md={8}>
+                        {bar}
+                        <Row className={TOOLBAR_CSS.updateReportContainer}>
+                            <span className={TOOLBAR_CSS.messageContainer}>
+                                <TerminusDBSpeaks report={report} />
+                            </span>
+                        </Row>
+                    </Col>
+                    <Col md={2}></Col>
+                </div>
+            </div>
         )
     }
     return bar

@@ -26,15 +26,6 @@ export const CSVList=()=>{
 	const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
 
-	/*const csvQuery = TerminusClient.WOQL.limit(50,
-		TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:Name'))
-	const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
-        woqlClient,
-        csvQuery,
-        branch,
-        ref,
-    )*/
-
 	const csvQuery = () => {
         let q = WOQL.and(WOQL.lib().document_metadata())
         q.sub(DOCTYPE_CSV, "v:Type ID")

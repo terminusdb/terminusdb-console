@@ -15,7 +15,7 @@ import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../Components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
-import {DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
+import {DOCUMENT_VIEW, CREATE_NEW} from '../../Components/CSVPane/constants.csv'
 import {BsCardList} from "react-icons/bs"
 import {
     TERMINUS_SUCCESS,
@@ -77,6 +77,7 @@ const DocumentPage = (props) => {
         for(var i=0; i<e.target.files.length; i++){
             let files = {};
             files = e.target.files[i]
+            files.action=CREATE_NEW
             const q=TerminusClient.WOQL.limit(50,
                 TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:name'))
             woqlClient.query(q).then((results) => {
@@ -87,16 +88,16 @@ const DocumentPage = (props) => {
                     let names=cBindings[item].name['@value']
                     setAvailableCsvs(arr => [...arr, names])
         		}
-                setCsvs( arr => [...arr, files]);
+                setCsvs(arr => [...arr, files]);
             })
         }
     }
-
+    //<main className="console__page__container console__page__container--width">
     return (
         <>
             <div id={props.id} className="console__page h-100" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
-                <DocumentNavTab total={cnt}
+                {!docID && !isCreating && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
                     types={types}
                     current={current}
@@ -108,8 +109,8 @@ const DocumentPage = (props) => {
                     setDocCount={setDocCount}
                     csvs={csvs}
                     setCsvs={setCsvs}
-                    insertCsvs={insertCsvs}/>
-                <main className="console__page__container console__page__container--width">
+                    insertCsvs={insertCsvs}/>}
+                <>
                     {!mode &&
                         <Loading/>
                     }
@@ -140,7 +141,7 @@ const DocumentPage = (props) => {
                         insertCsvs={insertCsvs}
                         availableCsvs={availableCsvs}
                         setDocument={setDocument}/>}
-                </main>
+                </>
                 <Footer/>
             </div>
         </>
