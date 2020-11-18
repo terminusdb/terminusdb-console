@@ -73,24 +73,26 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 		</>
 	}
 
-
 	const PreviewToolBarForSingleDocuments = ({preview, setPreview}) => {
 		return <>
-			<Col md={8}>
-				<span className="db-card-credit subheader-spacing">
+			<Col md={11}>
+				<span className="db-card-credit" style={{fontSize: "2em"}}>
 					<MdSlideshow className="db_info_icon_spacing"/>
 					<span className="db_info">
-						<span className="tdb__dblist__info--blue d-icons-text">
-							Showing preview of file  <strong>{preview.fileName} </strong>
+						<span className="db_info db_info d-nav-text">
+							Showing contents of file  <strong>{preview.fileName} </strong>
 						</span>
 					</span>
 				</span>
 			</Col>
-			<Col md={4}>
-				<span className="d-icon-header close-preview-span" key="cancel" title={"Close Preview and go back"}
-					onClick={()=> setPreview({show: false, fileName:false, data:[], selectedCSV: false})}>
-	                <BiArrowBack className="db_info_icon_spacing"/>
-	            </span>
+			<Col md={1}>
+				<span style={{fontSize: "2em"}}>
+					<span title={"Close contents and go back"} key="cancel"
+						className="d-nav-icons"
+						onClick={()=> setPreview({show: false, fileName:false, data:[], selectedCSV: false})}>
+						<BiArrowBack className="db_info_icon_spacing"/>
+					</span>
+				</span>
 			</Col>
 		</>
 	}
@@ -103,7 +105,7 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 			</Col>
 			<Col md={4}>
 				<span onClick={()=> setPreview({show: false, fileName:false, data:[]})}
-					className="db-card-credit csv-act">
+					className="db-card-credit csv-act" style={{float: "right"}}>
 					<TiDeleteOutline color="#721c24" className='db_info_icon_spacing csv_icon_spacing'/>
 					<span className="db_info">Close Preview</span>
 				</span>

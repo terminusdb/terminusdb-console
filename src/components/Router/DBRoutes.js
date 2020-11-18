@@ -6,6 +6,7 @@ import {
     DB_SCHEMA_ROUTE,
     DB_DOCUMENT_ROUTE,
     SPECIFIC_DB_ROUTE,
+    SPECIFIC_DOC_ROUTE,
     TERMINUS_ROUTE,
 } from '../../constants/routes'
 import {WOQLClientObj} from '../../init/woql-client-instance'
@@ -88,6 +89,11 @@ const DBRoute = () => {
         </Route>,
     )
     routes.push(
+        <Route key="dbdoc" path={`${path}${DB_DOCUMENT_ROUTE}${SPECIFIC_DOC_ROUTE}`}>
+            <SpecificDoc />
+        </Route>,
+    )
+    routes.push(
         <Route key="dbdoc" path={`${path}${DB_DOCUMENT_ROUTE}`}>
             <DocumentPage />
         </Route>,
@@ -108,4 +114,9 @@ const DBRoute = () => {
         </Route>,
     )
     return <DBContextProvider woqlClient={woqlClient}><Switch>{routes}</Switch></DBContextProvider>
+}
+
+const SpecificDoc = () => {
+    const {docid} = useParams()
+    return <DocumentPage docid={docid} />
 }

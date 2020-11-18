@@ -25,11 +25,12 @@ export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, av
                 </Row>}
                 <Row key="rd" className="database-context-row detail-credits chosen-csv-container">
                     {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-					<Col md={10}>
-					</Col>
-					<Col md={2}>
-						<button className={TOOLBAR_CSS.editOWLButton+" close-button"} onClick={onCsvCancel}>Close</button>
-					</Col>
+					{(page==CREATE_DB_VIEW) && <>
+						<Col md={10}></Col>
+						<Col md={2}>
+							<button className={TOOLBAR_CSS.editOWLButton+" close-button"} onClick={onCsvCancel}>Close</button>
+						</Col>
+					</>}
                     <SelectedCSVList setLoading={setLoading} csvs={csvs} page={page} preview={preview}
 						setPreview={setPreview} setCsvs={setCsvs} availableCsvs={availableCsvs}/>
 					<CSVPreview preview={preview} setPreview={setPreview} previewCss={css}/>

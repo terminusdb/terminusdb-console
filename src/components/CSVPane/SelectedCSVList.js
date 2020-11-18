@@ -41,7 +41,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			limitedData.push(jsonRes[item])
 		}
 		setLoading(false)
-		setPreview({show: true, fileName: currentFile.fileName, data: limitedData, page: page});
+		setPreview({show: true, fileName: currentFile.fileName, data: limitedData, page: page, selectedCSV:false});
 	};
 
 
@@ -49,7 +49,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		const fileName = e.target.id
 		setCsvs(csvs.filter(item => item.name !== fileName));
 		if(preview.fileName==fileName)
-			setPreview({show: false, fileName:false, data:[]})
+			setPreview({show: false, fileName:false, data:[], selectedCSV:false})
 	}
 
 	function process_error(err, update_start, message){
@@ -65,6 +65,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const handleUpload=(e) => {
 		let update_start = Date.now(), upFormatted=[]
         update_start = update_start || Date.now()
+		setLoading(true)
 		let updateFiles=csvs.filter(item => { // filter csvs for update
 			let act=item.action.split(" ")
 			if(act[0]==action.UPDATE){
@@ -81,7 +82,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				setCsvs([]);
 			})
 			.catch((err) => process_error(err, update_start, "Failed to update file"))
-			.finally(() => setLoading(false))
+			//.finally(() => setLoading(false))
 		}
 		if(isArray(insertFiles)){
 			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {

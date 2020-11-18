@@ -61,9 +61,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     }
 
     let csvRowClick = function csvRowClick(id, name){
-        //const q=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
-        //    .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
-        //const q=TerminusClient.WOQL.triple(id, "scm:csv_column", "v:Column Obj").triple("v:Column Obj", "scm:csv_column_name", "v:Property Name")
         setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
     }
 
@@ -138,17 +135,17 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     return (<>
         {!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border "}/>}
-        <main className="console__page__container console__page__container--width">
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            <Row className="generic-message-holder">
-                {report && <TerminusDBSpeaks report={report}/>}
-            </Row>
-            {!isAdding && !preview.show && <ControlledTable
-                query={query}
-                freewidth={true}
-                view={tabConfig}
-                limit={tabConfig.pagesize()}/>}
-        </main>
+            <main className="console__page__container console__page__container--width">
+                <Row className="generic-message-holder">
+                    {report && <TerminusDBSpeaks report={report}/>}
+                </Row>
+                {!isAdding && !preview.show && <ControlledTable
+                    query={query}
+                    freewidth={true}
+                    view={tabConfig}
+                    limit={tabConfig.pagesize()}/>}
+            </main>
     </>)
 }
 
@@ -188,7 +185,7 @@ const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
 }
 
 
-function getTypeMetadata(types, de){
+export function getTypeMetadata(types, de){
     for(var i = 0; i<types.length; i++){
         if(types[i]['Class ID'] == de){
             let tm = {

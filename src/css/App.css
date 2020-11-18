@@ -1576,15 +1576,22 @@ span.delete-modal-label {
       border: 0 !important
   }
 
+  .commit-log-title{
+      letter-spacing: 0.88px;
+      font-size: 14px;
+  }
+
   .sub-headings {
       font-size: 19px;
       color: #bbc;
       padding-left: 1em;
   }
 
-  .latest-update-heading {
-   }
-
+  .d-sub-headings {
+      letter-spacing: 0.88px;
+      padding-left: 10px !important;
+      color: #787878;
+  }
 
   .table-hover.table td{
     word-break: break-word;
@@ -2706,10 +2713,7 @@ span.delete-modal-label {
       background-color: #002856;
       margin: 0px 0px 0px 0px;
       padding: 2px;
-  }
-
-  .document-edit-toolbar {
-      background-color: #f4f4f4 !important;
+      width: 100%;
   }
 
   .schema-edit-report {
@@ -5302,7 +5306,7 @@ span.csv_subheader_section{
     float: right;
 }
 
-.csv-preview-header {
+.csv-preview-header, .commit-log-header {
     width: 100%;
     font-size: 16px;
     border: 1px solid #ddd;
@@ -5312,16 +5316,20 @@ span.csv_subheader_section{
     margin-top: 10px;
 }
 
-.d-icon-header{
-    padding:10px;
-    font-size: 1.6em !important;
+.d-nav-icons{
+    padding: 5px;
     cursor: pointer;
-    color:#0055bb;
+    margin: 0px 0px 0px 5px;
 }
 
-.d-icon-header:hover{
+.d-nav-icons:hover{
   background-color: #ddd !important;
   border-radius: 50%;
+}
+
+.d-nav-text {
+    padding-top: 20px;
+    letter-spacing: 0.88px;
 }
 
 span.add-csv {
