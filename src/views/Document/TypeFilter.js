@@ -28,7 +28,7 @@ export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
     }
 
     function getTypeSelector(){
-        let ph = "Show All " + types.length + " Document Types"
+        let ph = "Show All " + types.length + " Types"
         if(docType && meta){
             ph = "Show " + meta.label + " Documents"
         }

@@ -11,6 +11,7 @@ export const CommitLog = () => {
     const {woqlClient} = WOQLClientObj()
     const {branch, branches, ref, consoleTime, prefixes} = DBContextObj()
     const [query, setQuery] = useState()
+    const [commit, setCommit] = useState()
 
     let limit = LATEST_UPDATES_LENGTH
 
@@ -47,9 +48,6 @@ export const CommitLog = () => {
         }
         let woql = WOQL.select("v:Author", "v:Commit ID", "v:Message", "v:Time", q)
         return woql;
-        woqlClient.query(woql).then((result) => {
-            if (result.bindings) setLatest(result)
-        })
     }
 
     useEffect(() => {
@@ -57,18 +55,89 @@ export const CommitLog = () => {
             setQuery(get_query(branch, ref))
         }
     }, [branch, ref, branches])
+    
+    let rowClick = (row) => {
+        let cmt = {}
+        cmt.id = row.original["Commit ID"]["@value"]
+        cmt.author = row.original["Author"]["@value"]
+        cmt.time = row.original["Time"]["@value"]
+        setCommit(cmt)
+    }
+
+    function unsetCommit(){
+        setCommit()
+    }
+
     const tabConfig= TerminusClient.View.table();
+    tabConfig.row().click(rowClick)
     tabConfig.column_order("Time", "Author", "Commit ID", "Message")
     tabConfig.column("Time").width(180).renderer({type: "time"})
     tabConfig.column("Message").width(300)
     tabConfig.pager("remote")
     tabConfig.pagesize(limit)
     if(!query) return null
+    if(commit){
+        return <CommitView commit={commit} onClose={unsetCommit}/>
+    }
     return (<Row className="update-list">
-        <div className="sub-headings latest-update-heading">{getLatestTitle()}</div>
+        <div className="sub-headings latest-update-heading">
+            {getLatestTitle()}
+        </div>
         <div style={{width: "100%"}}>
             <ControlledTable hook="auto" limit={limit} query={query} view={tabConfig} prefixes={prefixes} /> 
         </div>
     </Row>)
 }
 
+export const CommitView = ({commit, onClose}) => {
+    const {woqlClient} = WOQLClientObj()
+    const {prefixes} = DBContextObj()
+    const WOQL = TerminusClient.WOQL
+    function getUsing(cid){
+        return woqlClient.resource("ref", cid)
+    }
+
+    function getRemovedTriplesQuery(cid){
+        return WOQL.using(getUsing(cid)).removed_triple("v:Removed Subject", "v:Removed Property", "v:Removed Object")
+    }
+
+    function getRemovedQuadsQuery(cid){
+        return WOQL.using(getUsing(cid)).removed_quad("v:Removed Subject", "v:Removed Property", "v:Removed Object", "v:Graph")
+    }
+
+    function getAddedTriplesQuery(cid){
+        return WOQL.using(getUsing(cid)).added_triple("v:Added Subject", "v:Added Property", "v:Added Object")
+    }
+
+    function getAddedQuadsQuery(cid){
+        return WOQL.using(getUsing(cid)).added_quad("v:Added Subject", "v:Added Property", "v:Added Object", "v:Graph")
+    }
+
+    const tabaConfig= TerminusClient.View.table();
+    tabaConfig.pager("remote").pagesize(10)
+    const tabbConfig= TerminusClient.View.table();
+    tabbConfig.pager("remote").pagesize(10)
+    const tabcConfig= TerminusClient.View.table();
+    tabcConfig.pager("remote").pagesize(10)
+    const tabdConfig= TerminusClient.View.table();
+    tabdConfig.pager("remote").pagesize(10)
+    return (<Row className="update-list">
+        <CommitHeader commit={commit} onClose={onClose}/>
+        <div className="sub-headings latest-update-heading">
+            Added Data
+        </div>
+        <div style={{width: "100%"}}>
+            <ControlledTable hook="auto" limit={tabaConfig.pagesize()} query={getAddedTriplesQuery(commit.id)} view={tabaConfig} prefixes={prefixes} /> 
+        </div>
+        <div className="sub-headings latest-update-heading">
+            Removed Data
+        </div>
+        <div style={{width: "100%"}}>
+            <ControlledTable hook="auto" limit={tabcConfig.pagesize()} query={getRemovedTriplesQuery(commit.id)} view={tabcConfig} prefixes={prefixes} /> 
+        </div>
+    </Row>)
+}
+
+export const CommitHeader = ({commit, onClose}) => {
+    return <div>{`Commit ${commit.id} ${commit.time} ${commit.author}`} <button onClick={onClose}>Close</button></div>             
+}

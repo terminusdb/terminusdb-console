@@ -185,7 +185,7 @@ const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
 }
 
 
-function getTypeMetadata(types, de){
+export function getTypeMetadata(types, de){
     for(var i = 0; i<types.length; i++){
         if(types[i]['Class ID'] == de){
             let tm = {

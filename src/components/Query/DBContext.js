@@ -106,6 +106,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
         for(var i = 0; i<prefixes.length; i++){
             if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
                 nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
+                TerminusClient.UTILS.addURLPrefix(prefixes[i]['Prefix']['@value'], prefixes[i]['IRI']["@value"])
             }   
         }
         woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)

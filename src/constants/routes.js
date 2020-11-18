@@ -19,6 +19,8 @@ export const SPECIFIC_ORG_ROUTE = '/:aid'
 export const DB_SCHEMA_ROUTE = '/schema'
 export const DB_DOCUMENT_ROUTE = '/document'
 export const DB_QUERY_ROUTE = '/query'
+export const SPECIFIC_DOC_ROUTE = '/:docid'
+
 
 export const DB_SCHEMA_BUILD_ROUTE = '/model'
 
