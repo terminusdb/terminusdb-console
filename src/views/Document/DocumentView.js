@@ -10,7 +10,9 @@ import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_JSON_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER,
     SUBMIT_INPUT_LABEL} from "./constants.document"
 import {ControlledTable} from '../Tables/ControlledTable'
-import {FrameViewer} from "./FrameViewer"
+//import {FrameViewer} from "./FrameViewer"
+import { FrameViewer } from '@terminusdb/terminusdb-react-components';
+
 import {DocumentViewNav} from "./DocumentViewNav"
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
@@ -196,7 +198,11 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     view={frameconf}
                     classframe={frame}
                     edit={edit}
+                    client={woqlClient}
                 />
+            }
+            {!(content && frame) && docview == "frame" && 
+                <Loading />
             }
             {!edit && docview == "link" &&
                 <DocumentLinks docid={docid} selectDocument={selectDocument} />
