@@ -21,43 +21,6 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 	const [previewQuery, setPreviewQuery]=useState(false)
 	const [cols, setCols]=useState([])
 
-	let formatData=(bindings)=>{
-		let row=bindings[0]["CSV Rows"], colName, nBindings=[], json={}
-		for(var x=0; x<bindings.length; x++){
-			let cn=bindings[x]["Property Name"]["@value"]
-			colName=cn.replace('Column ','');
-			if(row===bindings[x]["CSV Rows"]){
-				//colName=bindings[x]["Property Name"]["@value"]
-				json[colName]=bindings[x]["Value"]["@value"]
-			}
-			else {
-				row=bindings[x]["CSV Rows"]
-				nBindings.push(json)
-				json={}
-				json[colName]=bindings[x]["Value"]["@value"]
-			}
-		}
-		return nBindings
-	}
-
-	/*useEffect(() => {
-		let id=preview.selectedCSV
-		// get property names from graph
-        const q=TerminusClient.WOQL.triple(id, "scm:csv_column", "v:Column Obj").triple("v:Column Obj", "scm:csv_column_name", "v:Property Name")
-        woqlClient.query(q).then((results) => {
-			let wr = new TerminusClient.WOQLResult(results, q)
-			for(var key in wr.bindings){
-				//let cln= "Column " + wr.bindings[key]["Property Name"]["@value"]
-				let cln=wr.bindings[key]["Property Name"]["@value"]
-				propertyColumnNames.push(cln)
-			}
-			setCols(propertyColumnNames)
-			let qp=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
-			   .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
-			setPropertyQuery(qp)
-		})
-	}, [preview.selectedCSV]) */
-
 	useEffect(() => {
 		let id=preview.selectedCSV
 		let WOQL=TerminusClient.WOQL
@@ -75,7 +38,6 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 				let propertyName= "v:" + wr.bindings[key]["Property Name"]["@value"].replace('Column ','')
 				propertyColumnNames.push(wr.bindings[key]["Property Name"]["@value"].replace('Column ',''))
 				columnQuery.push(WOQL.triple('v:CSV Row', property, propertyName))
-				//propertyColumnNames.push(wr.bindings[key]["CSV ID"])
 			}
 			setCols(propertyColumnNames)
 			let qp=WOQL.and(
@@ -88,22 +50,12 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 	}, [preview.selectedCSV])
 
 
-	/*useEffect(() => {
-		tabConfig.pagesize(100)
-		tabConfig.pager("remote")
-		tabConfig.column_order(...cols)
-		setTConf(tabConfig)
-		setQuery(propertyQuery)
-		tabConfig.bindings(formatData)
-    }, [propertyQuery])*/
-
 	useEffect(() => {
 		tabConfig.pagesize(10)
 		tabConfig.pager("remote")
-		//tabConfig.column_order(...cols)
+		tabConfig.column_order(...cols)
 		setTConf(tabConfig)
 		setQuery(previewQuery)
-		//tabConfig.bindings(formatData)
     }, [previewQuery])
 
 	const Contents = ({preview, query, tConf}) => {
