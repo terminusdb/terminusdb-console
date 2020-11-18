@@ -10,7 +10,6 @@ import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER,
     SUBMIT_INPUT_LABEL} from "./constants.document"
 import {ControlledTable} from '../Tables/ControlledTable'
-import {FrameViewer} from "./FrameViewer"
 import {DocumentCreateNav} from "./DocumentCreateNav"
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}) => {
