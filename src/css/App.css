@@ -5298,6 +5298,10 @@ span.csv_subheader_section{
     z-index: -1;
 }
 
+.close-preview-span{
+    float: right;
+}
+
 .csv-preview-header {
     width: 100%;
     font-size: 16px;

@@ -16,7 +16,6 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../Components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW, CREATE_NEW} from '../../Components/CSVPane/constants.csv'
-import {BsCardList} from "react-icons/bs"
 import {
     TERMINUS_SUCCESS,
     TERMINUS_ERROR,
@@ -38,6 +37,7 @@ const DocumentPage = (props) => {
     const [isCreating, setIsCreating] = useState(false)
     const [csvs, setCsvs]=useState([])
     const [availableCsvs, setAvailableCsvs]=useState([])
+    const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
     const {woqlClient} = WOQLClientObj()
     const tabConfig= TerminusClient.View.table();
 
@@ -97,7 +97,7 @@ const DocumentPage = (props) => {
         <>
             <div id={props.id} className="console__page h-100" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
-                {!docID && !isCreating && <DocumentNavTab total={cnt}
+                {!docID && !isCreating && !preview.show && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
                     types={types}
                     current={current}
@@ -132,6 +132,8 @@ const DocumentPage = (props) => {
                         setCsvs={setCsvs}
                         insertCsvs={insertCsvs}
                         availableCsvs={availableCsvs}
+                        setPreview={setPreview}
+                        preview={preview}
                         setDocument={setDocument}/>}
                     {mode == "instance" && <NoSchemaDocumentPage
                         docid={docID}
@@ -140,6 +142,8 @@ const DocumentPage = (props) => {
                         setCsvs={setCsvs}
                         insertCsvs={insertCsvs}
                         availableCsvs={availableCsvs}
+                        setPreview={setPreview}
+                        preview={preview}
                         setDocument={setDocument}/>}
                 </>
                 <Footer/>
@@ -152,7 +156,7 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs}) => {
+const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview}) => {
     let WOQL = TerminusClient.WOQL
     const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
@@ -221,7 +225,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
                     total={cnt}
                 />
             }
-            {(csvs.length>0) &&  <main className="console__page__container console__page__container--width">
+            {(csvs.length>0) && <>
                 <CSVLoader csvs={csvs}
                     setCsvs={setCsvs}
                     insertCsvs={insertCsvs}
@@ -229,14 +233,8 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
                     setIsAdding={setIsAdding}
                     availableCsvs={availableCsvs}
                     onCsvCancel={onCsvCancel}/>
-                <span className="db-card-credit csv_subheader_section">
-					<BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
-					<span className="db_info existing_csv_subheader">
-						CSV Documents
-					</span>
-				</span>
                 <CSVList/>
-            </main>}
+            </>}
             {!isCreating && docid &&
                 <DocumentView
                     close={closeDV}
@@ -254,11 +252,12 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
                     setCurrent={setCurrent}
                     setIsAdding={setIsAdding}
                     isAdding={isAdding}
-                    setDocType={setDocType}
                     docType={docType}
                     tabConfig={tabConfig}
                     csvs={csvs}
                     setCsvs={setCsvs}
+                    setPreview={setPreview}
+                    preview={preview}
                 />
             }
         </>
@@ -266,7 +265,7 @@ const DocumentPageWithSchema = ({docid, setDocument, setIsAdding, isAdding, cnt,
 }
 
 
-const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs}) => {
+const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs, preview, setPreview}) => {
     return (<>
         {(csvs.length>0) && <>
             <CSVLoader csvs={csvs} setCsvs={setCsvs}

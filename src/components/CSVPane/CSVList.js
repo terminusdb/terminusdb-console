@@ -13,6 +13,7 @@ import {DOCTYPE_CSV, SHOW, REMOVE, DOWNLOAD} from "./constants.csv"
 import {convertStringsToJson} from '../../utils/helperFunctions';
 import {Row, Col} from "reactstrap"
 import {ControlledTable} from '../../views/Tables/ControlledTable'
+import {BsCardList} from "react-icons/bs"
 
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 
@@ -50,7 +51,7 @@ export const CSVList=()=>{
         update_start = update_start || Date.now()
 		return await woqlClient.getCSV(name, download).then((results) =>{
 			const jsonRes=convertStringsToJson(results)
-			if(!download) setPreview({show: true, fileName: name, data: jsonRes});
+			if(!download) setPreview({show: true, fileName: name, data: jsonRes, page: page});
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
 		.finally(() => setLoading(false))
@@ -102,7 +103,15 @@ export const CSVList=()=>{
     tabConfig.pagesize(10)
 
 	return (<>
+		<CSVPreview preview={preview} setPreview={setPreview} previewCss={"csv-preview-results csv-preview-results-border "}/>
+		<main className="console__page__container console__page__container--width">
 			{loading &&  <Loading type={TERMINUS_COMPONENT} />}
+			<span className="db-card-credit csv_subheader_section">
+				<BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
+				<span className="db_info existing_csv_subheader">
+					CSV Documents
+				</span>
+			</span>
 			<Row className="generic-message-holder">
 				{rep && <TerminusDBSpeaks report={report}/>}
 			</Row>
@@ -115,6 +124,6 @@ export const CSVList=()=>{
 				view={tabConfig}
 				onError={setReport}/>
 			<br/>
-			<CSVPreview preview={preview} setPreview={setPreview} previewCss={"csv-preview-results csv-preview-results-border "}/>
+		</main>
 	</>)
 }

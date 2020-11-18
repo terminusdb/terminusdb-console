@@ -12,12 +12,11 @@ import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
-import {DOCTYPE_CSV, DOWNLOAD, DELETE} from '../../Components/CSVPane/constants.csv'
+import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
 import {BiDownload} from "react-icons/bi"
 import {RiDeleteBin5Line} from "react-icons/ri"
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs}) => {
-    const [preview, setPreview] = useState({show:false, fileName:false, data:[]})
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
 
@@ -65,7 +64,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         //const q=TerminusClient.WOQL.triple('v:CSV ID', 'type', 'scm:CSV').eq('v:CSV ID', id).triple('v:CSV ID', 'scm:csv_row', 'v:CSV Rows')
         //    .triple('v:CSV Rows', 'v:Properties', 'v:Value').quad('v:Properties', 'label', 'v:Property Name', 'schema/main')
         //const q=TerminusClient.WOQL.triple(id, "scm:csv_column", "v:Column Obj").triple("v:Column Obj", "scm:csv_column_name", "v:Property Name")
-        setPreview({show: true, fileName: name, data:[], selectedCSV: id});
+        setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
     }
 
     let onDocClick = function(cell){
@@ -104,7 +103,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-        return await woqlClient.deleteCSV(name).then((results) =>{
+        let commitMsg="Deleting File " + name + "-" + update_start
+        return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
@@ -136,18 +136,18 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
+        {!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+            previewCss={"csv-preview-results csv-preview-results-border "}/>}
         <main className="console__page__container console__page__container--width">
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
             <Row className="generic-message-holder">
                 {report && <TerminusDBSpeaks report={report}/>}
             </Row>
-            {!isAdding && <ControlledTable
+            {!isAdding && !preview.show && <ControlledTable
                 query={query}
                 freewidth={true}
                 view={tabConfig}
                 limit={tabConfig.pagesize()}/>}
-            {!isAdding && preview  && <CSVPreview preview={preview} setPreview={setPreview}
-                previewCss={"csv-preview-results csv-preview-results-border "}/>}
         </main>
     </>)
 }

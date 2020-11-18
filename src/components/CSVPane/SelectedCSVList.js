@@ -41,7 +41,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			limitedData.push(jsonRes[item])
 		}
 		setLoading(false)
-		setPreview({show: true, fileName: currentFile.fileName, data: limitedData});
+		setPreview({show: true, fileName: currentFile.fileName, data: limitedData, page: page});
 	};
 
 

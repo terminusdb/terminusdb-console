@@ -14,7 +14,8 @@ export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, av
 	let css="csv-preview-results"
     const [loading, setLoading] = useState(false)
 
-	return (
+	return (<>
+		<main className="console__page__container console__page__container--width">
             <div className="sub-headings csv-info csv-container">
                 {(page==CREATE_DB_VIEW) && <Row key="rm" className="db_info_branch_text csv_title">
                     <Col md={10} className="csv-title-align">{title}</Col>
@@ -31,8 +32,9 @@ export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, av
 					</Col>
                     <SelectedCSVList setLoading={setLoading} csvs={csvs} page={page} preview={preview}
 						setPreview={setPreview} setCsvs={setCsvs} availableCsvs={availableCsvs}/>
-                    <CSVPreview preview={preview} setPreview={setPreview} previewCss={css}/>
+					<CSVPreview preview={preview} setPreview={setPreview} previewCss={css}/>
                 </Row>
             </div>
-	)
+		</main>
+	</>)
 }
