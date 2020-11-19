@@ -10,10 +10,10 @@ import { AiFillLock, AiOutlineFork, AiOutlineCloudDownload, AiOutlineCheckCircle
     AiOutlineBranches, AiOutlineSchedule, AiOutlineDelete, AiOutlineWarning, AiOutlineCloud, AiOutlineLogin, AiFillWarning, AiOutlinePlus, AiOutlineQuestion, AiOutlineQuestionCircle} from 'react-icons/ai';
 
 export const BuiltInPrefixes = ({prefixes}) => {
-    const cols = [
-        {name: "Prefix", selector: "prefix"},    
-        {name: "URL", selector: "url"}
-    ]   
+    const tabConfig= TerminusClient.View.table();
+    tabConfig.column("prefix").header("Prefix").width(100)
+    tabConfig.column("url").header("IRI").width(400)
+    return <WOQLTable bindings={prefixes} view={tabConfig.json()}/>
 
     const dataProvider = {columnData:prefixes, columnConf:cols}
     return (<RenderTable dataProvider={dataProvider} />)
@@ -26,13 +26,11 @@ export const CustomPrefixes = ({prefixes, query, isEdit, onDelete, onEdit}) => {
     if(!prefixes || !prefixes.length) return null
 
     let onEd = (cell) => {
-        console.log("Delete", cell.row.original)
         onEdit(cell.row.original["Prefix"]["@value"])
     }
 
 
     let onDel = (cell) => {
-        console.log("Delete", cell.row.original)
         onDelete(cell.row.original["Prefix Pair IRI"])
     }
 
@@ -62,10 +60,11 @@ export const CustomPrefixes = ({prefixes, query, isEdit, onDelete, onEdit}) => {
     }
     else {
         tabConfig.column_order("Prefix", "IRI", "Edit", "Delete")
-        tabConfig.column("Delete").width(30).click(onDel)
-        tabConfig.column("Edit").width(30).click(onEd)
+        tabConfig.column("Delete").unsortable(true).width(30).click(onDel)
+        tabConfig.column("Edit").unsortable(true).width(30).click(onEd)
     }
     tabConfig.column("Prefix").width(100)
+    tabConfig.column("IRI").width(400).renderer({maxword: 100})
 
     return (
         <div style={{"marginBottom": "40px"}} >

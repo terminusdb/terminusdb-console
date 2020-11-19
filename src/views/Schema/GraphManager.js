@@ -111,10 +111,10 @@ export const GraphManager = (props) => {
                         let s = gres["S_" + j]
                         let t =  gres["T_" + j]
                         if(s){
-                            ng["Size"] = formatBytes(s['@value'])
+                            ng["Size"] = s//formatBytes(s['@value'])
                         }
                         if(t){
-                            ng["Triples"] = t['@value']
+                            ng["Triples"] = t//['@value']
                         }
                         ngs.push(ng)
                         j++

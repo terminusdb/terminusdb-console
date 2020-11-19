@@ -13,7 +13,7 @@ export const CSVInput = ({css, inputCss, onChange, text, multiple}) =>{
 					onChange={onChange}
 					key={text}
 					accept=".csv"/>
-				<label for="csvInp">{text}</label>
+				<label htmlFor="csvInp">{text}</label>
 			</span>
 		</>
 	)

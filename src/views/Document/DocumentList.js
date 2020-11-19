@@ -6,23 +6,24 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import {ControlledTable} from '../Tables/ControlledTable'
 import {Row, Col} from "reactstrap"
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {FileLoader} from "./FileLoader"
-import {CSVList} from '../../components/CSVPane/CSVList'
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
+import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
+import {BiDownload} from "react-icons/bi"
+import {RiDeleteBin5Line} from "react-icons/ri"
 
-export const DocumentListView = ({doctype, total, types, selectDocument, createDocument}) => {
-    const [docType, setDocType] = useState(doctype)
-    const [docCount, setDocCount] = useState()
-    const [current, setCurrent] = useState(doctype)
-    const [isAdding, setIsAdding] = useState(false)
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
+    const [loading, setLoading]=useState(false)
+    const [report, setReport]=useState(false)
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
 
     let WOQL = TerminusClient.WOQL
-
 
     const docQuery = () => {
         let q = WOQL.and(
@@ -41,12 +42,6 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
         else setIsAdding(false)
     }
 
-    const changeDocType = (dt) => {
-        if(dt !== docType) {
-            setDocType(dt)
-        }
-    }
-
     useEffect(() => {
         setQuery(docQuery())
         if(docType){
@@ -55,77 +50,104 @@ export const DocumentListView = ({doctype, total, types, selectDocument, createD
     }, [docType])
 
 
-    const doCreate = () => {
-        if(createDocument) createDocument(docType)
+    function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
     }
 
-    let onRowClick = function(row){
-        if(selectDocument) {
-            selectDocument(row.original["Document ID"], row.original["Type ID"])
+    let csvRowClick = function csvRowClick(id, name){
+        setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
+    }
+
+    let onDocClick = function(cell){
+        let row = cell.row
+        if(selectDocument && row) {
+            if(row.original["Type ID"]==DOCTYPE_CSV){
+                //csvRowClick(row.original.Name["@value"])
+                csvRowClick(row.original["Document ID"], row.original.Name["@value"])
+            }
+            else selectDocument(row.original["Document ID"], row.original["Type ID"])
         }
     }
 
-    let docs = (docType ? (docCount || 0) : total)
-    const tabConfig= TerminusClient.View.table();
-    tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
+    let onClassClick = function(cell){
+        if(setDocType && cell && cell.row) {
+            setDocType(cell.row.original["Type ID"])
+        }
+    }
+
+    const downloadCSV=async(cell)=>{
+		let row=cell.row
+		let name=row.original.Name["@value"]
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+		return await woqlClient.getCSV(name, true).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully downloaded file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
+		.finally(() => setLoading(false))
+	}
+
+    const deleteCSV=async(cell)=>{
+        let row=cell.row
+		let name=row.original.Name["@value"]
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        let commitMsg="Deleting File " + name + "-" + update_start
+        return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
+		.finally(() => setLoading(false))
+    }
+
+	const getDownloadButton=()=>{
+		return <span className="csv-toolbar-holder" title={"Download CSV "}>
+            <BiDownload color="#0055bb" className='schema-toolbar-delete'/>
+        </span>
+	}
+
+    const getDeleteButton=()=>{
+		return <span className="schema-toolbar-delete-holder" title={"Delete CSV"}>
+            <RiDeleteBin5Line color="#721c24" className='schema-toolbar-delete'/>
+        </span>
+	}
+
+    const tabConfig=TerminusClient.View.table();
+    if(docType==DOCTYPE_CSV) {
+        tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Download", "Delete")
+        tabConfig.column("Download").click(downloadCSV).render(getDownloadButton)
+        tabConfig.column("Delete").click(deleteCSV).render(getDeleteButton)
+    }
+    else tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
-    tabConfig.row().click(onRowClick)
-    tabConfig.column("Document ID", "Name").minWidth(100)
-    //tabConfig.column("Document ID", "Name").minWidth(150).width(150)
-    tabConfig.column("Type Name").header("Type").minWidth(80)
-    //tabConfig.column("Description").width(0)
-
+    tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
+    tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
-            <FileLoader adding={adding} />
-            {isAdding &&
-                <CSVList/>
-            }
-            {!isAdding &&
-            <Row>
-                <Col>
-                    <TotalStats total={total} />
-                </Col>
-                <Col>
-                    <DocumentTypeFilter types={types} meta={current} doctype={docType} setType={changeDocType} />
-                </Col>
-                <Col>
-                    {docType &&
-                        <TypeStats
-                            total={total}
-                            meta={current}
-                            doctype={docType}
-                            limit={tabConfig.pagesize()}
-                            setTotal={setDocCount}
-                        />
-                    }
-                    <DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={doCreate} />
-                </Col>
-                <Col>
-                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
-                </Col>
-            </Row>
-            }
-        {!isAdding &&
-            <ControlledTable
-                query={query}
-                freewidth={true}
-                view={tabConfig}
-                limit={tabConfig.pagesize()}
-            />
-        }
+        {!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+            previewCss={"csv-preview-results csv-preview-results-border "}/>}
+            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+            <main className="console__page__container console__page__container--width">
+                <Row className="generic-message-holder">
+                    {report && <TerminusDBSpeaks report={report}/>}
+                </Row>
+                {!isAdding && !preview.show && <ControlledTable
+                    query={query}
+                    freewidth={true}
+                    view={tabConfig}
+                    limit={tabConfig.pagesize()}/>}
+            </main>
     </>)
 }
-
-
-
-
-const TotalStats = ({total}) => {
-    if(typeof total != "number") return null
-    return <span>{total} Document{(total === 1 ? "" : "s")} </span>
-}
-
 
 const DocumentTypeMeta = ({doctype, meta,count,  onCreate}) => {
     if(!doctype || !meta) return null
@@ -163,7 +185,7 @@ const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
 }
 
 
-function getTypeMetadata(types, de){
+export function getTypeMetadata(types, de){
     for(var i = 0; i<types.length; i++){
         if(types[i]['Class ID'] == de){
             let tm = {

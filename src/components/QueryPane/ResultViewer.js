@@ -24,7 +24,11 @@ export const ResultViewer = ({bindings, type, viewConfig, query, prefixes, updat
 
     return (<>
         {bindings && type==="table" &&
-            <WOQLTable bindings={bindings} view={currentView} query={query} updateQuery={updateQuery} prefixes={prefixes} />
+            <WOQLTable bindings={bindings} 
+                view={currentView} 
+                query={query} 
+                updateQuery={updateQuery} 
+                prefixes={prefixes} />
         }
         {bindings && type==="graph" &&
             <WOQLGraph config={myviewer.config} dataProvider={myviewer} query={query} updateQuery={updateQuery}/>

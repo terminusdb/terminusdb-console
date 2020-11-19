@@ -25,12 +25,15 @@ export const GraphList = ({graphs, isEdit, onDelete}) => {
     const tabConfig= TerminusClient.View.table();
     if(!isEdit){
         tabConfig.column_order("ID", "Type", "Triples", "Size", "Delete")
-        tabConfig.column("Delete").click(onDel).width(30)
+        tabConfig.column("Delete").unsortable(true).click(onDel).width(30)
     }
     else {
         tabConfig.column_order("ID", "Type", "Triples", "Size")
     }
     
+    tabConfig.column("Triples").renderer({type: "number", datatype: "xsd:integer"})
+    tabConfig.column("Size").renderer({type: "number", datatype: "xsd:integer", format: "bytes"})
+
     return (<WOQLTable bindings={ngraphs} view={tabConfig.json()} />)
 
     //return (<ResultViewer type ="table" query={query} updateQuery={updateQuery} bindings= {graphs}/>)

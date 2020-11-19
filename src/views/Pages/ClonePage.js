@@ -97,7 +97,6 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
         setOrgid(organization)
         setDBid(db)
         if(organization == ""){
-            alert(orgid)
             setCurrentList(showingMine ? list : collaborations)
         }
     }, [organization, db])
