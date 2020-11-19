@@ -23,3 +23,6 @@ export const DOCUMENT_VIEW="document"
 export const DEFAULT_COMMIT_MSG="Adding a csv to database"
 
 export const DOCTYPE_CSV="terminusdb:///schema#CSV"
+
+export const DOWNLOAD_ENTIRE_FILE="Download entire file"
+export const DOWNLOAD_SNIPPET="Download snippet of the file"

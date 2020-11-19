@@ -107,7 +107,6 @@ const DocumentPage = (props) => {
         }
     }
 
-    //<main className="console__page__container console__page__container--width">
     return (
         <>
             <div id={props.id} className="console__page h-100" id="terminus-console-page">
