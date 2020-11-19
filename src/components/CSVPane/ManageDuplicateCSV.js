@@ -4,9 +4,9 @@ import {Row, Col} from "reactstrap"
 import {AiOutlineExclamationCircle} from "react-icons/ai"
 import {DEFAULT_COMMIT_MSG} from "./constants.csv"
 
-export const ManageDuplicateCsv=({fileName, setLoading, csvs, setCsvs})=>{
+export const ManageDuplicateCsv=({fileName})=>{
 
-	return (<Row style={{width:"100%"}}>
+	return (<Row className="csv-duplicate-msg">
 		<Col md={8}>
 			<span id={fileName} className={action.DUPLICATE_SPAN_CSS}>
 				<AiOutlineExclamationCircle id={fileName} color="#856404" className={action.CONTROLS_ICONS}/>

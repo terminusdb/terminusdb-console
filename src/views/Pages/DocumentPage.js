@@ -16,7 +16,7 @@ import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../Components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
-import {DOCUMENT_VIEW, CREATE_NEW} from '../../Components/CSVPane/constants.csv'
+import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../Components/CSVPane/constants.csv'
 import {BsCardList} from "react-icons/bs"
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
@@ -94,13 +94,19 @@ const DocumentPage = (props) => {
                 let res = new TerminusClient.WOQLResult(results, q)
         		const cBindings=res.getBindings()
         		for(var item in cBindings) {
-                    let names=cBindings[item].name['@value']
-                    setAvailableCsvs(arr => [...arr, names])
+                    let name=cBindings[item].name['@value']
+                    if(files.name==name){
+                        let updateOpt=UPDATE+" "+name
+                        files.action=updateOpt
+                        files.fileToUpdate=name
+                    }
+                    setAvailableCsvs(arr => [...arr, name])
         		}
                 setCsvs(arr => [...arr, files]);
             })
         }
     }
+
     //<main className="console__page__container console__page__container--width">
     return (
         <>

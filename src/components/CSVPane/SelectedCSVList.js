@@ -103,6 +103,17 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		})
 	}
 
+	const customStyles = {
+	  control: base => ({
+	    ...base,
+	    height: "30px"
+	  }),
+	  valueContainer: (base) => ({
+	    ...base,
+	    height: "30px"
+	  })
+	};
+
 	const getSelectOptions=(id)=>{
 		let opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
 		availableCsvs.map(names=>{
@@ -112,38 +123,24 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		return opts
 	}
 
-	const customStyles = (width = 100, height = 20) => {
-        return {
-            container: (base) => ({
-                ...base,
-                display:'inline-block',
-                width: width,
-            }),
-            valueContainer: (base) => ({
-                ...base,
-                minHeight: height,
-            })
-        }
-    }
 
 	const List=()=>{
 		return (csvs.map( item => <>
 					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={item.name}>
-						<Col md={2} key={item.name}>
+						<span className="selected-csv-span selected-csv-name-span" key={item.name}>
 							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
-						</Col>
-						<Col md={2} key={item.name}>
+						</span>
+						<span className="selected-csv-span" key={item.name}>
 							<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatBytes(item.size)}</span>
-						</Col>
-						<Col md={2} key={item.name}>
+						</span>
+						<span className="selected-csv-span" key={item.name}>
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
-						</Col>
+						</span>
 						{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <>
-							<Col md={2} key={item.name}>
-								<label htmlFor={item.name}/>
+							<span className="selected-csv-span selected-csv-select-span" key={item.name}>
 								<Select placeholder={"Choose an action"}
 									className={action.CONTROLS_TEXT}
 									defaultValue={{value: item.action, label: item.action}}
@@ -151,29 +148,30 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 									styles={customStyles}
 									options = {getSelectOptions(item.name)}
 								/>
-							</Col>
+							</span>
 						</>}
 						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
-							<Col md={2} key={item.name}>
+							<span className="selected-csv-span" key={item.name}>
 								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
-							</Col>
+							</span>
 						</>}
-						<Col md={2} key={item.name}>
+						<span className="selected-csv-span" key={item.name}>
 							<span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
 								<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
 							</span>
-						</Col>
-						<Col md={2} key={item.name}>
+						</span>
+						<span className="selected-csv-span" key={item.name}>
 							<span id={item.name} onClick={removeCsv} className={action.CONTROLS_SPAN_CSS}>
 								<TiDeleteOutline id={item.name} color="#721c24" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>
 							</span>
-						</Col>
+						</span>
 					</Row>
 					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
 						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
 					</>)}
+					<span className="selected-csvs-sections"> </span>
 				</>))
 	}
 

@@ -4137,7 +4137,18 @@ span.delete-modal-label {
 
   .csv-rows {
       margin-left: -40px;
-      margin-top: 20px;
+      margin-top: 70px;
+  }
+
+  .csv-duplicate-msg {
+      width: 100%;
+      margin-top: -15px
+  }
+
+  .selected-csvs-sections {
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      margin: 30px 0px 0px 0px;
   }
 
   .invitation_info_icon_spacing {
@@ -5304,6 +5315,20 @@ span.csv_subheader_section{
 
 .close-preview-span{
     float: right;
+}
+
+.selected-csv-span {
+    margin-right: 20px;
+    max-width: 350px;
+    min-width: 100px;
+}
+
+.selected-csv-select-span {
+    min-width: 290px !important;
+}
+
+.selected-csv-name-span {
+    min-width: 350px !important;
 }
 
 .csv-preview-header, .commit-log-header {
