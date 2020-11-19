@@ -5365,6 +5365,11 @@ span.add-csv {
     margin-top: 10px;
 }
 
+
+.d-page-overflow {
+    overflow-x: hidden !important;
+}
+
 .csv-preview-icon {
     font-size: 18px;
     margin-right: 10px;

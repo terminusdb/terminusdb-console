@@ -109,7 +109,7 @@ const DocumentPage = (props) => {
 
     return (
         <>
-            <div id={props.id} className="console__page h-100" id="terminus-console-page">
+            <div id={props.id} className="console__page h-100 d-page-overflow" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
                 {!docID && !isCreating && !preview.show && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
