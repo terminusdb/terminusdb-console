@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 //import {getDBPageRoute} from '../Router/ConsoleRouter'
-
 import {
     CLASSES_TAB,
     OWL_TAB,
