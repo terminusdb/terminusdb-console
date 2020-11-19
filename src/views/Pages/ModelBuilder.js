@@ -13,31 +13,40 @@ export const ModelBuilder = (props) =>{
     const { woqlClient, contextEnriched } = WOQLClientObj()
     const {graphs, setHead, branch, report, ref} = DBContextObj()
 
+    const dbName = woqlClient ? woqlClient.db() : ''
     const {mainGraphDataProvider,
           saveGraphChanges,
           reportMessage,
-          callServerLoading} = modelCallServerHook(woqlClient,branch,ref)
+          callServerLoading,resetReport
+          } = modelCallServerHook(woqlClient,branch,ref)
     
     const saveData=(query)=>{
       saveGraphChanges(query)
     }
 
-    if(!graphs || graphs['schema/main']===undefined){
+    if(graphs && graphs['schema/main']===undefined){
       return  <NoPageLayout noLoginButton={true} text="There is no main schema graph." />
     }
 
+
+
     return (
        <div id={props.id} className="console__page console__page--hidden" id="terminus-console-page">           
-            <ConsoleNavbar onHeadChange={props.onHeadChange} />
+            <ConsoleNavbar onHeadChange={props.onHeadChange} />         
             {reportMessage && 
               <div className="tdb__model__message">
+                <div className="icon-header tdb__model__xicon" >         
+                  <i className="fa fa-times" title="close box" 
+                  onClick={resetReport}></i>
+               </div>
                 <TerminusDBSpeaks  report={reportMessage} />
-              </div>}                      
+              </div>}
+                                
             
               {graphs && graphs['schema/main']!==undefined &&
                 <> 
-                <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider}>
-                  <SchemaBuilder saveGraph={saveData}/>
+                <GraphObjectProvider mainGraphDataProvider={mainGraphDataProvider} dbName={dbName}>
+                  <SchemaBuilder saveGraph={saveData} dbName={dbName}/>
                 </GraphObjectProvider>
                 </>
               }
