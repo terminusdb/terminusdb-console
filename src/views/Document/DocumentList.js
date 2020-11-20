@@ -13,7 +13,7 @@ import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
-import {BiDownload} from "react-icons/bi"
+import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
 
 export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
@@ -110,7 +110,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
 	const getDownloadButton=()=>{
 		return <span className="csv-toolbar-holder" title={"Download CSV "}>
-            <BiDownload color="#0055bb" className='schema-toolbar-delete'/>
+            <MdFileDownload color="#0055bb" className='schema-toolbar-delete'/>
         </span>
 	}
 

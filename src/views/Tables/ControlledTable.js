@@ -14,7 +14,7 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
     const [orderBy, setOrderBy] = useState(order||false)
     const [first, setFirst] = useState(true)
     const [tabresult, setTabResult] = useState()
-    
+
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
@@ -67,7 +67,7 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
             }
             else {
                 let nq = docQuery()
-                updateQuery(nq)    
+                updateQuery(nq)
             }
         }
     }, [query])
@@ -127,26 +127,26 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         for(var i = 0; i<prefixes.length; i++){
             if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
                 nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
-            }   
+            }
         }
         return nups
     }
 
-    return (       
+    return (
         <div className="tdb__loading__parent">
-            {(report && !isEmpty && tabresult) &&  
-                <WOQLTable 
+            {(report && !isEmpty && tabresult) &&
+                <WOQLTable
                     result={tabresult}
                     freewidth={freewidth}
-                    view={(view ? view.json() : {})} 
+                    view={(view ? view.json() : {})}
                     limit={mlimit}
                     query={query}
                     start={start}
                     orderBy={orderBy}
                     setLimits={changeLimits}
                     setOrder={changeOrder}
-                    totalRows={rowCount} 
-                />            
+                    totalRows={rowCount}
+                />
             }
             {loading &&
                 <Loading type={TERMINUS_COMPONENT}/>

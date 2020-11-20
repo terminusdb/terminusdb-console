@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {TCForm, JSONTCButtons} from '../../components/Form/FormComponents'
-import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_WITH_CSV, DB_CSV_CREATE_FORM, CREATE_DB_FORM,
-    ADD_MORE_CSV, } from './constants.createdb'
+import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_DB_FORM, DB_CSV_CREATE_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
@@ -39,8 +38,6 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     DB_ADVANCED_FORM.fields.map((item) => {
         advancedInfo[item.id] = item.value || ''
     })
-
-
 
     let layout = (logged_in ? [3,2,1]  : [2, 1])
 
@@ -107,7 +104,6 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
     function onCsvCancel() {
         setCsvs([])
     }
-
 
     return (
         <>

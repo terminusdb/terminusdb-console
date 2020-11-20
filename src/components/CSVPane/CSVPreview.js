@@ -7,10 +7,14 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {isArray} from "../../utils/helperFunctions"
-import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {DBContextObj} from '../../components/Query/DBContext'
-import {DOCUMENT_VIEW, CREATE_DB_VIEW} from "./constants.csv"
-import {BiArrowBack} from "react-icons/bi"
+import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE} from "./constants.csv"
+import {BiArrowBack, BiDownload} from "react-icons/bi"
+import {MdFileDownload} from "react-icons/md"
+import Loading from '../../components/Reports/Loading'
+import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+import {jsonToCSV} from 'react-papaparse';
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
+import {RiDeleteBin5Line} from "react-icons/ri"
 
 export const CSVPreview=({preview, setPreview, previewCss})=>{
 	const {woqlClient} = WOQLClientObj()
@@ -18,8 +22,12 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 	const [query, setQuery] = useState(false)
 	const tabConfig=TerminusClient.View.table();
 	const [tConf, setTConf]=useState({})
-	const [previewQuery, setPreviewQuery]=useState(false)
 	const [cols, setCols]=useState([])
+
+	const [loading, setLoading]=useState(false)
+    const [report, setReport]=useState(false)
+	const [snippet, setSnippet] = useState(false)
+	let counter=1
 
 	useEffect(() => {
 		let id=preview.selectedCSV
@@ -45,63 +53,151 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 					.triple('v:CSV ID', 'scm:csv_row', 'v:CSV Row'),
 				WOQL.and(...columnQuery)
 			)
-			setPreviewQuery(qp)
+			tabConfig.pagesize(10)
+			tabConfig.pager("remote")
+			tabConfig.column_order(...cols)
+			setTConf(tabConfig)
+			setQuery(qp)
 		})
 	}, [preview.selectedCSV])
-
-
-	useEffect(() => {
-		tabConfig.pagesize(10)
-		tabConfig.pager("remote")
-		tabConfig.column_order(...cols)
-		setTConf(tabConfig)
-		setQuery(previewQuery)
-    }, [previewQuery])
 
 	const Contents = ({preview, query, tConf}) => {
 		return <>
 			{isArray(preview.data) && <Row className="csv-preview-results">
 				<ResultViewer type="table" bindings={preview.data}/>
 			</Row>}
-			<Row className={previewCss}>
-				{query && preview.selectedCSV && tConf && <ControlledTable
+			{query && preview.selectedCSV && tConf && <Row className={previewCss}>
+				<ControlledTable
 					query={query}
 					freewidth={true}
 					view={tConf}
-					limit={tConf.pagesize()}/>}
-			</Row>
+					onResults={setResult}
+					limit={tConf.pagesize()}/>
+				</Row>}
+
 		</>
 	}
 
+
+	const setResult = (res)=>{
+		console.log('res', res.bindings)
+		//counter += 1
+		//setSnippet(res.bindings)
+		console.log('snippet', res.bindings)
+		//let newBindings=JSON.parse(JSON.stringify(res.bindings))
+		//setSnippet("HELLO")
+		//setSnippet(res.bindings)
+		//console.log('snippet', snippet)
+		//let copy=res
+    }
+
+	function process_error(err, update_start, message){
+        setReport({
+            error: err,
+            status: TERMINUS_ERROR,
+            message: message,
+            time: Date.now() - update_start,
+        })
+        console.log(err)
+    }
+
+	const downloadCSV=async()=>{
+		let name=preview.fileName
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+		return await woqlClient.getCSV(name, true).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully downloaded file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
+		.finally(() => setLoading(false))
+	}
+
+	const downloadSnippet=()=>{
+		console.log("snippet", snippet)
+	}
+
+	const deleteCSV=async()=>{
+        let name=preview.fileName
+        let update_start = Date.now()
+        setLoading(true)
+        update_start = update_start || Date.now()
+        let commitMsg="Deleting File " + name + "-" + update_start
+        return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
+		})
+		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
+		.finally(() => setLoading(false))
+    }
+
+	const CSVViewTitle=({fileName})=>{
+		return <h3 className="db_info d-nav-text">
+            <span> Showing contents of file  <strong>{fileName} </strong> </span>
+        </h3>
+	}
+
+	const CSVDownloadIcons=({preview})=>{
+		return <span style={{fontSize: "2em"}}>
+	        <span onClick={downloadCSV} className="d-nav-icons" title={DOWNLOAD_ENTIRE_FILE}>
+	            <MdFileDownload className="db_info_icon_spacing"/>
+	        </span>
+	    </span>
+	}
+
+	/*
+	{<span onClick={downloadSnippet} className="d-nav-icons" title={DOWNLOAD_SNIPPET}>
+		<BiDownload className='db_info_icon_spacing'/>
+	</span>}
+	*/
+
+	const CSVDelete=({preview})=>{
+		return <span style={{fontSize: "2em"}}>
+			<span onClick={deleteCSV} className="d-nav-icons" title={DELETE}>
+				<RiDeleteBin5Line color="#721c24" className='db_info_icon_spacing'/>
+			</span>
+	    </span>
+	}
+
+	const CSVGoBackIcon=({preview})=>{
+		return <span style={{fontSize: "2em"}}>
+	        <span onClick={()=> setPreview({show: false, fileName:false, data:[], selectedCSV: false})}
+				className="d-nav-icons" title={"Close contents and go back"}>
+	            <BiArrowBack className="db_info_icon_spacing"/>
+	        </span>
+		</span>
+	}
+
 	const PreviewToolBarForSingleDocuments = ({preview, setPreview}) => {
-		return <>
-			<Col md={11}>
-				<span className="db-card-credit" style={{fontSize: "2em"}}>
-					<MdSlideshow className="db_info_icon_spacing"/>
-					<span className="db_info">
-						<span className="db_info db_info d-nav-text">
-							Showing contents of file  <strong>{preview.fileName} </strong>
-						</span>
-					</span>
-				</span>
-			</Col>
-			<Col md={1}>
-				<span style={{fontSize: "2em"}}>
-					<span title={"Close contents and go back"} key="cancel"
-						className="d-nav-icons"
-						onClick={()=> setPreview({show: false, fileName:false, data:[], selectedCSV: false})}>
-						<BiArrowBack className="db_info_icon_spacing"/>
-					</span>
-				</span>
-			</Col>
-		</>
+		return (
+		<div className="nav__main__wrap">
+			<div className="tdb__model__header">
+				<Col>
+					<div className="tdb__model__hright">
+						<Row style={{width:"100%"}}>
+							<Col md={2}>
+							</Col>
+							<Col md={7}>
+                                <CSVViewTitle fileName={preview.fileName}/>
+                            </Col>
+							<Col md={2}>
+                                <CSVDownloadIcons preview={preview}/>
+								<CSVDelete preview={preview}/>
+                            </Col>
+							<Col md={1}>
+                                <CSVGoBackIcon preview={preview}/>
+                            </Col>
+						</Row>
+					</div>
+				</Col>
+			</div>
+		</div>)
 	}
 
 	const PreviewBar = ({preview, setPreview}) => {
 		return <>
 			<Col md={8}>
 				<MdSlideshow color="#0055bb" className="csv-preview-icon db_info_icon_spacing"/>
-					Showing preview of file  <strong>{preview.fileName} </strong>
+				<span className="preview-bar-title">Showing preview of file  <strong>{preview.fileName} </strong></span>
 			</Col>
 			<Col md={4}>
 				<span onClick={()=> setPreview({show: false, fileName:false, data:[]})}
@@ -119,21 +215,15 @@ export const CSVPreview=({preview, setPreview, previewCss})=>{
 				<Row className='csv-preview-header'>
 					<PreviewBar preview={preview} setPreview={setPreview}/>
 				</Row>
-				<Contents preview={preview} query={query} tConf={tConf}/>
+				<Contents preview={preview}/>
 			</>}
 			{(preview.selectedCSV) && (preview.page==DOCUMENT_VIEW) && <>
-				<div className="nav__main__wrap">
-					<div className="tdb__model__header">
-		                <Col md={2}></Col>
-		                <Col md={8}>
-							<Row>
-								<PreviewToolBarForSingleDocuments preview={preview} setPreview={setPreview}/>
-							</Row>
-						</Col>
-						<Col md={2}></Col>
-					</div>
-				</div>
+				<PreviewToolBarForSingleDocuments preview={preview} setPreview={setPreview}/>
 				<main className="console__page__container console__page__container--width">
+					<Row className="generic-message-holder">
+						{report && <TerminusDBSpeaks report={report}/>}
+					</Row>
+					{loading &&  <Loading type={TERMINUS_COMPONENT} />}
 					<Contents preview={preview} query={query} tConf={tConf}/>
 				</main>
 			</>

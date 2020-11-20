@@ -8,7 +8,7 @@ import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
 import {convertStringsToJson} from '../../utils/helperFunctions';
-import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG} from "./constants.csv"
+import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW} from "./constants.csv"
 import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
@@ -150,6 +150,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 								/>
 							</span>
 						</>}
+						{(page==CREATE_DB_VIEW) && <span className="selected-csv-span"></span>}
 						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
 							<span className="selected-csv-span" key={item.name}>
 								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
@@ -171,7 +172,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
 						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
 					</>)}
-					<span className="selected-csvs-sections"> </span>
+					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections"> </span>}
 				</>))
 	}
 
