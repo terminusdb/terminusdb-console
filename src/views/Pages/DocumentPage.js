@@ -298,15 +298,16 @@ const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, inser
 function sanitizeURLID(id_for_url){
     id_for_url = TerminusClient.UTILS.shorten(id_for_url)
     if(id_for_url.substring(0, 4) == "doc:") id_for_url = id_for_url.substring(4)
-    return id_for_url
-    //return encodeURIComponent(id_for_url)
+    return encodeURIComponent(id_for_url)
 }
 
 
 function desanitizeURLID(id_from_url){
     if(!id_from_url) return id_from_url
-    id_from_url = encodeURIComponent(id_from_url)
-    if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + id_from_url
+    id_from_url = decodeURIComponent(id_from_url)
+    if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + encodeURIComponent(id_from_url)
+    //if(id_from_url.indexOf("://") != -1) {
+    //}
     return TerminusClient.UTILS.unshorten(id_from_url)
 }
 
