@@ -111,10 +111,10 @@ export const GraphManager = (props) => {
                         let s = gres["S_" + j]
                         let t =  gres["T_" + j]
                         if(s){
-                            ng["Size"] = formatBytes(s['@value'])
+                            ng["Size"] = s//formatBytes(s['@value'])
                         }
                         if(t){
-                            ng["Triples"] = t['@value']
+                            ng["Triples"] = t//['@value']
                         }
                         ngs.push(ng)
                         j++
@@ -165,7 +165,7 @@ export const GraphManager = (props) => {
                 </Row>
                 <span className="graphs-listing">
                     {graphListings && 
-                        <GraphList graphs={graphListings} />
+                        <GraphList graphs={graphListings} isEdit={subpage!="list"} onDelete={submitDelete}/>
                     }
                 </span>  
             </>}
@@ -208,11 +208,11 @@ const ListSubpage = ({graphs, onCreate, onDelete, message}) => {
     }
    
     cols.push(
-        <Col key='m1' md={7} className="schema-toolbar-title">
+        <Col key='m1' md={9} className="schema-toolbar-title">
             {umsg}
         </Col>
     )
-    cols.push(
+    /*cols.push(
         <Col  key='m2' md={3} className={TOOLBAR_CSS.graphCol}>
             <span className="schema-toolbar-prefixes-holder">
                 {(dopts && dopts.length > 0) &&
@@ -230,9 +230,9 @@ const ListSubpage = ({graphs, onCreate, onDelete, message}) => {
                 </span>
             }
         </Col>
-    )
+    )*/
     cols.push(
-        <Col  key='m3' md={2} className={TOOLBAR_CSS.createCol}>
+        <Col  key='m3' md={3} className={TOOLBAR_CSS.createCol}>
             <Button className={TOOLBAR_CSS.createGraphButton} onClick={doCreate}>
                 Create Graph
             </Button>

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 //import {getDBPageRoute} from '../Router/ConsoleRouter'
-
 import {
     CLASSES_TAB,
     OWL_TAB,
@@ -32,7 +31,7 @@ import {PageView} from "../Templates/PageView"
 import {NoPageLayout} from '../../components/Router/PrivateRoute'
 
 const SchemaPage = (props) => {
-    const {graphs, setHead, branch, report, prefixes} = DBContextObj()
+    const {graphs, setHead, branch, report, prefixesLoaded} = DBContextObj()
 
     const [graphFilter, setGraphFilter] = useState()
 

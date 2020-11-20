@@ -100,7 +100,7 @@ export const Merge = () => {
                 setReport(rep)
             })
             .catch((err) => {
-                alert("yo")
+                //alert("yo")
                 let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${targetBranch} `
                 setReport({error: err, status: TERMINUS_ERROR, message: message})
             })

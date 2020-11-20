@@ -18,16 +18,19 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
      * maybe a copy of this
      */
 
-    const {woqlClient} = WOQLClientObj()
+    const [woql, updateQuery] = useState(query)
+    const [report, setReport] = useState()
+    /*const {woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
+    const [updateQuery, report, qresult, woql, loading] = WOQLQueryContainerHook(
         woqlClient,
         query,
         branch,
         ref,
-    )
+    )*/
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || 'js')
     const [content, setContent] = useState(initcontent)
+    const [qres, setQres] = useState()
 
     const [showLanguage, setShowLanguage] = useState(false)
     const [showContent, setShowContent] = useState('')
@@ -39,14 +42,18 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
     let initcontent = queryText || ''
 
     const [disabled] = useMemo(() => {
-        if (bindings) {
+        if (woql) {
             changeTab(1)
             return [{}]
-        } else return [{disabled: true}]
-    }, [bindings])
+        } else return [{disabled:true}]
+    }, [woql])
 
     const onSelect = (k) => {
         changeTab(k)
+    }
+
+    const onResults = (res) => {
+        setQres(res)
     }
 
     //
@@ -96,7 +103,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         editable={true}
                         query={woql}
                         updateQuery={updateQuery}
-                        languages={['js', 'json', 'python']}
+                        languages={['js', 'json']}
                     >
                         <QueryLibrary library="editor" />
                     </QueryEditor>
@@ -104,10 +111,10 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                 <Tab label="Result Viewer" {...disabled}>
                     <ResultQueryPane
                         resultView={resultView}
-                        bindings={bindings || []}
                         query={woql}
-                        prefixes={prefixes}
                         updateQuery={updateQuery}
+                        setMainError={setError}
+                        onResults={onResults}
                     />
                 </Tab>
             </Tabs>

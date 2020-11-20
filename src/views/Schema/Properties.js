@@ -1,58 +1,53 @@
 import React, {useState, useEffect} from 'react'
-import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {
-    FAILED_LOADING_SCHEMA_CLASSES,
-    PROPERTIES_QUERY_LIMIT,
     TAB_SCREEN_CSS,
     TOOLBAR_CSS
 } from './constants.schema'
-import {ComponentFailure} from '../../components/Reports/ComponentFailure.js'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
-import {WOQLClientObj} from '../../init/woql-client-instance'
-import {DBContextObj} from '../../components/Query/DBContext'
-import {PropertyList} from '../Tables/PropertyList'
 import {SCHEMA_PROPERTIES_ROUTE} from '../../constants/routes'
-import {PROPERTIES_TABLE_INFO_MSG} from './constants.schema'
-import {TERMINUS_INFO} from '../../constants/identifiers'
 import {Col, Row, Button} from "reactstrap"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
+import {ControlledTable} from '../Tables/ControlledTable'
 
 
 
 export const Properties = (props) => {
-    const {woqlClient} = WOQLClientObj()
-    const {branch, ref} = DBContextObj()
     const [filter, setFilter] = useState(props.graph)
-    const [updateQuery, report, bindings, woql, loading] = WOQLQueryContainerHook(
-        woqlClient,
-        getPropertiesQuery(props.graph),
-        branch,
-        ref,
-    )
+    const [query, setQuery] = useState(getPropertiesQuery(props.graph))
+    const [report, setReport] = useState()
+    const [empty, setEmpty] = useState(false)
 
     useEffect(() => {
         if (
             props.graph &&
             (!filter || filter.id != props.graph.id || filter.type != props.graph.type)
         ) {
-            if (filter) updateQuery(getPropertiesQuery(props.graph))
+            if (filter) setQuery(getPropertiesQuery(props.graph))
             setFilter(props.graph)
         }
     }, [props.graph])
 
+
     function getPropertiesQuery(gfilter) {
         let gstr = gfilter.type + '/' + gfilter.id
-        return TerminusClient.WOQL.limit(
-            PROPERTIES_QUERY_LIMIT,
-            TerminusClient.WOQL.lib().properties(false, false, gstr),
-        )
+        return TerminusClient.WOQL.lib().properties(false, false, gstr)
     }
+
+    const tabConfig= TerminusClient.View.table();
+    tabConfig.column_order("Property ID", "Property Name", "Property Domain", 
+        "Property Range", "Property Type", "Property Description")
+    tabConfig.pager("remote")
+    tabConfig.pagesize(10)
+    tabConfig.column("Property Name").header("Name").width(100)
+    tabConfig.column("Property Domain").header("Domain").width(100)
+    tabConfig.column("Property Range").header("Range").width(100)
+    tabConfig.column("Property Type").header("Type").width(60)
+    tabConfig.column("Property Description").header("Description").width(300)
+
     return (
         <div className={TAB_SCREEN_CSS}>
-            {loading && <Loading />}
             <Row className={TOOLBAR_CSS.container}>
                 <Col key='m1' md={9} className="schema-toolbar-title">
                     Properties relate objects to data about the object and to other objects
@@ -66,12 +61,10 @@ export const Properties = (props) => {
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            {(bindings && bindings.length > 0) && 
-               <span className="graphs-listing">
-                    <PropertyList query={woql} properties={bindings} updateQuery={updateQuery} />
-                </span>  
-            }
-            {(!(bindings && bindings.length > 0)) &&
+            <span className="graphs-listing">
+                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/> 
+            </span>  
+            {empty &&
                 <Row className="generic-message-holder">
                     <EmptyResult report={report} />
                 </Row>

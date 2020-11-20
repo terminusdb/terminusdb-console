@@ -143,7 +143,7 @@ export const PrefixManager = (props) => {
                     }
                 </Row>
                 <span className="prefixes-listing">
-                    <CustomPrefixes prefixes={prefixes} />
+                    <CustomPrefixes prefixes={prefixes} isEdit={subpage!="list"} onEdit={setUpdating} onDelete={submitDelete} />
                     <div className="builtin-prefixes">
                         <h3 className="builtin-prefixes-header">Built-in Prefixes</h3>
                         <BuiltInPrefixes prefixes={builtin_rows} />
@@ -176,11 +176,11 @@ const ListSubpage = ({prefixes, onCreate, onEdit, message}) => {
         return {label: item["Prefix"]["@value"], value: item["Prefix"]["@value"]}
     })
     cols.push(
-        <Col key='m1' md={8} className="schema-toolbar-title">
+        <Col key='m1' md={9} className="schema-toolbar-title">
             {umsg}
         </Col>
     )
-    cols.push(
+    /*cols.push(
         <Col  key='m2' md={2} className={TOOLBAR_CSS.graphCol}>
             <span className="schema-toolbar-prefixes-holder">
                 <Select 
@@ -191,9 +191,9 @@ const ListSubpage = ({prefixes, onCreate, onEdit, message}) => {
                 />
             </span>
         </Col>
-    )
+    )*/
     cols.push(
-        <Col  key='m3' md={2} className={TOOLBAR_CSS.createCol}>
+        <Col  key='m3' md={3} className={TOOLBAR_CSS.createCol}>
             <Button className={TOOLBAR_CSS.createGraphButton} onClick={doCreate}>
                 {CREATE_PREFIX_BUTTON}
             </Button>
