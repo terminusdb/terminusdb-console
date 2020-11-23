@@ -258,8 +258,8 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     <span className="db_info existing_csv_subheader">
                         CSV Documents
                     </span>
-                </span>
-                <CSVList/>*/}
+                </span>*/}
+                <CSVList/>
             </>}
             {!isCreating && !docid && (csvs.length==0) &&
                     <DocumentListView

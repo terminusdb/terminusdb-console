@@ -12,6 +12,7 @@ import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
+import {CSVViewContents} from "../../Components/CSVPane/CSVViewContents"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
@@ -133,19 +134,21 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
-        {!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+        {/*!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+            previewCss={"csv-preview-results csv-preview-results-border "}/>*/}
+        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border "}/>}
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            <main className="console__page__container console__page__container--width">
-                <Row className="generic-message-holder">
-                    {report && <TerminusDBSpeaks report={report}/>}
-                </Row>
-                {!isAdding && !preview.show && <ControlledTable
-                    query={query}
-                    freewidth={true}
-                    view={tabConfig}
-                    limit={tabConfig.pagesize()}/>}
-            </main>
+        {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        <main className="console__page__container console__page__container--width">
+            <Row className="generic-message-holder">
+                {report && <TerminusDBSpeaks report={report}/>}
+            </Row>
+            {!isAdding && !preview.show && <ControlledTable
+                query={query}
+                freewidth={true}
+                view={tabConfig}
+                limit={tabConfig.pagesize()}/>}
+        </main>
     </>)
 }
 

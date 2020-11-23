@@ -5451,6 +5451,10 @@ span.add-csv {
     border-radius: 3px !important;
 }
 
+.section-container {
+    min-height: 10% !important;
+}
+
 div.load-data-section {
     margin: 0 30px;
     margin-bottom: 30px;

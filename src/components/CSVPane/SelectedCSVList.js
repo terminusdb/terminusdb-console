@@ -127,20 +127,20 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const List=()=>{
 		return (csvs.map( item => <>
 					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={item.name}>
-						<span className="selected-csv-span selected-csv-name-span" key={item.name}>
+						<span className="selected-csv-span selected-csv-name-span">
 							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatBytes(item.size)}</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
 						</span>
 						{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <>
-							<span className="selected-csv-span selected-csv-select-span" key={item.name}>
+							<span className="selected-csv-span selected-csv-select-span">
 								<Select placeholder={"Choose an action"}
 									className={action.CONTROLS_TEXT}
 									defaultValue={{value: item.action, label: item.action}}
@@ -152,17 +152,17 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						</>}
 						{(page==CREATE_DB_VIEW) && <span className="selected-csv-span"></span>}
 						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
-							<span className="selected-csv-span" key={item.name}>
+							<span className="selected-csv-span">
 								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
 							</span>
 						</>}
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
 								<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
 							</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<span id={item.name} onClick={removeCsv} className={action.CONTROLS_SPAN_CSS}>
 								<TiDeleteOutline id={item.name} color="#721c24" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>
