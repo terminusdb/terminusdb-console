@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {ADD_CSV, ADD_MORE_CSV, ADD_MORE_CSV_TITLE} from './constants.document'
 import {DOCUMENT_VIEW} from "../../components/CSVPane/constants.csv"
-import {CSVInput} from '../../Components/CSVPane/CSVInput'
+import {CSVInput} from '../../components/CSVPane/CSVInput'
 
 export const FileLoader = ({adding, csvs, setCsvs, insertCsvs}) => {
     useEffect(() => {

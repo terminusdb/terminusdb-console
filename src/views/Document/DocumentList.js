@@ -11,9 +11,9 @@ import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
-import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
-import {CSVViewContents} from "../../Components/CSVPane/CSVViewContents"
-import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
+import {CSVPreview} from '../../components/CSVPane/CSVPreview'
+import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
+import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
 
