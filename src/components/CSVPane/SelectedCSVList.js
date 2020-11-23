@@ -3,7 +3,8 @@ import * as action from "./constants.csv"
 import {Row, Col} from "reactstrap"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
-import {AiOutlineFolderView, AiFillBuild, AiOutlineEdit} from "react-icons/ai"
+import {AiFillBuild, AiOutlineEdit} from "react-icons/ai"
+import {BsFileEarmarkPlus} from "react-icons/bs"
 import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
@@ -123,12 +124,11 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		return opts
 	}
 
-
 	const List=()=>{
-		return (csvs.map( item => <>
-					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={item.name}>
+		return (csvs.map( item => <div key={"d_"+item.name+"_"+item.lastModified}>
+					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={"Row_"+item.name+"_"+item.lastModified}>
 						<span className="selected-csv-span selected-csv-name-span">
-							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
+							<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
 						</span>
 						<span className="selected-csv-span">
@@ -169,11 +169,13 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 							</span>
 						</span>
 					</Row>
-					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
-						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
-					</>)}
-					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections"> </span>}
-				</>))
+					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv =>
+						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
+							<ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>
+						</div>}
+					)}
+					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
+				</div>))
 	}
 
 	return(<>

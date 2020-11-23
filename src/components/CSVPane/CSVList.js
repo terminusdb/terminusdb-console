@@ -6,6 +6,7 @@ import {CSVViewContents} from "./CSVViewContents"
 import {DOCTYPE_CSV, DOCUMENT_VIEW_FRAGMENT} from "./constants.csv"
 import {Row, Col} from "reactstrap"
 import {ControlledTable} from '../../views/Tables/ControlledTable'
+import {BsCardList} from "react-icons/bs"
 
 export const CSVList=()=>{
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
@@ -26,12 +27,17 @@ export const CSVList=()=>{
 
 	const tabConfig=TerminusClient.View.table();
 	tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
-    tabConfig.pagesize(5)
+    tabConfig.pagesize(10)
     tabConfig.pager("remote")
-    tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(csvRowClick)
 
 	return (<>
             <main className="console__page__container console__page__container--width">
+				<span className="db-card-credit csv_subheader_section">
+					<BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
+					<span className="db_info existing_csv_subheader">
+						CSV Documents
+					</span>
+				</span>
                 <ControlledTable
                     query={query}
                     freewidth={true}

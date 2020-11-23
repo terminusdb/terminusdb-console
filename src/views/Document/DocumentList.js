@@ -58,15 +58,17 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             message: message,
             time: Date.now() - update_start,
         })
-        console.log(err)
+        //console.log(err)
     }
 
     let csvRowClick = function csvRowClick(id, name){
+        setReport(false)
         setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
     }
 
     let onDocClick = function(cell){
         let row = cell.row
+        setReport(false)
         if(selectDocument && row) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
                 //csvRowClick(row.original.Name["@value"])
@@ -77,6 +79,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     }
 
     let onClassClick = function(cell){
+        setReport(false)
         if(setDocType && cell && cell.row) {
             setDocType(cell.row.original["Type ID"])
         }
