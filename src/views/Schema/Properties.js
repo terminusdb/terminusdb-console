@@ -10,7 +10,7 @@ import {Col, Row, Button} from "reactstrap"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
 import {ControlledTable} from '../Tables/ControlledTable'
-
+import {TERMINUS_TABLE} from '../../constants/identifiers'
 
 
 export const Properties = (props) => {
@@ -36,7 +36,7 @@ export const Properties = (props) => {
     }
 
     const tabConfig= TerminusClient.View.table();
-    tabConfig.column_order("Property ID", "Property Name", "Property Domain", 
+    tabConfig.column_order("Property ID", "Property Name", "Property Domain",
         "Property Range", "Property Type", "Property Description")
     tabConfig.pager("remote")
     tabConfig.pagesize(10)
@@ -55,22 +55,20 @@ export const Properties = (props) => {
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                      {GraphFilter(SCHEMA_PROPERTIES_ROUTE, filter, props.onChangeGraph)}
                 </Col>
-            </Row>            
+            </Row>
             <Row className="generic-message-holder">
-                {(report && report.status) && 
+                {(report && report.status) &&
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            <span className="graphs-listing">
-                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/> 
-            </span>  
+            <Row>
+                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport} loadingType={TERMINUS_TABLE}/>
+            </Row>
             {empty &&
                 <Row className="generic-message-holder">
                     <EmptyResult report={report} />
                 </Row>
-            } 
+            }
         </div>
     )
 }
-
-
