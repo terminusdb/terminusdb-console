@@ -10,7 +10,7 @@ export const ManageDuplicateCsv=({fileName})=>{
 		<Col key={"Col_exists_msg_"+fileName} md={8}>
 			<span id={fileName} className={action.DUPLICATE_SPAN_CSS}>
 				<AiOutlineExclamationCircle id={fileName} color="#856404" className={action.CONTROLS_ICONS}/>
-				<span className={action.CONTROLS_TEXT}>This CSV was already added, you can update or create a new Csv</span>
+				<span className={action.CONTROLS_TEXT}>This CSV was already added, you can update or create a new CSV</span>
 			</span>
 		</Col>
 	</Row>)

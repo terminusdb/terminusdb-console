@@ -12,6 +12,7 @@ import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} 
 import {jsonToCSV} from 'react-papaparse';
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {RiDeleteBin5Line} from "react-icons/ri"
+import {TERMINUS_TABLE} from "../../constants/identifiers"
 
 export const CSVViewContents=({preview, setPreview, previewCss})=>{
 	const {woqlClient} = WOQLClientObj()
@@ -161,6 +162,7 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
 				query={query}
 				freewidth={true}
 				view={tConf}
+				loadingType={TERMINUS_TABLE}
 				limit={tConf.pagesize()}/>
 		</Row>
 	}

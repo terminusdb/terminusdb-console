@@ -5,15 +5,17 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {TERMINUS_COMPONENT} from "../../constants/identifiers"
+import {TERMINUS_COMPONENT, TERMINUS_TABLE} from "../../constants/identifiers"
 
-export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty, onResults, onRowCount}) => {
+export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty, onResults, onRowCount, loadingType}) => {
     const [mlimit, setLimit] = useState(limit || 0)
     const [start, setStart] = useState(0)
     const [rowCount, setRowCount] = useState()
     const [orderBy, setOrderBy] = useState(order||false)
     const [first, setFirst] = useState(true)
     const [tabresult, setTabResult] = useState()
+
+    let loadingCss= (loadingType==TERMINUS_TABLE) ? TERMINUS_TABLE : TERMINUS_COMPONENT
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
@@ -149,7 +151,7 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
                 />
             }
             {loading &&
-                <Loading type={TERMINUS_COMPONENT}/>
+                <Loading type={loadingCss}/>
             }
         </div>
     )

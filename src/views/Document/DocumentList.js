@@ -10,7 +10,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE} from '../../constants/identifiers'
 import {CSVPreview} from '../../Components/CSVPane/CSVPreview'
 import {CSVViewContents} from "../../Components/CSVPane/CSVViewContents"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../Components/CSVPane/constants.csv'
@@ -149,6 +149,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             {!isAdding && !preview.show && <ControlledTable
                 query={query}
                 freewidth={true}
+                loadingType={TERMINUS_TABLE}
                 view={tabConfig}
                 limit={tabConfig.pagesize()}/>}
         </main>

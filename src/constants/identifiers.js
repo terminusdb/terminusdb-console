@@ -14,6 +14,7 @@ export const TERMINUS_USER_SCHEMA = 'http://hub.terminusdb.com/users/'
 export const TERMINUS_COMPONENT = 'component'
 export const TERMINUS_PAGE = 'page'
 export const TERMINUS_SYSTEM = 'system'
+export const TERMINUS_TABLE = 'table'
 
 //formats for WOQL
 export const WOQL_JS = 'WOQL.js'

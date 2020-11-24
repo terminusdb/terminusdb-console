@@ -169,11 +169,11 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 							</span>
 						</span>
 					</Row>
-					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv =>
+					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
-							<ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>
+							<ManageDuplicateCsv fileName={item.name}/>
 						</div>}
-					)}
+					</>)}
 					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
 				</div>))
 	}
