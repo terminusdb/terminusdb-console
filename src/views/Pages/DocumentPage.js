@@ -73,7 +73,7 @@ const DocumentPage = (props) => {
 
     function setDocument(docid, type){
         setDocID(docid)
-        setSelType(type)
+        if(type) setSelType(type)
         if(docid){
             goDBSubPage(woqlClient.db(), woqlClient.organization(), "document", sanitizeURLID(docid))
         }
@@ -305,8 +305,6 @@ function desanitizeURLID(id_from_url){
     if(!id_from_url) return id_from_url
     id_from_url = decodeURIComponent(id_from_url)
     if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + encodeURIComponent(id_from_url)
-    //if(id_from_url.indexOf("://") != -1) {
-    //}
     return TerminusClient.UTILS.unshorten(id_from_url)
 }
 

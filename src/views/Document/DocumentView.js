@@ -25,8 +25,9 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [jsonld, setJsonld] = useState()
     const [content, setContent] = useState()
     const [frame, setFrame] = useState()
-    const [docview, setDocView] = useState("frame")
+    const [docview, setDocView] = useState("table")
     const [docType, setDocType] = useState(doctype)
+    const [dataframe, setDataframe] = useState()
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
@@ -85,6 +86,43 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     }, [jsonld])
 
     useEffect(() => {
+        if(frame && jsonld){
+            let df = loadFrameViewer()
+            setDataframe(df)
+        }
+    }, [frame, jsonld, edit, docview])
+
+    function loadNewDocument(id){
+        setJsonld()
+        setContent()
+        setFrame()
+        setDocType(doctype)
+        setDataframe()
+        selectDocument(id)
+    
+    }
+
+    function loadFrameViewer(){
+        let frameconf = TerminusClient.View.document()
+        var property_style = "display: block; padding: 0.3em 1em;"
+        var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
+        var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
+        var value_style = "font-weight: 400; color: #002856;";
+        frameconf.show_all(docview == "frame" ? "fancy" : "table");
+        frameconf.object().style(box_style);
+        frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
+        frameconf.object().headerFeatures("type").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style})
+        frameconf.object().features("value").style(property_style);
+        frameconf.property().features("label").style(label_style);
+        frameconf.property().features("label", "value");
+        frameconf.property().property("terminus:id").hidden(true);
+        frameconf.data().features("value").style(value_style);
+        frameconf.selectDocument = loadNewDocument
+        let fv = new FrameViewer(frame, jsonld, frameconf, edit, woqlClient)
+        return fv
+    }
+
+    useEffect(() => {
         updateQuery(docQuery())
     }, [docid])
 
@@ -114,7 +152,14 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     function updateDocument(commit){
         commit = commit || "Document " + docid + " updated from console document view"
         let WOQL = TerminusClient.WOQL
-        let json = parseOutput(updatedJSON)
+        let json = false
+        if(docview == "json"){
+            json = parseOutput(updatedJSON)        
+        }
+        else {
+            json = dataframe.extract()
+            console.log("Extracted", json)
+        }
         if(json){
             let q = WOQL.update_object(json)
             woqlClient.query(q, commit)
@@ -122,6 +167,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 updateQuery(docQuery())
                 setContent("")
                 setJsonld()
+                setDataframe()
                 unsetEditMode()
             })
         }
@@ -142,25 +188,13 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
 
     function toggleEdit(){
         if(!edit){
-            setDocView("json")
+            if(docview == "link"){
+                setDocView("json")
+            }
         }
         setEdit(!edit)
     }
 
-    let frameconf = TerminusClient.View.document()
-    var property_style = "display: block; padding: 0.3em 1em;"
-	var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
-	var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
-	var value_style = "font-weight: 400; color: #002856;";
-	frameconf.show_all("SimpleFrameViewer");
-	frameconf.object().style(box_style);
-	frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
-	frameconf.object().headerFeatures("type").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style})
-	frameconf.object().features("value").style(property_style);
-	frameconf.property().features("label").style(label_style);
-	frameconf.property().features("label", "value");
-	frameconf.property().property("terminus:id").hidden(true);
-	frameconf.data().features("value").style(value_style);
 
     return <>
         <DocumentViewNav
@@ -183,7 +217,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     prefixes={prefixes}
                 />
             }
-            {content && edit && docview == "json" &&
+            {dataframe && (docview == "frame" || docview == "table") &&
+                <>{dataframe.render()}</>
+            }
+            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
                 <ViewToolbar
                     editmode={edit}
                     docid={docid}
@@ -194,19 +231,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     onUpdate={updateDocument}
                 />
             }
-            {content && frame && docview == "frame" &&
-                <FrameViewer
-                    doc={jsonld}
-                    view={frameconf}
-                    classframe={frame}
-                    edit={edit}
-                    client={woqlClient}
-                />
-            }
-            {!(content && frame) && docview == "frame" && 
+            {!(content && frame) && (docview == "frame" || docview == "table") && 
                 <Loading />
             }
-            {!edit && docview == "link" &&
+            {docview == "link" &&
                 <DocumentLinks docid={docid} selectDocument={selectDocument} />
             }
         </main>

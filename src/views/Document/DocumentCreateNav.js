@@ -23,9 +23,9 @@ export const DocumentCreateNav = ({types, doctype, onClose, docView, setView}) =
 				<Col>
 					<div className="tdb__model__hright">
 						<Row style={{width:"100%"}}>
-							{/*<Col md={2}>
+							{<Col md={2}>
                                 <DocumentViewIcons setDocView={setView} docView={docView}/>
-							</Col>*/}
+							</Col>}
 							<Col md={9}>
                                 <DocumentViewTitle types={types} doctype={doctype} />
                             </Col>
@@ -41,8 +41,8 @@ export const DocumentCreateNav = ({types, doctype, onClose, docView, setView}) =
 }
 
 export const DocumentGoBackIcon = ({onClose}) => {
-    return <span style={{fontSize: "2em"}}>
-        <span onClick={onClose} className="d-nav-icons" title={GO_BACK}>
+    return <span onClick={onClose} style={{fontSize: "2em"}}>
+        <span className="d-nav-icons" title={GO_BACK}>
             <BiArrowBack className="db_info_icon_spacing"/>
         </span>
     </span>
