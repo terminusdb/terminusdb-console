@@ -14,9 +14,9 @@ import {DocumentNavTab} from "../Document/DocumentNavTab"
 import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
-import {CSVList} from '../../Components/CSVPane/CSVList'
+import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
-import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../Components/CSVPane/constants.csv'
+import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
