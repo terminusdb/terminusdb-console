@@ -5,7 +5,7 @@ import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {TypeStats} from "./TypeStats"
 import {Row, Col} from "reactstrap"
 import {FileLoader} from "./FileLoader"
-import {DOCTYPE_CSV} from '../../Components/CSVPane/constants.csv'
+import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
 import {CREATE_NEW_DOCUMENT, GO_BACK} from './constants.document'
 import {BiArrowBack} from "react-icons/bi"
 
