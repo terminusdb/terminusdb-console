@@ -20,6 +20,7 @@ import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import {DB_CSV_CREATE_FORM} from "./constants.createdb"
+import {isArray} from "../../utils/helperFunctions"
 
 export const CreateDatabase = () => {
 
@@ -94,18 +95,23 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         doc.organization = woqlClient.user_organization()
         return CreateLocal(doc, woqlClient)
         .then((local_id) => {
-            after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
             if(doc.files) {
                 setLoading(true)
                 woqlClient.insertCSV(doc.files, DB_CSV_CREATE_FORM.defaultCommitMsg, null, null).then((results) => {
                     setReport({status: TERMINUS_SUCCESS, message: DB_CSV_CREATE_FORM.csvSuccess, time: Date.now() - update_start})
+                    after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
                 })
                 .catch((err) => process_error(err, update_start, DB_CSV_CREATE_FORM.csvError))
                 .finally(() => setLoading(false))
             }
+            else{
+                after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+            }
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
-        .finally(() => setLoading(false))
+        .finally(() => {
+            if(!isArray(doc.files)) setLoading(false)
+        })
     }
 
     function after_create_db(update_start, message, id, create_or_clone, remote_record, onShare){
@@ -214,31 +220,18 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         </div>
     )
-    /*<div className="pretty-form">*/
-    /*return (
-
-        <>
-            {onCancel &&
-                <div className="create-place-badge remote-badge">
-                        <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
-                    Creating Terminus Hub Database
-                    <img className="create-place-badge-hub-img" src="https://assets.terminusdb.com/terminusdb-console/images/cowduck-space.png" title="Terminus Hub Database"/>
-                </div>
-            }
-            <Row className="generic-message-holder">
-                {report &&
-                    <TerminusDBSpeaks report={report} />
-                }
-            </Row>
-            <Row>
-                <DBCreateCard start={smeta} onSubmit={createRemote} organizations={u.organizations} databases={bffClient.databases()}  type="create" />
-            </Row>
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-        </>
-    )*/
 }
 
-
+function process_error(err, update_start, message){
+    setLoading(false)
+    setReport({
+        error: err,
+        status: TERMINUS_ERROR,
+        message: message,
+        time: Date.now() - update_start,
+    })
+    console.log(err)
+}
 
 export const ShareDBForm = ({onSuccess, starter}) => {
     const [report, setReport] = useState()
@@ -282,17 +275,9 @@ export const ShareDBForm = ({onSuccess, starter}) => {
             })
         })
         .catch((err) => process_error(err, update_start, "Push to TerminusHub failed"))
-        .finally(() => setLoading(false))
-    }
-
-    function process_error(err, update_start, message){
-        setReport({
-            error: err,
-            status: TERMINUS_ERROR,
-            message: message,
-            time: Date.now() - update_start,
+        .finally(() => {
+            setLoading(false)
         })
-        console.log(err)
     }
 
     return (

@@ -54,6 +54,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	function process_error(err, update_start, message){
+		setLoading(false)
         setReport({
             error: err,
             status: TERMINUS_ERROR,
