@@ -16,6 +16,7 @@ import {SCHEMA_CLASSES_ROUTE} from '../../constants/routes'
 import {Col, Row, Button} from "reactstrap"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
+import {TERMINUS_TABLE} from '../../constants/identifiers'
 
 
 export const Classes = (props) => {
@@ -55,21 +56,19 @@ export const Classes = (props) => {
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                      {GraphFilter(SCHEMA_CLASSES_ROUTE, filter, props.onChangeGraph)}
                 </Col>
-            </Row>            
+            </Row>
             <Row className="generic-message-holder">
-                {(report && report.status) && 
+                {(report && report.status) &&
                     <TerminusDBSpeaks report={report} />
                 }
             </Row>
-            <span className="graphs-listing">
-                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport}/> 
-            </span>  
+
+                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport} loadingType={TERMINUS_TABLE}/>
             {empty &&
                 <Row className="generic-message-holder">
                     <EmptyResult report={report} />
                 </Row>
-            } 
+            }
         </div>
     )
 }
-

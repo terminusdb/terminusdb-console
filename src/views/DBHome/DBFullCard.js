@@ -18,7 +18,7 @@ import { DBBranches, DBLastCommit, CloneRoleCredits, DBPrivacy, DBCreated, Clone
 import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
-    const [loading, setLoading] = useState()
+    const [loading, setLoading] = useState(false)
     const [report, setReport] = useState()
 
     meta.action = (onAction ? _user_db_action(meta, user) : false)

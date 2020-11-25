@@ -5365,6 +5365,11 @@ span.add-csv {
     margin-top: 10px;
 }
 
+
+.d-page-overflow {
+    overflow-x: hidden !important;
+}
+
 .csv-preview-icon {
     font-size: 18px;
     margin-right: 10px;
@@ -5444,6 +5449,10 @@ span.add-csv {
     opacity: 0.8;
     border: 1px solid #fff;
     border-radius: 3px !important;
+}
+
+.section-container {
+    min-height: 10% !important;
 }
 
 div.load-data-section {

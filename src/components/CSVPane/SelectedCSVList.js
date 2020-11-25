@@ -3,7 +3,8 @@ import * as action from "./constants.csv"
 import {Row, Col} from "reactstrap"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
-import {AiOutlineFolderView, AiFillBuild, AiOutlineEdit} from "react-icons/ai"
+import {AiFillBuild, AiOutlineEdit} from "react-icons/ai"
+import {BsFileEarmarkPlus} from "react-icons/bs"
 import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
@@ -53,6 +54,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	function process_error(err, update_start, message){
+		setLoading(false)
         setReport({
             error: err,
             status: TERMINUS_ERROR,
@@ -123,24 +125,23 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		return opts
 	}
 
-
 	const List=()=>{
-		return (csvs.map( item => <>
-					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={item.name}>
-						<span className="selected-csv-span selected-csv-name-span" key={item.name}>
-							<AiOutlineFolderView color={"#0055bb"} className="db_info_branch_icon"/>
+		return (csvs.map( item => <div key={"d_"+item.name+"_"+item.lastModified}>
+					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={"Row_"+item.name+"_"+item.lastModified}>
+						<span className="selected-csv-span selected-csv-name-span">
+							<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{item.name}</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatBytes(item.size)}</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
 							<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
 						</span>
 						{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <>
-							<span className="selected-csv-span selected-csv-select-span" key={item.name}>
+							<span className="selected-csv-span selected-csv-select-span">
 								<Select placeholder={"Choose an action"}
 									className={action.CONTROLS_TEXT}
 									defaultValue={{value: item.action, label: item.action}}
@@ -152,17 +153,17 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						</>}
 						{(page==CREATE_DB_VIEW) && <span className="selected-csv-span"></span>}
 						{(page==DOCUMENT_VIEW) && (availableCsvs.length==0) && <>
-							<span className="selected-csv-span" key={item.name}>
+							<span className="selected-csv-span">
 								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
 							</span>
 						</>}
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
 								<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
 							</span>
 						</span>
-						<span className="selected-csv-span" key={item.name}>
+						<span className="selected-csv-span">
 							<span id={item.name} onClick={removeCsv} className={action.CONTROLS_SPAN_CSS}>
 								<TiDeleteOutline id={item.name} color="#721c24" className={action.CONTROLS_ICONS}/>
 								<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>
@@ -170,10 +171,12 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						</span>
 					</Row>
 					{(page==DOCUMENT_VIEW) && availableCsvs.map(acv => <>
-						{acv==item.name && <ManageDuplicateCsv fileName={item.name} setLoading={setLoading} csvs={csvs} setCsvs={setCsvs}/>}
+						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
+							<ManageDuplicateCsv fileName={item.name}/>
+						</div>}
 					</>)}
-					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections"> </span>}
-				</>))
+					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
+				</div>))
 	}
 
 	return(<>
