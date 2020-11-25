@@ -14,10 +14,9 @@ import {DocumentNavTab} from "../Document/DocumentNavTab"
 import {ConsoleNavbar} from "../../components/Navbar/ConsoleNavbar";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
-import {CSVList} from '../../Components/CSVPane/CSVList'
+import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
-import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../Components/CSVPane/constants.csv'
-import {BsCardList} from "react-icons/bs"
+import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
@@ -109,7 +108,7 @@ const DocumentPage = (props) => {
 
     return (
         <>
-            <div id={props.id} className="console__page h-100" id="terminus-console-page">
+            <div id={props.id} className="console__page h-100 d-page-overflow" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
                 {!docID && !isCreating && !preview.show && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
@@ -253,13 +252,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     setIsAdding={setIsAdding}
                     availableCsvs={availableCsvs}
                     onCsvCancel={onCsvCancel}/>
-                {/*<span className="db-card-credit csv_subheader_section">
-                    <BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
-                    <span className="db_info existing_csv_subheader">
-                        CSV Documents
-                    </span>
-                </span>
-                <CSVList/>*/}
+                <CSVList/>
             </>}
             {!isCreating && !docid && (csvs.length==0) &&
                     <DocumentListView

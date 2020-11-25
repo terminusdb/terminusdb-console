@@ -19,6 +19,7 @@ export const CSV_MAIN_ACTION_CSS="tdb__button__base tdb__button__base--bgreen up
 
 export const CREATE_DB_VIEW="create"
 export const DOCUMENT_VIEW="document"
+export const DOCUMENT_VIEW_FRAGMENT="Document Fragment"
 
 export const DEFAULT_COMMIT_MSG="Adding a csv to database"
 
