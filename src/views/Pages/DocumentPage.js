@@ -17,6 +17,7 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
+import {BsCardList} from "react-icons/bs"
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
