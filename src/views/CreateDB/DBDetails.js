@@ -113,7 +113,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                 values={values}
                 buttons={buttons}
             />
-            {(csvs.length>0) && <CSVLoader csvs={csvs} title={DB_CSV_CREATE_FORM.title} addButton={DB_CSV_CREATE_FORM.addButton}
+            {!from_local && (csvs.length>0) && <CSVLoader csvs={csvs} title={DB_CSV_CREATE_FORM.title} addButton={DB_CSV_CREATE_FORM.addButton}
                 setCsvs={setCsvs} insertCsvs={insertCsvs} page="create" onCsvCancel={onCsvCancel}/>}
             <Row>
                 <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
@@ -135,7 +135,7 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
                     )}
                 </span>
 
-                {(csvs.length==0) && <CSVInput css={DB_CSV_CREATE_FORM.csvWrapperClassName} text={DB_CSV_CREATE_FORM.createButton} onChange={insertCsvs}
+                {!from_local && (csvs.length==0) && <CSVInput css={DB_CSV_CREATE_FORM.csvWrapperClassName} text={DB_CSV_CREATE_FORM.createButton} onChange={insertCsvs}
                     inputCss={'create-db-file'} multiple={true}/>
                 }
                 {/*<JSONTCButtons buttons={{className:"create-with-adv-btns-align", submitText:CREATE_DB_FORM.createButtonText}}/>*/}
