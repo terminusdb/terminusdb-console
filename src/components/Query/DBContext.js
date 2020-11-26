@@ -316,6 +316,8 @@ export const TerminusDBProvider = (woqlClient) => {
     let consoleTime = false
     let prefixesLoaded = true
     let prefixes = []
+    let refObject = false
+
     return {
         setConsoleTime,
         setHead,

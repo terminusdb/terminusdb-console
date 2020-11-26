@@ -72,7 +72,7 @@ const DocumentPage = (props) => {
 
     function setDocument(docid, type){
         setDocID(docid)
-        setSelType(type)
+        if(type) setSelType(type)
         if(docid){
             goDBSubPage(woqlClient.db(), woqlClient.organization(), "document", sanitizeURLID(docid))
         }
@@ -255,21 +255,21 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                 <CSVList/>
             </>}
             {!isCreating && !docid && (csvs.length==0) &&
-                    <DocumentListView
-                        selectDocument={setDocument}
-                        setDocType={setDocType}
-                        types={types}
-                        setCurrent={setCurrent}
-                        setIsAdding={setIsAdding}
-                        isAdding={isAdding}
-                        setDocType={setDocType}
-                        docType={docType}
-                        tabConfig={tabConfig}
-                        csvs={csvs}
-                        setCsvs={setCsvs}
-                        setPreview={setPreview}
-                        preview={preview}
-                    />
+                <DocumentListView
+                    selectDocument={setDocument}
+                    setDocType={setDocType}
+                    types={types}
+                    setCurrent={setCurrent}
+                    setIsAdding={setIsAdding}
+                    isAdding={isAdding}
+                    setDocType={setDocType}
+                    docType={docType}
+                    tabConfig={tabConfig}
+                    csvs={csvs}
+                    setCsvs={setCsvs}
+                    setPreview={setPreview}
+                    preview={preview}
+                />
             }
         </>
     )
@@ -298,8 +298,6 @@ function desanitizeURLID(id_from_url){
     if(!id_from_url) return id_from_url
     id_from_url = decodeURIComponent(id_from_url)
     if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + encodeURIComponent(id_from_url)
-    //if(id_from_url.indexOf("://") != -1) {
-    //}
     return TerminusClient.UTILS.unshorten(id_from_url)
 }
 

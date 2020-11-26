@@ -13,9 +13,11 @@ import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 
+
 import {DocumentViewNav} from "./DocumentViewNav"
 import {BiArrowBack, BiSave} from "react-icons/bi"
 import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
+import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
     const [edit, setEdit] = useState(false)
@@ -25,8 +27,12 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [jsonld, setJsonld] = useState()
     const [content, setContent] = useState()
     const [frame, setFrame] = useState()
-    const [docview, setDocView] = useState("frame")
+    const [docview, setDocView] = useState("table")
     const [docType, setDocType] = useState(doctype)
+    const [dataframe, setDataframe] = useState()
+    const [loading, setLoading] = useState(true)
+    const [sreport, setReport] = useState()
+
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
@@ -85,6 +91,44 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     }, [jsonld])
 
     useEffect(() => {
+        if(frame && jsonld){
+            setLoading(false)
+            let df = loadFrameViewer()
+            setDataframe(df)
+        }
+    }, [frame, jsonld, edit, docview])
+
+    function loadNewDocument(id){
+        setJsonld()
+        setContent()
+        setFrame()
+        setDocType(doctype)
+        setDataframe()
+        selectDocument(id)
+    
+    }
+
+    function loadFrameViewer(){
+        let frameconf = TerminusClient.View.document()
+        var property_style = "display: block; padding: 0.3em 1em;"
+        var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
+        var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
+        var value_style = "font-weight: 400; color: #002856;";
+        frameconf.show_all(docview == "frame" ? "fancy" : "table");
+        frameconf.object().style(box_style);
+        frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
+        frameconf.object().headerFeatures("type").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style})
+        frameconf.object().features("value").style(property_style);
+        frameconf.property().features("label").style(label_style);
+        frameconf.property().features("label", "value");
+        frameconf.property().property("terminus:id").hidden(true);
+        frameconf.data().features("value").style(value_style);
+        frameconf.selectDocument = loadNewDocument
+        let fv = new FrameViewer(frame, jsonld, frameconf, edit, woqlClient)
+        return fv
+    }
+
+    useEffect(() => {
         updateQuery(docQuery())
     }, [docid])
 
@@ -114,16 +158,30 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     function updateDocument(commit){
         commit = commit || "Document " + docid + " updated from console document view"
         let WOQL = TerminusClient.WOQL
-        let json = parseOutput(updatedJSON)
+        let json = false
+        if(docview == "json"){
+            json = parseOutput(updatedJSON)        
+        }
+        else {
+            json = dataframe.extract()
+            console.log("Extracted", json)
+        }
         if(json){
+            setLoading(true)
             let q = WOQL.update_object(json)
             woqlClient.query(q, commit)
             .then(() => {
                 updateQuery(docQuery())
                 setContent("")
                 setJsonld()
+                setDataframe()
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully updated " + docid})
                 unsetEditMode()
             })
+            .catch((e) => {
+                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
+            })
+            .finally(() => setLoading(false))
         }
     }
 
@@ -142,25 +200,13 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
 
     function toggleEdit(){
         if(!edit){
-            setDocView("json")
+            if(docview == "link"){
+                setDocView("json")
+            }
         }
         setEdit(!edit)
     }
 
-    let frameconf = TerminusClient.View.document()
-    var property_style = "display: block; padding: 0.3em 1em;"
-	var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
-	var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
-	var value_style = "font-weight: 400; color: #002856;";
-	frameconf.show_all("SimpleFrameViewer");
-	frameconf.object().style(box_style);
-	frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
-	frameconf.object().headerFeatures("type").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style})
-	frameconf.object().features("value").style(property_style);
-	frameconf.property().features("label").style(label_style);
-	frameconf.property().features("label", "value");
-	frameconf.property().property("terminus:id").hidden(true);
-	frameconf.data().features("value").style(value_style);
 
     return <>
         <DocumentViewNav
@@ -175,6 +221,11 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
+            {(sreport && sreport.status && !edit) &&
+                <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={sreport} />
+                </Row>
+            }
             {content && docview == "json" &&
                 <JSONEditor
                     dataProvider={content}
@@ -183,7 +234,15 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     prefixes={prefixes}
                 />
             }
-            {content && edit && docview == "json" &&
+            {dataframe && (docview == "frame" || docview == "table") &&
+                <>{dataframe.render()}</>
+            }
+            {edit && sreport && sreport.status && 
+                <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={sreport} />
+                </Row>        
+            }
+            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
                 <ViewToolbar
                     editmode={edit}
                     docid={docid}
@@ -194,19 +253,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     onUpdate={updateDocument}
                 />
             }
-            {content && frame && docview == "frame" &&
-                <FrameViewer
-                    doc={jsonld}
-                    view={frameconf}
-                    classframe={frame}
-                    edit={edit}
-                    client={woqlClient}
-                />
-            }
-            {!(content && frame) && docview == "frame" && 
+            {loading && 
                 <Loading />
             }
-            {!edit && docview == "link" &&
+            {docview == "link" &&
                 <DocumentLinks docid={docid} selectDocument={selectDocument} />
             }
         </main>
@@ -275,15 +325,6 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
         return null
     }
 
-/*
-<Button key="json" className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
-    {EDIT_DOCUMENT_BUTTON}
-</Button>
-<Button key="Close" className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
-    Close
-</Button>
-
-*/
     function extractInput() {
         return onUpdate(commit)
     }
