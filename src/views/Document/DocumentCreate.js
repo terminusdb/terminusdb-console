@@ -12,14 +12,17 @@ import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTO
 import {ControlledTable} from '../Tables/ControlledTable'
 import {DocumentCreateNav} from "./DocumentCreateNav"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
+import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
-    const [docView, setDocView] = useState("json")
+    const [docView, setDocView] = useState("table")
     const [frame, setFrame] = useState()
     const [dataframe, setDataframe] = useState()
     const [content, setContent] = useState(getStarterContent(doctype))
+    const [loading, setLoading] = useState(true)
+    const [sreport, setReport] = useState(true)
     const { woqlClient} = WOQLClientObj()
 
     useEffect(() => {
@@ -32,6 +35,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
 
     useEffect(() => {
         if(frame){
+            setLoading(false)
             let df = loadFrameViewer(frame)
             setDataframe(df)
         }
@@ -78,13 +82,19 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
             let q = WOQL.update_object(json)
+            setLoading(true)
             woqlClient.query(q, commit)
             .then(() => {
+                setReport({status: TERMINUS_SUCCESS, message: "Created new " + json['@type'] + " " + json['@id']})
                 if(selectDocument){
                     close()
                     selectDocument(json['@id'], json['@type'])
                 }
             })
+            .catch((e) => {
+                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})                
+            })
+            .finally(() => setLoading(false))
         }
     }
 
@@ -94,7 +104,8 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
         var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
         var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
         var value_style = "font-weight: 400; color: #002856;";
-        frameconf.show_all("SimpleFrameViewer");
+        frameconf.show_all("table");
+        frameconf.show_id = true
         frameconf.object().style(box_style);
         frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
         frameconf.object().headerFeatures("type").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style})
@@ -120,10 +131,10 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
-            {dataframe && docView == "frame" &&
+            {dataframe && docView == "table" &&
                 <>{dataframe.render()}</>
             }
-            {!(content && frame) && docView == "frame" && 
+            {loading && 
                 <Loading />
             }
             {content && (docView == "json") && 
@@ -134,7 +145,12 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
                     prefixes={prefixes}
                 />
             }
-            {(docView == "json" || (frame && (docView=="frame"))) &&             
+            {(sreport && sreport.status) &&
+                <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={sreport} />
+                </Row>
+            }
+            {(docView == "json" || (frame && (docView=="table"))) &&             
                 <CreateToolbar
                     types={types}
                     type={doctype}

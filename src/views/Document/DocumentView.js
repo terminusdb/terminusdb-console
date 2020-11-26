@@ -13,9 +13,11 @@ import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 
+
 import {DocumentViewNav} from "./DocumentViewNav"
 import {BiArrowBack, BiSave} from "react-icons/bi"
 import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
+import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
     const [edit, setEdit] = useState(false)
@@ -28,6 +30,9 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [docview, setDocView] = useState("table")
     const [docType, setDocType] = useState(doctype)
     const [dataframe, setDataframe] = useState()
+    const [loading, setLoading] = useState(true)
+    const [sreport, setReport] = useState()
+
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
@@ -87,6 +92,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
 
     useEffect(() => {
         if(frame && jsonld){
+            setLoading(false)
             let df = loadFrameViewer()
             setDataframe(df)
         }
@@ -161,6 +167,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             console.log("Extracted", json)
         }
         if(json){
+            setLoading(true)
             let q = WOQL.update_object(json)
             woqlClient.query(q, commit)
             .then(() => {
@@ -168,8 +175,13 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 setContent("")
                 setJsonld()
                 setDataframe()
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully updated " + docid})
                 unsetEditMode()
             })
+            .catch((e) => {
+                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
+            })
+            .finally(() => setLoading(false))
         }
     }
 
@@ -209,6 +221,11 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
+            {(sreport && sreport.status && !edit) &&
+                <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={sreport} />
+                </Row>
+            }
             {content && docview == "json" &&
                 <JSONEditor
                     dataProvider={content}
@@ -219,6 +236,11 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             }
             {dataframe && (docview == "frame" || docview == "table") &&
                 <>{dataframe.render()}</>
+            }
+            {edit && sreport && sreport.status && 
+                <Row className="generic-message-holder">
+                    <TerminusDBSpeaks report={sreport} />
+                </Row>        
             }
             {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
                 <ViewToolbar
@@ -231,7 +253,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     onUpdate={updateDocument}
                 />
             }
-            {!(content && frame) && (docview == "frame" || docview == "table") && 
+            {loading && 
                 <Loading />
             }
             {docview == "link" &&
@@ -303,15 +325,6 @@ export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCan
         return null
     }
 
-/*
-<Button key="json" className={TOOLBAR_CSS.editOWLButton} onClick={toggle}>
-    {EDIT_DOCUMENT_BUTTON}
-</Button>
-<Button key="Close" className={TOOLBAR_CSS.editOWLButton} onClick={onCancel}>
-    Close
-</Button>
-
-*/
     function extractInput() {
         return onUpdate(commit)
     }

@@ -95,7 +95,13 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
             let tres = qresult
             tres.prefixes = _generate_context(prefixes)
             if(onResults && qresult.bindings && qresult.bindings.length){
+                for(var k in report){
+                    qresult[k] = report[k]
+                }
                 onResults(qresult)
+            }
+            else if(qresult && typeof qresult.bindings != "undefined" && qresult.bindings.length == 0){
+                if(onEmpty) onEmpty(report)
             }
             setTabResult(tres)
         }
@@ -119,7 +125,6 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
     }
 
     let isEmpty = (report && report.rows == 0 && !start)
-    if(isEmpty && onEmpty) onEmpty()
 
     const _generate_context = (prefixes) => {
         let nups = {}

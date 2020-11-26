@@ -19,6 +19,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
      */
 
     const [woql, updateQuery] = useState(query)
+    const [updated, setUpdated] = useState(false)
     const [report, setReport] = useState()
     /*const {woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
@@ -112,8 +113,11 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                     <ResultQueryPane
                         resultView={resultView}
                         query={woql}
+                        updated={updated}
                         updateQuery={updateQuery}
                         setMainError={setError}
+                        setReport={setReport}
+                        setUpdated={setUpdated}
                         onResults={onResults}
                     />
                 </Tab>
