@@ -13,6 +13,7 @@ import {jsonToCSV} from 'react-papaparse';
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {RiDeleteBin5Line} from "react-icons/ri"
 import {TERMINUS_TABLE} from "../../constants/identifiers"
+import {DBContextObj} from '../../components/Query/DBContext'
 
 export const CSVViewContents=({preview, setPreview, previewCss})=>{
 	const {woqlClient} = WOQLClientObj()
@@ -22,6 +23,9 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
 	const [tConf, setTConf]=useState({})
 	const [cols, setCols]=useState([])
 	//const [snippet, setSnippet]=useState([])
+
+    const {updateBranches} = DBContextObj()
+
 
 	const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -86,6 +90,7 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
         update_start = update_start || Date.now()
         let commitMsg="Deleting File " + name + "-" + update_start
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+            updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))

@@ -22,8 +22,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     const [report, setReport]=useState(false)
 
     const { woqlClient} = WOQLClientObj()
-    const {ref, branch, prefixes} = DBContextObj()
-
+    const {ref, branch, prefixes, updateBranches} = DBContextObj()
+    
     let WOQL = TerminusClient.WOQL
 
     const docQuery = () => {
@@ -106,6 +106,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         update_start = update_start || Date.now()
         let commitMsg="Deleting File " + name + "-" + update_start
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+            updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))

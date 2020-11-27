@@ -34,7 +34,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [sreport, setReport] = useState()
 
     const { woqlClient} = WOQLClientObj()
-    const {ref, branch, prefixes} = DBContextObj()
+    const {ref, branch, prefixes, updateBranches} = DBContextObj()
     let WOQL = TerminusClient.WOQL
 
     const docQuery = () => {
@@ -173,6 +173,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             .then(() => {
                 updateQuery(docQuery())
                 setContent("")
+                updateBranches()
                 setJsonld()
                 setDataframe()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully updated " + docid})

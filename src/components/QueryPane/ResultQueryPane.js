@@ -7,6 +7,7 @@ import TerminusClient from "@terminusdb/terminusdb-client"
 import { TerminusDBSpeaks } from "../Reports/TerminusDBSpeaks"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import Loading from '../../components/Reports/Loading'
+import {DBContextObj} from '..//Query/DBContext'
 
 
 export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes, setMainError, setReport, setUpdated, updated}) => {
@@ -19,6 +20,8 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes,
     const [hasUpdate, setUpdate] = useState(query ? query.containsUpdate() : false)
     const qeclass = TOOLBAR_CSS.container
     
+    const {updateBranches} = DBContextObj()
+
 
     useEffect(() => {
         if(query && (currentView != "table" || (hasUpdate && !updated))){
@@ -33,6 +36,7 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes,
                     transaction_restart_count: r.transaction_restart_count || 0,
                     rows: r.bindings ? r.bindings.length : 0
                 }
+                updateBranches()
                 setUpdated(true)
                 setMainError(false)
                 setReport(rep)
@@ -45,6 +49,7 @@ export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes,
 
     useEffect(() => {
         setUpdate(query ? query.containsUpdate() : false)
+        setUpdated(false)
     }, [query])
 
 

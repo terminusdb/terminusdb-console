@@ -16,12 +16,14 @@ import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
 import {formatBytes} from "../../utils/format"
 import Select from 'react-select'
 import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
+import {DBContextObj} from '../../components/Query/DBContext'
 
 export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs}) => {
 	let currentFile={}, availableCsvList=[]
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
 	const {woqlClient}=WOQLClientObj()
+    const {updateBranches} = DBContextObj()
 
 	const viewPreview=(e)=>{
 		let maxlines=6, buff=[] // read 6 lines
@@ -80,6 +82,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		let insertFiles=csvs.filter(item => item.action === action.CREATE_NEW) // filter csvs for create
 		if(isArray(upFormatted)){
 			woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
+                updateBranches()
 				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
 				setCsvs([]);
 			})
@@ -88,7 +91,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 		if(isArray(insertFiles)){
 			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {
-				setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
+                updateBranches()
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
 				setCsvs([]);
 			})
 			.catch((err) => process_error(err, update_start, "Failed to add file"))

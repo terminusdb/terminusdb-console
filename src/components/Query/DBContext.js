@@ -166,7 +166,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
         if(branches && branches[branchID] && branches[branchID].head == sref){
             sref = false
-            refTime=false  
+            refTime=false
         }
         sref = sref || false
         woqlClient.ref(sref)

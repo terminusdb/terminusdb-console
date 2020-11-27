@@ -14,6 +14,7 @@ import {DocumentCreateNav} from "./DocumentCreateNav"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 
+
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
@@ -24,6 +25,9 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
     const [loading, setLoading] = useState(true)
     const [sreport, setReport] = useState(true)
     const { woqlClient} = WOQLClientObj()
+
+    const {updateBranches} = DBContextObj()
+
 
     useEffect(() => {
         setFrame()
@@ -85,6 +89,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
             setLoading(true)
             woqlClient.query(q, commit)
             .then(() => {
+                updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Created new " + json['@type'] + " " + json['@id']})
                 if(selectDocument){
                     close()
