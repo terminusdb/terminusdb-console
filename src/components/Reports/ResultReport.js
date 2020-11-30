@@ -31,7 +31,7 @@ export const ResultReport = ({report}) => {
             return (<QuerySuccess report={currentReport} time={qtime} />)
         }
         else {
-            return (<HybridSuccess report={currentReport} time={qtime} />)
+            return (<UpdateSuccess report={currentReport} time={qtime} />)
         }
     }
 

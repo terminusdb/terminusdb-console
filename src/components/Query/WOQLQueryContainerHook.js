@@ -31,10 +31,10 @@ function WOQLQueryContainerHook(woqlClient, startQuery, branch, ref) {
      */
     function processErrorResult(e) {
         /*let rep = {
-            start: start, 
-            end: end, 
+            start: start,
+            end: end,
             duration: (end-start)*1000,
-            error: e 
+            error: e
         }*/
         setBindings(undefined)
         setReport({error: e})

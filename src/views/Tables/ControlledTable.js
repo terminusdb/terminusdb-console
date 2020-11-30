@@ -5,16 +5,18 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import { WOQLTable } from '@terminusdb/terminusdb-react-components';
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
-import {TERMINUS_COMPONENT} from "../../constants/identifiers"
+import {TERMINUS_COMPONENT, TERMINUS_TABLE} from "../../constants/identifiers"
 
-export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty, onResults, onRowCount}) => {
+export const ControlledTable = ({query, order, limit, freewidth, view, hook, onError, onEmpty, onResults, onRowCount, loadingType}) => {
     const [mlimit, setLimit] = useState(limit || 0)
     const [start, setStart] = useState(0)
     const [rowCount, setRowCount] = useState()
     const [orderBy, setOrderBy] = useState(order||false)
     const [first, setFirst] = useState(true)
     const [tabresult, setTabResult] = useState()
-    
+
+    let loadingCss= (loadingType==TERMINUS_TABLE) ? TERMINUS_TABLE : TERMINUS_COMPONENT
+
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes} = DBContextObj()
     let WOQL = TerminusClient.WOQL
@@ -67,7 +69,7 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
             }
             else {
                 let nq = docQuery()
-                updateQuery(nq)    
+                updateQuery(nq)
             }
         }
     }, [query])
@@ -93,7 +95,13 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
             let tres = qresult
             tres.prefixes = _generate_context(prefixes)
             if(onResults && qresult.bindings && qresult.bindings.length){
+                for(var k in report){
+                    qresult[k] = report[k]
+                }
                 onResults(qresult)
+            }
+            else if(qresult && typeof qresult.bindings != "undefined" && qresult.bindings.length == 0){
+                if(onEmpty) onEmpty(report)
             }
             setTabResult(tres)
         }
@@ -117,7 +125,6 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
     }
 
     let isEmpty = (report && report.rows == 0 && !start)
-    if(isEmpty && onEmpty) onEmpty()
 
     const _generate_context = (prefixes) => {
         let nups = {}
@@ -127,29 +134,29 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         for(var i = 0; i<prefixes.length; i++){
             if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
                 nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
-            }   
+            }
         }
         return nups
     }
 
-    return (       
+    return (
         <div className="tdb__loading__parent">
-            {(report && !isEmpty && tabresult) &&  
-                <WOQLTable 
+            {(report && !isEmpty && tabresult) &&
+                <WOQLTable
                     result={tabresult}
                     freewidth={freewidth}
-                    view={(view ? view.json() : {})} 
+                    view={(view ? view.json() : {})}
                     limit={mlimit}
                     query={query}
                     start={start}
                     orderBy={orderBy}
                     setLimits={changeLimits}
                     setOrder={changeOrder}
-                    totalRows={rowCount} 
-                />            
+                    totalRows={rowCount}
+                />
             }
             {loading &&
-                <Loading type={TERMINUS_COMPONENT}/>
+                <Loading type={loadingCss}/>
             }
         </div>
     )

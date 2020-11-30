@@ -166,7 +166,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
         if(branches && branches[branchID] && branches[branchID].head == sref){
             sref = false
-            refTime=false  
+            refTime=false
         }
         sref = sref || false
         woqlClient.ref(sref)
@@ -316,6 +316,8 @@ export const TerminusDBProvider = (woqlClient) => {
     let consoleTime = false
     let prefixesLoaded = true
     let prefixes = []
+    let refObject = false
+
     return {
         setConsoleTime,
         setHead,

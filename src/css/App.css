@@ -659,6 +659,8 @@ span.delete-modal-label {
   .advanced-button {
       float: right !important;
       border-radius: 3px !important;
+      letter-spacing: 0.88px;
+      font-size: 1.1rem !important;
   }
 
   .advanced-settings-create-form {
@@ -1576,7 +1578,7 @@ span.delete-modal-label {
       border: 0 !important
   }
 
-  .commit-log-title{
+  .commit-log-title, .preview-bar-title{
       letter-spacing: 0.88px;
       font-size: 14px;
   }
@@ -5291,6 +5293,7 @@ span.csv_subheader_section{
 .chosen-csv-container{
     border: 1px solid #ddd;
     border-radius: 4px;
+    padding-bottom: 50px;
 }
 
 .csv_info_icon_spacing{
@@ -5359,6 +5362,12 @@ span.csv_subheader_section{
 
 span.add-csv {
     float: right;
+    margin-top: 10px;
+}
+
+
+.d-page-overflow {
+    overflow-x: hidden !important;
 }
 
 .csv-preview-icon {
@@ -5440,6 +5449,10 @@ span.add-csv {
     opacity: 0.8;
     border: 1px solid #fff;
     border-radius: 3px !important;
+}
+
+.section-container {
+    min-height: 10% !important;
 }
 
 div.load-data-section {

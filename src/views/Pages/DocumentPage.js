@@ -17,7 +17,8 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
-import {BsCardList} from "react-icons/bs"
+
+//import {BsCardList} from "react-icons/bs"
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
@@ -73,7 +74,7 @@ const DocumentPage = (props) => {
 
     function setDocument(docid, type){
         setDocID(docid)
-        setSelType(type)
+        if(type) setSelType(type)
         if(docid){
             goDBSubPage(woqlClient.db(), woqlClient.organization(), "document", sanitizeURLID(docid))
         }
@@ -107,10 +108,9 @@ const DocumentPage = (props) => {
         }
     }
 
-    //<main className="console__page__container console__page__container--width">
     return (
         <>
-            <div id={props.id} className="console__page h-100" id="terminus-console-page">
+            <div id={props.id} className="console__page h-100 d-page-overflow" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
                 {!docID && !isCreating && !preview.show && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
@@ -254,30 +254,24 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     setIsAdding={setIsAdding}
                     availableCsvs={availableCsvs}
                     onCsvCancel={onCsvCancel}/>
-                {/*<span className="db-card-credit csv_subheader_section">
-                    <BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
-                    <span className="db_info existing_csv_subheader">
-                        CSV Documents
-                    </span>
-                </span>
-                <CSVList/>*/}
+                <CSVList/>
             </>}
             {!isCreating && !docid && (csvs.length==0) &&
-                    <DocumentListView
-                        selectDocument={setDocument}
-                        setDocType={setDocType}
-                        types={types}
-                        setCurrent={setCurrent}
-                        setIsAdding={setIsAdding}
-                        isAdding={isAdding}
-                        setDocType={setDocType}
-                        docType={docType}
-                        tabConfig={tabConfig}
-                        csvs={csvs}
-                        setCsvs={setCsvs}
-                        setPreview={setPreview}
-                        preview={preview}
-                    />
+                <DocumentListView
+                    selectDocument={setDocument}
+                    setDocType={setDocType}
+                    types={types}
+                    setCurrent={setCurrent}
+                    setIsAdding={setIsAdding}
+                    isAdding={isAdding}
+                    setDocType={setDocType}
+                    docType={docType}
+                    tabConfig={tabConfig}
+                    csvs={csvs}
+                    setCsvs={setCsvs}
+                    setPreview={setPreview}
+                    preview={preview}
+                />
             }
         </>
     )
@@ -298,15 +292,14 @@ const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, inser
 function sanitizeURLID(id_for_url){
     id_for_url = TerminusClient.UTILS.shorten(id_for_url)
     if(id_for_url.substring(0, 4) == "doc:") id_for_url = id_for_url.substring(4)
-    return id_for_url
-    //return encodeURIComponent(id_for_url)
+    return encodeURIComponent(id_for_url)
 }
 
 
 function desanitizeURLID(id_from_url){
     if(!id_from_url) return id_from_url
-    id_from_url = encodeURIComponent(id_from_url)
-    if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + id_from_url
+    id_from_url = decodeURIComponent(id_from_url)
+    if(id_from_url.indexOf(":") == -1) id_from_url = "doc:" + encodeURIComponent(id_from_url)
     return TerminusClient.UTILS.unshorten(id_from_url)
 }
 

@@ -10,10 +10,15 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+//import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
+//import {CSVPreview} from '../../components/CSVPane/CSVPreview'
+//import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
+//import {BiDownload} from "react-icons/bi"
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE} from '../../constants/identifiers'
 import {CSVPreview} from '../../components/CSVPane/CSVPreview'
+import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
-import {BiDownload} from "react-icons/bi"
+import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
 
 export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
@@ -21,8 +26,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     const [report, setReport]=useState(false)
 
     const { woqlClient} = WOQLClientObj()
-    const {ref, branch, prefixes} = DBContextObj()
-
+    const {ref, branch, prefixes, updateBranches} = DBContextObj()
+    
     let WOQL = TerminusClient.WOQL
 
     const docQuery = () => {
@@ -57,15 +62,17 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             message: message,
             time: Date.now() - update_start,
         })
-        console.log(err)
+        //console.log(err)
     }
 
     let csvRowClick = function csvRowClick(id, name){
+        setReport(false)
         setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
     }
 
     let onDocClick = function(cell){
         let row = cell.row
+        setReport(false)
         if(selectDocument && row) {
             if(row.original["Type ID"]==DOCTYPE_CSV){
                 //csvRowClick(row.original.Name["@value"])
@@ -76,6 +83,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     }
 
     let onClassClick = function(cell){
+        setReport(false)
         if(setDocType && cell && cell.row) {
             setDocType(cell.row.original["Type ID"])
         }
@@ -102,6 +110,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         update_start = update_start || Date.now()
         let commitMsg="Deleting File " + name + "-" + update_start
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+            updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
@@ -110,7 +119,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
 	const getDownloadButton=()=>{
 		return <span className="csv-toolbar-holder" title={"Download CSV "}>
-            <BiDownload color="#0055bb" className='schema-toolbar-delete'/>
+            <MdFileDownload color="#0055bb" className='schema-toolbar-delete'/>
         </span>
 	}
 
@@ -133,19 +142,22 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
-        {!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+        {/*!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
+            previewCss={"csv-preview-results csv-preview-results-border "}/>*/}
+        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border "}/>}
-            {loading &&  <Loading type={TERMINUS_COMPONENT} />}
-            <main className="console__page__container console__page__container--width">
-                <Row className="generic-message-holder">
-                    {report && <TerminusDBSpeaks report={report}/>}
-                </Row>
-                {!isAdding && !preview.show && <ControlledTable
-                    query={query}
-                    freewidth={true}
-                    view={tabConfig}
-                    limit={tabConfig.pagesize()}/>}
-            </main>
+        {loading &&  <Loading type={TERMINUS_COMPONENT} />}
+        <main className="console__page__container console__page__container--width">
+            <Row className="generic-message-holder">
+                {report && <TerminusDBSpeaks report={report}/>}
+            </Row>
+            {!isAdding && !preview.show && <ControlledTable
+                query={query}
+                freewidth={true}
+                loadingType={TERMINUS_TABLE}
+                view={tabConfig}
+                limit={tabConfig.pagesize()}/>}
+        </main>
     </>)
 }
 

@@ -10,14 +10,14 @@ import { LIST_LOCAL, LIST_REMOTE } from "../Pages/constants.pages"
 import Select from "react-select";
 import Loading from "../../components/Reports/Loading"
 import {CreateLocalForm} from "../CreateDB/CreateDatabase"
-import { AiOutlinePlus, AiOutlineLink } from "react-icons/ai";
+import {BsPlus} from "react-icons/bs"
 import { GRAPHDB, HUBDB } from "../../constants/images"
 import { MdContentCopy } from 'react-icons/md';
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
     if(!list || !user ) return null
     const { woqlClient,  refreshDBRecord } = WOQLClientObj()
-    const { getTokenSilently } = useAuth0()    
+    const { getTokenSilently } = useAuth0()
     const [listSort, setSort] = useState(sort || "name")
     const [listFilter, setFilter] = useState(filter || "")
     const [sorted, setSorted] = useState()
@@ -43,14 +43,14 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     }, [list])
 
 
-    
+
     function setAction(dbmeta){
         let db = _copy_db_card(dbmeta)
         if(db.action == 'synchronise' || db.action == 'share'){
             goDBPage(db.id, woqlClient.user_organization(), "synchronize")
         }
         else if(db.action == 'hub' && db.remote_record){
-            goHubPage(db.remote_record.organization, db.remote_record.id)            
+            goHubPage(db.remote_record.organization, db.remote_record.id)
         }
         else if(db.action == 'clone'){
             setLoading(true)
@@ -58,7 +58,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)
-                .then(() => goDBHome(id, woqlClient.user_organization(), report)) 
+                .then(() => goDBHome(id, woqlClient.user_organization(), report))
             })
             .finally(() => setLoading(false))
         }
@@ -97,7 +97,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     if(showingCreate) return (<CreateLocalForm onCancel={unshowCreate}/>)
 
     let stats = generateListStats()
-    return (<>        
+    return (<>
         <div className="dblist-filters">
             <div className="home_top_bar">
             <DBListStats type={type} stats={stats} filter={listFilter}/>
@@ -109,11 +109,11 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             </div>
         </div>
         <div className="generic-message-holder">
-            {report && 
+            {report &&
                 <TerminusDBSpeaks report={report} />
             }
         </div>
-        <DBList type={type} list={sorted} className={className} user={user} onAction={setAction}/>            
+        <DBList type={type} list={sorted} className={className} user={user} onAction={setAction}/>
     </>)
 }
 
@@ -131,7 +131,7 @@ export const DBListStats = ({type, stats, filter}) => {
     return (
         <span className="stats-list">
             <img src={GRAPHDB} className="stats-icon" /> {txt}
-            {(stats.remotes > 0) && 
+            {(stats.remotes > 0) &&
                 <DBRemoteCount count={stats.remotes} />
             }
         </span>
@@ -153,9 +153,9 @@ export const DBRemoteCount = ({count}) => {
 export const CreateDB = ({type, onCreate, title}) => {
     let txt = "Create " + (title ? title : "Database")
     let ntitle = "Create a new " + title + (type == "clone" ? " on TerminusHub" : "")
-    return ( 
+    return (
         <button title={ntitle} type="submit" className="dblist-create" onClick={onCreate}>
-            {txt} <AiOutlinePlus className="create-btn-icon" />
+            {txt} <BsPlus className="create-btn-icon"/>
         </button>
     )
 }
@@ -182,7 +182,7 @@ export const ListFilter = ({filter, type, onChange, logged_in}) => {
 
 
     return (
-        <Select 
+        <Select
             className="dblist-filter mb-2"
             options={filters}
             placeholder = {ph}
@@ -219,7 +219,7 @@ export const ListSorter = ({sort, logged_in, onChange}) => {
     }
 
     return (
-        <Select 
+        <Select
             className="dblist-filter"
             options={sorts}
             placeholder = {"Order by " + ph}
@@ -301,8 +301,8 @@ function _sort_list(unsorted, listSort){
         sortf = function(a, b){
             var lts = a.updated || 0
             var rts = b.updated || 0
-            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated 
-            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated 
+            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated
+            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated
             if(rts == lts){
                 lts = a.updated || 0
                 rts = b.updated || 0
@@ -314,8 +314,8 @@ function _sort_list(unsorted, listSort){
         sortf = function(a, b){
             var lts = a.updated || 0
             var rts = b.updated || 0
-            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated 
-            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated 
+            if(a.remote_record && a.remote_record.updated > lts) lts = a.remote_record.updated
+            if(b.remote_record && b.remote_record.updated > rts) rts = b.remote_record.updated
             return lts - rts
         }
     }
@@ -323,14 +323,14 @@ function _sort_list(unsorted, listSort){
         sortf = function(a, b){
             var lts = (a.id ? (a.updated || 0) : 0)
             var rts = (b.id ? (b.updated || 0) : 0)
-            return rts - lts 
+            return rts - lts
         }
     }
     else if(listSort == 'updated remote'){
         sortf = function(a, b){
             if(a.remote_record && b.remote_record){
-                var lts = a.remote_record.updated || 0                
-                var rts = b.remote_record.updated || 0                
+                var lts = a.remote_record.updated || 0
+                var rts = b.remote_record.updated || 0
                 return rts - lts
             }
         }
@@ -355,7 +355,7 @@ function _sort_list(unsorted, listSort){
                 if(a.remote_record.organization && b.remote_record.organization){
                     if(a.remote_record.organization.toLowerCase() < a.remote_record.organization.toLowerCase()) { return -1; }
                     if(a.remote_record.organization.toLowerCase() > b.remote_record.organization.toLowerCase()) { return 1; }
-                    return 0;    
+                    return 0;
                 }
                 if(a.remote_record.organization) return 1
                 if(a.remote_record.organization) return -1
@@ -388,15 +388,15 @@ function _copy_db_card(card){
             ncard[k] = []
             for(var i = 0; i<card[k].length; i++){
                 if(typeof card[k][i] == "object"){
-                    ncard[k].push(_copy_db_card(card[k][i]))   
+                    ncard[k].push(_copy_db_card(card[k][i]))
                 }
                 else {
                     ncard[k].push(card[k][i])
-                }                
+                }
             }
         }
         else if(typeof card[k] == "object"){
-            ncard[k] = _copy_db_card(card[k])   
+            ncard[k] = _copy_db_card(card[k])
         }
         else {
             ncard[k] = card[k]
