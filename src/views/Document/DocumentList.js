@@ -23,7 +23,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
-    
+
     let WOQL = TerminusClient.WOQL
 
     const docQuery = () => {
@@ -138,10 +138,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
     return (<>
-        {/*!isAdding && preview.show && <CSVPreview preview={preview} setPreview={setPreview}
-            previewCss={"csv-preview-results csv-preview-results-border "}/>*/}
         {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
-            previewCss={"csv-preview-results csv-preview-results-border "}/>}
+            previewCss={"csv-preview-results csv-preview-results-border "} setDocType={setDocType}/>}
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <main className="console__page__container console__page__container--width">
             <Row className="generic-message-holder">
