@@ -4,7 +4,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {isArray} from "../../utils/helperFunctions"
-import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE, DOCUMENT_VIEW_FRAGMENT} from "./constants.csv"
+import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE, DOCUMENT_VIEW_FRAGMENT, DOCTYPE_CSV} from "./constants.csv"
 import {BiArrowBack, BiDownload} from "react-icons/bi"
 import {MdFileDownload} from "react-icons/md"
 import Loading from '../../components/Reports/Loading'
@@ -15,7 +15,7 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 import {TERMINUS_TABLE} from "../../constants/identifiers"
 import {DBContextObj} from '../../components/Query/DBContext'
 
-export const CSVViewContents=({preview, setPreview, previewCss})=>{
+export const CSVViewContents=({preview, setPreview, previewCss, setDocType})=>{
 	const {woqlClient} = WOQLClientObj()
 	let propertyColumnNames=[]
 	const [query, setQuery] = useState(false)
@@ -92,6 +92,7 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
             updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
+			setDocType(DOCTYPE_CSV)
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
 		.finally(() => setLoading(false))
