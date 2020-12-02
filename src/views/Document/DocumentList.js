@@ -137,8 +137,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
 
-    console.log('report', report)
-    
     return (<>
         {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border"}/>}

@@ -23,6 +23,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
 	const {woqlClient}=WOQLClientObj()
+	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
 	const viewPreview=(e)=>{
 		let maxlines=6, buff=[] // read 6 lines
@@ -69,7 +70,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		let update_start = Date.now(), upFormatted=[]
         update_start = update_start || Date.now()
 		setLoading(true)
-		const {updateBranches} = DBContextObj()
 		let updateFiles=csvs.filter(item => { // filter csvs for update
 			let act=item.action.split(" ")
 			if(act[0]==action.UPDATE){
