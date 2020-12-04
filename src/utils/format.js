@@ -1,4 +1,4 @@
-import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
+/*import { WOQL_JS, WOQL_JSON, WOQL_PY } from '../labels/queryFormats'
 import { QUERY, RULE } from "../labels/tags"
 import { isObject } from "../utils/helperFunctions"
 const TerminusClient = require('@terminusdb/terminusdb-client');
@@ -37,4 +37,14 @@ export const parseText = (text, format, mode) =>{
         case WOQL_JS:
             return eval(text);
     }
+}*/
+
+
+export const formatBytes=(bytes, decimals = 2)=>{
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }

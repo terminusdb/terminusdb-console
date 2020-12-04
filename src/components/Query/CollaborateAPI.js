@@ -7,7 +7,7 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 /**
  * Meta has create db (id, label, comment, organization)
  */
-export const CreateLocal = async (meta, client, preformed) => {  
+export const CreateLocal = async (meta, client, preformed) => {
     if(!preformed){
         let dbs = client.databases()
         meta.id = _new_local_id(meta.id, dbs)
@@ -22,7 +22,7 @@ export const CreateLocal = async (meta, client, preformed) => {
     return client.createDatabase(meta.id, meta, meta.organization).then(() => meta.id)
 }
 
-export const CreateRemote = async (meta, client, remoteClient, getTokenSilently) => {  
+export const CreateRemote = async (meta, client, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
@@ -35,7 +35,7 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     })
 }
 
-export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {  
+export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
@@ -48,8 +48,8 @@ export const isLocalURL = function(lurl, client){
     return _is_local_server(client, lurl)
 }
 
-export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => { 
-    let dewun = (meta.remote_record ? meta.remote_record : meta) 
+export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => {
+    let dewun = (meta.remote_record ? meta.remote_record : meta)
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
@@ -58,13 +58,13 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 
 
 /*
-* remote_url 
+* remote_url
 * id (local)
 * label
 * comment
 */
 export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed) => {
-    let url = meta.remote_url 
+    let url = meta.remote_url
     let newid = meta.id
     let newby = {}
     if(!newid){
@@ -95,27 +95,27 @@ export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed
 
 export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently) => {
     let msg = {invitation: {
-        id: meta.invitation_id, 
+        id: meta.invitation_id,
         action: "accept"
     }}
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    return remoteClient.updateUser(client.connection.user.logged_in, msg)    
-}  
+    return remoteClient.updateUser(client.connection.user.logged_in, msg)
+}
 
 export const RejectInvite = async (meta, client, remoteClient, getTokenSilently) => {
     let msg = {invitation: {
-        id: meta.invitation_id, 
+        id: meta.invitation_id,
         action: "reject"
     }}
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    return remoteClient.updateUser(client.connection.user.logged_in, msg)    
-}  
+    return remoteClient.updateUser(client.connection.user.logged_in, msg)
+}
 
-export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {  
+export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) => {
     let WOQL = TerminusClient.WOQL
     let remote_name = meta.remote || "origin"
     const jwtoken = await getTokenSilently()
@@ -125,10 +125,9 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     if(meta.schema) delete meta['schema']
     //meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
     let resp = await remoteClient.createDatabase(meta.id, meta, meta.organization)
-    console.log(resp, " is the response")
     let rem = meta.remote_url
     let using = client.user_organization() + "/" + client.db() + "/_meta"
-    let q = WOQL.lib().add_remote(using, rem, remote_name)       
+    let q = WOQL.lib().add_remote(using, rem, remote_name)
     let uprepo = await client.query(q, "Setting remote for sharing database on Terminus Hub")
     let push_to = {
         remote: remote_name,
@@ -144,22 +143,22 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     })
 }
 
-export const addRemote = async (remote_name, remote_url, client, getTokenSilently, isHubURL) => { 
+export const addRemote = async (remote_name, remote_url, client, getTokenSilently, isHubURL) => {
     let WOQL = TerminusClient.WOQL
     let using = client.organization() + "/" + client.db() + "/_meta"
-    let q = WOQL.lib().add_remote(using, remote_url, remote_name)       
+    let q = WOQL.lib().add_remote(using, remote_url, remote_name)
     let res = await client.query(q, `Adding remote ${remote_name} at ${remote_url}`)
     return Fetch(remote_name, remote_url, client, getTokenSilently, isHubURL)
 }
 
-export const removeRemote = async (remote_name, client, getTokenSilently) => { 
+export const removeRemote = async (remote_name, client, getTokenSilently) => {
     let WOQL = TerminusClient.WOQL
     let using = client.organization() + "/" + client.db() + "/_meta"
-    let q = WOQL.lib().delete_remote(using, remote_name)       
+    let q = WOQL.lib().delete_remote(using, remote_name)
     return client.query(q, `Deleting remote ${remote_name}`)
 }
 
-export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth) => {  
+export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth) => {
     let nClient = client.copy()
     if(_is_local_server(nClient, remote_url)){
         nClient.remote_auth( nClient.local_auth() )
@@ -175,37 +174,37 @@ export const Fetch = async (remote_name, remote_url, client, getTokenSilently, n
 }
 
 
-export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) => {  
+export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    return remoteClient.updateOrganization(meta.id, meta)    
+    return remoteClient.updateOrganization(meta.id, meta)
 }
 
 
-export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {  
+export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
-    return remoteClient.updateDatabase(meta)    
+    return remoteClient.updateDatabase(meta)
 }
 
 
-export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently) => {  
+export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
-    return remoteClient.getDatabase(meta.id, meta.organization)    
+    return remoteClient.getDatabase(meta.id, meta.organization)
 }
 
 
 
 /*
-* meta has : local_branch / remote_branch / url / commit 
+* meta has : local_branch / remote_branch / url / commit
 */
-export const Push = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently) => {  
+export const Push = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently) => {
     let from_branch = local_branch || 'main'
     let to_branch = remote_branch || 'main'
     commit = commit || `Push of local branch ${local_branch} to ${remote} branch ${remote_branch} with Console`
@@ -227,9 +226,9 @@ export const Push = async (local_branch, remote, remote_branch, remote_url, comm
 }
 
 /*
-* meta has : local_branch / remote_branch / url / commit 
+* meta has : local_branch / remote_branch / url / commit
 */
-export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, no_auth) => {  
+export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, no_auth) => {
     let to_branch = local_branch || 'main'
     let from_branch = remote_branch || 'main'
     commit = commit || `Pull to local branch ${local_branch} from ${remote} branch ${remote_branch} with Console`
@@ -256,7 +255,7 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
 
 export const legalURLID = (idstr) => {
     if(!idstr.match(/^[0-9a-z_\-]+$/)) {
-        return false            
+        return false
     }
     if(idstr.length > 40) return false
     return true
@@ -274,8 +273,8 @@ function _new_local_id(starter, dbl){
         if(_is_integer(v)){
             ind = v
             starter = starter.substring(0, starter.lastIndexOf("_"))
-        }    
-    }    
+        }
+    }
     let base = starter
     let ids = dbl.map((item) => item.id)
     while(ids.indexOf(base) != -1){
@@ -292,7 +291,7 @@ function _new_remote_id(starter, org, dbl, preformed){
         if(_is_integer(v)){
             ind = v
             starter = starter.substring(0, starter.lastIndexOf("_"))
-        }    
+        }
     }
     let base = starter
     let ids = dbl.map((item) => item.organization + "/" + item.id)
@@ -323,7 +322,7 @@ function _new_local_label(starter, dbl){
         if(_is_integer(num)){
             ind = num
             starter = starter.substring(0, starter.lastIndexOf(" ("))
-        }    
+        }
     }
     let ndbl = []
     for(var i = 0 ; i<dbl.length; i++){
@@ -336,4 +335,3 @@ function _new_local_label(starter, dbl){
     }
     return base
 }
-

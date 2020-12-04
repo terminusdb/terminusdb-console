@@ -85,7 +85,7 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
                     <APIUpdateReport error = { report.error } message={report.message} status={report.status} time={report.time}/>
                 </TCRow>
             }
-            <JSONTCButtons buttons={buttons} />
+
             {showGrid &&
                 <TCGrid layout={layout}>
                     {tcf}
@@ -95,6 +95,7 @@ export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, val
                 {tcf}
             </>}
             {children}
+            {<JSONTCButtons buttons={buttons} />}
         </form>
     )
 }

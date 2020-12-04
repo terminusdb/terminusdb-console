@@ -28,9 +28,9 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [repos, setRepos] = useState()
 
     const [ref, setRef] = useState(woqlClient.ref())
-    
+
     const [consoleTime, setConsoleTime] = useState()
-    
+
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(0)
     const [headUpdating, setHeadUpdating] = useState(false)
@@ -38,6 +38,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [graphsReload, setGraphsReload] = useState(0)
     const [branchesReload, setBranchesReload] = useState(0)
     const [prefixesReload, setPrefixesReload] = useState(0)
+    const [prefixesLoaded, setPrefixesLoaded] = useState(false)
 
     const WOQL = TerminusClient.WOQL
 
@@ -105,9 +106,11 @@ export const DBContextProvider = ({children, woqlClient}) => {
         for(var i = 0; i<prefixes.length; i++){
             if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
                 nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
-            }   
+                TerminusClient.UTILS.addURLPrefix(prefixes[i]['Prefix']['@value'], prefixes[i]['IRI']["@value"])
+            }
         }
         woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
+        setPrefixesLoaded(true)
     }
 
 
@@ -163,7 +166,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
 
         if(branches && branches[branchID] && branches[branchID].head == sref){
             sref = false
-            refTime=false  
+            refTime=false
         }
         sref = sref || false
         woqlClient.ref(sref)
@@ -223,8 +226,8 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 if(repos[title]){
                     title += i
                 }
-                if (b['Remote URL'] && b['Remote URL']['@value']) {                    
-                    repos[title] = { 
+                if (b['Remote URL'] && b['Remote URL']['@value']) {
+                    repos[title] = {
                         url: b['Remote URL']['@value'],
                         title: title,
                     }
@@ -233,7 +236,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                     repos.local = {
                         title: 'local'
                     }
-                }    
+                }
             }
         }
         return repos
@@ -283,6 +286,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 repos,
                 prefixes,
                 loading,
+                prefixesLoaded
             }}
         >
             {children}
@@ -310,7 +314,10 @@ export const TerminusDBProvider = (woqlClient) => {
     let ref = false
     let loading = false
     let consoleTime = false
+    let prefixesLoaded = true
     let prefixes = []
+    let refObject = false
+
     return {
         setConsoleTime,
         setHead,
@@ -325,6 +332,7 @@ export const TerminusDBProvider = (woqlClient) => {
         branch,
         refObject,
         loading,
+        prefixesLoaded,
     }
 }
 
@@ -341,6 +349,7 @@ export const NullDBProvider = (woqlClient) => {
     let loading = false
     let consoleTime = false
     let prefixes = []
+    let prefixesLoaded = true
     return {
         setConsoleTime,
         setHead,
@@ -354,7 +363,7 @@ export const NullDBProvider = (woqlClient) => {
         consoleTime,
         ref,
         loading,
+        prefixesLoaded
     }
 
 }
-

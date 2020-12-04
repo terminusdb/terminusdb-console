@@ -11,7 +11,11 @@ export const ResultViewer = ({bindings, type, viewConfig, query, prefixes, updat
     */
     const woqlGraphConfig= TerminusClient.View.graph();
     woqlGraphConfig.height(800).width(1000)
-
+    //woqlGraphConfig.edges(["Object", "Subject"]);
+    //woqlGraphConfig.node("Subject").size(20).color([180, 220, 250]).text("Predicate")
+    //woqlGraphConfig.node("Object").size(30).color([0, 220, 250]).text("Predicate")
+    //woqlGraphConfig.node("Subject").text("Predicate")
+    //woqlGraphConfig.node("B").text("v:BLabel")
     const result = new TerminusClient.WOQLResult({bindings:bindings},query);
 
     let viewer = woqlGraphConfig.create(null);
@@ -20,7 +24,11 @@ export const ResultViewer = ({bindings, type, viewConfig, query, prefixes, updat
 
     return (<>
         {bindings && type==="table" &&
-            <WOQLTable bindings={bindings} view={currentView} query={query} updateQuery={updateQuery} prefixes={prefixes} />
+            <WOQLTable bindings={bindings} 
+                view={currentView} 
+                query={query} 
+                updateQuery={updateQuery} 
+                prefixes={prefixes} />
         }
         {bindings && type==="graph" &&
             <WOQLGraph config={myviewer.config} dataProvider={myviewer} query={query} updateQuery={updateQuery}/>

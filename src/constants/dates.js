@@ -27,3 +27,8 @@ export const printts = (ts, f) => {
     f = f || DATETIME_REGULAR
     return format(new Date(ts * 1000), f)
 }
+
+export const formatFileDate=(d)=>{
+    let dt=format(new Date(d), DATETIME_DB_UPDATED)
+    return dt
+}

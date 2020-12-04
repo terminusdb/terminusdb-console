@@ -2,6 +2,21 @@
     min-height: 70px!important;
   }
 
+  .version-info {
+    font-size: 18px;
+    margin: 0px 10px 0px 20px;
+    cursor: pointer;
+  }
+
+  .version-info-align {
+      font-size: 17px;
+      margin: 10px 0px 10px 0px;
+  }
+
+  .version-info-col {
+      color: #0055bb;
+  }
+
   .btn-primary.disabled, .btn-primary:disabled{
     background-color: #00C08B !important;
   }
@@ -21,7 +36,7 @@
   .detail-credits{
       display: flex;
       flex-grow: 1;
-      flex-wrap: wrap-reverse;
+      /*flex-wrap: wrap-reverse;*/
       padding: 0px 20px 0 20px;
       align-items: center;
       /* justify-content: center; */
@@ -284,6 +299,17 @@ span.delete-button {
     padding-right: 6px;
 }
 
+span.add-csv-subheader{
+    margin-top: 9px;
+}
+
+span.create-new-button {
+    color: #00C08B;
+    background-color: transparent;
+    padding-right: 6px;
+    background-color: transparent !important;
+}
+
 .tcf-inp-center {
         text-align: center;
 }
@@ -308,6 +334,8 @@ span.delete-modal-label {
 
 
 }
+
+
 
   img.cancel-ic{
       float:right;
@@ -645,14 +673,18 @@ span.delete-modal-label {
 
   .advanced-button {
       float: right !important;
+      border-radius: 3px !important;
+      letter-spacing: 0.88px;
+      font-size: 1.1rem !important;
   }
 
   .advanced-settings-create-form {
       margin-top: -20px;
-      width: 100%;
+      /*width: 100%;*/
       display: block;
       height: 70px;
       margin-bottom: 10px;
+      margin: 0px 10px 0px 10px;
   }
 
   p.create-form-helptext::before {
@@ -1561,15 +1593,22 @@ span.delete-modal-label {
       border: 0 !important
   }
 
+  .commit-log-title, .preview-bar-title{
+      letter-spacing: 0.88px;
+      font-size: 14px;
+  }
+
   .sub-headings {
       font-size: 19px;
       color: #bbc;
       padding-left: 1em;
   }
 
-  .latest-update-heading {
-   }
-
+  .d-sub-headings {
+      letter-spacing: 0.88px;
+      padding-left: 10px !important;
+      color: #787878;
+  }
 
   .table-hover.table td{
     word-break: break-word;
@@ -1966,6 +2005,7 @@ span.delete-modal-label {
       color: #fff;
       opacity: 0.8;
       border: 1px solid #fff;
+      border-radius: 3px !important;
   }
 
   div.advanced-section-create-form {
@@ -2584,6 +2624,7 @@ span.delete-modal-label {
       margin-top: -8px;
       text-align: right;
       padding-right: 10px;
+      min-width: 100px;
   }
 
   .ros-close-icon:hover {
@@ -2680,6 +2721,7 @@ span.delete-modal-label {
       margin: 0px 0px 0px 0px;
       border-bottom: 1px solid #00C08B;
       padding: 2px 2px 8px 2px;
+      width: 100%;
   }
 
   .schema-edit-toolbar {
@@ -2688,6 +2730,7 @@ span.delete-modal-label {
       background-color: #002856;
       margin: 0px 0px 0px 0px;
       padding: 2px;
+      width: 100%;
   }
 
   .schema-edit-report {
@@ -3087,6 +3130,10 @@ span.delete-modal-label {
       background-color: #fafbfe !important;
   }
 
+  .pexel-img-container {
+      text-align: center;
+  }
+
   textarea.database-description-input:hover,
   .database-create-title-input:hover,
   .pexel-search-input:hover,
@@ -3316,12 +3363,17 @@ span.delete-modal-label {
       cursor: pointer;
   }
 
-  .schema-toolbar-delete-holder {
+  .flatText{
+      color: #787878;
+      letter-spacing: 0.88px;
+  }
+
+  .schema-toolbar-delete-holder, .csv-toolbar-holder {
       margin-left: 6px;
       font-size: 1.2em;
   }
 
-  .schema-toolbar-delete-holder:hover {
+  .schema-toolbar-delete-holder:hover, .csv-toolbar-holder:hover {
       cursor: pointer;
   }
 
@@ -3941,9 +3993,20 @@ span.delete-modal-label {
       text-align: center;
   }
 
-  .delete-modal-button{
+  .delete-modal-button, .create-new-button-spacing{
       margin: 0px auto !important;
       margin-right: 20px !important;
+      background-color: transparent !important;
+      padding: 0.375rem 0.75rem !important;
+  }
+
+  .create-new-button-spacing:hover {
+      color: #fff !important;
+      background-color: #00C08B !important;
+  }
+
+  .subheader-btns{
+      margin-top: 10px !important
   }
 
   .db-action {
@@ -4015,6 +4078,94 @@ span.delete-modal-label {
   .db_info_icon_spacing {
      /* margin: 0px 0px 0px 15px;*/
       color: #0055bb;
+  }
+
+  .csv-control-spacing {
+      margin: 10px;
+  }
+
+  .csv-item-title{
+      font-size: 14px;
+  }
+
+  .csv-preview-results {
+      font-size: 14px;
+      border-radius: 3px;
+      padding: 40px;
+      max-width: 1800px;
+      min-width: 1180px;
+      overflow-x: scroll;
+  }
+
+  .csv-download-link{
+      color: #0066f9;
+  }
+
+  .csv-download-link:hover{
+      color: #0066f9;
+      text-decoration: underline;
+  }
+
+  .csv-preview-results-border {
+      border: 1px solid #ddd;
+  }
+
+  .csv-title-align{
+    margin-top: 30px;
+  }
+
+  .csv-container {
+      margin: 0px 68px 0px 10px;
+      color: #000;
+  }
+
+  .csv_title {
+      font-size: 16px;
+      color: #000 !important;
+  }
+
+  .create-with-adv-btns-align{
+      margin: 10px 0px 0px 0px;
+  }
+
+  .upload-row{
+      width: 100%;
+      margin: 50px 0px 10px 0px;
+  }
+
+  button.upload-csv-btn{
+      font-size: 12px;
+      font-weight: 600;
+  }
+
+  input.commit-log-input{
+      border-radius: 3px;
+  }
+
+  .csv_content_title{
+      font-size: 16px;
+      color: #000 !important;
+      margin-top: 10px
+  }
+
+  .csv_icon_spacing {
+      margin: 0px 0px 0px 15px;
+  }
+
+  .csv-rows {
+      margin-left: -40px;
+      margin-top: 70px;
+  }
+
+  .csv-duplicate-msg {
+      width: 100%;
+      margin-top: -15px
+  }
+
+  .selected-csvs-sections {
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      margin: 30px 0px 0px 0px;
   }
 
   .invitation_info_icon_spacing {
@@ -4114,7 +4265,8 @@ span.delete-modal-label {
       font-weight: 500;
   }
 
-  .hub-organization-link {
+
+  .hub-organization-link, .csv-act {
       border: 1px solid white;
       border-radius: 4px;
   }
@@ -4123,7 +4275,7 @@ span.delete-modal-label {
     font-weight: 500;
 }
 
-  .hub-organization-link:hover {
+  .hub-organization-link:hover, .csv-act:hover {
       cursor: pointer;
       color: #033684;
       border-radius: 12px;
@@ -4541,7 +4693,7 @@ span.delete-modal-label {
       text-align: center;
   }
 
-  .delete-modal-icon {
+  .delete-modal-icon{
       font-size: 20px;
       margin-right: 20px;
   }
@@ -4616,8 +4768,32 @@ span.delete-modal-label {
       border: 1px solid #ddd;
       min-height: 200px;
       width: 300px;
-      height: 360px;
+      height: 380px;
       border-radius: 8px;
+  }
+
+  div.pexels-container {
+      margin-top: 50px;
+      width: 100%;
+  }
+
+  span.pexel-search-field {
+      width: 100%;
+  }
+
+  div.pexels-controls {
+      margin: 10px 0px 10px 0px;
+  }
+
+  span.pexels-controls {
+      font-size: 20px;
+      color: rgb(0, 92, 191);
+      margin: 10px;
+  }
+
+  span.pexels-controls:hover {
+      color: #00C08B;
+      cursor: pointer;
   }
 
   .add-image-control {
@@ -4625,7 +4801,7 @@ span.delete-modal-label {
       margin-top: 60px;
   }
 
-  .delete-modal-icon:hover {
+  .delete-modal-icon:hover{
       color: #fff
   }
 
@@ -4675,9 +4851,19 @@ span.delete-modal-label {
       margin: 10px;
   }
 
-  .image-picker-link:hover {
+  div.upload-image-clear {
+      float: right;
+      width: 100%;
+      margin: 5px 20px 5px 10px;
+      text-align: right;
+      font-size: 12px;
+      text-decoration: underline;
+  }
+
+  .image-picker-link:hover, div.upload-image-clear:hover {
       color: #005cbf;
       text-decoration: underline;
+      cursor: pointer;
   }
 
   .db-create-image-url {
@@ -4771,17 +4957,6 @@ span.delete-modal-label {
     cursor: pointer;
 }
 
-.create-place-badge-hub-img {
-    margin-top: -4px;
-    margin-left: 8px;
-    height: 40px;
-    width: 40px;
-}
-
-.create-place-badge {
-
-}
-
 .local-badge {
     color: #888;
     border: 1px solid #ddd;
@@ -4828,12 +5003,18 @@ span.delete-modal-label {
     margin-left: 15px;
 }
 
+
+.create-db-options:hover {
+    cursor: pointer;
+}
+
 .create-db-span:hover {
     border-bottom: 5px solid #00C08B !important;
+    cursor: pointer;
 }
 
 .create-db-span {
-    border-bottom: 5px solid white; 
+    border-bottom: 5px solid white;
     display:inline-block;
     padding: 30px 30px 4px 30px;
 }
@@ -5026,5 +5207,347 @@ button.tdb__button__cancel:hover {
 }
 
 .feedback-alert {
+    width: 100%;
+}
+
+.create-db-items {
+    /*box-shadow: 0 10px 20px 6px rgba(0,0,0,0.10);*/
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fff;
+    min-height: 700px;
+}
+.create-db-tabs {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.create-db-tabs-panel {
+    background-color: #fff;
+    margin: 0 30px;
+}
+
+.create-db-tabs-title {
+    transition: ease-in-out all .3s;
+    width: calc(98%/3);
+    border-radius: 5px;
+    font-size: 18px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #787878;
+}
+
+.create-db-tabs-title:hover {
+	color: #00C08B;
+	background-color: #ededed;
+	border-radius: 5px
+}
+
+.create-db-tabs-selected {
+    color: #00C08B;
+    background-color: #fff !important;
+    border-radius: 5px;
+}
+
+.create-place-badge-hub-img {
+    margin-top: -4px;
+    margin-left: 8px;
+    height: 40px;
+    width: 40px;
+}
+
+.create-db-local-img {
+    transition: ease-in-out all .3s;
+    margin-right: 10px;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/create-locally-shaded-out-color.png");
+}
+
+.create-db-tabs-selected .create-db-tabs-icon .create-db-local-img,
+.create-db-tabs-title:hover .create-db-tabs-icon .create-db-local-img {
+    transition: ease-in-out all .3s;
+    margin-right: 10px;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/create-locally-terminus-color.png");
+}
+
+.create-db-local-hub {
+    transition: ease-in-out all .3s;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/Cow-duck-avatar-shaded-out-color.png");
+}
+
+.create-db-tabs-selected .create-db-tabs-icon .create-db-local-hub,
+.create-db-tabs-title:hover .create-db-tabs-icon .create-db-local-hub {
+    transition: ease-in-out all .3s;
+    content: url("https://assets.terminusdb.com/terminusdb-console/images/Cow-duck-avatar-terminus-color.png");
+}
+
+button.close-button{
+    font-size: 14px;
+}
+
+button.close-button:hover{
+    font-size: 14px;
+    background-color: #888;
+    color: #fff
+}
+
+
+span.subheader-spacing{
+    margin-top: 15px;
+}
+
+span.csv_subheader_section{
+    margin-top: 20px;
+}
+
+.chosen-csv-container{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding-bottom: 50px;
+}
+
+.csv_info_icon_spacing{
+    margin: 0px -10px 0px 30px;
+    font-size: 18px;
+}
+
+.existing_csv_subheader{
+    margin: 20px;
+    font-size: 16px;
+    color: #787878;
+}
+
+.inputfile, .csv-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.close-preview-span{
+    float: right;
+}
+
+.selected-csv-span {
+    margin-right: 20px;
+    max-width: 350px;
+    min-width: 100px;
+}
+
+.selected-csv-select-span {
+    min-width: 290px !important;
+}
+
+.selected-csv-name-span {
+    min-width: 350px !important;
+}
+
+.csv-preview-header, .commit-log-header {
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    background-color: #ddd;
+    padding: 10px 0px 10px 0px;
+    border-radius: 3px;
+    margin-top: 10px;
+}
+
+.d-nav-icons{
+    padding: 5px;
+    cursor: pointer;
+    margin: 0px 0px 0px 5px;
+}
+
+.d-nav-icons:hover{
+  background-color: #ddd !important;
+  border-radius: 50%;
+}
+
+.d-nav-text {
+    padding-top: 20px;
+    letter-spacing: 0.88px;
+}
+
+span.add-csv {
+    float: right;
+    margin-top: 10px;
+}
+
+
+.d-page-overflow {
+    overflow-x: hidden !important;
+}
+
+.csv-preview-icon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.inputfile, .csv-input {
+    cursor: pointer;
+}
+
+.inputfile + label, .csv-label {
+    /*max-width: 80%;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: .375rem .75rem;
+    font-size: 14px;
+    letter-spacing: 0.88px;
+}
+
+.d-icons-text {
+    letter-spacing: 0.88px;
+}
+
+.create-db-file + label strong, .csv-label {
+    /*height: 100%;
+    color: #e2e8f0;
+    background-color: #00C08B;
+    display: inline-block;*/
+    border-radius: 3px;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 14px;
+    border: 1px solid #e5e5e5;
+}
+
+.add-files + label {
+    border: 1px solid #00C08B;
+    color: #00C08B;
+    border-radius: 3px;
+}
+
+.add-files + label:hover {
+    border: 1px solid #00C08B;
+    color: white;
+    background-color: #00C08B;
+}
+
+.create-db-file + label span, .create-db-file + label strong {
+    padding: 0.625rem 1.25rem;
+}
+
+.create-db-file + label span {
+    width: 200px;
+    min-height: 2em;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+.create-db-file + label {
+    border-radius: 0;
+    color: #000;
+    background-color: #f5f5f5;
+    font-size: 1.1rem;
+    border: 1px solid #e5e5e5;
+    margin-top: 1.5rem;
+    border-radius: 3px !important;
+}
+
+.create-db-file + label:hover {
+    background-color: #00C08B;
+    color: #fff;
+    opacity: 0.8;
+    border: 1px solid #fff;
+    border-radius: 3px !important;
+}
+
+.section-container {
+    min-height: 10% !important;
+}
+
+div.load-data-section {
+    margin: 0 30px;
+    margin-bottom: 30px;
+}
+
+span.upload-data-align{
+    display: flex;
+    white-space: nowrap;
+    width: 100%;
+}
+
+button.upload-file {
+    margin-left: 30px;
+    height: 42px;
+}
+
+div.file-info-containers {
+    display: block;
+    background-color: #fff;
+    border: 0.5px solid #ddd;
+    border-radius: 4px;
+}
+
+span.remote-info-label {
+    font-size: 15px;
+    color: #787878;
+    font-weight: 600;
+}
+
+div.extacted-file {
+    margin-top: 30px;
+}
+
+div.header-row {
+    width: 100%;
+    margin: 20px 0px 20px 0px;
+}
+
+span.extracted-file-info {
+    display: inline-block;
+    text-align: center;
+    padding: 8px 16px 8px 8px;
+}
+
+.header-edit-icon {
+    color: #0055bb;
+}
+
+.header-edit-icon:hover {
+    color: #00C08B;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.delete-file {
+    color: #dc3545;
+    width: 100%;
+    text-align:right;
+}
+
+span.delete-file:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.header-controls {
+    width: 100%;
+    text-align:right;
+    margin-right: 30px;
+}
+input.file-header-values {
+    border: 1px solid #f2f3fa;
+    background-color: #fafbfe !important;
+    padding: 0;
+    border-radius: 4px;
+}
+
+span.header-control-panel {
+    text-align: right;
     width: 100%;
 }

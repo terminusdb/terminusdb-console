@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Route, useRouteMatch, useLocation, Switch } from "react-router-dom"
 import DatabaseHome from "../../views/Pages/DatabaseHome"
-import {DB_SYNCHRONISE, DB_MANAGE} from "../../constants/routes"
+import {DB_SYNCHRONISE, DB_MANAGE,DB_SCHEMA_BUILD_ROUTE} from "../../constants/routes"
 import {ManageDB} from "../../views/DBManage/ManageDB"
 
 export const DBHomeRoutes = () => {
@@ -19,10 +19,13 @@ export const DBHomeRoutes = () => {
             <ManageDB page={DB_MANAGE} report={report} />
         </Route>
     )
+
     routes.push(
         <Route key="home" path="/">
             <DatabaseHome report={report} />
         </Route>
     )
+
+ 
     return (<Switch>{routes}</Switch>)
 }

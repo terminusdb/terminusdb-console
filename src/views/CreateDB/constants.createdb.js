@@ -28,7 +28,7 @@ const copyLocallyImg = TERMINUS_IMAGE_BASE + "copy-locally.png"
 const copyRemoteImg = TERMINUS_IMAGE_BASE + "copy-remote.png"
 
 export const CREATE_DATABASE_LOCALLY = "Local Database"
-export const CREATE_DATABASE_HUB = "Terminus Hub Database"
+export const CREATE_DATABASE_HUB = "TerminusHUB Database"
 
 //const cloneImg = TERMINUS_IMAGE_BASE + "clone.png"
 //const forkImg = TERMINUS_IMAGE_BASE + "fork.png"
@@ -159,6 +159,20 @@ export const DB_DETAILS_FORM = {
             },
         },
     ],
+}
+
+export const DB_LOAD_DATA_FORM = {
+    importButton: "Load Data"
+}
+
+export const DB_CSV_CREATE_FORM = {
+    csvWrapperClassName: "advanced-settings-create-form",
+    title: "Create Database From CSVs",
+    createButton: "Create Database From CSVs",
+    addButton: "Add More CSVs",
+    csvError: "Error in inserting CSV",
+    csvSuccess: "Successfully inserted CSV",
+    defaultCommitMsg: "create database with CSVs"
 }
 
 export const DB_ADVANCED_FORM = {
@@ -459,3 +473,6 @@ export const CREATE_REMOTE_FORM = {
 
 export const CREATE_LOCAL_INTRO = "Create a new database on your local TerminusDB server"
 export const CREATE_REMOTE_INTRO = "You can choose to create a new database on your local server, or save it directly to your TerminusHub account for sharing with others"
+
+export const CREATE_WITH_CSV="Create Database From CSVs"
+export const ADD_MORE_CSV="Add More CSVs"

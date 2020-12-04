@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
-import {TCForm} from '../../components/Form/FormComponents'
-import {DB_DETAILS_FORM, DB_ADVANCED_FORM} from './constants.createdb'
+import {TCForm, JSONTCButtons} from '../../components/Form/FormComponents'
+import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_DB_FORM, DB_CSV_CREATE_FORM} from './constants.createdb'
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
-
-
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import {CSVLoader} from "../../components/CSVPane/CSVLoader"
+import {Row, Col} from "reactstrap"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 
 /**
  * Form for viewing and editing database meta data
@@ -37,14 +39,14 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         advancedInfo[item.id] = item.value || ''
     })
 
-
-
     let layout = (logged_in ? [3,2,1]  : [2, 1])
 
     //set up state variables configuration
     const [values, setValues] = useState(dbInfo)
     const [advanced, setAdvanced] = useState(advancedInfo)
     const [advancedSettings, setAdvancedSettings] = useState(false)
+
+    const [csvs, setCsvs]=useState([])
 
     function toggleAdvanced() {
         setAdvancedSettings(!advancedSettings)
@@ -62,7 +64,11 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         let dbdoc = {
             id: extract.dbid,
             label: extract.dbname,
-            comment: extract.description,
+            comment: extract.description
+        }
+        if (Array.isArray(csvs) && csvs.length){
+            dbdoc.files = []
+            dbdoc.files = csvs
         }
         if(advanced.schema){
             dbdoc.schema = true
@@ -87,34 +93,53 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
         onSubmit(dbdoc)
     }
 
+    const insertCsvs = (e) => {
+	   for(var i=0; i<e.target.files.length; i++){
+		   let files = {};
+           files = e.target.files[i]
+		   setCsvs( arr => [...arr, files]);
+	   }
+    }
+
+    function onCsvCancel() {
+        setCsvs([])
+    }
+
     return (
         <>
-            <TCForm
-                onSubmit={onExtract}
+            <TCForm onSubmit={onExtract}
                 layout={layout}
                 fields={detfields}
                 values={values}
                 buttons={buttons}
             />
+            {!from_local && (csvs.length>0) && <CSVLoader csvs={csvs} title={DB_CSV_CREATE_FORM.title} addButton={DB_CSV_CREATE_FORM.addButton}
+                setCsvs={setCsvs} insertCsvs={insertCsvs} page="create" onCsvCancel={onCsvCancel}/>}
+            <Row>
+                <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
+                    {(!advancedSettings && !from_local) && (
+                        <button
+                            className={DB_ADVANCED_FORM.advancedButtonClassName}
+                            onClick={toggleAdvanced}
+                        >
+                            {DB_ADVANCED_FORM.showAdvanced}
+                        </button>
+                    )}
+                    {advancedSettings && (
+                        <button
+                            className={DB_ADVANCED_FORM.advancedButtonClassName}
+                            onClick={toggleAdvanced}
+                        >
+                            {DB_ADVANCED_FORM.hideAdvanced}
+                        </button>
+                    )}
+                </span>
 
-            <span className={DB_ADVANCED_FORM.advancedWrapperClassName}>
-                {(!advancedSettings && !from_local) && (
-                    <button
-                        className={DB_ADVANCED_FORM.advancedButtonClassName}
-                        onClick={toggleAdvanced}
-                    >
-                        {DB_ADVANCED_FORM.showAdvanced}
-                    </button>
-                )}
-                {advancedSettings && (
-                    <button
-                        className={DB_ADVANCED_FORM.advancedButtonClassName}
-                        onClick={toggleAdvanced}
-                    >
-                        {DB_ADVANCED_FORM.hideAdvanced}
-                    </button>
-                )}
-            </span>
+                {!from_local && (csvs.length==0) && <CSVInput css={DB_CSV_CREATE_FORM.csvWrapperClassName} text={DB_CSV_CREATE_FORM.createButton} onChange={insertCsvs}
+                    inputCss={'create-db-file'} multiple={true}/>
+                }
+                {/*<JSONTCButtons buttons={{className:"create-with-adv-btns-align", submitText:CREATE_DB_FORM.createButtonText}}/>*/}
+            </Row>
             {advancedSettings && (
                 <TCForm
                     fields={DB_ADVANCED_FORM.fields}

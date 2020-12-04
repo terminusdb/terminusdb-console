@@ -17,6 +17,10 @@ import { Row, Col } from "reactstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import {DB_CSV_CREATE_FORM} from "./constants.createdb"
+import {isArray} from "../../utils/helperFunctions"
 
 export const CreateDatabase = () => {
 
@@ -44,9 +48,9 @@ export const CreateDatabase = () => {
     }
     return (
         <div className="tdb__loading__parent">
+
             <div className="create-section">
                 <hr/>
-
                 {allow_remote && <>
                     <div className="create-db-option-descr">Choose where you want to create your database</div>
                         <span className="create-db-span" onClick={handleLocal}>
@@ -75,9 +79,9 @@ export const CreateDatabase = () => {
                 <CreateRemoteForm />
             }
         </div>
+
     )
 }
-
 
 export const CreateLocalForm = ({onCancel, from_local}) => {
     const [report, setReport] = useState()
@@ -91,10 +95,23 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         doc.organization = woqlClient.user_organization()
         return CreateLocal(doc, woqlClient)
         .then((local_id) => {
-            after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+            if(doc.files) {
+                setLoading(true)
+                woqlClient.insertCSV(doc.files, DB_CSV_CREATE_FORM.defaultCommitMsg, null, null).then((results) => {
+                    setReport({status: TERMINUS_SUCCESS, message: DB_CSV_CREATE_FORM.csvSuccess, time: Date.now() - update_start})
+                    after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+                })
+                .catch((err) => process_error(err, update_start, DB_CSV_CREATE_FORM.csvError))
+                .finally(() => setLoading(false))
+            }
+            else{
+                after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
+            }
         })
         .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
-        .finally(() => setLoading(false))
+        .finally(() => {
+            if(!isArray(doc.files)) setLoading(false)
+        })
     }
 
     function after_create_db(update_start, message, id, create_or_clone, remote_record, onShare){
@@ -117,11 +134,10 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
         return`${CREATE_DB_FORM.createFailureMessage} ${label}, (id: ${id}) `
     }
 
-    
     return  (<>
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <div className="pretty-form">
-        {onCancel && 
+        {onCancel &&
             <div className="create-place-badge local-badge">
                 <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
                 Creating Local Database
@@ -159,7 +175,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
         smeta[k] = org[k]
     }
     smeta.hub_url = remoteClient.server()
-  
+
     async function createRemote(doc, update_start) {
         setLoading(true)
         if(!doc.organization) doc.organization = bffClient.user_organization()
@@ -186,7 +202,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
 
     return (
         <div className="pretty-form">
-            {onCancel && 
+            {onCancel &&
                 <div className="create-place-badge remote-badge">
                         <AiOutlineCloseCircle className="cancel-create-form" title="Cancel Database Create" onClick={onCancel}/>
                     Creating Terminus Hub Database
@@ -206,7 +222,16 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     )
 }
 
-
+function process_error(err, update_start, message){
+    setLoading(false)
+    setReport({
+        error: err,
+        status: TERMINUS_ERROR,
+        message: message,
+        time: Date.now() - update_start,
+    })
+    console.log(err)
+}
 
 export const ShareDBForm = ({onSuccess, starter}) => {
     const [report, setReport] = useState()
@@ -240,7 +265,6 @@ export const ShareDBForm = ({onSuccess, starter}) => {
             sclient.db(local.id)
         }
         let lid = sclient.db()
-        console.log(doc)
         ShareLocal(doc, sclient, bffClient, getTokenSilently)
         .then(() => {
             let rep = {status: TERMINUS_SUCCESS, message: "Successfully Pushed Database to TerminusHub"}
@@ -251,18 +275,10 @@ export const ShareDBForm = ({onSuccess, starter}) => {
             })
         })
         .catch((err) => process_error(err, update_start, "Push to TerminusHub failed"))
-        .finally(() => setLoading(false))
-    }
-    
-    function process_error(err, update_start, message){
-        setReport({
-            error: err,
-            status: TERMINUS_ERROR,
-            message: message,
-            time: Date.now() - update_start,
+        .finally(() => {
+            setLoading(false)
         })
-        console.log(err)
-    }    
+    }
 
     return (
         <div className="tdb__loading__parent">
@@ -275,7 +291,7 @@ export const ShareDBForm = ({onSuccess, starter}) => {
                 }
             </Row>
             {
-                <DBCreateCard 
+                <DBCreateCard
                     start={smeta} onSubmit={shareLocal} organizations={u.organizations} databases={bffClient.databases()} type="share"/>
             }
             {loading &&  <Loading type={TERMINUS_COMPONENT} />}
