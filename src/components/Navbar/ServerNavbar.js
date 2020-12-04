@@ -29,7 +29,7 @@ export const ServerNavbar = (props) => {
                 <img src="https://terminusdb.com/img/logos/logo.svg" alt="Terminus DB logo" />
             </NavLink>
             <span title="Version Info" className="version-info" onClick={toggle}>
-                <AiOutlineInfoCircle color="#ff9796"/>
+                <AiOutlineInfoCircle color="#fff"/>
             </span>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle} className="version-info-align version-info-col">About TerminusDB Console</ModalHeader>
