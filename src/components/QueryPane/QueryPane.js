@@ -18,17 +18,9 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
      * maybe a copy of this
      */
 
-    const [woql, updateQuery] = useState(query)
+    const [woql, updateWOQL] = useState(query)
     const [updated, setUpdated] = useState(false)
-    const [report, setReport] = useState()
-    /*const {woqlClient} = WOQLClientObj()
-    const {ref, branch, prefixes} = DBContextObj()
-    const [updateQuery, report, qresult, woql, loading] = WOQLQueryContainerHook(
-        woqlClient,
-        query,
-        branch,
-        ref,
-    )*/
+    const [report, setReport] = useState()   
     const [baseLanguage, setBaseLanguage] = useState(startLanguage || 'js')
     const [content, setContent] = useState(initcontent)
     const [qres, setQres] = useState()
@@ -53,6 +45,11 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
         changeTab(k)
     }
 
+    const updateQuery = (q) => {
+        if(!woql || JSON.stringify(woql.json()) != JSON.stringify(q.json())){
+            updateWOQL(q)
+        } 
+    }
     const onResults = (res) => {
         setQres(res)
     }

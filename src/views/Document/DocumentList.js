@@ -85,6 +85,46 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }
     }
 
+    const downloadDocument = (cell) => {
+        let row=cell.row
+        let type = row.original["Type ID"]
+        setLoading(true)
+        let update_start = Date.now()
+
+        function downloadSuccess(results, fname){
+            const url=window.URL.createObjectURL(new Blob([results]));
+            const link=document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fname);
+            document.body.appendChild(link);
+            link.click();      
+        }
+
+        function downloadFailure(err, did, iscsv){
+            let tname = iscsv ? "CSV" : TerminusClient.UTILS.shorten(type)
+            return process_error(err, update_start, "Failed to download " + tname + " document " + did)
+        }
+
+        if(type==DOCTYPE_CSV) {
+            let name=row.original.Name["@value"]
+            woqlClient.getCSV(name)
+                .then((results) => downloadSuccess(results, name))
+                .catch((err) => downloadFailure(err, name, true))
+                .finally(() => setLoading(false))
+        }
+        else {
+            let docid = row.original["Document ID"]     
+            woqlClient.query(WOQL.read_object(docid, "v:Doc"))
+                .then((results) => {
+                    let did = TerminusClient.UTILS.lastURLBit(docid)
+                    let cnts = results.bindings[0]["Doc"]
+                    downloadSuccess(JSON.stringify(cnts, false, 2), did + ".json")
+                })
+                .catch((err) => downloadFailure(err, docid))
+                .finally(() => setLoading(false))
+        }            
+    }
+
     const downloadCSV=async(cell)=>{
 		let row=cell.row
 		let name=row.original.Name["@value"]
@@ -96,59 +136,77 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 		})
 		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
 		.finally(() => setLoading(false))
-	}
-
-    const deleteCSV=async(cell)=>{
+    }
+    
+    const deleteDocument = (cell) => {
         let row=cell.row
-		let name=row.original.Name["@value"]
-        let update_start = Date.now()
+        let type = row.original["Type ID"]
         setLoading(true)
-        update_start = update_start || Date.now()
-        let commitMsg="Deleting File " + name + "-" + update_start
-        return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
+        let update_start = Date.now()
+
+        function deleteSuccess(did, iscsv){
             updateBranches()
-			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
-		})
-		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
-		.finally(() => setLoading(false))
+            let tname = iscsv ? "CSV" : TerminusClient.UTILS.shorten(type)
+			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted " + tname + " document " + did})
+        }
+
+        function deleteFailure(err, did, iscsv){
+            let tname = iscsv ? "CSV" : TerminusClient.UTILS.shorten(type)
+            return process_error(err, update_start, "Failed to delete " + tname + " document " + did)
+        }
+
+        if(type==DOCTYPE_CSV) {
+            let name=row.original.Name["@value"]        
+            let commitMsg="Deleted CSV File " + name + " from console document list"
+            woqlClient.deleteCSV(name, commitMsg)
+                .then(() => deleteSuccess(name, true))
+                .catch((err) => deleteFailure(err, name, true))
+                .finally(() => setLoading(false))
+        }
+        else {  
+            let docid = row.original["Document ID"]     
+            let t2name = TerminusClient.UTILS.shorten(type)
+            let cmsg = "Deleted " + t2name + " document " + docid + " from console document list"
+            woqlClient.query(WOQL.delete_object(docid), cmsg)
+                .then(() => deleteSuccess(docid))
+                .catch((err) => deleteFailure(err, docid))
+                .finally(() => setLoading(false))
+        }
     }
 
+
 	const getDownloadButton=()=>{
-		return <span className="csv-toolbar-holder" title={"Download CSV "}>
+		return <span className="csv-toolbar-holder" title={"Download Document"}>
             <MdFileDownload color="#0055bb" className='schema-toolbar-delete'/>
         </span>
 	}
 
     const getDeleteButton=()=>{
-		return <span className="schema-toolbar-delete-holder" title={"Delete CSV"}>
+		return <span className="schema-toolbar-delete-holder" title={"Delete Document"}>
             <RiDeleteBin5Line color="#721c24" className='schema-toolbar-delete'/>
         </span>
 	}
 
     const tabConfig=TerminusClient.View.table();
-    if(docType==DOCTYPE_CSV) {
-        tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Download", "Delete")
-        tabConfig.column("Download").click(downloadCSV).render(getDownloadButton)
-        tabConfig.column("Delete").click(deleteCSV).render(getDeleteButton)
-    }
-    else tabConfig.column_order("Document ID", "Name", "Type Name", "Description")
+    tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Download", "Delete")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
-    tabConfig.column("Type Name").header("Type").minWidth(80).click(onClassClick)
-
+    tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
+    tabConfig.column("Download").click(downloadDocument).minWidth(80).render(getDownloadButton)
+    tabConfig.column("Delete").click(deleteDocument).minWidth(80).render(getDeleteButton)
+    
     return (<>
         {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border"}/>}
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <main className="console__page__container console__page__container--width">
-            <Row className="generic-message-holder">
-                {report && <TerminusDBSpeaks report={report}/>}
-            </Row>
+            {report && <Row className="generic-message-holder">
+                <TerminusDBSpeaks report={report}/>
+            </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}
                 freewidth={true}
-                loadingType={TERMINUS_TABLE}
                 view={tabConfig}
                 limit={tabConfig.pagesize()}/>}
         </main>

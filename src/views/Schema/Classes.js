@@ -11,12 +11,12 @@ import {
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {ControlledTable} from '../Tables/ControlledTable'
 import {SCHEMA_CLASSES_ROUTE} from '../../constants/routes'
 import {Col, Row, Button} from "reactstrap"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
-import {TERMINUS_TABLE} from '../../constants/identifiers'
+import {TERMINUS_ERROR, TERMINUS_TABLE} from '../../constants/identifiers'
+import {ControlledTable} from '../Tables/ControlledTable'
 
 
 export const Classes = (props) => {
@@ -24,6 +24,7 @@ export const Classes = (props) => {
     const [query, setQuery] = useState(getClassQuery(props.graph))
     const [report, setReport] = useState()
     const [empty, setEmpty] = useState(false)
+    const { woqlClient} = WOQLClientObj()
     useEffect(() => {
         if (
             props.graph &&
@@ -57,18 +58,11 @@ export const Classes = (props) => {
                      {GraphFilter(SCHEMA_CLASSES_ROUTE, filter, props.onChangeGraph)}
                 </Col>
             </Row>
-            <Row className="generic-message-holder">
-                {(report && report.status) &&
-                    <TerminusDBSpeaks report={report} />
-                }
-            </Row>
-
-                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport} loadingType={TERMINUS_TABLE}/>
-            {empty &&
-                <Row className="generic-message-holder">
-                    <EmptyResult report={report} />
-                </Row>
-            }
+            <ControlledTable 
+                limit={tabConfig.pagesize()} 
+                query={query} 
+                view={tabConfig} 
+            />
         </div>
     )
 }

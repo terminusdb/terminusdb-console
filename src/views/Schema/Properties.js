@@ -17,7 +17,6 @@ export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
     const [query, setQuery] = useState(getPropertiesQuery(props.graph))
     const [report, setReport] = useState()
-    const [empty, setEmpty] = useState(false)
 
     useEffect(() => {
         if (
@@ -55,20 +54,12 @@ export const Properties = (props) => {
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                      {GraphFilter(SCHEMA_PROPERTIES_ROUTE, filter, props.onChangeGraph)}
                 </Col>
-            </Row>
-            <Row className="generic-message-holder">
-                {(report && report.status) &&
-                    <TerminusDBSpeaks report={report} />
-                }
-            </Row>
-            <Row>
-                <ControlledTable limit={tabConfig.pagesize()} query={query} view={tabConfig} onEmpty={setEmpty} onError={setReport} loadingType={TERMINUS_TABLE}/>
-            </Row>
-            {empty &&
-                <Row className="generic-message-holder">
-                    <EmptyResult report={report} />
-                </Row>
-            }
+            </Row>           
+            <ControlledTable 
+                limit={tabConfig.pagesize()} 
+                query={query} 
+                view={tabConfig} 
+            />
         </div>
     )
 }
