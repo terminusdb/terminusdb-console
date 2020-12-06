@@ -193,8 +193,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.pager("remote")
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
-    tabConfig.column("Download").click(downloadDocument).minWidth(80).render(getDownloadButton)
-    tabConfig.column("Delete").click(deleteDocument).minWidth(80).render(getDeleteButton)
+    tabConfig.column("Download").unsortable(true).click(downloadDocument).minWidth(80).render(getDownloadButton)
+    tabConfig.column("Delete").unsortable(true).click(deleteDocument).minWidth(80).render(getDeleteButton)
     
     return (<>
         {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
