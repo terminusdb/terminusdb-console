@@ -2,6 +2,21 @@
     min-height: 70px!important;
   }
 
+  .version-info {
+    font-size: 18px;
+    margin: 0px 10px 0px 20px;
+    cursor: pointer;
+  }
+
+  .version-info-align {
+      font-size: 17px;
+      margin: 10px 0px 10px 0px;
+  }
+
+  .version-info-col {
+      color: #0055bb;
+  }
+
   .btn-primary.disabled, .btn-primary:disabled{
     background-color: #00C08B !important;
   }

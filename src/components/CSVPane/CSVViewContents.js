@@ -15,17 +15,15 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 import {TERMINUS_TABLE} from "../../constants/identifiers"
 import {DBContextObj} from '../../components/Query/DBContext'
 
-export const CSVViewContents=({preview, setPreview, previewCss, setDocType})=>{
+export const CSVViewContents=({preview, setPreview, previewCss})=>{
 	const {woqlClient} = WOQLClientObj()
 	let propertyColumnNames=[]
 	const [query, setQuery] = useState(false)
 	const tabConfig=TerminusClient.View.table();
 	const [tConf, setTConf]=useState({})
 	const [cols, setCols]=useState([])
-	//const [snippet, setSnippet]=useState([])
 
     const {updateBranches} = DBContextObj()
-
 
 	const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
@@ -92,7 +90,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setDocType})=>{
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
             updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
-			setDocType(DOCTYPE_CSV)
+			setPreview({show: false, fileName:false, data:[], selectedCSV: false})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
 		.finally(() => setLoading(false))
