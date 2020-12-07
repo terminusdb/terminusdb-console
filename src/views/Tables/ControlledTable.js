@@ -10,7 +10,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 
 
-export const ControlledTable = ({query, order, limit, freewidth, view, hook}) => {
+export const ControlledTable = ({query, order, limit, freewidth, view, hook, onEmpty, onLoading, onError}) => {
     const { woqlClient} = WOQLClientObj()
     const { branch, ref, prefixes} = DBContextObj()
 
@@ -41,17 +41,42 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook}) =>
         return nups
     }
 
-    function onLoading(){
+    function myOnLoading(){
         return <Loading type={TERMINUS_TABLE} />
     }
 
-    function onError(report){
+
+    function myOnError(report){
         report.status = TERMINUS_ERROR
         return <TerminusDBSpeaks report={report} />
     }
 
-    function onEmpty(report){
+    function myOnEmpty(report){
         return <EmptyResult report={report} />
+    }
+
+    function doError(report){
+        if(onError) {
+            let x = onError(report)
+            return x || null
+        }
+        return myOnError(report)
+    }
+
+    function doLoading(){
+        if(onLoading) {
+            let x = onLoading()
+            return x || null
+        }
+        return myOnLoading()
+    }
+
+    function doEmpty(report){
+        if(onEmpty) {
+            let x = onEmpty(report)
+            return x || null
+        }
+        return myOnEmpty(report)
     }
 
     if(!prefixes) {
@@ -66,10 +91,10 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook}) =>
         rows={limit}
         order={order} 
         query={myWOQL} 
-        onLoading={onLoading} 
+        onLoading={doLoading} 
         view={view}
-        onError={onError}
-        onEmpty={onEmpty}
+        onError={doError}
+        onEmpty={doEmpty}
     />
     
     return (

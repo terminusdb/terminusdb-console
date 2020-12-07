@@ -13,9 +13,10 @@ import {ControlledTable} from '../Tables/ControlledTable'
 import {DocumentCreateNav} from "./DocumentCreateNav"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
+import {getTypeMetadata} from "./DocumentList"
+import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
 
-
-export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}) => {
+export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
     const [docView, setDocView] = useState("table")
@@ -31,7 +32,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
 
     useEffect(() => {
         setFrame()
-        if(doctype){
+        if(doctype && doctype != TerminusClient.UTILS.unshorten("system:Document")){
             getClassFrame()
         }
 
@@ -124,25 +125,34 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
     }
 
 
+    function smdt(dt){
+        setDocType(dt)
+    }
 
-
+    let meta = ((TerminusClient.UTILS.unshorten(doctype) == TerminusClient.UTILS.unshorten("system:Document")) 
+        ? {abstract: true, label: "Document", id: "system:Document", description: "A document type"} 
+        : getTypeMetadata(types, TerminusClient.UTILS.unshorten(doctype)) || {})
 
     return <>
         <DocumentCreateNav 
             docView={docView}
             setView={setDocView}
             types={types}
+            meta={meta}
             doctype={doctype}
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
-            {dataframe && docView == "table" &&
+            {meta.abstract && 
+                <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} />
+            }
+            {(!meta.abstract) && dataframe && docView == "table" &&
                 <>{dataframe.render()}</>
             }
-            {loading && 
+            {(!meta.abstract) && loading && 
                 <Loading />
             }
-            {content && (docView == "json") && 
+            {(!meta.abstract) && content && (docView == "json") && 
                 <JSONEditor
                     dataProvider={content}
                     edit={true}
@@ -155,7 +165,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
                     <TerminusDBSpeaks report={sreport} />
                 </Row>
             }
-            {(docView == "json" || (frame && (docView=="table"))) &&             
+            {(!meta.abstract) && (docView == "json" || (frame && (docView=="table"))) &&             
                 <CreateToolbar
                     types={types}
                     type={doctype}
@@ -165,6 +175,111 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument}
             }
         </main>
     </>
+}
+
+export const DocumentChoices = ({types, doctype, meta, setType}) => {
+    if(!doctype) return null
+    const [stypes, setSubTypes] = useState()
+    let WOQL = TerminusClient.WOQL
+    const {woqlClient} = WOQLClientObj()
+    const {ref, branch, prefixes} = DBContextObj()
+    const docQuery = () => {
+        return WOQL.and(
+            WOQL.lib().classes(),
+            WOQL.sub(doctype, "v:Class ID")
+        )
+    }
+    const [updateQuery, report, qresult, woql] = WOQLQueryContainerHook(
+        woqlClient,
+        docQuery(),
+        branch,
+        ref,
+    )
+
+    useEffect( () => {
+        if(doctype){
+            setSubTypes()
+            updateQuery(docQuery())
+        }
+    }, [doctype])
+
+    useEffect(() => {
+        if(qresult){
+            setSubTypes(qresult.bindings)
+        }
+    }, [qresult])
+
+    function typeOptions(){
+        let to = []
+        for(var i = 0; i<types.length; i++){
+            if(types[i]['Class ID'] != doctype){
+                let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID'])
+                to.push({label: lab, value: types[i]['Class ID']})
+            }
+        }
+        return to
+    }
+
+    function changeFilter(sid){
+        return function() {
+            if(setType) setType(sid)
+        }
+    }
+
+    function getTypeSelector(){
+        let ts = []
+        for(var i = 0; i<stypes.length; i++){
+            let sid = stypes[i]['Class ID']
+            if(sid != DOCTYPE_CSV){
+                ts.push(<span style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
+                    <DocumentChoice type={sid} types={types}/>
+                </span>)        
+            }
+        }
+        return ts
+    }
+    let choices_style = { margin: "10px auto", width: "90%"}
+    if(stypes && stypes.length > 0){
+        return <span style={choices_style}>{getTypeSelector()}</span>
+    }
+    return null
+}
+
+export const DocumentChoice = ({types, type, setType}) => {
+    let meta = getTypeMetadata(types, TerminusClient.UTILS.unshorten(type))
+    if(!meta) return null
+    let pane_style = {
+        display: "inline-block",
+        width: "200px",
+        padding: "10px",
+        height: "200px",
+        borderRadius: "8px",
+        verticalAlign: "top",
+    }
+    let hdr_style = {
+        display: "inline-block",
+        textAlign: "center",
+        fontSize: "1.2m",    
+        width: "180px"
+    }
+    let body_style = {
+        display: "inline-block",
+        height: "120px",
+        overflow: "hidden",
+        color: "#444",
+        fontSize: "0.9em"
+    }
+    if(meta.abstract){
+        hdr_style.color = "rgba(255, 178, 102, 0.7)"
+    }
+    let icons = (meta.abstract ? { color: "rgb(255, 178, 102)"} : {color: "rgba(255, 178, 102, 0.7)"})
+    icons.display = "inline-block"
+    icons.textAlign = "center"
+    icons.width = "180px"
+    icons.fontSize = "2.5em"
+    let desc = meta.description || "~"
+    return <span className="create-document-widget" style={pane_style}><i style={icons} className="custom-img-entities"></i>
+    <strong style={hdr_style}>{meta.label} </strong> <span style={body_style}>{desc}</span></span>
 }
 
 export const CreateToolbar = ({types, type, onCancel, onCreate, report}) => {
