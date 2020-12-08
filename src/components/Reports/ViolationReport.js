@@ -4,7 +4,7 @@ import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS,
     VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants.reports"
 
 export const ViolationReport = ({violations, tone}) => {
-    console.log('violations', violations)
+   
     let vioBuff = violations.map((item, index) => {
         return (<TerminusViolation key={"_"+index} vio={item} />)
     })

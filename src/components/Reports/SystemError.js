@@ -21,10 +21,11 @@ export const SystemError = ({error}) => {
                         obj.type=item[key]
                         break
                     case vios.WITNESS_PROPERTY:
-                        let val=item[key]["@value"]
+                        var val=item[key]["@value"]
                         if(val==undefined)
                             obj.property=`${TerminusClient.UTILS.shorten(item[key])}`
-                        else obj.property=`${TerminusClient.UTILS.shorten(item[key])}`
+                        else
+                            obj.property=val
                         break
                     case vios.WITNESS_CLASS:
                         obj.class=item[key]["@value"]
@@ -39,7 +40,11 @@ export const SystemError = ({error}) => {
                         obj.message=item[key]
                         break
                     case vios.WITNESS_SUBJECT:
-                        obj.subject=`${TerminusClient.UTILS.shorten(item[key])}` 
+                        var val=item[key]["@value"]
+                        if(val==undefined)
+                            obj.subject=`${TerminusClient.UTILS.shorten(item[key])}`
+                        else
+                            obj.subject=`${TerminusClient.UTILS.shorten(val)}`
                         break
                     case vios.WITNESS_PARENT_TYPE:
                         break
@@ -62,8 +67,8 @@ export const SystemError = ({error}) => {
 
     if(error.data && error.data["api:message"]){
         msg=processApiMessage(error.data["api:message"])
-        if(error.data["api:error"]) {
-            let wit=error.data["api:error"] ["api:witnesses"]
+        if(error.data["api:error"]["api:witnesses"]) {
+            let wit=error.data["api:error"]["api:witnesses"]
             msgObject=processErrorWitness(wit)
 
             switch(msgObject.type){
@@ -74,7 +79,7 @@ export const SystemError = ({error}) => {
                     }
                     msg=msg + " of type " + msgObject.baseType
                     break
-                case vios.VIOLATION_UNTYPES_INSTANCE:
+                case vios.VIOLATION_UNTYPED_INSTANCE:
                     msg=msg + " for "
                     if(msgObject.property) {
                         msg=msg + " Property " + msgObject.property
@@ -85,6 +90,24 @@ export const SystemError = ({error}) => {
                     msg=msg + " for document " + msgObject.subject + ". "
                     if(msgObject.property) {
                         msg=msg + "Expecting type " + msgObject.baseType + " for property " + msgObject.property + ". "
+                    }
+                    break
+                case vios.VIOLATION_INVALID_CLASS_VIOLATION:
+                    if(msgObject.class){
+                        let m=msgObject.message["@value"], rep=""
+                        if(m.includes(msgObject.class)) {
+                            rep=m.replace(msgObject.class, `${TerminusClient.UTILS.shorten(msgObject.class)}`)
+                        }
+                        msg=msg + ". " + rep
+                    }
+                    break
+                case vios.VIOLATION_PROPERTY_WITH_UNDEFINED_DOMAIN:
+                    if(msgObject.property){
+                        let m=msgObject.message["@value"], rep=""
+                        if(m.includes(msgObject.property)) {
+                            rep=m.replace(msgObject.property, `${TerminusClient.UTILS.shorten(msgObject.property)}`)
+                        }
+                        msg=msg + ". " + rep
                     }
                     break
                 default:
@@ -104,11 +127,11 @@ export const SystemError = ({error}) => {
 
     return (
         <div className={SYSTEM_ERROR_CSS}>
-            {SYSTEM_ERROR.title &&
+            {/*SYSTEM_ERROR.title &&
                 <span className={SYSTER_ERROR_TITLE_CSS}>
                     {SYSTEM_ERROR.title}
                 </span>
-            }
+            */}
             { msg && <span className={SYSTER_ERROR_MSG_CSS}>
                 {msg}
             </span>

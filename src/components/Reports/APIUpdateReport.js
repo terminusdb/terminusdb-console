@@ -72,6 +72,7 @@ const APIUpdateError = ({message, error, time}) => {
 
 const APIInputError = ({message, violations, time}) => {
     let txt = message + queryTimeDisplay(time)
+    
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3" />
