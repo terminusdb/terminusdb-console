@@ -53,14 +53,18 @@ export const SystemError = ({error}) => {
     }
 
     function processApiMessage(apiMsg) {
-        switch (apiMsg) {
-            case apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR):
+        if(apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR))
+            return "Syntax error found"
+        else if (apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX))
+            return "Key has unknown prefix"
+        else return apiMsg
+        /*switch (apiMsg) {
+            case (apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR)):
                 return "Syntax error found"
-            case apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR):
+            case apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX):
                 return "Key has unknown prefix"
-            default:
-                return apiMsg
-        }
+            default: return apiMsg
+        } */
     }
 
     if(error.data && error.data["api:message"]){
@@ -80,7 +84,7 @@ export const SystemError = ({error}) => {
                 case vios.VIOLATION_UNTYPES_INSTANCE:
                     msg=msg + " for "
                     if(msgObject.property) {
-                        msg=msg + " Property " + msgObject.property + ". "
+                        msg=msg + " Property " + msgObject.property
                     }
                     msg=msg + ". " + msgObject.message["@value"]
                     break
