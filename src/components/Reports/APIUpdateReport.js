@@ -72,6 +72,7 @@ const APIUpdateError = ({message, error, time}) => {
 
 const APIInputError = ({message, violations, time}) => {
     let txt = message + queryTimeDisplay(time)
+    
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3" />
@@ -87,7 +88,7 @@ const APISystemError = ({message, error, time}) => {
         <Alert color="danger">
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
-            {error && 
+            {error &&
                 <SystemError error={error} />
             }
         </Alert>

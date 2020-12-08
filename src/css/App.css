@@ -2565,6 +2565,10 @@ span.delete-modal-label {
       color: #0066f9
   }
 
+  .terminus-system-error{
+      padding-left: 20px;
+  }
+
   .terminus-system-error-title {
       padding: 8px;
   }
