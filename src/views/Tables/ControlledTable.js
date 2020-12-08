@@ -28,19 +28,6 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         }
     }, [branch, ref])
 
-    const _generate_context = (prefixes) => {
-        let nups = {}
-        for(var k in TerminusClient.UTILS.standard_urls){
-            nups[k] = TerminusClient.UTILS.standard_urls[k]
-        }
-        for(var i = 0; i<prefixes.length; i++){
-            if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
-                nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
-            }
-        }
-        return nups
-    }
-
     function myOnLoading(){
         return <Loading type={TERMINUS_TABLE} />
     }
@@ -83,7 +70,7 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         return (onLoading ? onLoading() : null)
     }
 
-    view.prefixes = _generate_context(prefixes)
+    view.prefixes = generate_context_from_prefixes(prefixes)
 
     return <ControlledWOQLTable 
         client={woqlClient} 
@@ -96,4 +83,18 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         onError={doError}
         onEmpty={doEmpty}
     />
+}
+
+
+export const generate_context_from_prefixes = (prefixes) => {
+    let nups = {}
+    for(var k in TerminusClient.UTILS.standard_urls){
+        nups[k] = TerminusClient.UTILS.standard_urls[k]
+    }
+    for(var i = 0; i<prefixes.length; i++){
+        if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
+            nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
+        }
+    }
+    return nups
 }

@@ -38,7 +38,8 @@ export const GO_BACK="Click to go back"
 
 export const DOCUMENT_VIEW_TITLE="Document View"
 export const TABLE_VIEW_TITLE="Table View"
-export const LINKS_VIEW_TITLE="Links"
+export const GRAPH_VIEW_TITLE="Graph View"
+export const LINKS_VIEW_TITLE="Document Links"
 export const JSON_VIEW_TITLE="JSON"
 
 export const DOCUMENT_INCOMING_LINK_TITLE="Showing incoming links to current document"
