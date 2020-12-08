@@ -11,6 +11,8 @@ import {BiArrowBack} from "react-icons/bi"
 
 export const DocumentNavTab = ({isAdding, total, types, current, docType, changeDocType, limit, setDocCount, docCount, doCreate, csvs, setCsvs, insertCsvs, onCsvCancel}) => {
 
+    const [showAdding, setShowAdding] = useState(false)
+
 	const TotalStats = ({total, doctype, docCount}) => {
         if(typeof total != "number") return null
         if(doctype && typeof docCount == "number" && total > 0){
@@ -33,18 +35,30 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
             </span>
 	}
 
-	const DocumentTypeMeta = ({doctype, meta, count, onCreate}) => {
-	    if(!doctype || !meta) return null
-		if(doctype==DOCTYPE_CSV) return null
-	    return <span>
-				{!meta.abstract && <span style={{fontSize: "2em"}}>
-					<span onClick={onCreate} className="d-nav-icons" title={CREATE_NEW_DOCUMENT}>
-						<BsPlus className="db_info_icon_spacing"/>
-					</span>
-				</span>}
-            </span>
-	}
+    const myCreate = () => {
+       // if(current) {
+            doCreate()
+        //}
+        //else {
+        //    setShowAdding(true)
+        //}
+    }
 
+    const DocumentTypeMeta = ({doctype, meta, types, count, onCreate}) => {
+        if(!types) return null
+        if(types.length == 0 || (types.length == 1 && types[0]['Class ID'] == DOCTYPE_CSV) 
+        || (docType && doctype==DOCTYPE_CSV)){
+            return null
+        }
+	    return <span>
+            <span style={{fontSize: "2em"}}>
+                <span onClick={onCreate} className="d-nav-icons" title={CREATE_NEW_DOCUMENT}>
+                    <BsPlus className="db_info_icon_spacing"/>
+                </span>
+            </span>
+        </span>
+    }
+    
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
@@ -66,7 +80,7 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 				                            doctype={docType}
 				                            limit={limit}
 				                            setTotal={setDocCount}/>}
-									<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={doCreate}/>
+									<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={myCreate}/>
 								</Col>
 								<Col md={3}>
 				                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
@@ -93,3 +107,4 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 		</div>
 	)
 }
+

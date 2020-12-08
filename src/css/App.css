@@ -5555,3 +5555,7 @@ span.header-control-panel {
     text-align: right;
     width: 100%;
 }
+
+span.create-document-widget:hover {
+    background-color: #fdffef;
+}

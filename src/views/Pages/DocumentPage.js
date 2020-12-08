@@ -49,7 +49,12 @@ const DocumentPage = (props) => {
     }
 
     const doCreate = () => {
-        setCreating(docType)
+        if(docType){
+            setCreating(docType)
+        }
+        else {
+            setCreating(TerminusClient.UTILS.unshorten("system:Document"))
+        }
     }
 
     function onCsvCancel() {
@@ -126,7 +131,9 @@ const DocumentPage = (props) => {
                     insertCsvs={insertCsvs}/>}
 
                     {!mode &&
-                        <Loading/>
+                        <main className="console__page__container console__page__container--width">
+                            <Loading/>
+                        </main>
                     }
                     {mode == "schema" && <DocumentPageWithSchema
                         docid={docID}
@@ -230,6 +237,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     selectDocument={setDocument}
                     close={closeDV}
                     doctype={isCreating}
+                    setDocType={setIsCreating}
                     types={types}
                     total={cnt}
                 />
@@ -262,7 +270,6 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     setCurrent={setCurrent}
                     setIsAdding={setIsAdding}
                     isAdding={isAdding}
-                    setDocType={setDocType}
                     docType={docType}
                     tabConfig={tabConfig}
                     csvs={csvs}
