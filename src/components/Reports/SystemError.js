@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { SYSTEM_ERROR, SYSTEM_ERROR_CSS, HIDE_ERROR_DETAILS, SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS,
     SYSTER_ERROR_MSG_CSS, SYSTER_ERROR_TITLE_CSS, UNKNOWN_ERROR } from "./constants.reports"
 import * as vios from "./constants.vios"
-
+import TerminusClient from '@terminusdb/terminusdb-client'
 
 export const SystemError = ({error}) => {
     let msg="", msgObject = {}
@@ -23,14 +23,14 @@ export const SystemError = ({error}) => {
                     case vios.WITNESS_PROPERTY:
                         let val=item[key]["@value"]
                         if(val==undefined)
-                            obj.property=item[key]
-                        else obj.property=val
+                            obj.property=`${TerminusClient.UTILS.shorten(item[key])}`
+                        else obj.property=`${TerminusClient.UTILS.shorten(item[key])}`
                         break
                     case vios.WITNESS_CLASS:
                         obj.class=item[key]["@value"]
                         break
                     case vios.WITNESS_BASE_TYPE:
-                        obj.baseType=item[key]["@value"]
+                        obj.baseType= `${TerminusClient.UTILS.shorten(item[key]["@value"])}`
                         break
                     case vios.WITNESS_LITERAL:
                         obj.literal=item[key]["@value"]
@@ -39,7 +39,7 @@ export const SystemError = ({error}) => {
                         obj.message=item[key]
                         break
                     case vios.WITNESS_SUBJECT:
-                        obj.subject=item[key]
+                        obj.subject=`${TerminusClient.UTILS.shorten(item[key])}` 
                         break
                     case vios.WITNESS_PARENT_TYPE:
                         break

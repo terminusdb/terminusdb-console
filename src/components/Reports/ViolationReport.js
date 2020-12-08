@@ -1,14 +1,15 @@
 import React from "react";
 import { Alert } from 'reactstrap';
-import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS, 
+import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS,
     VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants.reports"
 
 export const ViolationReport = ({violations, tone}) => {
-    let vioBuff = violations.map((item, index) => {    
+    console.log('violations', violations)
+    let vioBuff = violations.map((item, index) => {
         return (<TerminusViolation key={"_"+index} vio={item} />)
     })
     let vcount = vioBuff.length + " " + (vioBuff.length > 1 ? VIOLATIONS_DETECTED : VIOLATION_DETECTED)
-    if(!vioBuff) return null    
+    if(!vioBuff) return null
     return (
         <span className = {VIOLATIONS_CSS}>
             <Alert color = {tone}>
@@ -22,7 +23,7 @@ export const ViolationReport = ({violations, tone}) => {
 export const TerminusViolation = ({vio}) => {
     let vioParts = []
     let msg = false
-    
+
     if(vio['vio:message'] && vio['vio:message']["@value"]){
         msg = vio['vio:message']["@value"]
     }
