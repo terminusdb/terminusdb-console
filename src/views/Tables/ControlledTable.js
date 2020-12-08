@@ -96,26 +96,4 @@ export const ControlledTable = ({query, order, limit, freewidth, view, hook, onE
         onError={doError}
         onEmpty={doEmpty}
     />
-    
-    return (
-        <div className="tdb__loading__parent">
-            {(report && !isEmpty && tabresult) &&
-                <WOQLTable
-                    result={tabresult}
-                    freewidth={freewidth}
-                    view={(view ? view.json() : {})}
-                    limit={mlimit}
-                    query={query}
-                    start={start}
-                    orderBy={orderBy}
-                    setLimits={changeLimits}
-                    setOrder={changeOrder}
-                    totalRows={rowCount}
-                />
-            }
-            {loading &&
-                <Loading type={loadingCss}/>
-            }
-        </div>
-    )
 }
