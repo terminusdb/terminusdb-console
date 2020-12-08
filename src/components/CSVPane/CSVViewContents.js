@@ -74,10 +74,23 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
-		return await woqlClient.getCSV(name, true).then((results) =>{
-			setReport({status: TERMINUS_SUCCESS, message: "Successfully downloaded file " + name})
-		})
-		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
+
+		function downloadSuccess(results, fname){
+            const url=window.URL.createObjectURL(new Blob([results]));
+            const link=document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fname);
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        function downloadFailure(err, did, iscsv){
+            let tname = iscsv ? "CSV" : TerminusClient.UTILS.shorten(type)
+            return process_error(err, update_start, "Failed to download " + tname + " document " + did)
+        }
+
+		return await woqlClient.getCSV(name, true).then((results) => downloadSuccess(results, name))
+		.catch((err) => downloadFailure(err, name, true))
 		.finally(() => setLoading(false))
 	}
 

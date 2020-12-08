@@ -58,13 +58,6 @@ export const SystemError = ({error}) => {
         else if (apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX))
             return "Key has unknown prefix"
         else return apiMsg
-        /*switch (apiMsg) {
-            case (apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR)):
-                return "Syntax error found"
-            case apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX):
-                return "Key has unknown prefix"
-            default: return apiMsg
-        } */
     }
 
     if(error.data && error.data["api:message"]){
