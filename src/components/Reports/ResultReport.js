@@ -8,7 +8,7 @@ import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_
 export const ResultReport = ({report}) => {
     const [currentReport, setReport] = useState(report)
     useEffect(() => { setReport(report)}, [report])
-    console.log('report', report)
+    //console.log('report', report)
     function getErrorReport(){
         let qtime = queryTimeDisplay()
         if(hasViolations(currentReport.error)){
