@@ -93,10 +93,8 @@ export const Properties = (props) => {
         return TerminusClient.WOQL.lib().properties(false, false, gstr)
     }
 
-    const tabConfig= TerminusClient.View.table();
     const graphConfig= TerminusClient.View.graph();
     graphConfig.show_force(true)
-    //graphConfig.height(800).width(1000)
     graphConfig.edges(["Property Domain", "Property Range"]);
     graphConfig.edge("Property Domain", "Property Range").size(2).text("Property Name").arrow({width: 50, height: 20})
         .icon({label: true, color: [109,98,100], size: 0.8})
@@ -113,6 +111,8 @@ export const Properties = (props) => {
     graphConfig.node("Property Domain").v("Document Domain").in("Yes").color([255,178,102])
     graphConfig.node("Property Range").v("Document Range").in("Yes").v("Abstract Range").in("Yes").color([252,219,186])
     graphConfig.node("Property Domain").v("Document Domain").in("Yes").v("Abstract Domain").in("Yes").color([252,219,186])
+
+    const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Property ID", "Property Name", "Property Domain",
         "Property Range", "Property Type", "Property Description")
     tabConfig.pager("remote")
@@ -126,13 +126,13 @@ export const Properties = (props) => {
     return (
         <div className={TAB_SCREEN_CSS}>
             <Row className={TOOLBAR_CSS.container}>
-                <Col key='m1' md={8} className="schema-toolbar-title">
+                <Col key='m1' md={7} className="schema-toolbar-title">
                     Objects have properties with different range types
                 </Col>                
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                      {GraphFilter(SCHEMA_PROPERTIES_ROUTE, filter, props.onChangeGraph)}
                 </Col>
-                <Col md={1} className={TOOLBAR_CSS.graphCol}>
+                <Col md={2} className={TOOLBAR_CSS.graphCol}>
                     <span style={{fontSize: "2em"}}>
                         <span onClick={showTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
                             <BiTable className={"db_info_icon_spacing" + (myview == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>

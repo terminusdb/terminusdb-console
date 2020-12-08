@@ -98,7 +98,7 @@ export const ControlledGraph = ({query, view}) => {
                 <EmptyResult report={result} />
             }
             {result && result.status == 200 && !isEmpty(result) &&
-            <div class="controlled-graph-container"> 
+            <div className="controlled-graph-container"> 
                 <WOQLGraph 
                     config={view} 
                     dataProvider={getProvider(result)} 
@@ -112,10 +112,13 @@ export const ControlledGraph = ({query, view}) => {
 }
 
 export const ControlledGraphHeader = ({changeLimits, woql, result, limit, start, loading, rowCount}) => {
-    let all_loaded = (rowCount && ((limit && limit >= rowCount) || !limit))
+    let all_loaded = (!loading && rowCount && ((limit && limit >= rowCount) || !limit))
     let txt
     if(all_loaded){
         txt = "All " + rowCount + " records loaded"
+    }
+    else if(!loading && rowCount == 0){
+        txt = ""
     }
     else {
         txt = limit + " records of " + (rowCount ? rowCount : "?") + " loaded"
