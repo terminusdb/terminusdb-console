@@ -88,7 +88,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
             let q = WOQL.update_object(json)
             setLoading(true)
-            woqlClient.query(q, commit)
+            woqlClient.query(q, commit, true)
             .then(() => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Created new " + json['@type'] + " " + json['@id']})

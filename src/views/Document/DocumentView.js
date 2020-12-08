@@ -169,7 +169,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         if(json){
             setLoading(true)
             let q = WOQL.update_object(json)
-            woqlClient.query(q, commit)
+            woqlClient.query(q, commit, true)
             .then(() => {
                 updateQuery(docQuery())
                 setContent("")
