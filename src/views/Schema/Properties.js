@@ -13,7 +13,7 @@ import {TERMINUS_TABLE} from '../../constants/identifiers'
 import {WOQLEditorControlled, WOQLGraph, ControlledQueryHook} from '@terminusdb/terminusdb-react-components'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import Loading from '../../components/Reports/Loading'
-import {TOOLBAR_CSS, GRAPH_VIEW_TITLE, TABLE_VIEW_TITLE, LINKS_VIEW_TITLE, JSON_VIEW_TITLE, DELETE_DOCUMENT_BUTTON} from "../document/constants.document"
+import {TOOLBAR_CSS, GRAPH_VIEW_TITLE, TABLE_VIEW_TITLE, LINKS_VIEW_TITLE, JSON_VIEW_TITLE, DELETE_DOCUMENT_BUTTON} from "../Document/constants.document"
 import {BiLink, BiNetworkChart, BiTable} from "react-icons/bi"
 import {VscJson} from "react-icons/vsc"
 import {RiDeleteBin5Line} from "react-icons/ri"
