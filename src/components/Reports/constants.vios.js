@@ -7,6 +7,7 @@ export const VIOLATION_INVALID_CLASS_VIOLATION = "vio:InvalidClassViolation" //w
 export const VIOLATION_PROPERTY_WITH_UNDEFINED_DOMAIN="vio:PropertyWithUndefinedDomain"
 export const VIOLATION_CLASS_INHERITANCE= "vio:ClassInheritanceViolation" // class inheritance vio in schema builder
 export const VIOLATION_CLASS_CYCLE="vio:ClassCycle" // create a class cycle using model builder
+export const VIOLATION_INVALID_CLASS_IN_RANGE="vio:Invalid_classIn_range"
 
 export const WITNESS_TYPE="@type"
 export const WITNESS_PROPERTY="vio:property"

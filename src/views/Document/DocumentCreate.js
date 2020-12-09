@@ -15,6 +15,7 @@ import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {getTypeMetadata} from "./DocumentList"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
+import {constructErrorJson} from "../../components/Reports/utils.vio"
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
@@ -98,7 +99,10 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 }
             })
             .catch((e) => {
-                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})                
+                if(e.data) {
+                    let ejson=constructErrorJson(e)
+                }
+                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
             })
             .finally(() => setLoading(false))
         }
@@ -129,12 +133,12 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         setDocType(dt)
     }
 
-    let meta = ((TerminusClient.UTILS.unshorten(doctype) == TerminusClient.UTILS.unshorten("system:Document")) 
-        ? {abstract: true, label: "Document", id: "system:Document", description: "A document type"} 
+    let meta = ((TerminusClient.UTILS.unshorten(doctype) == TerminusClient.UTILS.unshorten("system:Document"))
+        ? {abstract: true, label: "Document", id: "system:Document", description: "A document type"}
         : getTypeMetadata(types, TerminusClient.UTILS.unshorten(doctype)) || {})
 
     return <>
-        <DocumentCreateNav 
+        <DocumentCreateNav
             docView={docView}
             setView={setDocView}
             types={types}
@@ -143,16 +147,16 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
-            {meta.abstract && 
+            {meta.abstract &&
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} />
             }
             {(!meta.abstract) && dataframe && docView == "table" &&
                 <>{dataframe.render()}</>
             }
-            {(!meta.abstract) && loading && 
+            {(!meta.abstract) && loading &&
                 <Loading />
             }
-            {(!meta.abstract) && content && (docView == "json") && 
+            {(!meta.abstract) && content && (docView == "json") &&
                 <JSONEditor
                     dataProvider={content}
                     edit={true}
@@ -165,7 +169,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                     <TerminusDBSpeaks report={sreport} />
                 </Row>
             }
-            {(!meta.abstract) && (docView == "json" || (frame && (docView=="table"))) &&             
+            {(!meta.abstract) && (docView == "json" || (frame && (docView=="table"))) &&
                 <CreateToolbar
                     types={types}
                     type={doctype}
@@ -233,7 +237,7 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
             if(sid != DOCTYPE_CSV){
                 ts.push(<span style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
                     <DocumentChoice type={sid} types={types}/>
-                </span>)        
+                </span>)
             }
         }
         return ts
@@ -259,7 +263,7 @@ export const DocumentChoice = ({types, type, setType}) => {
     let hdr_style = {
         display: "inline-block",
         textAlign: "center",
-        fontSize: "1.2m",    
+        fontSize: "1.2m",
         width: "180px"
     }
     let body_style = {
