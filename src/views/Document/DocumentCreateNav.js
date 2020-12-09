@@ -53,6 +53,9 @@ export const DocumentViewIcons = ({docView, setDocView, edit}) => {
     const onTable = () => setDocView("table")
     const onJson = () => setDocView("json")
     return <span style={{fontSize: "2em"}}>
+        <span onClick={onFrame} className="d-nav-icons" title={DOCUMENT_VIEW_TITLE}>
+            <BiFile className={"db_info_icon_spacing" + (docView == "frame" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
+        </span>
         <span onClick={onTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
             <BiTable className={"db_info_icon_spacing" + (docView == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
