@@ -257,8 +257,10 @@ export const DocumentChoice = ({types, type, setType}) => {
         width: "200px",
         padding: "10px",
         height: "200px",
-        borderRadius: "8px",
+        borderRadius: "5px",
         verticalAlign: "top",
+        border:"1px solid #002856",
+        margin:"5px"
     }
     let hdr_style = {
         display: "inline-block",
@@ -282,7 +284,10 @@ export const DocumentChoice = ({types, type, setType}) => {
     icons.width = "180px"
     icons.fontSize = "2.5em"
     let desc = meta.description || "~"
-    return <span className="create-document-widget" style={pane_style}><i style={icons} className="custom-img-entities"></i>
+    return <span className="create-document-widget" 
+            style={pane_style}>
+
+            <i style={icons} className="custom-img-entities"></i>
     <strong style={hdr_style}>{meta.label} </strong> <span style={body_style}>{desc}</span></span>
 }
 
