@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {
-    TAB_SCREEN_CSS,
-    TOOLBAR_CSS
+    TAB_SCREEN_CSS
 } from './constants.schema'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {SCHEMA_PROPERTIES_ROUTE} from '../../constants/routes'
@@ -14,11 +13,11 @@ import {TERMINUS_TABLE} from '../../constants/identifiers'
 import {WOQLEditorControlled, WOQLGraph, ControlledQueryHook} from '@terminusdb/terminusdb-react-components'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import Loading from '../../components/Reports/Loading'
-import {CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER, GO_BACK,
-    SUBMIT_INPUT_LABEL, DOCUMENT_VIEW_TITLE, TABLE_VIEW_TITLE, LINKS_VIEW_TITLE, JSON_VIEW_TITLE, DELETE_DOCUMENT_BUTTON} from "../document/constants.document"
-import {BiLink, BiFile, BiTable} from "react-icons/bi"
+import {TOOLBAR_CSS, GRAPH_VIEW_TITLE, TABLE_VIEW_TITLE, LINKS_VIEW_TITLE, JSON_VIEW_TITLE, DELETE_DOCUMENT_BUTTON} from "../Document/constants.document"
+import {BiLink, BiNetworkChart, BiTable} from "react-icons/bi"
 import {VscJson} from "react-icons/vsc"
 import {RiDeleteBin5Line} from "react-icons/ri"
+import {ControlledGraph} from "../Tables/ControlledGraph"
 
 export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
@@ -48,30 +47,72 @@ export const Properties = (props) => {
 
     function getPropertiesQuery(gfilter, which) {
         let gstr = gfilter.type + '/' + gfilter.id
+        let WOQL = TerminusClient.WOQL
         if(which && which == "graph"){
-            return TerminusClient.WOQL.and(
-                TerminusClient.WOQL.lib().properties(false, false, gstr),
-                TerminusClient.WOQL.quad("v:Property Domain", "label", "v:Domain Name", gstr)
-                .opt().quad("v:Property Range", "label", "v:Range Name", gstr)
+            return WOQL.and(
+                WOQL.lib().properties(false, false, gstr),
+                WOQL.quad("v:Property Domain", "label", "v:Domain Name", gstr)
+                .or(
+                    WOQL.quad("v:Property Domain", "system:tag", "system:abstract", gstr).eq("v:Abstract Domain", "Yes"),
+                    WOQL.and(
+                        WOQL.not().quad("v:Property Domain", "system:tag", "system:abstract", gstr),
+                        WOQL.eq("v:Abstract Domain", "No")
+                    )
+                )
+                .or(
+                    WOQL.sub("system:Document", "v:Property Domain").eq("v:Document Domain", "Yes"),
+                    WOQL.and(
+                        WOQL.not().sub("system:Document", "v:Property Domain"),
+                        WOQL.eq("v:Document Domain", "No")
+                    )
+                )  
+                .opt().quad("v:Property Range", "label", "v:Range Name", gstr)	
+                    .or(
+                        WOQL.quad("v:Property Range", "system:tag", "system:abstract", gstr).eq("v:Abstract Range", "Yes"),
+                        WOQL.and(
+                            WOQL.not().quad("v:Property Range", "system:tag", "system:abstract", gstr),
+                            WOQL.eq("v:Abstract Range", "No")
+                        )
+                    )
+                    .or(
+                        WOQL.sub("system:Document", "v:Property Range").eq("v:Document Range", "Yes"),
+                        WOQL.and(
+                            WOQL.not().sub("system:Document", "v:Property Range"),
+                            WOQL.eq("v:Document Range", "No")
+                        )
+                    )
+                    .or(
+                        WOQL.quad("v:Property Range", "owl:oneOf", "v:Any", gstr).eq("v:Enum Range", "Yes"),
+                        WOQL.and(
+                            WOQL.not().quad("v:Property Range", "owl:oneOf", "v:Any", gstr),
+                            WOQL.eq("v:Enum Range", "No")
+                        )
+                    )
             )
         }
         return TerminusClient.WOQL.lib().properties(false, false, gstr)
     }
 
-    const tabConfig= TerminusClient.View.table();
     const graphConfig= TerminusClient.View.graph();
     graphConfig.show_force(true)
-    //graphConfig.height(800).width(1000)
     graphConfig.edges(["Property Domain", "Property Range"]);
-    graphConfig.edge("Property Domain", "Property Range").text("Property ID")
-    graphConfig.node("Property Range").size(30).color([180, 220, 250]).text("Range Name").icon({label: true, color: [0,0,0]})
-    graphConfig.node("Property Domain").size(30).text("Domain Name").icon({label: true, color: [0,0,0]})
+    graphConfig.edge("Property Domain", "Property Range").size(2).text("Property Name").arrow({width: 50, height: 20})
+        .icon({label: true, color: [109,98,100], size: 0.8})
+    graphConfig.node("Property Range").size(30).text("Range Name").color([150,233,151]).icon({label: true, color: [0,0,0]})
+    graphConfig.node("Property Domain").size(30).text("Domain Name").color([150,233,151]).icon({label: true, color: [0,0,0]})
+    graphConfig.node("Property Range").v("Abstract Range").in("Yes").color([189,248,190])
+    graphConfig.node("Property Domain").v("Abstract Domain").in("Yes").color([189,248,190])
+    graphConfig.node("Property Range").v("Enum Range").in("Yes").color([23,190,207])
+
     graphConfig.node("Property Range").v("Property Type").in("Data").hidden(true)
     graphConfig.node("Property Range").collisionRadius(100)
-    //woqlGraphConfig.node("Subject").size(20).color([180, 220, 250]).text("Predicate")
-    //woqlGraphConfig.node("Object").size(30).color([0, 220, 250]).text("Predicate")
-    //woqlGraphConfig.node("Subject").text("Predicate")
-    //woqlGraphConfig.node("B").text("v:BLabel")
+    graphConfig.node("Property Domain").collisionRadius(100)
+    graphConfig.node("Property Range").v("Document Range").in("Yes").color([255,178,102])
+    graphConfig.node("Property Domain").v("Document Domain").in("Yes").color([255,178,102])
+    graphConfig.node("Property Range").v("Document Range").in("Yes").v("Abstract Range").in("Yes").color([252,219,186])
+    graphConfig.node("Property Domain").v("Document Domain").in("Yes").v("Abstract Domain").in("Yes").color([252,219,186])
+
+    const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Property ID", "Property Name", "Property Domain",
         "Property Range", "Property Type", "Property Description")
     tabConfig.pager("remote")
@@ -85,21 +126,21 @@ export const Properties = (props) => {
     return (
         <div className={TAB_SCREEN_CSS}>
             <Row className={TOOLBAR_CSS.container}>
-                <Col key='m1' md={8} className="schema-toolbar-title">
+                <Col key='m1' md={7} className="schema-toolbar-title">
                     Objects have properties with different range types
-                </Col>
-                <Col md={1} className={TOOLBAR_CSS.graphCol}>
-                <span>
-                    <span onClick={showTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
-                        <BiTable className={"db_info_icon_spacing" + (myview == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
-                    </span>
-                    <span onClick={showGraph} className="d-nav-icons" title={JSON_VIEW_TITLE}>
-                        <VscJson className={"db_info_icon_spacing" + (myview == "graph" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
-                    </span>
-                </span>
-                </Col>
+                </Col>                
                 <Col md={3} className={TOOLBAR_CSS.graphCol}>
                      {GraphFilter(SCHEMA_PROPERTIES_ROUTE, filter, props.onChangeGraph)}
+                </Col>
+                <Col md={2} className={TOOLBAR_CSS.graphCol}>
+                    <span style={{fontSize: "2em"}}>
+                        <span onClick={showTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
+                            <BiTable className={"db_info_icon_spacing" + (myview == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
+                        </span>
+                        <span onClick={showGraph} className="d-nav-icons" title={GRAPH_VIEW_TITLE}>
+                            <BiNetworkChart className={"db_info_icon_spacing" + (myview == "graph" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
+                        </span>
+                    </span>
                 </Col>
             </Row>
             {myview == "table" &&            
@@ -116,68 +157,3 @@ export const Properties = (props) => {
     )
 }
 
-export const ControlledGraph = ({query, view}) => {
-    const [loaded, setLoaded] = useState(false)
-    const { woqlClient} = WOQLClientObj()
-
-    const {
-        updateQuery,
-        changeOrder,
-        changeLimits,
-        woql,
-        result,
-        limit,
-        start,
-        orderBy,
-        loading,
-        rowCount,
-    } = ControlledQueryHook(woqlClient, query, false, 200)
-
-
-    useEffect(() => {
-        if(query && woql){
-            if(loaded){
-                updateQuery(query)
-            }
-            else {
-                setLoaded(true)
-            }
-        }
-    }, [query])
-
-    function getProvider(result){
-        const rt = new TerminusClient.WOQLResult(result,query);
-        let viewer = view.create(null);
-        viewer.setResult(rt);
-        return viewer;    
-    }
-
-    function isEmpty(res){
-        if(start == 0 && res.rows == 0) return true
-        return false
-    }
-
-    if(result && view && view.prefixes) result.prefixes = view.prefixes
-
-    return (
-        <div className="tdb__loading__parent">
-            {loading && 
-                <Loading type={TERMINUS_TABLE} />
-            }
-            {result && result.status != 200 &&  
-                <TerminusDBSpeaks report={result} />
-            }
-            {result && result.status == 200 && isEmpty(result) && 
-                <EmptyResult report={result} />
-            }
-            {result && result.status == 200 && !isEmpty(result) &&
-                <WOQLGraph 
-                    config={view} 
-                    dataProvider={getProvider(result)} 
-                    query={query} 
-                    updateQuery={updateQuery}
-                />
-        }
-    </div>
-)
-}

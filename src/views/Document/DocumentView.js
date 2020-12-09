@@ -18,6 +18,7 @@ import {DocumentViewNav} from "./DocumentViewNav"
 import {BiArrowBack, BiSave} from "react-icons/bi"
 import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
 import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
+import {ControlledGraph} from "../Tables/ControlledGraph"
 
 export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
     const [edit, setEdit] = useState(false)
@@ -269,19 +270,62 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
     let WOQL = TerminusClient.WOQL
     let outs = WOQL.triple(docid, "v:Property", "v:Target").triple("v:Target", "type", "v:Type").sub("system:Document", "v:Type")
     let ins = WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type")
-    const chooseOut = function(cell){
-        selectDocument(cell.row.original['Target'])
+
+
+    let linksql = WOQL.and(
+        WOQL.eq("v:Node", docid),
+        WOQL.opt().limit(1).triple(docid, "label", "v:Node Label"),
+        WOQL.or(
+            WOQL.and(
+                WOQL.triple(docid, "v:Property", "v:Target").triple("v:Target", "type", "v:Type").sub("system:Document", "v:Type"),
+                WOQL.opt().limit(1).triple("v:Target", "label", "v:Link Name"),
+                WOQL.opt().limit(1).quad("v:Property", "label", "v:Property Name", "schema"),
+                WOQL.opt().limit(1).quad("v:Type", "label", "v:Type Name", "schema")
+            ), 
+            WOQL.and(
+                WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type"),
+                WOQL.opt().limit(1).triple("v:Source", "label", "v:Link Name"),
+                WOQL.opt().limit(1).quad("v:Property", "label", "v:Property Name", "schema"),
+                WOQL.opt().limit(1).quad("v:Type", "label", "v:Type Name", "schema")
+            )
+        )
+    )
+    
+    const chooseOut = function(row){
+        selectDocument(row.original['Target'])
     }
-    const chooseIn = function(cell){
-        selectDocument(cell.row.original['Source'])
+    const chooseIn = function(row){
+        selectDocument(row.original['Source'])
     }
 
     const outtab= TerminusClient.View.table();
-    outtab.column("Target").click(chooseOut)
+    outtab.row().click(chooseOut)
+    outtab.pager("remote")
+    outtab.pagesize(10)
+
     const intab = TerminusClient.View.table();
     intab.column_order("Source", "Type", "Property")
-    intab.column("Source").click(chooseIn)
-    return (<Row>
+    intab.row().click(chooseIn)
+    intab.pager("remote")
+    intab.pagesize(10)
+
+    const graphConfig= TerminusClient.View.graph();
+    graphConfig.show_force(true)
+    graphConfig.edges(["Node", "Target"], ["Source", "Node"]);
+    graphConfig.edge("Node", "Target").size(2).text("Property Name").arrow({width: 60, height: 30})
+         .icon({label: true, color: [109,98,100], size: 0.8})
+    graphConfig.edge("Source", "Node").size(2).text("Property Name").arrow({width: 60, height: 30})
+         .icon({label: true, color: [109,98,100], size: 0.8})
+    graphConfig.node("Node").size(45).collisionRadius(150).text("Node Label").color([150,233,151]).icon({label: true, color: [50,50,80]})
+    graphConfig.node("Source", "Target").collisionRadius(120).size(40).text("Link Name").color([255,178,102]).icon({label: true, color: [80,60,40]})    
+    if(!docid) return null
+    return (<>
+    <Row>
+        <Col>
+            <ControlledGraph query={linksql} view={graphConfig} />
+        </Col>
+    </Row>
+    <Row>
         <Col>
             <span style={{fontSize: "2em"}}>
                 <span title={DOCUMENT_INCOMING_LINK_TITLE}>
@@ -289,7 +333,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
                     <span className="sub-headings d-sub-headings">Incoming Links</span>
                 </span>
             </span>
-            <ControlledTable query={ins} view={intab} limit={20}/>
+            <ControlledTable query={ins} view={intab} limit={10}/>
         </Col>
         <Col>
             <span style={{fontSize: "2em"}}>
@@ -298,9 +342,10 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
                     <span className="sub-headings d-sub-headings">Outgoing Links</span>
                 </span>
             </span>
-            <ControlledTable query={outs} view={outtab} limit={20}/>
+            <ControlledTable query={outs} view={outtab} limit={10}/>
         </Col>
-    </Row>)
+    </Row>
+    </>)
 }
 
 export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCancel,  onUpdate}) => {
