@@ -2565,6 +2565,10 @@ span.delete-modal-label {
       color: #0066f9
   }
 
+  .terminus-system-error{
+      padding-left: 20px;
+  }
+
   .terminus-system-error-title {
       padding: 8px;
   }
@@ -5550,4 +5554,12 @@ input.file-header-values {
 span.header-control-panel {
     text-align: right;
     width: 100%;
+}
+
+span.create-document-widget:hover {
+    background-color: #fdffef;
+}
+
+span.controlled-graph-container {
+    border-bottom: 1px solid #888;
 }

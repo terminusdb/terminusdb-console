@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import {Row, Col} from "reactstrap"
-import {ResultViewer} from "../../components/QueryPane/ResultViewer"
 import Loading from '../../components/Reports/Loading'
 import {CSVInput} from "./CSVInput"
 import {TERMINUS_COMPONENT} from '../../constants/identifiers'

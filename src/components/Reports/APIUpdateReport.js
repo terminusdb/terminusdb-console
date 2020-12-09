@@ -72,6 +72,7 @@ const APIUpdateError = ({message, error, time}) => {
 
 const APIInputError = ({message, violations, time}) => {
     let txt = message + queryTimeDisplay(time)
+
     return (
         <Alert color="warning">
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3" />
@@ -82,12 +83,15 @@ const APIInputError = ({message, violations, time}) => {
 }
 
 const APISystemError = ({message, error, time}) => {
-    let txt = message + queryTimeDisplay(time)
+    var txt;
+    if(message == undefined)
+        txt="Connection to Server failed"
+    else txt = message + queryTimeDisplay(time)
     return (
         <Alert color="danger">
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
-            {error && 
+            {error &&
                 <SystemError error={error} />
             }
         </Alert>

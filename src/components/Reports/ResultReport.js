@@ -2,7 +2,7 @@ import React, { useState, useEffect,Fragment } from "react"
 import { Alert, Container } from 'reactstrap'
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
-import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS, 
+import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS,
     NO_RESULTS_ADVICE, NO_RESULTS, INSERTS, DELETES, TRANSACTION_RESTARTS} from "./constants.reports"
 
 export const ResultReport = ({report}) => {
@@ -64,7 +64,7 @@ const ImpotentQuery = ({report, time}) => {
         <Alert color="warning">
             <span className={ RESULT_REPORT_CSS }>
                 {NO_RESULTS}
-                <span> {txt} </span> 
+                <span> {txt} </span>
                 {NO_RESULTS_ADVICE}
             </span>
         </Alert>
@@ -97,8 +97,8 @@ const UpdateSuccess = ({report, time}) => {
     return (
         <Alert color="success">
             <span className={ RESULT_REPORT_CSS }>
-                Successfully updated database 
-                <span> {txt} </span> 
+                Successfully updated database
+                <span> {txt} </span>
                 <span className={ RESULT_REPORT_LABEL_CSS }>
                     {INSERTS}
                 </span>
@@ -142,10 +142,8 @@ const QuerySystemError = ({error, time}) => {
     <Alert color="danger">
         <span className={ RESULT_REPORT_CSS }>
             {QUERY_CAUSED_ERROR}
-            <span> {txt} </span> 
+            <span> {txt} </span>
         </span>
         <SystemError error={error} />
     </Alert>)
 }
-
-

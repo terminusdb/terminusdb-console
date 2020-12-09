@@ -12,11 +12,11 @@ import {BiLink, BiFile, BiTable} from "react-icons/bi"
 import {VscJson} from "react-icons/vsc"
 import {RiDeleteBin5Line} from "react-icons/ri"
 import { AiFillCloseCircle, AiFillEdit} from 'react-icons/ai';
-import {BiArrowBack} from "react-icons/bi"
+import {BiArrowBack, BiBorderNone} from "react-icons/bi"
 import TerminusClient from '@terminusdb/terminusdb-client'
 
 
-export const DocumentCreateNav = ({types, doctype, onClose, docView, setView}) => {
+export const DocumentCreateNav = ({types, doctype, meta, onClose, docView, setView}) => {
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
@@ -27,7 +27,7 @@ export const DocumentCreateNav = ({types, doctype, onClose, docView, setView}) =
                                 <DocumentViewIcons setDocView={setView} docView={docView}/>
 							</Col>}
 							<Col md={9}>
-                                <DocumentViewTitle types={types} doctype={doctype} />
+                                <DocumentViewTitle types={types} doctype={doctype} meta={meta}/>
                             </Col>
 							<Col md={1}>
                                 <DocumentGoBackIcon onClose={onClose}/>
@@ -50,27 +50,42 @@ export const DocumentGoBackIcon = ({onClose}) => {
 
 export const DocumentViewIcons = ({docView, setDocView, edit}) => {
     const onFrame = () => setDocView("frame")
-    const onTable = () => setDocView("frame")
+    const onTable = () => setDocView("table")
     const onJson = () => setDocView("json")
     return <span style={{fontSize: "2em"}}>
         <span onClick={onTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
-            <BiTable className={"db_info_icon_spacing" + (docView == "table" ? " document_view_selected" : " document_view_unselected")}/>
+            <BiTable className={"db_info_icon_spacing" + (docView == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
         <span onClick={onJson} className="d-nav-icons" title={JSON_VIEW_TITLE}>
-            <VscJson className={"db_info_icon_spacing" + (docView == "json" ? " document_view_selected" : " document_view_unselected")}/>
+            <VscJson className={"db_info_icon_spacing" + (docView == "json" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
     </span>
 }
 
 
 
-export const DocumentViewTitle = ({types, doctype}) => {
+export const DocumentViewTitle = ({types, doctype, meta}) => {
     if(types && doctype){
-        let meta = getTypeMetadata(types, TerminusClient.UTILS.unshorten(doctype))
+        meta = meta || getTypeMetadata(types, TerminusClient.UTILS.unshorten(doctype))
         let tyname = ((meta && meta.label) ? meta.label : TerminusClient.UTILS.shorten(doctype))
         let title = `${TerminusClient.UTILS.shorten(doctype)}`
+        function isDoc(a){
+            return TerminusClient.UTILS.unshorten(a) == TerminusClient.UTILS.unshorten("system:Document") 
+        }
         return <h3 className="db_info db_info d-nav-text" title={title}>
-            <span> Create New {tyname} </span>
+            {isDoc(meta.id) && 
+                <span> Choose Document Type to Create </span>
+            }
+            {!isDoc(meta.id) && 
+                <span> Create New {tyname} </span>
+            }
+            {meta.abstract && (!isDoc(meta.id)) && 
+             <span>
+                <span className="d-nav-icons">
+                    <BiBorderNone />
+                </span>
+               Abstract Type - Choose Sub-Type to Create</span>
+            }
         </h3>
     }
     let p = (doctype ? TerminusClient.UTILS.shorten(doctype) : "")

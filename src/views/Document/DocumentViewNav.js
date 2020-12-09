@@ -12,7 +12,7 @@ import {BiLink, BiFile, BiTable} from "react-icons/bi"
 import {VscJson} from "react-icons/vsc"
 import {RiDeleteBin5Line} from "react-icons/ri"
 import { AiFillCloseCircle, AiFillEdit} from 'react-icons/ai';
-import {BiArrowBack} from "react-icons/bi"
+import {BiArrowBack, BiNetworkChart} from "react-icons/bi"
 import TerminusClient from '@terminusdb/terminusdb-client'
 
 
@@ -23,10 +23,10 @@ export const DocumentViewNav = ({types, current, docid, doctype, jsonld, edit, o
 				<Col>
 					<div className="tdb__model__hright">
 						<Row style={{width:"100%"}}>
-							<Col md={2}>
+							<Col md={3}>
                                 <DocumentViewIcons setDocView={setView} docView={docView}/>
 							</Col>
-							<Col md={7}>
+							<Col md={6}>
                                 <DocumentViewTitle types={types} docid={docid} jsonld={jsonld} />
                             </Col>
 							<Col md={2}>
@@ -51,13 +51,13 @@ export const DocumentViewIcons = ({docView, setDocView, edit}) => {
 
     return <span style={{fontSize: "2em"}}>
         <span onClick={onTable} className="d-nav-icons" title={TABLE_VIEW_TITLE}>
-            <BiTable className={"db_info_icon_spacing" + (docView == "table" ? " document_view_selected" : " document_view_unselected")}/>
+            <BiTable className={"db_info_icon_spacing" + (docView == "table" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
         <span onClick={onLink} className="d-nav-icons" title={LINKS_VIEW_TITLE}>
-            <BiLink className={"db_info_icon_spacing" + (docView == "link" ? " document_view_selected" : " document_view_unselected")}/>
+            <BiNetworkChart className={"db_info_icon_spacing" + (docView  == "link" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
         <span onClick={onJson} className="d-nav-icons" title={JSON_VIEW_TITLE}>
-            <VscJson className={"db_info_icon_spacing" + (docView == "json" ? " document_view_selected" : " document_view_unselected")}/>
+            <VscJson className={"db_info_icon_spacing" + (docView == "json" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
         </span>
     </span>
 }

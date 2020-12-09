@@ -10,11 +10,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
-//import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
-//import {CSVPreview} from '../../components/CSVPane/CSVPreview'
-//import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
-//import {BiDownload} from "react-icons/bi"
-import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE} from '../../constants/identifiers'
+import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE, TERMINUS_INFO} from '../../constants/identifiers'
 import {CSVPreview} from '../../components/CSVPane/CSVPreview'
 import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
@@ -24,6 +20,7 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
+    const [emptyDB, setEmptyDV] = useState(false)
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -45,6 +42,21 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     const adding = (isadd) => {
         if(isadd) setIsAdding(true)
         else setIsAdding(false)
+    }
+
+    const setEmpty = () => {
+        let rep = {}
+        if(types && types.length > 0){
+            let meta = getTypeMetadata(types, docType)
+            rep.status = TERMINUS_INFO
+            rep.message = ((docType && meta) ? "There are no " + meta.label + " documents in the database" :  "There are no documents in the database")
+        }
+        else {
+            rep.status = TERMINUS_WARNING
+            rep.message = "No document types have been defined. Use the Schema Builder to create a document type or add CSV files directly"
+
+        }
+        return <TerminusDBSpeaks report={rep}/>
     }
 
     useEffect(() => {
@@ -129,19 +141,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }            
     }
 
-    const downloadCSV=async(cell)=>{
-		let row=cell.row
-		let name=row.original.Name["@value"]
-        let update_start = Date.now()
-        setLoading(true)
-        update_start = update_start || Date.now()
-		return await woqlClient.getCSV(name, true).then((results) =>{
-			setReport({status: TERMINUS_SUCCESS, message: "Successfully downloaded file " + name})
-		})
-		.catch((err) => process_error(err, update_start, "Failed to download file " + name))
-		.finally(() => setLoading(false))
-    }
-    
     const deleteDocument = (cell) => {
         let row=cell.row
         let type = row.original["Type ID"]
@@ -199,7 +198,11 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
     tabConfig.column("Download").unsortable(true).click(downloadDocument).minWidth(80).render(getDownloadButton)
     tabConfig.column("Delete").unsortable(true).click(deleteDocument).minWidth(80).render(getDeleteButton)
-    
+   
+    if(typeof types != "object") return <main className="console__page__container console__page__container--width"></main>
+
+
+
     return (<>
         {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
             previewCss={"csv-preview-results csv-preview-results-border"}/>}
@@ -210,46 +213,12 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}
+                onEmpty={setEmpty}
                 freewidth={true}
                 view={tabConfig}
                 limit={tabConfig.pagesize()}/>}
         </main>
     </>)
-}
-
-const DocumentTypeMeta = ({doctype, meta,count,  onCreate}) => {
-    if(!doctype || !meta) return null
-    return <span>
-            <span title={doctype + ": " + meta.description}>{count} {meta.label} Document{(count === 1 ? "" : "s")} </span>
-            {!meta.abstract &&
-                <button onClick={onCreate}> Create New </button>
-            }
-        </span>
-}
-
-
-const DocumentLimits = ({doctype, meta, start, limit, setLimit}) => {
-    const [mstart, setMstart] = useState(start)
-    const [mlimit, setMlimit] = useState(limit)
-
-    function doChange(){
-        if(mstart != start || mlimit != limit) setLimit(mlimit, mstart)
-    }
-
-    function chLimit(e){
-        if(e && e.target) setMlimit(e.target.value || 0)
-    }
-
-    function chStart(e){
-        if(e && e.target) setMstart(e.target.value || 0)
-    }
-
-
-    return <span>
-        Limit <input type="text" defaultValue={mlimit} onChange={chLimit}/>
-        Start <input type="text" defaultValue={mstart} onChange={chStart}/>
-        <button onClick={doChange}>Update</button>
-    </span>
 }
 
 
