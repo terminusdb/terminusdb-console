@@ -5559,6 +5559,7 @@ span.header-control-panel {
 
 span.create-document-widget:hover {
     background-color: #fdffef;
+    cursor: pointer;
 }
 
 span.controlled-graph-container {

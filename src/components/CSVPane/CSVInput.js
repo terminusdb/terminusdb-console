@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 
-export const CSVInput = ({css, inputCss, onChange, text, multiple}) =>{
+export const CSVInput = ({css, style, inputCss, onChange, text, multiple}) =>{
 
 	return (
 		<>
-			<span className={css}>
+			<span className={css} style={style}>
 				<input type="file"
 					name="csvInp"
 					id="csvInp"

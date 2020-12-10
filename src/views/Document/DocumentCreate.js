@@ -8,7 +8,7 @@ import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerH
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER,
-    SUBMIT_INPUT_LABEL} from "./constants.document"
+    SUBMIT_INPUT_LABEL, PANE_STYLE, HDR_STYLE, BODY_STYLE} from "./constants.document"
 import {ControlledTable} from '../Tables/ControlledTable'
 import {DocumentCreateNav} from "./DocumentCreateNav"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
@@ -16,8 +16,9 @@ import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../consta
 import {getTypeMetadata} from "./DocumentList"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
 import {constructErrorJson} from "../../components/Reports/utils.vio"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 
-export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType}) => {
+export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType, insertCsvs}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
     const [docView, setDocView] = useState("table")
@@ -83,7 +84,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
             json = dataframe.extract()
-            console.log("extracted", json)
+            //console.log("extracted", json)
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
@@ -148,7 +149,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         />
         <main className="console__page__container console__page__container--width">
             {meta.abstract &&
-                <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} />
+                <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} insertCsvs={insertCsvs}/>
             }
             {(!meta.abstract) && dataframe && docView == "table" &&
                 <>{dataframe.render()}</>
@@ -181,7 +182,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     </>
 }
 
-export const DocumentChoices = ({types, doctype, meta, setType}) => {
+export const DocumentChoices = ({types, doctype, meta, setType, insertCsvs}) => {
     if(!doctype) return null
     const [stypes, setSubTypes] = useState()
     let WOQL = TerminusClient.WOQL
@@ -230,11 +231,15 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
         }
     }
 
-    function getTypeSelector(){
+    function getTypeSelector(insertCsvs){
         let ts = []
         for(var i = 0; i<stypes.length; i++){
             let sid = stypes[i]['Class ID']
-            if(sid != DOCTYPE_CSV){
+            if(sid == DOCTYPE_CSV){
+                let meta = getTypeMetadata(types, TerminusClient.UTILS.unshorten(sid))
+                ts.push(<DocumentCSVChoice types={types} meta={meta} insertCsvs={insertCsvs}/>)
+            }
+            else {
                 ts.push(<span style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
                     <DocumentChoice type={sid} types={types}/>
                 </span>)
@@ -244,51 +249,46 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
     }
     let choices_style = { margin: "10px auto", width: "90%"}
     if(stypes && stypes.length > 0){
-        return <span style={choices_style}>{getTypeSelector()}</span>
+        return <span style={choices_style}>{getTypeSelector(insertCsvs)}</span>
     }
     return null
 }
 
-export const DocumentChoice = ({types, type, setType}) => {
-    let meta = getTypeMetadata(types, TerminusClient.UTILS.unshorten(type))
+export const DocumentCSVChoice = ({types, meta, insertCsvs}) => {
     if(!meta) return null
-    let pane_style = {
-        display: "inline-block",
-        width: "200px",
-        padding: "10px",
-        height: "200px",
-        borderRadius: "5px",
-        verticalAlign: "top",
-        border:"1px solid #002856",
-        margin:"5px"
-    }
-    let hdr_style = {
-        display: "inline-block",
-        textAlign: "center",
-        fontSize: "1.2m",
-        width: "180px"
-    }
-    let body_style = {
-        display: "inline-block",
-        height: "120px",
-        overflow: "hidden",
-        color: "#444",
-        fontSize: "0.9em"
-    }
+    let desc = meta.description || "~"
+    let children = []
+    children.push(<>
+        <DocumentIcon meta={meta}/>
+        <div><strong style={HDR_STYLE}>{meta.label} </strong></div>
+        <div style={BODY_STYLE}>{desc}</div>
+    </>)
+    return <CSVInput css={"create-document-widget"} text={children} onChange={insertCsvs}
+        inputCss={''} multiple={true} style={PANE_STYLE}/>
+}
+
+export const DocumentIcon = ({meta}) => {
+    if(!meta) return null
     if(meta.abstract){
-        hdr_style.color = "rgba(255, 178, 102, 0.7)"
+        HDR_STYLE.color = "rgba(255, 178, 102, 0.7)"
     }
     let icons = (meta.abstract ? { color: "rgb(255, 178, 102)"} : {color: "rgba(255, 178, 102, 0.7)"})
     icons.display = "inline-block"
     icons.textAlign = "center"
     icons.width = "180px"
     icons.fontSize = "2.5em"
-    let desc = meta.description || "~"
-    return <span className="create-document-widget" 
-            style={pane_style}>
+    return <i style={icons} className="custom-img-entities"></i>
+}
 
-            <i style={icons} className="custom-img-entities"></i>
-    <strong style={hdr_style}>{meta.label} </strong> <span style={body_style}>{desc}</span></span>
+export const DocumentChoice = ({types, type, setType}) => {
+    let meta = getTypeMetadata(types, TerminusClient.UTILS.unshorten(type))
+    if(!meta) return null
+    let desc = meta.description || "~"
+    return <span className="create-document-widget" style={PANE_STYLE}>
+        <DocumentIcon meta={meta}/>
+        <strong style={HDR_STYLE}>{meta.label} </strong>
+        <span style={BODY_STYLE}>{desc}</span>
+    </span>
 }
 
 export const CreateToolbar = ({types, type, onCancel, onCreate, report}) => {

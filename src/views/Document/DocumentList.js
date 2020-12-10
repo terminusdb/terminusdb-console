@@ -113,7 +113,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             link.href = url;
             link.setAttribute('download', fname);
             document.body.appendChild(link);
-            link.click();      
+            link.click();
         }
 
         function downloadFailure(err, did, iscsv){
@@ -129,7 +129,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
                 .finally(() => setLoading(false))
         }
         else {
-            let docid = row.original["Document ID"]     
+            let docid = row.original["Document ID"]
             woqlClient.query(WOQL.read_object(docid, "v:Doc"))
                 .then((results) => {
                     let did = TerminusClient.UTILS.lastURLBit(docid)
@@ -138,7 +138,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
                 })
                 .catch((err) => downloadFailure(err, docid))
                 .finally(() => setLoading(false))
-        }            
+        }
     }
 
     const deleteDocument = (cell) => {
@@ -159,15 +159,15 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }
 
         if(type==DOCTYPE_CSV) {
-            let name=row.original.Name["@value"]        
+            let name=row.original.Name["@value"]
             let commitMsg="Deleted CSV File " + name + " from console document list"
             woqlClient.deleteCSV(name, commitMsg)
                 .then(() => deleteSuccess(name, true))
                 .catch((err) => deleteFailure(err, name, true))
                 .finally(() => setLoading(false))
         }
-        else {  
-            let docid = row.original["Document ID"]     
+        else {
+            let docid = row.original["Document ID"]
             let t2name = TerminusClient.UTILS.shorten(type)
             let cmsg = "Deleted " + t2name + " document " + docid + " from console document list"
             woqlClient.query(WOQL.delete_object(docid), cmsg)
@@ -198,7 +198,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
     tabConfig.column("Download").unsortable(true).click(downloadDocument).minWidth(80).render(getDownloadButton)
     tabConfig.column("Delete").unsortable(true).click(deleteDocument).minWidth(80).render(getDeleteButton)
-   
+
     if(typeof types != "object") return <main className="console__page__container console__page__container--width"></main>
 
 

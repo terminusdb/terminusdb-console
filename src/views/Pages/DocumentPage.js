@@ -234,7 +234,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
 
     return (
         <>
-            {isCreating &&
+            {isCreating && (csvs.length==0) &&
                 <DocumentCreate
                     selectDocument={setDocument}
                     close={closeDV}
@@ -242,6 +242,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     setDocType={setIsCreating}
                     types={types}
                     total={cnt}
+                    insertCsvs={insertCsvs}
                 />
             }
             {!isCreating && docid &&
