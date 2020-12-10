@@ -8,6 +8,7 @@ import {FileLoader} from "./FileLoader"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
 import {CREATE_NEW_DOCUMENT, GO_BACK} from './constants.document'
 import {BiArrowBack} from "react-icons/bi"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 
 export const DocumentNavTab = ({isAdding, total, types, current, docType, changeDocType, limit, setDocCount, docCount, doCreate, csvs, setCsvs, insertCsvs, onCsvCancel}) => {
 
@@ -44,21 +45,31 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
         //}
     }
 
-    const DocumentTypeMeta = ({doctype, meta, types, count, onCreate}) => {
-        if(!types) return null
-        if(types.length == 0 || (types.length == 1 && types[0]['Class ID'] == DOCTYPE_CSV) 
-        || (docType && doctype==DOCTYPE_CSV)){
-            return null
-        }
-	    return <span>
+    const AddCSVIcon = ({insertCsvs}) => {
+        let children = []
+        children.push(<AddIcon title={CREATE_NEW_DOCUMENT}/>)
+        return <CSVInput text={children} onChange={insertCsvs} multiple={true} labelCss={"csvInputNoPad"}/>
+    }
+
+    const AddIcon =({title, onClick}) => {
+        return <span>
             <span style={{fontSize: "2em"}}>
-                <span onClick={onCreate} className="d-nav-icons" title={CREATE_NEW_DOCUMENT}>
-                    <BsPlus className="db_info_icon_spacing"/>
+                <span onClick={onClick} className="d-nav-icons" title={title}>
+                    <BsPlus className="db_info_icon_spacing" title={title}/>
                 </span>
             </span>
         </span>
     }
-    
+
+    const DocumentTypeMeta = ({doctype, meta, types, count, onCreate, insertCsvs}) => {
+        if(!types) return null
+        if(types.length == 0 || (types.length == 1 && types[0]['Class ID'] == DOCTYPE_CSV)
+        || (docType && doctype==DOCTYPE_CSV)){
+            return <AddCSVIcon insertCsvs={insertCsvs}/>
+        }
+	    return <AddIcon onClick={onCreate} title={CREATE_NEW_DOCUMENT}/>
+    }
+
 	return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
@@ -80,7 +91,7 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 				                            doctype={docType}
 				                            limit={limit}
 				                            setTotal={setDocCount}/>}
-									<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={myCreate}/>
+									<DocumentTypeMeta count={docCount} types={types} meta={current} doctype={docType} onCreate={myCreate} insertCsvs={insertCsvs}/>
 								</Col>
 								<Col md={3}>
 				                    <DocumentSubTypeFilter doctype={docType} meta={current} setType={changeDocType} />
@@ -107,4 +118,3 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
 		</div>
 	)
 }
-

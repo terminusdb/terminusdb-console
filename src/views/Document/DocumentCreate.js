@@ -84,10 +84,6 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
             json = dataframe.extract()
-<<<<<<< HEAD
-            //console.log("extracted", json)
-=======
->>>>>>> ce4b419eb6b3090992352411219f216fb20b93fb
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
@@ -269,8 +265,7 @@ export const DocumentCSVChoice = ({types, meta, insertCsvs}) => {
         <div><strong style={HDR_STYLE}>{meta.label} </strong></div>
         <div style={BODY_STYLE}>{desc}</div>
     </>)
-    return <CSVInput css={"create-document-widget"} text={children} onChange={insertCsvs}
-        inputCss={''} multiple={true} style={PANE_STYLE}/>
+    return <CSVInput css={"create-document-widget"} text={children} onChange={insertCsvs} multiple={true} style={PANE_STYLE}/>
 }
 
 export const DocumentIcon = ({meta}) => {

@@ -1,12 +1,12 @@
-export const VIOLATION_WITH_DATA_TYPE_OBJECT="vio:ViolationWithDatatypeObject" //expecting integer datatype but entering string
-export const VIOLATION_UNTYPED_INSTANCE="vio:UntypedInstance" // trying to add extra property with false value
-export const VIOLATION_WOQL_SYNTAX_ERROR="woql_syntax_error" // syntax error
-export const VIOLATION_DATA_TYPE_SUBSUMPTION="vio:DataTypeSubsumptionViolation" //changing datatype of property in schema eg: while updating document changing label type to integer
-export const VIOLATION_KEY_HAS_UNKNOWN_PREFIX="key_has_unknown_prefix" // removing id  of a choices
-export const VIOLATION_INVALID_CLASS_VIOLATION = "vio:InvalidClassViolation" //when adding triple to a class that dont exist
+export const VIOLATION_WITH_DATA_TYPE_OBJECT="vio:ViolationWithDatatypeObject"
+export const VIOLATION_UNTYPED_INSTANCE="vio:UntypedInstance"
+export const VIOLATION_WOQL_SYNTAX_ERROR="woql_syntax_error"
+export const VIOLATION_DATA_TYPE_SUBSUMPTION="vio:DataTypeSubsumptionViolation"
+export const VIOLATION_KEY_HAS_UNKNOWN_PREFIX="key_has_unknown_prefix"
+export const VIOLATION_INVALID_CLASS_VIOLATION = "vio:InvalidClassViolation"
 export const VIOLATION_PROPERTY_WITH_UNDEFINED_DOMAIN="vio:PropertyWithUndefinedDomain"
-export const VIOLATION_CLASS_INHERITANCE= "vio:ClassInheritanceViolation" // class inheritance vio in schema builder
-export const VIOLATION_CLASS_CYCLE="vio:ClassCycle" // create a class cycle using model builder
+export const VIOLATION_CLASS_INHERITANCE= "vio:ClassInheritanceViolation"
+export const VIOLATION_CLASS_CYCLE="vio:ClassCycle" 
 export const VIOLATION_INVALID_CLASS_IN_RANGE="vio:Invalid_classIn_range"
 
 export const WITNESS_TYPE="@type"

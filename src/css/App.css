@@ -5395,6 +5395,10 @@ span.add-csv {
     margin-right: 10px;
 }
 
+.csvInputNoPad {
+    padding: 0px !important;
+}
+
 .inputfile, .csv-input {
     cursor: pointer;
 }
