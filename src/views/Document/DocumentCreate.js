@@ -29,7 +29,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     const [sreport, setReport] = useState(true)
     const { woqlClient} = WOQLClientObj()
 
-    const {updateBranches} = DBContextObj()
+    const {updateBranches, branch, ref} = DBContextObj()
 
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             let df = loadFrameViewer(frame)
             setDataframe(df)
         }
-    }, [frame])
+    }, [frame, docView, branch, ref])
 
 
     const getClassFrame = () => {
@@ -84,7 +84,10 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
             json = dataframe.extract()
+<<<<<<< HEAD
             //console.log("extracted", json)
+=======
+>>>>>>> ce4b419eb6b3090992352411219f216fb20b93fb
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
@@ -100,8 +103,11 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 }
             })
             .catch((e) => {
-                if(e.data) {
+                if(e.data && e.data['api:message'] && dataframe){
                     let ejson=constructErrorJson(e)
+                    let ps = dataframe
+                    ps.setFrameErrors(ejson)
+                    setDataframe(ps)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
             })
@@ -115,7 +121,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
         var label_style = "display: inline-block; min-width: 100px; font-weight: 600; color: #446ba0;";
         var value_style = "font-weight: 400; color: #002856;";
-        frameconf.show_all("table");
+        frameconf.show_all(docView == "frame" ? "fancy" : "table");
         frameconf.show_id = true
         frameconf.object().style(box_style);
         frameconf.object().headerFeatures("id").style(property_style).args({headerStyle: label_style + " padding-right: 10px;", bodyStyle: value_style, label: "Database ID", removePrefixes: true});
@@ -151,7 +157,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             {meta.abstract &&
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} insertCsvs={insertCsvs}/>
             }
-            {(!meta.abstract) && dataframe && docView == "table" &&
+            {(!meta.abstract) && dataframe && (docView == "table" || docView == "frame") &&
                 <>{dataframe.render()}</>
             }
             {(!meta.abstract) && loading &&
@@ -170,7 +176,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                     <TerminusDBSpeaks report={sreport} />
                 </Row>
             }
-            {(!meta.abstract) && (docView == "json" || (frame && (docView=="table"))) &&
+            {(!meta.abstract) && (docView == "json" || (frame && (docView=="table" || docView == "frame"))) &&
                 <CreateToolbar
                     types={types}
                     type={doctype}
