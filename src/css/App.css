@@ -316,6 +316,7 @@ span.create-new-button {
 
 span.delete-button:hover {
     color: #fff;
+    background-color: #dc3545
 }
 
 .del-hub-warning {
