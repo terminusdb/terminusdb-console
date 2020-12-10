@@ -30,9 +30,6 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
 
     const {updateBranches, branch, ref} = DBContextObj()
 
-    function xclose(){
-        console.log("frame", dataframe.frame.document)
-    }
 
     useEffect(() => {
         setFrame()
@@ -81,22 +78,15 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     }
 
     function createDocument(commit){
-        console.log("f", dataframe.frame.document.properties)
-        alert("1")
         let WOQL = TerminusClient.WOQL
         let json
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
             json = dataframe.extract()
-            console.log("f2", dataframe.frame.document.properties)
-            alert("2")
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
-            let q = WOQL.update_object(json)
-            console.log("f3", dataframe.frame.document.properties)
-            alert("3")
-            
+            let q = WOQL.update_object(json)            
             setLoading(true)
             woqlClient.query(q, commit, true)
             .then(() => {
@@ -185,7 +175,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 <CreateToolbar
                     types={types}
                     type={doctype}
-                    onCancel={xclose}
+                    onCancel={close}
                     onCreate={createDocument}
                 />
             }
