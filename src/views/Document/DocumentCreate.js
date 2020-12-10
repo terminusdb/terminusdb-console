@@ -15,6 +15,7 @@ import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {getTypeMetadata} from "./DocumentList"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
+import {constructErrorJson} from "../../components/Reports/utils.vio"
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
@@ -108,8 +109,9 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             })
             .catch((e) => {
                 if(e.data && e.data['api:message'] && dataframe){
+                    let ejson=constructErrorJson(e)
                     let ps = dataframe
-                    ps.setFrameErrors(e.data)
+                    ps.setFrameErrors(ejson)
                     setDataframe(ps)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})                
@@ -143,12 +145,12 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         setDocType(dt)
     }
 
-    let meta = ((TerminusClient.UTILS.unshorten(doctype) == TerminusClient.UTILS.unshorten("system:Document")) 
-        ? {abstract: true, label: "Document", id: "system:Document", description: "A document type"} 
+    let meta = ((TerminusClient.UTILS.unshorten(doctype) == TerminusClient.UTILS.unshorten("system:Document"))
+        ? {abstract: true, label: "Document", id: "system:Document", description: "A document type"}
         : getTypeMetadata(types, TerminusClient.UTILS.unshorten(doctype)) || {})
 
     return <>
-        <DocumentCreateNav 
+        <DocumentCreateNav
             docView={docView}
             setView={setDocView}
             types={types}
@@ -157,16 +159,16 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             onClose={close}
         />
         <main className="console__page__container console__page__container--width">
-            {meta.abstract && 
+            {meta.abstract &&
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} />
             }
             {(!meta.abstract) && dataframe && (docView == "table" || docView == "frame") &&
                 <>{dataframe.render()}</>
             }
-            {(!meta.abstract) && loading && 
+            {(!meta.abstract) && loading &&
                 <Loading />
             }
-            {(!meta.abstract) && content && (docView == "json") && 
+            {(!meta.abstract) && content && (docView == "json") &&
                 <JSONEditor
                     dataProvider={content}
                     edit={true}
@@ -247,7 +249,7 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
             if(sid != DOCTYPE_CSV){
                 ts.push(<span style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
                     <DocumentChoice type={sid} types={types}/>
-                </span>)        
+                </span>)
             }
         }
         return ts
@@ -267,13 +269,15 @@ export const DocumentChoice = ({types, type}) => {
         width: "200px",
         padding: "10px",
         height: "200px",
-        borderRadius: "8px",
+        borderRadius: "5px",
         verticalAlign: "top",
+        border:"1px solid #002856",
+        margin:"5px"
     }
     let hdr_style = {
         display: "inline-block",
         textAlign: "center",
-        fontSize: "1.2m",    
+        fontSize: "1.2m",
         width: "180px"
     }
     let body_style = {
@@ -292,7 +296,10 @@ export const DocumentChoice = ({types, type}) => {
     icons.width = "180px"
     icons.fontSize = "2.5em"
     let desc = meta.description || "~"
-    return <span className="create-document-widget" style={pane_style}><i style={icons} className="custom-img-entities"></i>
+    return <span className="create-document-widget" 
+            style={pane_style}>
+
+            <i style={icons} className="custom-img-entities"></i>
     <strong style={hdr_style}>{meta.label} </strong> <span style={body_style}>{desc}</span></span>
 }
 

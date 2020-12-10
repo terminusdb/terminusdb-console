@@ -12,6 +12,7 @@ import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTO
 import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
+import {constructErrorJson} from "../../components/Reports/utils.vio"
 
 
 import {DocumentViewNav} from "./DocumentViewNav"
@@ -106,7 +107,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         setDocType(doctype)
         setDataframe()
         selectDocument(id)
-    
+
     }
 
     function loadFrameViewer(){
@@ -161,7 +162,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         let WOQL = TerminusClient.WOQL
         let json = false
         if(docview == "json"){
-            json = parseOutput(updatedJSON)        
+            json = parseOutput(updatedJSON)
         }
         else {
             json = dataframe.extract()
@@ -181,6 +182,9 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 unsetEditMode()
             })
             .catch((e) => {
+                if(e.data) {
+                    let ejson=constructErrorJson(e)
+                }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
             })
             .finally(() => setLoading(false))
@@ -239,10 +243,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             {dataframe && (docview == "frame" || docview == "table") &&
                 <>{dataframe.render()}</>
             }
-            {edit && sreport && sreport.status && 
+            {edit && sreport && sreport.status &&
                 <Row className="generic-message-holder">
                     <TerminusDBSpeaks report={sreport} />
-                </Row>        
+                </Row>
             }
             {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
                 <ViewToolbar
@@ -255,7 +259,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     onUpdate={updateDocument}
                 />
             }
-            {loading && 
+            {loading &&
                 <Loading />
             }
             {docview == "link" &&
@@ -281,7 +285,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
                 WOQL.opt().limit(1).triple("v:Target", "label", "v:Link Name"),
                 WOQL.opt().limit(1).quad("v:Property", "label", "v:Property Name", "schema"),
                 WOQL.opt().limit(1).quad("v:Type", "label", "v:Type Name", "schema")
-            ), 
+            ),
             WOQL.and(
                 WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type"),
                 WOQL.opt().limit(1).triple("v:Source", "label", "v:Link Name"),
@@ -290,7 +294,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
             )
         )
     )
-    
+
     const chooseOut = function(row){
         selectDocument(row.original['Target'])
     }
@@ -317,7 +321,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
     graphConfig.edge("Source", "Node").size(2).text("Property Name").arrow({width: 60, height: 30})
          .icon({label: true, color: [109,98,100], size: 0.8})
     graphConfig.node("Node").size(45).collisionRadius(150).text("Node Label").color([150,233,151]).icon({label: true, color: [50,50,80]})
-    graphConfig.node("Source", "Target").collisionRadius(120).size(40).text("Link Name").color([255,178,102]).icon({label: true, color: [80,60,40]})    
+    graphConfig.node("Source", "Target").collisionRadius(120).size(40).text("Link Name").color([255,178,102]).icon({label: true, color: [80,60,40]})
     if(!docid) return null
     return (<>
     <Row>

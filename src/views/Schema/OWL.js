@@ -144,7 +144,7 @@ export const OWL = (props) => {
             )}
             {loading && <Loading     />}
             {failure && <TerminusDBSpeaks failure={failure.failure} report={failure.report} />}
-            {(turtle !== false && !loading && prefixes) && 
+            {(turtle !== false && !loading && prefixes) &&
                 <OWLEditor dataProvider={turtle} edit={edit} onChange={getContents} prefixes={prefixes}/>
             }
         </div>
@@ -181,7 +181,7 @@ export const SchemaToolbar = ({
                     {EDIT_OWL_BUTTON}
                 </Button>
             )
-        } 
+        }
         return null
     }
 
@@ -278,7 +278,7 @@ export const SchemaToolbar = ({
                 </Col>
             )}
         </Row>
-        {report && 
+        {report &&
             <Row className="generic-message-holder" style={{marginBottom: "1.4em"}}>
                  <TerminusDBSpeaks report={report} />
             </Row>
