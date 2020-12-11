@@ -12,7 +12,7 @@ import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTO
 import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
-import {constructErrorJson} from "../../components/Reports/utils.vio"
+import {constructError} from "../../components/Reports/utils.vio"
 
 
 import {DocumentViewNav} from "./DocumentViewNav"
@@ -198,7 +198,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             })
             .catch((e) => {
                 if(e.data) {
-                    let ejson=constructErrorJson(e)
+                    let ejson=constructError(e)
                     setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})

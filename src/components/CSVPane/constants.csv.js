@@ -7,6 +7,7 @@ export const DOWNLOAD='Download'
 export const DELETE='Delete CSV'
 export const UPLOAD='Upload CSV'
 export const UPDATE='Update'
+export const UPDATE_CSV='Update CSV'
 export const CREATE_NEW='Create New CSV'
 
 export const CSV_ROWS="csv-rows"

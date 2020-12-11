@@ -5385,7 +5385,6 @@ span.add-csv {
     margin-top: 10px;
 }
 
-
 .d-page-overflow {
     overflow-x: hidden !important;
 }
@@ -5393,6 +5392,12 @@ span.add-csv {
 .csv-preview-icon {
     font-size: 18px;
     margin-right: 10px;
+}
+
+.csvUpdateIcon {
+    overflow: unset !important;
+    padding: 0px !important;
+    max-width: 0px !important;
 }
 
 .csvInputNoPad {

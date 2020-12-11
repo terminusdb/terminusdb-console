@@ -173,20 +173,20 @@ export const constructErrorMessage = (error) => {
 	return;
 }
 
-export const constructErrorJson = (error) => {
-	let eJson={}
+export const constructError = (error) => {
+	let eArray=[]
 	if(error.data["api:error"] && (error.data["api:error"]["api:witnesses"] || error.data["api:error"]["api:witness"])) {
 		if(error.data["api:error"]["api:witnesses"] == undefined){
 			let witness=error.data["api:error"]["api:witness"]
-			eJson.witness=witness
+			eArray.push(witness)
 		}
 		else {
 			let witnesses=error.data["api:error"]["api:witnesses"]
-			eJson.witnesses=witnesses
+			eArray.push(witnesses)
 		}
 	}
 	else if (error.data["api:error"]){
-		eJson.error=error.data["api:error"]
+		eArray.push(error.data["api:error"])
 	}
-	return eJson
+	return eArray
 }

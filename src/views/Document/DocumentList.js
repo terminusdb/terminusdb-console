@@ -204,7 +204,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
 
     return (<>
-        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
+        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview} setCsvs={setCsvs}
             previewCss={"csv-preview-results csv-preview-results-border"}/>}
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <main className="console__page__container console__page__container--width">
