@@ -27,9 +27,18 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     const [loading, setLoading] = useState(true)
     const [sreport, setReport] = useState(true)
     const { woqlClient} = WOQLClientObj()
-
+    const [extractedJSON, setExtractedJSON] = useState()
+    const [ecommit, setECommit] = useState()
+    const [errors, setErrors] = useState()
+    const [extract, setExtract] = useState(0)
+    
     const {updateBranches, branch, ref} = DBContextObj()
 
+    useEffect(() => {
+        if(extract){
+            createDocument(ecommit, extractedJSON)
+        }
+    }, [extract, extractedJSON])
 
     useEffect(() => {
         setFrame()
@@ -77,12 +86,17 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         }
     }
 
-    function createDocument(commit){
+    
+    const extractDocument = (c) => {
+        setExtract(extract + 1)
+        setECommit(c)
+    }
+
+    function createDocument(commit, json){
         let WOQL = TerminusClient.WOQL
-        let json
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
-            json = dataframe.extract()
+            
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
@@ -100,9 +114,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             .catch((e) => {
                 if(e.data && e.data['api:message'] && dataframe){
                     let ejson=constructErrorJson(e)
-                    let ps = dataframe
-                    ps.setFrameErrors(ejson)
-                    setDataframe(ps)
+                    setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})                
             })
@@ -110,7 +122,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         }
     }
 
-    function loadFrameViewer(frame){
+    function loadFrameViewer(){
         let frameconf = TerminusClient.View.document()
         var property_style = "display: block; padding: 0.3em 1em;"
         var box_style = "padding: 8px; border: 1px solid #afafaf; background-color: #efefef;"
@@ -126,8 +138,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         frameconf.property().features("label", "value");
         frameconf.property().property("terminus:id").hidden(true);
         frameconf.data().features("value").style(value_style);
-        let fv = new FrameViewer(frame, false, frameconf, true, woqlClient)
-        return fv
+        return frameconf
     }
 
 
@@ -153,7 +164,16 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} />
             }
             {(!meta.abstract) && dataframe && (docView == "table" || docView == "frame") &&
-                <>{dataframe.render()}</>
+                <FrameViewer 
+                    classframe={frame}
+                    mode="edit" 
+                    view={dataframe} 
+                    type={(docView=="frame" ? "fancy": "table")} 
+                    client={woqlClient}
+                    onExtract={setExtractedJSON}
+                    errors={errors}
+                    extract={extract} 
+                />
             }
             {(!meta.abstract) && loading &&
                 <Loading />
@@ -176,7 +196,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                     types={types}
                     type={doctype}
                     onCancel={close}
-                    onCreate={createDocument}
+                    onCreate={((docView == "json" ) ? createDocument : extractDocument)}
                 />
             }
         </main>
@@ -215,17 +235,6 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
         }
     }, [qresult])
 
-    function typeOptions(){
-        let to = []
-        for(var i = 0; i<types.length; i++){
-            if(types[i]['Class ID'] != doctype){
-                let lab = (types[i]['Class Name'] && types[i]['Class Name']['@value'] ? types[i]['Class Name']['@value'] : types[i]['Class ID'])
-                to.push({label: lab, value: types[i]['Class ID']})
-            }
-        }
-        return to
-    }
-
     function changeFilter(sid){
         return function() {
             if(setType) setType(sid)
@@ -237,7 +246,7 @@ export const DocumentChoices = ({types, doctype, meta, setType}) => {
         for(var i = 0; i<stypes.length; i++){
             let sid = stypes[i]['Class ID']
             if(sid != DOCTYPE_CSV){
-                ts.push(<span style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
+                ts.push(<span key={sid} style={{cursor: "pointer"}} onClick={changeFilter(sid)}>
                     <DocumentChoice type={sid} types={types}/>
                 </span>)
             }
