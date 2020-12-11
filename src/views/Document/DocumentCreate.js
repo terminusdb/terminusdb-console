@@ -280,7 +280,7 @@ export const DocumentCSVChoice = ({types, meta, insertCsvs}) => {
 export const DocumentIcon = ({meta}) => {
     if(!meta) return null
     if(meta.abstract){
-        HDR_STYLE.color = "rgba(255, 178, 102, 0.7)"
+        //HDR_STYLE.color = "rgba(255, 178, 102, 0.7)"
     }
     let icons = (meta.abstract ? { color: "rgb(255, 178, 102)"} : {color: "rgba(255, 178, 102, 0.7)"})
     icons.display = "inline-block"
