@@ -34,6 +34,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [dataframe, setDataframe] = useState()
     const [loading, setLoading] = useState(true)
     const [sreport, setReport] = useState()
+    const [ecommit, setECommit] = useState()
+    const [errors, setErrors] = useState()
+    const [extract, setExtract] = useState(0)
+    const [extractedJSON, setExtractedJSON] = useState()
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -126,8 +130,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         frameconf.property().property("terminus:id").hidden(true);
         frameconf.data().features("value").style(value_style);
         frameconf.selectDocument = loadNewDocument
-        let fv = new FrameViewer(frame, jsonld, frameconf, edit, woqlClient)
-        return fv
+        return frameconf
     }
 
     useEffect(() => {
@@ -157,17 +160,31 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         close()
     }
 
-    function updateDocument(commit){
+    const extractDocument = (c) => {
+        setExtract(extract + 1)
+        setECommit(c)
+    }
+
+    function getExtract(a){
+        setExtractedJSON(a)
+    }
+
+    useEffect(() => {
+        if(extract && extractedJSON){
+            updateDocument(ecommit, extractedJSON)
+        }
+    }, [extract, extractedJSON])
+
+    function updateDocument(commit, json){
         commit = commit || "Document " + docid + " updated from console document view"
         let WOQL = TerminusClient.WOQL
-        let json = false
         if(docview == "json"){
             json = parseOutput(updatedJSON)
         }
-        else {
-            json = dataframe.extract()
-            console.log("Extracted", json)
-        }
+        //else {
+            //json = dataframe.extract()
+            //console.log("Extracted", json)
+        //}
         if(json){
             setLoading(true)
             let q = WOQL.update_object(json)
@@ -176,14 +193,13 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 updateQuery(docQuery())
                 setContent("")
                 updateBranches()
-                setJsonld()
-                setDataframe()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully updated " + docid})
                 unsetEditMode()
             })
             .catch((e) => {
                 if(e.data) {
                     let ejson=constructErrorJson(e)
+                    setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
             })
@@ -241,7 +257,17 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 />
             }
             {dataframe && (docview == "frame" || docview == "table") &&
-                <>{dataframe.render()}</>
+                <FrameViewer 
+                    classframe={frame}
+                    doc={jsonld}
+                    mode={(edit ? "edit" : "view")} 
+                    view={dataframe} 
+                    type={(docview=="frame" ? "fancy": "table")} 
+                    client={woqlClient}
+                    onExtract={getExtract}
+                    errors={errors}
+                    extract={extract} 
+                />
             }
             {edit && sreport && sreport.status &&
                 <Row className="generic-message-holder">
@@ -256,7 +282,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     types={types}
                     type={doctype}
                     onCancel={cancel}
-                    onUpdate={updateDocument}
+                    onUpdate={(docview=="json" ? updateDocument : extractDocument)}
                 />
             }
             {loading &&
