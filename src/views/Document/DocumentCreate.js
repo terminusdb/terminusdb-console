@@ -279,15 +279,13 @@ export const DocumentCSVChoice = ({types, meta, insertCsvs}) => {
 
 export const DocumentIcon = ({meta}) => {
     if(!meta) return null
-    if(meta.abstract){
-        //HDR_STYLE.color = "rgba(255, 178, 102, 0.7)"
-    }
-    let icons = (meta.abstract ? { color: "rgb(255, 178, 102)"} : {color: "rgba(255, 178, 102, 0.7)"})
+    let icons = (meta.abstract ? { color: "rgb(255, 178, 102, 0.5)"} : {color: "rgba(255, 178, 102)"})
     icons.display = "inline-block"
     icons.textAlign = "center"
     icons.width = "180px"
     icons.fontSize = "2.5em"
-    return <i style={icons} className="custom-img-entities"></i>
+    let title = "Create " + TerminusClient.UTILS.shorten(meta.id) + meta.abstract ? " Abstract Class" : "Class" 
+    return <i title={title} style={icons} className="custom-img-entities"></i>
 }
 
 export const DocumentChoice = ({types, type, setType}) => {
