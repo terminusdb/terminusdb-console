@@ -10,7 +10,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {generate_context_from_prefixes} from "./ControlledTable"
 
-export const ControlledGraph = ({query, view}) => {
+export const ControlledGraph = ({query, view, onClick}) => {
     const [loaded, setLoaded] = useState(false)
     const [dimensions, setDimensions] = useState(false)
     const { woqlClient} = WOQLClientObj()
@@ -103,6 +103,7 @@ export const ControlledGraph = ({query, view}) => {
                     config={view} 
                     dataProvider={getProvider(result)} 
                     query={query} 
+                    onClick={onClick}
                     updateQuery={updateQuery}
                 />
             </div>

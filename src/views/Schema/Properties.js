@@ -18,6 +18,7 @@ import {BiLink, BiNetworkChart, BiTable} from "react-icons/bi"
 import {VscJson} from "react-icons/vsc"
 import {RiDeleteBin5Line} from "react-icons/ri"
 import {ControlledGraph} from "../Tables/ControlledGraph"
+import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 
 export const Properties = (props) => {
     const [filter, setFilter] = useState(props.graph)
@@ -25,6 +26,7 @@ export const Properties = (props) => {
     const [report, setReport] = useState()
     const [myview, setMyView] = useState("table")
     const { woqlClient} = WOQLClientObj()
+    const [frame, setFrame] = useState(false)
 
     const showGraph = () => setView("graph")
     const showTable = () => setView("table")
@@ -103,15 +105,12 @@ export const Properties = (props) => {
     graphConfig.node("Property Range").v("Abstract Range").in("Yes").color([189,248,190])
     graphConfig.node("Property Domain").v("Abstract Domain").in("Yes").color([189,248,190])
     graphConfig.node("Property Range").v("Enum Range").in("Yes").color([23,190,207])
-
     graphConfig.node("Property Range").v("Property Type").in("Data").hidden(true)
-    graphConfig.node("Property Range").collisionRadius(100)
     graphConfig.node("Property Domain").collisionRadius(100)
     graphConfig.node("Property Range").v("Document Range").in("Yes").color([255,178,102])
     graphConfig.node("Property Domain").v("Document Domain").in("Yes").color([255,178,102])
     graphConfig.node("Property Range").v("Document Range").in("Yes").v("Abstract Range").in("Yes").color([252,219,186])
     graphConfig.node("Property Domain").v("Document Domain").in("Yes").v("Abstract Domain").in("Yes").color([252,219,186])
-
     const tabConfig= TerminusClient.View.table();
     tabConfig.column_order("Property ID", "Property Name", "Property Domain",
         "Property Range", "Property Type", "Property Description")
@@ -122,6 +121,18 @@ export const Properties = (props) => {
     tabConfig.column("Property Range").header("Range").width(100)
     tabConfig.column("Property Type").header("Type").width(60)
     tabConfig.column("Property Description").header("Description").width(300)
+
+    
+    const getClassFrame = (docType) => {
+        woqlClient.getClassFrame(docType).then((cf) => setFrame(cf))
+    }
+
+    const showClass = (cid) => {
+        if(cid) getClassFrame(cid)
+    }
+
+    const docview = TerminusClient.View.document();
+    docview.selectDocument = getClassFrame
 
     return (
         <div className={TAB_SCREEN_CSS}>
@@ -151,8 +162,17 @@ export const Properties = (props) => {
                 />
             }
             {myview == "graph" && 
-                <ControlledGraph query={query} view={graphConfig} />
+                <ControlledGraph onClick={showClass} query={query} view={graphConfig} />               
             }
+             {myview == "graph" && frame &&
+                    <FrameViewer 
+                        classframe={frame}
+                        mode="view" 
+                        view={docview} 
+                        type="table" 
+                        client={woqlClient}
+                    />            
+                }
         </div>
     )
 }
