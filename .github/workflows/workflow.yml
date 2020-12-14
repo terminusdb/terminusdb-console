@@ -18,6 +18,7 @@ jobs:
       with:
         node-version: 14
     - run: npm install
+    - run: echo "${{ github.ref }}" | grep -P "canary|rc" && mv console/env-production console/.env
     - run: npm run build
     - run: bash ".ci/publish_bintray.sh" "${GITHUB_REF##*/}"
       env:
