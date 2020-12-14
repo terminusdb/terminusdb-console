@@ -19,7 +19,7 @@ jobs:
         node-version: 14
     - run: npm install
     - run: |
-        if [ echo "${{ github.ref }}" | grep -P "canary|rc" ] then
+        if [ echo "${{ github.ref }}" | grep -P "canary|rc" ]; then
             mv console/env-production console/.env
         fi
     - run: npm run build
