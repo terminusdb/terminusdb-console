@@ -24,6 +24,8 @@ export const SystemError = ({error}) => {
     let showf = ((error && Object.keys(error).length) ? true : false)
     if(!msg) msg = UNKNOWN_ERROR
 
+    if(!error.data) return null
+
     let eMsg=parseAPIMessage(error.data["api:message"])
 
     return (
