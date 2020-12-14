@@ -161,6 +161,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     }
 
     const extractDocument = (c) => {
+        setExtractedJSON()
         setExtract(extract + 1)
         setECommit(c)
     }
