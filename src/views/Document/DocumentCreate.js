@@ -87,8 +87,8 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         }
     }
 
-    
     const extractDocument = (c) => {
+        setExtractedJSON()
         setExtract(extract + 1)
         setECommit(c)
     }

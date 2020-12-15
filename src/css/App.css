@@ -5579,3 +5579,52 @@ span.create-document-widget:hover {
 span.controlled-graph-container {
     border-bottom: 1px solid #888;
 }
+
+textarea.wiki {
+    border: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+}
+
+textarea.wiki-title {
+    font-size: 2.5em;
+    height: 40px !important;
+}
+
+textarea.wiki-description {
+    font-size: 1.5em;
+}
+
+textarea.wiki-property {
+    font-size: 1.2em;
+}
+
+textarea.wiki:focus, textarea.wiki:after {
+    border: 0 !important;
+    padding: 0 !important
+}
+
+div.wiki-property-header {
+    font-weight: 600;
+    min-height: 24px;
+}
+
+div.wiki-propery-header-1 {
+    font-size: 24px;
+}
+
+div.wiki-propery-header-2 {
+    font-size: 20px;
+}
+
+div.wiki-propery-header-3 {
+    font-size: 18px;
+}
+
+div.wiki-propery-header-4 {
+    font-size: 16px;
+}
+
+div.wiki-propery-header-5 {
+    font-size: 16px;
+}

@@ -24,7 +24,7 @@ function formMessageObject(item) {
 			case vios.WITNESS_LITERAL:
 				obj.literal=item[key]["@value"]
 				break
-			case vios.WITNESS_MESSAGE:
+            case vios.WITNESS_MESSAGE:
 				obj.message=item[key]
 				break
 			case vios.WITNESS_SUBJECT:
@@ -107,8 +107,9 @@ function constructUntypedInstanceVio(msgObject) {
 	text=text + " for "
 	if(msgObject.property) {
 		text=text + " Property " + `${TerminusClient.UTILS.shorten(msgObject.property)}`
-	}
-	text=text + ". " + msgObject.message["@value"]
+    }
+    console.log("message object ", msgObject)
+	text=text + ". " //+ msgObject.message["@value"]
 	return text
 }
 
@@ -173,20 +174,22 @@ export const constructErrorMessage = (error) => {
 	return;
 }
 
-export const constructError = (error) => {
-	let eArray=[]
+export const constructErrorJson = (error) => {
+	let eJson=[]
 	if(error.data["api:error"] && (error.data["api:error"]["api:witnesses"] || error.data["api:error"]["api:witness"])) {
 		if(error.data["api:error"]["api:witnesses"] == undefined){
 			let witness=error.data["api:error"]["api:witness"]
-			eArray.push(witness)
+			eJson.push(witness)
 		}
 		else {
 			let witnesses=error.data["api:error"]["api:witnesses"]
-			eArray.push(witnesses)
+			eJson = witnesses
 		}
 	}
 	else if (error.data["api:error"]){
-		eArray.push(error.data["api:error"])
+        let er = error.data["api:error"]
+        er["api:message"] = error.data["api:message"]
+        eJson.push(er)
 	}
 	return eArray
 }
