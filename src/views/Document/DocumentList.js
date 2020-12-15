@@ -93,8 +93,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         let row = cell.row
         setReport(false)
         if(selectDocument && row) {
+            setUpdateCSV([])
             if(row.original["Type ID"]==DOCTYPE_CSV){
-                //csvRowClick(row.original.Name["@value"])
                 csvRowClick(row.original["Document ID"], row.original.Name["@value"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
@@ -198,13 +198,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
     const updateSingleCSV = (e) => {
         setSelectedFile(e.target.files)
-        /*console.log('currentCSVToUpdate in ftn', currentCSVToUpdate)
-		let files = {};
-		for(var i=0; i<e.target.files.length; i++){
-            files = e.target.files[i]
-			files.fileToUpdate=preview.fileName // stopped here
-		}
-	   setUpdateCSV([files])*/
     }
 
     const getUpdateButton=()=>{
@@ -232,7 +225,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         setLoading(true)
         let update_start = Date.now()
         if(type==DOCTYPE_CSV) {
-            //setCurrentCSVToUpdate(TerminusClient.UTILS.shorten(dId))
             setCurrentCSVToUpdate(row.original.Name["@value"])
             setLoading(false)
         }
@@ -271,8 +263,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
                 <TerminusDBSpeaks report={report}/>
             </Row>}
             {isArray(updateCSV) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
-                <SelectedCSVList csvs={updateCSV} updateSelectedSingleFile={true}
-                    page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs}/>
+                <SelectedCSVList csvs={updateCSV} updateSelectedSingleFile={true} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs} setUpdateCSV={setUpdateCSV}/>
             </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}

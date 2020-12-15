@@ -18,7 +18,7 @@ import Select from 'react-select'
 import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
 import {DBContextObj} from '../../components/Query/DBContext'
 
-export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile}) => {
+export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile, setUpdateCSV}) => {
 	let currentFile={}, availableCsvList=[]
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
@@ -226,8 +226,30 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				</div>))
 	}
 
+	const HeaderBar=()=>{
+
+		function closeHeader(){
+			setCsvs([])
+			setUpdateCSV([])
+		}
+
+		return <Row className='csv-preview-header' key="hr">
+			<Col md={8}>
+				<span className="preview-bar-title"><strong>Selected files</strong></span>
+			</Col>
+			<Col md={4}>
+				<span onClick={closeHeader}
+					className="db-card-credit csv-act" style={{float: "right"}}>
+					<TiDeleteOutline color="#721c24" className='db_info_icon_spacing csv_icon_spacing'/>
+					<span className="db_info">Close</span>
+				</span>
+			</Col>
+		</Row>
+	}
+
 	return(<>
-			<Row className="generic-message-holder">
+			<HeaderBar/>
+			<Row className="generic-message-holder"  key="mr">
 				{report && <TerminusDBSpeaks report={report}/>}
 			</Row>
 			<List/>
