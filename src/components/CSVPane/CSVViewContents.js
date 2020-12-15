@@ -143,7 +143,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 	    </span>
 	}
 
-	const singleCSV = (e) => {
+	const updateSingleCSV = (e) => {
 		let files = {};
 		for(var i=0; i<e.target.files.length; i++){
             files = e.target.files[i]
@@ -160,7 +160,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 				<BiUpload className='db_info_icon_spacing'/>
 			</span>
 	    </span>)
-		return <CSVInput text={children} onChange={singleCSV} labelCss={"csvUpdateIcon"} multiple={false}/>
+		return <CSVInput text={children} onChange={updateSingleCSV} labelCss={"csvUpdateIcon"} multiple={false}/>
 	}
 
 	const CSVGoBackIcon=({preview})=>{

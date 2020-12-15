@@ -68,7 +68,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				setCsvs([]);
 			})
 			.catch((err) => process_error(err, update_start, "Failed to update file"))
-			//.finally(() => setLoading(false))
+			.finally(() => {
+				if(!isArray(insertFiles)) setLoading(false)
+			})
 		}
 		if(isArray(insertFiles)){
 			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {

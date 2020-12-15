@@ -21,8 +21,7 @@ import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
 import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {ControlledGraph} from "../Tables/ControlledGraph"
 
-export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
-    const [edit, setEdit] = useState(false)
+export const DocumentView = ({docid, doctype, types, selectDocument, close, setEdit, edit}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
     const [currentContext, setCurrentContext] = useState(false)
@@ -257,16 +256,16 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 />
             }
             {dataframe && (docview == "frame" || docview == "table") &&
-                <FrameViewer 
+                <FrameViewer
                     classframe={frame}
                     doc={jsonld}
-                    mode={(edit ? "edit" : "view")} 
-                    view={dataframe} 
-                    type={(docview=="frame" ? "fancy": "table")} 
+                    mode={(edit ? "edit" : "view")}
+                    view={dataframe}
+                    type={(docview=="frame" ? "fancy": "table")}
                     client={woqlClient}
                     onExtract={getExtract}
                     errors={errors}
-                    extract={extract} 
+                    extract={extract}
                 />
             }
             {edit && sreport && sreport.status &&
