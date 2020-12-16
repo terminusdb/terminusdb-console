@@ -5574,6 +5574,7 @@ textarea.wiki {
     border: 0 !important;
     padding: 0 !important;
     min-height: 0 !important;
+    resize: none !important;
 }
 
 textarea.wiki-title {
@@ -5581,8 +5582,22 @@ textarea.wiki-title {
     height: 40px !important;
 }
 
+.wiki-title-row {
+    margin-top: 40px;
+}
+
+.wiki-left {
+    text-align: right;
+}
+
+.wiki-title-row .wiki-left {
+    padding-top: 20px;
+}
+
 textarea.wiki-description {
     font-size: 1.5em;
+    margin-top: 4px;
+    margin-bottom: 10px;
 }
 
 textarea.wiki-property {
@@ -5594,25 +5609,62 @@ textarea.wiki:focus, textarea.wiki:after {
     padding: 0 !important
 }
 
+
+.wiki-left-icon {
+    color: #888;
+    cursor: pointer;
+}
+
+.wiki-object-wrapper {
+    border: 2px solid white;
+    margin-bottom: 1em;
+}
+
+.wiki-object-selected {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    margin-bottom: 1em;
+    border-left: 2px solid #888;
+    border-right: 2px solid #888;
+}
+
+span.wiki-property-label {
+    display: inline-block;
+}
+
+.wiki-property-label {
+    color: #0055bb;
+    min-height: 24px;
+    font-size: 1.3em;
+}
+
+div.wiki-property-label {
+}
+
+div.wiki-property-wrapper {
+    margin-bottom: 6px;
+}
+
 div.wiki-property-header {
-    font-weight: 600;
+    color: #002856;
+    font-weight: 500;
     min-height: 24px;
 }
 
 div.wiki-propery-header-1 {
-    font-size: 24px;
+    font-size: 32px;
 }
 
 div.wiki-propery-header-2 {
-    font-size: 20px;
+    font-size: 26px;
 }
 
 div.wiki-propery-header-3 {
-    font-size: 18px;
+    font-size: 22px;
 }
 
 div.wiki-propery-header-4 {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 div.wiki-propery-header-5 {

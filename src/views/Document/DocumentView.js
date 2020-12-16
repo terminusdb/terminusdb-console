@@ -29,7 +29,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [jsonld, setJsonld] = useState()
     const [content, setContent] = useState()
     const [frame, setFrame] = useState()
-    const [docview, setDocView] = useState("table")
+    const [docview, setDocView] = useState("frame")
     const [docType, setDocType] = useState(doctype)
     const [dataframe, setDataframe] = useState()
     const [loading, setLoading] = useState(true)

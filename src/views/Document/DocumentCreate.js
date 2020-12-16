@@ -21,7 +21,7 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType, insertCsvs}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
-    const [docView, setDocView] = useState("table")
+    const [docView, setDocView] = useState("frame")
     const [frame, setFrame] = useState()
     const [dataframe, setDataframe] = useState()
     const [content, setContent] = useState(getStarterContent(doctype))
