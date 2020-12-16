@@ -5316,6 +5316,10 @@ span.csv_subheader_section{
     padding-bottom: 50px;
 }
 
+.update-csv-container-doc {
+    max-height: 350px;
+}
+
 .csv_info_icon_spacing{
     margin: 0px -10px 0px 30px;
     font-size: 18px;
@@ -5351,7 +5355,8 @@ span.csv_subheader_section{
 }
 
 .selected-csv-name-span {
-    min-width: 350px !important;
+    /*min-width: 350px !important;*/
+    min-width: 0px !important;
 }
 
 .csv-preview-header, .commit-log-header {
@@ -5385,7 +5390,6 @@ span.add-csv {
     margin-top: 10px;
 }
 
-
 .d-page-overflow {
     overflow-x: hidden !important;
 }
@@ -5393,6 +5397,12 @@ span.add-csv {
 .csv-preview-icon {
     font-size: 18px;
     margin-right: 10px;
+}
+
+.csvUpdateIcon {
+    overflow: unset !important;
+    padding: 0px !important;
+    max-width: 0px !important;
 }
 
 .csvInputNoPad {

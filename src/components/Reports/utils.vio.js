@@ -191,5 +191,5 @@ export const constructErrorJson = (error) => {
         er["api:message"] = error.data["api:message"]
         eJson.push(er)
 	}
-	return eJson
+	return eArray
 }

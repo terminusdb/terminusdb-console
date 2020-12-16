@@ -4,7 +4,8 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {isArray} from "../../utils/helperFunctions"
-import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE, DOCUMENT_VIEW_FRAGMENT, DOCTYPE_CSV} from "./constants.csv"
+import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE, UPDATE_CSV, DOCUMENT_VIEW_FRAGMENT,
+	DOCTYPE_CSV} from "./constants.csv"
 import {BiArrowBack, BiDownload} from "react-icons/bi"
 import {MdFileDownload} from "react-icons/md"
 import Loading from '../../components/Reports/Loading'
@@ -12,16 +13,21 @@ import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} 
 import {jsonToCSV} from 'react-papaparse';
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {RiDeleteBin5Line} from "react-icons/ri"
+import {BiUpload} from "react-icons/bi"
 import {TERMINUS_TABLE} from "../../constants/identifiers"
 import {DBContextObj} from '../../components/Query/DBContext'
+import {CSVInput} from "./CSVInput"
+import {SelectedCSVList} from "./SelectedCSVList"
+import {UPDATE} from "./constants.csv"
 
-export const CSVViewContents=({preview, setPreview, previewCss})=>{
+export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 	const {woqlClient} = WOQLClientObj()
 	let propertyColumnNames=[]
 	const [query, setQuery] = useState(false)
 	const tabConfig=TerminusClient.View.table();
 	const [tConf, setTConf]=useState({})
 	const [cols, setCols]=useState([])
+	const [updateCSV, setUpdateCSV]=useState([])
 
     const {updateBranches} = DBContextObj()
 
@@ -129,12 +135,32 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
 	</span>}
 	*/
 
-	const CSVDelete=({preview})=>{
+	const CSVDelete=()=>{
 		return <span style={{fontSize: "2em"}}>
 			<span onClick={deleteCSV} className="d-nav-icons" title={DELETE}>
 				<RiDeleteBin5Line color="#721c24" className='db_info_icon_spacing'/>
 			</span>
 	    </span>
+	}
+
+	const updateSingleCSV = (e) => {
+		let files = {};
+		for(var i=0; i<e.target.files.length; i++){
+            files = e.target.files[i]
+			files.action= UPDATE+" "+preview.fileName
+			files.fileToUpdate=preview.fileName // stopped here
+		}
+	   setUpdateCSV([files])
+    }
+
+	const CSVUpdate=()=>{
+		let children=[]
+		children.push(<span style={{fontSize: "2em"}}>
+			<span className="d-nav-icons" title={UPDATE_CSV}>
+				<BiUpload className='db_info_icon_spacing'/>
+			</span>
+	    </span>)
+		return <CSVInput text={children} onChange={updateSingleCSV} labelCss={"csvUpdateIcon"} multiple={false}/>
 	}
 
 	const CSVGoBackIcon=({preview})=>{
@@ -160,7 +186,8 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
                             </Col>
 							<Col md={2}>
                                 <CSVDownloadIcons preview={preview}/>
-								<CSVDelete preview={preview}/>
+								<CSVDelete/>
+								<CSVUpdate preview={preview}/>
                             </Col>
 							<Col md={1}>
                                 <CSVGoBackIcon preview={preview}/>
@@ -193,6 +220,10 @@ export const CSVViewContents=({preview, setPreview, previewCss})=>{
 						{report && <TerminusDBSpeaks report={report}/>}
 					</Row>
 					{loading &&  <Loading type={TERMINUS_COMPONENT} />}
+					{isArray(updateCSV) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container">
+						<SelectedCSVList csvs={updateCSV} updateSelectedSingleFile={true}
+							page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs}/>
+					</Row>}
 					<Contents preview={preview} query={query} tConf={tConf}/>
 				</main>
 			</>}
