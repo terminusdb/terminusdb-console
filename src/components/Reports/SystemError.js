@@ -28,6 +28,7 @@ export const SystemError = ({error}) => {
 
     let eMsg=parseAPIMessage(error.data["api:message"])
 
+
     return (
         <div className={SYSTEM_ERROR_CSS}>
             { isArray(msg) && msg.map (item => <div>

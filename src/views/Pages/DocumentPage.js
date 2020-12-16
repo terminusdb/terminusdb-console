@@ -158,6 +158,7 @@ const DocumentPage = (props) => {
                         availableCsvs={availableCsvs}
                         setPreview={setPreview}
                         preview={preview}
+                        setDocID={setDocID}
                         setDocument={setDocument}/>}
                     {mode == "instance" && <NoSchemaDocumentPage
                         docid={docID}
@@ -179,10 +180,11 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel}) => {
+const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel}) => {
     let WOQL = TerminusClient.WOQL
     const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
+    const [edit, setEdit]=useState(false)
 
     const docQuery = () => {
         return WOQL.order_by("v:Class Name", WOQL.lib().document_classes())
@@ -252,6 +254,8 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     docid={docid}
                     doctype={doctype}
                     types={types}
+                    setEdit={setEdit}
+                    edit={edit}
                     total={cnt}
                 />
             }
@@ -277,8 +281,10 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     tabConfig={tabConfig}
                     csvs={csvs}
                     setCsvs={setCsvs}
+                    setDocID={setDocID}
                     setPreview={setPreview}
                     preview={preview}
+                    setEdit={setEdit}
                 />
             }
         </>

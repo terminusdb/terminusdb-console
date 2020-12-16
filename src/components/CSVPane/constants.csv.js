@@ -7,6 +7,7 @@ export const DOWNLOAD='Download'
 export const DELETE='Delete CSV'
 export const UPLOAD='Upload CSV'
 export const UPDATE='Update'
+export const UPDATE_CSV='Update CSV'
 export const CREATE_NEW='Create New CSV'
 
 export const CSV_ROWS="csv-rows"
@@ -21,7 +22,7 @@ export const CREATE_DB_VIEW="create"
 export const DOCUMENT_VIEW="document"
 export const DOCUMENT_VIEW_FRAGMENT="Document Fragment"
 
-export const DEFAULT_COMMIT_MSG="Adding a csv to database"
+export const DEFAULT_COMMIT_MSG="Adding/ Updating a csv to database"
 
 export const DOCTYPE_CSV="terminusdb:///schema#CSV"
 

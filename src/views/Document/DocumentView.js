@@ -12,7 +12,7 @@ import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTO
 import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
-import {constructErrorJson} from "../../components/Reports/utils.vio"
+import {constructError} from "../../components/Reports/utils.vio"
 
 
 import {DocumentViewNav} from "./DocumentViewNav"
@@ -21,8 +21,7 @@ import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
 import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {ControlledGraph} from "../Tables/ControlledGraph"
 
-export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
-    const [edit, setEdit] = useState(false)
+export const DocumentView = ({docid, doctype, types, selectDocument, close, setEdit, edit}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
     const [currentContext, setCurrentContext] = useState(false)
@@ -199,7 +198,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
             })
             .catch((e) => {
                 if(e.data) {
-                    let ejson=constructErrorJson(e)
+                    let ejson=constructError(e)
                     setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
@@ -258,16 +257,16 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 />
             }
             {dataframe && (docview == "frame" || docview == "table") &&
-                <FrameViewer 
+                <FrameViewer
                     classframe={frame}
                     doc={jsonld}
-                    mode={(edit ? "edit" : "view")} 
-                    view={dataframe} 
-                    type={(docview=="frame" ? "fancy": "table")} 
+                    mode={(edit ? "edit" : "view")}
+                    view={dataframe}
+                    type={(docview=="frame" ? "fancy": "table")}
                     client={woqlClient}
                     onExtract={getExtract}
                     errors={errors}
-                    extract={extract} 
+                    extract={extract}
                 />
             }
             {edit && sreport && sreport.status &&
