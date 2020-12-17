@@ -1,3 +1,13 @@
+# TerminusDB Console v4.1.0 Release Notes
+
+## New
+
+* New client version with improved views
+* New document creation page
+* New class frame visualizations
+* Improvements to model builder
+* Better handling of CSVs
+
 # TerminusDB Console v4.0.0 Release Notes
 
 ## New
