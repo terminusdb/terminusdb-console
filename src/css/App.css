@@ -5587,6 +5587,9 @@ textarea.wiki {
     resize: none !important;
 }
 
+span.wiki-title {
+    font-size: 2.5em;
+}
 textarea.wiki-title {
     font-size: 2.5em;
     height: 40px !important;
@@ -5596,14 +5599,7 @@ textarea.wiki-title {
     margin-top: 40px;
 }
 
-.wiki-left {
-    text-align: right;
-}
-
-.wiki-title-row .wiki-left {
-    padding-top: 20px;
-}
-
+span.wiki-description,
 textarea.wiki-description {
     font-size: 1.5em;
     margin-top: 4px;
@@ -5617,12 +5613,6 @@ textarea.wiki-property {
 textarea.wiki:focus, textarea.wiki:after {
     border: 0 !important;
     padding: 0 !important
-}
-
-
-.wiki-left-icon {
-    color: #888;
-    cursor: pointer;
 }
 
 .wiki-object-wrapper {
@@ -5643,10 +5633,12 @@ span.wiki-property-label {
 }
 
 .wiki-property-label {
-    color: #0055bb;
+    color: #00C08B;
     min-height: 24px;
     font-size: 1.3em;
 }
+
+
 
 div.wiki-property-label {
 }
@@ -5680,3 +5672,181 @@ div.wiki-propery-header-4 {
 div.wiki-propery-header-5 {
     font-size: 16px;
 }
+
+.wiki-chooser {
+    width: 400px !important;
+    display: inline-block !important;
+}
+
+.wiki-chooser-box {
+    width: 400px;
+    display: inline-block;
+    height: 55px;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: -6px;
+}
+
+.wiki-chooser-box-choice {
+    margin-left: 10px;
+    margin-right: 2px;
+    position: absolute;
+    top: 30%;
+}
+
+
+.wiki-value-row {
+    min-height: 32px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.wiki-choice-row {
+    min-height: 60px;
+
+}
+
+.wiki-index-col {
+    -ms-flex: 0 0 20px;
+    flex: 0 0 20px;
+    padding: 0;
+    position: relative;
+}
+
+.wiki-choice-row .wiki-index-col {
+    padding-top: 16px;
+}
+
+.wiki-data-index {
+    color: #00C08B;
+    font-size: 0.8em;
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    transform: translateY(-50%);
+}
+
+.wiki-content-col {
+    padding: 0px;
+}
+
+.wiki-menu {
+
+}
+
+span.wiki-row-error {
+    display: inline-block;
+    height: 100%;
+    min-width: 400px;
+    margin-left: 10px;
+    vertical-align: top;
+    position: relative;
+}
+
+span.wiki-error-contents {
+    color: #bd362f;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.wiki-choice-wrapper {
+    display: inline-block;
+}
+
+.wiki-action-column {
+    text-align: right;
+    background-color: yellow;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.wiki-left-contents  {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid blue; 
+  display: inline-block;
+  width: 100%;
+}
+
+.wiki-title-row .wiki-left {
+    padding-top: 20px;
+}
+
+.wiki-menu {
+    position: absolute;
+    left: 10px;
+    width: 250px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 6px 6px #aaa;
+    display: block;
+    padding: 8px;
+    background-color: white;
+    bottom: 40px;
+    text-align: left;
+}
+
+.wiki-menu-entry {
+    cursor: pointer;
+    padding: 6px;
+    display: block;
+} 
+
+.wiki-menu-selector {
+    padding: 6px;
+} 
+
+.wiki-menu-icon {
+    padding-right: 6px;
+    font-size: 1.6em;
+    vertical-align: -4px;
+}
+
+.wiki-menu-spacer {
+    border: 1px solid #efefef;
+}
+
+.wiki-menu-entry:hover {
+    background-color: #efefef;
+}
+
+.wiki-left-icon {
+    font-size: 1.2em;
+    color: #00C08B;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.wiki-left-icon:hover {
+    border-radius: 4px;
+    background-color: #00C08B;
+    color: white;
+}
+
+.wiki-right-contents {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    width: 100%;
+}
+
+.wiki-right-icon {
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.wiki-navigation-column {
+    text-align: left;
+    background-color: yellow;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
