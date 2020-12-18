@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import * as action from "./constants.csv"
 import {Row, Col} from "reactstrap"
+import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import {AiFillBuild, AiOutlineEdit} from "react-icons/ai"
@@ -9,7 +10,7 @@ import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
 import {convertStringsToJson} from '../../utils/helperFunctions';
-import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW} from "./constants.csv"
+import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW, DOCTYPE_CSV} from "./constants.csv"
 import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
@@ -18,7 +19,7 @@ import Select from 'react-select'
 import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
 import {DBContextObj} from '../../components/Query/DBContext'
 
-export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile, setUpdateCSV}) => {
+export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile, setUpdateDoc}) => {
 	let currentFile={}, availableCsvList=[]
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [report, setReport]=useState(false)
@@ -47,10 +48,72 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         console.log(err)
     }
 
+	const handleNonCSVUpdate=(file)=>{
+		function validateDocId(jObj){
+			let update_start = Date.now()
+			for(var key in jObj){
+				if(key=="@id"){
+					if(jObj[key]==file[0].fileToUpdate){
+						file.idInFile=jObj[key]
+						return true
+					}
+				}
+			}
+		}
+
+		function showErrorInReadingFile(error){
+			let update_start=Date.now()
+			process_error(error, update_start, "Failed to update file")
+		}
+
+		function onReaderLoad(event){
+			var json
+			try{
+				json=JSON.parse(event.target.result)
+			}
+			catch(e){
+				showErrorInReadingFile(e)
+				return
+			}
+			if(validateDocId(json)){
+				let WOQL=TerminusClient.WOQL
+				let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
+	            let q = WOQL.update_object(json)
+	            setLoading(true)
+	            woqlClient.query(q, commit, true)
+	            .then(() => {
+	                updateBranches()
+	                setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
+					setUpdateDoc([])
+	            })
+	            .catch((e) => {
+	                if(e.data && e.data['api:message'] && dataframe){
+	                    let ejson=constructError(e)
+	                    setErrors(ejson)
+	                }
+	                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
+	            })
+	            .finally(() => setLoading(false))
+			}
+			else {
+				let err="The id in file "+ file[0].name + " does not match the selected doc id " + file[0].fileToUpdate
+				showErrorInReadingFile(err)
+				setLoading(false)
+			}
+	    }
+		let reader=new FileReader()
+        reader.onload=onReaderLoad
+        reader.readAsText(file[0])
+	}
+
 	const handleUpload=(e) => {
 		let update_start = Date.now(), upFormatted=[]
         update_start = update_start || Date.now()
 		setLoading(true)
+		if(csvs[0].docType!==DOCTYPE_CSV){ // single file upload => JSON files
+			handleNonCSVUpdate(csvs)
+			return
+		}
 		let updateFiles=csvs.filter(item => { // filter csvs for update
 			let act=item.action.split(" ")
 			if(act[0]==action.UPDATE){
@@ -83,10 +146,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			.finally(() => setLoading(false))
 		}
 	}
-
-
-
-
 
 	const getSelectOptions=(id)=>{
 		let opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
@@ -181,17 +240,22 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		</span>
 	}
 
-	const FileRemove=({item})=>{
+	const FileRemove=({item, type})=>{
 
-		const removeCsv=(e)=>{
-			const fileName = e.target.id
-			setCsvs(csvs.filter(item => item.name !== fileName));
-			if(preview.fileName==fileName)
-				setPreview({show: false, fileName:false, data:[], selectedCSV:false})
+		const removeFile=(e)=>{
+			if(type==DOCTYPE_CSV){
+				const fileName = e.target.id
+				setCsvs(csvs.filter(item => item.name !== fileName));
+				if(preview.fileName==fileName)
+					setPreview({show: false, fileName:false, data:[], selectedCSV:false})
+			}
+			else {
+				setUpdateDoc([])
+			}
 		}
 
 		return <span className="selected-csv-span">
-			<span id={item.name} onClick={removeCsv} className={action.CONTROLS_SPAN_CSS}>
+			<span id={item.name} onClick={removeFile} className={action.CONTROLS_SPAN_CSS}>
 				<TiDeleteOutline id={item.name} color="#721c24" className={action.CONTROLS_ICONS}/>
 				<span className={action.CONTROLS_TEXT} id={item.name}>{action.REMOVE}</span>
 			</span>
@@ -215,7 +279,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						<span className="selected-csv-span">
 							{(!updateSelectedSingleFile) && <FilePreview item={item}/>}
 						</span>
-						<FileRemove item={item}/>
+						{(updateSelectedSingleFile) && <FileRemove item={item}/>}
+						{(!updateSelectedSingleFile) && <FileRemove item={item} type={DOCTYPE_CSV}/>}
 					</Row>
 					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
@@ -230,7 +295,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 
 		function closeHeader(){
 			setCsvs([])
-			setUpdateCSV([])
+			setUpdateDoc([])
 		}
 
 		return <Row className='csv-preview-header' key="hr">
