@@ -67,13 +67,13 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 
 		function onReaderLoad(event){
-			var json
+			var json, jsonParseError=false
 			try{
 				json=JSON.parse(event.target.result)
 			}
 			catch(e){
-				showErrorInReadingFile(e)
-				return
+				jsonParseError=e
+				setLoading(false)
 			}
 			if(validateDocId(json)){
 				let WOQL=TerminusClient.WOQL
@@ -96,8 +96,14 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	            .finally(() => setLoading(false))
 			}
 			else {
-				let err="The id in file "+ file[0].name + " does not match the selected doc id " + file[0].fileToUpdate
-				showErrorInReadingFile(err)
+				if(jsonParseError){
+					let err="Syntax Error: Contents of "+ file[0].name + " is not in JSON or JSON-LD format"
+					showErrorInReadingFile(err)
+				}
+				else {
+					let err="The id in file "+ file[0].name + " does not match the selected doc id " + file[0].fileToUpdate
+					showErrorInReadingFile(err)
+				}
 				setLoading(false)
 			}
 	    }
