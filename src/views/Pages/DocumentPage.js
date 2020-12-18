@@ -17,6 +17,8 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
+
+//import {BsCardList} from "react-icons/bs"
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
@@ -49,7 +51,12 @@ const DocumentPage = (props) => {
     }
 
     const doCreate = () => {
-        setCreating(docType)
+        if(docType){
+            setCreating(docType)
+        }
+        else {
+            setCreating(TerminusClient.UTILS.unshorten("system:Document"))
+        }
     }
 
     function onCsvCancel() {
@@ -126,7 +133,9 @@ const DocumentPage = (props) => {
                     insertCsvs={insertCsvs}/>}
 
                     {!mode &&
-                        <Loading/>
+                        <main className="console__page__container console__page__container--width">
+                            <Loading/>
+                        </main>
                     }
                     {mode == "schema" && <DocumentPageWithSchema
                         docid={docID}
@@ -149,6 +158,7 @@ const DocumentPage = (props) => {
                         availableCsvs={availableCsvs}
                         setPreview={setPreview}
                         preview={preview}
+                        setDocID={setDocID}
                         setDocument={setDocument}/>}
                     {mode == "instance" && <NoSchemaDocumentPage
                         docid={docID}
@@ -170,10 +180,11 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel}) => {
+const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel}) => {
     let WOQL = TerminusClient.WOQL
     const {woqlClient} = WOQLClientObj()
     const {ref, branch} = DBContextObj()
+    const [edit, setEdit]=useState(false)
 
     const docQuery = () => {
         return WOQL.order_by("v:Class Name", WOQL.lib().document_classes())
@@ -225,13 +236,15 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
 
     return (
         <>
-            {isCreating &&
+            {isCreating && (csvs.length==0) &&
                 <DocumentCreate
                     selectDocument={setDocument}
                     close={closeDV}
                     doctype={isCreating}
+                    setDocType={setIsCreating}
                     types={types}
                     total={cnt}
+                    insertCsvs={insertCsvs}
                 />
             }
             {!isCreating && docid &&
@@ -241,6 +254,8 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     docid={docid}
                     doctype={doctype}
                     types={types}
+                    setEdit={setEdit}
+                    edit={edit}
                     total={cnt}
                 />
             }
@@ -262,13 +277,14 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setIsAdding, isAdd
                     setCurrent={setCurrent}
                     setIsAdding={setIsAdding}
                     isAdding={isAdding}
-                    setDocType={setDocType}
                     docType={docType}
                     tabConfig={tabConfig}
                     csvs={csvs}
                     setCsvs={setCsvs}
+                    setDocID={setDocID}
                     setPreview={setPreview}
                     preview={preview}
+                    setEdit={setEdit}
                 />
             }
         </>

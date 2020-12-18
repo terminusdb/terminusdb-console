@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import {Row, Col} from "reactstrap"
-import {ResultViewer} from "../../components/QueryPane/ResultViewer"
 import Loading from '../../components/Reports/Loading'
 import {CSVInput} from "./CSVInput"
 import {TERMINUS_COMPONENT} from '../../constants/identifiers'
@@ -10,7 +9,7 @@ import {CREATE_DB_VIEW} from "./constants.csv"
 import {TOOLBAR_CSS} from "../../views/Document/constants.document"
 import {AiOutlineCloseCircle} from "react-icons/ai"
 
-export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, availableCsvs, setIsAdding, onCsvCancel}) => {
+export const CSVLoader = ({csvs, title, setCsvs, insertCsvs, addButton, page, availableCsvs, onCsvCancel}) => {
 	const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV:false})
 	let css="csv-preview-results"
     const [loading, setLoading] = useState(false)

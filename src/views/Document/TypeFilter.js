@@ -9,9 +9,7 @@ import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerH
 export const DocumentTypeFilter = ({doctype, setType, meta, types}) => {
     const [docType, setDocType] = useState(doctype)
     useEffect(() => {
-        if(doctype){
-            setDocType(doctype)
-        }
+        setDocType(doctype)
     }, [doctype])
 
     function typeOptions(){

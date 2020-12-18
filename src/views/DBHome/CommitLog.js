@@ -85,7 +85,7 @@ export const CommitLog = () => {
             {getLatestTitle()}
         </div>
         <div style={{width: "100%"}}>
-            <ControlledTable hook="auto" limit={limit} query={query} view={tabConfig} prefixes={prefixes} />
+            <ControlledTable hook="auto" limit={limit} query={query} view={tabConfig} />
         </div>
     </Row>)
 }
@@ -128,13 +128,13 @@ export const CommitView = ({commit, onClose}) => {
             Added Data
         </Row>
         <div style={{width: "100%"}}>
-            <ControlledTable hook="auto" limit={tabaConfig.pagesize()} query={getAddedTriplesQuery(commit.id)} view={tabaConfig} prefixes={prefixes} />
+            <ControlledTable hook="auto" limit={tabaConfig.pagesize()} query={getAddedTriplesQuery(commit.id)} view={tabaConfig} />
         </div>
         <div className="sub-headings latest-update-heading" key="removedData">
             Removed Data
         </div>
         <div style={{width: "100%"}}>
-            <ControlledTable hook="auto" limit={tabcConfig.pagesize()} query={getRemovedTriplesQuery(commit.id)} view={tabcConfig} prefixes={prefixes} />
+            <ControlledTable hook="auto" limit={tabcConfig.pagesize()} query={getRemovedTriplesQuery(commit.id)} view={tabcConfig} />
         </div>
     </Row>)
 }

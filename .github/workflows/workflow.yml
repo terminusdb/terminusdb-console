@@ -1,0 +1,33 @@
+name: Build and release
+on:
+  push:
+    branches:
+      - dev
+      - canary
+      - rc
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - run: |
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary|rc") ]; then
+            BRANCH="${GITHUB_REF##*/}"
+            echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-$BRANCH" > .npmrc
+        fi
+    - run: npm install
+    - run: |
+        if [ $(echo "${{ github.ref }}" | grep -P "canary|rc") ]; then
+            mv console/env-production console/.env
+        fi
+    - run: npm run build
+    - run: bash ".ci/publish_bintray.sh" "${GITHUB_REF##*/}"
+      env:
+        BINTRAY_API_TOKEN: ${{ secrets.BINTRAY_API_TOKEN }}

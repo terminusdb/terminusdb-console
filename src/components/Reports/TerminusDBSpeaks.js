@@ -9,6 +9,7 @@ import {PageFailure} from './PageFailure'
  */
 
 export const TerminusDBSpeaks = ({report, failure}) => {
+    
     if (failure) {
         return <PageFailure failure={failure} report={report} />
     }

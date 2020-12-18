@@ -12,15 +12,16 @@ import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTO
 import {ControlledTable} from '../Tables/ControlledTable'
 //import {FrameViewer} from "./FrameViewer"
 import { FrameViewer } from '@terminusdb/terminusdb-react-components';
+import {constructError} from "../../components/Reports/utils.vio"
 
 
 import {DocumentViewNav} from "./DocumentViewNav"
 import {BiArrowBack, BiSave} from "react-icons/bi"
 import {MdCallMissed, MdCallMissedOutgoing} from "react-icons/md"
 import { TERMINUS_ERROR, TERMINUS_SUCCESS } from '../../constants/identifiers'
+import {ControlledGraph} from "../Tables/ControlledGraph"
 
-export const DocumentView = ({docid, doctype, types, selectDocument, close}) => {
-    const [edit, setEdit] = useState(false)
+export const DocumentView = ({docid, doctype, types, selectDocument, close, setEdit, edit}) => {
     const [updatedJSON, setUpdatedJSON] = useState()
     const [showContext, setShowContext] = useState(false)
     const [currentContext, setCurrentContext] = useState(false)
@@ -32,6 +33,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
     const [dataframe, setDataframe] = useState()
     const [loading, setLoading] = useState(true)
     const [sreport, setReport] = useState()
+    const [ecommit, setECommit] = useState()
+    const [errors, setErrors] = useState()
+    const [extract, setExtract] = useState(0)
+    const [extractedJSON, setExtractedJSON] = useState()
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -105,7 +110,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         setDocType(doctype)
         setDataframe()
         selectDocument(id)
-    
+
     }
 
     function loadFrameViewer(){
@@ -124,8 +129,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         frameconf.property().property("terminus:id").hidden(true);
         frameconf.data().features("value").style(value_style);
         frameconf.selectDocument = loadNewDocument
-        let fv = new FrameViewer(frame, jsonld, frameconf, edit, woqlClient)
-        return fv
+        return frameconf
     }
 
     useEffect(() => {
@@ -155,31 +159,48 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
         close()
     }
 
-    function updateDocument(commit){
+    const extractDocument = (c) => {
+        setExtractedJSON()
+        setExtract(extract + 1)
+        setECommit(c)
+    }
+
+    function getExtract(a){
+        setExtractedJSON(a)
+    }
+
+    useEffect(() => {
+        if(extract && extractedJSON){
+            updateDocument(ecommit, extractedJSON)
+        }
+    }, [extract, extractedJSON])
+
+    function updateDocument(commit, json){
         commit = commit || "Document " + docid + " updated from console document view"
         let WOQL = TerminusClient.WOQL
-        let json = false
         if(docview == "json"){
-            json = parseOutput(updatedJSON)        
+            json = parseOutput(updatedJSON)
         }
-        else {
-            json = dataframe.extract()
-            console.log("Extracted", json)
-        }
+        //else {
+            //json = dataframe.extract()
+            //console.log("Extracted", json)
+        //}
         if(json){
             setLoading(true)
             let q = WOQL.update_object(json)
-            woqlClient.query(q, commit)
+            woqlClient.query(q, commit, true)
             .then(() => {
                 updateQuery(docQuery())
                 setContent("")
                 updateBranches()
-                setJsonld()
-                setDataframe()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully updated " + docid})
                 unsetEditMode()
             })
             .catch((e) => {
+                if(e.data) {
+                    let ejson=constructError(e)
+                    setErrors(ejson)
+                }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in document"})
             })
             .finally(() => setLoading(false))
@@ -236,12 +257,22 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                 />
             }
             {dataframe && (docview == "frame" || docview == "table") &&
-                <>{dataframe.render()}</>
+                <FrameViewer
+                    classframe={frame}
+                    doc={jsonld}
+                    mode={(edit ? "edit" : "view")}
+                    view={dataframe}
+                    type={(docview=="frame" ? "fancy": "table")}
+                    client={woqlClient}
+                    onExtract={getExtract}
+                    errors={errors}
+                    extract={extract}
+                />
             }
-            {edit && sreport && sreport.status && 
+            {edit && sreport && sreport.status &&
                 <Row className="generic-message-holder">
                     <TerminusDBSpeaks report={sreport} />
-                </Row>        
+                </Row>
             }
             {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
                 <ViewToolbar
@@ -251,10 +282,10 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close}) => 
                     types={types}
                     type={doctype}
                     onCancel={cancel}
-                    onUpdate={updateDocument}
+                    onUpdate={(docview=="json" ? updateDocument : extractDocument)}
                 />
             }
-            {loading && 
+            {loading &&
                 <Loading />
             }
             {docview == "link" &&
@@ -269,19 +300,62 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
     let WOQL = TerminusClient.WOQL
     let outs = WOQL.triple(docid, "v:Property", "v:Target").triple("v:Target", "type", "v:Type").sub("system:Document", "v:Type")
     let ins = WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type")
-    const chooseOut = function(cell){
-        selectDocument(cell.row.original['Target'])
+
+
+    let linksql = WOQL.and(
+        WOQL.eq("v:Node", docid),
+        WOQL.opt().limit(1).triple(docid, "label", "v:Node Label"),
+        WOQL.or(
+            WOQL.and(
+                WOQL.triple(docid, "v:Property", "v:Target").triple("v:Target", "type", "v:Type").sub("system:Document", "v:Type"),
+                WOQL.opt().limit(1).triple("v:Target", "label", "v:Link Name"),
+                WOQL.opt().limit(1).quad("v:Property", "label", "v:Property Name", "schema"),
+                WOQL.opt().limit(1).quad("v:Type", "label", "v:Type Name", "schema")
+            ),
+            WOQL.and(
+                WOQL.triple("v:Source", "v:Property", docid).triple("v:Source", "type", "v:Type").sub("system:Document", "v:Type"),
+                WOQL.opt().limit(1).triple("v:Source", "label", "v:Link Name"),
+                WOQL.opt().limit(1).quad("v:Property", "label", "v:Property Name", "schema"),
+                WOQL.opt().limit(1).quad("v:Type", "label", "v:Type Name", "schema")
+            )
+        )
+    )
+
+    const chooseOut = function(row){
+        selectDocument(row.original['Target'])
     }
-    const chooseIn = function(cell){
-        selectDocument(cell.row.original['Source'])
+    const chooseIn = function(row){
+        selectDocument(row.original['Source'])
     }
 
     const outtab= TerminusClient.View.table();
-    outtab.column("Target").click(chooseOut)
+    outtab.row().click(chooseOut)
+    outtab.pager("remote")
+    outtab.pagesize(10)
+
     const intab = TerminusClient.View.table();
     intab.column_order("Source", "Type", "Property")
-    intab.column("Source").click(chooseIn)
-    return (<Row>
+    intab.row().click(chooseIn)
+    intab.pager("remote")
+    intab.pagesize(10)
+
+    const graphConfig= TerminusClient.View.graph();
+    graphConfig.show_force(true)
+    graphConfig.edges(["Node", "Target"], ["Source", "Node"]);
+    graphConfig.edge("Node", "Target").size(2).text("Property Name").arrow({width: 60, height: 30})
+         .icon({label: true, color: [109,98,100], size: 0.8})
+    graphConfig.edge("Source", "Node").size(2).text("Property Name").arrow({width: 60, height: 30})
+         .icon({label: true, color: [109,98,100], size: 0.8})
+    graphConfig.node("Node").size(45).collisionRadius(150).text("Node Label").color([150,233,151]).icon({label: true, color: [50,50,80]})
+    graphConfig.node("Source", "Target").collisionRadius(120).size(40).text("Link Name").color([255,178,102]).icon({label: true, color: [80,60,40]})
+    if(!docid) return null
+    return (<>
+    <Row>
+        <Col>
+            <ControlledGraph query={linksql} view={graphConfig} />
+        </Col>
+    </Row>
+    <Row>
         <Col>
             <span style={{fontSize: "2em"}}>
                 <span title={DOCUMENT_INCOMING_LINK_TITLE}>
@@ -289,7 +363,7 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
                     <span className="sub-headings d-sub-headings">Incoming Links</span>
                 </span>
             </span>
-            <ControlledTable query={ins} view={intab} limit={20}/>
+            <ControlledTable query={ins} view={intab} limit={10}/>
         </Col>
         <Col>
             <span style={{fontSize: "2em"}}>
@@ -298,9 +372,10 @@ export const DocumentLinks = ({docid, types, type, onCancel,  selectDocument}) =
                     <span className="sub-headings d-sub-headings">Outgoing Links</span>
                 </span>
             </span>
-            <ControlledTable query={outs} view={outtab} limit={20}/>
+            <ControlledTable query={outs} view={outtab} limit={10}/>
         </Col>
-    </Row>)
+    </Row>
+    </>)
 }
 
 export const ViewToolbar = ({editmode, report, toggle, docid, types, type, onCancel,  onUpdate}) => {

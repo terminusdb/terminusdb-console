@@ -8,91 +8,84 @@ import { TerminusDBSpeaks } from "../Reports/TerminusDBSpeaks"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import Loading from '../../components/Reports/Loading'
 import {DBContextObj} from '..//Query/DBContext'
+import {WOQLEditorControlled, WOQLTable, ControlledQueryHook} from '@terminusdb/terminusdb-react-components'
+import { TERMINUS_TABLE } from "../../constants/identifiers";
 
 
-export const ResultQueryPane = ({resultView,query,bindings,updateQuery,prefixes, setMainError, setReport, setUpdated, updated}) => {
+export const ResultQueryPane = ({resultView, result, query, 
+    limit, start, orderBy, setLimits, setOrder, totalRows, setError, loading}) => {
+    const currentViewStart=resultView || "table";
+    const [currentView,setCurrentView] = useState(currentViewStart)
+
     const { woqlClient} = WOQLClientObj()
 
-	const currentViewStart=resultView || "table";
-    const [currentView,setCurrentView] = useState(currentViewStart)
-    const [latest, setLatest] = useState(bindings)
-    const [loading, setLoading] = useState(false)
-    const [hasUpdate, setUpdate] = useState(query ? query.containsUpdate() : false)
     const qeclass = TOOLBAR_CSS.container
     
-    const {updateBranches} = DBContextObj()
+    const {updateBranches, prefixes} = DBContextObj()
 
-
-    useEffect(() => {
-        if(query && (currentView != "table" || (hasUpdate && !updated))){
-            let stime = Date.now()
-            setLoading(true)
-            woqlClient.query(query).then((r) => {
-                let rep = {
-                    type: 'success',
-                    duration: Date.now() - stime,
-                    deletes: r.deletes,
-                    inserts: r.inserts,
-                    transaction_restart_count: r.transaction_restart_count || 0,
-                    rows: r.bindings ? r.bindings.length : 0
-                }
-                updateBranches()
-                setUpdated(true)
-                setMainError(false)
-                setReport(rep)
-                setResult(r)
-            })
-            .catch((e) => setMainError(e))
-            .finally(() => setLoading(false))
+    const _generate_context = (prefixes) => {
+        let nups = {}
+        for(var k in TerminusClient.UTILS.standard_urls){
+            nups[k] = TerminusClient.UTILS.standard_urls[k]
         }
-    }, [currentView, query])
-
-    useEffect(() => {
-        setUpdate(query ? query.containsUpdate() : false)
-        setUpdated(false)
-    }, [query])
-
-
-    const setEmpty = (report)=>{
-        setMainError(false)
-        setReport(report)
+        for(var i = 0; i<prefixes.length; i++){
+            if(prefixes[i]['Prefix'] && prefixes[i]['Prefix']['@value'] && prefixes[i]['IRI'] && prefixes[i]['IRI']["@value"]){
+                nups[prefixes[i]['Prefix']['@value']] = prefixes[i]['IRI']["@value"]
+            }
+        }
+        return nups
     }
 
+    function setReport(result){}
 
+    useEffect(() => {
+        if(result){
+            if(query.containsUpdate() && result.inserts > 0 || result.deletes > 0){
+                updateBranches()
+            }
+            setReport(result)
+        }
+    }, [result])
 
     const updateView = (viewType)=>{
     	setCurrentView(viewType)
     }
 
-    const setResult = (res)=>{
-        setMainError(false)
-        let b = res
-        b.rows = (res && res.bindings ? res.bindings.length : 0)
-        setReport(b)
-    	setLatest(res.bindings)
-    }
-
     const tabConfig= TerminusClient.View.table();
-    tabConfig.pager("remote")
     tabConfig.pagesize(20)
+    let tr, lim
+    if(query && query.containsUpdate()){
+        tabConfig.pager("local")
+        tr = result.bindings.length
+        lim = result.bindings.length
+    }
+    else {
+        tabConfig.pager("remote")
+        tr = totalRows
+        lim = limit
+    }
+    if(prefixes) tabConfig.prefixes = _generate_context(prefixes)
 
 	return(
-		<div className="tdb__qpane__editor" >
+		<div className="tdb__qpane__editor tdb__loading__parent">
             <ViewChooser updateView={updateView} view={currentView}/>
-            {currentView == "table" && !hasUpdate &&  
-                <ControlledTable
-                    query={query}
-                    onEmpty={setEmpty}
+            {currentView == "table" && 
+                <WOQLTable
+                    result={result}
                     freewidth={true}
-                    view={tabConfig}
-                    onResults={setResult}
-                    onError={setMainError}
-                    limit={tabConfig.pagesize()}
-                />
+                    view={tabConfig.json()}
+                    limit={lim}
+                    query={query}
+                    start={start}
+                    orderBy={orderBy}
+                    setLimits={setLimits}
+                    setOrder={setOrder}
+                    totalRows={tr}
+                />            
             }
-            {loading && <Loading />}
-            {currentView != "table" || (currentView == "table" && hasUpdate) && 
-                <ResultViewer type={currentView} bindings={latest} query={query} prefixes={prefixes}/>
+            {loading && <Loading type={TERMINUS_TABLE}/>}
+            {currentView != "table" && 
+                <ResultViewer type={currentView} bindings={result.bindings} query={query} prefixes={prefixes} />
             }
         </div>
 	)

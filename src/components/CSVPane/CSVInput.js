@@ -1,19 +1,21 @@
 import React, {useState} from 'react'
 
-export const CSVInput = ({css, inputCss, onChange, text, multiple}) =>{
-
+export const CSVInput = ({id, css, style, inputCss, onChange, text, multiple, labelCss}) =>{
+	var inp ;
+	if(id == undefined) inp="csvInp"
+	else inp=id
 	return (
 		<>
-			<span className={css}>
+			<span className={css} style={style}>
 				<input type="file"
-					name="csvInp"
-					id="csvInp"
+					name={inp}
+					id={inp}
 					className={"inputfile "+inputCss}
 					multiple={multiple}
 					onChange={onChange}
 					key={text}
 					accept=".csv"/>
-				<label htmlFor="csvInp">{text}</label>
+				<label htmlFor={inp} className={labelCss}>{text}</label>
 			</span>
 		</>
 	)

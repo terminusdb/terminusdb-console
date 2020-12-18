@@ -316,6 +316,7 @@ span.create-new-button {
 
 span.delete-button:hover {
     color: #fff;
+    background-color: #dc3545
 }
 
 .del-hub-warning {
@@ -2563,6 +2564,10 @@ span.delete-modal-label {
       font-size: 0.9em;
       cursor: pointer;
       color: #0066f9
+  }
+
+  .terminus-system-error{
+      padding-left: 20px;
   }
 
   .terminus-system-error-title {
@@ -5311,6 +5316,10 @@ span.csv_subheader_section{
     padding-bottom: 50px;
 }
 
+.update-csv-container-doc {
+    max-height: 350px;
+}
+
 .csv_info_icon_spacing{
     margin: 0px -10px 0px 30px;
     font-size: 18px;
@@ -5346,7 +5355,8 @@ span.csv_subheader_section{
 }
 
 .selected-csv-name-span {
-    min-width: 350px !important;
+    /*min-width: 350px !important;*/
+    min-width: 0px !important;
 }
 
 .csv-preview-header, .commit-log-header {
@@ -5380,7 +5390,6 @@ span.add-csv {
     margin-top: 10px;
 }
 
-
 .d-page-overflow {
     overflow-x: hidden !important;
 }
@@ -5388,6 +5397,16 @@ span.add-csv {
 .csv-preview-icon {
     font-size: 18px;
     margin-right: 10px;
+}
+
+.csvUpdateIcon {
+    overflow: unset !important;
+    padding: 0px !important;
+    max-width: 0px !important;
+}
+
+.csvInputNoPad {
+    padding: 0px !important;
 }
 
 .inputfile, .csv-input {
@@ -5550,4 +5569,62 @@ input.file-header-values {
 span.header-control-panel {
     text-align: right;
     width: 100%;
+}
+
+span.create-document-widget:hover {
+    background-color: #fdffef;
+    cursor: pointer;
+}
+
+span.controlled-graph-container {
+    border-bottom: 1px solid #888;
+}
+
+textarea.wiki {
+    border: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+}
+
+textarea.wiki-title {
+    font-size: 2.5em;
+    height: 40px !important;
+}
+
+textarea.wiki-description {
+    font-size: 1.5em;
+}
+
+textarea.wiki-property {
+    font-size: 1.2em;
+}
+
+textarea.wiki:focus, textarea.wiki:after {
+    border: 0 !important;
+    padding: 0 !important
+}
+
+div.wiki-property-header {
+    font-weight: 600;
+    min-height: 24px;
+}
+
+div.wiki-propery-header-1 {
+    font-size: 24px;
+}
+
+div.wiki-propery-header-2 {
+    font-size: 20px;
+}
+
+div.wiki-propery-header-3 {
+    font-size: 18px;
+}
+
+div.wiki-propery-header-4 {
+    font-size: 16px;
+}
+
+div.wiki-propery-header-5 {
+    font-size: 16px;
 }
