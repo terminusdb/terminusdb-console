@@ -227,10 +227,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         let dId=row.original["Document ID"]
         let type = row.original["Type ID"]
         setDocType(type)
-        setLoading(true)
         if(type==DOCTYPE_CSV) setCurrentDocToUpdate(row.original.Name["@value"])
         else setCurrentDocToUpdate(TerminusClient.UTILS.shorten(dId))
-        setLoading(false)
     }
 
     const handleUpdate=(cell)=>{
