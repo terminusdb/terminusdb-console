@@ -17,6 +17,7 @@ jobs:
         node-version: 14
         registry-url: 'https://registry.npmjs.org'
     - run: npm install
+    - run: mv console/env-production console/.env
     - run: npm run build
     - run: npm publish
       env:
