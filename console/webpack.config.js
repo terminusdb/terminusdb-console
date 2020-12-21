@@ -4,6 +4,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyWebPackPlugin= require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
+require("./check_env_variables")
 
 module.exports = (env, argv) => ({
   entry: [
@@ -16,7 +17,7 @@ module.exports = (env, argv) => ({
   },
   devtool:argv.mode === 'production' ? false : '#inline-source-map',
   plugins: [
-    new Dotenv({path: path.resolve(__dirname, '.env')}),
+   // new Dotenv({path: path.resolve(__dirname, '.env')}),
     new HtmlWebPackPlugin({
         inject: true,
         template: path.resolve(__dirname, './index.html'),
@@ -100,4 +101,13 @@ module.exports = (env, argv) => ({
       }
     }*/
 });
+
+console.log("AUTH___",process.env.AUTH0_CLIENT_ID);
+if(!process.env.AUTH0_DOMAIN || !process.env.AUTH0_CLIENT_ID || !process.env.AUDIENCE){
+  throw new Error('I CAN NOT FIND THE Auth0 ENV VARS')
+}
+
+if(!process.env.TERMINUS_HUB_URL || !process.env.TERMINUS_HUB_URL){
+  throw new Error('I CAN NOT FIND THE TERMINUS_HUB ENV VARS')
+}
 
