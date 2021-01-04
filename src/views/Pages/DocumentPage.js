@@ -17,12 +17,13 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {CSVList} from '../../components/CSVPane/CSVList'
 import {Footer}  from "../../views/Templates/Footer"
 import {DOCUMENT_VIEW, CREATE_NEW, UPDATE} from '../../components/CSVPane/constants.csv'
+import {getFileType} from "../../utils/helperFunctions"
 
 //import {BsCardList} from "react-icons/bs"
 import {goDBSubPage, goDBPage} from "../../components/Router/ConsoleRouter"
 
 const DocumentPage = (props) => {
-    const {graphs} = DBContextObj()
+    const {graphs, ref, branch} = DBContextObj()
     const [mode, setMode] = useState(false)
     const [docID, setDocID] = useState(desanitizeURLID(props.docid))
     const [selType, setSelType] = useState()
@@ -88,11 +89,26 @@ const DocumentPage = (props) => {
         }
     }
 
+    const availableDocQuery = () => {
+        let WOQL=TerminusClient.WOQL
+        return WOQL.select("Document ID").and(
+            WOQL.lib().document_metadata()
+        )
+    }
+
+    const [updateQuery, report, availableDocs, woql]=WOQLQueryContainerHook(
+        woqlClient,
+        availableDocQuery(),
+        branch,
+        ref,
+    )
+
     const insertCsvs = (e) => {
         for(var i=0; i<e.target.files.length; i++){
-            let files = {};
-            files = e.target.files[i]
-            files.action=CREATE_NEW
+            let file = {};
+            file = e.target.files[i]
+            file.action=CREATE_NEW
+            file.fileType=getFileType(file.name)
             const q=TerminusClient.WOQL.limit(50,
                 TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:name'))
             woqlClient.query(q).then((results) => {
@@ -101,14 +117,14 @@ const DocumentPage = (props) => {
         		const cBindings=res.getBindings()
         		for(var item in cBindings) {
                     let name=cBindings[item].name['@value']
-                    if(files.name==name){
+                    if(file.name==name){
                         let updateOpt=UPDATE+" "+name
-                        files.action=updateOpt
-                        files.fileToUpdate=name
+                        file.action=updateOpt
+                        file.fileToUpdate=name
                     }
                     setAvailableCsvs(arr => [...arr, name])
         		}
-                setCsvs(arr => [...arr, files]);
+                setCsvs(arr => [...arr, file]);
             })
         }
     }
@@ -159,6 +175,7 @@ const DocumentPage = (props) => {
                         setPreview={setPreview}
                         preview={preview}
                         setDocID={setDocID}
+                        availableDocs={availableDocs}
                         setDocument={setDocument}/>}
                     {mode == "instance" && <NoSchemaDocumentPage
                         docid={docID}
@@ -169,6 +186,7 @@ const DocumentPage = (props) => {
                         availableCsvs={availableCsvs}
                         setPreview={setPreview}
                         preview={preview}
+                        availableDocs={availableDocs}
                         setDocument={setDocument}/>}
                 <Footer/>
             </div>
@@ -180,10 +198,10 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel}) => {
+const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel, availableDocs}) => {
     let WOQL = TerminusClient.WOQL
-    const {woqlClient} = WOQLClientObj()
-    const {ref, branch} = DBContextObj()
+    const {woqlClient}=WOQLClientObj()
+    const {ref, branch}=DBContextObj()
     const [edit, setEdit]=useState(false)
 
     const docQuery = () => {
@@ -266,6 +284,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdd
                     page={DOCUMENT_VIEW}
                     setIsAdding={setIsAdding}
                     availableCsvs={availableCsvs}
+                    availableDocs={availableDocs}
                     onCsvCancel={onCsvCancel}/>
                 <CSVList/>
             </>}
@@ -292,10 +311,10 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdd
 }
 
 
-const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs, preview, setPreview}) => {
+const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs, preview, setPreview, availableDocs}) => {
     return (<>
         {(csvs.length>0) && <>
-            <CSVLoader csvs={csvs} setCsvs={setCsvs}
+            <CSVLoader csvs={csvs} setCsvs={setCsvs} availableDocs={availableDocs}
                 insertCsvs={insertCsvs} page={DOCUMENT_VIEW} availableCsvs={availableCsvs}/>
             <p>List of exiting Csvs</p>
         </>}

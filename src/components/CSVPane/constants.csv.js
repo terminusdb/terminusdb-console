@@ -28,3 +28,22 @@ export const DOCTYPE_CSV="terminusdb:///schema#CSV"
 
 export const DOWNLOAD_ENTIRE_FILE="Download entire file"
 export const DOWNLOAD_SNIPPET="Download snippet of the file"
+
+export const ACCEPT_CSV_TYPE=".csv"
+export const ACCEPT_JSON_JSONLD_TYPE=".json, .jsonld"
+export const ACCEPT_MULTI_FILE_TYPES=".csv, .json, .jsonld"
+
+export const CSV_FILE_TYPE="csv"
+export const JSON_FILE_TYPE="json"
+export const JSON_LD_FILE_TYPE="jsonld"
+
+export const SELECT_CUSTOM_STYLES = {
+  control: base => ({
+	...base,
+	height: "30px"
+  }),
+  valueContainer: (base) => ({
+	...base,
+	height: "30px"
+  })
+};

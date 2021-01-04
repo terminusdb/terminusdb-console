@@ -1,4 +1,5 @@
 import {readString} from 'react-papaparse';
+import {CSV_FILE_TYPE, JSON_FILE_TYPE, JSON_LD_FILE_TYPE} from "../components/CSVPane/constants.csv.js"
 
 export const isObject = (obj) => {
     for (var key in obj) {
@@ -137,4 +138,18 @@ export const convertStringsToJson=(str)=>{
         columns: null
         })
     return res.data
+}
+
+export const getFileType=(filename)=>{
+    let ext=filename.split('.').pop();
+    switch (ext){
+        case CSV_FILE_TYPE:
+            return CSV_FILE_TYPE
+        case JSON_FILE_TYPE:
+            return JSON_FILE_TYPE
+        case JSON_LD_FILE_TYPE:
+            return JSON_FILE_TYPE
+        default:
+            console.log("Invalid file type")
+    }
 }
