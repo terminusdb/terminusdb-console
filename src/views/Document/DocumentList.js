@@ -14,14 +14,14 @@ import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT,
 import {CSVPreview} from '../../components/CSVPane/CSVPreview'
 import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
-import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
+import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW, JSON_FILE_TYPE} from '../../components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
 import {BiUpload} from "react-icons/bi"
 import {SelectedCSVList} from "../../components/CSVPane/SelectedCSVList"
-import {isArray} from "../../utils/helperFunctions"
+import {isArray, getFileType} from "../../utils/helperFunctions"
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview, setDocID, setEdit}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview, setDocID, setEdit, availableDocs, availableCsvs}) => {
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
     const [emptyDB, setEmptyDV] = useState(false)
@@ -218,6 +218,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             files.action= "Update "+currentDocToUpdate
         	files.fileToUpdate=currentDocToUpdate
             files.docType=docType
+            files.fileType=getFileType(selectedFile[i].name)
         }
         setUpdateDoc([files])
     }, [selectedFile])
@@ -269,7 +270,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
                 <TerminusDBSpeaks report={report}/>
             </Row>}
             {isArray(updateDoc) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
-                <SelectedCSVList csvs={updateDoc} updateSelectedSingleFile={true} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs} setUpdateDoc={setUpdateDoc}/>
+                <SelectedCSVList csvs={updateDoc} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setUpdateDoc} availableDocs={availableDocs} availableCsvs={availableCsvs}/>
             </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}

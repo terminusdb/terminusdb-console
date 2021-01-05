@@ -151,5 +151,6 @@ export const getFileType=(filename)=>{
             return JSON_FILE_TYPE
         default:
             console.log("Invalid file type")
+            return
     }
 }

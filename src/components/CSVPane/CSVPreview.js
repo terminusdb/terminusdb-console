@@ -4,12 +4,17 @@ import {Row, Col} from "reactstrap"
 import {MdSlideshow} from "react-icons/md"
 import {TiDeleteOutline} from "react-icons/ti"
 import {ControlledTable} from '../../views/Tables/ControlledTable'
+import {JSONEditor} from "../../views/Document/JSONEditor"
+import {CSV_FILE_TYPE, JSON_FILE_TYPE} from "./constants.csv"
 
 export const CSVPreview=({preview, setPreview, previewCss})=>{
 
 	const DisplayData = ({preview}) => {
 		return <Row className="csv-preview-results">
-			<ResultViewer type="table" bindings={preview.data}/>
+			{(preview.fileType==CSV_FILE_TYPE) && <ResultViewer type="table" bindings={preview.data}/>}
+			{(preview.fileType==JSON_FILE_TYPE) && <div style={{width: "100%"}}>
+				<JSONEditor dataProvider={JSON.stringify(JSON.parse(preview.data), null, 2)} edit={false}/>
+			</div>}
 		</Row>
 	}
 
