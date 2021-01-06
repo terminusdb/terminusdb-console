@@ -274,7 +274,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close, setE
                     <TerminusDBSpeaks report={sreport} />
                 </Row>
             }
-            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
+            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "table"))) &&
                 <ViewToolbar
                     editmode={edit}
                     docid={docid}
