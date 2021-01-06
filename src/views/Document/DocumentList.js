@@ -25,8 +25,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
     const [emptyDB, setEmptyDV] = useState(false)
-    const [updateCSV, setUpdateCSV]=useState([])
-    const [currentCSVToUpdate, setCurrentCSVToUpdate]=useState(false)
+    const [updateDoc, setUpdateDoc]=useState([])
+    const [currentDocToUpdate, setCurrentDocToUpdate]=useState(false)
     const [selectedFile, setSelectedFile]=useState([])
 
     const { woqlClient} = WOQLClientObj()
@@ -93,7 +93,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         let row = cell.row
         setReport(false)
         if(selectDocument && row) {
-            setUpdateCSV([])
+            setUpdateDoc([])
             if(row.original["Type ID"]==DOCTYPE_CSV){
                 csvRowClick(row.original["Document ID"], row.original.Name["@value"])
             }
@@ -196,49 +196,55 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         </span>
 	}
 
-    const updateSingleCSV = (e) => {
-        setSelectedFile(e.target.files)
-    }
-
-    const getUpdateButton=()=>{
+    const getUpdateButton=(cell)=>{
+        var acceptType
+        let row=cell.row
+        let type = row.original["Type ID"]
+        if(type==DOCTYPE_CSV){
+            acceptType=".csv"
+        }
+        else acceptType=".json, .jsonld"
         return <span className="schema-toolbar-delete-holder" title={"Update Document"}>
             <BiUpload color="#0055bb" className='schema-toolbar-delete'/>
-            <CSVInput onChange={updateSingleCSV} multiple={false} id="singleCSV"/>
+            <CSVInput multiple={false} id="singleCSV" acceptType={acceptType}/>
         </span>
     }
 
     useEffect(() => {
         if(selectedFile.length==0) return
-		let files = {};
-		for(var i=0; i<selectedFile.length; i++){
+        let files = {};
+        for(var i=0; i<selectedFile.length; i++){
             files = selectedFile[i]
-            files.action= "Update "+currentCSVToUpdate
-			files.fileToUpdate=currentCSVToUpdate
-		}
-	   setUpdateCSV([files])
+            files.action= "Update "+currentDocToUpdate
+        	files.fileToUpdate=currentDocToUpdate
+            files.docType=docType
+        }
+        setUpdateDoc([files])
     }, [selectedFile])
 
     const updateDocument=(cell)=>{
         let row=cell.row
         let dId=row.original["Document ID"]
         let type = row.original["Type ID"]
-        setLoading(true)
-        let update_start = Date.now()
-        if(type==DOCTYPE_CSV) {
-            setCurrentCSVToUpdate(row.original.Name["@value"])
-            setLoading(false)
-        }
-        else {
-            setEdit(true)
-            setDocID(dId)
-            setDocType(row.original["Type ID"])
-        }
+        setDocType(type)
+        if(type==DOCTYPE_CSV) setCurrentDocToUpdate(row.original.Name["@value"])
+        else setCurrentDocToUpdate(TerminusClient.UTILS.shorten(dId))
     }
 
     const handleUpdate=(cell)=>{
+        function invokeFileInput(){
+            let inp=document.getElementById("singleCSV")
+            inp.click()
+            inp.onclick = function () {
+                this.value = null;
+            };
+            inp.onchange = function (e) {
+                setSelectedFile(e.target.files)
+            }
+        }
         let row=cell.row
         let type = row.original["Type ID"]
-        if(type==DOCTYPE_CSV) document.getElementById("singleCSV").click()
+        invokeFileInput()
         updateDocument(cell)
     }
 
@@ -262,8 +268,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             {report && <Row className="generic-message-holder">
                 <TerminusDBSpeaks report={report}/>
             </Row>}
-            {isArray(updateCSV) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
-                <SelectedCSVList csvs={updateCSV} updateSelectedSingleFile={true} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs} setUpdateCSV={setUpdateCSV}/>
+            {isArray(updateDoc) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
+                <SelectedCSVList csvs={updateDoc} updateSelectedSingleFile={true} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs} setUpdateDoc={setUpdateDoc}/>
             </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}

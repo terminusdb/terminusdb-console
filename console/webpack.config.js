@@ -4,6 +4,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CopyWebPackPlugin= require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
+require("./check_env_variables")
 
 module.exports = (env, argv) => ({
   entry: [
@@ -16,7 +17,7 @@ module.exports = (env, argv) => ({
   },
   devtool:argv.mode === 'production' ? false : '#inline-source-map',
   plugins: [
-    new Dotenv({path: path.resolve(__dirname, '.env')}),
+   // new Dotenv({path: path.resolve(__dirname, '.env')}),
     new HtmlWebPackPlugin({
         inject: true,
         template: path.resolve(__dirname, './index.html'),
@@ -100,4 +101,3 @@ module.exports = (env, argv) => ({
       }
     }*/
 });
-

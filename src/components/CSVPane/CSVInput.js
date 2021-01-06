@@ -1,9 +1,11 @@
 import React, {useState} from 'react'
 
-export const CSVInput = ({id, css, style, inputCss, onChange, text, multiple, labelCss}) =>{
-	var inp ;
+export const CSVInput = ({id, css, style, inputCss, onChange, text, multiple, labelCss, acceptType}) =>{
+	var inp, types;
 	if(id == undefined) inp="csvInp"
 	else inp=id
+	if(acceptType==undefined) types=".csv"
+	else types=acceptType
 	return (
 		<>
 			<span className={css} style={style}>
@@ -14,7 +16,7 @@ export const CSVInput = ({id, css, style, inputCss, onChange, text, multiple, la
 					multiple={multiple}
 					onChange={onChange}
 					key={text}
-					accept=".csv"/>
+					accept={types}/>
 				<label htmlFor={inp} className={labelCss}>{text}</label>
 			</span>
 		</>
