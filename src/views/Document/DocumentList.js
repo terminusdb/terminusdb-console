@@ -11,23 +11,24 @@ import {TypeStats} from "./TypeStats"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE, TERMINUS_INFO} from '../../constants/identifiers'
-import {CSVPreview} from '../../components/CSVPane/CSVPreview'
 import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW, JSON_FILE_TYPE} from '../../components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
 import {BiUpload} from "react-icons/bi"
+import {CSVPreview} from "../../components/CSVPane/CSVPreview"
 import {SelectedCSVList} from "../../components/CSVPane/SelectedCSVList"
 import {isArray, getFileType} from "../../utils/helperFunctions"
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview, setDocID, setEdit, availableDocs, availableCsvs}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setViewContent, viewContent, setDocID, setEdit, availableDocs, availableCsvs}) => {
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
     const [emptyDB, setEmptyDV] = useState(false)
     const [updateDoc, setUpdateDoc]=useState([])
     const [currentDocToUpdate, setCurrentDocToUpdate]=useState(false)
     const [selectedFile, setSelectedFile]=useState([])
+    const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -86,7 +87,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
 
     let csvRowClick = function csvRowClick(id, name){
         setReport(false)
-        setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
+        setViewContent({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW});
     }
 
     let onDocClick = function(cell){
@@ -262,8 +263,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     if(typeof types != "object") return <main className="console__page__container console__page__container--width"></main>
 
     return (<>
-        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview} setCsvs={setCsvs}
-            previewCss={"csv-preview-results csv-preview-results-border"}/>}
+        {!isAdding && viewContent.show && <CSVViewContents viewContent={viewContent} setViewContent={setViewContent} setCsvs={setCsvs}
+            previewCss={"csv-preview-results csv-preview-results-border"} availableCsvs={availableCsvs} setPreview={setPreview}/>}
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <main className="console__page__container console__page__container--width">
             {report && <Row className="generic-message-holder">
@@ -272,7 +273,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             {isArray(updateDoc) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
                 <SelectedCSVList csvs={updateDoc} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setUpdateDoc} availableDocs={availableDocs} availableCsvs={availableCsvs}/>
             </Row>}
-            {!isAdding && !preview.show && <ControlledTable
+            <CSVPreview preview={preview} setPreview={setPreview} previewCss={"csv-preview-results"}/>
+            {!isAdding && !viewContent.show && <ControlledTable
                 query={query}
                 onEmpty={setEmpty}
                 freewidth={true}

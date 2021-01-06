@@ -15,13 +15,11 @@ import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW, DOCTYPE_CSV, SELECT_C
 import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
-import {formatBytes} from "../../utils/format"
 import Select from 'react-select'
-import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {checkIfDocTypeExists} from "./utils.csv"
+import {checkIfDocTypeExists, extractFileInfo} from "./utils.csv"
 
-export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile, availableDocs}) => {
+export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, availableDocs}) => {
 	let currentFile={}, availableCsvList=[]
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [selectedFiles, setSelectedFiles]=useState([])
@@ -29,6 +27,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const {woqlClient}=WOQLClientObj()
 	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
+	console.log('csvs', csvs)
 	const FileName=({item})=>{
 		return <span className="selected-csv-span selected-csv-name-span">
 			<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
@@ -153,7 +152,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			defaultValue={value: item.extracted.select.value, label: item.extracted.select.label}
 
 		const changeAction=(e)=>{
-			csvs.map(item=>{
+			selectedFiles.map(item=>{
 				if(item.name==e.id){
 					item.action=e.value
 					item.fileToUpdate=e.fileToUpdate
@@ -177,47 +176,23 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		</>
 	}
 
-	const updateJsonDoc=(file)=>{
-		let json=file[0].extracted.data
-		let WOQL=TerminusClient.WOQL
-		let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
-		let q = WOQL.update_object(json)
-		setLoading(true)
-		woqlClient.query(q, commit, true)
-		.then(() => {
-			updateBranches()
-			setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
-		})
-		.catch((e) => {
-			if(e.data && e.data['api:message'] && dataframe){
-				//let ejson=constructError(e)
-				//setErrors(ejson)
-			}
-			setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
-		})
-		.finally(() => setLoading(false))
-	}
-
-	const handleUpload=(e) => {
+	const handleUpload=async(e) => {
 		let update_start = Date.now(), upFormatted=[]
         update_start = update_start || Date.now()
 		setLoading(true)
 		let jsonFiles=selectedFiles.filter(item => item.fileType === JSON_FILE_TYPE)
-		if(isArray(jsonFiles)){
-			updateJsonDoc(jsonFiles)
-		}
 		let csvFiles=selectedFiles.filter(item => item.fileType === CSV_FILE_TYPE)
 		let updateFiles=csvFiles.filter(item => { // filter csvs for update
 			let act=item.action.split(" ")
 			if(act[0]==action.UPDATE){
-				upFormatted.push({fileToBeUpdated:item.fileToUpdate, updateWith:item})
+				upFormatted.push({fileToBeUpdated:item.file.fileToUpdate, updateWith:item.file})
 				return true
 			}
 			else false
 		})
 		let insertFiles=csvFiles.filter(item => item.action === action.CREATE_NEW) // filter csvs for create
 		if(isArray(upFormatted)){
-			woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
+			await woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
                 updateBranches()
 				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
 				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
@@ -229,7 +204,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			})
 		}
 		if(isArray(insertFiles)){
-			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {
+			let fls=[]
+			insertFiles.map(it=>{fls.push(it.file)})
+			await woqlClient.insertCSV(fls, commitMsg, null, null).then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
 				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
@@ -238,53 +215,104 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 			.catch((err) => process_error(err, update_start, "Failed to add file"))
 			.finally(() => setLoading(false))
 		}
+		if(isArray(jsonFiles)){ // json files
+			updateDocs(jsonFiles)
+		}
 	}
 
-	function extractFileInfo(file){
-		let fJson={}
-		fJson.name=file.name
-		fJson.fileType=file.fileType
-		fJson.action=file.action
-		fJson.size=formatBytes(file.size)
-		fJson.lastModified=formatFileDate(file.lastModified)
-		return fJson
+	const methodThatReturnsAPromise=async(file)=>{
+		let json=file.extracted.data
+		let WOQL=TerminusClient.WOQL
+		let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
+		let q = WOQL.update_object(json)
+		setLoading(true)
+		return await woqlClient.query(q, commit, true)
+		.then((res) => {
+			updateBranches()
+			setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
+			setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+		})
+		.catch((e) => {
+			setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
+		})
+		.finally(() => setLoading(false))
 	}
 
-	function extractFromJson(file){
-		let buff=[]
-		var updateText
-		const curr = csvs.filter(it => it.name == file.name)
-		readLines(curr[0], undefined, function(line) {
-			buff+=line
-	    }, function onComplete() {
-			let pj=JSON.parse(buff)
-			if(checkIfDocTypeExists(pj, availableDocs)){
-				updateText=action.UPDATE+" "+pj["@id"]
-				file.action=action.UPDATE
-			}
-			else updateText=action.CREATE_NEW
-			let fJson=extractFileInfo(file)
-			fJson.extracted={select: {value: updateText, label: updateText}, data: pj}
-			setSelectedFiles(arr => [...arr, fJson])
-	    });
+	const updateDocs = async(jFiles) => {
+		jFiles.reduce( async (previousPromise, nextFile) => {
+		    await previousPromise;
+			let json=nextFile.extracted.data
+			let WOQL=TerminusClient.WOQL
+			let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
+			let q = WOQL.update_object(json)
+			setLoading(true)
+		    return woqlClient.query(q, commit, true)
+			.then((res) => {
+				updateBranches()
+				setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
+				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+			})
+			.catch((e) => {
+				setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
+			})
+			.finally(() => setLoading(false))
+		}, Promise.resolve());
 	}
+
+	const handleFileChosen = async (file) => {
+	  return new Promise((resolve, reject) => {
+	    let fileReader = new FileReader();
+	    fileReader.onload = () => {
+	      resolve(fileReader.result);
+		  var updateText
+		  const content = fileReader.result;
+		  if(content==null) return
+		  let pj=JSON.parse(content)
+		  if(checkIfDocTypeExists(pj, availableDocs)){
+			  updateText=action.UPDATE+" "+pj["@id"]
+			  file.action=action.UPDATE
+		  }
+		  else updateText=action.CREATE_NEW
+		  let fJson=extractFileInfo(file)
+		  fJson.extracted={select: {value: updateText, label: updateText}, data: pj}
+		  setSelectedFiles(arr => [...arr, fJson])
+
+	    };
+	    fileReader.onerror = reject;
+	    fileReader.readAsText(file);
+	  });
+	}
+
+	const readAllFiles = async (AllFiles) => {
+	  const results = await Promise.all(AllFiles.map(async (file) => {
+	    const fileContents = await handleFileChosen(file);
+	    return fileContents;
+	  }));
+	  return results;
+	}
+
+	console.log('selectedFiles', selectedFiles)
 
 	const setFileAttributes=(file)=>{
 		let fJson=extractFileInfo(file)
+		fJson.file=file
 		setSelectedFiles(arr => [...arr, fJson])
 	}
 
 	useEffect(() => {
 		setSelectedFiles([])
+		let jsonFiles=[]
 		csvs.map(item=>{
-			if(item.fileType==CSV_FILE_TYPE)
+			if(item.fileType==CSV_FILE_TYPE){
 				setFileAttributes(item)
-			else if (item.fileType==JSON_FILE_TYPE)
-				extractFromJson(item)
+			}
+			else if (item.fileType==JSON_FILE_TYPE){
+				jsonFiles.push(item)
+			}
 		})
+		readAllFiles(jsonFiles)
     }, [csvs])
 
-	console.log('selectedFiles', selectedFiles)
 
 	const List=()=>{
 		return (isArray(selectedFiles) && selectedFiles.map( item => <div key={"d_"+item.name+"_"+item.lastModified}>

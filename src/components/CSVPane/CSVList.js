@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react"
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {CSVPreview} from "./CSVPreview"
 import {CSVViewContents} from "./CSVViewContents"
 import {DOCTYPE_CSV, DOCUMENT_VIEW_FRAGMENT} from "./constants.csv"
 import {Row, Col} from "reactstrap"
@@ -9,7 +8,7 @@ import {ControlledTable} from '../../views/Tables/ControlledTable'
 import {BsCardList} from "react-icons/bs"
 
 export const CSVList=()=>{
-	const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
+	const [viewContent, setViewContent] = useState({show:false, fileName:false, data:[], selectedCSV: false})
 	let WOQL = TerminusClient.WOQL
 	const csvQuery = () => {
         let q = WOQL.and(WOQL.lib().document_metadata())
@@ -22,7 +21,7 @@ export const CSVList=()=>{
 	let csvRowClick = function csvRowClick(cell){
 		let row = cell.row
 		let id=row.original["Document ID"], name=row.original.Name["@value"]
-        setPreview({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW_FRAGMENT});
+        setViewContent({show: true, fileName: name, data:[], selectedCSV: id, page:DOCUMENT_VIEW_FRAGMENT});
     }
 
 	const tabConfig=TerminusClient.View.table();
@@ -43,7 +42,7 @@ export const CSVList=()=>{
                     freewidth={true}
                     view={tabConfig}
                     limit={tabConfig.pagesize()}/>
-				{preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
+				{viewContent.show && <CSVViewContents viewContent={viewContent} setViewContent={setViewContent}
 		            previewCss={"csv-preview-results csv-preview-results-border"}/>}
             </main>
 

@@ -3,7 +3,7 @@ import {Row, Col} from "reactstrap"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import TerminusClient from '@terminusdb/terminusdb-client'
-import {isArray} from "../../utils/helperFunctions"
+import {isArray, getFileType} from "../../utils/helperFunctions"
 import {DOCUMENT_VIEW, CREATE_DB_VIEW, DOWNLOAD_ENTIRE_FILE, DOWNLOAD_SNIPPET, DELETE, UPDATE_CSV, DOCUMENT_VIEW_FRAGMENT,
 	DOCTYPE_CSV} from "./constants.csv"
 import {BiArrowBack, BiDownload} from "react-icons/bi"
@@ -20,7 +20,7 @@ import {CSVInput} from "./CSVInput"
 import {SelectedCSVList} from "./SelectedCSVList"
 import {UPDATE} from "./constants.csv"
 
-export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
+export const CSVViewContents=({viewContent, setViewContent, previewCss, setCsvs, availableCsvs, setPreview})=>{
 	const {woqlClient} = WOQLClientObj()
 	let propertyColumnNames=[]
 	const [query, setQuery] = useState(false)
@@ -35,7 +35,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
     const [report, setReport]=useState(false)
 
 	useEffect(() => {
-		let id=preview.selectedCSV
+		let id=viewContent.selectedCSV
 		let WOQL=TerminusClient.WOQL
 		// get property names from graph
         const q=WOQL.and (
@@ -63,7 +63,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 			setTConf(tabConfig)
 			setQuery(qp)
 		})
-	}, [preview.selectedCSV])
+	}, [viewContent.selectedCSV])
 
 	function process_error(err, update_start, message){
         setReport({
@@ -76,7 +76,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
     }
 
 	const downloadCSV=async()=>{
-		let name=preview.fileName
+		let name=viewContent.fileName
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
@@ -101,7 +101,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 	}
 
 	const deleteCSV=async()=>{
-        let name=preview.fileName
+        let name=viewContent.fileName
         let update_start = Date.now()
         setLoading(true)
         update_start = update_start || Date.now()
@@ -109,7 +109,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
         return await woqlClient.deleteCSV(name, commitMsg).then((results) =>{
             updateBranches()
 			setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted file " + name})
-			setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+			setViewContent({show: false, fileName:false, data:[], selectedCSV: false})
 		})
 		.catch((err) => process_error(err, update_start, "Failed to retrieve file " + name))
 		.finally(() => setLoading(false))
@@ -121,7 +121,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
         </h3>
 	}
 
-	const CSVDownloadIcons=({preview})=>{
+	const CSVDownloadIcons=({viewContent})=>{
 		return <span style={{fontSize: "2em"}}>
 	        <span onClick={downloadCSV} className="d-nav-icons" title={DOWNLOAD_ENTIRE_FILE}>
 	            <MdFileDownload className="db_info_icon_spacing"/>
@@ -147,8 +147,9 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 		let files = {};
 		for(var i=0; i<e.target.files.length; i++){
             files = e.target.files[i]
-			files.action= UPDATE+" "+preview.fileName
-			files.fileToUpdate=preview.fileName // stopped here
+			files.action= UPDATE+" "+viewContent.fileName
+			files.fileToUpdate=viewContent.fileName // stopped here
+			files.fileType=getFileType(files.name)
 		}
 	   setUpdateCSV([files])
     }
@@ -163,16 +164,16 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 		return <CSVInput text={children} onChange={updateSingleCSV} labelCss={"csvUpdateIcon"} multiple={false}/>
 	}
 
-	const CSVGoBackIcon=({preview})=>{
+	const CSVGoBackIcon=({viewContent})=>{
 		return <span style={{fontSize: "2em"}}>
-	        <span onClick={()=> setPreview({show: false, fileName:false, data:[], selectedCSV: false})}
+	        <span onClick={()=> setViewContent({show: false, fileName:false, data:[], selectedCSV: false})}
 				className="d-nav-icons" title={"Close contents and go back"}>
 	            <BiArrowBack className="db_info_icon_spacing"/>
 	        </span>
 		</span>
 	}
 
-	const PreviewToolBarForSingleDocuments = ({preview, setPreview}) => {
+	const PreviewToolBarForSingleDocuments = ({viewContent, setViewContent}) => {
 		return (
 		<div className="nav__main__wrap">
 			<div className="tdb__model__header">
@@ -182,15 +183,15 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 							<Col md={2}>
 							</Col>
 							<Col md={7}>
-                                <CSVViewTitle fileName={preview.fileName}/>
+                                <CSVViewTitle fileName={viewContent.fileName}/>
                             </Col>
 							<Col md={2}>
-                                <CSVDownloadIcons preview={preview}/>
+                                <CSVDownloadIcons viewContent={viewContent}/>
 								<CSVDelete/>
-								<CSVUpdate preview={preview}/>
+								<CSVUpdate viewContent={viewContent}/>
                             </Col>
 							<Col md={1}>
-                                <CSVGoBackIcon preview={preview}/>
+                                <CSVGoBackIcon viewContent={viewContent}/>
                             </Col>
 						</Row>
 					</div>
@@ -200,7 +201,7 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 	}
 
 
-	const Contents=({preview, query, tConf})=>{
+	const Contents=({viewContent, query, tConf})=>{
 		return <Row className={previewCss}>
 			<ControlledTable
 				query={query}
@@ -212,19 +213,18 @@ export const CSVViewContents=({preview, setPreview, previewCss, setCsvs})=>{
 	}
 
 	return <>
-		{preview.show && <>
-			{(preview.selectedCSV) && query &&  tConf && <>
-				<PreviewToolBarForSingleDocuments preview={preview} setPreview={setPreview}/>
+		{viewContent.show && <>
+			{(viewContent.selectedCSV) && query &&  tConf && <>
+				<PreviewToolBarForSingleDocuments viewContent={viewContent} setViewContent={setViewContent}/>
 				<main className="console__page__container console__page__container--width section-container">
 					<Row className="generic-message-holder">
 						{report && <TerminusDBSpeaks report={report}/>}
 					</Row>
 					{loading &&  <Loading type={TERMINUS_COMPONENT} />}
 					{isArray(updateCSV) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container">
-						<SelectedCSVList csvs={updateCSV} updateSelectedSingleFile={true}
-							page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs}/>
+						<SelectedCSVList csvs={updateCSV} page={DOCUMENT_VIEW} setLoading={setLoading} setViewContent={setViewContent} setCsvs={setUpdateCSV} availableCsvs={availableCsvs} setPreview={setPreview}/>
 					</Row>}
-					<Contents preview={preview} query={query} tConf={tConf}/>
+					<Contents viewContent={viewContent} query={query} tConf={tConf}/>
 				</main>
 			</>}
 		</>}

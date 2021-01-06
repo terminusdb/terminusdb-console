@@ -36,7 +36,7 @@ const DocumentPage = (props) => {
     const [isCreating, setIsCreating] = useState(false)
     const [csvs, setCsvs]=useState([])
     const [availableCsvs, setAvailableCsvs]=useState([])
-    const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
+    const [viewContent, setViewContent] = useState({show:false, fileName:false, data:[], selectedCSV: false})
     const {woqlClient} = WOQLClientObj()
     const tabConfig= TerminusClient.View.table();
 
@@ -103,7 +103,43 @@ const DocumentPage = (props) => {
         ref,
     )
 
+    const availableCsvQuery=()=>{
+        let WOQL=TerminusClient.WOQL
+        return WOQL.limit(50,
+            WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:name'))
+    }
+
+    const [updateQuery1, report1, csvsList, woql1]=WOQLQueryContainerHook(
+        woqlClient,
+        availableCsvQuery(),
+        branch,
+        ref,
+    )
+
     const insertCsvs = (e) => {
+        let fileList=[]
+        for(var i=0; i<e.target.files.length; i++){
+            let file = {};
+            file = e.target.files[i]
+            file.action=CREATE_NEW
+            file.fileType=getFileType(file.name)
+            setAvailableCsvs([])
+            let cBindings=csvsList.bindings
+    		for(var item in cBindings) {
+                let name=cBindings[item].name['@value']
+                if(file.name==name){
+                    let updateOpt=UPDATE+" "+name
+                    file.action=updateOpt
+                    file.fileToUpdate=name
+                }
+                setAvailableCsvs(arr => [...arr, name])
+    		}
+            fileList.push(file)
+        }
+        setCsvs(fileList);
+    }
+
+    /*const insertCsvs = (e) => {
         for(var i=0; i<e.target.files.length; i++){
             let file = {};
             file = e.target.files[i]
@@ -124,16 +160,18 @@ const DocumentPage = (props) => {
                     }
                     setAvailableCsvs(arr => [...arr, name])
         		}
-                setCsvs(arr => [...arr, file]);
+                fileList.push(file)
+                //setCsvs(arr => [...arr, file]);
             })
         }
-    }
+        setCsvs(fileList);
+    }   */
 
     return (
         <>
             <div id={props.id} className="console__page h-100 d-page-overflow" id="terminus-console-page">
                 <ConsoleNavbar onHeadChange={props.onHeadChange}/>
-                {!docID && !isCreating && !preview.show && <DocumentNavTab total={cnt}
+                {!docID && !isCreating && !viewContent.show && <DocumentNavTab total={cnt}
                     isAdding={isAdding}
                     types={types}
                     current={current}
@@ -172,8 +210,8 @@ const DocumentPage = (props) => {
                         setCsvs={setCsvs}
                         insertCsvs={insertCsvs}
                         availableCsvs={availableCsvs}
-                        setPreview={setPreview}
-                        preview={preview}
+                        setViewContent={setViewContent}
+                        viewContent={viewContent}
                         setDocID={setDocID}
                         availableDocs={availableDocs}
                         setDocument={setDocument}/>}
@@ -184,8 +222,8 @@ const DocumentPage = (props) => {
                         setCsvs={setCsvs}
                         insertCsvs={insertCsvs}
                         availableCsvs={availableCsvs}
-                        setPreview={setPreview}
-                        preview={preview}
+                        setViewContent={setViewContent}
+                        viewContent={viewContent}
                         availableDocs={availableDocs}
                         setDocument={setDocument}/>}
                 <Footer/>
@@ -198,7 +236,7 @@ const DocumentPage = (props) => {
  * Loads full list of document types and total count of documents to make them available to all sub-parts
  */
 
-const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setPreview, preview, onCsvCancel, availableDocs}) => {
+const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdding, isAdding, cnt, setCount, setTypes, types, setCurrent, setDocType, docType, tabConfig, setIsCreating, isCreating, csvs, setCsvs, availableCsvs, insertCsvs, setViewContent, viewContent, onCsvCancel, availableDocs}) => {
     let WOQL = TerminusClient.WOQL
     const {woqlClient}=WOQLClientObj()
     const {ref, branch}=DBContextObj()
@@ -303,8 +341,8 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdd
                     csvs={csvs}
                     setCsvs={setCsvs}
                     setDocID={setDocID}
-                    setPreview={setPreview}
-                    preview={preview}
+                    setViewContent={setViewContent}
+                    viewContent={viewContent}
                     setEdit={setEdit}
                 />
             }
@@ -313,7 +351,7 @@ const DocumentPageWithSchema = ({docid, doctype, setDocument, setDocID, setIsAdd
 }
 
 
-const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs, preview, setPreview, availableDocs}) => {
+const NoSchemaDocumentPage = ({doctype, docid, setDocument, csvs, setCsvs, insertCsvs, availableCsvs, viewContent, setViewContent, availableDocs}) => {
     return (<>
         {(csvs.length>0) && <>
             <CSVLoader csvs={csvs} setCsvs={setCsvs} availableDocs={availableDocs}
