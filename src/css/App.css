@@ -5355,8 +5355,9 @@ span.csv_subheader_section{
 }
 
 .selected-csv-name-span {
-    /*min-width: 350px !important;*/
-    min-width: 0px !important;
+    /*min-width: 350px !important;
+    min-width: 0px !important;*/
+    width: 280px !important;
 }
 
 .csv-preview-header, .commit-log-header {

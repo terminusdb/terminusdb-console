@@ -27,7 +27,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const {woqlClient}=WOQLClientObj()
 	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
-	console.log('csvs', csvs)
 	const FileName=({item})=>{
 		return <span className="selected-csv-span selected-csv-name-span">
 			<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
@@ -133,8 +132,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	const getSelectOptions=(item)=>{
-		let id=item.name, opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
+		let id=item.name, opts=[]
 		if(item.fileType==CSV_FILE_TYPE){
+			opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
 			availableCsvs.map(names=>{
 				let updateOpt=action.UPDATE+" "+names
 				opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
@@ -170,7 +170,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					options = {getSelectOptions(item)}
 				/>
 			</span>}
-			{(item.action==action.CREATE_NEW) && <span className="selected-csv-span">
+			{(item.action==action.CREATE_NEW) && <span className="selected-csv-span selected-csv-select-span">
 				<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
 			</span>}
 		</>
@@ -251,6 +251,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				updateBranches()
 				setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
 				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+				setCsvs([])
 			})
 			.catch((e) => {
 				setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
@@ -291,8 +292,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	  return results;
 	}
 
-	console.log('selectedFiles', selectedFiles)
-
 	const setFileAttributes=(file)=>{
 		let fJson=extractFileInfo(file)
 		fJson.file=file
@@ -300,7 +299,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	useEffect(() => {
-		//setSelectedFiles([])
 		let jsonFiles=[]
 		csvs.map(item=>{
 			if(item.fileType==CSV_FILE_TYPE){
