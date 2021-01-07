@@ -13,14 +13,21 @@ import {DEFAULT_PAGE_SIZE, DEFAULT_ORDER_BY} from "./constants.document"
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT, TERMINUS_TABLE, TERMINUS_INFO} from '../../constants/identifiers'
 import {CSVPreview} from '../../components/CSVPane/CSVPreview'
 import {CSVViewContents} from "../../components/CSVPane/CSVViewContents"
+import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW} from '../../components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
+import {BiUpload} from "react-icons/bi"
+import {SelectedCSVList} from "../../components/CSVPane/SelectedCSVList"
+import {isArray} from "../../utils/helperFunctions"
 
-export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview}) => {
+export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setPreview, preview, setDocID, setEdit}) => {
     const [loading, setLoading]=useState(false)
     const [report, setReport]=useState(false)
     const [emptyDB, setEmptyDV] = useState(false)
+    const [updateDoc, setUpdateDoc]=useState([])
+    const [currentDocToUpdate, setCurrentDocToUpdate]=useState(false)
+    const [selectedFile, setSelectedFile]=useState([])
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -86,8 +93,8 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         let row = cell.row
         setReport(false)
         if(selectDocument && row) {
+            setUpdateDoc([])
             if(row.original["Type ID"]==DOCTYPE_CSV){
-                //csvRowClick(row.original.Name["@value"])
                 csvRowClick(row.original["Document ID"], row.original.Name["@value"])
             }
             else selectDocument(row.original["Document ID"], row.original["Type ID"])
@@ -177,7 +184,6 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         }
     }
 
-
 	const getDownloadButton=()=>{
 		return <span className="csv-toolbar-holder" title={"Download Document"}>
             <MdFileDownload color="#0055bb" className='schema-toolbar-delete'/>
@@ -190,26 +196,80 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         </span>
 	}
 
+    const getUpdateButton=(cell)=>{
+        var acceptType
+        let row=cell.row
+        let type = row.original["Type ID"]
+        if(type==DOCTYPE_CSV){
+            acceptType=".csv"
+        }
+        else acceptType=".json, .jsonld"
+        return <span className="schema-toolbar-delete-holder" title={"Update Document"}>
+            <BiUpload color="#0055bb" className='schema-toolbar-delete'/>
+            <CSVInput multiple={false} id="singleCSV" acceptType={acceptType}/>
+        </span>
+    }
+
+    useEffect(() => {
+        if(selectedFile.length==0) return
+        let files = {};
+        for(var i=0; i<selectedFile.length; i++){
+            files = selectedFile[i]
+            files.action= "Update "+currentDocToUpdate
+        	files.fileToUpdate=currentDocToUpdate
+            files.docType=docType
+        }
+        setUpdateDoc([files])
+    }, [selectedFile])
+
+    const updateDocument=(cell)=>{
+        let row=cell.row
+        let dId=row.original["Document ID"]
+        let type = row.original["Type ID"]
+        setDocType(type)
+        if(type==DOCTYPE_CSV) setCurrentDocToUpdate(row.original.Name["@value"])
+        else setCurrentDocToUpdate(TerminusClient.UTILS.shorten(dId))
+    }
+
+    const handleUpdate=(cell)=>{
+        function invokeFileInput(){
+            let inp=document.getElementById("singleCSV")
+            inp.click()
+            inp.onclick = function () {
+                this.value = null;
+            };
+            inp.onchange = function (e) {
+                setSelectedFile(e.target.files)
+            }
+        }
+        let row=cell.row
+        let type = row.original["Type ID"]
+        invokeFileInput()
+        updateDocument(cell)
+    }
+
     const tabConfig=TerminusClient.View.table();
-    tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Download", "Delete")
+    tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Update","Download", "Delete")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
+    tabConfig.column("Update").unsortable(true).click(handleUpdate).minWidth(80).render(getUpdateButton)
     tabConfig.column("Download").unsortable(true).click(downloadDocument).minWidth(80).render(getDownloadButton)
     tabConfig.column("Delete").unsortable(true).click(deleteDocument).minWidth(80).render(getDeleteButton)
 
     if(typeof types != "object") return <main className="console__page__container console__page__container--width"></main>
 
-
-
     return (<>
-        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview}
+        {!isAdding && preview.show && <CSVViewContents preview={preview} setPreview={setPreview} setCsvs={setCsvs}
             previewCss={"csv-preview-results csv-preview-results-border"}/>}
         {loading &&  <Loading type={TERMINUS_COMPONENT} />}
         <main className="console__page__container console__page__container--width">
             {report && <Row className="generic-message-holder">
                 <TerminusDBSpeaks report={report}/>
+            </Row>}
+            {isArray(updateDoc) && <Row key="rd" className="database-context-row detail-credits chosen-csv-container update-csv-container-doc">
+                <SelectedCSVList csvs={updateDoc} updateSelectedSingleFile={true} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setCsvs} setUpdateDoc={setUpdateDoc}/>
             </Row>}
             {!isAdding && !preview.show && <ControlledTable
                 query={query}

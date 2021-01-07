@@ -8,6 +8,10 @@ export const SystemError = ({error}) => {
     let msg=""
     const [showFull, setFull] = useState(false)
 
+    if(typeof(error)=="string") return <div className={SYSTEM_ERROR_CSS}>
+        {error}
+    </div>
+
     if(error.data && error.data["system:message"]){
         msg = (error.data["system:message"]["@value"] ? error.data["system:message"]["@value"] : error.data["system:message"])
     }
@@ -27,6 +31,7 @@ export const SystemError = ({error}) => {
     if(!error.data) return null
 
     let eMsg=parseAPIMessage(error.data["api:message"])
+
 
     return (
         <div className={SYSTEM_ERROR_CSS}>
