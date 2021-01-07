@@ -71,7 +71,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
         changeTab(k)
     }
 
-    const updateWOQL = (q) => {
+    const updateWOQL = (q, commitMsg) => {
         if(consoleTime && q.containsUpdate()){
             setError({message: "You cannot update historical states"})
         }
@@ -82,7 +82,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                 }
                 if(limit != 20 || start) changeLimits(20, 0)
             }
-            updateQuery(q)
+            updateQuery(q, commitMsg)
         }
     }
 
@@ -119,7 +119,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
             <Tabs selected={selectedTab} onSelect={onSelect} id="query_tabs">
                 <Tab label={QUERY_PANEL_TITLE}>
-                    {loading && 
+                    {loading &&
                         <Loading type={TERMINUS_TABLE} />
                     }
                     <QueryEditor
@@ -142,7 +142,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                     </QueryEditor>
                 </Tab>
                 <Tab label="Result Viewer" {...disabled}>
-                    <ResultQueryPane 
+                    <ResultQueryPane
                         result={result}
                         setError={setError}
                         query={woql}
