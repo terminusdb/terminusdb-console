@@ -4085,6 +4085,10 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  div.new-csv-inp-id{
+      margin-top: 15px
+  }
+
   .csv-control-spacing {
       margin: 10px;
   }

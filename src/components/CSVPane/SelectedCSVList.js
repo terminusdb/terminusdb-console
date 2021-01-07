@@ -14,7 +14,7 @@ import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW, DOCTYPE_CSV, SELECT_C
 	CSV_FILE_TYPE, JSON_FILE_TYPE} from "./constants.csv"
 import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
+import {ManageDuplicateCsv, ShowNewIDInput} from "./ManageDuplicateCSV"
 import Select from 'react-select'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {checkIfDocTypeExists, extractFileInfo} from "./utils.csv"
@@ -24,6 +24,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [selectedFiles, setSelectedFiles]=useState([])
 	const [report, setReport]=useState(false)
+	const [newIDField, setNewIDField]=useState({})
 	const {woqlClient}=WOQLClientObj()
 	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
@@ -99,6 +100,9 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		const removeFile=(e)=>{
 			const fileName = e.target.id
 			setCsvs(csvs.filter(item => item.name !== fileName));
+			setSelectedFiles([])
+			if((item.fileType==CSV_FILE_TYPE) && (item.file.name==fileName))
+				setNewIDField({})
 			if((item.fileType==CSV_FILE_TYPE) && (preview.fileName==fileName))
 				setPreview({show: false, fileName:false, data:[], selectedCSV:false})
 		}
@@ -154,6 +158,13 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		const changeAction=(e)=>{
 			selectedFiles.map(item=>{
 				if(item.name==e.id){
+					setNewIDField({})
+					if((item.fileType==CSV_FILE_TYPE) && (e.value==action.CREATE_NEW)){ //if user chose create new for already existing csv in db
+						let act=item.action.split(" ")
+						if(act[0]==action.UPDATE){
+							setNewIDField(item)
+						}
+					}
 					item.action=e.value
 					item.fileToUpdate=e.fileToUpdate
 				}
@@ -324,7 +335,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					</Row>
 					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
-							<ManageDuplicateCsv fileName={item.name}/>
+							<div><ManageDuplicateCsv fileName={item.name} newIDField={newIDField}/></div>
+							<div class="new-csv-inp-id">{isObject(newIDField) && <ShowNewIDInput newIDField={newIDField}/>}</div>
 						</div>}
 					</>)}
 					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}

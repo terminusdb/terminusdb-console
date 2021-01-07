@@ -139,34 +139,6 @@ const DocumentPage = (props) => {
         setCsvs(fileList);
     }
 
-    /*const insertCsvs = (e) => {
-        for(var i=0; i<e.target.files.length; i++){
-            let file = {};
-            file = e.target.files[i]
-            file.action=CREATE_NEW
-            file.fileType=getFileType(file.name)
-            const q=TerminusClient.WOQL.limit(50,
-                TerminusClient.WOQL.triple('v:Document ID', 'type', 'scm:CSV').triple('v:Document ID', 'label', 'v:name'))
-            woqlClient.query(q).then((results) => {
-                setAvailableCsvs([])
-                let res = new TerminusClient.WOQLResult(results, q)
-        		const cBindings=res.getBindings()
-        		for(var item in cBindings) {
-                    let name=cBindings[item].name['@value']
-                    if(file.name==name){
-                        let updateOpt=UPDATE+" "+name
-                        file.action=updateOpt
-                        file.fileToUpdate=name
-                    }
-                    setAvailableCsvs(arr => [...arr, name])
-        		}
-                fileList.push(file)
-                //setCsvs(arr => [...arr, file]);
-            })
-        }
-        setCsvs(fileList);
-    }   */
-
     return (
         <>
             <div id={props.id} className="console__page h-100 d-page-overflow" id="terminus-console-page">
