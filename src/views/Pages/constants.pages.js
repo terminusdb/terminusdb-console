@@ -17,11 +17,6 @@ export const MANAGE_SERVER_TITLE = "Server Configuration"
 export const MANAGE_SERVER_CSS = ""
 export const CLONEDB_TITLE = "Clone"
 
-export const ADD_CSV = "Add Csvs"
-export const ADD_MORE_CSV = "Add More Csvs"
-export const ADD_MORE_CSV_TITLE = "Add Csvs as Documents"
-
-
 //Terminus DB Home Page
 export const TERMINUS_HOME_TITLE = "TerminusDB - Terminus Database"
 export const TERMINUS_HOME_ADVICE = "This is the TerminusDB Terminus Database. It stores the internal meta-data about users, roles, databases, etc. It should not be updated directly - treat with care."

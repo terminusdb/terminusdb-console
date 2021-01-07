@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const Dotenv = require('dotenv-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+require("./check_env_variables")
 
 module.exports = (env, argv) => ({
   entry: [

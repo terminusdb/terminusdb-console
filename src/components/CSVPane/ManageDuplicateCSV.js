@@ -15,3 +15,20 @@ export const ManageDuplicateCsv=({fileName})=>{
 		</Col>
 	</Row>)
 }
+
+export const ShowNewIDInput=({newIDField})=>{
+	let item=newIDField
+	function handleInput(e, item){
+		item.newFileName=e.target.value
+		item.action=action.CREATE_NEW
+	}
+
+	return <Row className="csv-duplicate-msg" key={"New_id_"+item.name}>
+		<Col key={"Col_new_id_"+item.name} md={3}>
+			<span className={action.CONTROLS_TEXT}>Add a new ID to create new CSV</span>
+		</Col>
+		<Col key={"Col_new_id_inp_"+item.name} md={2}>
+			<input onBlur={(e)=>handleInput(e, item)} required/>
+		</Col>
+	</Row>
+}

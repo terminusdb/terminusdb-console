@@ -13,6 +13,10 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 export const DocumentNavTab = ({isAdding, total, types, current, docType, changeDocType, limit, setDocCount, docCount, doCreate, csvs, setCsvs, insertCsvs, onCsvCancel}) => {
 
     const [showAdding, setShowAdding] = useState(false)
+    
+    var acceptType=".json, .jsonld"
+    if(docType==DOCTYPE_CSV) acceptType=".csv"
+    else if (docType==undefined) acceptType=".json, .jsonld, .csv"
 
 	const TotalStats = ({total, doctype, docCount}) => {
         if(typeof total != "number") return null
@@ -48,7 +52,7 @@ export const DocumentNavTab = ({isAdding, total, types, current, docType, change
     const AddCSVIcon = ({insertCsvs}) => {
         let children = []
         children.push(<AddIcon title={CREATE_NEW_DOCUMENT}/>)
-        return <CSVInput text={children} onChange={insertCsvs} multiple={true} labelCss={"csvInputNoPad"}/>
+        return <CSVInput text={children} onChange={insertCsvs} multiple={true} labelCss={"csvInputNoPad"} acceptType={acceptType}/>
     }
 
     const AddIcon =({title, onClick}) => {
