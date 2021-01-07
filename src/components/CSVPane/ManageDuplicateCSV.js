@@ -19,11 +19,8 @@ export const ManageDuplicateCsv=({fileName})=>{
 export const ShowNewIDInput=({newIDField})=>{
 	let item=newIDField
 	function handleInput(e, item){
-		item.name=e.target.value
-		item.file.name=item.name
-		item.file.action=action.CREATE_NEW
-		item.file.fileToUpdate=""
-		console.log('item new', item)
+		item.newFileName=e.target.value
+		item.action=action.CREATE_NEW
 	}
 
 	return <Row className="csv-duplicate-msg" key={"New_id_"+item.name}>

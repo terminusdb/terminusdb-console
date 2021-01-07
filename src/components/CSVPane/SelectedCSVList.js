@@ -24,7 +24,6 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
 	const [selectedFiles, setSelectedFiles]=useState([])
 	const [report, setReport]=useState(false)
-	const [newIDField, setNewIDField]=useState({})
 	const {woqlClient}=WOQLClientObj()
 	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
@@ -163,6 +162,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 						let act=item.action.split(" ")
 						if(act[0]==action.UPDATE){
 							setNewIDField(item)
+							item.test=true
 						}
 					}
 					item.action=e.value
@@ -170,6 +170,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				}
 			})
 		}
+
+		//console.log('selectedFiles', selectedFiles)
 
 		return <>
 			{(page==DOCUMENT_VIEW) && (item.action!==action.CREATE_NEW) && <span className="selected-csv-span selected-csv-select-span">
@@ -216,7 +218,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 		if(isArray(insertFiles)){
 			let fls=[]
-			insertFiles.map(it=>{fls.push(it.file)})
+			insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
 			await woqlClient.insertCSV(fls, commitMsg, null, null).then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
@@ -335,8 +337,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					</Row>
 					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
-							<div><ManageDuplicateCsv fileName={item.name} newIDField={newIDField}/></div>
-							<div class="new-csv-inp-id">{isObject(newIDField) && <ShowNewIDInput newIDField={newIDField}/>}</div>
+							<div><ManageDuplicateCsv fileName={item.name}/></div>
+							{/*<div class="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
 						</div>}
 					</>)}
 					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
