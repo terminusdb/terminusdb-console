@@ -12,7 +12,7 @@ export const CSVList=()=>{
 	let WOQL = TerminusClient.WOQL
 	const csvQuery = () => {
         let q = WOQL.and(WOQL.lib().document_metadata())
-        q.sub(DOCTYPE_CSV, "v:Type ID")
+        //q.sub(DOCTYPE_CSV, "v:Type ID")
         return q
     }
 
@@ -34,7 +34,7 @@ export const CSVList=()=>{
 				<span className="db-card-credit csv_subheader_section">
 					<BsCardList color={"#787878"} className="csv_info_icon_spacing"/>
 					<span className="db_info existing_csv_subheader">
-						CSV Documents
+						Available Documents 
 					</span>
 				</span>
                 <ControlledTable

@@ -300,7 +300,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	}
 
 	useEffect(() => {
-		setSelectedFiles([])
+		//setSelectedFiles([])
 		let jsonFiles=[]
 		csvs.map(item=>{
 			if(item.fileType==CSV_FILE_TYPE){
