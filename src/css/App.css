@@ -4085,6 +4085,10 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  div.new-csv-inp-id{
+      margin-top: 15px
+  }
+
   .csv-control-spacing {
       margin: 10px;
   }
@@ -5355,8 +5359,9 @@ span.csv_subheader_section{
 }
 
 .selected-csv-name-span {
-    /*min-width: 350px !important;*/
-    min-width: 0px !important;
+    /*min-width: 350px !important;
+    min-width: 0px !important;*/
+    width: 280px !important;
 }
 
 .csv-preview-header, .commit-log-header {
