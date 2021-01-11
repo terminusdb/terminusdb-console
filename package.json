@@ -60,7 +60,6 @@
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "codemirror": "^5.58.1",
-    "convert-csv-to-json": "^1.0.0",
     "core-js": "^3.8.0",
     "date-fns": "^2.16.1",
     "dotenv-webpack": "^1.7.0",
@@ -95,13 +94,11 @@
     "react-simple-code-editor": "^0.11.0",
     "react-slick": "^0.25.2",
     "react-tabs": "^3.1.1",
-    "react-textarea-autosize": "^8.3.0",
     "react-toggle-button": "^2.2.0",
     "react-tooltip": "^4.2.10",
     "react-transition-group": "^4.4.1",
     "react-unsplash-wrapper": "^1.1.5",
     "reactstrap": "^8.6.0",
-    "recharts": "^2.0.0-beta.7",
     "simple-react-notifications": "^1.2.15"
   },
   "devDependencies": {
