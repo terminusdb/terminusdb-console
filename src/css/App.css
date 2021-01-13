@@ -1,4 +1,8 @@
-.navbar{
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.react.css";
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css";
+
+
+ .navbar{
     min-height: 70px!important;
   }
 
@@ -2497,17 +2501,19 @@ span.delete-modal-label {
     margin-left: 10px;
 }
 
-  .stats-list {
-      display: inline-block;
-      max-width: 500px;
-      height: 56px;
-      padding: 10px 8px 10px 0;
-      font-size: 1.2em;
-  }
+.stats-list {
+  display: flex;
+  max-width: 500px;
+  height: 56px;
+  padding: 10px 8px 10px 0;
+  font-size: 1.2em;
+  align-items: center;
+}
 
-  .stats-icon {
-      height: 36px;
-  }
+.stats-icon {
+  height: 36px;
+  padding-right: 10px;
+}
 
   .dblist-create {
     border: 1px solid white;

@@ -48,7 +48,7 @@ const SubsectionSummary = ({section, onOpen}) => {
     }
 
     return (
-        <Container className={SUMMARY_SECTION.containerCSS}>
+        <div className={SUMMARY_SECTION.containerCSS}>
             <Row key={section.id + "_summary"} className={SUMMARY_SECTION.contentRowCSS}>
                 <Col md={1} className={SUMMARY_SECTION.iconContainerCSS}>
                     {getIcon(section)}
@@ -70,7 +70,7 @@ const SubsectionSummary = ({section, onOpen}) => {
                     {getOpen(section)}
                 </Col>
             </Row>
-        </Container>
+        </div>
     )
 }
 

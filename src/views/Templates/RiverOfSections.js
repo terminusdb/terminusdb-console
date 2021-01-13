@@ -40,9 +40,9 @@ export const RiverOfSections = ({active, label, sections, children}) => {
 
 
     let ros = (
-        <Container className={RIVER_OF_SECTIONS.pageCSS}>
+        <div className={RIVER_OF_SECTIONS.pageCSS}>
             {contents}
-        </Container>
+        </div>
     )
     return ros
 }
