@@ -28,6 +28,7 @@ jobs:
             mv console/env-production console/.env
         elif [ $(echo "${{ github.ref }}" | grep -P "dev") ]; then
             mv console/env-development console/.env
+            echo "copy env-development"
         fi
     - run: npm run build
     - run: bash ".ci/publish_bintray.sh" "${GITHUB_REF##*/}"
