@@ -43,8 +43,11 @@ const SubsectionSummary = ({section, onOpen}) => {
 
     function getIcon(section){
         if(!section.icon) return null
-        if(section.id == "delete") return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.deleteCSS} icon={section.icon}/>)
-        else return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.iconCSS} icon={section.icon}/>)
+        if(section.id == "delete") {
+            return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.deleteCSS} icon={section.icon}/>)
+        }else{
+            return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.iconCSS} icon={section.icon}/>)
+        }
     }
 
     return (
