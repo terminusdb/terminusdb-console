@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import 'react-tabs/style/react-tabs.css';
 import Loading from '../../components/Reports/Loading'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {
@@ -13,12 +12,10 @@ import { goDBHome, goHubPage } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Row, Col } from "reactstrap"
+import { Row, Col } from "react-bootstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 import {DB_CSV_CREATE_FORM} from "./constants.createdb"
 import {isArray} from "../../utils/helperFunctions"
 

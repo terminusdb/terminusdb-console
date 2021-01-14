@@ -3,7 +3,7 @@ import {QueryEditor} from './QueryEditor'
 import {QueryLibrary} from './QueryLibrary'
 import {ReportWrapper} from './ReportWrapper'
 import {WOQLClientObj} from '../../init/woql-client-instance'
-import {Tabs, Tab} from 'react-bootstrap-tabs'
+import {Tabs, Tab} from 'react-bootstrap'
 import {ResultQueryPane} from './ResultQueryPane'
 import {WOQLEditorControlled, WOQLTable, ControlledQueryHook} from '@terminusdb/terminusdb-react-components'
 import {QUERY_PANEL_TITLE, QUERY_EDITOR_LABEL} from './constants.querypane'
@@ -27,7 +27,9 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
     const [showLanguage, setShowLanguage] = useState(false)
     const [showContent, setShowContent] = useState('')
-    const [selectedTab, changeTab] = useState(0)
+    //const [selectedTab, changeTab] = useState(0)
+    const [selectedTab, changeTab] = useState('query')
+    
     const [error, setError] = useState(false)
     const { woqlClient} = WOQLClientObj()
     const {updateBranches, branch, ref, consoleTime} = DBContextObj()
@@ -105,20 +107,11 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
         )
     return (
         <>
-            {/* <nav className="nav__main">
-                <ul className="nav__main__center">
-                    <li className="nav__main__item">
-                        <button className="nav__main__link">Query</button>
-                    </li>
-                    <li className="nav__main__item">
-                        <button className="nav__main__link">Result</button>
-                    </li>
-                </ul>
-            </nav> */}
+          
             <ReportWrapper {...errorObj}>{errorChild}</ReportWrapper>
 
-            <Tabs selected={selectedTab} onSelect={onSelect} id="query_tabs">
-                <Tab label={QUERY_PANEL_TITLE}>
+            <Tabs selected={selectedTab} activeKey={selectedTab} onSelect={onSelect} id="query_tabs">
+                <Tab eventKey="query" label={QUERY_PANEL_TITLE} title={QUERY_PANEL_TITLE}>
                     {loading &&
                         <Loading type={TERMINUS_TABLE} />
                     }
@@ -141,7 +134,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
                         <QueryLibrary library="editor" />
                     </QueryEditor>
                 </Tab>
-                <Tab label="Result Viewer" {...disabled}>
+                <Tab eventKey="result" label="Result Viewer" title="Result Viewer" {...disabled}>
                     <ResultQueryPane
                         result={result}
                         setError={setError}
