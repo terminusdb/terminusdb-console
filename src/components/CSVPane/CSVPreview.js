@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { ResultViewer } from "..//QueryPane/ResultViewer"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {MdSlideshow} from "react-icons/md"
 import {TiDeleteOutline} from "react-icons/ti"
 import {ControlledTable} from '../../views/Tables/ControlledTable'

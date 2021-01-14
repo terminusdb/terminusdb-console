@@ -3,7 +3,7 @@
  */
 import React, {useState, useEffect} from 'react'
 import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
-import {Row, Col, Badge, Container} from "reactstrap"
+import {Row, Col, Badge, Container} from "react-bootstrap" //replaced
 import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import {SynchronizeActions} from "./SynchronizeActions"

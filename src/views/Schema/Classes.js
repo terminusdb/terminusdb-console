@@ -12,7 +12,7 @@ import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {SCHEMA_CLASSES_ROUTE} from '../../constants/routes'
-import {Col, Row, Button} from "reactstrap"
+import {Col, Row, Button} from "react-bootstrap" //replaced
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
 import {TERMINUS_ERROR, TERMINUS_TABLE} from '../../constants/identifiers'

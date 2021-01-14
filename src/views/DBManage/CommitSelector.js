@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {printts} from '../../constants/dates'
-import {Row, Col, Container} from "reactstrap"
+import {Row, Col, Container} from "react-bootstrap" //replaced
 import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
 import {BranchSelector} from '../../components/History/BranchSelector' 
 

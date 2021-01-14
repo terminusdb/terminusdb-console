@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB } from "../../constants/images"
-import {Row, Col } from "reactstrap"
+import {Row, Col } from "react-bootstrap" //replaced
 import {goDBPage, goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
 import { TERMINUS_ERROR, TERMINUS_COMPONENT } from "../../constants/identifiers"
 import Loading from "../../components/Reports/Loading"

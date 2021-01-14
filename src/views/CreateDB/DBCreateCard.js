@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
-import {Row, Col, Modal, ModalHeader, ModalBody} from "reactstrap"
+import {Row, Col, Modal, ModalHeader, ModalBody} from "react-bootstrap" //replaced
 import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt,
     AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation,
     AiOutlineGlobal, AiOutlineLeft} from 'react-icons/ai';

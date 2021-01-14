@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Container, Row, Col } from "reactstrap"
+import { Container, Row, Col } from "react-bootstrap" //replaced
 //import { Container, Row, Col } from "react-bootstrap"
 import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS,
          SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, ILLEGAL_ID_ERROR,

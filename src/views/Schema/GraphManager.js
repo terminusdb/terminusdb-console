@@ -15,7 +15,7 @@ import {
 } from '../../constants/identifiers'
 import {GraphList} from '../Tables/GraphList'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {Col, Row, Button} from "reactstrap"
+import {Col, Row, Button} from "react-bootstrap" //replaced
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {legalURLID} from "../../components/Query/CollaborateAPI"
 import Select from "react-select";

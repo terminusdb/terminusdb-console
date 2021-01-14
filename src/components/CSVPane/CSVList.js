@@ -3,7 +3,7 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {CSVViewContents} from "./CSVViewContents"
 import {DOCTYPE_CSV, DOCUMENT_VIEW_FRAGMENT} from "./constants.csv"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {ControlledTable} from '../../views/Tables/ControlledTable'
 import {BsCardList} from "react-icons/bs"
 

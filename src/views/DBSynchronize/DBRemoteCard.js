@@ -3,7 +3,7 @@
  */
 import React, {useState} from 'react'
 import { GRAPHDB } from "../../constants/images"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import { printts } from "../../constants/dates"
 import { DATETIME_COMPLETE } from "../../constants/dates"
 import { AiFillEdit, AiFillCopy, AiOutlineBlock, AiFillLock, AiOutlineUser, AiOutlineWarning,

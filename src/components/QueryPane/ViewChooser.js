@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "reactstrap";
+//import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Container, Col, Row } from "react-bootstrap" //replaced;
 import { TABLE_VIEW, GRAPH_VIEW, TOOLBAR_CSS,ELEMENTS_ID } from "./constants.querypane"
 import {Dropdown} from '../Form/Dropdown'; 
 

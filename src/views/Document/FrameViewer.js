@@ -3,7 +3,7 @@ import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {Row, Col, Button} from "reactstrap"
+import {Row, Col, Button} from "react-bootstrap" //replaced
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"

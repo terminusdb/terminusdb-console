@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Container } from "reactstrap";
+import { Container } from "react-bootstrap" //replaced;
 import { RIVER_OF_SECTIONS } from "./constants.templates"
 import { ExpandableSubsection } from "./ExpandableSubsection";
 import { Crumbs } from "./BreadCrumbs"

@@ -2,7 +2,7 @@ import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
 import { Alert } from 'reactstrap';
 import { addUser } from "../../variables/formLabels"
-import { Col } from "reactstrap";
+import { Col } from "react-bootstrap" //replaced;
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"

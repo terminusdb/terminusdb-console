@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Button, Container } from "reactstrap";
+import { Col, Row, Button, Container } from "react-bootstrap" //replaced;
 import { RIVER_OF_SECTIONS, SUMMARY_SECTION, SECTION_HEADER } from "./constants.templates"
 import { CHECK } from "../../constants/faicons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -44,7 +44,9 @@ const SubsectionSummary = ({section, onOpen}) => {
     function getIcon(section){
         if(!section.icon) return null
         if(section.id == "delete") {
-            return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.deleteCSS} icon={section.icon}/>)
+            return (<FontAwesomeIcon size="5x" 
+                    className={SUMMARY_SECTION.deleteCSS} 
+                    icon={section.icon}/>)
         }else{
             return (<FontAwesomeIcon size="5x" className={SUMMARY_SECTION.iconCSS} icon={section.icon}/>)
         }
