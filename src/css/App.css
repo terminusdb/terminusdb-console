@@ -2136,6 +2136,10 @@ span.delete-modal-label {
 
   .tcf-internal-row {
       padding: 0;
+      /*
+      * add after update bootstrap
+      */
+      flex:1;
   }
 
   .tcf-internal-col {

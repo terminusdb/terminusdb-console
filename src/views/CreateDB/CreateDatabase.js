@@ -12,7 +12,7 @@ import { goDBHome, goHubPage } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
 import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
-import { Row, Col } from "react-bootstrap"
+import { Row, Col, Container } from "react-bootstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
 import { AiOutlineCloseCircle, AiFillCiCircle } from 'react-icons/ai'

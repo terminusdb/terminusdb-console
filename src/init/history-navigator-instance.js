@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+/*import React, { useState, useEffect, useContext } from "react";
 import TerminusClient from '@terminusdb/terminusdb-client';
 import { addHours, startOfHour } from "date-fns";
 
@@ -8,6 +8,9 @@ export const HistoryNavigatorObj = () => useContext(HistoryNavigatorContext);
 export const HistoryNavigatorProvider = ({children,woqlClient}) => {
 
     let nowts = parseFloat(startOfHour(addHours(new Date(), 1)).getTime()/1000)
+    
+
+
     const [branches, setBranches] = useState([])//props.branches);
     const [refId, setRef] = useState(woqlClient.ref());//props.ref
     const [settingCommit, setSettingCommit] = useState(false);
@@ -84,9 +87,7 @@ export const HistoryNavigatorProvider = ({children,woqlClient}) => {
                 if(lres){
                     let commie = extractCommitData(lres)
                     if(commie.child){
-                        /*
-                        *I add the commit at the main instance of terminus client
-                        */
+                       
                         woqlClient.ref(commie.id)
                         setRef(commie.id)
                     }
@@ -157,3 +158,5 @@ export const HistoryNavigatorProvider = ({children,woqlClient}) => {
     </HistoryNavigatorContext.Provider>
     )
 }
+
+*/

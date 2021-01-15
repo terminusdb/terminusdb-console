@@ -24,7 +24,6 @@ import { CloneLocal } from "../CreateDB/CloneDatabase"
 import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
 import Select from "react-select"
 import {CreateDB} from "../Server/DBListControl"
-import { isFuture } from 'date-fns';
 import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
 import {Collaborators} from "../Server/Collaborators"
 import {FiUsers} from "react-icons/fi"
