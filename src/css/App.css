@@ -1,6 +1,5 @@
 @import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.react.css";
 @import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css";
-
 .publisher-picker-col{
   min-width: 300px;
 }

@@ -235,7 +235,7 @@ export const TCFormField = ({
                     {children}
                     </Col>
                     {cowDuck &&
-                        <Col md={{ size: 'auto'}} className={inputGutterClassName} >
+                        <Col md="auto" className={inputGutterClassName} >
                             {cdhelp}
                         </Col>
                     }
