@@ -1,6 +1,6 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
-import { Alert } from 'reactstrap';
+import { Alert } from "react-bootstrap" //replace;
 import { collaborate, createUser } from "../../variables/formLabels"
 import { Col } from "react-bootstrap" //replaced;
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"

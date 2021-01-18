@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Col, Row, Label, Input} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Col, Row, Label, Input} from "react-bootstrap" //replace;
 import { useForm } from 'react-hook-form';
 import { UNDER_CONSTRUCTION } from "./constants.reports"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

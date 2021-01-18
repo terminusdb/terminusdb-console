@@ -5,7 +5,7 @@ import {SERVER_ROUTE} from '../../constants/routes'
 import {AiOutlineInfoCircle} from "react-icons/ai"
 import packageJson from '../../../package.json';
 
-//import {Modal, ModalHeader, ModalBody, Row, Col} from 'reactstrap';
+//import {Modal, ModalHeader, ModalBody, Row, Col} from "react-bootstrap" //replace;
 import {Modal, ModalHeader, ModalBody, Row, Col} from 'react-bootstrap';
 
 export const ServerNavbar = (props) => {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col} from 'reactstrap'
+import {Row, Col} from "react-bootstrap" //replace
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'

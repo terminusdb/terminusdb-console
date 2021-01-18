@@ -21,7 +21,7 @@ import { DATETIME_DB_UPDATED } from "../../constants/dates"
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {DBCreateCard} from "../CreateDB/DBCreateCard"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
-import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
+import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from "react-bootstrap" //replace
 import Select from "react-select"
 import {CreateDB} from "../Server/DBListControl"
 import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
