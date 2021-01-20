@@ -7,7 +7,6 @@ import {printts, DATETIME_COMPLETE} from '../../constants/dates'
 import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList,
     AiFillEdit, AiOutlinePushpin, AiOutlineEdit, AiFillBuild, AiOutlineBuild} from 'react-icons/ai';
 import { FiBox } from 'react-icons/fi'
-//import { parseTwoDigitYear } from 'moment'
 import {formatBytes} from "../../utils/format"
 
 export const ScopedDetails = () => {

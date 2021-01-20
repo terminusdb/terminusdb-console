@@ -1582,6 +1582,7 @@ export const CloneRoleCredits = ({meta}) => {
 export const DBTimings = ({meta}) => {
     let parts = []
     function updateStamp(ts){
+        //set to now, but with 0 mins, 0 secs, and 0 ms
         let lab = moment(ts*1000).startOf('hour').fromNow()
         return lab
     }
