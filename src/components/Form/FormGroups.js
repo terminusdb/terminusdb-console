@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Label,Input, FormText} from "reactstrap";
+import { FormGroup, Label,Input, FormText} from "react-bootstrap" //replaced;
 
 export const FormGroups = (props) => {
     const select = props.select || false;

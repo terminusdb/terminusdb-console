@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react'
-import {Row, Col, Container} from 'reactstrap'
+import {Row, Col, Container} from "react-bootstrap" //replace
 import Loading from '../../components/Reports/Loading'
 import { WOQLClientObj } from '../../init/woql-client-instance'
 import { Organization } from './Organization'

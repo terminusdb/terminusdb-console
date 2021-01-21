@@ -172,6 +172,7 @@ export const Synchronize = () => {
             {!loading && !operation &&                 
                 <DBRemotes 
                     woqlClient={woqlClient}
+                    bffClient={bffClient}
                     meta={meta}
                     user={user}
                     repos={repos} 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert} from 'reactstrap'
+import {Alert} from "react-bootstrap" //replace
 
 export const COMMIT_LOG_FORM = {
     fields: [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect,Fragment } from "react"
-import { Alert, Container } from 'reactstrap'
+import { Alert, Container } from "react-bootstrap" //replace
 import { ViolationReport, hasViolations, getViolations } from './ViolationReport'
 import { SystemError } from "./SystemError"
 import { RESULT_REPORT_CSS, QUERY_CAUSED_ERROR, RESULT_REPORT_LABEL_CSS, RESULT_REPORT_COUNT_CSS,

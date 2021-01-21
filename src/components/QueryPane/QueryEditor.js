@@ -5,7 +5,7 @@ import {LanguageSwitcher} from "./LanguageSwitcher"
 import { COMMIT_BOX, QUERY_EDITOR_LABEL  } from "./constants.querypane"
 import {makeWOQLFromString , makeWOQLIntoString} from "./queryPaneUtils"
 import TerminusClient  from "@terminusdb/terminusdb-client"
-import {Alert} from "reactstrap";
+import {Alert} from "react-bootstrap" //replaced;
 /**
  * Controls the display of query viewer and editor
  */

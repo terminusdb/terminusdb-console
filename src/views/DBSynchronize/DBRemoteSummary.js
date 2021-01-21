@@ -1,4 +1,4 @@
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import React from 'react'
 import { isLocalURL } from '../../components/Query/CollaborateAPI'
 import { AiOutlineInfoCircle } from 'react-icons/ai'

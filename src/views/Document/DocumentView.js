@@ -3,7 +3,7 @@ import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {Row, Col, Button} from "reactstrap"
+import {Row, Col, Button} from "react-bootstrap" //replaced
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
@@ -274,7 +274,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close, setE
                     <TerminusDBSpeaks report={sreport} />
                 </Row>
             }
-            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "frame" || docview == "table"))) &&
+            {edit && ((content && docview == "json") || (frame && jsonld && (docview == "table"))) &&
                 <ViewToolbar
                     editmode={edit}
                     docid={docid}

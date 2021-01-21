@@ -5,7 +5,7 @@ import {BuiltInPrefixes, CustomPrefixes} from '../Tables/Prefixes'
 import {TAB_SCREEN_CSS, TOOLBAR_CSS, PREFIXES, CREATE_PREFIX_BUTTON, GRAPH_FILTER_CSS} from './constants.schema'
 import Loading from '../../components/Reports/Loading'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {Col, Row, Button} from "reactstrap"
+import {Col, Row, Button} from "react-bootstrap" //replaced
 import {TERMINUS_ERROR, TERMINUS_SUCCESS} from "../../constants/identifiers"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {legalURLID} from "../../components/Query/CollaborateAPI"

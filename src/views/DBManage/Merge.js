@@ -15,7 +15,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
-import {Col, Row, Container, Alert} from "reactstrap"
+import {Col, Row, Container, Alert} from "react-bootstrap" //replaced
 import Loading from '../../components/Reports/Loading'
 import Select from "react-select";
 

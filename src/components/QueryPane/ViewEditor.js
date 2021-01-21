@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Container } from 'reactstrap'
+import { Button, Container } from "react-bootstrap" //replace
 import {SHOW_VIEW_EDITOR, HIDE_VIEW_EDITOR} from './constants.querypane'
 import { CodeEditor } from "./Editor"
 

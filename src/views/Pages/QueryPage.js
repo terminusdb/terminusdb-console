@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row } from "reactstrap";
+import { Row } from "react-bootstrap" //replaced;
 import { QueryPane } from "../../components/QueryPane/QueryPane"
 import { PageView } from '../Templates/PageView'
 import { NEW_QUERY_BUTTON_TEXT } from "./constants.pages"

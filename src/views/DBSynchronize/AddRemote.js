@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS, TERMINUS_INFO} from '../../constants/identifiers'
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import { legalURLID } from '../../components/Query/CollaborateAPI'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 

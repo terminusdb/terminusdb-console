@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
-
+import {RecordHubAction, RecordHubFailure} from "./HubAction"
 /**
  * Meta has create db (id, label, comment, organization)
  */
@@ -63,7 +63,7 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
 * label
 * comment
 */
-export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed) => {
+export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed, bffClient) => {
     let url = meta.remote_url
     let newid = meta.id
     let newby = {}
@@ -89,7 +89,15 @@ export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed
         const jwtoken = await getTokenSilently()
         client.remote_auth({type: "jwt", key: jwtoken})
     }
-    return client.clonedb(newby, newid).then(() => newid)
+
+    return client.clonedb(newby, newid).then(() => {
+        RecordHubAction(bffClient, "clone", newby.remote_url)
+        return newid
+    })
+    .catch((e) => {
+        RecordHubFailure(bffClient, "clone", newby.remote_url)
+        throw e
+    })
 }
 
 
@@ -158,7 +166,7 @@ export const removeRemote = async (remote_name, client, getTokenSilently) => {
     return client.query(q, `Deleting remote ${remote_name}`)
 }
 
-export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth) => {
+export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth, bffClient) => {
     let nClient = client.copy()
     if(_is_local_server(nClient, remote_url)){
         nClient.remote_auth( nClient.local_auth() )
@@ -170,7 +178,16 @@ export const Fetch = async (remote_name, remote_url, client, getTokenSilently, n
         const jwtoken = await getTokenSilently()
         nClient.remote_auth({type: "jwt", key: jwtoken})
     }
-    return nClient.fetch(remote_name)
+    return nClient.fetch(remote_name).then((x) => {
+        RecordHubAction(bffClient, "fetch", remote_url)
+        return x
+    })
+    .catch((e) => {
+        console.log(e)
+        RecordHubFailure(bffClient, "fetch", remote_url)
+        throw e
+    })
+
 }
 
 
@@ -204,7 +221,7 @@ export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently
 /*
 * meta has : local_branch / remote_branch / url / commit
 */
-export const Push = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently) => {
+export const Push = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, bffClient) => {
     let from_branch = local_branch || 'main'
     let to_branch = remote_branch || 'main'
     commit = commit || `Push of local branch ${local_branch} to ${remote} branch ${remote_branch} with Console`
@@ -222,13 +239,19 @@ export const Push = async (local_branch, remote, remote_branch, remote_url, comm
         const jwtoken = await getTokenSilently()
         nClient.remote_auth({type: "jwt", key: jwtoken})
     }
-    return nClient.push(push_to)
+    return nClient.push(push_to).then(() => {
+        RecordHubAction(bffClient, "push", remote_url, remote_branch)
+    })
+    .catch((e) => {
+        RecordHubFailure(bffClient, "push", remote_url, remote_branch)
+        throw e
+    })
 }
 
 /*
 * meta has : local_branch / remote_branch / url / commit
 */
-export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, no_auth) => {
+export const Pull = async (local_branch, remote, remote_branch, remote_url, commit, client, getTokenSilently, no_auth, bffClient) => {
     let to_branch = local_branch || 'main'
     let from_branch = remote_branch || 'main'
     commit = commit || `Pull to local branch ${local_branch} from ${remote} branch ${remote_branch} with Console`
@@ -250,7 +273,13 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
         const jwtoken = await getTokenSilently()
         nClient.remote_auth({type: "jwt", key: jwtoken})
     }
-    return nClient.pull(pull_from)
+    return nClient.pull(pull_from).then(() => {
+        RecordHubAction(bffClient, "pull", remote_url, remote_branch)
+    })
+    .catch((e) => {
+        RecordHubFailure(bffClient, "pull", remote_url, remote_branch)
+        throw e
+    })
 }
 
 export const legalURLID = (idstr) => {

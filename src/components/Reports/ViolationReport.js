@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from 'reactstrap';
+import { Alert } from "react-bootstrap" //replace;
 import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS,
     VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants.reports"
 

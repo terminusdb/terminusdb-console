@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Alert, Container, Row, Col } from 'reactstrap'
+import { Alert, Container, Row, Col } from "react-bootstrap" //replace
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "../../constants/faicons"
 import {SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS, HIDE_ERROR_DETAILS, COMPONENT_ERROR} from "./constants.reports"

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import Loading from '../../components/Reports/Loading'
 import {CSVInput} from "./CSVInput"
 import {TERMINUS_COMPONENT} from '../../constants/identifiers'

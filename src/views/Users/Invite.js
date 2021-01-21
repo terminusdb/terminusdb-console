@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroups } from "../../components/Form/FormGroups"
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button} from "react-bootstrap" //replaced;
 
 
 export const InviteModal = (props) => {

@@ -1,3 +1,9 @@
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.react.css";
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css";
+.publisher-picker-col{
+  min-width: 300px;
+}
+
 .navbar{
     min-height: 70px!important;
   }
@@ -2129,6 +2135,10 @@ span.delete-modal-label {
 
   .tcf-internal-row {
       padding: 0;
+      /*
+      * add after update bootstrap
+      */
+      flex:1;
   }
 
   .tcf-internal-col {
@@ -2497,17 +2507,19 @@ span.delete-modal-label {
     margin-left: 10px;
 }
 
-  .stats-list {
-      display: inline-block;
-      max-width: 500px;
-      height: 56px;
-      padding: 10px 8px 10px 0;
-      font-size: 1.2em;
-  }
+.stats-list {
+  display: flex;
+  max-width: 500px;
+  height: 56px;
+  padding: 10px 8px 10px 0;
+  font-size: 1.2em;
+  align-items: center;
+}
 
-  .stats-icon {
-      height: 36px;
-  }
+.stats-icon {
+  height: 36px;
+  padding-right: 10px;
+}
 
   .dblist-create {
     border: 1px solid white;
@@ -5585,51 +5597,396 @@ span.controlled-graph-container {
     border-bottom: 1px solid #888;
 }
 
-textarea.wiki {
-    border: 0 !important;
-    padding: 0 !important;
-    min-height: 0 !important;
+.wiki-title {
+    font-size: 3em;
 }
 
-textarea.wiki-title {
-    font-size: 2.5em;
-    height: 40px !important;
+
+div.wiki-full-page {
+    margin-top: 40px;
 }
 
-textarea.wiki-description {
+
+.wiki-description {
     font-size: 1.5em;
 }
 
-textarea.wiki-property {
-    font-size: 1.2em;
+input.wiki-text:after,
+input.wiki-text:focus,
+textarea.wiki:after,
+textarea.wiki:focus {
+    border: 0 !important;
+    outline: none;
 }
 
-textarea.wiki:focus, textarea.wiki:after {
+input.wiki-text,
+textarea.wiki {
+    outline: none;
     border: 0 !important;
-    padding: 0 !important
+    min-height: 0 !important;
+    resize: none !important;
+    width: 100% !important;
+}
+
+
+.wiki-simple-value,
+input.wiki-text,
+textarea.wiki {
+    padding: 0.3em 0.1em !important;
+    font-size: 1em;
+}
+
+.wiki-description .wiki-simple-value,
+.wiki-description input.wiki-text,
+.wiki-description textarea.wiki {
+    padding-top: 0 !important;
+}
+
+.wiki-title .wiki-simple-value,
+.wiki-title input.wiki-text,
+.wiki-title textarea.wiki {
+    padding-bottom: 0 !important;
+}
+
+span.wiki-simple-value {
+    display: inline-block;
+}
+
+
+.wiki-property-selector {
+    background-color: white;
+}
+
+span.wiki-id-editor {
+    max-width: 800px !important;
+    display: inline-block;
+}
+.wiki-type-tile {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    padding: 6px;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+}
+
+.wiki-object-stats {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 6px;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+}
+
+.wiki-id-tile {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+}
+
+.wiki-summary-tiles {
+    padding: 6px;
+    display: inline-block;
+    margin: 0 10px;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+}
+
+.wiki-summary-sample {
+    margin-right: 10px;
+}
+
+.wiki-summary-label {
+    color: #444;
+}
+
+.wiki-icon {
+    padding-right: 4px;
+} 
+
+div.wiki-value-wrapper {
+    font-size: 1.1em;
+}
+
+div.wiki-object-header {
+    margin-bottom: 8px;
+}
+
+.wiki-value-new {
+}
+
+div.wiki-value-wrapper,
+div.wiki-property-wrapper,
+div.wiki-object-wrapper,
+div.wiki-document {
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    padding: 0 !important;
+}
+
+div.wiki-property-wrapper {
+    padding-top: 1em !important;
+    padding-bottom: 1em !important;
+}
+
+
+.wiki-value-highlighted,
+.wiki-property-highlighted,
+.wiki-object-highlighted,
+.wiki-document-highlighted {
+    border-left: 2px solid #888;
+    border-right: 2px solid #888;
+}
+
+
+.wiki-value-highlighted .wiki-main-column,
+.wiki-value-highlighted textarea.wiki,
+.wiki-property-highlighted .wiki-main-column,
+.wiki-property-highlighted textarea.wiki,
+.wiki-document-highlighted textarea.wiki,
+.wiki-document-highlighted .wiki-main-column {
+    background-color: #f8faf8 !important;
+}
+
+span.wiki-property-label {
+    display: inline-block;
+}
+
+.wiki-property-label {
+    color: #00C08B;
+    min-height: 24px;
+    font-size: 1.3em;
+}
+
+
+
+div.wiki-property-label {
+}
+
+
+span.wiki-property-header {
+}
+
+.wiki-main-column {
+}
+
+.wiki-row {
+    min-height: 32px;
 }
 
 div.wiki-property-header {
-    font-weight: 600;
-    min-height: 24px;
+    color: #002856;
+    font-weight: 500;
+    min-height: 32px;
 }
 
-div.wiki-propery-header-1 {
-    font-size: 24px;
+span.wiki-propery-header-1 {
+    font-size: 32px;
 }
 
-div.wiki-propery-header-2 {
-    font-size: 20px;
+span.wiki-propery-header-2 {
+    font-size: 26px;
 }
 
-div.wiki-propery-header-3 {
+span.wiki-propery-header-3 {
+    font-size: 22px;
+}
+
+span.wiki-propery-header-4 {
     font-size: 18px;
 }
 
-div.wiki-propery-header-4 {
+span.wiki-propery-header-5 {
     font-size: 16px;
 }
 
-div.wiki-propery-header-5 {
-    font-size: 16px;
+.wiki-chooser {
+    width: 400px !important;
+    display: inline-block !important;
 }
+
+.wiki-chooser-box {
+    width: 400px;
+    display: inline-block;
+    height: 55px;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: -6px;
+}
+
+.wiki-chooser-box-choice {
+    margin-left: 10px;
+    margin-right: 2px;
+    position: absolute;
+    top: 30%;
+}
+
+
+
+
+.wiki-choice-row {
+    min-height: 60px;
+
+}
+
+.wiki-index-col {
+    -ms-flex: 0 0 20px;
+    flex: 0 0 20px;
+    padding: 0;
+    position: relative;
+}
+
+.wiki-choice-row .wiki-index-col {
+    padding-top: 16px;
+}
+
+.wiki-data-index {
+    color: #00C08B;
+    font-size: 0.8em;
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    transform: translateY(-50%);
+}
+
+.wiki-content-col {
+    padding: 0px;
+}
+
+.wiki-menu {
+
+}
+
+span.wiki-row-error {
+    display: inline-block;
+    height: 100%;
+    min-width: 400px;
+    margin-left: 10px;
+    vertical-align: top;
+    position: relative;
+}
+
+span.wiki-error-contents {
+    color: #bd362f;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.wiki-choice-wrapper {
+    display: inline-block;
+}
+
+.wiki-action-column {
+    text-align: right;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+
+.wiki-left-contents  {
+  min-height: 32px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-block;
+  width: 100%;
+}
+
+.wiki-title-row .wiki-left {
+    padding-top: 20px;
+}
+
+.wiki-menu {
+    position: absolute;
+    left: 80px;
+    width: 250px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 6px 6px #aaa;
+    display: block;
+    padding: 8px;
+    background-color: white;
+    bottom: 40px;
+    text-align: left;
+    z-index: 99999 !important;
+}
+
+.wiki-menu-entry {
+    cursor: pointer;
+    padding: 6px;
+    display: block;
+} 
+
+.wiki-menu-selector {
+    padding: 6px;
+} 
+
+.wiki-menu-icon {
+    padding-right: 6px;
+    font-size: 1.6em;
+    vertical-align: -4px;
+}
+
+.wiki-menu-spacer {
+    border: 1px solid #efefef;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.wiki-menu-entry:hover {
+    background-color: #efefef;
+}
+
+.wiki-left-icon {
+    font-size: 1.2em;
+    color: #00C08B;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.wiki-left-icon:hover {
+    border-radius: 4px;
+    background-color: #00C08B;
+    color: white;
+}
+
+.wiki-right-contents {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+}
+
+.wiki-right-icon {
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.wiki-navigation-column {
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.wiki-status-icon {
+    float: left;
+    padding-top: 6px;
+} 
+
+.wiki-status-ok {
+    color:  #0055bb;    
+}
+
+.wiki-status-pending {
+    color: orange;
+}
+
+.wiki-status-success {
+    color: #00C08B;
+}
+

@@ -4,7 +4,7 @@ import {DBNavbarTop} from './DBNavbarTop'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
 import {Login} from './Login'
-import { Modal, ModalHeader, ModalBody } from "reactstrap"
+import { Modal, ModalHeader, ModalBody } from "react-bootstrap" //replaced
 import {UnderConstruction} from '../Reports/UnderConstruction'
 import {LOGIN_LABEL,noHttps} from './constants.navbar'
 import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';

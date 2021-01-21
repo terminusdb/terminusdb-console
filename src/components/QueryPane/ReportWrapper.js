@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert } from 'reactstrap'
+import { Alert } from "react-bootstrap" //replace
 import { ResultReport } from "../Reports/ResultReport"
 import { QUERY_PANE_INTRO } from "./constants.querypane"
 

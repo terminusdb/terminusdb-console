@@ -3,7 +3,7 @@
  */
 import React, {useState, useEffect} from 'react'
 import {TERMINUS_COMPONENT, TERMINUS_ERROR, TERMINUS_SUCCESS} from '../../constants/identifiers'
-import {Row, Col, Badge, Container} from "reactstrap"
+import {Row, Col, Badge, Container} from "react-bootstrap" //replaced
 import Loading from "../../components/Reports/Loading"
 import { TerminusDBSpeaks } from "../../components/Reports/TerminusDBSpeaks"
 import {SynchronizeActions} from "./SynchronizeActions"
@@ -15,7 +15,7 @@ import {DBRemoteCard} from "./DBRemoteCard"
     contains user reporting and main view logic
 */
 
-export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh, onLogin, woqlClient, getTokenSilently, branchesUpdated}) => {
+export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh, onLogin, woqlClient, getTokenSilently, branchesUpdated, bffClient}) => {
     const [loading, setLoading] = useState()
     const [report, setReport] = useState()
     const [upperReport, setUpperReport] = useState()
@@ -46,7 +46,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
         setLoading(true)
         setUpperReport(false)
         setReport(false)
-        return Push(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently)
+        return Push(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently, bffClient)
         .then((data) => {
             let newrep = {
                 status: TERMINUS_SUCCESS,
@@ -105,7 +105,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
             })
         }
         let no_auth = (remote.type == "remote")
-        return Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently, no_auth)
+        return Pull(local_branch, remote.title, remote_branch, remote.url, false, woqlClient, getTokenSilently, no_auth, bffClient)
         .then((data) => {
                 let newrep = {
                     status: TERMINUS_SUCCESS,
@@ -133,7 +133,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
         setLoading(true)
         update_start = Date.now()
         let no_auth = (remote.type == "remote")
-        return Fetch(remote.title, remote.url, woqlClient, getTokenSilently, no_auth)
+        return Fetch(remote.title, remote.url, woqlClient, getTokenSilently, no_auth, bffClient)
         .then((data) => {
             let newrep = {
                 status: TERMINUS_SUCCESS,
@@ -156,7 +156,7 @@ export const DBRemote = ({repo, user, meta, branch, onDelete, onGoHub, onRefresh
 
     async function remoteFetch(){
         remoteRefresh()
-        onFetch(repo)
+        return onFetch(repo)
     }
 
     let remote_branches = (myRemote && myRemote.branches ? myRemote.branches : [])

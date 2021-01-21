@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button, Collapse, CardBody, Card, CardHeader, Col, Row } from 'reactstrap';
+import { Button, Collapse, CardBody, Card, CardHeader, Col, Row } from "react-bootstrap" //replace;
 import {useForm} from 'react-hook-form'
 import { AiFillCaretUp, AiFillCaretDown } from 'react-icons/ai'
 import {SendEmailHook} from  "../../init/SendEmailHook"

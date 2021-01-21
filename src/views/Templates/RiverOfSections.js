@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Container } from "reactstrap";
+import { Container } from "react-bootstrap" //replaced;
 import { RIVER_OF_SECTIONS } from "./constants.templates"
 import { ExpandableSubsection } from "./ExpandableSubsection";
 import { Crumbs } from "./BreadCrumbs"
@@ -40,9 +40,9 @@ export const RiverOfSections = ({active, label, sections, children}) => {
 
 
     let ros = (
-        <Container className={RIVER_OF_SECTIONS.pageCSS}>
+        <div className={RIVER_OF_SECTIONS.pageCSS}>
             {contents}
-        </Container>
+        </div>
     )
     return ros
 }

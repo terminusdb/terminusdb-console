@@ -13,7 +13,7 @@ import {
     TAB_SCREEN_CSS
 } from './constants.schema'
 import {GraphFilter} from './GraphFilter'
-import {Row, Col, Button} from 'reactstrap'
+import {Row, Col, Button} from "react-bootstrap" //replace
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {SCHEMA_OWL_ROUTE} from '../../constants/routes'
 import {DBContextObj} from '../../components/Query/DBContext'

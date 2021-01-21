@@ -5,7 +5,7 @@
  */
 import React from "react";
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
-import { Container } from "reactstrap";
+import { Container } from "react-bootstrap" //replaced;
 import {Footer}  from "./Footer"
 import Loading from "../../components/Reports/Loading"
 import { TERMINUS_PAGE } from "../../constants/identifiers"

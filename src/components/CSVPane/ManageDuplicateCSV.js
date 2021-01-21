@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import * as action from "./constants.csv"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {AiOutlineExclamationCircle} from "react-icons/ai"
 import {DEFAULT_COMMIT_MSG} from "./constants.csv"
 

@@ -10,7 +10,7 @@ import {
 import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from '../CreateDB/constants.createdb'
 import {goDBHome, goServerHome} from '../../components/Router/ConsoleRouter'
 import { TCForm } from '../../components/Form/FormComponents'
-import {Container, Row} from 'reactstrap'
+import {Container, Row} from "react-bootstrap" //replace
 import {UnstableWarning} from '../../components/Reports/UnstableWarning'
 
 export const CopyLocalForm = () => {

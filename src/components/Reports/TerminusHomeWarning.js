@@ -1,5 +1,5 @@
 import React from 'react'
-import {Container} from 'reactstrap'
+import {Container} from "react-bootstrap" //replace
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {MASCOT_COLOR} from '../../constants/images'
 import {WARNING_PAGE_CSS, WARNING_BOX_CSS} from './constants.reports'

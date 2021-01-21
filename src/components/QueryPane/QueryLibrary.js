@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, ButtonGroup} from 'reactstrap'
+import {Button, ButtonGroup} from "react-bootstrap" //replace
 import TerminusClient from '@terminusdb/terminusdb-client'
 
 export const QueryLibrary = (props) => {

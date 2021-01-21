@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Button, Row, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
+import {Button, Row, Modal, ModalHeader, ModalBody, Col, ModalFooter} from "react-bootstrap" //replace
 import {useForm} from 'react-hook-form'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'

@@ -3,7 +3,7 @@ import initPexel from './initPexel';
 import SearchBar from './SearchBar';
 import ImageList from './ImageList';
 import './SearchBar.css';
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {FaArrowAltCircleRight, FaArrowAltCircleLeft} from "react-icons/fa"
 import {AiOutlineSearch} from "react-icons/ai"
 
