@@ -1,3 +1,9 @@
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.react.css";
+@import "https://unpkg.com/@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css";
+.publisher-picker-col{
+  min-width: 300px;
+}
+
 .navbar{
     min-height: 70px!important;
   }
@@ -2129,6 +2135,10 @@ span.delete-modal-label {
 
   .tcf-internal-row {
       padding: 0;
+      /*
+      * add after update bootstrap
+      */
+      flex:1;
   }
 
   .tcf-internal-col {
@@ -2497,17 +2507,19 @@ span.delete-modal-label {
     margin-left: 10px;
 }
 
-  .stats-list {
-      display: inline-block;
-      max-width: 500px;
-      height: 56px;
-      padding: 10px 8px 10px 0;
-      font-size: 1.2em;
-  }
+.stats-list {
+  display: flex;
+  max-width: 500px;
+  height: 56px;
+  padding: 10px 8px 10px 0;
+  font-size: 1.2em;
+  align-items: center;
+}
 
-  .stats-icon {
-      height: 36px;
-  }
+.stats-icon {
+  height: 36px;
+  padding-right: 10px;
+}
 
   .dblist-create {
     border: 1px solid white;
@@ -4085,6 +4097,10 @@ span.delete-modal-label {
       color: #0055bb;
   }
 
+  div.new-csv-inp-id{
+      margin-top: 15px
+  }
+
   .csv-control-spacing {
       margin: 10px;
   }
@@ -5355,8 +5371,9 @@ span.csv_subheader_section{
 }
 
 .selected-csv-name-span {
-    /*min-width: 350px !important;*/
-    min-width: 0px !important;
+    /*min-width: 350px !important;
+    min-width: 0px !important;*/
+    width: 280px !important;
 }
 
 .csv-preview-header, .commit-log-header {

@@ -1,6 +1,6 @@
 import { RiDeleteBin5Line, RiErrorWarningLine } from 'react-icons/ri'
 import { AiOutlineDelete } from "react-icons/ai"
-import {Row, Modal, ModalHeader, ModalBody, ModalFooter, Col} from "reactstrap"
+import {Row, Modal, ModalHeader, ModalBody, ModalFooter, Col} from "react-bootstrap" //replaced
 import React, {useState} from 'react'
 import {DELETE_DB_MODAL} from '../DBHome/constants.dbhome'
 import { AiOutlineWarning } from "react-icons/ai"

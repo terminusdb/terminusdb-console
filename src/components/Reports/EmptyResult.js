@@ -1,5 +1,5 @@
 import React from "react"
-import { Alert } from 'reactstrap'
+import { Alert } from "react-bootstrap" //replace
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "../../constants/faicons"
 import { NO_RESULTS } from "./constants.reports"

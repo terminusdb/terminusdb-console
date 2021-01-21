@@ -2,9 +2,11 @@ import { NavLink } from "react-router-dom";
 import React,{useState,Fragment} from "react";
 import {LOGIN_LABEL,PROFILE_PAGE_LABEL, LOGOUT_LABEL} from './constants.navbar'
 import { useAuth0 } from "../../react-auth0-spa";
-import { USER, POWER_OFF } from "../../constants/faicons"
+//import { USER, POWER_OFF } from "../../constants/faicons"
 import { PROFILE_ROUTE } from "../../constants/routes"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { FaUserAlt, FaPowerOff} from "react-icons/fa";
 import OutsideClickHandler from 'react-outside-click-handler';
 import {redirect_uri} from '../../utils/baseRouter'
 import {CLONE_DB_ROUTE} from '../../constants/routes'
@@ -62,13 +64,15 @@ export const Login = (props) => {
                             <a  className="tdb__dropdown__button profile_a"
                                 href = {PROFILE_ROUTE+profile_arg}
                                 target="_blank">
-                                <FontAwesomeIcon icon={USER} className="mr-3" />{PROFILE_PAGE_LABEL}
+                                <FaUserAlt className="mr-3 mb-1" />
+                               {PROFILE_PAGE_LABEL}
                             </a>
                             <NavLink tag = {NavLink} className="tdb__dropdown__button"
                                 onClick={() => logoutWithRedirect()}
                                 to="#"
                                 exact>
-                                <FontAwesomeIcon icon={POWER_OFF} className="mr-3" />{LOGOUT_LABEL}
+                                <FaPowerOff className="mr-3 mb-1" />
+                                {LOGOUT_LABEL}
                             </NavLink>
                         </div>
                        </div>

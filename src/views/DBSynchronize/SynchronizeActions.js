@@ -2,7 +2,7 @@
  * Controller application for branch creation form
  */
 import React, {useState, useEffect} from 'react'
-import {Row, Col, Badge, Container} from "reactstrap"
+import {Row, Col, Badge, Container} from "react-bootstrap" //replaced
 import { AiOutlineCloudUpload, AiOutlineCloudDownload, AiOutlineBranches } from 'react-icons/ai';
 import Select from "react-select";
 

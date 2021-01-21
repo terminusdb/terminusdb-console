@@ -3,7 +3,7 @@ import {BsBook, BsBookHalf} from "react-icons/bs"
 import {AiOutlinePlusSquare} from "react-icons/ai"
 import {DocumentTypeFilter, DocumentSubTypeFilter} from "./TypeFilter"
 import {TypeStats} from "./TypeStats"
-import {Row, Col, Button} from "reactstrap"
+import {Row, Col, Button} from "react-bootstrap" //replaced
 import {FileLoader} from "./FileLoader"
 import {getTypeMetadata} from "./DocumentList"
 import {TOOLBAR_CSS, CANCEL_EDIT_BUTTON, EDIT_DOCUMENT_BUTTON, UPDATE_JSON_BUTTON, COMMIT_PLACEHOLDER, GO_BACK,

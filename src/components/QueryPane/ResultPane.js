@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "reactstrap";
+import { Container } from "react-bootstrap" //replaced;
 
 //allows multiple resultviews to exist together
 /*I don't need result panel

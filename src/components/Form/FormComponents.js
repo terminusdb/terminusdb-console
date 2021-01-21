@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { Container, Row, Col } from "reactstrap"
+import { Container, Row, Col } from "react-bootstrap" //replaced
+//import { Container, Row, Col } from "react-bootstrap"
 import { REQUIRED_FIELD, REQUIRED_FIELD_CSS, SUBMIT_SECTION_CSS, BUTTONS_CONTAINER_CSS,
          SUBMIT_CSS, CANCEL_CSS, CANCEL_TEXT, SUBMIT_TEXT, ILLEGAL_ID_ERROR,
          LABEL_CSS, ERROR_MESSAGE_CSS, REQUIRED_FIELD_ERROR, FORM_FIELD_CSS, HELP_ROW_CSS,
@@ -234,7 +235,7 @@ export const TCFormField = ({
                     {children}
                     </Col>
                     {cowDuck &&
-                        <Col md={{ size: 'auto'}} className={inputGutterClassName} >
+                        <Col md="auto" className={inputGutterClassName} >
                             {cdhelp}
                         </Col>
                     }

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState,Fragment} from 'react'
 import { CloneDB, ForkDB, DeleteDB, RejectInvite, AcceptInvite, UpdateDatabase, isLocalURL, isHubURL, RefreshDatabaseRecord } from '../../components/Query/CollaborateAPI'
 import {useAuth0} from '../../react-auth0-spa'
 import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"
@@ -21,10 +21,9 @@ import { DATETIME_DB_UPDATED } from "../../constants/dates"
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {DBCreateCard} from "../CreateDB/DBCreateCard"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
-import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from 'reactstrap'
+import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from "react-bootstrap" //replace
 import Select from "react-select"
 import {CreateDB} from "../Server/DBListControl"
-import { isFuture } from 'date-fns';
 import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
 import {Collaborators} from "../Server/Collaborators"
 import {FiUsers} from "react-icons/fi"
@@ -1138,7 +1137,7 @@ export const HubDBCard = ({meta, onAction, report}) => {
         setMode()
     }
 
-    return (<>
+    return (<Fragment>
         <Row key='r7' className='database-summary-listing database-listing-line'>
             <CloneImagePanel meta={meta} />
             <span className='database-main-content'>
@@ -1170,7 +1169,7 @@ export const HubDBCard = ({meta, onAction, report}) => {
         {(mode == "edit") &&
             <EditHubPage meta={meta} onSuccess={onEditSuccess}/>
         }
-    </>)
+    </Fragment>)
 }
 
 export const HubForkPage = ({meta, onAction}) => {
@@ -1311,7 +1310,7 @@ export const HubDBImage = ({meta, onAction}) => {
 
 
 export const HubCredits = ({meta, onAction}) => {
-    return (<>
+    return (<Fragment>
         <div className="dbcard-creditline">
             <CloneProductionCredits  key='ac' meta={meta} onAction={onAction}/>
             <CloneRoleCredits key='ade' meta={meta} />
@@ -1330,7 +1329,7 @@ export const HubCredits = ({meta, onAction}) => {
                 <DBLastCommit meta={meta} />
             }
         </div>
-    </>
+    </Fragment>
     )
 }
 
@@ -1583,6 +1582,7 @@ export const CloneRoleCredits = ({meta}) => {
 export const DBTimings = ({meta}) => {
     let parts = []
     function updateStamp(ts){
+        //set to now, but with 0 mins, 0 secs, and 0 ms
         let lab = moment(ts*1000).startOf('hour').fromNow()
         return lab
     }

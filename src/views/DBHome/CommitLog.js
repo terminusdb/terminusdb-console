@@ -5,7 +5,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
 export const CommitLog = () => {

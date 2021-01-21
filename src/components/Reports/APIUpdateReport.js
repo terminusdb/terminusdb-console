@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert, Container} from 'reactstrap'
+import {Alert, Container} from "react-bootstrap" //replace
 import {ViolationReport, hasViolations, getViolations} from './ViolationReport'
 import {SystemError} from './SystemError'
 import {RESULT_REPORT_CSS} from './constants.reports'

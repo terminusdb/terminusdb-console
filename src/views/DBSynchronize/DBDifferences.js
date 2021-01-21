@@ -2,7 +2,7 @@
  * Display differences between local and remote branches
  */
 import React from 'react'
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import { printts } from "../../constants/dates"
 import { DATETIME_COMPLETE } from "../../constants/dates"
 import { AiOutlineCloudUpload, AiOutlineCheckCircle, AiOutlineDown, AiOutlineUp, AiOutlineCheck,

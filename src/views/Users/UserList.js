@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { collaborate, userList} from "../../variables/formLabels"
 import { fakeUserData } from "../Test/fakeUserData"
 import DataTable from 'react-data-table-component';
-import { Col, Alert } from "reactstrap";
+import { Col, Alert } from "react-bootstrap" //replaced;
 import { RENDER_TYPE_TABLE }  from "../../labels/renderTypeLabels"
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 

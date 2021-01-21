@@ -4,8 +4,9 @@ import {DB_DETAILS_FORM, DB_ADVANCED_FORM, CREATE_DB_FORM, DB_CSV_CREATE_FORM} f
 import {getDefaultScmURL, getDefaultDocURL} from '../../constants/functions'
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import {CSVLoader} from "../../components/CSVPane/CSVLoader"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import {CSVInput} from "../../components/CSVPane/CSVInput"
+import {getFileType} from "../../utils/helperFunctions"
 
 /**
  * Form for viewing and editing database meta data
@@ -95,9 +96,10 @@ export const DBDetailsForm = ({onSubmit, buttons, dbid, logged_in, from_local}) 
 
     const insertCsvs = (e) => {
 	   for(var i=0; i<e.target.files.length; i++){
-		   let files = {};
-           files = e.target.files[i]
-		   setCsvs( arr => [...arr, files]);
+		   let file = {};
+           file = e.target.files[i]
+           file.fileType=getFileType(file.name)
+		   setCsvs( arr => [...arr, file]);
 	   }
     }
 

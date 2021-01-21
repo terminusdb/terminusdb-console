@@ -20,8 +20,8 @@ export const ModelBuilder = (props) =>{
           callServerLoading,resetReport
           } = modelCallServerHook(woqlClient,branch,ref)
     
-    const saveData=(query)=>{
-      saveGraphChanges(query)
+    const saveData=(query,commitMessage)=>{
+      saveGraphChanges(query,commitMessage)
     }
 
     if(graphs && graphs['schema/main']===undefined){
