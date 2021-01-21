@@ -44,7 +44,7 @@ export const DocumentViewNav = ({types, current, docid, doctype, jsonld, edit, o
 }
 
 export const DocumentViewIcons = ({docView, setDocView, edit}) => {
-    let show_fancy = true
+    let show_fancy = false
     const onLink = () => setDocView("link")
     const onFrame = () => setDocView("frame")
     const onTable = () => setDocView("table")

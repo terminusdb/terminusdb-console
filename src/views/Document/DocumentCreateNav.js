@@ -49,7 +49,7 @@ export const DocumentGoBackIcon = ({onClose}) => {
 }
 
 export const DocumentViewIcons = ({docView, setDocView, edit}) => {
-    let show_fancy = true
+    let show_fancy = false
     const onFrame = () => setDocView("frame")
     const onTable = () => setDocView("table")
     const onJson = () => setDocView("json")
