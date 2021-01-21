@@ -85,9 +85,9 @@ export const parseWitnesses = (wit) => {
 }
 
 export const parseAPIMessage = (apiMsg) => {
-	if(apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR))
+	if(apiMsg && apiMsg.includes(vios.VIOLATION_WOQL_SYNTAX_ERROR))
 		return "Syntax error found"
-	else if (apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX))
+	else if (apiMsg && apiMsg.includes(vios.VIOLATION_KEY_HAS_UNKNOWN_PREFIX))
 		return "Key has unknown prefix"
 	else return apiMsg
 }

@@ -16,7 +16,7 @@ import { MdContentCopy } from 'react-icons/md';
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
     if(!list || !user ) return null
-    const { woqlClient,  refreshDBRecord } = WOQLClientObj()
+    const { woqlClient,  refreshDBRecord, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
     const [listSort, setSort] = useState(sort || "name")
     const [listFilter, setFilter] = useState(filter || "")
@@ -54,7 +54,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         }
         else if(db.action == 'clone'){
             setLoading(true)
-            CloneDB(db, woqlClient, getTokenSilently)
+            CloneDB(db, woqlClient, getTokenSilently, false, false, bffClient)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 refreshDBRecord(id, woqlClient.user_organization(), 'clone', db.remote_record)

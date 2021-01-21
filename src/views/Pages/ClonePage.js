@@ -163,7 +163,7 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
                 newb.remote_url = remoteClient.server() + db.organization + "/" + db.id
                 setBump(bump+1)
                 setReport({status: TERMINUS_SUCCESS, message: "Invitation Accepted - Cloning Database"})
-                return CloneDB(newb, woqlClient, getTokenSilently)
+                return CloneDB(newb, woqlClient, getTokenSilently, false, false, bffClient)
                 .then((id) => {
                     setReport({status: TERMINUS_SUCCESS, message: "Cloning successful"})
                     return addClone(id, woqlClient.user_organization(), newb)
@@ -188,7 +188,7 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
         else if(db.action == 'clone'){
             setLoading(true)
             let pred = (db.auto ? false : true)
-            CloneDB(db, woqlClient, getTokenSilently, false, pred)
+            CloneDB(db, woqlClient, getTokenSilently, false, pred, bffClient)
             .then((id) => {
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully Cloned Database"})
                 addClone(id, woqlClient.user_organization(), db)
