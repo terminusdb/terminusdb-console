@@ -18,7 +18,7 @@ export const ComponentFailure = ({error}) => {
 
     const show_hide = (showFull ? HIDE_ERROR_DETAILS : SHOW_ERROR_DETAILS ) 
     return (
-        <Alert color="danger">
+        <Alert variant="danger">
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>
             <strong>{COMPONENT_ERROR}</strong>
             {detmsg}

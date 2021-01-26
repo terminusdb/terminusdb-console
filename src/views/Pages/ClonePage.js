@@ -21,7 +21,7 @@ import { DATETIME_DB_UPDATED } from "../../constants/dates"
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {DBCreateCard} from "../CreateDB/DBCreateCard"
 import { CloneLocal } from "../CreateDB/CloneDatabase"
-import {Row, Container, Modal, ModalHeader, ModalBody, Col, ModalFooter} from "react-bootstrap" //replace
+import {Row, Container, Modal, ModalBody, Col, ModalFooter} from "react-bootstrap" //replace
 import Select from "react-select"
 import {CreateDB} from "../Server/DBListControl"
 import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
@@ -1966,9 +1966,9 @@ export const DeleteHubDB = ({meta, isOpen}) => {
     let tbdel = meta.id
 
     return (
-        <Modal isOpen={modal} toggle={toggle}>
+        <Modal show={modal} onHide={toggle}>
             {loading && <Loading />}
-            <ModalHeader toggle={toggle}>  <span className="modal-head">Confirm Database Delete</span> </ModalHeader>
+            <Modal.Header closeButton>  <span className="modal-head">Confirm Database Delete</span> </Modal.Header>
             <ModalBody>
                 <Row key="rd">
                     <span className="delete-modal-atext"><AiOutlineWarning className="del-hub-warning" /> This will remove the database permanently from your hub account.
@@ -1996,7 +1996,7 @@ export const DeleteHubDB = ({meta, isOpen}) => {
                         <button className={"tdb__button__base tdb__button__cancel"} onClick={toggle}>Cancel</button>
                     }
                     {!disabled &&
-                        <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred delete-modal-button" >
+                        <button onClick={onDelete} className="tdb__button__base tdb__button__base--bred" >
                             <AiOutlineDelete className="delete-button"/> Delete Database
                         </button>
                     }

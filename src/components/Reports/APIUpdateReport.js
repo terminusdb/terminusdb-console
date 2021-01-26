@@ -11,25 +11,30 @@ import {
 } from '../../constants/identifiers'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import * as icons from '../../constants/faicons'
+//import { woql } from '@terminusdb/terminusdb-client/lib/woql'
 
-export const APIUpdateReport = ({status, message, time, error}) => {
+export const APIUpdateReport = ({status, message, time, error, onClose}) => {
+    let onCloseObj={}
+    if(onClose){
+        onCloseObj={dismissible:true,onClose:()=>onClose()}
+    }
     return (
         <Container>
-            {status == TERMINUS_SUCCESS && <APIUpdateSuccess message={message} time={time} />}
-            {status == TERMINUS_WARNING && (
-                <APIUpdateWarning message={message} time={time} error={error} />
+            {status === TERMINUS_SUCCESS && <APIUpdateSuccess message={message} time={time} onCloseObj={onCloseObj}/>}
+            {status === TERMINUS_WARNING && (
+                <APIUpdateWarning message={message} time={time} error={error} onCloseObj={onCloseObj} />
             )}
-            {status == TERMINUS_ERROR && (
-                <APIUpdateError message={message} time={time} error={error} />
+            {status === TERMINUS_ERROR && (
+                <APIUpdateError message={message} time={time} error={error} onCloseObj={onCloseObj}/>
             )}
-            {status == TERMINUS_INFO && <APIUpdateInfo message={message} />}
+            {status === TERMINUS_INFO && <APIUpdateInfo message={message} onCloseObj={onCloseObj}/>}
         </Container>
     )
 }
 
-const APIUpdateInfo = ({message}) => {
+const APIUpdateInfo = ({message,onCloseObj}) => {
     return (
-        <Alert color="info">
+        <Alert variant="info" {...onCloseObj}>
             <span className={RESULT_REPORT_CSS}>{message}</span>
         </Alert>
     )
@@ -40,21 +45,21 @@ function queryTimeDisplay(t) {
     return qtime ? ' (' + qtime + ' seconds' + ')' : ''
 }
 
-const APIUpdateSuccess = ({message, time}) => {
+const APIUpdateSuccess = ({message, time, onCloseObj}) => {
     let txt = message + queryTimeDisplay(time)
     return (
-        <Alert color="success">
+        <Alert variant="success" {...onCloseObj}>
             <FontAwesomeIcon icon={icons.CHECK} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
         </Alert>
     )
 }
 
-const APIUpdateWarning = ({message, error, time}) => {
+const APIUpdateWarning = ({message, error, time , onCloseObj}) => {
     let txt = message + queryTimeDisplay(time)
     let vios = hasViolations(error)
     return (
-        <Alert color="warning">
+        <Alert variant="warning" {...onCloseObj}>
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
             {vios && <ViolationReport violations={getViolations(error)} />}
@@ -62,19 +67,19 @@ const APIUpdateWarning = ({message, error, time}) => {
     )
 }
 
-const APIUpdateError = ({message, error, time}) => {
+const APIUpdateError = ({message, error, time,onCloseObj}) => {
     if (hasViolations(error)) {
-        return <APIInputError time={time} message={message} violations={getViolations(error)} />
+        return <APIInputError onCloseObj={onCloseObj} time={time} message={message} violations={getViolations(error)} />
     } else {
-        return <APISystemError time={time} message={message} error={error} />
+        return <APISystemError onCloseObj={onCloseObj} time={time} message={message} error={error} />
     }
 }
 
-const APIInputError = ({message, violations, time}) => {
+const APIInputError = ({message, violations, time, onCloseObj}) => {
     let txt = message + queryTimeDisplay(time)
 
     return (
-        <Alert color="warning">
+        <Alert variant="warning" {...onCloseObj}>
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
             <ViolationReport violations={violations} tone="warning" />
@@ -82,13 +87,13 @@ const APIInputError = ({message, violations, time}) => {
     )
 }
 
-const APISystemError = ({message, error, time}) => {
+const APISystemError = ({message, error, time,onCloseObj}) => {
     var txt;
     if(message == undefined)
         txt="Connection to Server failed"
     else txt = message + queryTimeDisplay(time)
     return (
-        <Alert color="danger">
+        <Alert variant="danger" {...onCloseObj}>
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3" />
             <span className={RESULT_REPORT_CSS}>{txt}</span>
             {error &&

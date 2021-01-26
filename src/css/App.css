@@ -320,10 +320,11 @@ span.create-new-button {
         text-align: center;
 }
 
-span.delete-button:hover {
+
+/*span.delete-button:hover {
     color: #fff;
     background-color: #dc3545
-}
+}*/
 
 .del-hub-warning {
     color: #ff8000;
@@ -4747,11 +4748,14 @@ span.delete-modal-label {
 
 
   .db-control-box {
-      display: inline-block;
-      height: 24px;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: 2px solid #efefef;
+    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 2px solid #efefef;
   }
 
   .db-control {

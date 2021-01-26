@@ -9,11 +9,11 @@ export const ReportWrapper = ({currentReport,type,children}) => {
 
     if(currentReport && currentReport.busy){
         return (
-            <Alert color='warning'>Busy</Alert>
+            <Alert variant='warning'>Busy</Alert>
         )
     }    
     else if(currentReport){
         return (<ResultReport report={currentReport} />)
     }
-    return (<Alert color={curType} style={{display:'block'}}>{curMessage}</Alert>)
+    return (<Alert variant={curType} style={{display:'block'}}>{curMessage}</Alert>)
 }

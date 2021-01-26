@@ -6,7 +6,7 @@ import {AiOutlineInfoCircle} from "react-icons/ai"
 import packageJson from '../../../package.json';
 
 //import {Modal, ModalHeader, ModalBody, Row, Col} from "react-bootstrap" //replace;
-import {Modal, ModalHeader, ModalBody, Row, Col} from 'react-bootstrap';
+import {Modal, ModalBody, Row, Col} from 'react-bootstrap';
 
 export const ServerNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
@@ -33,8 +33,8 @@ export const ServerNavbar = (props) => {
             <span title="Version Info" className="version-info" onClick={toggle}>
                 <AiOutlineInfoCircle color="#fff"/>
             </span>
-            <Modal isOpen={modal} toggle={toggle}>
-                <ModalHeader toggle={toggle} className="version-info-align version-info-col">About TerminusDB Console</ModalHeader>
+            <Modal show={modal} onHide={toggle}>
+                <Modal.Header closeButton className="version-info-align version-info-col">About TerminusDB Console</Modal.Header>
                 <ModalBody>
                     <Row style={{width: "100%"}}>
                         <Col md={5} className="version-info-align version-info-col">
