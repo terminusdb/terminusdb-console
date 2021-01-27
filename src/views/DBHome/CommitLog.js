@@ -3,14 +3,18 @@ import TerminusClient from '@terminusdb/terminusdb-client'
 import {ControlledTable} from '../Tables/ControlledTable'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
+import {BranchInfo} from './../DBManage/BranchInfo'
 import {printts, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 import {Row, Col} from "react-bootstrap" //replaced
 import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
-export const CommitLog = () => {
+export const CommitLog = ({selectedBranch}) => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, consoleTime, prefixes} = DBContextObj()
+    if(selectedBranch)
+        var [branch, branches, ref, consoleTime, prefixes]=BranchInfo(selectedBranch)
+    else var {branch, branches, ref, consoleTime, prefixes}=DBContextObj()
+
     const [query, setQuery] = useState()
     const [commit, setCommit] = useState()
 
