@@ -95,11 +95,11 @@ const DBRoute = () => {
             <QueryPage />
         </Route>,
     )
-    routes.push(
-        <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
+    /*routes.push(
+       <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
             <MetricsPage />
         </Route>,
-    )
+    )*/
     routes.push(
         <Route key="dbdoc" path={`${path}${DB_DOCUMENT_ROUTE}${SPECIFIC_DOC_ROUTE}`}>
             <SpecificDoc />
