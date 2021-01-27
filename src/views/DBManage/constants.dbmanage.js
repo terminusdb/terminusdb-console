@@ -202,6 +202,23 @@ export const BACKUP_FORM = {
     }
 }
 
+export const RESET_BRANCH_FORM = {
+    commit: {
+        id: "commit",
+        label: "Commit Message",
+        inputElement: {
+            type: "textarea",
+            placeholder: "A short description of the reason to reset the branch",
+            className: "branch-commit-textarea"
+        }
+    },
+    buttons: {
+        submitText: "Reset Branch"
+    },
+    resetBranchSuccessMessage: "Successfully Reset Branch ",
+    resetBranchFailureMessage: "Failed to Reset Branch ",
+}
+
 export const NEW_BRANCH="New Branch"
 export const MERGE_BRANCH="Merge Branch"
 export const CLOSE_BRANCH="Close Branch"

@@ -15,7 +15,9 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {BranchNavBar} from "./BranchNavBar"
+import Loading from '../../components/Reports/Loading'
 import {BranchCommits} from "./BranchCommits"
+import {Reset} from "./Reset"
 
 export const ManageDB = (props) => {
     const {graphs, ref, branch}=DBContextObj()
@@ -23,7 +25,7 @@ export const ManageDB = (props) => {
     const [branchCount, setBranchCount]=useState()
     const [branchAction, setBranchAction]=useState({})
     const [loading, setLoading]=useState(false)
-    const [report, setReport]=useState(false)
+    const [reportMsg, setReport]=useState(false)
 
     const branchCountQuery = () => {
         let WOQL=TerminusClient.WOQL
@@ -109,8 +111,10 @@ export const ManageDB = (props) => {
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
             <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>
             <main className="console__page__container console__page__container--width">
+                {loading && <Loading type={TERMINUS_COMPONENT} />}
                 {branchAction.create && <Branch key="branch"/>}
                 {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch}/>}
+                {branchAction.reset && <Reset key="reset" branch={branchAction.branch}/>}
                 {!branchAction.branch && <ControlledTable
                     limit={tabConfig.pagesize()}
                     query={query}
