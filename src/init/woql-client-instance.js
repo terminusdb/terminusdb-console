@@ -18,10 +18,16 @@ export const WOQLClientProvider = ({children, params}) => {
     const [showLogin, setShowLogin] = useState(false)
     const [newKeyValue, setNewKeyValue] = useState()
     const [reloadKey, setReloadTime] = useState(0)
+    /*
+    * count the remote operation  
+    */
     const [contextEnriched, setContextEnriched ] = useState(0)
+    /*
+    * the user roles data 
+    */
     const [remoteEnriched, setRemoteEnriched] = useState(false)
     const [initComplete, setInitComplete] = useState(false)
-    const { user, loading, getTokenSilently } = useAuth0();
+    const { user, loading:auth0Loading, getTokenSilently } = useAuth0();
     
     /**
      * Called on init and only if the key changes afterwards
@@ -40,9 +46,9 @@ export const WOQLClientProvider = ({children, params}) => {
             } 
             else {
                 try {
-                    await dbClient.connect(opts)
-                    setWoqlClient(dbClient)
+                    await dbClient.connect(opts)                   
                     await enrich_local_db_listing(dbClient)
+                    setWoqlClient(dbClient)
                     setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
@@ -54,17 +60,28 @@ export const WOQLClientProvider = ({children, params}) => {
             }
         }
         initWoqlClient()
-    }, [params, newKeyValue, reloadKey]);
+    }, //[params, newKeyValue, reloadKey]);
+    [params, reloadKey]);
 
     useEffect(() => {
-        if(!loading && !user && woqlClient){
+        /*
+        * it will be I have to null the server/bff
+        * if the auth0Status has been loaded  and the user in not logged I set the loading to false
+        */
+        if(!auth0Loading && !user && woqlClient){
             setLoading(false)
         }
-        else if(!loading && user && woqlClient && !remoteEnriched) {
+        /*
+        * if the user is logged I'll call the remote server for get extra info about the db
+        */
+        else if(!auth0Loading && user && woqlClient && !remoteEnriched) {
             initRemoteConnection(user)
         }
-     }, [loading, user, woqlClient])    
+     }, [auth0Loading, user, woqlClient])    
 
+     /*
+     * after get the user's rolesData
+     */
      useEffect(() => {
         if(remoteEnriched && initComplete){
             try {
@@ -91,8 +108,7 @@ export const WOQLClientProvider = ({children, params}) => {
         hubClient.local_auth(hubcreds)
         hubClient.organization(hub_org) 
         hubClient.connection.user.id = hub_org
-        hubClient.connection.user.author = remote_user.email
-        
+        hubClient.connection.user.author = remote_user.email       
         setRemoteClient(hubClient)
         const bClient = new TerminusClient.WOQLClient(params.bff)
         bClient.local_auth(hubcreds)
@@ -101,6 +117,9 @@ export const WOQLClientProvider = ({children, params}) => {
         bClient.connection.user.author = remote_user.email
         setBffClient(bClient)
         try {
+            /*
+            * get the user roles from the remote administration db
+            */
             let roledata = await bClient.getRoles(bClient.uid())
             setRemoteEnriched(roledata)
             if(roledata.databases) bClient.databases(roledata.databases) 
@@ -115,7 +134,9 @@ export const WOQLClientProvider = ({children, params}) => {
         }
     }
 
-
+    /*
+    * insert the key for the basic authorization 
+    */
     const setKey = (key) => {
         if (params) params.key = key
         window.sessionStorage.setItem('apiKey', key)
@@ -359,7 +380,7 @@ export const WOQLClientProvider = ({children, params}) => {
     const refreshRemote = async (org, id) => {
         let dmeta = await RefreshDatabaseRecord({id: id, organization: org}, bffClient, getTokenSilently)
         if(dmeta) updateRemote(dmeta)  
-        setContextEnriched(contextEnriched + 1)
+        //setContextEnriched(contextEnriched + 1)
         return dmeta
     }
 

@@ -10,7 +10,7 @@ import Loading from '../../components/Reports/Loading'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 
 export const ModelBuilder = (props) =>{   
-    const { woqlClient, contextEnriched } = WOQLClientObj()
+    const { woqlClient } = WOQLClientObj()
     const {graphs, setHead, branch, report, ref} = DBContextObj()
 
     const dbName = woqlClient ? woqlClient.db() : ''

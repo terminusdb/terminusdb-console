@@ -217,7 +217,7 @@ export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently
     remoteClient.local_auth(creds)
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
-    console.log("___GET_DATABASE___", meta);
+    //console.log("___GET_DATABASE___", meta);
     return remoteClient.getDatabase(meta.id, meta.organization)
 }
 

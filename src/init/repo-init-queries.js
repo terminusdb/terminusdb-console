@@ -17,9 +17,10 @@ export async function enrich_local_db_listing(woqlClient){
     let res
     try {
         res = await TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
-    }
-    catch(e){
+    }catch(e){
+        // eslint-disable-next-line no-console
         console.log(e)
+        return 
     }
     let ndbs = dbs.map((item) => {
         for(var i = 0; i < res.length; i++){
