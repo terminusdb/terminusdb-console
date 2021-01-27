@@ -26,7 +26,7 @@ const AddUserPermissionForm = (props) => {
     return (
         <>
         <hr className="my-space-50"/>
-        {(!loading) && <Alert color="success">
+        {(!loading) && <Alert variant="success">
            Successfully added new User - <b>{stripDocFromUrl(userInfo.id)}</b>
          </Alert>}
         <form onSubmit={ handleSubmit(onSubmit) }>

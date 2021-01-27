@@ -15,7 +15,7 @@ import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {getTypeMetadata} from "./DocumentList"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
-import {constructError} from "../../components/Reports/utils.vio"
+import {constructErrorMessage} from "../../components/Reports/utils.vio"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType, insertCsvs}) => {
@@ -114,7 +114,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             })
             .catch((e) => {
                 if(e.data && e.data['api:message'] && dataframe){
-                    let ejson=constructError(e)
+                    let ejson=constructErrorMessage(e)
                     setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})

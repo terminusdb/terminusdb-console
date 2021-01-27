@@ -197,7 +197,7 @@ export const Merge = ({defaultBranch}) => {
                     />
                 </Row>
                 <div className='row' {...showAlert}>
-                    <Alert color='warning' className="flex-grow-1">
+                    <Alert variant='warning' className="flex-grow-1">
                         {submissionProblem || 'noValue'}
                     </Alert>
                 </div>
