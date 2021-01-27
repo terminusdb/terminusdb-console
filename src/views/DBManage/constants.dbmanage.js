@@ -202,21 +202,47 @@ export const BACKUP_FORM = {
     }
 }
 
-export const RESET_BRANCH_FORM = {
+export const SQUASH_BRANCH_FORM = {
     commit: {
         id: "commit",
         label: "Commit Message",
         inputElement: {
             type: "textarea",
-            placeholder: "A short description of the reason to reset the branch",
+            placeholder: "A short description of the reason to squash the branch",
+            className: "branch-commit-textarea"
+        }
+    },
+    buttons: {
+        submitText: "Squash Branch"
+    },
+    squashBranchSuccessMessage: "Successfully squashed Branch ",
+    squashBranchFailureMessage: "Failed to squash Branch ",
+}
+
+export const RESET_BRANCH_FORM = {
+    commitDescriptor: {
+        id: "commitDescriptor",
+        label: "Commit Descriptor",
+        inputElement: {
+            type: "textarea",
+            placeholder: "Commit Descriptor to reset branch to ",
             className: "branch-commit-textarea"
         }
     },
     buttons: {
         submitText: "Reset Branch"
     },
-    resetBranchSuccessMessage: "Successfully Reset Branch ",
-    resetBranchFailureMessage: "Failed to Reset Branch ",
+    resetBranchSuccessMessage: "Successfully reset Branch ",
+    resetBranchFailureMessage: "Failed to reset Branch ",
+}
+
+export const OPTIMIZE_BRANCH_FORM = {
+    description: "Optimize resources in database ",
+    buttons: {
+        submitText: "Optimize Branch"
+    },
+    optimizeSuccessMessage: "Successfully optimized database ",
+    optimizeFailureMessage: "Failed to optimize database ",
 }
 
 export const NEW_BRANCH="New Branch"

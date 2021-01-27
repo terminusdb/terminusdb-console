@@ -3,14 +3,14 @@ import {Row, Col} from "react-bootstrap"
 import {RESET_BRANCH_FORM} from "./constants.dbmanage"
 
 export const Reset = ({branch, key, onReset}) => {
-	const [commitMsg, setCommitMsg]=useState()
+	const [commitDescriptor, setCommitDescriptor]=useState()
 
 	return <Row className="new-branch" key={key}>
 		<Col className="branch-id-col" >
-			<input onBlur={(evt) => {setCommitMsg(evt.target.value)}}
-				className={RESET_BRANCH_FORM.commit.inputElement.className}
-				type={RESET_BRANCH_FORM.commit.inputElement.type}
-				placeholder = {RESET_BRANCH_FORM.commit.inputElement.placeholder}/>
+			<input onBlur={(evt) => {setCommitDescriptor(evt.target.value)}}
+				className={RESET_BRANCH_FORM.commitDescriptor.inputElement.className}
+				type={RESET_BRANCH_FORM.commitDescriptor.inputElement.type}
+				placeholder = {RESET_BRANCH_FORM.commitDescriptor.inputElement.placeholder}/>
 		</Col>
 		<Col>
 			<button type="submit" onClick={()=> onReset(branch, commitMsg)} className="mt-1 tdb__button__base tdb__button__base--green">

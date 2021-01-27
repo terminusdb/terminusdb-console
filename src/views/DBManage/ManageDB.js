@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Branch } from "./Branch"
 import { Merge } from "./Merge"
-import { MANAGE_SECTIONS } from "./constants.dbmanage"
+import { MANAGE_SECTIONS, SQUASH_BRANCH_FORM, RESET_BRANCH_FORM, OPTIMIZE_BRANCH_FORM } from "./constants.dbmanage"
 import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import { RiverOfSections } from "../Templates/RiverOfSections"
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar"
@@ -19,6 +19,8 @@ import {BranchNavBar} from "./BranchNavBar"
 import Loading from '../../components/Reports/Loading'
 import {BranchCommits} from "./BranchCommits"
 import {Reset} from "./Reset"
+import {Squash} from "./Squash"
+import {Optimize} from "./Optimize"
 
 export const ManageDB = (props) => {
     const {graphs, ref, branch}=DBContextObj()
@@ -76,9 +78,20 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.deleteBranch(branch).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted branch " + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
         })
         .catch((err) => process_error(err, update_start, "Failed to delete branch " + branch))
+        .finally(() => setLoading(false))
+    }
+
+    const onSquash = (branch, commit) => {
+        let update_start = Date.now()
+        setLoading(true)
+        woqlClient.squashBranch(branch, commit).then((results) => {
+            setReport({status: TERMINUS_SUCCESS, message: SQUASH_BRANCH_FORM.squashBranchSuccessMessage + branch})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+        })
+        .catch((err) => process_error(err, update_start, SQUASH_BRANCH_FORM.squashBranchFailureMessage + branch))
         .finally(() => setLoading(false))
     }
 
@@ -86,10 +99,21 @@ export const ManageDB = (props) => {
         let update_start = Date.now()
         setLoading(true)
         woqlClient.resetBranch(branch, commit).then((results) => {
-            setReport({status: TERMINUS_SUCCESS, message: "Successfully reset branch " + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            setReport({status: TERMINUS_SUCCESS, message: RESET_BRANCH_FORM.resetBranchSuccessMessage + branch})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
         })
-        .catch((err) => process_error(err, update_start, "Failed to reset branch " + branch))
+        .catch((err) => process_error(err, update_start, RESET_BRANCH_FORM.resetBranchFailureMessage + branch))
+        .finally(() => setLoading(false))
+    }
+
+    const onOptimize = () => {
+        let update_start = Date.now()
+        setLoading(true)
+        woqlClient.optimize_system().then((results) => {
+            setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage + branch})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+        })
+        .catch((err) => process_error(err, update_start, OPTIMIZE_BRANCH_FORM.optimizeFailureMessage + branch))
         .finally(() => setLoading(false))
     }
 
@@ -101,7 +125,7 @@ export const ManageDB = (props) => {
 
     let onBranchClick = function(cell){
         let row = cell.row
-        //setReport(false)
+        setReport(false)
         if(row) {
             let branchID=row.original["Branch ID"]["@value"]
             setBranchAction({branch: branchID})
@@ -134,6 +158,8 @@ export const ManageDB = (props) => {
                 {branchAction.create && <Branch key="branch"/>}
                 {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch}/>}
                 {branchAction.reset && <Reset key="reset" branch={branchAction.branch} onReset={onReset}/>}
+                {branchAction.squash && <Squash key="squash" branch={branchAction.branch} onSquash={onSquash}/>}
+                {branchAction.optimize && <Optimize key="optimize" onOptimize={onOptimize}/>}
                 {!branchAction.branch && <ControlledTable
                     limit={tabConfig.pagesize()}
                     query={query}

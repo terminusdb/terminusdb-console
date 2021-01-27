@@ -38,7 +38,7 @@ const TotalBranches=({branchCount})=>{
 
 const NewBranch=({title, setBranchAction, branchAction})=>{
     function onClick(){
-        setBranchAction({branch:false, create:true, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:true, merge:false, reset: false, squash: false, optimize:false})
     }
     return <Col md={2}>
         <span style={{fontSize: "2em"}}>
@@ -51,7 +51,7 @@ const NewBranch=({title, setBranchAction, branchAction})=>{
 
 const Merge=({title, setBranchAction, branchAction})=> {
     function onClick(){
-        setBranchAction({branch:branchAction.branch, create:false, merge:true, reset: false, squash: false})
+        setBranchAction({branch:branchAction.branch, create:false, merge:true, reset: false, squash: false, optimize:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClick} className="d-nav-icons" title={title}>
@@ -62,7 +62,7 @@ const Merge=({title, setBranchAction, branchAction})=> {
 
 const Close=({title, setBranchAction, branchAction})=>{
     function onClose(){
-        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClose} className="d-nav-icons" title={title}>
@@ -82,7 +82,7 @@ const Title=({branchAction})=>{
 const Delete=({title, setBranchAction, branchAction, onDelete})=> {
     function onClick() {
         onDelete(branchAction.branch)
-        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span title={title} onClick={onClick} className="d-nav-icons">
@@ -93,7 +93,7 @@ const Delete=({title, setBranchAction, branchAction, onDelete})=> {
 
 const Reset=({title, setBranchAction, branchAction})=> {
     function onClick() {
-        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: true, squash: false})
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: true, squash: false, optimize:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClick} className="d-nav-icons" title={title}>
@@ -103,8 +103,11 @@ const Reset=({title, setBranchAction, branchAction})=> {
 }
 
 const Optimize=({title, setBranchAction, branchAction})=> {
+    function onClick() {
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false, optimize:true})
+    }
     return <span style={{fontSize: "2em"}}>
-        <span className="d-nav-icons" title={title}>
+        <span className="d-nav-icons" title={title} onClick={onClick}>
             <BsCheckCircle className="db_info_icon_spacing"/>
         </span>
     </span>
@@ -112,7 +115,7 @@ const Optimize=({title, setBranchAction, branchAction})=> {
 
 const Squash=({title, setBranchAction, branchAction})=> {
     function onClick() {
-        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: true})
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: true, optimize:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span className="d-nav-icons" title={title} onClick={onClick}>
