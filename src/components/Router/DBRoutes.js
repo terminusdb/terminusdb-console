@@ -5,6 +5,7 @@ import {
     DB_SYNCHRONISE,
     DB_SCHEMA_ROUTE,
     DB_DOCUMENT_ROUTE,
+    DB_METRICS_ROUTE,
     SPECIFIC_DB_ROUTE,
     SPECIFIC_DOC_ROUTE,
     TERMINUS_ROUTE,
@@ -14,6 +15,7 @@ import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
 import {Synchronize} from '../../views/DBSynchronize/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
+import MetricsPage from "../../views/Pages/MetricsPage"
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
 import {DBContextProvider} from '../Query/DBContext'
@@ -55,6 +57,11 @@ const MasterDBRoute = () => {
         </Route>,
     )
     routes.push(
+        <Route key="metrics" path={`${path}${DB_METRICS_ROUTE}`}>
+            <MetricsPage/>
+        </Route>,
+    )
+    routes.push(
         <Route key="document" path={`${path}${DB_DOCUMENT_ROUTE}`}>
             <DocumentPage />
         </Route>,
@@ -86,6 +93,11 @@ const DBRoute = () => {
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />
+        </Route>,
+    )
+    routes.push(
+        <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
+            <MetricsPage />
         </Route>,
     )
     routes.push(

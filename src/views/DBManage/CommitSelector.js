@@ -3,7 +3,7 @@ import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {printts} from '../../constants/dates'
 import {Row, Col, Container} from "react-bootstrap" //replaced
 import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
-import {BranchSelector} from '../../components/History/BranchSelector' 
+import {BranchSelector} from '../../components/History/BranchSelector'
 
 
 export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage}) => {
@@ -34,7 +34,7 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
             updateSourceCommit(c.target.value)
         }
     }
-    
+
     function unsetManual(){
         setManuallyUpdated(false)
     }
@@ -64,7 +64,7 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
                         Commit ID
                 </span>
                 <span className="commit-id-input-box">
-                    <input 
+                    <input
                         className="commit-id-input"
                         value={sourceCommit}
                         onChange={setCommitID}
@@ -73,20 +73,20 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
                 </span>
             </Col>
             <Col md={2} className='commit-branch-selector'>
-                <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>    
+                <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>
             </Col>
         </Row>
         <Row>
             <div className="history__nav history__nav--noshadow ">
-                <TimelineCommits 
+                <TimelineCommits
                     branch={myBranch}
                     woqlClient={woqlClient}
-                    onChange={setCurrentItem} 
+                    onChange={setCurrentItem}
                     headMessage={actionMessage}
-                    setHead={setCommit} 
+                    setHead={setCommit}
                     currentCommit={commit}
                     firstCommit={firstCommit}
-                    currentStartTime={time} 
+                    currentStartTime={time}
                 />
             </div>
         </Row>

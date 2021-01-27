@@ -14,7 +14,7 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
-    function changeBranch(SelValue){       
+    function changeBranch(SelValue){
         let nub = SelValue
         if(nub !== get_branch()){
             if(onChange){
@@ -23,8 +23,8 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
             else {
                 setHead(nub)
             }
-        } 
-        toggle();     
+        }
+        toggle();
     }
 
     function get_branch(){
@@ -37,18 +37,18 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
             return {label: item.id, value: item.id}
         })
 
-        const entries = Object.values(branches).map((item, index) => {              
+        const entries = Object.values(branches).map((item, index) => {
             return (<button onClick={
                 function(){
                     changeBranch(item.id)
-                }} 
+                }}
                 className="tdb__dropdown__button" key={item.id} >{item.id}</button>
-                      
+
                 )
         })
 
-        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={BRANCH_SELECTOR.label + " " + get_branch()} className="nav__main__link" >                   
-                    {entries}                 
+        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={BRANCH_SELECTOR.label + " " + get_branch()} className="nav__main__link" >
+                    {entries}
                 </Dropdown>
             )
     }else if(branch && branches && Object.keys(branches).length == 1 && !hideSingle){
@@ -64,8 +64,8 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
 /*
 
 <OutsideClickHandler
-                    onOutsideClick={closeDrop}    
-                >   
+                    onOutsideClick={closeDrop}
+                >
                     <div className="tdb__dropdown" >
                         <button className="tdb__dropdown__button tdb__dropdown__button--top nav__main__link" onClick={toggle}>
                             {BRANCH_SELECTOR.label + " " + branch} <i className="fa fa-caret-down"></i>

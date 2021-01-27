@@ -265,6 +265,12 @@
       min-width: 180px;
   }
 
+  input.branch-commit-textarea {
+    width: 100%;
+    height: 100%;
+    padding-left: 15px;
+  }
+
 
   img.center {
       margin: auto;
@@ -5707,7 +5713,7 @@ span.wiki-id-editor {
 
 .wiki-icon {
     padding-right: 4px;
-} 
+}
 
 div.wiki-value-wrapper {
     font-size: 1.1em;
@@ -5924,11 +5930,11 @@ span.wiki-error-contents {
     cursor: pointer;
     padding: 6px;
     display: block;
-} 
+}
 
 .wiki-menu-selector {
     padding: 6px;
-} 
+}
 
 .wiki-menu-icon {
     padding-right: 6px;
@@ -5980,10 +5986,10 @@ span.wiki-error-contents {
 .wiki-status-icon {
     float: left;
     padding-top: 6px;
-} 
+}
 
 .wiki-status-ok {
-    color:  #0055bb;    
+    color:  #0055bb;
 }
 
 .wiki-status-pending {
@@ -5993,4 +5999,3 @@ span.wiki-error-contents {
 .wiki-status-success {
     color: #00C08B;
 }
-
