@@ -14,6 +14,7 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {DBContextObj} from '../../components/Query/DBContext'
+import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {BranchNavBar} from "./BranchNavBar"
 import Loading from '../../components/Reports/Loading'
 import {BranchCommits} from "./BranchCommits"
@@ -75,10 +76,23 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.deleteBranch(branch).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted branch " + branch})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => process_error(err, update_start, "Failed to delete branch " + branch))
         .finally(() => setLoading(false))
     }
+
+    const onReset = (branch, commit) => {
+        let update_start = Date.now()
+        setLoading(true)
+        woqlClient.resetBranch(branch, commit).then((results) => {
+            setReport({status: TERMINUS_SUCCESS, message: "Successfully reset branch " + branch})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        })
+        .catch((err) => process_error(err, update_start, "Failed to reset branch " + branch))
+        .finally(() => setLoading(false))
+    }
+
 
     const deleteBranch = (cell) => {
         let branch=cell.row.original["Branch ID"]["@value"]
@@ -112,9 +126,14 @@ export const ManageDB = (props) => {
             <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>
             <main className="console__page__container console__page__container--width">
                 {loading && <Loading type={TERMINUS_COMPONENT} />}
+                {reportMsg && reportMsg.status == TERMINUS_SUCCESS &&
+                    <div className='row generic-message-holder'>
+                        <TerminusDBSpeaks report={reportMsg} />
+                    </div>
+                }
                 {branchAction.create && <Branch key="branch"/>}
                 {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch}/>}
-                {branchAction.reset && <Reset key="reset" branch={branchAction.branch}/>}
+                {branchAction.reset && <Reset key="reset" branch={branchAction.branch} onReset={onReset}/>}
                 {!branchAction.branch && <ControlledTable
                     limit={tabConfig.pagesize()}
                     query={query}
