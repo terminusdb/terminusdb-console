@@ -21,6 +21,7 @@ import {BranchCommits} from "./BranchCommits"
 import {Reset} from "./Reset"
 import {Squash} from "./Squash"
 import {Optimize} from "./Optimize"
+import {ActionHeader} from "./ActionHeader"
 
 export const ManageDB = (props) => {
     const {graphs, ref, branch}=DBContextObj()
@@ -125,6 +126,10 @@ export const ManageDB = (props) => {
         })
     }
 
+    const onClose = () => {
+		setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false, optimize:false})
+	}
+
 
     const deleteBranch = (cell) => {
         let branch=cell.row.original["Branch ID"]["@value"]
@@ -163,6 +168,7 @@ export const ManageDB = (props) => {
                         <TerminusDBSpeaks report={reportMsg} />
                     </div>
                 }
+                {branchAction.title && <ActionHeader onClose={onClose} title={branchAction.title}/>}
                 {branchAction.create && <Branch key="branch"/>}
                 {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch}/>}
                 {branchAction.reset && <Reset key="reset" branch={branchAction.branch} onReset={onReset}/>}
@@ -179,15 +185,3 @@ export const ManageDB = (props) => {
 
     )
 }
-
-/*
-export const ManageDB = (props) => {
-    return (
-    	<PageView report={props.report} dbPage={true}>
-	        <RiverOfSections key='a' sections={MANAGE_SECTIONS} label={props.label}>
-	            <Branch key="branch" />
-	            <Merge key="merge" />
-	        </RiverOfSections>
-	    </PageView>
-    )
-}*/

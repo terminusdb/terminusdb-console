@@ -242,7 +242,7 @@ export const OPTIMIZE_BRANCH_FORM = {
         submitText: "Optimize Branch"
     },
     optimizeSuccessMessage: "Optimization complete",
-    optimizeFailureMessage: "Optimization failed",
+    optimizeFailureMessage: "Failed to optimize ",
 }
 
 export const NEW_BRANCH="New Branch"
