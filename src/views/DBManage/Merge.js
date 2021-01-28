@@ -242,9 +242,13 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                     </Row>
                 </Col>
                 <div className="justify-content-end flex-grow-1 d-flex align-items-baseline" style={{"z-index": 99999}}>
-                    <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
-                        Merge into {targetBranch} Branch
-                    </button>
+                    <Col md={10}>
+                    </Col>
+                    <Col md={2}>
+                        <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
+                            Merge into {targetBranch} Branch
+                        </button>
+                    </Col>
                 </div>
             </Container>
         </>
