@@ -108,13 +108,21 @@ export const ManageDB = (props) => {
 
     const onOptimize = () => {
         let update_start = Date.now()
+        var message = OPTIMIZE_BRANCH_FORM.optimizeSystemSuccessMessage
         setLoading(true)
         woqlClient.optimize_system().then((results) => {
-            setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+            woqlClient.optimize_meta()
+        }).then((results) => {
+            woqlClient.optimize_commit()
+        }).then((results) => {
+            woqlClient.optimize_branch(branchAction.branch)
         })
-        .catch((err) => process_error(err, update_start, OPTIMIZE_BRANCH_FORM.optimizeFailureMessage + branch))
-        .finally(() => setLoading(false))
+        .catch((err) => process_error(err, update_start, OPTIMIZE_BRANCH_FORM.optimizeFailureMessag))
+        .finally(() => {
+            setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+            setLoading(false)
+        })
     }
 
 

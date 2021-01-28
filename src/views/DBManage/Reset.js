@@ -13,7 +13,7 @@ export const Reset = ({branch, key, onReset}) => {
 				placeholder = {RESET_BRANCH_FORM.commitDescriptor.inputElement.placeholder}/>
 		</Col>
 		<Col>
-			<button type="submit" onClick={()=> onReset(branch, commitMsg)} className="mt-1 tdb__button__base tdb__button__base--green">
+			<button type="submit" onClick={()=> onReset(branch, commitDescriptor)} className="mt-1 tdb__button__base tdb__button__base--green">
 				{RESET_BRANCH_FORM.buttons.submitText}
 			</button>
 		</Col>

@@ -241,8 +241,8 @@ export const OPTIMIZE_BRANCH_FORM = {
     buttons: {
         submitText: "Optimize Branch"
     },
-    optimizeSuccessMessage: "Successfully optimized database ",
-    optimizeFailureMessage: "Failed to optimize database ",
+    optimizeSuccessMessage: "Optimization complete",
+    optimizeFailureMessage: "Optimization failed",
 }
 
 export const NEW_BRANCH="New Branch"
