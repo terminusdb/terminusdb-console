@@ -64,13 +64,13 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
 
     const [disabled] = useMemo(() => {
         if (result && !result.error) {
-            changeTab(1)
+            changeTab("result")
             return [{}]
         } else return [{disabled:true}]
     }, [result])
 
-    const onSelect = (k) => {
-        changeTab(k)
+    const onSelect = (key) => {
+        changeTab(key)
     }
 
     const updateWOQL = (q, commitMsg) => {
@@ -110,7 +110,7 @@ export const QueryPane = ({query, className, resultView, startLanguage, queryTex
           
             <ReportWrapper {...errorObj}>{errorChild}</ReportWrapper>
 
-            <Tabs selected={selectedTab} activeKey={selectedTab} onSelect={onSelect} id="query_tabs">
+            <Tabs activeKey={selectedTab} onSelect={onSelect} id="query_tabs">
                 <Tab eventKey="query" label={QUERY_PANEL_TITLE} title={QUERY_PANEL_TITLE}>
                     {loading &&
                         <Loading type={TERMINUS_TABLE} />

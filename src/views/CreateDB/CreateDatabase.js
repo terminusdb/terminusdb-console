@@ -98,14 +98,14 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
                     setReport({status: TERMINUS_SUCCESS, message: DB_CSV_CREATE_FORM.csvSuccess, time: Date.now() - update_start})
                     after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
                 })
-                .catch((err) => process_error(err, update_start, DB_CSV_CREATE_FORM.csvError))
+                .catch((err) => process_error(err, update_start, DB_CSV_CREATE_FORM.csvError, setLoading, setReport))
                 .finally(() => setLoading(false))
             }
             else{
                 after_create_db(update_start, get_local_create_message(doc.label, doc.id), local_id, "create", doc)
             }
         })
-        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id)))
+        .catch((err) => process_error(err, update_start, create_local_failure(doc.label, local_id), setLoading, setReport))
         .finally(() => {
             if(!isArray(doc.files)) setLoading(false)
         })
@@ -188,7 +188,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
             addClone(local_id, woqlClient.user_organization(), newguy)
             .then(() => goDBHome(local_id, woqlClient.user_organization(), rep))
         })
-        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id)))
+        .catch((err) => process_error(err, update_start, create_remote_failure(doc.label, doc.id), setLoading, setReport))
         .finally(() => setLoading(false))
     }
 
@@ -219,7 +219,7 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     )
 }
 
-function process_error(err, update_start, message){
+function process_error(err, update_start, message, setLoading, setReport){
     setLoading(false)
     setReport({
         error: err,
@@ -271,7 +271,7 @@ export const ShareDBForm = ({onSuccess, starter}) => {
                 if(onSuccess) onSuccess(doc)
             })
         })
-        .catch((err) => process_error(err, update_start, "Push to TerminusHub failed"))
+        .catch((err) => process_error(err, update_start, "Push to TerminusHub failed", setLoading, setReport))
         .finally(() => {
             setLoading(false)
         })

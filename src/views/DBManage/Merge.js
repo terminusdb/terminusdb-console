@@ -17,17 +17,17 @@ import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
 import {Col, Row, Container, Alert} from "react-bootstrap" //replaced
 import Loading from '../../components/Reports/Loading'
-import Select from "react-select";
+import Select from "react-select"
 
 
-export const Merge = () => {
+export const Merge = ({defaultBranch}) => {
     const {woqlClient} = WOQLClientObj()
     const {branch, ref, branches, consoleTime, DBInfo} = DBContextObj()
 
     const [loading, setLoading] = useState(false)
 
     const [sourceCommit, setSourceCommit] = useState()
-    const [starterBranch, setStarterBranch] = useState()
+    const [starterBranch, setStarterBranch] = useState(defaultBranch)
     const [targetBranch, setTargetBranch] = useState()
     const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
@@ -37,7 +37,8 @@ export const Merge = () => {
     useEffect(() => {
         if(ref && !sourceCommit){
             setSourceCommit(ref)
-            setStarterBranch(branch)
+            if(defaultBranch) setStarterBranch(defaultBranch)
+            else setStarterBranch(branch)
         }
         else if(!sourceCommit){
             let guess = false
@@ -50,7 +51,8 @@ export const Merge = () => {
                 }
             }
             let chosen = guess ? guess.id : branch
-            setStarterBranch(chosen)
+            if(defaultBranch) setStarterBranch(defaultBranch)
+            else setStarterBranch(chosen)
             setSourceCommit(branches[chosen].head)
         }
         if(branch && !targetBranch){
@@ -195,11 +197,11 @@ export const Merge = () => {
                     />
                 </Row>
                 <div className='row' {...showAlert}>
-                    <Alert color='warning' className="flex-grow-1">
+                    <Alert variant='warning' className="flex-grow-1">
                         {submissionProblem || 'noValue'}
                     </Alert>
                 </div>
-                {report && 
+                {report &&
                     <TerminusDBSpeaks report={report} />
                 }
                 <Col className="merge-inputs">

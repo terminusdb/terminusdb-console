@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
-import {Row, Col, Modal, ModalHeader, ModalBody} from "react-bootstrap" //replaced
+import {Row, Col, Modal, ModalBody} from "react-bootstrap" //replaced
 import { AiOutlineRead, AiOutlineDown, AiOutlineSchedule, AiFillCheckCircle, AiOutlineThunderbolt,
     AiOutlinePlusCircle, AiOutlineLink, AiFillLock, AiFillInfoCircle, AiOutlineUser, AiOutlineExclamation,
     AiOutlineGlobal, AiOutlineLeft} from 'react-icons/ai';
@@ -404,8 +404,8 @@ export const DBControlPanel = ({meta, onChange}) => {
 
             </div>
 
-            <Modal isOpen={modal} toggle={imagePickerToggle} contentClassName="custom-modal-style" size="lg">
-                <ModalHeader toggle={imagePickerToggle}/>
+            <Modal show={modal} onHide={imagePickerToggle} contentClassName="custom-modal-style" size="lg">
+                <Modal.Header closeButton/>
                 <ModalBody>
                     <Row key="mr">
                         <span className="upload-image-btn">

@@ -61,7 +61,7 @@ const ImpotentQuery = ({report, time}) => {
     let txt = (time ? " (" + time + ")" : "")
 
     return (
-        <Alert color="warning">
+        <Alert variant="warning">
             <span className={ RESULT_REPORT_CSS }>
                 {NO_RESULTS}
                 <span> {txt} </span>
@@ -73,7 +73,7 @@ const ImpotentQuery = ({report, time}) => {
 
 const QuerySuccess = ({report, time}) => {
     return (
-        <Alert color="info">
+        <Alert variant="info">
             <span className={ RESULT_REPORT_CSS }>
                 Query returned {report.rows} records in {time}
             </span>
@@ -95,7 +95,7 @@ const HybridSuccess = ({report, time}) => {
 const UpdateSuccess = ({report, time}) => {
     let txt = (time ? " (" + time + ")" : "")
     return (
-        <Alert color="success">
+        <Alert variant="success">
             <span className={ RESULT_REPORT_CSS }>
                 Successfully updated database
                 <span> {txt} </span>
@@ -127,7 +127,7 @@ const QueryError = ({violations, time}) => {
     let txt = (time ? " (" + time + ")" : "")
 
     return (
-        <Alert color="warning">
+        <Alert variant="warning">
             <span className={ RESULT_REPORT_CSS }> {txt}
                 <ViolationReport violations={violations} tone="warning"/>
             </span>
@@ -139,7 +139,7 @@ const QuerySystemError = ({error, time}) => {
     let txt = (time ? " (" + time + ")" : "")
 
     return (
-    <Alert color="danger">
+    <Alert variant="danger">
         <span className={ RESULT_REPORT_CSS }>
             {QUERY_CAUSED_ERROR}
             <span> {txt} </span>

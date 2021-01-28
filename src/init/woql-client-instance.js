@@ -46,6 +46,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     setInitComplete(true)
                     setConnecting(false)
                 } catch (err) {
+                    console.log("__CONNECT_ERROR__",err)
                     setError(true)
                     setConnecting(false)
                     setLoading(false)
@@ -84,11 +85,14 @@ export const WOQLClientProvider = ({children, params}) => {
         //console.log(remote_user)
         let hub_org = remote_user['http://terminusdb.com/schema/system#agent_name']
         let hubcreds = {type: "jwt", key: jwtoken}
+        
         const hubClient = new TerminusClient.WOQLClient(params.remote)
+
         hubClient.local_auth(hubcreds)
         hubClient.organization(hub_org) 
         hubClient.connection.user.id = hub_org
         hubClient.connection.user.author = remote_user.email
+        
         setRemoteClient(hubClient)
         const bClient = new TerminusClient.WOQLClient(params.bff)
         bClient.local_auth(hubcreds)

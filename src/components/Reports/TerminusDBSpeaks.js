@@ -8,7 +8,7 @@ import {PageFailure} from './PageFailure'
  * Report is generally to report the result of some action or to prompt a user with helpful text
  */
 
-export const TerminusDBSpeaks = ({report, failure}) => {
+export const TerminusDBSpeaks = ({report, failure, onClose}) => {
     
     if (failure) {
         return <PageFailure failure={failure} report={report} />
@@ -21,6 +21,7 @@ export const TerminusDBSpeaks = ({report, failure}) => {
                 message={report.message}
                 error={report.error}
                 time={report.time}
+                onClose={onClose}
             />
         )
     } else if (report.message) {
@@ -30,6 +31,7 @@ export const TerminusDBSpeaks = ({report, failure}) => {
                 message={report.message}
                 error={report.error}
                 time={report.time}
+                onClose={onClose}
             />
         )
     } else if (report.error) {

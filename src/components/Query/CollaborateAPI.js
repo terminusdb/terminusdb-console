@@ -24,6 +24,10 @@ export const CreateLocal = async (meta, client, preformed) => {
 
 export const CreateRemote = async (meta, client, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
+    /*
+    * I add the new jwt token to the remote connection obj  
+    * I add the new jwt token to the local connection obj to pass it to the local terminusdb server
+    */
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
@@ -213,6 +217,7 @@ export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently
     remoteClient.local_auth(creds)
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
+    console.log("___GET_DATABASE___", meta);
     return remoteClient.getDatabase(meta.id, meta.organization)
 }
 
@@ -260,6 +265,8 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
         remote_branch: from_branch,
         message: commit,
     }
+    // eslint-disable-next-line no-console
+    console.log("___PULL____FROM", pull_from)
     let nClient = client.copy()
     nClient.checkout(to_branch)
     //create copy so we don't change internal state of woqlClient inadvertently

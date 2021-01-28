@@ -154,7 +154,7 @@ export const Branch = () => {
 
             <Container>
             <div className='row generic-message-holder' {...showAlert}>
-                <Alert color='warning' className="flex-grow-1">
+                <Alert variant='warning' className="flex-grow-1">
                     {submissionProblem || 'noValue'}
                 </Alert>
             </div>                    

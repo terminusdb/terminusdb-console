@@ -8,11 +8,16 @@ import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList,
     AiFillEdit, AiOutlinePushpin, AiOutlineEdit, AiFillBuild, AiOutlineBuild} from 'react-icons/ai';
 import { FiBox } from 'react-icons/fi'
 import {formatBytes} from "../../utils/format"
+import {BranchInfo} from './../DBManage/BranchInfo'
 
-export const ScopedDetails = () => {
+export const ScopedDetails = ({selectedBranch}) => {
 
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
+    if(selectedBranch)
+        var [branch, branches, ref, consoleTime, graphs]=BranchInfo(selectedBranch)
+    else var {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
     const [latest, setLatest] = useState()
 
 
