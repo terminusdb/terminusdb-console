@@ -169,8 +169,8 @@ export const ManageDB = (props) => {
                     </div>
                 }
                 {branchAction.title && <ActionHeader onClose={onClose} title={branchAction.title}/>}
-                {branchAction.create && <Branch key="branch"/>}
-                {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch}/>}
+                {branchAction.create && <Branch key="branch" setBranchAction={setBranchAction} setReport={setReport}/>}
+                {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch} setBranchAction={setBranchAction} setReport={setReport}/>}
                 {branchAction.reset && <Reset key="reset" branch={branchAction.branch} onReset={onReset}/>}
                 {branchAction.squash && <Squash key="squash" branch={branchAction.branch} onSquash={onSquash}/>}
                 {branchAction.optimize && <Optimize key="optimize" onOptimize={onOptimize}/>}

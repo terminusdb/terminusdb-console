@@ -4390,8 +4390,11 @@ span.delete-modal-label {
 
 
   .new-branch {
-      margin-top: 2em;
-      margin-bottom: 2em;
+      border: 1px solid #ddd;
+      padding: 30px 0px 30px 0px;
+      border-radius: 3px;
+      border-bottom-right-radius: 0px;
+      border-bottom-left-radius: 0px;
   }
 
   .branch-title-col {

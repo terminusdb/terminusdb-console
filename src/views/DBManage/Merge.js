@@ -20,7 +20,7 @@ import Loading from '../../components/Reports/Loading'
 import Select from "react-select"
 
 
-export const Merge = ({defaultBranch}) => {
+export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
     const {woqlClient} = WOQLClientObj()
     const {branch, ref, branches, consoleTime, DBInfo} = DBContextObj()
 
@@ -60,7 +60,7 @@ export const Merge = ({defaultBranch}) => {
         }
     }, [branch, ref, consoleTime, branches])
 
-    const [report, setReport] = useState()
+    //const [report, setReport] = useState()
 
     function getMergeRoot(){
         let b = isBranchHead(sourceCommit)
@@ -99,6 +99,7 @@ export const Merge = ({defaultBranch}) => {
                     status: TERMINUS_SUCCESS,
                     time: Date.now() - update_start,
                 }
+                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
                 setReport(rep)
             })
             .catch((err) => {
@@ -168,9 +169,9 @@ export const Merge = ({defaultBranch}) => {
     }
 
 
-    if (report && report.status == TERMINUS_SUCCESS) {
+    /*if (report && report.status == TERMINUS_SUCCESS) {
         return (<span className="database-list-intro"><TerminusDBSpeaks report={report} /></span>)
-    }
+    }*/
 
     if(!starterBranch || !targetBranch) return null
 
@@ -180,9 +181,7 @@ export const Merge = ({defaultBranch}) => {
         return {label: item.id, value: item.id}
     }) : [])
     return (<>
-            <div className="tdb__loading__parent">
-            <Container>
-
+            <Container className="new-branch">
                 <Row>
                     <CommitSelector
                         branch={starterBranch}
@@ -201,9 +200,9 @@ export const Merge = ({defaultBranch}) => {
                         {submissionProblem || 'noValue'}
                     </Alert>
                 </div>
-                {report &&
+                {/*report &&
                     <TerminusDBSpeaks report={report} />
-                }
+                */}
                 <Col className="merge-inputs">
                     <Row className="merge-branch">
                         <Col className="branch-selector-title-col" md={2}>
@@ -248,8 +247,15 @@ export const Merge = ({defaultBranch}) => {
                     </button>
                 </div>
             </Container>
-            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
-            </div>
         </>
     )
 }
+
+/*
+<div className="tdb__loading__parent">
+<Container>
+
+</Container>
+{(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+</div>
+*/
