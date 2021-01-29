@@ -9,7 +9,7 @@ import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
 import {Row, Col} from "react-bootstrap" //replaced
 import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
-export const CommitLog = ({selectedBranch}) => {
+export const CommitLog = ({selectedBranch, onReset, getResetButton}) => {
     const {woqlClient} = WOQLClientObj()
     if(selectedBranch)
         var [branch, branches, ref, consoleTime, prefixes]=BranchInfo(selectedBranch)
@@ -69,13 +69,22 @@ export const CommitLog = ({selectedBranch}) => {
         setCommit(cmt)
     }
 
+    function resetBranch (cell) {
+        let cmt= cell.row.original["Commit ID"]["@value"]
+        onReset(branch, cmt)
+    }
+
     function unsetCommit(){
         setCommit()
     }
 
     const tabConfig= TerminusClient.View.table();
     tabConfig.row().click(rowClick)
-    tabConfig.column_order("Time", "Author", "Commit ID", "Message")
+    if(selectedBranch){
+        tabConfig.column_order("Time", "Author", "Commit ID", "Message", "Reset")
+        tabConfig.column("Reset").minWidth(80).width(80).unsortable(true).click(resetBranch).render(getResetButton)
+    }
+    else tabConfig.column_order("Time", "Author", "Commit ID", "Message")
     tabConfig.column("Time").width(180).renderer({type: "time"})
     tabConfig.column("Message").width(300)
     tabConfig.pager("remote")

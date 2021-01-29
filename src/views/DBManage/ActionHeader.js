@@ -2,7 +2,11 @@ import React, {useState} from "react";
 import {Row, Col} from "react-bootstrap"
 import {TiDeleteOutline} from "react-icons/ti"
 
-export const ActionHeader = ({title, onClose}) => {
+export const ActionHeader = ({branchAction, onClose}) => {
+	var title=branchAction.title
+	if(branchAction.merge)
+	 	title=branchAction.title + " " + branchAction.branch
+
 	return <div class="csv-preview-header row">
 		<Col md={10}>
 			<span class="preview-bar-title">

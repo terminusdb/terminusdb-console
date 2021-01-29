@@ -37,8 +37,8 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
     useEffect(() => {
         if(ref && !sourceCommit){
             setSourceCommit(ref)
-            if(defaultBranch) setStarterBranch(defaultBranch)
-            else setStarterBranch(branch)
+            //if(defaultBranch) setStarterBranch(defaultBranch)
+            setStarterBranch(branch)
         }
         else if(!sourceCommit){
             let guess = false
@@ -51,8 +51,8 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                 }
             }
             let chosen = guess ? guess.id : branch
-            if(defaultBranch) setStarterBranch(defaultBranch)
-            else setStarterBranch(chosen)
+            //if(defaultBranch) setStarterBranch(defaultBranch)
+            setStarterBranch(chosen)
             setSourceCommit(branches[chosen].head)
         }
         if(branch && !targetBranch){
@@ -99,11 +99,10 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                     status: TERMINUS_SUCCESS,
                     time: Date.now() - update_start,
                 }
-                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
                 setReport(rep)
             })
             .catch((err) => {
-                //alert("yo")
                 let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${targetBranch} `
                 setReport({error: err, status: TERMINUS_ERROR, message: message})
             })
@@ -204,7 +203,7 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                     <TerminusDBSpeaks report={report} />
                 */}
                 <Col className="merge-inputs">
-                    <Row className="merge-branch">
+                    {/*<Row className="merge-branch">
                         <Col className="branch-selector-title-col" md={2}>
                             <span className="commit-selector-title">
                                 Merge Into Branch
@@ -221,7 +220,7 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                                 defaultValue= {targetBranch}
                             />
                         </Col>
-                    </Row>
+                    </Row>*/}
                     <Row className="merge-commit">
                         <Col className="commit-log-title" md={2}>
                             <span className="commit-selector-title">

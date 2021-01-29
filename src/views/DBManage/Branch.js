@@ -76,7 +76,7 @@ export const Branch = ({setBranchAction, setReport}) => {
         nc.branch(newID, source_free)
         .then(() => {
             afterCreate(update_start)
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, optimize:false})
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => {
             let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${newID} `

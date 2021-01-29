@@ -225,7 +225,7 @@ export const RESET_BRANCH_FORM = {
         label: "Commit Descriptor",
         inputElement: {
             type: "textarea",
-            placeholder: "Commit Descriptor to reset branch to ",
+            placeholder: "Commit ID of ineterst to reset branch to ",
             className: "branch-commit-textarea"
         }
     },
@@ -249,6 +249,7 @@ export const NEW_BRANCH="New Branch"
 export const MERGE_BRANCH="Merge Branch"
 export const CLOSE_BRANCH="Close Branch"
 export const DELETE_BRANCH="Delete Branch"
-export const RESET_BRANCH="Reset Branch"
+export const RESET_SPECIFIC_BRANCH="Reset to a specific commit"
+export const RESET_BRANCH="Reset Branch to this commit"
 export const OPTIMIZE_BRANCH="Optimize Branch"
 export const SQUASH_BRANCH="Squash Branch"
