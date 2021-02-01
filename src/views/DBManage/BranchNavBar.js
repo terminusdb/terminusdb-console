@@ -7,7 +7,7 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 import {MdRefresh} from "react-icons/md"
 import {FaCompressAlt} from "react-icons/fa"
 import {BsCheckCircle} from "react-icons/bs"
-import {NEW_BRANCH, MERGE_BRANCH, CLOSE_BRANCH, DELETE_BRANCH, RESET_SPECIFIC_BRANCH, OPTIMIZE_BRANCH, SQUASH_BRANCH} from "./constants.dbmanage"
+import {NEW_BRANCH, MERGE_BRANCH, CLOSE_BRANCH, DELETE_BRANCH, RESET_SPECIFIC_BRANCH, OPTIMIZE_BRANCH, SQUASH_BRANCH, MAIN_BRANCH} from "./constants.dbmanage"
 
 const Header=({children})=>{
     return <div className="nav__main__wrap">
@@ -137,7 +137,8 @@ export const BranchNavBar=({branchCount, branchAction, setBranchAction, onDelete
         children.push(<Optimize title={OPTIMIZE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onOptimize={onOptimize}/>)
         children.push(<Squash title={SQUASH_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
         children.push(<Col md={1}/>)
-        children.push(<Delete title={DELETE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>)
+        if(branchAction.branch !== MAIN_BRANCH)
+            children.push(<Delete title={DELETE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>)
         children.push(<Back title={CLOSE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
     }
     if(branchAction.create){

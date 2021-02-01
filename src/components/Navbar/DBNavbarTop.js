@@ -28,7 +28,7 @@ export const DBNavbarTop = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches, consoleTime} = DBContextObj()
+    const {branches, consoleTime, branch} = DBContextObj()
 
     let dbmeta = woqlClient.get_database() || {}
     const [toggleTime, setToggleTime] = useState(false)
@@ -63,7 +63,7 @@ const GuardedDBNavbar = (props) => {
                </label>
             </li>
             <li className="nav__main__item nav__main__item--box">
-                <BranchSelector />
+                <BranchSelector currentBranch={branch}/>
                 <label className="switch" title="time travel tools">
                     <input type="checkbox" className="switch__input" onChange={handleToggle} />
                     <span className="switch__slider"></span>
@@ -71,5 +71,5 @@ const GuardedDBNavbar = (props) => {
                 {currentCommitTime}
             </li>
         </Fragment>
-    ) 
+    )
 }

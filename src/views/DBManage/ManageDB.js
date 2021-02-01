@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Branch } from "./Branch"
 import { Merge } from "./Merge"
-import { MANAGE_SECTIONS, SQUASH_BRANCH_FORM, RESET_BRANCH_FORM, OPTIMIZE_BRANCH_FORM } from "./constants.dbmanage"
+import { MANAGE_SECTIONS, SQUASH_BRANCH_FORM, RESET_BRANCH_FORM, OPTIMIZE_BRANCH_FORM, MAIN_BRANCH } from "./constants.dbmanage"
 import {TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
 import { RiverOfSections } from "../Templates/RiverOfSections"
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar"
@@ -24,7 +24,7 @@ import {ActionHeader} from "./ActionHeader"
 
 
 export const ManageDB = (props) => {
-    const {graphs, ref, branch}=DBContextObj()
+    const {graphs, ref, branch, updateBranches}=DBContextObj()
     const {woqlClient}=WOQLClientObj()
     const [branchCount, setBranchCount]=useState()
     const [branchAction, setBranchAction]=useState({})
@@ -59,7 +59,7 @@ export const ManageDB = (props) => {
     const [query, setQuery] = useState(getBranchQuery())
 
     const getDeleteButton=(cell)=>{
-        if(cell.row.values["Branch ID"]["@value"] == "main") return <span/>
+        if(cell.row.values["Branch ID"]["@value"] == MAIN_BRANCH) return <span/>
 		return <span className="schema-toolbar-delete-holder" title={"Delete Document"}>
             <RiDeleteBin5Line color="#721c24" className='schema-toolbar-delete'/>
         </span>
@@ -81,6 +81,7 @@ export const ManageDB = (props) => {
         woqlClient.deleteBranch(branch).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted branch " + branch})
             setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            updateBranches()
         })
         .catch((err) => process_error(err, update_start, "Failed to delete branch " + branch))
         .finally(() => setLoading(false))

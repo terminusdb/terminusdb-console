@@ -6,7 +6,7 @@ import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
 import {BranchSelector} from '../../components/History/BranchSelector'
 
 
-export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage}) => {
+export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setTargetBranch}) => {
     const [sourceCommit, setSourceCommit] = useState(ref)
     const [manuallyUpdated, setManuallyUpdated] = useState(false)
     const [myBranch, setMyBranch] = useState(branch)
@@ -73,7 +73,7 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
                 </span>
             </Col>
             <Col md={2} className='commit-branch-selector'>
-                <BranchSelector onChange={changeBranch} currentBranch={myBranch}/>
+                <BranchSelector onChange={changeBranch} currentBranch={myBranch} setTargetBranch={setTargetBranch}/>
             </Col>
         </Row>
         <Row>
