@@ -28,7 +28,7 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
     }
 
     function get_branch(){
-        if(currentBranch) return currentBranch
+        //if(currentBranch) return currentBranch 
         return branch
     }
 

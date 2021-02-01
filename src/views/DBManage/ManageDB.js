@@ -88,10 +88,17 @@ export const ManageDB = (props) => {
 
     const onSquash = (branch, commit) => {
         let update_start = Date.now()
+        var new_commit
         setLoading(true)
         woqlClient.squashBranch(branch, commit).then((results) => {
-            setReport({status: TERMINUS_SUCCESS, message: SQUASH_BRANCH_FORM.squashBranchSuccessMessage + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            if(results["api:commit"]){
+                var cmt = results["api:commit"].split("/");
+                new_commit = cmt.pop()
+            }
+            woqlClient.resetBranch(branch, new_commit).then((results) => {
+                setReport({status: TERMINUS_SUCCESS, message: SQUASH_BRANCH_FORM.squashBranchSuccessMessage + branch})
+                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            })
         })
         .catch((err) => process_error(err, update_start, SQUASH_BRANCH_FORM.squashBranchFailureMessage + branch))
         .finally(() => setLoading(false))
@@ -126,7 +133,7 @@ export const ManageDB = (props) => {
 
 
     const deleteBranch = (cell) => {
-        if(cell.row.values["Branch ID"]["@value"] == "main") return 
+        if(cell.row.values["Branch ID"]["@value"] == "main") return
         let branch=cell.row.original["Branch ID"]["@value"]
         onDelete(branch)
     }
