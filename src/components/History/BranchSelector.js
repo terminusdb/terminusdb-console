@@ -28,9 +28,11 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
     }
 
     function get_branch(){
-        //if(currentBranch) return currentBranch 
+        //if(currentBranch) return currentBranch
         return branch
     }
+
+    const [branchTitle, setBranchTitle]=useState(BRANCH_SELECTOR.label + " " + get_branch())
 
     if(branch && branches && Object.keys(branches).length > 1 ) {
         let bopts = Object.values(branches).map( (item) => {
@@ -38,16 +40,16 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch }) => {
         })
 
         const entries = Object.values(branches).map((item, index) => {
-            return (<button onClick={
-                function(){
-                    changeBranch(item.id)
-                }}
-                className="tdb__dropdown__button" key={item.id} >{item.id}</button>
-
+            if(item.id != currentBranch){
+                return (<button onClick={ () => {
+                        setBranchTitle(BRANCH_SELECTOR.label + " " + item.id)
+                        changeBranch(item.id)}}
+                    className="tdb__dropdown__button" key={item.id} >{item.id}</button>
                 )
+            }
         })
 
-        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={BRANCH_SELECTOR.label + " " + get_branch()} className="nav__main__link" >
+        return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={branchTitle} className="nav__main__link" >
                     {entries}
                 </Dropdown>
             )
