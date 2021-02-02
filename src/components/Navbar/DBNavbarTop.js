@@ -62,14 +62,14 @@ const GuardedDBNavbar = (props) => {
                     {dbmeta.label}
                </label>
             </li>
-            <li className="nav__main__item nav__main__item--box">
-                <BranchSelector currentBranch={branch}/>
+            {<li className="nav__main__item nav__main__item--box">
+                {/*<BranchSelector currentBranch={branch}/>*/}
                 <label className="switch" title="time travel tools">
                     <input type="checkbox" className="switch__input" onChange={handleToggle} />
                     <span className="switch__slider"></span>
                 </label>
                 {currentCommitTime}
-            </li>
+            </li>}
         </Fragment>
     )
 }

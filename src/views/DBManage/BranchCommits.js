@@ -15,7 +15,7 @@ export const BranchCommits = ({selectedBranch, onReset}) => {
 
 	return <>
 		<Row className="scoped-details-row">
-			 <ScopedDetails selectedBranch={selectedBranch}/>
+			<ScopedDetails/>
 		</Row>
 		<Row key="rd">
 			<CommitLog selectedBranch={selectedBranch} getResetButton={getResetButton} onReset={onReset}/>

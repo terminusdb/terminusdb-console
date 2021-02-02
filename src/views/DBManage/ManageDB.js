@@ -98,7 +98,7 @@ export const ManageDB = (props) => {
             }
             woqlClient.resetBranch(branch, new_commit).then((results) => {
                 setReport({status: TERMINUS_SUCCESS, message: SQUASH_BRANCH_FORM.squashBranchSuccessMessage + branch})
-                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+                setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
             })
         })
         .catch((err) => process_error(err, update_start, SQUASH_BRANCH_FORM.squashBranchFailureMessage + branch))
@@ -110,7 +110,7 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.resetBranch(branch, commit).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: RESET_BRANCH_FORM.resetBranchSuccessMessage + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => process_error(err, update_start, RESET_BRANCH_FORM.resetBranchFailureMessage + branch))
         .finally(() => setLoading(false))
@@ -122,7 +122,7 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.optimize_branch(branchAction.branch).then(()=>{
             setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => process_error(err, update_start, OPTIMIZE_BRANCH_FORM.optimizeFailureMessage + branch))
         .finally(() => setLoading(false))
@@ -130,6 +130,7 @@ export const ManageDB = (props) => {
 
     const onClose = () => {
 		setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
+        setReport(false)
 	}
 
 
@@ -145,6 +146,8 @@ export const ManageDB = (props) => {
         if(row) {
             let branchID=row.original["Branch ID"]["@value"]
             setBranchAction({branch: branchID})
+            updateBranches(branchID)
+            setReport({status: TERMINUS_SUCCESS, message: "Database switched to branch  " + branchID})
         }
     }
 
@@ -152,22 +155,18 @@ export const ManageDB = (props) => {
     tabConfig.column_order("Branch ID", "Commit ID", "Time", "Delete")
     tabConfig.column("Time").header("Last Commit Time").minWidth(50).width(80).renderer({type: "time"}).click(onBranchClick)
     tabConfig.column("Delete").minWidth(80).width(80).unsortable(true).click(deleteBranch).render(getDeleteButton)
-
-    //tabConfig.column_order("Class ID", "Class Name", "Parents", "Children", "Abstract", "Description")
     tabConfig.column("Commit ID").header("Latest Commit").click(onBranchClick)
     tabConfig.column("Branch ID").click(onBranchClick)
     tabConfig.pager("remote")
     tabConfig.pagesize(10)
-    //tabConfig.row().click(showClass)
 
     return (
         <div id={props.id} className="console__page h-100" id="terminus-console-page">
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
-            <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete} onOptimize={onOptimize}/>
+            <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete} onOptimize={onOptimize} setReport={setReport}/>
             <main className="console__page__container console__page__container--width">
                 {loading && <Loading type={TERMINUS_COMPONENT} />}
-                {reportMsg && reportMsg.status == TERMINUS_SUCCESS &&
-                    <div className='row generic-message-holder'>
+                {reportMsg && <div className='row generic-message-holder'>
                         <TerminusDBSpeaks report={reportMsg} />
                     </div>
                 }

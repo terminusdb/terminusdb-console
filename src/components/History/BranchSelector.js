@@ -35,7 +35,9 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch, setTargetB
 
     useEffect(() => {
         setBranchTitle(BRANCH_SELECTOR.label + " " + get_branch())
+        if(setTargetBranch) setTargetBranch(get_branch()) 
     }, [branch])
+
 
 
     if(branch && branches && Object.keys(branches).length > 1 ) {

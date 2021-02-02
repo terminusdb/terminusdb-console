@@ -53,12 +53,14 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
             let chosen = guess ? guess.id : branch
             //if(defaultBranch) setStarterBranch(defaultBranch)
             setStarterBranch(chosen)
-            setSourceCommit(branches[chosen].head)
+            setSourceCommit(branches[defaultBranch].head)
         }
         if(branch && !targetBranch){
             setTargetBranch(branch)
         }
     }, [branch, ref, consoleTime, branches])
+
+    console.log("branches", branches)
 
     //const [report, setReport] = useState()
 
@@ -114,7 +116,7 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
     function selectCommitID(c){
         setSubmissionProblem(false)
         if(c != sourceCommit){
-            setSourceCommit(c)
+            //setSourceCommit(c)
         }
     }
 
@@ -145,6 +147,8 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
 
     function checkSubmission(){
         setReport()
+        console.log("branches[targetBranch].head", branches[targetBranch].head)
+        console.log("sourceCommit", sourceCommit)
         if(!sourceCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
@@ -191,6 +195,7 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
+                        setTargetBranch={setTargetBranch}
                         actionMessage="Merge From This Commit"
                     />
                 </Row>
