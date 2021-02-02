@@ -225,13 +225,14 @@ export const RESET_BRANCH_FORM = {
         label: "Commit Descriptor",
         inputElement: {
             type: "textarea",
-            placeholder: "Commit ID of ineterst to reset branch to ",
+            placeholder: "Commit ID of interest to reset branch to ",
             className: "branch-commit-textarea"
         }
     },
     buttons: {
         submitText: "Reset Branch"
     },
+    resetUserMessage: "Performing this action will reset the branch to commit ",
     resetBranchSuccessMessage: "Successfully reset Branch ",
     resetBranchFailureMessage: "Failed to reset Branch ",
 }
@@ -250,7 +251,7 @@ export const MERGE_BRANCH="Merge Branch"
 export const CLOSE_BRANCH="Close Branch"
 export const DELETE_BRANCH="Delete Branch"
 export const RESET_SPECIFIC_BRANCH="Reset to a specific commit"
-export const RESET_BRANCH="Reset Branch to this commit"
+export const RESET_BRANCH="Reset Branch to commit "
 export const OPTIMIZE_BRANCH="Optimize Branch"
 export const SQUASH_BRANCH="Squash Branch"
 export const MAIN_BRANCH="main"

@@ -173,14 +173,14 @@ export const ManageDB = (props) => {
                 {branchAction.title && <ActionHeader onClose={onClose} branchAction={branchAction}/>}
                 {branchAction.create && <Branch key="branch" setBranchAction={setBranchAction} setReport={setReport}/>}
                 {branchAction.merge && <Merge key="merge" defaultBranch={branchAction.branch} setBranchAction={setBranchAction} setReport={setReport}/>}
-                {branchAction.reset && <Reset key="reset" branch={branchAction.branch} onReset={onReset}/>}
+                {branchAction.reset && <Reset key="reset" branch={branchAction.branch} commit={branchAction.commit} onReset={onReset}/>}
                 {branchAction.squash && <Squash key="squash" branch={branchAction.branch} onSquash={onSquash}/>}
                 {!branchAction.branch && <ControlledTable
                     limit={tabConfig.pagesize()}
                     query={query}
                     view={tabConfig}
                 />}
-                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset}/>}
+                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
             </main>
         </div>
 

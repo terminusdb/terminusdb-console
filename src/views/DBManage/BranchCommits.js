@@ -5,7 +5,7 @@ import {ScopedDetails} from "./../DBHome/ScopedDetails"
 import {MdRefresh} from "react-icons/md"
 import {RESET_BRANCH} from "./constants.dbmanage"
 
-export const BranchCommits = ({selectedBranch, onReset}) => {
+export const BranchCommits = ({selectedBranch, onReset, setBranchAction}) => {
 
 	const getResetButton =() => {
         return <span className="table-icons" title={RESET_BRANCH}>
@@ -18,7 +18,7 @@ export const BranchCommits = ({selectedBranch, onReset}) => {
 			<ScopedDetails/>
 		</Row>
 		<Row key="rd">
-			<CommitLog selectedBranch={selectedBranch} getResetButton={getResetButton} onReset={onReset}/>
+			<CommitLog selectedBranch={selectedBranch} getResetButton={getResetButton} onReset={onReset} setBranchAction={setBranchAction}/>
 		</Row>
 	</>
 }
