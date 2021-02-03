@@ -20,14 +20,14 @@ import Loading from '../../components/Reports/Loading'
 import Select from "react-select"
 
 
-export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
+export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     const {woqlClient} = WOQLClientObj()
     const {branch, ref, branches, consoleTime, DBInfo} = DBContextObj()
 
     const [loading, setLoading] = useState(false)
 
     const [sourceCommit, setSourceCommit] = useState()
-    const [starterBranch, setStarterBranch] = useState(defaultBranch)
+    const [starterBranch, setStarterBranch] = useState(currentBranch)
     const [targetBranch, setTargetBranch] = useState()
     const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
@@ -37,7 +37,7 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
     useEffect(() => {
         if(ref && !sourceCommit){
             setSourceCommit(ref)
-            //if(defaultBranch) setStarterBranch(defaultBranch)
+            //if(currentBranch) setStarterBranch(currentBranch)
             setStarterBranch(branch)
         }
         else if(!sourceCommit){
@@ -51,16 +51,15 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
                 }
             }
             let chosen = guess ? guess.id : branch
-            //if(defaultBranch) setStarterBranch(defaultBranch)
-            setStarterBranch(chosen)
-            setSourceCommit(branches[defaultBranch].head)
+            //if(currentBranch) setStarterBranch(currentBranch)
+            //setStarterBranch(chosen)
+            setStarterBranch(currentBranch)
+            setSourceCommit(branches[currentBranch].head)
         }
         if(branch && !targetBranch){
             setTargetBranch(branch)
         }
     }, [branch, ref, consoleTime, branches])
-
-    console.log("branches", branches)
 
     //const [report, setReport] = useState()
 
@@ -95,13 +94,13 @@ export const Merge = ({defaultBranch, setReport, setBranchAction}) => {
         return nClient
             .rebase(rebase_source)
             .then(() => {
-                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} into branch ${targetBranch}`
+                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} ${starterBranch} into branch ${targetBranch}`
                 let rep = {
                     message: message,
                     status: TERMINUS_SUCCESS,
                     time: Date.now() - update_start,
                 }
-                setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+                setBranchAction({branch:starterBranch, create:false, merge:false, reset: false, squash: false})
                 setReport(rep)
             })
             .catch((err) => {
