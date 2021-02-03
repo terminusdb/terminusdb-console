@@ -30,6 +30,7 @@ export const ManageDB = (props) => {
     const [branchAction, setBranchAction]=useState({})
     const [loading, setLoading]=useState(false)
     const [reportMsg, setReport]=useState(false)
+    const [commitsRefresh, setCommitsRefresh]=useState(1)
 
     const branchCountQuery = () => {
         let WOQL=TerminusClient.WOQL
@@ -80,11 +81,13 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.deleteBranch(branch).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: "Successfully deleted branch " + branch})
-            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
-            updateBranches()
+            updateBranches(MAIN_BRANCH)
         })
         .catch((err) => process_error(err, update_start, "Failed to delete branch " + branch))
-        .finally(() => setLoading(false))
+        .finally(() => {
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+            setLoading(false)
+        })
     }
 
     const onSquash = (branch, commit) => {
@@ -110,6 +113,7 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.resetBranch(branch, commit).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: RESET_BRANCH_FORM.resetBranchSuccessMessage + branch})
+            setCommitsRefresh(commitsRefresh+1)
             setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => process_error(err, update_start, RESET_BRANCH_FORM.resetBranchFailureMessage + branch))
@@ -147,7 +151,6 @@ export const ManageDB = (props) => {
             let branchID=row.original["Branch ID"]["@value"]
             setBranchAction({branch: branchID})
             updateBranches(branchID)
-            setReport({status: TERMINUS_SUCCESS, message: "Database switched to branch  " + branchID})
         }
     }
 
@@ -160,13 +163,14 @@ export const ManageDB = (props) => {
     tabConfig.pager("remote")
     tabConfig.pagesize(10)
 
+
     return (
         <div id={props.id} className="console__page h-100" id="terminus-console-page">
             <ConsoleNavbar onHeadChange={props.onHeadChange} />
             <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete} onOptimize={onOptimize} setReport={setReport}/>
             <main className="console__page__container console__page__container--width">
                 {loading && <Loading type={TERMINUS_COMPONENT} />}
-                {reportMsg && <div className='row generic-message-holder'>
+                {reportMsg  && <div className='row generic-message-holder'>
                         <TerminusDBSpeaks report={reportMsg} />
                     </div>
                 }
@@ -180,7 +184,7 @@ export const ManageDB = (props) => {
                     query={query}
                     view={tabConfig}
                 />}
-                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
+                {branchAction.branch && commitsRefresh && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
             </main>
         </div>
 

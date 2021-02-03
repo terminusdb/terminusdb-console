@@ -41,7 +41,7 @@ export const CREATE_BRANCH_FORM = {
     buttons: {
         submitText: "Create New Branch"
     },
-    branchSuccessMessage: "Successfully Created New Branch ",
+    branchSuccessMessage: "Successfully Created New Branch. Your currently working on branch: ",
     branchFailureMessage: "Failed to Create New Branch ",
 }
 

@@ -11,7 +11,7 @@ import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
 export const CommitLog = ({selectedBranch, onReset, setBranchAction, getResetButton}) => {
     const {woqlClient} = WOQLClientObj()
-    let {branch, branches, ref, consoleTime, prefixes}=DBContextObj()
+    let {branch, branches, ref, consoleTime, prefixes, commitsReload}=DBContextObj()
 
     const [query, setQuery] = useState()
     const [commit, setCommit] = useState()
