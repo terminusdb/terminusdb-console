@@ -24,7 +24,7 @@ import {ActionHeader} from "./ActionHeader"
 
 
 export const ManageDB = (props) => {
-    const {graphs, ref, branch, updateBranches, updateCommits, setHead}=DBContextObj()
+    const {graphs, ref, branch, updateBranches, setHead}=DBContextObj()
     const {woqlClient}=WOQLClientObj()
     const [branchCount, setBranchCount]=useState()
     const [branchAction, setBranchAction]=useState({})
@@ -100,6 +100,7 @@ export const ManageDB = (props) => {
             }
             woqlClient.resetBranch(branch, new_commit).then((results) => {
                 setReport({status: TERMINUS_SUCCESS, message: SQUASH_BRANCH_FORM.squashBranchSuccessMessage + branch})
+                setHead(branch, {commit: new_commit})
                 setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
             })
         })
@@ -112,7 +113,6 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.resetBranch(branch, commit).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: RESET_BRANCH_FORM.resetBranchSuccessMessage + branch})
-            updateCommits()
             setHead(branch, {commit: commit})
             setBranchAction({branch:branch, create:false, merge:false, reset: false, squash: false})
         })
