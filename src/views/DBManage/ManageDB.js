@@ -149,8 +149,9 @@ export const ManageDB = (props) => {
         setReport(false)
         if(row) {
             let branchID=row.original["Branch ID"]["@value"]
-            setBranchAction({branch: branchID})
             updateBranches(branchID)
+            setHead(branchID)
+            setBranchAction({branch: branchID})
         }
     }
 
