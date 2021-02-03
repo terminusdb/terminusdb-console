@@ -39,6 +39,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
     const [branchesReload, setBranchesReload] = useState(0)
     const [prefixesReload, setPrefixesReload] = useState(0)
     const [prefixesLoaded, setPrefixesLoaded] = useState(false)
+    const [commitsReload, setCommitsReload] = useState(0)
 
     const WOQL = TerminusClient.WOQL
 
@@ -179,6 +180,10 @@ export const DBContextProvider = ({children, woqlClient}) => {
         setConsoleTime(refTime)
     }
 
+    function updateCommits(){
+        setCommitsReload(commitsReload+1)
+    }
+
     function updateBranches(bid) {
         if(bid) {
             setBranch(bid)
@@ -279,6 +284,8 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 consoleTime,
                 DBInfo,
                 branches,
+                commitsReload,
+                updateCommits,
                 graphs,
                 report,
                 branch,

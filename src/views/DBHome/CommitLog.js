@@ -11,7 +11,7 @@ import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
 export const CommitLog = ({selectedBranch, onReset, setBranchAction, getResetButton}) => {
     const {woqlClient} = WOQLClientObj()
-    let {branch, branches, ref, consoleTime, prefixes, commitsReload}=DBContextObj()
+    let {branch, branches, ref, consoleTime, prefixes, commits}=DBContextObj()
 
     const [query, setQuery] = useState()
     const [commit, setCommit] = useState()
@@ -20,7 +20,7 @@ export const CommitLog = ({selectedBranch, onReset, setBranchAction, getResetBut
 
     function getLatestTitle(){
         let tstr = ""
-        if(ref){
+        if(ref && consoleTime){
             tstr += "Updates before " + printts(consoleTime, DATETIME_COMPLETE)
         }
         if(branches) {
@@ -54,10 +54,10 @@ export const CommitLog = ({selectedBranch, onReset, setBranchAction, getResetBut
     }
 
     useEffect(() => {
-        if(branch){
+        //if(branch){
             setQuery(get_query(branch, ref))
-        }
-    }, [branch, ref, branches])
+        //}
+    }, [branch, ref, branches, commits])
 
     let cellClick = (cell) => {
         let cmt = {}

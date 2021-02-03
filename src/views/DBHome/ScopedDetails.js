@@ -90,7 +90,7 @@ export const ScopedDetails = () => {
     }
 
     function getContextTitle(){
-        if(ref){
+        if(ref && consoleTime){
             return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref
         }
         if(branches && Object.keys(branches).length > 1) {

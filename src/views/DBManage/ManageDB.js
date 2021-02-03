@@ -24,13 +24,12 @@ import {ActionHeader} from "./ActionHeader"
 
 
 export const ManageDB = (props) => {
-    const {graphs, ref, branch, updateBranches}=DBContextObj()
+    const {graphs, ref, branch, updateBranches, updateCommits, setHead}=DBContextObj()
     const {woqlClient}=WOQLClientObj()
     const [branchCount, setBranchCount]=useState()
     const [branchAction, setBranchAction]=useState({})
     const [loading, setLoading]=useState(false)
     const [reportMsg, setReport]=useState(false)
-    const [commitsRefresh, setCommitsRefresh]=useState(1)
 
     const branchCountQuery = () => {
         let WOQL=TerminusClient.WOQL
@@ -113,8 +112,9 @@ export const ManageDB = (props) => {
         setLoading(true)
         woqlClient.resetBranch(branch, commit).then((results) => {
             setReport({status: TERMINUS_SUCCESS, message: RESET_BRANCH_FORM.resetBranchSuccessMessage + branch})
-            setCommitsRefresh(commitsRefresh+1)
-            setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
+            updateCommits()
+            setHead(branch, {commit: commit})
+            setBranchAction({branch:branch, create:false, merge:false, reset: false, squash: false})
         })
         .catch((err) => process_error(err, update_start, RESET_BRANCH_FORM.resetBranchFailureMessage + branch))
         .finally(() => setLoading(false))
@@ -184,7 +184,7 @@ export const ManageDB = (props) => {
                     query={query}
                     view={tabConfig}
                 />}
-                {branchAction.branch && commitsRefresh && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
+                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
             </main>
         </div>
 
