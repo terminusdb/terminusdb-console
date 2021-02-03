@@ -4,12 +4,13 @@ import {printts} from '../../constants/dates'
 import {Row, Col, Container} from "react-bootstrap" //replaced
 import {TimelineCommits} from '@terminusdb/terminusdb-react-components';
 import {BranchSelector} from '../../components/History/BranchSelector'
+import {MAIN_BRANCH} from "./constants.dbmanage"
 
 
 export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setTargetBranch}) => {
     const [sourceCommit, setSourceCommit] = useState(ref)
     const [manuallyUpdated, setManuallyUpdated] = useState(false)
-    const [myBranch, setMyBranch] = useState(branch)
+    const [myBranch, setMyBranch] = useState(MAIN_BRANCH)
 
     function setCurrentItem(item){
         if(item && item.commit != sourceCommit && (!manuallyUpdated)){
