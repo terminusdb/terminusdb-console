@@ -27,7 +27,7 @@ export const FeedbackForm = (props) => {
 	return (<>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div key="rr" className="feedback-section">
-                        {userName && <><h3 class="h3 box__text">Hi {userName}</h3>
+                        {userName && <><h3 className="h3 box__text">Hi {userName}</h3>
                             <div className="feedback-text">If you notice any bugs or have any suggestions about how we can improve the service, please let us know</div>
                         </>}
 

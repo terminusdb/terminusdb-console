@@ -41,10 +41,18 @@ const ServerHome = (props) => {
     */
     function load_missing_urls(urls){
         let promises = urls.map((item) => refreshRemoteURL(item))
+        /*
+        * manual implementation of Promise.allSettled() refreshRemoteURL return always a promise resolved
+        * method returns a promise that resolves after all of the given promises 
+        * have either fulfilled or rejected, with an array of objects that each describes 
+        * the outcome of each promise.
+        * REFACTOR we have to review this and move the call in the children 
+        * one call for every children so the refresh is at children level
+        */
         Promise.all(promises).then((values) => {
-            setMyDBs(get_dbs_to_show())
+            setMyDBs(get_dbs_to_show())          
         }).catch(err=>{
-            console.log("___PROMISE___ALL",err)
+            console.log(err)
         })
     }
 

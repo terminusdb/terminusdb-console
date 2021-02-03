@@ -19,6 +19,7 @@ export const DBList = ({list, className, user, onAction, filter, sort}) => {
     return (
         <div className="tdb__dblist">
             {list.map((value, index) => {
+                //console.log("DB_SUMMARY_CARD",value)
                 return (<DBSummaryCard key={"sum_" + index} meta={value} user={user} onAction={onAction}/>)
             })}
         </div>

@@ -22,6 +22,10 @@ export const CreateLocal = async (meta, client, preformed) => {
     return client.createDatabase(meta.id, meta, meta.organization).then(() => meta.id)
 }
 
+/*
+* create database in HUB
+* first create in hub after clone locally
+*/
 export const CreateRemote = async (meta, client, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     /*
@@ -31,6 +35,7 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.local_auth(creds)
     client.remote_auth(creds)
+    
     let rmeta = meta
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
     .then((resp) => {

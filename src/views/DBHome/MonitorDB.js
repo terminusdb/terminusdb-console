@@ -29,8 +29,13 @@ export const MonitorDB = (props) => {
     async function load_assets(){
         let nkstate = await refreshDBRecord()
         if(nkstate.remote_url){
-            let rem = await refreshRemoteURL(nkstate.remote_url)
-            let ar = woqlClient.get_database()
+            /*
+            * call the remote server for add details at the database info
+            */
+            await refreshRemoteURL(nkstate.remote_url)
+            /*
+            * force refresh
+            */
             setBump(bump+1)   
             setAssetRecord(woqlClient.get_database())
         }

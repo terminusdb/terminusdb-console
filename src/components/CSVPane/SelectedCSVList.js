@@ -338,7 +338,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
 							<div><ManageDuplicateCsv fileName={item.name}/></div>
-							{/*<div class="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
+							{/*<div className="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
 						</div>}
 					</>)}
 					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}

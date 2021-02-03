@@ -128,7 +128,7 @@ const DBCreatePicture = ({local}) => {
 
 
 export const DBCreateCard = ({start, databases, organizations, onSubmit, type}) => {
-
+    console.log("___ORGANIZATIONS____",organizations)
     const [current, setCurrent] = useState(start)
 
     function changePrivacy(){
@@ -486,14 +486,14 @@ export const DBTitle = ({label, organization, onChange, databases}) => {
 }
 
 export const DBRemoteURL = ({hub_url, organization, id}) => {
-    let base = hub_url || ""
-    base += organization + "/" + (id || "")
+    let remoteDbURL = hub_url || ""
+    remoteDbURL += organization + "/" + (id || "")
 
     return(
         <span>
             <AiFillCheckCircle title={id + " is a valid id for the database"} className="db_info_icon_spacing" color="#12aa22"/>
             <span title="This URL is the ID of your database on terminus hub" className="db_info">
-            <AiOutlineLink className="db_icons_standard"/> {base}</span>
+            <AiOutlineLink className="db_icons_standard"/> {remoteDbURL}</span>
         </span>
     )
 }

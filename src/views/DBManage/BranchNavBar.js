@@ -73,7 +73,7 @@ const Close=({title, setBranchAction, branchAction})=>{
 
 const Title=({branchAction})=>{
     return <Col md={3}>
-        <h3 class="db_info d-nav-text">
+        <h3 className="db_info d-nav-text">
             <span> Branch </span> ~ <span> {branchAction.branch} </span>
         </h3>
     </Col>

@@ -122,10 +122,14 @@ export const WOQLClientProvider = ({children, params}) => {
             */
             let roledata = await bClient.getRoles(bClient.uid())
             setRemoteEnriched(roledata)
+            console.log("____GET___ROLE___",roledata)
+
             if(roledata.databases) bClient.databases(roledata.databases) 
             if(roledata.invites) bClient.connection.user.invites = roledata.invites
             if(roledata.collaborators) bClient.connection.user.collaborators = roledata.collaborators
-            if(roledata.organizations) bClient.connection.user.organizations = roledata.organizations
+            if(roledata.organizations) {
+                bClient.connection.user.organizations = roledata.organizations
+            }
             setContextEnriched(contextEnriched + 1)
         }
         catch(e){
@@ -377,11 +381,19 @@ export const WOQLClientProvider = ({children, params}) => {
         }
     }
 
+    /*
+    *  wrap the error in a promise resolve with the error message
+    */
     const refreshRemote = async (org, id) => {
-        let dmeta = await RefreshDatabaseRecord({id: id, organization: org}, bffClient, getTokenSilently)
-        if(dmeta) updateRemote(dmeta)  
-        //setContextEnriched(contextEnriched + 1)
-        return dmeta
+        try{
+            let dmeta = await RefreshDatabaseRecord({id: id, organization: org}, bffClient, getTokenSilently)
+            console.log("REFRESH_REMOTE",dmeta)
+            if(dmeta) updateRemote(dmeta)  
+            //setContextEnriched(contextEnriched + 1)
+            return dmeta
+        }catch(err){
+            Promise.resolve({ status: 'rejected', reason: err });   
+        }
     }
 
     const refreshRemoteURL = async (url) => {
