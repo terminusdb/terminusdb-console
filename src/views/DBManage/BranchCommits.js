@@ -3,11 +3,13 @@ import {Row, Col} from "react-bootstrap"
 import {CommitLog} from "./../DBHome/CommitLog"
 import {ScopedDetails} from "./../DBHome/ScopedDetails"
 import {MdRefresh} from "react-icons/md"
-import {RESET_BRANCH} from "./constants.dbmanage"
+import {RESET_BRANCH, INTERNAL_AUTHOR, INTERNAL_MESSAGE} from "./constants.dbmanage"
 
-export const BranchCommits = ({selectedBranch, onReset, setBranchAction}) => {
+export const BranchCommits = ({selectedBranch, setBranchAction}) => {
 
-	const getResetButton =() => {
+	const getResetButton =(cell) => {
+		if((cell.row.values["Author"]["@value"] == INTERNAL_AUTHOR) &&
+			(cell.row.values["Message"]["@value"] == INTERNAL_MESSAGE)) return <span/>
         return <span className="table-icons" title={RESET_BRANCH}>
         	<MdRefresh className="db_info_icon_spacing"/>
     	</span>
@@ -18,7 +20,7 @@ export const BranchCommits = ({selectedBranch, onReset, setBranchAction}) => {
 			<ScopedDetails/>
 		</Row>
 		<Row key="rd">
-			<CommitLog selectedBranch={selectedBranch} getResetButton={getResetButton} onReset={onReset} setBranchAction={setBranchAction}/>
+			<CommitLog selectedBranch={selectedBranch} getResetButton={getResetButton} setBranchAction={setBranchAction}/>
 		</Row>
 	</>
 }

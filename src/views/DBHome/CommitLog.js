@@ -9,7 +9,7 @@ import {RESET_BRANCH} from "../DBManage/constants.dbmanage"
 import {Row, Col} from "react-bootstrap" //replaced
 import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
-export const CommitLog = ({selectedBranch, onReset, setBranchAction, getResetButton}) => {
+export const CommitLog = ({selectedBranch, setBranchAction, getResetButton}) => {
     const {woqlClient} = WOQLClientObj()
     let {branch, branches, ref, consoleTime, prefixes, commits}=DBContextObj()
 
