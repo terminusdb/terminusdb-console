@@ -7,7 +7,7 @@ import {RiDeleteBin5Line} from "react-icons/ri"
 import {MdRefresh} from "react-icons/md"
 import {FaCompressAlt} from "react-icons/fa"
 import {BsCheckCircle} from "react-icons/bs"
-import {NEW_BRANCH, MERGE_BRANCH, CLOSE_BRANCH, DELETE_BRANCH, RESET_BRANCH, OPTIMIZE_BRANCH, SQUASH_BRANCH} from "./constants.dbmanage"
+import {NEW_BRANCH, MERGE_BRANCH, CLOSE_BRANCH, DELETE_BRANCH, RESET_SPECIFIC_BRANCH, OPTIMIZE_BRANCH, SQUASH_BRANCH, MAIN_BRANCH} from "./constants.dbmanage"
 
 const Header=({children})=>{
     return <div className="nav__main__wrap">
@@ -38,7 +38,7 @@ const TotalBranches=({branchCount})=>{
 
 const NewBranch=({title, setBranchAction, branchAction})=>{
     function onClick(){
-        setBranchAction({branch:false, create:true, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:true, merge:false, reset: false, squash: false, title: title})
     }
     return <Col md={2}>
         <span style={{fontSize: "2em"}}>
@@ -51,7 +51,7 @@ const NewBranch=({title, setBranchAction, branchAction})=>{
 
 const Merge=({title, setBranchAction, branchAction})=> {
     function onClick(){
-        setBranchAction({branch:branchAction.branch, create:false, merge:true, reset: false, squash: false})
+        setBranchAction({branch:branchAction.branch, create:false, merge:true, reset: false, squash: false, title:title})
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClick} className="d-nav-icons" title={title}>
@@ -60,9 +60,10 @@ const Merge=({title, setBranchAction, branchAction})=> {
     </span>
 }
 
-const Close=({title, setBranchAction, branchAction})=>{
+const Back=({title, setBranchAction, branchAction, setReport})=>{
     function onClose(){
-        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, title:false})
+        setReport(false)
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClose} className="d-nav-icons" title={title}>
@@ -82,7 +83,7 @@ const Title=({branchAction})=>{
 const Delete=({title, setBranchAction, branchAction, onDelete})=> {
     function onClick() {
         onDelete(branchAction.branch)
-        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false, title:false})
     }
     return <span style={{fontSize: "2em"}}>
         <span title={title} onClick={onClick} className="d-nav-icons">
@@ -93,7 +94,7 @@ const Delete=({title, setBranchAction, branchAction, onDelete})=> {
 
 const Reset=({title, setBranchAction, branchAction})=> {
     function onClick() {
-        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: true, squash: false})
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: true, squash: false, title:title})
     }
     return <span style={{fontSize: "2em"}}>
         <span onClick={onClick} className="d-nav-icons" title={title}>
@@ -102,9 +103,13 @@ const Reset=({title, setBranchAction, branchAction})=> {
     </span>
 }
 
-const Optimize=({title, setBranchAction, branchAction})=> {
+const Optimize=({title, setBranchAction, branchAction, onOptimize})=> {
+    function onClick() {
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
+        onOptimize(branchAction.branch)
+    }
     return <span style={{fontSize: "2em"}}>
-        <span className="d-nav-icons" title={title}>
+        <span className="d-nav-icons" title={title} onClick={onClick}>
             <BsCheckCircle className="db_info_icon_spacing"/>
         </span>
     </span>
@@ -112,7 +117,7 @@ const Optimize=({title, setBranchAction, branchAction})=> {
 
 const Squash=({title, setBranchAction, branchAction})=> {
     function onClick() {
-        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: true})
+        setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: true, title:title})
     }
     return <span style={{fontSize: "2em"}}>
         <span className="d-nav-icons" title={title} onClick={onClick}>
@@ -121,7 +126,7 @@ const Squash=({title, setBranchAction, branchAction})=> {
     </span>
 }
 
-export const BranchNavBar=({branchCount, branchAction, setBranchAction, onDelete})=>{
+export const BranchNavBar=({branchCount, branchAction, setBranchAction, onDelete, onOptimize, setReport})=>{
     let children = []
     children.push(<TotalBranches branchCount={branchCount}/>)
     children.push(<NewBranch title={NEW_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
@@ -129,16 +134,17 @@ export const BranchNavBar=({branchCount, branchAction, setBranchAction, onDelete
         children.push(<Title branchAction={branchAction}/>)
         children.push(<Col md={1}/>)
         children.push(<Merge title={MERGE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
-        children.push(<Reset title={RESET_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
-        children.push(<Optimize title={OPTIMIZE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
+        children.push(<Reset title={RESET_SPECIFIC_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
+        children.push(<Optimize title={OPTIMIZE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onOptimize={onOptimize}/>)
         children.push(<Squash title={SQUASH_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
         children.push(<Col md={1}/>)
-        children.push(<Delete title={DELETE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>)
-        children.push(<Close title={CLOSE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
+        if(branchAction.branch !== MAIN_BRANCH)
+            children.push(<Delete title={DELETE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete}/>)
+        children.push(<Back title={CLOSE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction} setReport={setReport}/>)
     }
     if(branchAction.create){
         children.push(<Col md={6}/>)
-        children.push(<Close title={CLOSE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
+        children.push(<Back title={CLOSE_BRANCH} setBranchAction={setBranchAction} branchAction={branchAction}/>)
     }
     return <Header children={children}/>
 }

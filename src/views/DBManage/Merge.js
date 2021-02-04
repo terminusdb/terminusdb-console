@@ -20,14 +20,14 @@ import Loading from '../../components/Reports/Loading'
 import Select from "react-select"
 
 
-export const Merge = ({defaultBranch}) => {
+export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     const {woqlClient} = WOQLClientObj()
     const {branch, ref, branches, consoleTime, DBInfo} = DBContextObj()
 
     const [loading, setLoading] = useState(false)
 
     const [sourceCommit, setSourceCommit] = useState()
-    const [starterBranch, setStarterBranch] = useState(defaultBranch)
+    const [starterBranch, setStarterBranch] = useState(currentBranch)
     const [targetBranch, setTargetBranch] = useState()
     const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
@@ -37,8 +37,8 @@ export const Merge = ({defaultBranch}) => {
     useEffect(() => {
         if(ref && !sourceCommit){
             setSourceCommit(ref)
-            if(defaultBranch) setStarterBranch(defaultBranch)
-            else setStarterBranch(branch)
+            //if(currentBranch) setStarterBranch(currentBranch)
+            setStarterBranch(branch)
         }
         else if(!sourceCommit){
             let guess = false
@@ -51,16 +51,17 @@ export const Merge = ({defaultBranch}) => {
                 }
             }
             let chosen = guess ? guess.id : branch
-            if(defaultBranch) setStarterBranch(defaultBranch)
-            else setStarterBranch(chosen)
-            setSourceCommit(branches[chosen].head)
+            //if(currentBranch) setStarterBranch(currentBranch)
+            //setStarterBranch(chosen)
+            setStarterBranch(currentBranch)
+            setSourceCommit(branches[currentBranch].head)
         }
         if(branch && !targetBranch){
             setTargetBranch(branch)
         }
     }, [branch, ref, consoleTime, branches])
 
-    const [report, setReport] = useState()
+    //const [report, setReport] = useState()
 
     function getMergeRoot(){
         let b = isBranchHead(sourceCommit)
@@ -93,16 +94,16 @@ export const Merge = ({defaultBranch}) => {
         return nClient
             .rebase(rebase_source)
             .then(() => {
-                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} into branch ${targetBranch}`
+                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} ${starterBranch} into branch ${targetBranch}`
                 let rep = {
                     message: message,
                     status: TERMINUS_SUCCESS,
                     time: Date.now() - update_start,
                 }
+                setBranchAction({branch:starterBranch, create:false, merge:false, reset: false, squash: false})
                 setReport(rep)
             })
             .catch((err) => {
-                //alert("yo")
                 let message = `${MERGE_BRANCH_FORM.mergeFailureMessage} into branch ${targetBranch} `
                 setReport({error: err, status: TERMINUS_ERROR, message: message})
             })
@@ -114,7 +115,7 @@ export const Merge = ({defaultBranch}) => {
     function selectCommitID(c){
         setSubmissionProblem(false)
         if(c != sourceCommit){
-            setSourceCommit(c)
+            //setSourceCommit(c)
         }
     }
 
@@ -145,6 +146,8 @@ export const Merge = ({defaultBranch}) => {
 
     function checkSubmission(){
         setReport()
+        console.log("branches[targetBranch].head", branches[targetBranch].head)
+        console.log("sourceCommit", sourceCommit)
         if(!sourceCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
@@ -168,9 +171,9 @@ export const Merge = ({defaultBranch}) => {
     }
 
 
-    if (report && report.status == TERMINUS_SUCCESS) {
+    /*if (report && report.status == TERMINUS_SUCCESS) {
         return (<span className="database-list-intro"><TerminusDBSpeaks report={report} /></span>)
-    }
+    }*/
 
     if(!starterBranch || !targetBranch) return null
 
@@ -180,9 +183,7 @@ export const Merge = ({defaultBranch}) => {
         return {label: item.id, value: item.id}
     }) : [])
     return (<>
-            <div className="tdb__loading__parent">
-            <Container>
-
+            <Container className="new-branch">
                 <Row>
                     <CommitSelector
                         branch={starterBranch}
@@ -193,6 +194,7 @@ export const Merge = ({defaultBranch}) => {
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
+                        setTargetBranch={setTargetBranch}
                         actionMessage="Merge From This Commit"
                     />
                 </Row>
@@ -201,11 +203,11 @@ export const Merge = ({defaultBranch}) => {
                         {submissionProblem || 'noValue'}
                     </Alert>
                 </div>
-                {report &&
+                {/*report &&
                     <TerminusDBSpeaks report={report} />
-                }
+                */}
                 <Col className="merge-inputs">
-                    <Row className="merge-branch">
+                    {/*<Row className="merge-branch">
                         <Col className="branch-selector-title-col" md={2}>
                             <span className="commit-selector-title">
                                 Merge Into Branch
@@ -222,7 +224,7 @@ export const Merge = ({defaultBranch}) => {
                                 defaultValue= {targetBranch}
                             />
                         </Col>
-                    </Row>
+                    </Row>*/}
                     <Row className="merge-commit">
                         <Col className="commit-log-title" md={2}>
                             <span className="commit-selector-title">
@@ -243,13 +245,24 @@ export const Merge = ({defaultBranch}) => {
                     </Row>
                 </Col>
                 <div className="justify-content-end flex-grow-1 d-flex align-items-baseline" style={{"z-index": 99999}}>
-                    <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
-                        Merge into {targetBranch} Branch
-                    </button>
+                    <Col md={10}>
+                    </Col>
+                    <Col md={2}>
+                        <button type="submit" onClick={checkSubmission} className="tdb__button__base tdb__button__base--green">
+                            Merge into {targetBranch} Branch
+                        </button>
+                    </Col>
                 </div>
             </Container>
-            {(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
-            </div>
         </>
     )
 }
+
+/*
+<div className="tdb__loading__parent">
+<Container>
+
+</Container>
+{(loading || !branches) && <Loading type={TERMINUS_COMPONENT} />}
+</div>
+*/

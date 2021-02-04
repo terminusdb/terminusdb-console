@@ -11,6 +11,7 @@ import {
 } from './constants.navbar'
 import {DBContextObj} from '../Query/DBContext'
 import {BranchSelector} from '../History/BranchSelector'
+import {BiGitBranch} from "react-icons/bi"
 import {printts} from '../../constants/dates'
 
 export const DBNavbarTop = (props) => {
@@ -28,7 +29,7 @@ export const DBNavbarTop = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches, consoleTime} = DBContextObj()
+    const {branches, consoleTime, branch} = DBContextObj()
 
     let dbmeta = woqlClient.get_database() || {}
     const [toggleTime, setToggleTime] = useState(false)
@@ -62,14 +63,17 @@ const GuardedDBNavbar = (props) => {
                     {dbmeta.label}
                </label>
             </li>
-            <li className="nav__main__item nav__main__item--box">
-                <BranchSelector />
+            {<li className="nav__main__item nav__main__item--box">
+                <span className="nav__main__commit">
+                    <BiGitBranch color="#ff9796"/>{branch}
+                </span>
+                {/*<BranchSelector currentBranch={branch}/>*/}
                 <label className="switch" title="time travel tools">
                     <input type="checkbox" className="switch__input" onChange={handleToggle} />
                     <span className="switch__slider"></span>
                 </label>
                 {currentCommitTime}
-            </li>
+            </li>}
         </Fragment>
-    ) 
+    )
 }

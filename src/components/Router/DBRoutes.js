@@ -15,7 +15,6 @@ import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
 import {Synchronize} from '../../views/DBSynchronize/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
-//import MetricsPage from "../../views/Pages/MetricsPage"
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
 import {DBContextProvider} from '../Query/DBContext'
@@ -95,8 +94,8 @@ const DBRoute = () => {
             <QueryPage />
         </Route>,
     )
-    /*routes.push(
-        <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
+    /*routes.push(   
+       <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
             <MetricsPage />
         </Route>,
     )*/

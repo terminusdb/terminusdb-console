@@ -187,7 +187,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     }
 
 	const getDownloadButton=()=>{
-		return <span className="csv-toolbar-holder" title={"Download Document"}>
+		return <span className="table-icons" title={"Download Document"}>
             <MdFileDownload color="#0055bb" className='schema-toolbar-delete'/>
         </span>
 	}
