@@ -16,12 +16,11 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
     function setCurrentItem(item){
         if(item && item.commit != targetCommit && (!manuallyUpdated)){
             updateTargetCommit(item.commit)
-            //updateTargetCommit(branches[item].head)
         }
     }
 
     function updateTargetCommit(c){
-        //setTargetCommit(c)
+        setTargetCommit(c)
         if(onSelect) onSelect(c)
     }
 
