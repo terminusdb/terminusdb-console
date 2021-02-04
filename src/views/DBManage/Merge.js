@@ -89,7 +89,8 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.checkout(targetBranch)
         nClient.remote_auth(nClient.local_auth())
         let rebase_source = {
-            rebase_from: getMergeRoot(),
+            //rebase_from: getMergeRoot(),
+           rebase_from: woqlClient.resource('branch', branch)
         }
         if (commitMsg) rebase_source.message = commitMsg
         else rebase_source.message = `Merging from ${targetCommit}, branch ${starterBranch}, into branch ${targetBranch} with console`

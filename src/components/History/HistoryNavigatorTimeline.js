@@ -11,19 +11,19 @@ export const HistoryNavigatorTimeline = ({woqlClient}) => {
 	}
 
     if(!branches || !DBInfo) return null
-    
+
     let firstCommit = DBInfo.created || null
 
     if(!branches) return null
     return <div className="history__nav">
-        <TimelineCommits 
+        <TimelineCommits
             branch={branch}
-            woqlClient={woqlClient} 
+            woqlClient={woqlClient}
             setHead={setCurrentItem}
             headMessage="Time Travel to this Commit"
             currentCommit={ref}
             currentStartTime={consoleTime}
-            firstCommitTime={firstCommit}    
+            firstCommitTime={firstCommit}
         />
     </div>
 
