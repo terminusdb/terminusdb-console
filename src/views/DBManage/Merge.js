@@ -26,7 +26,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
 
     const [loading, setLoading] = useState(false)
 
-    const [sourceCommit, setSourceCommit] = useState()
+    const [targetCommit, setTargetCommit] = useState()
     const [starterBranch, setStarterBranch] = useState(currentBranch)
     const [targetBranch, setTargetBranch] = useState()
     const [commitMsg, setCommitMsg] = useState("")
@@ -35,12 +35,11 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     let update_start = Date.now()
 
     useEffect(() => {
-        if(ref && !sourceCommit){
-            setSourceCommit(ref)
-            //if(currentBranch) setStarterBranch(currentBranch)
+        if(ref && !targetCommit){
+            setTargetCommit(ref)
             setStarterBranch(branch)
         }
-        else if(!sourceCommit){
+        else if(!targetCommit){
             let guess = false
             for(var b in branches){
                 if(b != branch){
@@ -51,10 +50,8 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
                 }
             }
             let chosen = guess ? guess.id : branch
-            //if(currentBranch) setStarterBranch(currentBranch)
-            //setStarterBranch(chosen)
-            setStarterBranch(currentBranch)
-            setSourceCommit(branches[currentBranch].head)
+            setStarterBranch(branch)
+            setTargetCommit(branches[currentBranch].head)
         }
         if(branch && !targetBranch){
             setTargetBranch(branch)
@@ -64,15 +61,20 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     //const [report, setReport] = useState()
 
     function getMergeRoot(){
-        let b = isBranchHead(sourceCommit)
+        let b = isBranchHead(targetCommit)
+        //return woqlClient.resource('branch', b)
         if(b) return woqlClient.resource('branch', b)
-        return woqlClient.resource('ref', sourceCommit)
+        return woqlClient.resource('ref', targetCommit)
     }
 
     function isBranchHead(myref){
         for(var b in branches){
-            if(branches[b].head == sourceCommit){
-                return b
+            if(b !== branch){
+                if(branches[b].head == targetCommit){
+                    console.log("mathc branch", branches[b].id)
+                    console.log("branches[b].head", branches[b].head)
+                    return b
+                }
             }
         }
         return false
@@ -87,10 +89,12 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.checkout(targetBranch)
         nClient.remote_auth(nClient.local_auth())
         let rebase_source = {
-            rebase_from: getMergeRoot(),
+            //rebase_from: getMergeRoot(),
+           rebase_from: woqlClient.resource('branch', branch)
         }
         if (commitMsg) rebase_source.message = commitMsg
-        else rebase_source.message = `Merging from ${sourceCommit}, branch ${starterBranch}, into branch ${targetBranch} with console`
+        else rebase_source.message = `Merging from ${targetCommit}, branch ${starterBranch}, into branch ${targetBranch} with console`
+        console.log("rebase_source",rebase_source)
         return nClient
             .rebase(rebase_source)
             .then(() => {
@@ -114,22 +118,22 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
 
     function selectCommitID(c){
         setSubmissionProblem(false)
-        if(c != sourceCommit){
-            //setSourceCommit(c)
+        if(c != targetCommit){
+            //setTargetCommit(c)
         }
     }
 
     function changeSourceBranch(b){
         setSubmissionProblem(false)
-        setStarterBranch(b)
+        //setStarterBranch(b)
     }
 
-    function changeTarget(a){
+    /*function changeTarget(a){
         if(a && a.value && a.value != targetBranch){
             setSubmissionProblem(false)
             setTargetBranch(a.value)
         }
-    }
+    }  */
 
     function updateCommitMsg(a){
         if(a && a.target){
@@ -146,12 +150,10 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
 
     function checkSubmission(){
         setReport()
-        console.log("branches[targetBranch].head", branches[targetBranch].head)
-        console.log("sourceCommit", sourceCommit)
-        if(!sourceCommit){
+        if(!targetCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
-        else if(sourceCommit.length < 30){
+        else if(targetCommit.length < 30){
             return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
         }
         if(!targetBranch){
@@ -160,12 +162,12 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         if(!(branches && branches[targetBranch])){
             return setUserError("create_branch_target", `Selected branch ${targetBranch} not found`)
         }
-        if(branches[targetBranch].head == sourceCommit){
+        if(branches[targetBranch].head == targetCommit){
             return setUserError("create_branch_target", `Selected branch ${targetBranch} is the same as source commit - cannot merge a commit with itself`)
         }
-        let isbranch = isBranchHead(sourceCommit)
+        let isbranch = isBranchHead(targetCommit)
         if(false && !isbranch){
-            return setUserError("create_branch_source", `Selected source commit ${sourceCommit} is not the head of a branch. The source of a merge must be the head of a branch - you can create a new branch from the desired comment and merge from it.`)
+            return setUserError("create_branch_source", `Selected source commit ${targetCommit} is not the head of a branch. The source of a merge must be the head of a branch - you can create a new branch from the desired comment and merge from it.`)
         }
         return onCreate()
     }

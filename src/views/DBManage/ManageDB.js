@@ -149,8 +149,9 @@ export const ManageDB = (props) => {
         setReport(false)
         if(row) {
             let branchID=row.original["Branch ID"]["@value"]
-            setBranchAction({branch: branchID})
             updateBranches(branchID)
+            setHead(branchID)
+            setBranchAction({branch: branchID})
         }
     }
 
@@ -184,7 +185,7 @@ export const ManageDB = (props) => {
                     query={query}
                     view={tabConfig}
                 />}
-                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} onReset={onReset} setBranchAction={setBranchAction}/>}
+                {branchAction.branch && <BranchCommits selectedBranch={branchAction.branch} setBranchAction={setBranchAction}/>}
             </main>
         </div>
 
