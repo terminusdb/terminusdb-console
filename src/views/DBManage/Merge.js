@@ -15,9 +15,10 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
-import {Col, Row, Container, Alert} from "react-bootstrap" //replaced
+import {Col, Row, Container, Alert} from "react-bootstrap"
 import Loading from '../../components/Reports/Loading'
 import Select from "react-select"
+import {MAIN_BRANCH} from "./constants.dbmanage"
 
 
 export const Merge = ({currentBranch, setReport, setBranchAction}) => {
@@ -25,18 +26,44 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     const {branch, ref, branches, consoleTime, DBInfo} = DBContextObj()
 
     const [loading, setLoading] = useState(false)
+    const [targetBranch, setTargetBranch] = useState(branch)
+    const [sourceBranch, setSourceBranch] = useState(MAIN_BRANCH)
+    const [sourceCommit, setSourceCommit] = useState(branches[MAIN_BRANCH].head)
+    const [selectedCommit, setSelectedCommit]=useState(selectedCommit)
 
-    const [targetCommit, setTargetCommit] = useState()
-    const [starterBranch, setStarterBranch] = useState(currentBranch)
-    const [targetBranch, setTargetBranch] = useState()
+    useEffect(() => {
+        if(ref && !sourceCommit){
+            setSourceCommit(ref)
+            setSourceBranch(branch)
+        }
+        else if(!sourceCommit){
+            let guess = false
+            for(var b in branches){
+                if(b != branch){
+                    if(!guess) guess = branches[b]
+                    else if(branches[b].updated > guess.updated){
+                        guess = branches[b]
+                    }
+                }
+            }
+            let chosen = guess ? guess.id : branch
+            setSourceBranch(branch)
+            setSourceCommit(branches[branch].head)
+        }
+        if(branch && !sourceCommit){
+            setSourceBranch(branch)
+        }
+    }, [branch, ref, consoleTime, branches])
+
+
+    /*const [targetCommit, setTargetCommit] = useState()
+    const [starterBranch, setStarterBranch] = useState()*/
     const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
 
-    const [latestCommit, setLatestCommit]= useState("")
-
     let update_start = Date.now()
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(ref && !targetCommit){
             setTargetCommit(ref)
             setStarterBranch(branch)
@@ -58,26 +85,21 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         if(branch && !targetBranch){
             setTargetBranch(branch)
         }
-    }, [branch, ref, consoleTime, branches])
+    }, [branch, ref, consoleTime, branches]) */
 
-    useEffect(() => {
-        setTargetCommit(latestCommit)
-    }, [latestCommit])
     //const [report, setReport] = useState()
 
     function getMergeRoot(){
-        let b = isBranchHead(targetCommit)
+        let b = isBranchHead(sourceCommit)
         //return woqlClient.resource('branch', b)
         if(b) return woqlClient.resource('branch', b)
-        return woqlClient.resource('ref', targetCommit)
+        return woqlClient.resource('ref', sourceCommit)
     }
 
     function isBranchHead(myref){
         for(var b in branches){
             if(b !== branch){
-                if(branches[b].head == targetCommit){
-                    console.log("mathc branch", branches[b].id)
-                    console.log("branches[b].head", branches[b].head)
+                if(branches[b].head == sourceCommit){
                     return b
                 }
             }
@@ -93,24 +115,26 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.ref(false)
         nClient.checkout(targetBranch)
         nClient.remote_auth(nClient.local_auth())
+        let url = `admin/${woqlClient.db()}/local/branch/${sourceBranch}/${selectedCommit}`
+
         let rebase_source = {
             //rebase_from: getMergeRoot(),
-           //rebase_from: woqlClient.resource('ref', targetCommit)
-           rebase_from: woqlClient.resource('branch', branch)
+           //rebase_from: woqlClient.resource('ref', sourceCommit)
+           rebase_from: url
         }
         if (commitMsg) rebase_source.message = commitMsg
-        else rebase_source.message = `Merging from ${targetCommit}, branch ${starterBranch}, into branch ${targetBranch} with console`
-        console.log("rebase_source",rebase_source)
+        else rebase_source.message = `Merging from ${selectedCommit}, branch ${sourceBranch}, into branch ${targetBranch} with console`
+
         return nClient
             .rebase(rebase_source)
             .then(() => {
-                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} ${starterBranch} into branch ${targetBranch}`
+                let message = `${MERGE_BRANCH_FORM.mergeSuccessMessage} ${sourceBranch} into branch ${targetBranch}`
                 let rep = {
                     message: message,
                     status: TERMINUS_SUCCESS,
                     time: Date.now() - update_start,
                 }
-                setBranchAction({branch:starterBranch, create:false, merge:false, reset: false, squash: false})
+                setBranchAction({branch:targetBranch, create:false, merge:false, reset: false, squash: false})
                 setReport(rep)
             })
             .catch((err) => {
@@ -124,7 +148,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
 
     function selectCommitID(c){
         setSubmissionProblem(false)
-        if(c != targetCommit){
+        if(c != sourceCommit){
             //setTargetCommit(c)
         }
     }
@@ -156,10 +180,10 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
 
     function checkSubmission(){
         setReport()
-        if(!targetCommit){
+        if(!selectedCommit){
             return setUserError("create_branch_source", "You must select a commit to start the new branch from")
         }
-        else if(targetCommit.length < 30){
+        else if(selectedCommit.length < 30){
             return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
         }
         if(!targetBranch){
@@ -169,14 +193,18 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
             return setUserError("create_branch_target", `Selected branch ${targetBranch} not found`)
         }
         //if(branches[targetBranch].head == targetCommit){
-        if(branches[branch].head == targetCommit){
-            return setUserError("create_branch_target", `Selected branch ${targetBranch} is the same as source commit - cannot merge a commit with itself`)
+        if(branches[branch].head == selectedCommit){
+            return setUserError("create_branch_target", `Selected branch ${selectedCommit} is the same as source commit - cannot merge a commit with itself`)
         }
-        let isbranch = isBranchHead(targetCommit)
+        let isbranch = isBranchHead(sourceCommit)
         if(false && !isbranch){
-            return setUserError("create_branch_source", `Selected source commit ${targetCommit} is not the head of a branch. The source of a merge must be the head of a branch - you can create a new branch from the desired comment and merge from it.`)
+            return setUserError("create_branch_source", `Selected source commit ${sourceCommit} is not the head of a branch. The source of a merge must be the head of a branch - you can create a new branch from the desired comment and merge from it.`)
         }
         return onCreate()
+    }
+
+    function getContextText(){
+        return `Merge from branch ${sourceBranch} to ${targetBranch}`
     }
 
 
@@ -184,28 +212,31 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         return (<span className="database-list-intro"><TerminusDBSpeaks report={report} /></span>)
     }*/
 
-    if(!starterBranch || !targetBranch) return null
+    if(!sourceBranch || !targetBranch) return null
 
     const showAlert = submissionProblem ? {} : {style:{visibility:'hidden'}}
 
     let bopts = ((branches && Object.keys(branches).length) ? Object.values(branches).map( (item) => {
         return {label: item.id, value: item.id}
     }) : [])
+
+
     return (<>
             <Container className="new-branch">
                 <Row>
                     <CommitSelector
-                        branch={starterBranch}
+                        branch={targetBranch}
                         branches={branches}
                         onChangeBranch={changeSourceBranch}
-                        contextText={"Merge Commits To "}
+                        contextText={getContextText()}
                         commit={ref}
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
-                        setTargetBranch={setTargetBranch}
-                        setLatestCommit={setLatestCommit}
+                        setSourceBranch={setSourceBranch}
+                        sourceBranch={sourceBranch}
                         actionMessage="Merge From This Commit"
+                        setSelectedCommit={setSelectedCommit}
                     />
                 </Row>
                 <div className='row' {...showAlert}>

@@ -151,6 +151,7 @@ export const Branch = ({setBranchAction, setReport}) => {
     }
 
     let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
+
     return (<>
             {/*loading && <Loading type={TERMINUS_COMPONENT} />*/}
             {/*<div className='row generic-message-holder' {...showAlert}>

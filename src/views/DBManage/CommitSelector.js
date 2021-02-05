@@ -7,29 +7,38 @@ import {BranchSelector} from '../../components/History/BranchSelector'
 import {MAIN_BRANCH} from "./constants.dbmanage"
 
 
-export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setTargetBranch, setLatestCommit}) => {
+export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setSelectedCommit, sourceBranch, setSourceBranch}) => {
     //const [targetCommit, setTargetCommit] = useState(ref)
     const [manuallyUpdated, setManuallyUpdated] = useState(false)
-    const [myBranch, setMyBranch] = useState(MAIN_BRANCH)
+    const [myBranch, setMyBranch] = useState(branch)
     //const [myBranch, setMyBranch] = useState(branch)
-    const [targetCommit, setTargetCommit] = useState(branches[myBranch].head)
+    //const [sourceCommit, setSourceCommit] = useState(branches[sourceBranch].head)
+    const [timelineInfo, setTimelineInfo]=useState()
+    const [sourceCommit, setSourceCommit] = useState()
 
     function setCurrentItem(item){
-        if(item && item.commit != targetCommit && (!manuallyUpdated)){
-            updateTargetCommit(item.commit)
+        if(item && item.commit != sourceCommit && (!manuallyUpdated)){
+            setTimelineInfo(item.commit)
+            //setSourceCommit(item.commit)
         }
     }
 
-    function updateTargetCommit(c){
-        setTargetCommit(c)
-        setLatestCommit(c)
+
+    useEffect(() => {
+        setSourceCommit(timelineInfo)
+        setSelectedCommit(timelineInfo)
+    }, [timelineInfo])
+
+    function updateSourceCommit(c){
+        setSourceCommit(c)
+        setSelectedCommit(c)
         if(onSelect) onSelect(c)
     }
 
     function changeBranch(mybranch){
-        setMyBranch(mybranch)
-        setTargetCommit(branches[mybranch].head)
-        setLatestCommit(branches[mybranch].head)
+        //setMyBranch(mybranch)
+        setSourceBranch(mybranch)
+        //setSourceCommit(branches[mybranch].head)
         if(onChangeBranch) onChangeBranch(mybranch)
     }
 
@@ -38,7 +47,7 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
         if(c && c.target){
             let update = c.target.value.length > 0
             setManuallyUpdated(update);
-            updateTargetCommit(c.target.value)
+            updateSourceCommit(c.target.value)
         }
     }
 
@@ -47,20 +56,21 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
     }
 
     function getContextDescription(){
-        if(branches && branches[myBranch] && branches[myBranch].head == targetCommit){
-            return "Latest Commit on " + myBranch + " branch"
+        if(branches && branches[sourceBranch] && branches[sourceBranch].head == sourceCommit){
+            return "Latest Commit on " + sourceBranch + " branch"
         }
         return ""
     }
 
     let setCommit = manuallyUpdated ? unsetManual : null
 
+
     return (
     <Container>
         <Row className="commit-selector-header">
             <Col className="commit-title-col" md={2}>
                 <span className="commit-selector-title">
-                        {contextText} {myBranch}
+                        {contextText}
                 </span>
             </Col>
             <Col md={3} className='commit-branch-context'>
@@ -73,28 +83,29 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
                 <span className="commit-id-input-box">
                     <input
                         className="commit-id-input"
-                        value={targetCommit}
+                        value={sourceCommit}
                         onChange={setCommitID}
                         id="create_branch_source"
                     />
                 </span>
             </Col>
             <Col md={2} className='commit-branch-selector'>
-                <BranchSelector onChange={changeBranch} currentBranch={myBranch} setTargetBranch={setTargetBranch}/>
+                <BranchSelector onChange={changeBranch} currentBranch={sourceBranch} setTargetBranch={setSourceBranch}/>
             </Col>
         </Row>
         <Row>
             <div className="history__nav history__nav--noshadow ">
-                <TimelineCommits
-                    branch={myBranch}
+                {<TimelineCommits
+                    /*branch={myBranch}*/
+                    branch={sourceBranch}
                     woqlClient={woqlClient}
                     onChange={setCurrentItem}
                     headMessage={actionMessage}
                     setHead={setCommit}
-                    currentCommit={targetCommit} //  currentCommit={commit}
+                    //currentCommit={sourceCommit} //  currentCommit={commit}
                     firstCommit={firstCommit}
                     currentStartTime={time}
-                />
+                />}
             </div>
         </Row>
     </Container>)
