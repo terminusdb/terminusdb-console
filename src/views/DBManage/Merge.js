@@ -115,7 +115,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.ref(false)
         nClient.checkout(targetBranch)
         nClient.remote_auth(nClient.local_auth())
-        let url = `admin/${woqlClient.db()}/local/branch/${sourceBranch}/${selectedCommit}`
+        let url = `admin/${woqlClient.db()}/local/commit/${selectedCommit}`
 
         let rebase_source = {
             //rebase_from: getMergeRoot(),
