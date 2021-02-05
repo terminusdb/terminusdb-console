@@ -7,6 +7,7 @@ import {
     DOCUMENT_PAGE_LABEL,
     SCHEMA_PAGE_LABEL,
     QUERY_PAGE_LABEL,
+    MANAGE_TITLE,
     PAGES_ID,
 } from './constants.navbar'
 import {DBContextObj} from '../Query/DBContext'
@@ -63,17 +64,19 @@ const GuardedDBNavbar = (props) => {
                     {dbmeta.label}
                </label>
             </li>
-            {<li className="nav__main__item nav__main__item--box">
-                <span class="nav__main__commit">
+            <li className="nav__main__item nav__main__item--box">
+                {(props.page==MANAGE_TITLE) && <span class="nav__main__commit">
                     <BiGitBranch color="#ff9796"/>{branch}
-                </span>
-                {/*<BranchSelector currentBranch={branch}/>*/}
-                <label className="switch" title="time travel tools">
-                    <input type="checkbox" className="switch__input" onChange={handleToggle} />
-                    <span className="switch__slider"></span>
-                </label>
-                {currentCommitTime}
-            </li>}
+                </span>}
+                {(props.page!=MANAGE_TITLE) && <>
+                    <BranchSelector currentBranch={branch}/>
+                    <label className="switch" title="time travel tools">
+                        <input type="checkbox" className="switch__input" onChange={handleToggle} />
+                        <span className="switch__slider"></span>
+                    </label>
+                    {currentCommitTime}
+                </>}
+            </li>
         </Fragment>
     )
 }

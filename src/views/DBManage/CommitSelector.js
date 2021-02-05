@@ -7,10 +7,11 @@ import {BranchSelector} from '../../components/History/BranchSelector'
 import {MAIN_BRANCH} from "./constants.dbmanage"
 
 
-export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setTargetBranch}) => {
+export const CommitSelector = ({branch, ref, branches, contextText, onSelect, onChangeBranch, commit, woqlClient, firstCommit, time, actionMessage, setTargetBranch, setLatestCommit}) => {
     //const [targetCommit, setTargetCommit] = useState(ref)
     const [manuallyUpdated, setManuallyUpdated] = useState(false)
     const [myBranch, setMyBranch] = useState(MAIN_BRANCH)
+    //const [myBranch, setMyBranch] = useState(branch)
     const [targetCommit, setTargetCommit] = useState(branches[myBranch].head)
 
     function setCurrentItem(item){
@@ -21,12 +22,14 @@ export const CommitSelector = ({branch, ref, branches, contextText, onSelect, on
 
     function updateTargetCommit(c){
         setTargetCommit(c)
+        setLatestCommit(c)
         if(onSelect) onSelect(c)
     }
 
     function changeBranch(mybranch){
         setMyBranch(mybranch)
         setTargetCommit(branches[mybranch].head)
+        setLatestCommit(branches[mybranch].head)
         if(onChangeBranch) onChangeBranch(mybranch)
     }
 

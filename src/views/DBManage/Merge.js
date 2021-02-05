@@ -32,6 +32,8 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
     const [commitMsg, setCommitMsg] = useState("")
     const [submissionProblem, setSubmissionProblem] = useState()
 
+    const [latestCommit, setLatestCommit]= useState("")
+
     let update_start = Date.now()
 
     useEffect(() => {
@@ -58,6 +60,9 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         }
     }, [branch, ref, consoleTime, branches])
 
+    useEffect(() => {
+        setTargetCommit(latestCommit)
+    }, [latestCommit])
     //const [report, setReport] = useState()
 
     function getMergeRoot(){
@@ -90,6 +95,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.remote_auth(nClient.local_auth())
         let rebase_source = {
             //rebase_from: getMergeRoot(),
+           //rebase_from: woqlClient.resource('ref', targetCommit)
            rebase_from: woqlClient.resource('branch', branch)
         }
         if (commitMsg) rebase_source.message = commitMsg
@@ -162,7 +168,8 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         if(!(branches && branches[targetBranch])){
             return setUserError("create_branch_target", `Selected branch ${targetBranch} not found`)
         }
-        if(branches[targetBranch].head == targetCommit){
+        //if(branches[targetBranch].head == targetCommit){
+        if(branches[branch].head == targetCommit){
             return setUserError("create_branch_target", `Selected branch ${targetBranch} is the same as source commit - cannot merge a commit with itself`)
         }
         let isbranch = isBranchHead(targetCommit)
@@ -191,12 +198,13 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
                         branch={starterBranch}
                         branches={branches}
                         onChangeBranch={changeSourceBranch}
-                        contextText={"Merge Commits From "}
+                        contextText={"Merge Commits To "}
                         commit={ref}
                         onSelect={selectCommitID}
                         firstCommit={DBInfo.created}
                         woqlClient={woqlClient}
                         setTargetBranch={setTargetBranch}
+                        setLatestCommit={setLatestCommit}
                         actionMessage="Merge From This Commit"
                     />
                 </Row>

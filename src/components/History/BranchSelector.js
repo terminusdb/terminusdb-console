@@ -46,14 +46,12 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch, setTargetB
         })
 
         const entries = Object.values(branches).map((item, index) => {
-            if(item.id != branch) { 
-                return (<button onClick={ () => {
-                        setBranchTitle(BRANCH_SELECTOR.label + " " + item.id)
-                        if(setTargetBranch) setTargetBranch(item.id)
-                        changeBranch(item.id)}}
-                    className="tdb__dropdown__button" key={item.id} >{item.id}</button>
-                )
-            }
+            return (<button onClick={ () => {
+                    setBranchTitle(BRANCH_SELECTOR.label + " " + item.id)
+                    if(setTargetBranch) setTargetBranch(item.id)
+                    changeBranch(item.id)}}
+                className="tdb__dropdown__button" key={item.id} >{item.id}</button>
+            )
         })
 
         return( <Dropdown toggle={toggle} isOpen={dropdownOpen} title={branchTitle} className="nav__main__link" >
