@@ -179,13 +179,14 @@ export const DBContextProvider = ({children, woqlClient}) => {
         setConsoleTime(refTime)
     }
 
+
     function updateBranches(bid) {
-        setBranchesReload(branchesReload + 1)
         if(bid) {
             setBranch(bid)
             woqlClient.ref(false)
             woqlClient.checkout(bid)
         }
+        setBranchesReload(branchesReload + 1)
     }
 
     function updatePrefixes() {
