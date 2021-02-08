@@ -137,7 +137,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const getSelectOptions=(item)=>{
 		let id=item.name, opts=[]
 		if(item.fileType==CSV_FILE_TYPE){
-			opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
+			//opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
 			availableCsvs.map(names=>{
 				let updateOpt=action.UPDATE+" "+names
 				opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
