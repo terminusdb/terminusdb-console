@@ -218,7 +218,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 		if(isArray(insertFiles)){
 			let fls=[]
-			insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
+			//insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
+			insertFiles.map(it=>{fls.push(it.file)})
 			await woqlClient.insertCSV(fls, commitMsg, null, null).then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
