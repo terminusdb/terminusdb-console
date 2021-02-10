@@ -112,10 +112,10 @@ export const DeleteDB = ({meta}) => {
 
                                    {/* <Row key="rm" className="del-mod-row">
                                         <Col md={2}>
-                                            <input type="checkbox" class="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
+                                            <input type="checkbox" className="tcf-checkbox" name="delete-remote" id="delete-remote" value="delete-remote"/>
                                         </Col>
                                         <Col md={10}>
-                                            <label class="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
+                                            <label className="tcf-checkbox-label tcf-label-modal-align" for="remote-db">Delete remote database?</label>
                                         </Col>
                                     </Row> */}
 

@@ -11,7 +11,7 @@ import { CREATE_DB_FORM, SHARE_DB_FORM, CREATE_REMOTE_INTRO, CREATE_LOCAL_INTRO,
 import { goDBHome, goHubPage } from '../../components/Router/ConsoleRouter'
 import { DBDetailsForm } from './DBDetails'
 import {useAuth0} from '../../react-auth0-spa'
-import { CreateLocal, CreateRemote, ShareLocal } from '../../components/Query/CollaborateAPI'
+import { CreateLocal, RecordHubAction, ShareLocal,CreateRemote } from '../../components/Query/CollaborateAPI'
 import { Row, Col, Container } from "react-bootstrap"
 import { TerminusDBSpeaks } from '../../components/Reports/TerminusDBSpeaks'
 import { DBCreateCard, DBShareHeader} from "./DBCreateCard"
@@ -159,6 +159,9 @@ export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     const { getTokenSilently } = useAuth0();
     if(!remoteEnriched) return null
     let u = bffClient.user()
+
+
+    console.log("____USER_CreateRemoteForm",u);
     let org = u.organizations[0]
     let smeta = {
         id: "",
@@ -238,6 +241,9 @@ export const ShareDBForm = ({onSuccess, starter}) => {
     const {woqlClient, remoteClient, bffClient, remoteEnriched, addShare  } = WOQLClientObj()
     if(!remoteEnriched) return null
     let u = bffClient.user()
+
+    console.log("__USER___",u);
+
     let smeta = {}
     for(var k in starter){
         smeta[k] = starter[k]

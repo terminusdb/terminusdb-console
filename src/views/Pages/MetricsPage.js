@@ -24,7 +24,7 @@ const RepoStatus=()=>{
     view.pager("remote")
 
     return <>
-        <div class="ros-summary-title">Repo Metrics</div>
+        <div className="ros-summary-title">Repo Metrics</div>
         <ControlledTable
             query={query}
             freewidth={true}
@@ -53,7 +53,7 @@ const RepoStars=()=>{
     view.pager("remote")
 
     return <>
-        <div class="ros-summary-title">Repo Starred by Users</div>
+        <div className="ros-summary-title">Repo Starred by Users</div>
         <ControlledTable
             query={query}
             freewidth={true}

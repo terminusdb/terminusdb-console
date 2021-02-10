@@ -439,7 +439,7 @@ export const HubToolbar = ({onChange, showingMine, onError, organization, url}) 
         }
         if(isLocalURL(u, woqlClient)){
             let did = u.substring(u.lastIndexOf("/")+1)
-            let ded = woqlClient.get_database(did, woqlClient.user_organization())
+            let ded = woqlClient.databaseInfo(did, woqlClient.user_organization())
             if(ded){
                 goDBHome(ded, woqlClient.user_organization())
             }

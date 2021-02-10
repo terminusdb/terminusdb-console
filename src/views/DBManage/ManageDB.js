@@ -125,7 +125,7 @@ export const ManageDB = (props) => {
         let update_start = Date.now()
         var message = OPTIMIZE_BRANCH_FORM.optimizeSystemSuccessMessage
         setLoading(true)
-        woqlClient.optimize_branch(branchAction.branch).then(()=>{
+        woqlClient.optimizeBranch(branchAction.branch).then(()=>{
             setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage + branch})
             setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
         })

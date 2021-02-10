@@ -29,7 +29,7 @@ export const GrantRole = () => {
         if (deets.uiri && deets.roleid) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             let rid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
             let uid = ( (deets.uiri.indexOf(":") == -1) ? "doc:" + deets.uiri : deets.uiri )
             TerminusClient.WOQL.lib()

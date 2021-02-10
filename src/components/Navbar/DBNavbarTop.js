@@ -32,7 +32,7 @@ const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
     const {branches, consoleTime, branch} = DBContextObj()
 
-    let dbmeta = woqlClient.get_database() || {}
+    let dbmeta = woqlClient.databaseInfo() || {}
     const [toggleTime, setToggleTime] = useState(false)
 
     function getNavURL(page) {

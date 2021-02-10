@@ -7,9 +7,9 @@ export const ActionHeader = ({branchAction, onClose}) => {
 	if(branchAction.merge)
 	 	title=branchAction.title + " " + branchAction.branch
 
-	return <div class="csv-preview-header row">
+	return <div className="csv-preview-header row">
 		<Col md={10}>
-			<span class="preview-bar-title">
+			<span className="preview-bar-title">
 				<strong>{title}</strong>
 			</span>
 		</Col>

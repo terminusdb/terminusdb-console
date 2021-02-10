@@ -8,7 +8,7 @@ import { AiOutlineInfoCircle } from 'react-icons/ai'
  * Component which provides a summary of the situation with respect to the remotes of a database
  */
 export const DBRemoteSummary = ({woqlClient, repos, isHubURL, onCreate, onShare, onLogin}) => {
-    let meta = woqlClient.get_database()
+    let meta = woqlClient.databaseInfo()
     let user = woqlClient.user()
 
     function categorize(repos){

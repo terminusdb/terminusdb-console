@@ -15,7 +15,6 @@ import {DBHomeRoutes} from './DBHomeRoutes'
 import {SchemaRoutes} from './SchemaRoutes'
 import {Synchronize} from '../../views/DBSynchronize/Synchronize'
 import QueryPage from '../../views/Pages/QueryPage'
-/*import MetricsPage from "../../views/Pages/MetricsPage"*/
 import DocumentPage from '../../views/Pages/DocumentPage'
 import TerminusHome from '../../views/Pages/TerminusHome'
 import {DBContextProvider} from '../Query/DBContext'
@@ -48,7 +47,7 @@ const MasterDBRoute = () => {
 
     const {path} = useRouteMatch()
     const {woqlClient} = WOQLClientObj()
-    woqlClient.set_system_db()
+    woqlClient.setSystemDb()
     const routes = []
 
     routes.push(
@@ -88,14 +87,14 @@ const DBRoute = () => {
     const { woqlClient } = WOQLClientObj()
     woqlClient.db(dbid)
     woqlClient.organization(aid)
-    const databaseInfo = woqlClient.get_database()
+    const databaseInfo = woqlClient.databaseInfo()
     const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />
         </Route>,
     )
-    /*routes.push(
+    /*routes.push(   
        <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
             <MetricsPage />
         </Route>,
