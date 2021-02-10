@@ -44,7 +44,7 @@ export const AddUserCommitLogID = () => {
             )
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             q.execute(tClient)
                 .then(() => {
                     let rep = {status: TERMINUS_SUCCESS, message: CREATED_ADMIN_MESSAGE}

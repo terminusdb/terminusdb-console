@@ -32,12 +32,12 @@ export const Synchronize = () => {
             if(meta) {
                 refreshDBRecord()
                 .then(() => {
-                    let lmeta = woqlClient.get_database()
+                    let lmeta = woqlClient.databaseInfo()
                     setMeta(lmeta)        
                 })
             }
             else {
-                setMeta(woqlClient.get_database())
+                setMeta(woqlClient.databaseInfo())
             }
         }
     }, [branches])
@@ -119,7 +119,7 @@ export const Synchronize = () => {
             return RefreshDatabaseRecord(hmeta, bffClient, getTokenSilently)
         }
         else if(isLocalURL(remote.url, woqlClient)){
-            return refreshDBRecord(hmeta.id, hmeta.organization).then(() => woqlClient.get_database(hmeta.id, hmeta.organization))
+            return refreshDBRecord(hmeta.id, hmeta.organization).then(() => woqlClient.databaseInfo(hmeta.id, hmeta.organization))
         }
     }
 

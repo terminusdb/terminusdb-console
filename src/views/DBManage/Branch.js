@@ -6,6 +6,7 @@ import {TCForm, TCRow} from '../../components/Form/FormComponents'
 import {CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM} from './constants.dbmanage'
 import {
     TERMINUS_SUCCESS,
+    TERMINUS_WARNING,
     TERMINUS_ERROR,
     TERMINUS_INFO,
     TERMINUS_COMPONENT,
@@ -28,7 +29,6 @@ export const Branch = ({setBranchAction, setReport}) => {
 
     const [sourceCommit, setSourceCommit] = useState()
     const [newID, setNewID] = useState()
-    const [submissionProblem, setSubmissionProblem] = useState()
     const [branchType, setBranchType] = useState("head")
 
     let update_start = Date.now()
@@ -91,19 +91,19 @@ export const Branch = ({setBranchAction, setReport}) => {
     function selectCommitID(c){
         if(c != sourceCommit){
             setSourceCommit(c)
-            setSubmissionProblem(false)
+            setReport(false)
         }
     }
 
     function updateID(c){
         if(c && c.target){
             setNewID(c.target.value)
-            setSubmissionProblem(false)
+            setReport(false)
         }
     }
 
     function setUserError(field, msg){
-        setSubmissionProblem(msg)
+        setReport({status: TERMINUS_WARNING, message: msg})
     }
 
     function checkSubmission(){
@@ -111,9 +111,9 @@ export const Branch = ({setBranchAction, setReport}) => {
             if(!sourceCommit){
                 return setUserError("create_branch_source", "You must select a commit to start the new branch from")
             }
-            else if(sourceCommit.length < 30){
+            /*else if(sourceCommit.length < 30){
                 return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
-            }
+            }*/
         }
         if(newID && newID.length){
             let nid = newID.trim()
@@ -150,7 +150,8 @@ export const Branch = ({setBranchAction, setReport}) => {
         if(branchType == btypes[i].value) ph = btypes[i].label
     }
 
-    let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
+    //let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
+
     return (<>
             {/*loading && <Loading type={TERMINUS_COMPONENT} />*/}
             {/*<div className='row generic-message-holder' {...showAlert}>

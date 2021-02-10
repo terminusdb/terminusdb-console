@@ -29,7 +29,7 @@ export const GrantCapability = () => {
         if (deets.roleid && deets.capid) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             let capid = ( (deets.capid.indexOf(":") == -1) ? "doc:" + deets.capid : deets.capid )
             let roleid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
 

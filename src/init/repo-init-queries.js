@@ -14,7 +14,7 @@ export async function enrich_local_db_listing(woqlClient){
     }
     if(usings.length == 0) return
     let sysClient = woqlClient.copy()
-    sysClient.set_system_db()
+    sysClient.setSystemDb()
     //let micro = Date.now()
     let res
     try {

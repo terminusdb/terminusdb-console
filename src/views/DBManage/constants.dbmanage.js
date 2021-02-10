@@ -247,7 +247,7 @@ export const OPTIMIZE_BRANCH_FORM = {
 }
 
 export const NEW_BRANCH="New Branch"
-export const MERGE_BRANCH="Merge Branch"
+export const MERGE_BRANCH="Merge to branch"
 export const CLOSE_BRANCH="Close Branch"
 export const DELETE_BRANCH="Delete Branch"
 export const RESET_SPECIFIC_BRANCH="Reset to a specific commit"

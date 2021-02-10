@@ -20,6 +20,7 @@ import Loading from '../../components/Reports/Loading'
 import {BranchCommits} from "./BranchCommits"
 import {Reset} from "./Reset"
 import {Squash} from "./Squash"
+import {MANAGE_TITLE} from "../../components/Navbar/constants.navbar"
 import {ActionHeader} from "./ActionHeader"
 
 
@@ -124,7 +125,7 @@ export const ManageDB = (props) => {
         let update_start = Date.now()
         var message = OPTIMIZE_BRANCH_FORM.optimizeSystemSuccessMessage
         setLoading(true)
-        woqlClient.optimize_branch(branchAction.branch).then(()=>{
+        woqlClient.optimizeBranch(branchAction.branch).then(()=>{
             setReport({status: TERMINUS_SUCCESS, message: OPTIMIZE_BRANCH_FORM.optimizeSuccessMessage + branch})
             setBranchAction({branch:branchAction.branch, create:false, merge:false, reset: false, squash: false})
         })
@@ -167,7 +168,7 @@ export const ManageDB = (props) => {
 
     return (
         <div id={props.id} className="console__page h-100" id="terminus-console-page">
-            <ConsoleNavbar onHeadChange={props.onHeadChange} />
+            <ConsoleNavbar onHeadChange={props.onHeadChange} page={MANAGE_TITLE}/>
             <BranchNavBar branchCount={branchCount} setBranchAction={setBranchAction} branchAction={branchAction} onDelete={onDelete} onOptimize={onOptimize} setReport={setReport}/>
             <main className="console__page__container console__page__container--width">
                 {loading && <Loading type={TERMINUS_COMPONENT} />}

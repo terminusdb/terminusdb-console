@@ -105,13 +105,13 @@ export const WOQLClientProvider = ({children, params}) => {
         
         const hubClient = new TerminusClient.WOQLClient(params.remote)
 
-        hubClient.local_auth(hubcreds)
+        hubClient.localAuth(hubcreds)
         hubClient.organization(hub_org) 
         hubClient.connection.user.id = hub_org
         hubClient.connection.user.author = remote_user.email       
         setRemoteClient(hubClient)
         const bClient = new TerminusClient.WOQLClient(params.bff)
-        bClient.local_auth(hubcreds)
+        bClient.localAuth(hubcreds)
         bClient.organization(hub_org) 
         bClient.connection.user.id = hub_org
         bClient.connection.user.author = remote_user.email
@@ -152,7 +152,7 @@ export const WOQLClientProvider = ({children, params}) => {
         woqlClient.connection.user.logged_in = user['http://terminusdb.com/schema/system#agent_name']
         if(woqlClient.connection.author()){
             if(woqlClient.connection.author() != user.email){
-                woqlClient.connection.user.local_author = woqlClient.connection.author()
+                woqlClient.connection.user.localAuthor = woqlClient.connection.author()
                 woqlClient.connection.user.problem = "mismatch"
                 woqlClient.author(user.email)
             }
@@ -236,7 +236,7 @@ export const WOQLClientProvider = ({children, params}) => {
         org = org || woqlClient.organization()
         let usings = [org + "/" + id]
         let sysClient = woqlClient.copy()
-        sysClient.set_system_db()
+        sysClient.setSystemDb()
         return TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
         .then((res) =>{
             if(res[0]){
@@ -294,7 +294,7 @@ export const WOQLClientProvider = ({children, params}) => {
                     woqlClient.databases(nudbs)
                 }
                 else {
-                    let odb = woqlClient.get_database(id, org) 
+                    let odb = woqlClient.databaseInfo(id, org) 
                     if(odb){
                         for(var k in local){
                             odb[k] = local[k]
@@ -308,7 +308,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 }                
                 setContextEnriched(contextEnriched + 1)
             }
-            return woqlClient.get_database()
+            return woqlClient.databaseInfo()
         })
     }
 
@@ -317,7 +317,7 @@ export const WOQLClientProvider = ({children, params}) => {
         org = org || woqlClient.organization()
         let usings = [org + "/" + id]
         let sysClient = woqlClient.copy()
-        sysClient.set_system_db()
+        sysClient.setSystemDb()
         return TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
     }
 

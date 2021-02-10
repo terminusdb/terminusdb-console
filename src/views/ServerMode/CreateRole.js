@@ -29,7 +29,7 @@ export const CreateRole = () => {
     function addRole(deets) {
         setLoading(true)
         let tClient = woqlClient.copy() //do not change internal client state
-        tClient.set_system_db()
+        tClient.setSystemDb()
         let rid = ( (deets.roleid.indexOf(":") == -1) ? "doc:" + deets.roleid : deets.roleid )
         let woql = TerminusClient.WOQL.lib().add_role(rid, deets.label, deets.description)
         woql.execute(tClient)

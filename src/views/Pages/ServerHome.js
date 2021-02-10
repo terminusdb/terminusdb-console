@@ -92,7 +92,7 @@ const ServerHome = (props) => {
         let q = WOQL.when( WOQL.triple("v:UIRI", "system:agent_name", id))
             .add_triple("v:UIRI", "system:user_identifier", email) 
         let fixer = woqlClient.copy()
-        fixer.set_system_db()
+        fixer.setSystemDb()
         fixer.query(q)
     }
 

@@ -47,7 +47,7 @@ const MasterDBRoute = () => {
 
     const {path} = useRouteMatch()
     const {woqlClient} = WOQLClientObj()
-    woqlClient.set_system_db()
+    woqlClient.setSystemDb()
     const routes = []
 
     routes.push(
@@ -87,7 +87,7 @@ const DBRoute = () => {
     const { woqlClient } = WOQLClientObj()
     woqlClient.db(dbid)
     woqlClient.organization(aid)
-    const databaseInfo = woqlClient.get_database()
+    const databaseInfo = woqlClient.databaseInfo()
     const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>

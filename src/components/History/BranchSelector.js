@@ -46,7 +46,7 @@ export const BranchSelector = ({ onChange, hideSingle, currentBranch, setTargetB
         })
 
         const entries = Object.values(branches).map((item, index) => {
-            if(item.id != branch) { 
+            if(item.id != branch) {
                 return (<button onClick={ () => {
                         setBranchTitle(BRANCH_SELECTOR.label + " " + item.id)
                         if(setTargetBranch) setTargetBranch(item.id)

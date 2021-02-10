@@ -33,8 +33,8 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
     * I add the new jwt token to the local connection obj to pass it to the local terminusdb server
     */
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
-    client.remote_auth(creds)
+    remoteClient.localAuth(creds)
+    client.remoteAuth(creds)
     
     let rmeta = meta
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
@@ -47,8 +47,8 @@ export const CreateRemote = async (meta, client, remoteClient, getTokenSilently)
 export const ForkDB = async (meta, client, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
-    client.remote_auth(creds)
+    remoteClient.localAuth(creds)
+    client.remoteAuth(creds)
     meta.fork = true
     return remoteClient.createDatabase(meta.id, meta, meta.organization)
 }
@@ -61,7 +61,7 @@ export const DeleteDB = async (meta, client, remoteClient, getTokenSilently) => 
     let dewun = (meta.remote_record ? meta.remote_record : meta)
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     return remoteClient.deleteDatabase(dewun.id, dewun.organization)
 }
 
@@ -89,14 +89,14 @@ export const CloneDB = async (meta, client, getTokenSilently, no_auth, preformed
     newby.comment = meta.comment || ""
     newby.remote_url = meta.remote_url
     if(_is_local_server(client, meta.remote_url)){
-        client.remote_auth(client.local_auth())
+        client.remoteAuth(client.localAuth())
     }
     else if(no_auth && no_auth === true){
-        client.remote_auth(false)
+        client.remoteAuth(false)
     }
     else {
         const jwtoken = await getTokenSilently()
-        client.remote_auth({type: "jwt", key: jwtoken})
+        client.remoteAuth({type: "jwt", key: jwtoken})
     }
 
     return client.clonedb(newby, newid).then(() => {
@@ -117,7 +117,7 @@ export const AcceptInvite = async (meta, client, remoteClient, getTokenSilently)
     }}
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     return remoteClient.updateUser(client.connection.user.logged_in, msg)
 }
 
@@ -128,7 +128,7 @@ export const RejectInvite = async (meta, client, remoteClient, getTokenSilently)
     }}
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     return remoteClient.updateUser(client.connection.user.logged_in, msg)
 }
 
@@ -137,8 +137,8 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     let remote_name = meta.remote || "origin"
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
-    client.remote_auth(creds)
+    remoteClient.localAuth(creds)
+    client.remoteAuth(creds)
     if(meta.schema) delete meta['schema']
     //meta.id =  _new_remote_id(meta.id, meta.organization, remoteClient.databases(), true)
     let resp = await remoteClient.createDatabase(meta.id, meta, meta.organization)
@@ -154,7 +154,7 @@ export const ShareLocal = async (meta, client, remoteClient, getTokenSilently) =
     }
     const jwtoken2 = await getTokenSilently()
     let ncreds = {type: "jwt", key: jwtoken2}
-    client.remote_auth(ncreds)
+    client.remoteAuth(ncreds)
     return client.fetch(push_to.remote).then(() => {
         client.push(push_to)
     })
@@ -178,14 +178,14 @@ export const removeRemote = async (remote_name, client, getTokenSilently) => {
 export const Fetch = async (remote_name, remote_url, client, getTokenSilently, no_auth, bffClient) => {
     let nClient = client.copy()
     if(_is_local_server(nClient, remote_url)){
-        nClient.remote_auth( nClient.local_auth() )
+        nClient.remoteAuth( nClient.localAuth() )
     }
     else if(no_auth && no_auth === true){
-        nClient.remote_auth(false)
+        nClient.remoteAuth(false)
     }
     else {
         const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
+        nClient.remoteAuth({type: "jwt", key: jwtoken})
     }
     return nClient.fetch(remote_name).then((x) => {
         RecordHubAction(bffClient, "fetch", remote_url)
@@ -203,7 +203,7 @@ export const Fetch = async (remote_name, remote_url, client, getTokenSilently, n
 export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     return remoteClient.updateOrganization(meta.id, meta)
 }
 
@@ -211,7 +211,7 @@ export const UpdateOrganization = async (meta, remoteClient, getTokenSilently) =
 export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     return remoteClient.updateDatabase(meta)
 }
 
@@ -219,7 +219,7 @@ export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {
 export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
-    remoteClient.local_auth(creds)
+    remoteClient.localAuth(creds)
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
     //console.log("___GET_DATABASE___", meta);
@@ -243,11 +243,11 @@ export const Push = async (local_branch, remote, remote_branch, remote_url, comm
     let nClient = client.copy()
     nClient.checkout(from_branch)
     if(_is_local_server(client, remote_url)){
-        nClient.remote_auth( nClient.local_auth() )
+        nClient.remoteAuth( nClient.localAuth() )
     }
     else {
         const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
+        nClient.remoteAuth({type: "jwt", key: jwtoken})
     }
     return nClient.push(push_to).then(() => {
         RecordHubAction(bffClient, "push", remote_url, remote_branch)
@@ -276,14 +276,14 @@ export const Pull = async (local_branch, remote, remote_branch, remote_url, comm
     nClient.checkout(to_branch)
     //create copy so we don't change internal state of woqlClient inadvertently
     if(_is_local_server(client, remote_url)){
-        nClient.remote_auth(nClient.local_auth())
+        nClient.remoteAuth(nClient.localAuth())
     }
     else if(no_auth && no_auth === true){
-        nClient.remote_auth(false)
+        nClient.remoteAuth(false)
     }
     else {
         const jwtoken = await getTokenSilently()
-        nClient.remote_auth({type: "jwt", key: jwtoken})
+        nClient.remoteAuth({type: "jwt", key: jwtoken})
     }
     return nClient.pull(pull_from).then(() => {
         RecordHubAction(bffClient, "pull", remote_url, remote_branch)
