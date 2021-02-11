@@ -115,7 +115,6 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         nClient.ref(false)
         nClient.checkout(sourceBranch)
         nClient.remoteAuth(nClient.localAuth())
-
         let rebase_source = {
             rebase_from: woqlClient.resource('ref', selectedCommit)
         }
@@ -144,7 +143,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
                 setLoading(false)
             })
     }
-
+    
     function selectCommitID(c){
         setSubmissionProblem(false)
         if(c != sourceCommit){
