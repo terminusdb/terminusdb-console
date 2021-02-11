@@ -7,7 +7,7 @@ import { NO_RESULTS } from "./constants.reports"
 
 export const EmptyResult = (props) => {
     let msg = props.message || NO_RESULTS
-    return <Alert color="warning">
+    return <Alert variant="warning">
         <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
         {msg}
     </Alert>

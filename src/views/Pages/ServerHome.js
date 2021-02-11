@@ -3,6 +3,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {SimplePageView} from '../Templates/SimplePageView'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {DBListControl} from "../Server/DBListControl"
+import {useAuth0} from '../../react-auth0-spa'
 
 /**
  * Server home is the launch screen to the local experience
@@ -20,7 +21,7 @@ const ServerHome = (props) => {
     //if we have some super user permission, we can view the users tab
     //if we are in unitialised step, show the add commit log message
     //if we
-
+    const { user:auth0User } = useAuth0();
     let [myDBs, setMyDBs] = useState(false)
 
     let active = props.page
@@ -35,26 +36,49 @@ const ServerHome = (props) => {
         }
         return mdbs
     }
-
+    /*
+    * the promise if go in error it will be rejected
+    */
     function load_missing_urls(urls){
         let promises = urls.map((item) => refreshRemoteURL(item))
+        /*
+        * manual implementation of Promise.allSettled() refreshRemoteURL return always a promise resolved
+        * method returns a promise that resolves after all of the given promises 
+        * have either fulfilled or rejected, with an array of objects that each describes 
+        * the outcome of each promise.
+        * REFACTOR we have to review this and move the call in the children 
+        * one call for every children so the refresh is at children level
+        */
         Promise.all(promises).then((values) => {
-            setMyDBs(get_dbs_to_show())
+            setMyDBs(get_dbs_to_show())          
+        }).catch(err=>{
+            console.log(err)
         })
     }
 
+    /*
+    * you have to test if the user is logged
+    * add the user fix the problem if I log in and after log out
+    */
     useEffect(() => {
         if(woqlClient){
             let mdbs = get_dbs_to_show()
             let missing_urls = []
             setMyDBs(mdbs)
-            for(var i = 0; i<mdbs.length; i++){
-                if(mdbs[i].remote_url && !mdbs[i].remote_record && missing_urls.indexOf(mdbs[i].remote_url) == -1){
-                    missing_urls.push(mdbs[i].remote_url)
+
+            /*
+            * I try to load the remote record only if the user is logged
+            * remove auth0 error 
+            */
+            if(auth0User){
+                for(var i = 0; i<mdbs.length; i++){
+                    if(mdbs[i].remote_url && !mdbs[i].remote_record && missing_urls.indexOf(mdbs[i].remote_url) == -1){
+                        missing_urls.push(mdbs[i].remote_url)
+                    }
                 }
-            }
-            if(missing_urls.length){
-                load_missing_urls(missing_urls)
+                if(missing_urls.length){
+                    load_missing_urls(missing_urls)
+                }
             }
             showlist = mdbs.length || false
         }
@@ -68,7 +92,7 @@ const ServerHome = (props) => {
         let q = WOQL.when( WOQL.triple("v:UIRI", "system:agent_name", id))
             .add_triple("v:UIRI", "system:user_identifier", email) 
         let fixer = woqlClient.copy()
-        fixer.set_system_db()
+        fixer.setSystemDb()
         fixer.query(q)
     }
 

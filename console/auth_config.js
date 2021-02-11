@@ -1,4 +1,4 @@
-console.log(process.env.AUTH0_DOMAIN);
+//console.log(process.env.AUTH0_DOMAIN);
 
 export const auth0_conf={
   "domain": process.env.AUTH0_DOMAIN,

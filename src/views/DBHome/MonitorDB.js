@@ -16,7 +16,7 @@ export const MonitorDB = (props) => {
 
     const [cloning, setCloning] = useState()
     const [bump, setBump] = useState(0)
-    let dbmeta = woqlClient.get_database() || {}
+    let dbmeta = woqlClient.databaseInfo() || {}
     const [assetRecord, setAssetRecord, ] = useState(dbmeta)
 
     let WOQL = TerminusClient.WOQL
@@ -29,10 +29,15 @@ export const MonitorDB = (props) => {
     async function load_assets(){
         let nkstate = await refreshDBRecord()
         if(nkstate.remote_url){
-            let rem = await refreshRemoteURL(nkstate.remote_url)
-            let ar = woqlClient.get_database()
+            /*
+            * call the remote server for add details at the database info
+            */
+            await refreshRemoteURL(nkstate.remote_url)
+            /*
+            * force refresh
+            */
             setBump(bump+1)   
-            setAssetRecord(woqlClient.get_database())
+            setAssetRecord(woqlClient.databaseInfo())
         }
         else {
             setAssetRecord(nkstate)
@@ -45,7 +50,7 @@ export const MonitorDB = (props) => {
 
     function onClone(id, org, doc){
         setCloning(false)
-        let oldie = woqlClient.get_database()
+        let oldie = woqlClient.databaseInfo()
         let nu = {
             id: id,
             organization: org,
@@ -66,7 +71,7 @@ export const MonitorDB = (props) => {
             goDBHome(id, org)
             updateBranches()
             woqlClient.db(id)
-            setAssetRecord(woqlClient.get_database())
+            setAssetRecord(woqlClient.databaseInfo())
         })
     }
 

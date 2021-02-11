@@ -24,7 +24,7 @@ const CreateNewUser = (props) => {
 
 
     return (
-             <>{(!loading) && <Alert color="success">
+             <>{(!loading) && <Alert variant="success">
                 Successfully created new User - <b>{userInfo.id}</b>
               </Alert>}
              <form onSubmit={ handleSubmit(onSubmit) }>

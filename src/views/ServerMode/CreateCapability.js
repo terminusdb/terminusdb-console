@@ -44,7 +44,7 @@ export const CreateCapability = () => {
         if (perms.length && res.length) {
             setLoading(true)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             TerminusClient.WOQL.lib()
                 .add_capability(deets.capid, perms, res, deets.label, deets.description)
                 .execute(tClient)

@@ -56,8 +56,8 @@ export const ResultQueryPane = ({resultView, result, query,
     let tr, lim
     if(query && query.containsUpdate()){
         tabConfig.pager("local")
-        tr = result.bindings.length
-        lim = result.bindings.length
+        tr = result.bindings ? result.bindings.length : 0
+        lim = result.bindings ? result.bindings.length : 0
     }
     else {
         tabConfig.pager("remote")

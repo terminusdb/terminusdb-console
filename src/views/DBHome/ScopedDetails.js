@@ -12,7 +12,9 @@ import {formatBytes} from "../../utils/format"
 export const ScopedDetails = () => {
 
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
+    let {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
     const [latest, setLatest] = useState()
 
 
@@ -88,7 +90,7 @@ export const ScopedDetails = () => {
     }
 
     function getContextTitle(){
-        if(ref){
+        if(ref && consoleTime){
             return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref
         }
         if(branches && Object.keys(branches).length > 1) {

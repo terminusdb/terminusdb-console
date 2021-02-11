@@ -12,7 +12,7 @@ export const ViolationReport = ({violations, tone}) => {
     if(!vioBuff) return null
     return (
         <span className = {VIOLATIONS_CSS}>
-            <Alert color = {tone}>
+            <Alert variant = {tone}>
                 <b>{vcount}</b>
                 {vioBuff}
             </Alert >

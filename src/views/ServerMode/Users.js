@@ -20,7 +20,7 @@ export const Users = (props) => {
     useEffect(() => {
         setLoading(true)
         let tClient = woqlClient.copy() //do not change internal client state
-        tClient.set_system_db()
+        tClient.setSystemDb()
         woql.execute(tClient)
             .then((result) => {
                 if (result && result.bindings) setUsers(result.bindings)

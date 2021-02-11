@@ -137,7 +137,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 	const getSelectOptions=(item)=>{
 		let id=item.name, opts=[]
 		if(item.fileType==CSV_FILE_TYPE){
-			opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
+			//opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
 			availableCsvs.map(names=>{
 				let updateOpt=action.UPDATE+" "+names
 				opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
@@ -218,7 +218,8 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		}
 		if(isArray(insertFiles)){
 			let fls=[]
-			insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
+			//insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
+			insertFiles.map(it=>{fls.push(it.file)})
 			await woqlClient.insertCSV(fls, commitMsg, null, null).then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
@@ -338,7 +339,7 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
 						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
 							<div><ManageDuplicateCsv fileName={item.name}/></div>
-							{/*<div class="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
+							{/*<div className="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
 						</div>}
 					</>)}
 					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}

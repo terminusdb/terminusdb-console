@@ -5,6 +5,7 @@ import {
     DB_SYNCHRONISE,
     DB_SCHEMA_ROUTE,
     DB_DOCUMENT_ROUTE,
+    DB_METRICS_ROUTE,
     SPECIFIC_DB_ROUTE,
     SPECIFIC_DOC_ROUTE,
     TERMINUS_ROUTE,
@@ -46,7 +47,7 @@ const MasterDBRoute = () => {
 
     const {path} = useRouteMatch()
     const {woqlClient} = WOQLClientObj()
-    woqlClient.set_system_db()
+    woqlClient.setSystemDb()
     const routes = []
 
     routes.push(
@@ -54,6 +55,11 @@ const MasterDBRoute = () => {
             <QueryPage />
         </Route>,
     )
+    /*routes.push(
+        <Route key="metrics" path={`${path}${DB_METRICS_ROUTE}`}>
+            <MetricsPage/>
+        </Route>,
+    )*/
     routes.push(
         <Route key="document" path={`${path}${DB_DOCUMENT_ROUTE}`}>
             <DocumentPage />
@@ -81,13 +87,18 @@ const DBRoute = () => {
     const { woqlClient } = WOQLClientObj()
     woqlClient.db(dbid)
     woqlClient.organization(aid)
-    const databaseInfo = woqlClient.get_database()
+    const databaseInfo = woqlClient.databaseInfo()
     const routes = []
     routes.push(
         <Route key="dbquery" path={`${path}${DB_QUERY_ROUTE}`}>
             <QueryPage />
         </Route>,
     )
+    /*routes.push(   
+       <Route key="dbMetrics" path={`${path}${DB_METRICS_ROUTE}`}>
+            <MetricsPage />
+        </Route>,
+    )*/
     routes.push(
         <Route key="dbdoc" path={`${path}${DB_DOCUMENT_ROUTE}${SPECIFIC_DOC_ROUTE}`}>
             <SpecificDoc />

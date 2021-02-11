@@ -7,10 +7,12 @@ import {
     DOCUMENT_PAGE_LABEL,
     SCHEMA_PAGE_LABEL,
     QUERY_PAGE_LABEL,
+    MANAGE_TITLE,
     PAGES_ID,
 } from './constants.navbar'
 import {DBContextObj} from '../Query/DBContext'
 import {BranchSelector} from '../History/BranchSelector'
+import {BiGitBranch} from "react-icons/bi"
 import {printts} from '../../constants/dates'
 
 export const DBNavbarTop = (props) => {
@@ -28,9 +30,9 @@ export const DBNavbarTop = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const {branches, consoleTime} = DBContextObj()
+    const {branches, consoleTime, branch} = DBContextObj()
 
-    let dbmeta = woqlClient.get_database() || {}
+    let dbmeta = woqlClient.databaseInfo() || {}
     const [toggleTime, setToggleTime] = useState(false)
 
     function getNavURL(page) {
@@ -63,13 +65,18 @@ const GuardedDBNavbar = (props) => {
                </label>
             </li>
             <li className="nav__main__item nav__main__item--box">
-                <BranchSelector />
-                <label className="switch" title="time travel tools">
-                    <input type="checkbox" className="switch__input" onChange={handleToggle} />
-                    <span className="switch__slider"></span>
-                </label>
-                {currentCommitTime}
+                {(props.page==MANAGE_TITLE) && <span class="nav__main__commit">
+                    <BiGitBranch color="#ff9796"/>{branch}
+                </span>}
+                {(props.page!=MANAGE_TITLE) && <>
+                    <BranchSelector currentBranch={branch}/>
+                    <label className="switch" title="time travel tools">
+                        <input type="checkbox" className="switch__input" onChange={handleToggle} />
+                        <span className="switch__slider"></span>
+                    </label>
+                    {currentCommitTime}
+                </>}
             </li>
         </Fragment>
-    ) 
+    )
 }

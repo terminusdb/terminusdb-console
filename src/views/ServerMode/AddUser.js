@@ -49,7 +49,7 @@ export const AddUser = () => {
             setLoading(true)
             let udoc = _form_document(deets)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             tClient.createUser(deets.uid, udoc)
             .then((result) => {
                 setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created New User'})
