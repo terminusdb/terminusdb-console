@@ -57,7 +57,7 @@
     "@o2xp/react-datatable": "^1.1.62",
     "@terminusdb/terminusdb-client": "^4.1.0",
     "@terminusdb/terminusdb-react-components": "^4.1.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "codemirror": "^5.58.1",
     "convert-csv-to-json": "^1.0.0",
