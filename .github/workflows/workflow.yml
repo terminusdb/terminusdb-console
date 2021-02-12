@@ -29,6 +29,13 @@ jobs:
         elif [ $(echo "${{ github.ref }}" | grep -P "dev") ]; then
             mv console/env-development console/.env 
         fi
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCLOUD_TOKEN }}
+        export_default_credentials: true
+
     - run: npm run build
     - run: |
         if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
@@ -36,3 +43,7 @@ jobs:
         fi
       env:
         BINTRAY_API_TOKEN: ${{ secrets.BINTRAY_API_TOKEN }}
+    - run: |
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
+            bash ".ci/publish_gcloud.sh" "${GITHUB_REF##*/}"
+        fi
