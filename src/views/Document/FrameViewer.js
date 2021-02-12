@@ -18,7 +18,7 @@ export const FrameViewer = ({doc, classframe, view, edit}) => {
     df.filterFrame(getRenderer)
     df.document.sortProperties()
     //if(edit) return <FrameEditor doc={doc} classframe={classframe} />
-    return df.document.render() 
+    return df.document.render()
 }
 
 const getRenderer = (name, frame, args) => {
@@ -35,7 +35,7 @@ const FrameRenderer = (frame) => {
             return frame.get()
 		}
 		else {
-			return FrameRenderer(frame) 			
+			return FrameRenderer(frame)
 		}
     }
 

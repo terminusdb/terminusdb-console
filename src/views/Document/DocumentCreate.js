@@ -32,7 +32,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     const [ecommit, setECommit] = useState()
     const [errors, setErrors] = useState()
     const [extract, setExtract] = useState(0)
-    
+
     const {updateBranches, branch, ref} = DBContextObj()
 
     useEffect(() => {
@@ -97,7 +97,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         let WOQL = TerminusClient.WOQL
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
-            
+
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
@@ -165,15 +165,15 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} insertCsvs={insertCsvs}/>
             }
             {(!meta.abstract) && dataframe && (docView == "table" || docView == "frame") &&
-                <FrameViewer 
+                <FrameViewer
                     classframe={frame}
-                    mode="edit" 
-                    view={dataframe} 
-                    type={(docView=="frame" ? "fancy": "table")} 
+                    mode="edit"
+                    view={dataframe}
+                    type={(docView=="frame" ? "fancy": "table")}
                     client={woqlClient}
                     onExtract={setExtractedJSON}
                     errors={errors}
-                    extract={extract} 
+                    extract={extract}
                 />
             }
             {(!meta.abstract) && loading &&
@@ -284,7 +284,7 @@ export const DocumentIcon = ({meta}) => {
     icons.textAlign = "center"
     icons.width = "180px"
     icons.fontSize = "2.5em"
-    let title = "Create " + TerminusClient.UTILS.shorten(meta.id) + meta.abstract ? " Abstract Class" : "Class" 
+    let title = "Create " + TerminusClient.UTILS.shorten(meta.id) + meta.abstract ? " Abstract Class" : "Class"
     return <i title={title} style={icons} className="custom-img-entities"></i>
 }
 

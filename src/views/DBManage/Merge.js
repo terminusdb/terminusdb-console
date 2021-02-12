@@ -113,8 +113,10 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         update_start = Date.now()
         let nClient = woqlClient.copy()
         nClient.ref(false)
-        nClient.checkout(sourceBranch)
-        nClient.remoteAuth(nClient.localAuth())
+        //nClient.checkout(sourceBranch)
+        //nClient.remoteAuth(nClient.localAuth())
+        //let url = `admin/${woqlClient.db()}/local/commit/${selectedCommit}`
+
         let rebase_source = {
             rebase_from: woqlClient.resource('ref', selectedCommit)
         }
@@ -138,8 +140,6 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
                 setReport({error: err, status: TERMINUS_ERROR, message: message})
             })
             .finally(() => {
-                nClient.checkout(targetBranch)
-                nClient.remoteAuth(nClient.localAuth())
                 setLoading(false)
             })
     }
