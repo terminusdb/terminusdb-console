@@ -1,4 +1,4 @@
-const server = process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/`
+const server = localStorage.getItem("terminusdb-server-override") || process.env.TERMINUSDB_SERVER || `${window.location.protocol}//${window.location.host}/`
 
 
 const TERMINUSDB=window.TERMINUSDB || {}
