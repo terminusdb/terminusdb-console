@@ -2867,15 +2867,16 @@ span.delete-modal-label {
   }
 
   .delete-hub-action {
-      display: inline-block;
-      color:#721c24;
-      border: 1px solid #721c24;
-      background-color: #f1f8ff;
-      padding: 0px 6px 0px 8px;
-      border-radius: 2em;
-      width: 75px;
-      text-align: left;
-  }
+    align-items: center;
+    display: flex;
+    color: #721c24;
+    border: 1px solid #721c24;
+    background-color: #f1f8ff;
+    padding: 0px 6px 0px 8px;
+    border-radius: 2em;
+    width: 75px;
+    text-align: left;
+    }
 
   .edit-hub-action {
       display: inline-block;
@@ -2892,6 +2893,7 @@ span.delete-modal-label {
   .hub-minor-actions {
       text-align: center;
       height: 30px;
+      display: flex;
   }
 
   .action-tooltip-holder {
