@@ -11,14 +11,14 @@ export const makeWOQLFromString =(str, lang)=>{
                  //nw = eval(str)
                  return nw;
             case "python":
-                throw "Python is not supported for editing queries through the console"; 
+                throw "Python is not supported for editing queries through the console";
         }
     }
         /*
         if(lang === "json"){
            const myj = JSON.parse(str)
                  return new TerminusClient.WOQL.json(myj)
-               
+
             }catch(e){
                 console.log(e)
                 setError(e)
