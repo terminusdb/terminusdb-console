@@ -40,6 +40,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close, setE
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
+
     let WOQL = TerminusClient.WOQL
 
     const docQuery = () => {
@@ -181,6 +182,7 @@ export const DocumentView = ({docid, doctype, types, selectDocument, close, setE
         if(docview == "json"){
             json = parseOutput(updatedJSON)
         }
+        //curl -X POST "https://127.0.0.1:6363/api/rebase/admin/newBanky/local/branch/main" -d '{ "author" : "gavin@terminusdb.com", "rebase_from" : "admin/newBanky/local/commit/1w2f1dxntxjxtj6yr03b4d0ato68u19" }' -u "admin:root" -k -H "Content-Type: application/json"
         //else {
             //json = dataframe.extract()
             //console.log("Extracted", json)

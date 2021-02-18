@@ -104,7 +104,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             let q = WOQL.update_object(json)
             setLoading(true)
             woqlClient.query(q, commit, true)
-            .then(() => {
+            .then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Created new " + json['@type'] + " " + json['@id']})
                 if(selectDocument){
