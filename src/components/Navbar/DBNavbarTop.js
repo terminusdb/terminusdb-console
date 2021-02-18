@@ -65,7 +65,7 @@ const GuardedDBNavbar = (props) => {
                </label>
             </li>
             <li className="nav__main__item nav__main__item--box">
-                {(props.page==MANAGE_TITLE) && <span class="nav__main__commit">
+                {(props.page==MANAGE_TITLE) && <span className="nav__main__commit">
                     <BiGitBranch color="#ff9796"/>{branch}
                 </span>}
                 {(props.page!=MANAGE_TITLE) && <>
