@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Row, Col } from "reactstrap"
+import {Row, Col } from "react-bootstrap" //replaced
 import Select from "react-select";
 import {AiFillEdit, AiOutlineUser, AiOutlineBlock, AiOutlineFolderView, AiOutlineSave,
 	AiOutlineFileAdd} from 'react-icons/ai'

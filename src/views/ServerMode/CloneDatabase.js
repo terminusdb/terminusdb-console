@@ -50,7 +50,7 @@ export const CloneDatabase = () => {
         }
         if (details.description) src.comment = details.description
         const jwtoken = await getTokenSilently()
-        remoteClient.local_auth({type: "jwt", key: jwtoken})
+        remoteClient.localAuth({type: "jwt", key: jwtoken})
 
         return remoteClient
             .clonedb(src, newid)

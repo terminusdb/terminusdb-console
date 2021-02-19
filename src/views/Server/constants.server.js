@@ -1,5 +1,5 @@
 import React from 'react'
-import {Alert} from 'reactstrap'
+import {Alert} from "react-bootstrap" //replace
 
 export const COMMIT_LOG_FORM = {
     fields: [
@@ -555,7 +555,7 @@ export const COMMIT_LOG_EXPLANATION = (
 
 export const JUST_COMMIT_LOG_EXPLANATION = (
     <>
-        <Alert color="danger">Missing Commit Log ID</Alert>
+        <Alert variant="danger">Missing Commit Log ID</Alert>
         {COMMIT_LOG_WHATIS}
     </>
 )

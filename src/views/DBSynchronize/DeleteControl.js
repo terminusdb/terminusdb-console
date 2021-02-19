@@ -1,6 +1,6 @@
 import { RiDeleteBin5Line, RiErrorWarningLine } from 'react-icons/ri'
 import { AiOutlineDelete } from "react-icons/ai"
-import {Row, Modal, ModalHeader, ModalBody, ModalFooter, Col} from "reactstrap"
+import {Row, Modal, ModalBody, ModalFooter, Col} from "react-bootstrap" //replaced
 import React, {useState} from 'react'
 import {DELETE_DB_MODAL} from '../DBHome/constants.dbhome'
 import { AiOutlineWarning } from "react-icons/ai"
@@ -12,8 +12,8 @@ export const DeleteControl = ({repo, onDelete}) => {
     const toggle = () => setModal(!modal);
     return (<span className='delete-control' onClick={toggle}>
         <DeleteWidget repo={repo} />
-        <Modal isOpen={modal} toggle={toggle}>
-            <ModalHeader toggle={toggle}> <span className="modal-head">Delete Remote</span> </ModalHeader>
+        <Modal show={modal} onHide={toggle}>
+            <Modal.Header closeButton> <span className="modal-head">Delete Remote</span> </Modal.Header>
             <ModalBody>
                 <Row key="rd">
                     <Col md={12} className="delete-modal-col-align">

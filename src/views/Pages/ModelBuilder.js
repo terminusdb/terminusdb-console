@@ -10,7 +10,7 @@ import Loading from '../../components/Reports/Loading'
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 
 export const ModelBuilder = (props) =>{   
-    const { woqlClient, contextEnriched } = WOQLClientObj()
+    const { woqlClient } = WOQLClientObj()
     const {graphs, setHead, branch, report, ref} = DBContextObj()
 
     const dbName = woqlClient ? woqlClient.db() : ''
@@ -20,14 +20,18 @@ export const ModelBuilder = (props) =>{
           callServerLoading,resetReport
           } = modelCallServerHook(woqlClient,branch,ref)
     
-    const saveData=(query)=>{
-      saveGraphChanges(query)
+    const saveData=(query,commitMessage)=>{
+      saveGraphChanges(query,commitMessage)
     }
 
     if(graphs && graphs['schema/main']===undefined){
       return  <NoPageLayout noLoginButton={true} text="There is no main schema graph." />
     }
-
+/*
+<div className="icon-header tdb__model__xicon" >         
+                  <i className="fa fa-times" title="close box" 
+                  onClick={resetReport}></i>
+               </div>*/
 
 
     return (
@@ -35,11 +39,8 @@ export const ModelBuilder = (props) =>{
             <ConsoleNavbar onHeadChange={props.onHeadChange} />         
             {reportMessage && 
               <div className="tdb__model__message">
-                <div className="icon-header tdb__model__xicon" >         
-                  <i className="fa fa-times" title="close box" 
-                  onClick={resetReport}></i>
-               </div>
-                <TerminusDBSpeaks  report={reportMessage} />
+                
+                <TerminusDBSpeaks  report={reportMessage} onClose={resetReport}/>
               </div>}
                                 
             

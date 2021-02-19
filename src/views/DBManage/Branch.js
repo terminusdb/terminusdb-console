@@ -6,6 +6,7 @@ import {TCForm, TCRow} from '../../components/Form/FormComponents'
 import {CREATE_BRANCH_FORM, BRANCH_SOURCE_FORM} from './constants.dbmanage'
 import {
     TERMINUS_SUCCESS,
+    TERMINUS_WARNING,
     TERMINUS_ERROR,
     TERMINUS_INFO,
     TERMINUS_COMPONENT,
@@ -16,11 +17,11 @@ import {DBContextObj} from '../../components/Query/DBContext'
 import {printts} from '../../constants/dates'
 import {CommitSelector} from "./CommitSelector"
 import {legalURLID} from "../../components/Query/CollaborateAPI"
-import {Col, Row, Container, Alert} from "reactstrap"
+import {Col, Row, Container, Alert} from "react-bootstrap" //replaced
 import Loading from '../../components/Reports/Loading'
 import Select from "react-select"
 
-export const Branch = () => {
+export const Branch = ({setBranchAction, setReport}) => {
     const {woqlClient} = WOQLClientObj()
     const {branch, ref, branches, consoleTime, DBInfo, setHead, updateBranches} = DBContextObj()
 
@@ -28,7 +29,6 @@ export const Branch = () => {
 
     const [sourceCommit, setSourceCommit] = useState()
     const [newID, setNewID] = useState()
-    const [submissionProblem, setSubmissionProblem] = useState()
     const [branchType, setBranchType] = useState("head")
 
     let update_start = Date.now()
@@ -48,12 +48,11 @@ export const Branch = () => {
 
     useEffect(() => {
         if(loading && newID){
-            alert("yoyo")
             setHead(newID)
         }
     }, [branches])
 
-    const [report, setReport] = useState()
+    //const [report, setReport] = useState()
 
     function afterCreate(update_start){
         let message = `${CREATE_BRANCH_FORM.branchSuccessMessage} ${newID}`
@@ -75,7 +74,10 @@ export const Branch = () => {
             nc.ref(sourceCommit)
         }
         nc.branch(newID, source_free)
-        .then(() => afterCreate(update_start))
+        .then(() => {
+            afterCreate(update_start)
+            setBranchAction({branch:false, create:false, merge:false, reset: false, squash: false})
+        })
         .catch((err) => {
             let message = `${CREATE_BRANCH_FORM.branchFailureMessage} ${newID} `
             setReport({error: err, status: TERMINUS_ERROR, message: message})
@@ -89,19 +91,19 @@ export const Branch = () => {
     function selectCommitID(c){
         if(c != sourceCommit){
             setSourceCommit(c)
-            setSubmissionProblem(false)
+            setReport(false)
         }
     }
 
     function updateID(c){
         if(c && c.target){
             setNewID(c.target.value)
-            setSubmissionProblem(false)
+            setReport(false)
         }
     }
 
     function setUserError(field, msg){
-        setSubmissionProblem(msg)
+        setReport({status: TERMINUS_WARNING, message: msg})
     }
 
     function checkSubmission(){
@@ -109,9 +111,9 @@ export const Branch = () => {
             if(!sourceCommit){
                 return setUserError("create_branch_source", "You must select a commit to start the new branch from")
             }
-            else if(sourceCommit.length < 30){
+            /*else if(sourceCommit.length < 30){
                 return setUserError("create_branch_source", "Incorrect format for commit ID - it should be a 30 character string")
-            }                    
+            }*/
         }
         if(newID && newID.length){
             let nid = newID.trim()
@@ -131,9 +133,9 @@ export const Branch = () => {
     }
 
 
-    if (report && report.status == TERMINUS_SUCCESS) {
+    /*if (report && report.status == TERMINUS_SUCCESS) {
         return (<div className='row generic-message-holder'><TerminusDBSpeaks report={report} /></div>)
-    }
+    }*/
 
     if(!DBInfo) return null
 
@@ -148,23 +150,22 @@ export const Branch = () => {
         if(branchType == btypes[i].value) ph = btypes[i].label
     }
 
-    let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
-    return (<>
-            {loading && <Loading type={TERMINUS_COMPONENT} />}
+    //let showAlert = submissionProblem ? {} : {style:{visibility:'hidden' , flexGrow:1}}
 
-            <Container>
-            <div className='row generic-message-holder' {...showAlert}>
-                <Alert color='warning' className="flex-grow-1">
+    return (<>
+            {/*loading && <Loading type={TERMINUS_COMPONENT} />*/}
+            {/*<div className='row generic-message-holder' {...showAlert}>
+                <Alert variant='warning' className="flex-grow-1">
                     {submissionProblem || 'noValue'}
                 </Alert>
-            </div>                    
+            </div>     */}
 
-            {report && report.status != TERMINUS_SUCCESS &&
+            {/*report && report.status != TERMINUS_SUCCESS &&
                  <div className='row generic-message-holder'><TerminusDBSpeaks report={report} /></div>
-            }
+            */}
             <Row className="new-branch">
                 <Col className="branch-type-col" >
-                    <Select 
+                    <Select
                         className = ""
                         placeholder = {ph}
                         defaultValue={branchType}
@@ -175,7 +176,7 @@ export const Branch = () => {
                     />
                 </Col>
                 <Col className="branch-id-col" >
-                    <input 
+                    <input
                         className = "tcf-input"
                         placeholder = "Enter New Branch ID"
                         value={newID}
@@ -189,11 +190,11 @@ export const Branch = () => {
                         Create New Branch
                     </button>
                 </Col>
-            </Row> 
-            { branchType == "choose" &&            
+            </Row>
+            { branchType == "choose" &&
                 <Row>
-                    <CommitSelector 
-                        branch={branch} 
+                    <CommitSelector
+                        branch={branch}
                         branches={branches}
                         contextText={"Start New Branch From "}
                         commit={ref}
@@ -204,7 +205,6 @@ export const Branch = () => {
                     />
                 </Row>
             }
-            </Container>
         </>
     )
 }

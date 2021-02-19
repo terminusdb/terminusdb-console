@@ -29,7 +29,7 @@ export const DBNavbar = (props) => {
 
 const GuardedDBNavbar = (props) => {
     const {woqlClient} = WOQLClientObj()
-    const databaseInfo = woqlClient.get_database()   
+    const databaseInfo = woqlClient.databaseInfo()   
     const [isTopOpen, setTopDropdownOpen] = useState(false)
     const toggleTop = () => setTopDropdownOpen((prevState) => !prevState)
 

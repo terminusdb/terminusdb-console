@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup } from "reactstrap";
+import { ButtonGroup } from "react-bootstrap" //replaced;
 import { BREADCRUMB } from "./constants.templates"
 
 export const Crumbs = (props) => {

@@ -12,7 +12,7 @@ export const MANAGE_SECTIONS = [
         icon: "infinity",
         button: "Merge",
         blurb: "Merging branches together creates a unified copy of the database from different branches which may have converged."
-    }   
+    }
 ]
 
 export const CREATE_BRANCH_FORM = {
@@ -41,7 +41,7 @@ export const CREATE_BRANCH_FORM = {
     buttons: {
         submitText: "Create New Branch"
     },
-    branchSuccessMessage: "Successfully Created New Branch ",
+    branchSuccessMessage: "Successfully Created New Branch. Your currently working on branch: ",
     branchFailureMessage: "Failed to Create New Branch ",
 }
 
@@ -93,7 +93,7 @@ export const MERGE_BRANCH_FORM = {
             },
             label: 'Merge into branch',
             help: "You can merge into the head of any branch",
-        },       
+        },
         {
             id: "commit",
             label: "Commit Message",
@@ -201,3 +201,59 @@ export const BACKUP_FORM = {
         submitText: "Backup Database"
     }
 }
+
+export const SQUASH_BRANCH_FORM = {
+    commit: {
+        id: "commit",
+        label: "Commit Message",
+        inputElement: {
+            type: "textarea",
+            placeholder: "A short description of the reason to squash the branch",
+            className: "branch-commit-textarea"
+        }
+    },
+    buttons: {
+        submitText: "Squash Branch"
+    },
+    squashBranchSuccessMessage: "Successfully squashed Branch ",
+    squashBranchFailureMessage: "Failed to squash Branch ",
+}
+
+export const RESET_BRANCH_FORM = {
+    commitDescriptor: {
+        id: "commitDescriptor",
+        label: "Commit Descriptor",
+        inputElement: {
+            type: "textarea",
+            placeholder: "Commit ID of interest to reset branch to ",
+            className: "branch-commit-textarea"
+        }
+    },
+    buttons: {
+        submitText: "Reset Branch"
+    },
+    resetUserMessage: "Performing this action will reset the branch to commit ",
+    resetBranchSuccessMessage: "Successfully reset Branch ",
+    resetBranchFailureMessage: "Failed to reset Branch ",
+}
+
+export const OPTIMIZE_BRANCH_FORM = {
+    description: "Optimize resources in database ",
+    buttons: {
+        submitText: "Optimize Branch"
+    },
+    optimizeSuccessMessage: "Optimization complete ",
+    optimizeFailureMessage: "Failed to optimize ",
+}
+
+export const NEW_BRANCH="New Branch"
+export const MERGE_BRANCH="Merge to branch"
+export const CLOSE_BRANCH="Close Branch"
+export const DELETE_BRANCH="Delete Branch"
+export const RESET_SPECIFIC_BRANCH="Reset to a specific commit"
+export const RESET_BRANCH="Reset Branch to commit "
+export const OPTIMIZE_BRANCH="Optimize Branch"
+export const SQUASH_BRANCH="Squash Branch"
+export const MAIN_BRANCH="main"
+export const INTERNAL_AUTHOR="TerminusDB"
+export const INTERNAL_MESSAGE="internal system operation"

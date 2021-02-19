@@ -5,7 +5,7 @@ import {
 } from './constants.schema'
 import {EmptyResult} from '../../components/Reports/EmptyResult'
 import {SCHEMA_PROPERTIES_ROUTE} from '../../constants/routes'
-import {Col, Row, Button} from "reactstrap"
+import {Col, Row, Button} from "react-bootstrap" //replaced
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
 import {GraphFilter} from './GraphFilter'
 import {ControlledTable} from '../Tables/ControlledTable'

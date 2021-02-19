@@ -10,7 +10,7 @@ import {
 import {COPY_LOCAL_FORM, COPY_DB_DETAILS_FORM} from '../CreateDB/constants.createdb'
 import {goDBHome, goServerHome} from '../../components/Router/ConsoleRouter'
 import { TCForm } from '../../components/Form/FormComponents'
-import {Container, Row} from 'reactstrap'
+import {Container, Row} from "react-bootstrap" //replace
 import {UnstableWarning} from '../../components/Reports/UnstableWarning'
 
 export const CopyLocalForm = () => {
@@ -106,7 +106,7 @@ export const CopyLocalForm = () => {
         let src = {remote_url: sourceURL, label: details.dbname}
         if (details.description) src.comment = details.description
         let cClient = woqlClient.copy()
-        cClient.remote_auth(cClient.local_auth())
+        cClient.remoteAuth(cClient.localAuth())
         cClient.organization(woqlClient.user_organization())
         return cClient
             .clonedb(src, newID)

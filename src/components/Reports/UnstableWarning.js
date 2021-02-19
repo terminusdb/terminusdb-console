@@ -1,11 +1,11 @@
 import React from "react"
-import { Alert, Container } from 'reactstrap'
+import { Alert, Container } from "react-bootstrap" //replace
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "../../constants/faicons"
 
 export const UnstableWarning = ({feature}) => {
     return (
-        <Alert color="warning">            
+        <Alert variant="warning">            
             <FontAwesomeIcon icon={icons.EXCLAMATION} className="mr-3"/>
             <span>
                 <strong>Warning: {feature} is not yet stable</strong> This is an early release 

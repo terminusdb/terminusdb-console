@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Alert, Container, Row, Col } from 'reactstrap'
+import { Alert, Container, Row, Col } from "react-bootstrap" //replace
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "../../constants/faicons"
 import {SHOW_ERROR_DETAILS, SHOW_ERROR_DETAILS_CSS, HIDE_ERROR_DETAILS, COMPONENT_ERROR} from "./constants.reports"
@@ -18,7 +18,7 @@ export const ComponentFailure = ({error}) => {
 
     const show_hide = (showFull ? HIDE_ERROR_DETAILS : SHOW_ERROR_DETAILS ) 
     return (
-        <Alert color="danger">
+        <Alert variant="danger">
             <FontAwesomeIcon icon={icons.ERROR} className="mr-3"/>
             <strong>{COMPONENT_ERROR}</strong>
             {detmsg}

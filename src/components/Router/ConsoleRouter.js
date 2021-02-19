@@ -1,5 +1,5 @@
 import React from 'react'
-import {createHashHistory} from 'history'
+import {createBrowserHistory} from "history"
 import {DB_ROUTE, CLONE_DB_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
 import {Router, Switch, Route} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
@@ -7,10 +7,9 @@ import {DBRoutes} from './DBRoutes'
 import {ServerRoutes} from './ServerRoutes'
 import {base_router} from '../../utils/baseRouter'
 import {Footer} from '../../views/Templates/Footer'
-import { createBrowserHistory } from "history";
 import { ConsoleNavbar } from "../../components/Navbar/ConsoleNavbar";
 
-export const ConsoleHistory= createBrowserHistory()//{basename: base_router});
+export const ConsoleHistory= createBrowserHistory({basename: base_router});
 
 export const ConsoleRouter = (props) => {
     function getSwitch() {

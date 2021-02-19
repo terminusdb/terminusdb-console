@@ -3,7 +3,7 @@ import Loading from '../../components/Reports/Loading'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
-import {Row, Col, Button} from "reactstrap"
+import {Row, Col, Button} from "react-bootstrap" //replaced
 import {WOQLQueryContainerHook} from '../../components/Query/WOQLQueryContainerHook'
 import {JSONEditor} from "./JSONEditor"
 import {TerminusDBSpeaks} from "../../components/Reports/TerminusDBSpeaks"
@@ -15,7 +15,7 @@ import { FrameViewer } from '@terminusdb/terminusdb-react-components';
 import { TERMINUS_ERROR, TERMINUS_FAILURE, TERMINUS_SUCCESS } from '../../constants/identifiers'
 import {getTypeMetadata} from "./DocumentList"
 import {DOCTYPE_CSV} from '../../components/CSVPane/constants.csv'
-import {constructError} from "../../components/Reports/utils.vio"
+import {constructErrorMessage} from "../../components/Reports/utils.vio"
 import {CSVInput} from "../../components/CSVPane/CSVInput"
 
 export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument, setDocType, insertCsvs}) => {
@@ -32,7 +32,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
     const [ecommit, setECommit] = useState()
     const [errors, setErrors] = useState()
     const [extract, setExtract] = useState(0)
-    
+
     const {updateBranches, branch, ref} = DBContextObj()
 
     useEffect(() => {
@@ -97,14 +97,14 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
         let WOQL = TerminusClient.WOQL
         if(docView == "json") json = parseOutput(updatedJSON)
         else if(dataframe) {
-            
+
         }
         if(json){
             commit = commit || json['@type'] + " " + json['@id'] + " created from console document page"
             let q = WOQL.update_object(json)
             setLoading(true)
             woqlClient.query(q, commit, true)
-            .then(() => {
+            .then((results) => {
                 updateBranches()
                 setReport({status: TERMINUS_SUCCESS, message: "Created new " + json['@type'] + " " + json['@id']})
                 if(selectDocument){
@@ -114,7 +114,7 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
             })
             .catch((e) => {
                 if(e.data && e.data['api:message'] && dataframe){
-                    let ejson=constructError(e)
+                    let ejson=constructErrorMessage(e)
                     setErrors(ejson)
                 }
                 setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
@@ -165,15 +165,15 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
                 <DocumentChoices types={types} meta={meta} doctype={doctype} setType={smdt} insertCsvs={insertCsvs}/>
             }
             {(!meta.abstract) && dataframe && (docView == "table" || docView == "frame") &&
-                <FrameViewer 
+                <FrameViewer
                     classframe={frame}
-                    mode="edit" 
-                    view={dataframe} 
-                    type={(docView=="frame" ? "fancy": "table")} 
+                    mode="edit"
+                    view={dataframe}
+                    type={(docView=="frame" ? "fancy": "table")}
                     client={woqlClient}
                     onExtract={setExtractedJSON}
                     errors={errors}
-                    extract={extract} 
+                    extract={extract}
                 />
             }
             {(!meta.abstract) && loading &&
@@ -284,7 +284,7 @@ export const DocumentIcon = ({meta}) => {
     icons.textAlign = "center"
     icons.width = "180px"
     icons.fontSize = "2.5em"
-    let title = "Create " + TerminusClient.UTILS.shorten(meta.id) + meta.abstract ? " Abstract Class" : "Class" 
+    let title = "Create " + TerminusClient.UTILS.shorten(meta.id) + meta.abstract ? " Abstract Class" : "Class"
     return <i title={title} style={icons} className="custom-img-entities"></i>
 }
 

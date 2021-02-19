@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import * as action from "./constants.csv"
-import {Row, Col} from "reactstrap"
+import {Row, Col} from "react-bootstrap" //replaced
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import { TERMINUS_SUCCESS, TERMINUS_ERROR, TERMINUS_WARNING, TERMINUS_COMPONENT} from '../../constants/identifiers'
@@ -10,32 +10,43 @@ import {MdSlideshow} from "react-icons/md"
 import {BiUpload} from "react-icons/bi"
 import {TiDeleteOutline} from "react-icons/ti"
 import {convertStringsToJson} from '../../utils/helperFunctions';
-import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW, DOCTYPE_CSV} from "./constants.csv"
+import {DOCUMENT_VIEW, DEFAULT_COMMIT_MSG, CREATE_DB_VIEW, DOCTYPE_CSV, SELECT_CUSTOM_STYLES,
+	CSV_FILE_TYPE, JSON_FILE_TYPE} from "./constants.csv"
 import {readLines, isObject, isArray} from "../../utils/helperFunctions"
 import {TerminusDBSpeaks} from '../../components/Reports/TerminusDBSpeaks'
-import {ManageDuplicateCsv} from "./ManageDuplicateCSV"
-import {formatBytes} from "../../utils/format"
+import {ManageDuplicateCsv, ShowNewIDInput} from "./ManageDuplicateCSV"
 import Select from 'react-select'
-import {formatFileDate, DATETIME_DB_UPDATED} from '../../constants/dates'
 import {DBContextObj} from '../../components/Query/DBContext'
+import {checkIfDocTypeExists, extractFileInfo} from "./utils.csv"
 
-export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, updateSelectedSingleFile, setUpdateDoc}) => {
+export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, setCsvs, availableCsvs, availableDocs}) => {
 	let currentFile={}, availableCsvList=[]
 	const [commitMsg, setCommitMsg]=useState(DEFAULT_COMMIT_MSG)
+	const [selectedFiles, setSelectedFiles]=useState([])
 	const [report, setReport]=useState(false)
 	const {woqlClient}=WOQLClientObj()
 	const {updateBranches} = (DBContextObj() !== undefined) ? DBContextObj() : false
 
-	const convertToJson = (content) => {
-		let limitedData = []
-		const jsonRes=convertStringsToJson(content)
-		for(var item in jsonRes) {
-			limitedData.push(jsonRes[item])
-		}
-		setLoading(false)
-		setPreview({show: true, fileName: currentFile.fileName, data: limitedData, page: page, selectedCSV:false});
-	};
+	const FileName=({item})=>{
+		return <span className="selected-csv-span selected-csv-name-span">
+			<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
+			<span className="csv-item-title">{item}</span>
+		</span>
+	}
 
+	const FileSize=({item})=>{
+		return <span className="selected-csv-span">
+			<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
+			<span className="csv-item-title">{item}</span>
+		</span>
+	}
+
+	const FileLastModified=({item})=>{
+		return <span className="selected-csv-span">
+			<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
+			<span className="csv-item-title">{item}</span>
+		</span>
+	}
 
 	function process_error(err, update_start, message){
 		setLoading(false)
@@ -48,216 +59,51 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
         console.log(err)
     }
 
-	const handleNonCSVUpdate=(file)=>{
-		function validateDocId(jObj){
-			let update_start = Date.now()
-			for(var key in jObj){
-				if(key=="@id"){
-					if(jObj[key]==file[0].fileToUpdate){
-						file.idInFile=jObj[key]
-						return true
-					}
-				}
-			}
+
+	const convertToJson = (content) => {
+		let limitedData = []
+		const jsonRes=convertStringsToJson(content)
+		for(var item in jsonRes) {
+			limitedData.push(jsonRes[item])
 		}
-
-		function showErrorInReadingFile(error){
-			let update_start=Date.now()
-			process_error(error, update_start, "Failed to update file")
-		}
-
-		function onReaderLoad(event){
-			var json, jsonParseError=false
-			try{
-				json=JSON.parse(event.target.result)
-			}
-			catch(e){
-				jsonParseError=e
-				setLoading(false)
-			}
-			if(validateDocId(json)){
-				let WOQL=TerminusClient.WOQL
-				let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
-	            let q = WOQL.update_object(json)
-	            setLoading(true)
-	            woqlClient.query(q, commit, true)
-	            .then(() => {
-	                updateBranches()
-	                setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
-					setUpdateDoc([])
-	            })
-	            .catch((e) => {
-	                if(e.data && e.data['api:message'] && dataframe){
-	                    let ejson=constructError(e)
-	                    setErrors(ejson)
-	                }
-	                setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
-	            })
-	            .finally(() => setLoading(false))
-			}
-			else {
-				if(jsonParseError){
-					let err="Syntax Error: Contents of "+ file[0].name + " is not in JSON or JSON-LD format"
-					showErrorInReadingFile(err)
-				}
-				else {
-					let err="The id in file "+ file[0].name + " does not match the selected doc id " + file[0].fileToUpdate
-					showErrorInReadingFile(err)
-				}
-				setLoading(false)
-			}
-	    }
-		let reader=new FileReader()
-        reader.onload=onReaderLoad
-        reader.readAsText(file[0])
-	}
-
-	const handleUpload=(e) => {
-		let update_start = Date.now(), upFormatted=[]
-        update_start = update_start || Date.now()
-		setLoading(true)
-		if(csvs[0].docType!==DOCTYPE_CSV){ // single file upload => JSON files
-			handleNonCSVUpdate(csvs)
-			return
-		}
-		let updateFiles=csvs.filter(item => { // filter csvs for update
-			let act=item.action.split(" ")
-			if(act[0]==action.UPDATE){
-				upFormatted.push({fileToBeUpdated:item.fileToUpdate, updateWith:item})
-				return true
-			}
-			else false
-		})
-		let insertFiles=csvs.filter(item => item.action === action.CREATE_NEW) // filter csvs for create
-		if(isArray(upFormatted)){
-			woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
-                updateBranches()
-				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
-				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
-				setCsvs([]);
-			})
-			.catch((err) => process_error(err, update_start, "Failed to update file"))
-			.finally(() => {
-				if(!isArray(insertFiles)) setLoading(false)
-			})
-		}
-		if(isArray(insertFiles)){
-			woqlClient.insertCSV(insertFiles , commitMsg, null, null).then((results) => {
-                updateBranches()
-                setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
-				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
-				setCsvs([]);
-			})
-			.catch((err) => process_error(err, update_start, "Failed to add file"))
-			.finally(() => setLoading(false))
-		}
-	}
-
-	const getSelectOptions=(id)=>{
-		let opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
-		availableCsvs.map(names=>{
-			let updateOpt=action.UPDATE+" "+names
-			opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
-		})
-		return opts
-	}
-
-	const FileName=({item})=>{
-		return <span className="selected-csv-span selected-csv-name-span">
-			<BsFileEarmarkPlus color={"#0055bb"} className="db_info_branch_icon"/>
-			<span className="csv-item-title">{item.name}</span>
-		</span>
-	}
-
-	const FileSize=({item})=>{
-		return <span className="selected-csv-span">
-			<AiFillBuild color={"#0055bb"} className="db_info_branch_icon"/>
-			<span className="csv-item-title">{formatBytes(item.size)}</span>
-		</span>
-	}
-
-	const FileLastModified=({item})=>{
-		return <span className="selected-csv-span">
-			<AiOutlineEdit color={"#0055bb"} className="db_info_branch_icon"/>
-			<span className="csv-item-title">{formatFileDate(item.lastModified)}</span>
-		</span>
-	}
-
-	const customStyles = {
-	  control: base => ({
-		...base,
-		height: "30px"
-	  }),
-	  valueContainer: (base) => ({
-		...base,
-		height: "30px"
-	  })
+		setLoading(false)
+		setPreview({show: true, fileType:currentFile.fileType, fileName: currentFile.fileName, data: limitedData, page: page, selectedCSV:false});
 	};
-
-	const SelectActions=({item, page, availableCsvs})=>{
-		const changeAction=(e)=>{
-			csvs.map(item=>{
-				if(item.name==e.id){
-					item.action=e.value
-					item.fileToUpdate=e.fileToUpdate
-				}
-			})
-		}
-		return <>
-			{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <span className="selected-csv-span selected-csv-select-span">
-				<Select placeholder={"Choose an action"}
-					className={action.CONTROLS_TEXT}
-					defaultValue={{value: item.action, label: item.action}}
-					onChange = {changeAction}
-					styles={customStyles}
-					options = {getSelectOptions(item.name)}
-				/>
-			</span>}
-		</>
-	}
-
-	const SelectForSingleUpdateFile=({item, page})=>{
-		return <>
-			{(page==DOCUMENT_VIEW) && <span className="selected-csv-span selected-csv-select-span">
-				<Select placeholder={"Choose an action"}
-					className={action.CONTROLS_TEXT}
-					defaultValue={{value: item.action, label: item.action}}
-					styles={customStyles}
-				/>
-			</span>}
-		</>
-	}
 
 	const FilePreview=({item})=>{
 		const viewPreview=(e)=>{
-			let maxlines=6, buff=[] // read 6 lines
+			var maxlines=6, buff=[] // read 6 lines
+			if(item.fileType==JSON_FILE_TYPE) maxlines=undefined
 			const fileName = e.target.id
 			currentFile.fileName=fileName
+			currentFile.fileType=item.fileType
 			const file = csvs.filter(item => item.name == fileName)
 		    readLines(file[0], maxlines, function(line) {
 				buff+=line
 		    }, function onComplete() {
-				convertToJson(buff)
+				if(item.fileType==JSON_FILE_TYPE)
+					setPreview({show: true, fileType:currentFile.fileType, fileName: currentFile.fileName, data: buff, page: page, selectedCSV:false});
+				else convertToJson(buff)
 		    });
 		}
-		return <span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
-			<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
-			<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
+		return <span className="selected-csv-span">
+			<span id={item.name} onClick={viewPreview} className="db-card-credit csv-act">
+				<MdSlideshow id={item.name} color="#0055bb" className={action.CONTROLS_ICONS}/>
+				<span className={action.CONTROLS_TEXT} id={item.name}>{action.PREVIEW}</span>
+			</span>
 		</span>
 	}
 
-	const FileRemove=({item, type})=>{
+	const FileRemove=({item})=>{
 
 		const removeFile=(e)=>{
-			if(type==DOCTYPE_CSV){
-				const fileName = e.target.id
-				setCsvs(csvs.filter(item => item.name !== fileName));
-				if(preview.fileName==fileName)
-					setPreview({show: false, fileName:false, data:[], selectedCSV:false})
-			}
-			else {
-				setUpdateDoc([])
-			}
+			const fileName = e.target.id
+			setCsvs(csvs.filter(item => item.name !== fileName));
+			setSelectedFiles([])
+			if((item.fileType==CSV_FILE_TYPE) && (item.file.name==fileName))
+				setNewIDField({})
+			if((item.fileType==CSV_FILE_TYPE) && (preview.fileName==fileName))
+				setPreview({show: false, fileName:false, data:[], selectedCSV:false})
 		}
 
 		return <span className="selected-csv-span">
@@ -268,40 +114,10 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 		</span>
 	}
 
-	const List=()=>{
-		return (csvs.map( item => <div key={"d_"+item.name+"_"+item.lastModified}>
-					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={"Row_"+item.name+"_"+item.lastModified}>
-						<FileName item={item}/>
-						<FileSize item={item}/>
-						<FileLastModified item={item}/>
-						<SelectActions item={item} availableCsvs={availableCsvs} page={page}/>
-						{(updateSelectedSingleFile) && <SelectForSingleUpdateFile page={page} item={item}/>}
-						{(page==CREATE_DB_VIEW) && <span className="selected-csv-span"></span>}
-						{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && <>
-							<span className="selected-csv-span">
-								<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
-							</span>
-						</>}
-						<span className="selected-csv-span">
-							{(!updateSelectedSingleFile) && <FilePreview item={item}/>}
-						</span>
-						{(updateSelectedSingleFile) && <FileRemove item={item}/>}
-						{(!updateSelectedSingleFile) && <FileRemove item={item} type={DOCTYPE_CSV}/>}
-					</Row>
-					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
-						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
-							<ManageDuplicateCsv fileName={item.name}/>
-						</div>}
-					</>)}
-					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
-				</div>))
-	}
-
 	const HeaderBar=()=>{
 
 		function closeHeader(){
 			setCsvs([])
-			setUpdateDoc([])
 		}
 
 		return <Row className='csv-preview-header' key="hr">
@@ -316,6 +132,218 @@ export const SelectedCSVList = ({csvs, page, setLoading, preview, setPreview, se
 				</span>
 			</Col>
 		</Row>
+	}
+
+	const getSelectOptions=(item)=>{
+		let id=item.name, opts=[]
+		if(item.fileType==CSV_FILE_TYPE){
+			//opts=[{value: action.CREATE_NEW, label: action.CREATE_NEW, id: id}]
+			availableCsvs.map(names=>{
+				let updateOpt=action.UPDATE+" "+names
+				opts.push({value: updateOpt, label: updateOpt, id: id, fileToUpdate:names})
+			})
+			return opts
+		}
+		else return opts;
+	}
+
+	const SelectAction=({item, page})=>{
+		let defaultValue={}
+		if(item.fileType==CSV_FILE_TYPE)
+			defaultValue={value: item.action, label: item.action}
+		else if(item.fileType==JSON_FILE_TYPE)
+			defaultValue={value: item.extracted.select.value, label: item.extracted.select.label}
+
+		const changeAction=(e)=>{
+			selectedFiles.map(item=>{
+				if(item.name==e.id){
+					setNewIDField({})
+					if((item.fileType==CSV_FILE_TYPE) && (e.value==action.CREATE_NEW)){ //if user chose create new for already existing csv in db
+						let act=item.action.split(" ")
+						if(act[0]==action.UPDATE){
+							setNewIDField(item)
+							item.test=true
+						}
+					}
+					item.action=e.value
+					item.fileToUpdate=e.fileToUpdate
+				}
+			})
+		}
+
+		//console.log('selectedFiles', selectedFiles)
+
+		return <>
+			{(page==DOCUMENT_VIEW) && (item.action!==action.CREATE_NEW) && <span className="selected-csv-span selected-csv-select-span">
+				<Select placeholder={"Choose an action"}
+					className={action.CONTROLS_TEXT}
+					defaultValue={defaultValue}
+					onChange = {changeAction}
+					styles={SELECT_CUSTOM_STYLES}
+					options = {getSelectOptions(item)}
+				/>
+			</span>}
+			{(item.action==action.CREATE_NEW) && <span className="selected-csv-span selected-csv-select-span">
+				<div className={action.CONTROLS_TEXT + " flatText"}>{action.CREATE_NEW}</div>
+			</span>}
+		</>
+	}
+
+	const handleUpload=async(e) => {
+		let update_start = Date.now(), upFormatted=[]
+        update_start = update_start || Date.now()
+		setLoading(true)
+		let jsonFiles=selectedFiles.filter(item => item.fileType === JSON_FILE_TYPE)
+		let csvFiles=selectedFiles.filter(item => item.fileType === CSV_FILE_TYPE)
+		let updateFiles=csvFiles.filter(item => { // filter csvs for update
+			let act=item.action.split(" ")
+			if(act[0]==action.UPDATE){
+				upFormatted.push({fileToBeUpdated:item.file.fileToUpdate, updateWith:item.file})
+				return true
+			}
+			else false
+		})
+		let insertFiles=csvFiles.filter(item => item.action === action.CREATE_NEW) // filter csvs for create
+		if(isArray(upFormatted)){
+			await woqlClient.updateCSV(upFormatted , commitMsg, null, null).then((results) => {
+                updateBranches()
+				setReport({status: TERMINUS_SUCCESS, message: "Successfully updated files "})
+				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+				setCsvs([]);
+			})
+			.catch((err) => process_error(err, update_start, "Failed to update file"))
+			.finally(() => {
+				if(!isArray(insertFiles)) setLoading(false)
+			})
+		}
+		if(isArray(insertFiles)){
+			let fls=[]
+			//insertFiles.map(it=>{fls.push({newFileName:it.newFileName, file:it.file})})
+			insertFiles.map(it=>{fls.push(it.file)})
+			await woqlClient.insertCSV(fls, commitMsg, null, null).then((results) => {
+                updateBranches()
+                setReport({status: TERMINUS_SUCCESS, message: "Successfully added files "})
+				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+				setCsvs([]);
+			})
+			.catch((err) => process_error(err, update_start, "Failed to add file"))
+			.finally(() => setLoading(false))
+		}
+		if(isArray(jsonFiles)){ // json files
+			updateDocs(jsonFiles)
+		}
+	}
+
+	const methodThatReturnsAPromise=async(file)=>{
+		let json=file.extracted.data
+		let WOQL=TerminusClient.WOQL
+		let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
+		let q = WOQL.update_object(json)
+		setLoading(true)
+		return await woqlClient.query(q, commit, true)
+		.then((res) => {
+			updateBranches()
+			setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
+			setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+		})
+		.catch((e) => {
+			setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
+		})
+		.finally(() => setLoading(false))
+	}
+
+	const updateDocs = async(jFiles) => {
+		jFiles.reduce( async (previousPromise, nextFile) => {
+		    await previousPromise;
+			let json=nextFile.extracted.data
+			let WOQL=TerminusClient.WOQL
+			let commit = commit || json['@type'] + " " + json['@id'] + " updated from console document page"
+			let q = WOQL.update_object(json)
+			setLoading(true)
+		    return woqlClient.query(q, commit, true)
+			.then((res) => {
+				updateBranches()
+				setReport({status: TERMINUS_SUCCESS, message: "Updated " + json['@id']})
+				setPreview({show: false, fileName:false, data:[], selectedCSV: false})
+				setCsvs([])
+			})
+			.catch((e) => {
+				setReport({status: TERMINUS_ERROR, error: e, message: "Violations detected in new " + json['@type'] + " " + json['@id']})
+			})
+			.finally(() => setLoading(false))
+		}, Promise.resolve());
+	}
+
+	const handleFileChosen = async (file) => {
+	  return new Promise((resolve, reject) => {
+	    let fileReader = new FileReader();
+	    fileReader.onload = () => {
+	      resolve(fileReader.result);
+		  var updateText
+		  const content = fileReader.result;
+		  if(content==null) return
+		  let pj=JSON.parse(content)
+		  if(checkIfDocTypeExists(pj, availableDocs)){
+			  updateText=action.UPDATE+" "+pj["@id"]
+			  file.action=action.UPDATE
+		  }
+		  else updateText=action.CREATE_NEW
+		  let fJson=extractFileInfo(file)
+		  fJson.extracted={select: {value: updateText, label: updateText}, data: pj}
+		  setSelectedFiles(arr => [...arr, fJson])
+
+	    };
+	    fileReader.onerror = reject;
+	    fileReader.readAsText(file);
+	  });
+	}
+
+	const readAllFiles = async (AllFiles) => {
+	  const results = await Promise.all(AllFiles.map(async (file) => {
+	    const fileContents = await handleFileChosen(file);
+	    return fileContents;
+	  }));
+	  return results;
+	}
+
+	const setFileAttributes=(file)=>{
+		let fJson=extractFileInfo(file)
+		fJson.file=file
+		setSelectedFiles(arr => [...arr, fJson])
+	}
+
+	useEffect(() => {
+		let jsonFiles=[]
+		csvs.map(item=>{
+			if(item.fileType==CSV_FILE_TYPE){
+				setFileAttributes(item)
+			}
+			else if (item.fileType==JSON_FILE_TYPE){
+				jsonFiles.push(item)
+			}
+		})
+		readAllFiles(jsonFiles)
+    }, [csvs])
+
+
+	const List=()=>{
+		return (isArray(selectedFiles) && selectedFiles.map( item => <div key={"d_"+item.name+"_"+item.lastModified}>
+					<Row style={{width: "100%"}} className={action.CSV_ROWS} key={"Row_"+item.name+"_"+item.lastModified}>
+						<FileName item={item.name}/>
+						<FileSize item={item.size}/>
+						<FileLastModified item={item.lastModified}/>
+						<SelectAction item={item} page={page}/>
+						<FilePreview item={item}/>
+						<FileRemove item={item}/>
+					</Row>
+					{(page==DOCUMENT_VIEW) && (isArray(availableCsvs)) && availableCsvs.map(acv => <>
+						{acv==item.name && <div key={"d_existMsg_"+item.name+"_"+item.lastModified}>
+							<div><ManageDuplicateCsv fileName={item.name}/></div>
+							{/*<div className="new-csv-inp-id">{item.test && <ShowNewIDInput newIDField={newIDField}/>}</div>*/}
+						</div>}
+					</>)}
+					{(page==DOCUMENT_VIEW) && <span className="selected-csvs-sections" key={"span_"+item.name+item.lastModified}> </span>}
+				</div>))
 	}
 
 	return(<>

@@ -109,7 +109,7 @@ export const DBContextProvider = ({children, woqlClient}) => {
                 TerminusClient.UTILS.addURLPrefix(prefixes[i]['Prefix']['@value'], prefixes[i]['IRI']["@value"])
             }
         }
-        woqlClient.connection.updateDatabasePrefixes(woqlClient.get_database(), nups)
+        woqlClient.connection.updateDatabasePrefixes(woqlClient.databaseInfo(), nups)
         setPrefixesLoaded(true)
     }
 
@@ -179,13 +179,14 @@ export const DBContextProvider = ({children, woqlClient}) => {
         setConsoleTime(refTime)
     }
 
+
     function updateBranches(bid) {
-        setBranchesReload(branchesReload + 1)
         if(bid) {
             setBranch(bid)
             woqlClient.ref(false)
             woqlClient.checkout(bid)
         }
+        setBranchesReload(branchesReload + 1)
     }
 
     function updatePrefixes() {

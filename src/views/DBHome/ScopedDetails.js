@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Row, Col} from 'reactstrap'
+import {Row, Col} from "react-bootstrap" //replace
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
@@ -7,13 +7,14 @@ import {printts, DATETIME_COMPLETE} from '../../constants/dates'
 import { AiOutlineShareAlt, AiOutlineIdcard, AiOutlineUnorderedList,
     AiFillEdit, AiOutlinePushpin, AiOutlineEdit, AiFillBuild, AiOutlineBuild} from 'react-icons/ai';
 import { FiBox } from 'react-icons/fi'
-import { parseTwoDigitYear } from 'moment'
 import {formatBytes} from "../../utils/format"
 
 export const ScopedDetails = () => {
 
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
+    let {branch, branches, ref, graphs, consoleTime} = DBContextObj()
+
     const [latest, setLatest] = useState()
 
 
@@ -89,7 +90,7 @@ export const ScopedDetails = () => {
     }
 
     function getContextTitle(){
-        if(ref){
+        if(ref && consoleTime){
             return "Viewing Database at " + printts(consoleTime, DATETIME_COMPLETE) + " Commit ID: " + ref
         }
         if(branches && Object.keys(branches).length > 1) {

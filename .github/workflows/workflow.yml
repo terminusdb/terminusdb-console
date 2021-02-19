@@ -18,16 +18,32 @@ jobs:
       with:
         node-version: 14
     - run: |
-        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary|rc") ]; then
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
             BRANCH="${GITHUB_REF##*/}"
             echo "@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-$BRANCH" > .npmrc
         fi
     - run: npm install
     - run: |
-        if [ $(echo "${{ github.ref }}" | grep -P "canary|rc") ]; then
+        if [ $(echo "${{ github.ref }}" | grep -P "canary") ]; then
             mv console/env-production console/.env
+        elif [ $(echo "${{ github.ref }}" | grep -P "dev") ]; then
+            mv console/env-development console/.env 
         fi
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCLOUD_TOKEN }}
+        export_default_credentials: true
+
     - run: npm run build
-    - run: bash ".ci/publish_bintray.sh" "${GITHUB_REF##*/}"
+    - run: |
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
+            bash ".ci/publish_bintray.sh" "${GITHUB_REF##*/}"
+        fi
       env:
         BINTRAY_API_TOKEN: ${{ secrets.BINTRAY_API_TOKEN }}
+    - run: |
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
+            bash ".ci/publish_gcloud.sh" "${GITHUB_REF##*/}"
+        fi

@@ -1,8 +1,8 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
-import { Alert } from 'reactstrap';
+import { Alert } from "react-bootstrap" //replace;
 import { collaborate, createUser } from "../../variables/formLabels"
-import { Col } from "reactstrap";
+import { Col } from "react-bootstrap" //replaced;
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 
 const CreateNewUser = (props) => {
@@ -24,7 +24,7 @@ const CreateNewUser = (props) => {
 
 
     return (
-             <>{(!loading) && <Alert color="success">
+             <>{(!loading) && <Alert variant="success">
                 Successfully created new User - <b>{userInfo.id}</b>
               </Alert>}
              <form onSubmit={ handleSubmit(onSubmit) }>

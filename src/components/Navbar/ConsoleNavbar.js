@@ -4,7 +4,7 @@ import {DBNavbarTop} from './DBNavbarTop'
 import {DBNavbar} from './DBNavbar'
 import {ServerNavbar} from './ServerNavbar'
 import {Login} from './Login'
-import { Modal, ModalHeader, ModalBody } from "reactstrap"
+import { Modal, ModalBody } from "react-bootstrap" //replaced
 import {UnderConstruction} from '../Reports/UnderConstruction'
 import {LOGIN_LABEL,noHttps} from './constants.navbar'
 import {HistoryNavigatorTimeline} from '../History/HistoryNavigatorTimeline';
@@ -74,8 +74,8 @@ export const ConsoleNavbar = (props) => {
             </header>
             {woqlClient.db() && <DBNavbar />}
             {isOpen && woqlClient.db() && <HistoryNavigatorTimeline woqlClient={woqlClient} />}
-            <Modal isOpen={feedbackModal} toggle={feedbackToggle} className="feedback-form">
-                <ModalHeader toggle={feedbackToggle} className="feedback-modal-head">Send us your feedback</ModalHeader>
+            <Modal show={feedbackModal} onHide={feedbackToggle} className="feedback-form">
+                <Modal.Header closeButton className="feedback-modal-head">Send us your feedback</Modal.Header>
                 <ModalBody>
                     <FeedbackForm toggle={feedbackToggle}/>
                 </ModalBody>

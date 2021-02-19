@@ -1,8 +1,8 @@
 import React, {useState}from "react";
 import { useForm } from 'react-hook-form';
-import { Alert } from 'reactstrap';
+import { Alert } from "react-bootstrap" //replace;
 import { addUser } from "../../variables/formLabels"
-import { Col } from "reactstrap";
+import { Col } from "react-bootstrap" //replaced;
 import { READ, WRITE, MANAGE } from "../../variables/databaseHomeLabels"
 import Select from "react-select";
 import { GET_BINDINGS }  from "../../labels/renderTypeLabels"
@@ -26,7 +26,7 @@ const AddUserPermissionForm = (props) => {
     return (
         <>
         <hr className="my-space-50"/>
-        {(!loading) && <Alert color="success">
+        {(!loading) && <Alert variant="success">
            Successfully added new User - <b>{stripDocFromUrl(userInfo.id)}</b>
          </Alert>}
         <form onSubmit={ handleSubmit(onSubmit) }>

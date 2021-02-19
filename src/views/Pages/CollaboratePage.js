@@ -4,7 +4,7 @@ import {SimplePageView} from '../Templates/SimplePageView'
 import {Collaborators} from "../Server/Collaborators"
 
 const CollaboratePage = (props) => {
-    const { woqlClient, contextEnriched } = WOQLClientObj()
+    const { woqlClient } = WOQLClientObj()
     let user = woqlClient.user()
     
     return (

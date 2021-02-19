@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from 'reactstrap';
+import { Alert } from "react-bootstrap" //replace;
 import {VIOLATION_DETECTED, VIOLATIONS_DETECTED, VIOLATIONS_CSS, VIOLATION_CSS,
     VIOLATION_PROPERTY_CSS, VIOLATION_PROPERTY_LABEL_CSS, VIOLATION_PROPERTY_VALUE_CSS} from "./constants.reports"
 
@@ -12,7 +12,7 @@ export const ViolationReport = ({violations, tone}) => {
     if(!vioBuff) return null
     return (
         <span className = {VIOLATIONS_CSS}>
-            <Alert color = {tone}>
+            <Alert variant = {tone}>
                 <b>{vcount}</b>
                 {vioBuff}
             </Alert >

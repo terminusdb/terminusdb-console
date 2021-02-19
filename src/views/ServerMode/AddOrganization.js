@@ -68,7 +68,7 @@ export const AddOrganization = () => {
             setLoading(true)
             let odoc = _form_document(deets)
             let tClient = woqlClient.copy() //do not change internal client state
-            tClient.set_system_db()
+            tClient.setSystemDb()
             tClient.createOrganization(deets.oid, odoc)
             .then((result) => {
                 setReport({status: TERMINUS_SUCCESS, message: 'Successfully Created New Organization'})

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button, CardImg, CardTitle, CardText, CardDeck,
-CardSubtitle, CardBody } from 'reactstrap';
+CardSubtitle, CardBody } from "react-bootstrap" //replace;
 import { FREE_PLAN, PRO_PLAN } from "./variables/pricingPlan"
 
 export const CardDecks = () => {

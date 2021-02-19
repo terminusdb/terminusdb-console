@@ -1,5 +1,7 @@
 import React from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
+
+
 /**
  * Functions that are always run at init time - they get the meta-data about available databases, etc.
  */
@@ -12,14 +14,15 @@ export async function enrich_local_db_listing(woqlClient){
     }
     if(usings.length == 0) return
     let sysClient = woqlClient.copy()
-    sysClient.set_system_db()
+    sysClient.setSystemDb()
     //let micro = Date.now()
     let res
     try {
         res = await TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
-    }
-    catch(e){
+    }catch(e){
+        // eslint-disable-next-line no-console
         console.log(e)
+        return 
     }
     let ndbs = dbs.map((item) => {
         for(var i = 0; i < res.length; i++){

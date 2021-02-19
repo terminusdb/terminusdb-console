@@ -18,6 +18,7 @@ export const SPECIFIC_ORG_ROUTE = '/:aid'
 //Routes within DB
 export const DB_SCHEMA_ROUTE = '/schema'
 export const DB_DOCUMENT_ROUTE = '/document'
+export const DB_METRICS_ROUTE = '/metrics'
 export const DB_QUERY_ROUTE = '/query'
 export const SPECIFIC_DOC_ROUTE = '/:docid'
 

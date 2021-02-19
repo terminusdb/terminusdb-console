@@ -5,12 +5,14 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {DBContextObj} from '../../components/Query/DBContext'
 import {printts, DATETIME_COMPLETE} from '../../constants/dates'
 import {LATEST_UPDATES_LENGTH} from './constants.dbhome'
-import {Row, Col} from "reactstrap"
+import {RESET_BRANCH} from "../DBManage/constants.dbmanage"
+import {Row, Col} from "react-bootstrap" //replaced
 import {BiGitCommit, BiArrowBack} from "react-icons/bi"
 
-export const CommitLog = () => {
+export const CommitLog = ({selectedBranch, setBranchAction, getResetButton}) => {
     const {woqlClient} = WOQLClientObj()
-    const {branch, branches, ref, consoleTime, prefixes} = DBContextObj()
+    let {branch, branches, ref, consoleTime, prefixes, commits}=DBContextObj()
+
     const [query, setQuery] = useState()
     const [commit, setCommit] = useState()
 
@@ -18,7 +20,7 @@ export const CommitLog = () => {
 
     function getLatestTitle(){
         let tstr = ""
-        if(ref){
+        if(ref && consoleTime){
             tstr += "Updates before " + printts(consoleTime, DATETIME_COMPLETE)
         }
         if(branches) {
@@ -52,17 +54,23 @@ export const CommitLog = () => {
     }
 
     useEffect(() => {
-        if(branch){
+        //if(branch){
             setQuery(get_query(branch, ref))
-        }
-    }, [branch, ref, branches])
+        //}
+    }, [branch, ref, branches, commits])
 
-    let rowClick = (row) => {
+    let cellClick = (cell) => {
         let cmt = {}
-        cmt.id = row.original["Commit ID"]["@value"]
-        cmt.author = row.original["Author"]["@value"]
-        cmt.time = row.original["Time"]["@value"]
+        cmt.id = cell.row.original["Commit ID"]["@value"]
+        cmt.author = cell.row.original["Author"]["@value"]
+        cmt.time = cell.row.original["Time"]["@value"]
         setCommit(cmt)
+    }
+
+    function resetBranch (cell) {
+        let cmt= cell.row.original["Commit ID"]["@value"]
+        let title=RESET_BRANCH + cmt
+        setBranchAction({branch:branch, create:false, merge:false, reset: true, squash: false, title:title, commit: cmt})
     }
 
     function unsetCommit(){
@@ -70,10 +78,15 @@ export const CommitLog = () => {
     }
 
     const tabConfig= TerminusClient.View.table();
-    tabConfig.row().click(rowClick)
-    tabConfig.column_order("Time", "Author", "Commit ID", "Message")
-    tabConfig.column("Time").width(180).renderer({type: "time"})
-    tabConfig.column("Message").width(300)
+    //tabConfig.row().click(rowClick)
+    if(selectedBranch){
+        tabConfig.column_order("Time", "Author", "Commit ID", "Message", "Reset")
+        tabConfig.column("Reset").minWidth(80).width(80).unsortable(true).click(resetBranch).render(getResetButton)
+    }
+    else tabConfig.column_order("Time", "Author", "Commit ID", "Message")
+    tabConfig.column("Time").width(180).renderer({type: "time"}).click(cellClick)
+    tabConfig.column("Message").width(300).click(cellClick)
+    tabConfig.column("Commit ID").click(cellClick)
     tabConfig.pager("remote")
     tabConfig.pagesize(limit)
     if(!query) return null

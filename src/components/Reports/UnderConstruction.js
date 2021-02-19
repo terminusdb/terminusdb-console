@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Col, Row, Label, Input} from 'reactstrap';
+import { Button, Modal, ModalBody, Col, Row, Label, Input} from "react-bootstrap" //replace;
 import { useForm } from 'react-hook-form';
 import { UNDER_CONSTRUCTION } from "./constants.reports"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,8 +27,8 @@ export const UnderConstruction = (props) => {
             <Button className={buttonClassName} outline color={color} onClick={toggle}>
                 {buttonText}
             </Button>
-            <Modal isOpen={modal} toggle={toggle} centered={true}>
-                <ModalHeader toggle={toggle} className={UNDER_CONSTRUCTION_CONST.headerClassName}>
+            <Modal show={modal} onHide={toggle} centered={true}>
+                <Modal.Header closeButton className={UNDER_CONSTRUCTION_CONST.headerClassName}>
                     <Row >
                         {!props.noIcon && 
                         <Col md={3}>
@@ -41,7 +41,7 @@ export const UnderConstruction = (props) => {
                             {hdr}
                         </Col>
                     </Row>
-                </ModalHeader>
+                </Modal.Header>
                 <ModalBody>
                     <Col md={12}>
                         <div className={UNDER_CONSTRUCTION_CONST.introClassName}>

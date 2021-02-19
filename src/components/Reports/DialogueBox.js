@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardTitle, CardText, CardImg,Container } from "reactstrap";
+import { Card, CardTitle, CardText, CardImg,Container } from "react-bootstrap" //replaced;
 import {MASCOT_COLOR, DIALOGUE_BACKGROUND } from "../../constants/images"
 
 export const DialogueBox = (props) => {

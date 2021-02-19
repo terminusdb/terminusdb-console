@@ -11,7 +11,7 @@ export const VIOLATION_INVALID_CLASS_IN_RANGE="vio:Invalid_classIn_range"
 
 export const WITNESS_TYPE="@type"
 export const WITNESS_PROPERTY="vio:property"
-export const WITNESS_CLASS="vio:class"
+export const WITNESS_className="vio:class"
 export const WITNESS_BASE_TYPE="vio:base_type"
 export const WITNESS_LITERAL="vio:literal"
 export const WITNESS_MESSAGE="vio:message"
