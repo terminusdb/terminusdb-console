@@ -7,6 +7,7 @@ import {
     ConnectionErrorPage,
     WOQLClientObj,
 } from '@terminusdb/terminusdb-console'
+import { Fragment } from 'react'
 
 /**
  * Loads the client and connects to the server before doing anything else
@@ -14,12 +15,19 @@ import {
  */
 const App = (props) => {
     const {showLogin, loadingServer, clientError, woqlClient} = WOQLClientObj()
+    const goToNopage=()=>{
+        ConsoleHistory.push("/test/notexist");
+    }
 
     if (showLogin) return <LoginPage />
     if (clientError) return <ConnectionErrorPage />
     if (loadingServer) return <LoadingAppPage />
 
-    return <ConsoleRouter history={ConsoleHistory} />
+    return <Fragment>
+         <button onClick={goToNopage}>goToNopage</button>
+        <ConsoleRouter history={ConsoleHistory} />
+           
+            </Fragment>
 }
 
 export default App

@@ -1,7 +1,7 @@
 import React from 'react'
 import {createBrowserHistory} from "history"
 import {DB_ROUTE, CLONE_DB_ROUTE, SERVER_ROUTE, TERMINUS_ROUTE} from '../../constants/routes'
-import {Router, Switch, Route} from 'react-router-dom'
+import {Router, Switch, Route,Redirect} from 'react-router-dom'
 import {DBRoutes} from './DBRoutes'
 //import {ProfileRoutes} from './ProfileRoutes'
 import {ServerRoutes} from './ServerRoutes'
@@ -19,6 +19,10 @@ export const ConsoleRouter = (props) => {
                     <DBRoutes />
                 </Route>
                 <ServerRoutes />
+                <Route path="/not-found" component={Notfound} />
+                <Route path="*">
+                    <Redirect to="/not-found" />
+                </Route>                
             </Switch>
         )
     }
@@ -29,6 +33,9 @@ export const ConsoleRouter = (props) => {
 }
 //<Footer/>
 
+const Notfound = ()=>{
+    return <div>NOT FOUND!!!!!!!</div>
+}
 /*
 * for page navigation, create dinamically the /db/username/dbname
 */
