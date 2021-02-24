@@ -1,6 +1,6 @@
 {
   "name": "@terminusdb/terminusdb-console",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "homepage": "./",
   "description": "console for terminusdb",
   "main": "src/index",
@@ -53,8 +53,8 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.13",
-    "@terminusdb/terminusdb-client": "^4.1.0",
-    "@terminusdb/terminusdb-react-components": "^4.1.0",
+    "@terminusdb/terminusdb-client": "^4.2.0",
+    "@terminusdb/terminusdb-react-components": "^4.2.0",
     "axios": "^0.21.1",
     "codemirror": "^5.58.1",
     "date-fns": "^2.16.1",
