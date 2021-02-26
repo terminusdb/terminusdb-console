@@ -23,11 +23,11 @@ const App = (props) => {
     if (clientError) return <ConnectionErrorPage />
     if (loadingServer) return <LoadingAppPage />
 
-    return <Fragment>
-         <button onClick={goToNopage}>goToNopage</button>
+    return <Fragment>        
         <ConsoleRouter history={ConsoleHistory} />
            
             </Fragment>
 }
 
 export default App
+//<button onClick={goToNopage}>goToNopage</button>
