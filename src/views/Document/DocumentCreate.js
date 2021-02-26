@@ -59,7 +59,12 @@ export const DocumentCreate = ({doctype, close, prefixes, types, selectDocument,
 
 
     const getClassFrame = () => {
-        woqlClient.getClassFrame(doctype).then((cf) => setFrame(cf))
+        woqlClient.getClassFrame(doctype).
+        then((cf) => setFrame(cf))
+        .catch(err=>{
+            setReport({status: TERMINUS_ERROR, error: err, message: "Failed to load document frame " + err.message})
+       
+        }).finally(()=>{setLoading(false)})
     }
 
 
