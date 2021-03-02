@@ -119,6 +119,7 @@ export const Merge = ({currentBranch, setReport, setBranchAction}) => {
         //let url = `admin/${woqlClient.db()}/local/commit/${selectedCommit}`
 
 
+
         let rebase_source = {
             rebase_from: woqlClient.resource('ref', selectedCommit)
         }
