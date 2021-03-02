@@ -463,23 +463,23 @@ export const HubToolbar = ({onChange, showingMine, onError, organization, url}) 
     return (
         <Row className="hub-toolbar">
             {u.logged_in && <>
-                <Col className="hub-home-col hub-recommendations-col">
+                <Col className="hub-home-col hub-recommendations-col" md={2}>
                     <MyDatabasesLinker showingMine={showingMine} bump={bump} organization={organization} onSubmit={goHome}/>
                 </Col>
-                <Col className="hub-toolbar-col hub-collaborations-col">
+                <Col className="hub-toolbar-col hub-collaborations-col" md={2}>
                     <CollaborationsLinker showingMine={showingMine} bump={bump} organization={organization} onSubmit={goCollaborations}/>
                 </Col>
-                <Col className="hub-toolbar-col hub-invitations-col">
+                <Col className="hub-toolbar-col hub-invitations-col" md={1.5}>
                     <InvitationsLinker bump={bump} organization={organization} onSubmit={goInvites}/>
                 </Col>
-                <Col className="hub-home-col hub-recommendations-col">
+                <Col className="hub-home-col hub-recommendations-col" md={1.5}>
                     <CollaboratorsLinker  bump={bump} organization={organization} onSubmit={goCollaborators}/>
                 </Col>
             </>}
-            <Col className="hub-toolbar-col hub-recommendations-col">
+            <Col className="hub-toolbar-col hub-recommendations-col" md={2}>
                 <RecommendationsLinker  bump={bump} organization={organization} onSubmit={goRecommendations}/>
             </Col>
-            <Col className="hub-toolbar-col publisher-picker-col">
+            <Col className="hub-toolbar-col publisher-picker-col" md={1}>
                 <PublisherPicker onSubmit={onChange} organization={organization} />
             </Col>
         </Row>
