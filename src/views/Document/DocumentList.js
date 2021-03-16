@@ -16,10 +16,10 @@ import {CSVInput} from "../../components/CSVPane/CSVInput"
 import {DOCTYPE_CSV, DOWNLOAD, DELETE, DOCUMENT_VIEW, JSON_FILE_TYPE} from '../../components/CSVPane/constants.csv'
 import {MdFileDownload} from "react-icons/md"
 import {RiDeleteBin5Line} from "react-icons/ri"
-import {BiUpload} from "react-icons/bi"
+import {BiUpload, BiCopy} from "react-icons/bi"
 import {CSVPreview} from "../../components/CSVPane/CSVPreview"
 import {SelectedCSVList} from "../../components/CSVPane/SelectedCSVList"
-import {isArray, getFileType} from "../../utils/helperFunctions"
+import {isArray, getFileType, copyToClipboard} from "../../utils/helperFunctions"
 
 export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, setCurrent, docType, setDocType, csvs, setCsvs, setViewContent, viewContent, setDocID, setEdit, availableDocs, availableCsvs}) => {
     const [loading, setLoading]=useState(false)
@@ -30,6 +30,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
     const [selectedFile, setSelectedFile]=useState([])
     const [preview, setPreview] = useState({show:false, fileName:false, data:[], selectedCSV: false})
 
+    const [copyToClipboardMsg, setCopyToClipboardMsg]=useState(false)
 
     const { woqlClient} = WOQLClientObj()
     const {ref, branch, prefixes, updateBranches} = DBContextObj()
@@ -74,6 +75,13 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
             setCurrent(getTypeMetadata(types, docType))
         }
     }, [docType])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setCopyToClipboardMsg(false)
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [copyToClipboardMsg]);
 
 
     function process_error(err, update_start, message){
@@ -251,12 +259,26 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
         updateDocument(cell)
     }
 
+    const handleCopyDocumentID=(cell)=> {
+        let row=cell.row
+        let dId=TerminusClient.UTILS.shorten(row.original["Document ID"])
+        copyToClipboard(dId)
+        setCopyToClipboardMsg("Copied " + dId)
+    }
+
+    const getCopyDocumentIDButton=()=>{
+        return <span className="table-icons" title={"Copy Document ID"}>
+            <BiCopy color="#0055bb" className='schema-toolbar-delete'/>
+        </span>
+    }
+
     const tabConfig=TerminusClient.View.table();
-    tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Update","Download", "Delete")
+    tabConfig.column_order("Document ID", "Name", "Type Name", "Description", "Copy ID", "Update","Download", "Delete")
     tabConfig.pagesize(10)
     tabConfig.pager("remote")
     tabConfig.column("Document ID", "Name", "Description").minWidth(100).click(onDocClick)
     tabConfig.column("Type Name").header("Type").minWidth(80).click(onDocClick)
+    tabConfig.column("Copy ID").unsortable(true).click(handleCopyDocumentID).minWidth(80).render(getCopyDocumentIDButton)
     tabConfig.column("Update").unsortable(true).click(handleUpdate).minWidth(80).render(getUpdateButton)
     tabConfig.column("Download").unsortable(true).click(downloadDocument).minWidth(80).render(getDownloadButton)
     tabConfig.column("Delete").unsortable(true).click(deleteDocument).minWidth(80).render(getDeleteButton)
@@ -275,6 +297,7 @@ export const DocumentListView = ({setIsAdding, isAdding, types, selectDocument, 
                 <SelectedCSVList csvs={updateDoc} page={DOCUMENT_VIEW} setLoading={setLoading} setPreview={setPreview} setCsvs={setUpdateDoc} availableDocs={availableDocs} availableCsvs={availableCsvs}/>
             </Row>}
             <CSVPreview preview={preview} setPreview={setPreview} previewCss={"csv-preview-results"}/>
+            <p className="clipboard-success">{copyToClipboardMsg}</p>
             {!isAdding && !viewContent.show && <ControlledTable
                 query={query}
                 onEmpty={setEmpty}
