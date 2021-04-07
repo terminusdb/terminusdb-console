@@ -15,8 +15,6 @@ import { GRAPHDB, HUBDB } from "../../constants/images"
 import { MdContentCopy } from 'react-icons/md';
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
-
-    //console.log("___DB___LIST", list)
     if(!list || !user ) return null
     const { woqlClient,  refreshDBRecord, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
@@ -82,8 +80,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         setShowingCreate(false)
     }
 
-    //we don't reduce the number of database we only sort it 
-    //so the sorted  lenght is the same of the list length
     function generateListStats(){
         let stats = {
             total: list.length,
@@ -122,7 +118,6 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
 }
 
 export const DBListStats = ({type, stats, filter}) => {
-    
     let txt
     if(stats.total == 0){
         txt = "There are no databases on this TerminusDB server"
