@@ -47,7 +47,7 @@ export const WOQLClientProvider = ({children, params}) => {
             else {
                 try {
                     await dbClient.connect(opts)                   
-                    await enrich_local_db_listing(dbClient)
+                   // await enrich_local_db_listing(dbClient)
                     setWoqlClient(dbClient)
                     setInitComplete(true)
                     setConnecting(false)
@@ -123,7 +123,8 @@ export const WOQLClientProvider = ({children, params}) => {
             let roledata = await bClient.getRoles(bClient.uid())
             setRemoteEnriched(roledata)
             console.log("____GET___ROLE___",roledata)
-
+            //set the remote databases information in the bclient instance
+            //bclient call the bff server
             if(roledata.databases) bClient.databases(roledata.databases) 
             if(roledata.invites) bClient.connection.user.invites = roledata.invites
             if(roledata.collaborators) bClient.connection.user.collaborators = roledata.collaborators
