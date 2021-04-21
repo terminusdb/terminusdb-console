@@ -16,7 +16,7 @@ import {WOQLClientObj} from '../../init/woql-client-instance'
 import {getDBInfo} from '../../init/repo-init-queries'
 
 //import {DBSummaryCard} from './DBSummaryCard'
-export const DBList = ({list, className, user, onAction, filter, sort}) => {
+export const DBList = ({list, className, user, onAction, filter, sort, updateRemote,update}) => {
     className = className || "database-listing-table"
     if(!list.length){
         return null
@@ -24,7 +24,7 @@ export const DBList = ({list, className, user, onAction, filter, sort}) => {
     return (
         <div className="tdb__dblist">
             {list.map((value, index) => {
-                return (<DBSummaryCard key={"sum_" + value.id} meta={value} user={user} onAction={onAction}/>)
+                return (<DBSummaryCard updateRemote={updateRemote} update={update} key={"sum_" + value.id} meta={value} user={user} onAction={onAction}/>)
             })}
         </div>
     )
@@ -61,19 +61,23 @@ function _user_db_action(meta, user){
 }
 
 
-export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
+export const DBSummaryCard = ({meta, user, title_max, onAction,updateRemote,update}) => {
     const {woqlClient} = WOQLClientObj()
     const [loading, setLoading] = useState()
 
     const [dbInfo, setDBInfo] = useState(meta)
     const [updateInterface, setUpdate] = useState()
 
+    //
     useEffect(() => {
         async function dbInfoCall(){
             const newMeta= await getDBInfo(woqlClient,meta)
             setDBInfo(newMeta)
             setUpdate(Date.now())
-             
+            updateRemote.dbInfo++
+            if(updateRemote.dbInfo === updateRemote.total){
+                update()
+            }            
         }    
         if(!dbInfo.type && meta.id && woqlClient){
             dbInfoCall()

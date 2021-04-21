@@ -55,6 +55,8 @@ export const WOQLClientProvider = ({children, params}) => {
                     console.log("__CONNECT_ERROR__",err)
                     setError(true)
                     setConnecting(false)
+                    //setLoading(false)
+                } finally{
                     setLoading(false)
                 }
             }
@@ -68,13 +70,13 @@ export const WOQLClientProvider = ({children, params}) => {
         * it will be I have to null the server/bff
         * if the auth0Status has been loaded  and the user in not logged I set the loading to false
         */
-        if(!auth0Loading && !user && woqlClient){
-            setLoading(false)
-        }
+       // if(!auth0Loading && !user && woqlClient){
+         //   setLoading(false)
+        //}
         /*
         * if the user is logged I'll call the remote server for get extra info about the db
         */
-        else if(!auth0Loading && user && woqlClient && !remoteEnriched) {
+        if(!auth0Loading && user && woqlClient && !remoteEnriched) {
             initRemoteConnection(user)
         }
      }, [auth0Loading, user, woqlClient])    

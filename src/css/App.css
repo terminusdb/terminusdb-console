@@ -302,6 +302,11 @@
       word-wrap: break-word;
   }
 
+  p.clipboard-success{
+     color: #00C08B ;
+     min-height: 25px;
+ }
+
   button.man-btn{
       margin-top: -40px;
   }
