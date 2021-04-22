@@ -10,13 +10,13 @@ export const WOQLClientObj = () => useContext(WOQLContext)
 export const WOQLClientProvider = ({children, params}) => {
     //if (window.location.search.includes("code=")) return null
     const [loadingServer, setLoading] = useState(true)
-    const [connecting, setConnecting] = useState(true)
+    //const [connecting, setConnecting] = useState(true)
     const [woqlClient, setWoqlClient] = useState(null)
     const [remoteClient, setRemoteClient] = useState(null)
     const [bffClient, setBffClient] = useState(null)
     const [clientError, setError] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
-    const [newKeyValue, setNewKeyValue] = useState()
+    //const [newKeyValue, setNewKeyValue] = useState()
     const [reloadKey, setReloadTime] = useState(0)
     /*
     * count the remote operation  
@@ -35,7 +35,7 @@ export const WOQLClientProvider = ({children, params}) => {
     useEffect(() => {
         const initWoqlClient = async () => {
             setShowLogin(false)
-            setConnecting(true)
+            //setConnecting(true)
             setError(false)
 
             const opts = params || {}
@@ -50,11 +50,11 @@ export const WOQLClientProvider = ({children, params}) => {
                    // await enrich_local_db_listing(dbClient)
                     setWoqlClient(dbClient)
                     setInitComplete(true)
-                    setConnecting(false)
+                   // setConnecting(false)
                 } catch (err) {
                     console.log("__CONNECT_ERROR__",err)
                     setError(true)
-                    setConnecting(false)
+                    //setConnecting(false)
                     //setLoading(false)
                 } finally{
                     setLoading(false)
@@ -147,7 +147,7 @@ export const WOQLClientProvider = ({children, params}) => {
     const setKey = (key) => {
         if (params) params.key = key
         window.sessionStorage.setItem('apiKey', key)
-        setNewKeyValue(key)
+        //setNewKeyValue(key)
         setReloadTime(Date.now())
     }
 

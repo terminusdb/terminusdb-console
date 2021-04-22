@@ -214,7 +214,8 @@ export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {
     return remoteClient.updateDatabase(meta)
 }
 
-
+//get all the info about a specific database in hub 
+//maybe move the settings internal terminus-client
 export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
@@ -222,7 +223,7 @@ export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
     console.log("___GET_DATABASE___", meta);
-    return remoteClient.getDatabase(meta.id, meta.organization)
+    return remoteClient.getDatabase()
 }
 
 

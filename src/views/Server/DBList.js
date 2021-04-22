@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-empty */
-import TerminusDB from '@terminusdb/terminusdb-client'
 import React, {useState, useEffect, Fragment} from "react"
 import { GRAPHDB, HUBDB } from "../../constants/images"
 import {goDBHome, goHubPage} from "../../components/Router/ConsoleRouter"

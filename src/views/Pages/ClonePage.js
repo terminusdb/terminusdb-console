@@ -28,14 +28,16 @@ import {CreateRemoteForm} from "../CreateDB/CreateDatabase"
 import {Collaborators} from "../Server/Collaborators"
 import {FiUsers} from "react-icons/fi"
 
+//organization action call
 const ClonePage = ({organization, db}) => {
     const { woqlClient, contextEnriched } = WOQLClientObj()
     let u = woqlClient.user()
     const [hubdbs, setHubDBs] = useState(_get_my_dbs(woqlClient, u))
     const [collabs, setCollabs] = useState(_get_my_cdbs(woqlClient, u))
 
+    //divided the database by type
     useEffect(() => {
-        if(contextEnriched){
+        if(contextEnriched>0){
             let u = woqlClient.user()
             setHubDBs(_get_my_dbs(woqlClient, u))
             setCollabs(_get_my_cdbs(woqlClient, u))
@@ -76,7 +78,7 @@ function _get_my_cdbs(woqlClient, user){
     return Object.values(cds)
 }
 
-
+//we don't pass meta ???
 export const CloneController = ({list, db, organization, meta, collaborations}) => {
     let [currentDB, setCurrentDB] = useState(meta)
     let [dbid, setDBid] = useState(db)
@@ -87,18 +89,18 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
     let [bump, setBump] = useState(0)
     let [showingMine, setShowingMine] = useState(true)
 
-    const { woqlClient,  refreshDBRecord, bffClient, remoteClient, addClone } = WOQLClientObj()
+    const { woqlClient, bffClient, remoteClient, addClone } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
 
     if(!woqlClient || !bffClient) return null
 
-    useEffect(() => {
+    /*useEffect(() => {
         setOrgid(organization)
         setDBid(db)
         if(organization == ""){
             setCurrentList(showingMine ? list : collaborations)
         }
-    }, [organization, db])
+    }, [organization, db])*/
 
     function loadNewStuff(org, db){
         setOrgid(false)
@@ -135,7 +137,7 @@ export const CloneController = ({list, db, organization, meta, collaborations}) 
             }
             else if(meta) setCurrentDB(meta)
         }
-    }, [dbid, orgid, bump])
+    }, [dbid, dbid, orgid, bump])
 
     function processOrganizationListing(o, res){
         if(o == "invitations" || o == "collaborators") {
@@ -1280,16 +1282,7 @@ export const EditHubPage = ({meta, onSuccess}) => {
     )
 }
 
-export const HubTitle = ({meta, onAction}) => {
-    let str = meta.label || '['+ meta.id+']'
-    return (
-        <span>
-            <span className='database-listing-title-row'>
-                <span key='a' className="database-listing-title-nolink">{str}</span>
-            </span>
-        </span>
-    )
-}
+
 
 export const HubDBImage = ({meta, onAction}) => {
     let icon = meta.icon

@@ -59,7 +59,7 @@
     "axios": "^0.21.1",
     "codemirror": "^5.60.0",
     "date-fns": "^2.19.0",
-    "dotenv-webpack": "^1.7.0",
+    "dotenv-webpack": "^1.8.0",
     "moment": "^2.29.1",
     "pexels": "^1.0.1",
     "prop-types": "^15.7.2",

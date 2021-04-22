@@ -130,10 +130,10 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 <TerminusDBSpeaks report={report} />
             }
         </div>
-        <DBList updateRemote={initialState}  type={type} list={sorted} className={className} user={user} onAction={setAction}/>
+        <DBList updateRemote={initialState} update={updateDBListInfo} type={type} list={sorted} className={className} user={user} onAction={setAction}/>
     </>)
 }
-//update={updateDBListInfo}
+//
 //to be review the element hierarchy
 export const DBListStats = ({type, stats, filter}) => {
     let txt
