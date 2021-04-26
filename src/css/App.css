@@ -1123,9 +1123,9 @@ span.delete-modal-label {
       border-top: 1px solid #00C08B !important;
   }
 
-  div.CodeMirror-hscrollbar{
+  /*div.CodeMirror-hscrollbar{
       display: none !important;
-  }
+  }*/
 
   div.cm-s-mdn-like{
       height: 200px !important;

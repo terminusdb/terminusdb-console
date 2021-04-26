@@ -9,7 +9,8 @@ import { AiOutlineCloudUpload, AiOutlineCloudSync, AiOutlineCloudDownload, AiFil
     AiFillWarning, AiFillBuild, AiOutlineInbox} from 'react-icons/ai';
 import { BsFillEnvelopeFill } from 'react-icons/bs';
 import { validURL } from '../../utils/helperFunctions'
-import {CloneProductionCredits, CloneRoleCredits, DBLastCommit, DBBranches, DBPrivacy, DBEmpty, DBTimings} from "../Pages/ClonePage"
+import { DBLastCommit,DBEmpty} from "../Clone/CloneController"
+import {CloneProductionCredits, CloneRoleCredits, DBBranches, DBPrivacy, DBTimings} from "../Clone/CloneListControl"
 import {DescribeDifferences, AreSynched} from "../DBSynchronize/DBDifferences"
 import {WOQLClientObj} from '../../init/woql-client-instance'
 import {getDBInfo} from '../../init/repo-init-queries'
@@ -23,7 +24,9 @@ export const DBList = ({list, className, user, onAction, filter, sort, updateRem
     return (
         <div className="tdb__dblist">
             {list.map((value, index) => {
-                return (<DBSummaryCard updateRemote={updateRemote} update={update} key={"sum_" + value.id} meta={value} user={user} onAction={onAction}/>)
+                if(value.id){
+                    return (<DBSummaryCard updateRemote={updateRemote} update={update} key={"sum_" + value.id} meta={value} user={user} onAction={onAction}/>)
+                }
             })}
         </div>
     )
@@ -61,18 +64,21 @@ function _user_db_action(meta, user){
 
 
 export const DBSummaryCard = ({meta, user, title_max, onAction,updateRemote,update}) => {
-    const {woqlClient} = WOQLClientObj()
+    const {woqlClient,refreshRemoteURL,remoteComplete} = WOQLClientObj()
     const [loading, setLoading] = useState()
-
-    const [dbInfo, setDBInfo] = useState(meta)
+    const dbInfo = meta
+    //const [dbInfo, setDBInfo] = useState(meta)
     const [updateInterface, setUpdate] = useState()
+    const [localChildComplete, setLocalComplete] = useState(false)
 
     //
     useEffect(() => {
         async function dbInfoCall(){
-            const newMeta= await getDBInfo(woqlClient,meta)
-            setDBInfo(newMeta)
+            await getDBInfo(woqlClient,meta)
+            //setDBInfo(newMeta)
+            setLocalComplete(true)
             setUpdate(Date.now())
+            //to be review 
             updateRemote.dbInfo++
             if(updateRemote.dbInfo === updateRemote.total){
                 update()
@@ -83,6 +89,15 @@ export const DBSummaryCard = ({meta, user, title_max, onAction,updateRemote,upda
         }
     
     },[meta])
+
+    useEffect(() =>{
+        async function updateRemote(){
+            await refreshRemoteURL(dbInfo.remote_url)
+            setUpdate(Date.now())
+        }
+        if(remoteComplete && 
+           localChildComplete && !dbInfo.remote_record && dbInfo.remote_url) updateRemote()
+    },[remoteComplete,localChildComplete])
 
     function loadHubDB(){
         dbInfo.action = "hub"

@@ -14,7 +14,9 @@ import { validURL } from '../../utils/helperFunctions';
 import { DeleteDB } from "./DeleteDB"
 import { DBID, isOnHub, formatBytes } from "../Server/DBList"
 import { AreSynched } from "../DBSynchronize/DBDifferences"
-import { DBBranches, DBLastCommit, CloneRoleCredits, DBPrivacy, DBCreated, CloneProductionCredits } from "../Pages/ClonePage"
+import {  DBLastCommit } from "../Clone/CloneController"
+import { DBBranches, CloneRoleCredits, DBPrivacy, DBCreated, CloneProductionCredits } from "../Clone/CloneListControl"
+
 import {WOQLClientObj} from '../../init/woql-client-instance'
 
 export const DBFullCard = ({meta, user, title_max, onAction, onClone}) => {
@@ -164,7 +166,7 @@ export const DBCloneStatus = ({meta, user}) => {
                 <DBHubClone url={meta.remote_url} meta={meta.remote_record} user={user} />
             </>
         }
-        return <DBRemoteCloned meta={meta.remote_url} user={user} />
+        return <DBRemoteCloned remote_url={meta.remote_url} />
     }
     return null
 }
@@ -179,8 +181,8 @@ export const DBLocalClone = ({meta, user}) => {
     )
 }
 
-export const DBRemoteCloned = ({meta, user}) => {
-    let ct = "Clone of " + meta.remote_url
+export const DBRemoteCloned = ({remote_url}) => {
+    let ct = "Clone of " + remote_url
     return (
         <span className="db-card-credit">
             <AiOutlineLink className="db_info_icon_spacing"/>
@@ -188,8 +190,6 @@ export const DBRemoteCloned = ({meta, user}) => {
         </span>
     )
 }
-
-
 
 export const DBHubClone = ({meta, url}) => {
     const {woqlClient} = WOQLClientObj()

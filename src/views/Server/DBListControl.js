@@ -85,13 +85,7 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
     //we don't reduce the number of database we only sort it 
     //so the sorted  lenght is the same of the list length
 
-    let initialState = {
-        total: list.length,
-        showing: sorted.length,
-        remotes: 0,
-        dbInfo:0,
-        
-    }
+    let initialState = generateListStats()
 
     //to be architect better this is a test 
     // I can add an update in the init context maybe
@@ -102,10 +96,12 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
             total: list.length,
             showing: sorted.length,
             remotes: 0,
+            dbInfo:0,
             
         }
-        for(var i = 0; i<sorted.length; i++){
-            if(sorted[i].remote_url) statsNew.remotes++
+        const currentList = sorted.length > 0 ? sorted : list
+        for(var i = 0; i<currentList.length; i++){
+            if(currentList[i].remote_url) statsNew.remotes++
         }
         return statsNew
     }

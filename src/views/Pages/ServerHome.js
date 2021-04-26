@@ -23,70 +23,26 @@ const ServerHome = (props) => {
     //if we
     const { user:auth0User } = useAuth0();
     let [myDBs, setMyDBs] = useState(false)
-
+    
+    //review I don't know maybe we have to remove
     let active = props.page
 
-    const { woqlClient, contextEnriched, refreshRemoteURL } = WOQLClientObj()
-    
-    function get_dbs_to_show(){
-        let mdbs = []
-        let dbs = woqlClient.databases()
-        for(var i = 0; i<dbs.length; i++){
-            if(dbs[i].id) mdbs.push(dbs[i])
-        }
-        return mdbs
-    }
-    /*
-    * the promise if go in error it will be rejected
-    */
-    function load_missing_urls(urls){
-        let promises = urls.map((item) => refreshRemoteURL(item))
-        /*
-        * manual implementation of Promise.allSettled() refreshRemoteURL return always a promise resolved
-        * method returns a promise that resolves after all of the given promises 
-        * have either fulfilled or rejected, with an array of objects that each describes 
-        * the outcome of each promise.
-        * REFACTOR we have to review this and move the call in the children 
-        * one call for every children so the refresh is at children level
-        */
-        Promise.all(promises).then((values) => {
-            setMyDBs(get_dbs_to_show())          
-        }).catch(err=>{
-            console.log(err)
-        })
-    }
+    const { woqlClient} = WOQLClientObj()
 
     /*
     * you have to test if the user is logged
-    * add the user fix the problem if I log in and after log out
+    * add the user fix the problem if I log in and after log out???
     */
     useEffect(() => {
         if(woqlClient){
-            let mdbs = get_dbs_to_show()
-            let missing_urls = []
-            setMyDBs(mdbs)
-
-            /*
-            * I try to load the remote record only if the user is logged
-            * remove auth0 error 
-            */
-            if(auth0User){
-                for(var i = 0; i<mdbs.length; i++){
-                    if(mdbs[i].remote_url && !mdbs[i].remote_record && missing_urls.indexOf(mdbs[i].remote_url) == -1){
-                        missing_urls.push(mdbs[i].remote_url)
-                    }
-                }
-                if(missing_urls.length){
-                    load_missing_urls(missing_urls)
-                }
-            }
-            showlist = mdbs.length || false
+            setMyDBs(woqlClient.databases())
         }
-    }, [woqlClient, contextEnriched])
+    }, [woqlClient])
 
     if(!woqlClient) return null
     let showlist = (woqlClient ? woqlClient.databases().length : false)
 
+    //to review this one I don't know if we need it
     function fixCommitLog(id, email){
         let WOQL = TerminusClient.WOQL 
         let q = WOQL.when( WOQL.triple("v:UIRI", "system:agent_name", id))
@@ -97,7 +53,7 @@ const ServerHome = (props) => {
     }
 
     let sections = []
-    let tabs = []
+    //let tabs = []
 
     let user = woqlClient.user()
     if(user.problem && user.problem == "missing"){

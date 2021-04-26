@@ -8,24 +8,27 @@ export const WOQLClientObj = () => useContext(WOQLContext)
 
 
 export const WOQLClientProvider = ({children, params}) => {
-    //if (window.location.search.includes("code=")) return null
     const [loadingServer, setLoading] = useState(true)
-    //const [connecting, setConnecting] = useState(true)
     const [woqlClient, setWoqlClient] = useState(null)
     const [remoteClient, setRemoteClient] = useState(null)
     const [bffClient, setBffClient] = useState(null)
     const [clientError, setError] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
-    //const [newKeyValue, setNewKeyValue] = useState()
     const [reloadKey, setReloadTime] = useState(0)
+
+    //const updateComplete = {dbInfo : 0 , totalDB: 0}
     /*
-    * count the remote operation  
+    * count the remote operation ?? 
     */
     const [contextEnriched, setContextEnriched ] = useState(0)
     /*
     * the user roles data 
     */
-    const [remoteEnriched, setRemoteEnriched] = useState(false)
+    const [remoteRolesData, setRemoteRolesData] = useState(null)
+
+    // after get the user roles and merge the data with the local one, set remote complete 
+    const [remoteComplete, setRemoteComplete] = useState(false)
+
     const [initComplete, setInitComplete] = useState(false)
     const { user, loading:auth0Loading, getTokenSilently } = useAuth0();
     
@@ -47,16 +50,11 @@ export const WOQLClientProvider = ({children, params}) => {
             else {
                 try {
                     await dbClient.connect(opts)                   
-                   // await enrich_local_db_listing(dbClient)
                     setWoqlClient(dbClient)
                     setInitComplete(true)
-                   // setConnecting(false)
                 } catch (err) {
                     console.log("__CONNECT_ERROR__",err)
                     setError(true)
-                    //setConnecting(false)
-                    //setLoading(false)
-                } finally{
                     setLoading(false)
                 }
             }
@@ -70,13 +68,13 @@ export const WOQLClientProvider = ({children, params}) => {
         * it will be I have to null the server/bff
         * if the auth0Status has been loaded  and the user in not logged I set the loading to false
         */
-       // if(!auth0Loading && !user && woqlClient){
-         //   setLoading(false)
-        //}
+        if(!auth0Loading && !user && woqlClient){
+            setLoading(false)
+        }
         /*
         * if the user is logged I'll call the remote server for get extra info about the db
         */
-        if(!auth0Loading && user && woqlClient && !remoteEnriched) {
+        if(!auth0Loading && user && woqlClient && !remoteRolesData) {
             initRemoteConnection(user)
         }
      }, [auth0Loading, user, woqlClient])    
@@ -85,9 +83,9 @@ export const WOQLClientProvider = ({children, params}) => {
      * after get the user's rolesData
      */
      useEffect(() => {
-        if(remoteEnriched && initComplete){
+        if(remoteRolesData && initComplete){
             try {
-                consolidateView(remoteEnriched)
+                consolidateView(remoteRolesData)
                 setLoading(false)
             }
             catch(e) {
@@ -95,7 +93,7 @@ export const WOQLClientProvider = ({children, params}) => {
                 setLoading(false)
             }
         }
-     }, [remoteEnriched, initComplete])    
+     }, [remoteRolesData, initComplete])    
 
 
 
@@ -123,8 +121,7 @@ export const WOQLClientProvider = ({children, params}) => {
             * get the user roles from the remote administration db
             */
             let roledata = await bClient.getRoles(bClient.uid())
-            setRemoteEnriched(roledata)
-            console.log("____GET___ROLE___",roledata)
+            setRemoteRolesData(roledata)
             //set the remote databases information in the bclient instance
             //bclient call the bff server
             if(roledata.databases) bClient.databases(roledata.databases) 
@@ -133,10 +130,12 @@ export const WOQLClientProvider = ({children, params}) => {
             if(roledata.organizations) {
                 bClient.connection.user.organizations = roledata.organizations
             }
-            setContextEnriched(contextEnriched + 1)
+           // setContextEnriched(contextEnriched + 1)
+            //setContextEnriched(1)
         }
         catch(e){
-            console.log(e)
+            console.log()       
+        }finally{
             setLoading(false)
         }
     }
@@ -154,7 +153,7 @@ export const WOQLClientProvider = ({children, params}) => {
     const consolidateView = (remotedata) => {
         woqlClient.connection.user.logged_in = user['http://terminusdb.com/schema/system#agent_name']
         if(woqlClient.connection.author()){
-            if(woqlClient.connection.author() != user.email){
+            if(woqlClient.connection.author() !== user.email){
                 woqlClient.connection.user.localAuthor = woqlClient.connection.author()
                 woqlClient.connection.user.problem = "mismatch"
                 woqlClient.author(user.email)
@@ -200,6 +199,10 @@ export const WOQLClientProvider = ({children, params}) => {
             }
         }
         woqlClient.databases(updated)
+        //push the update
+        //to be remove but I have to check where i used before
+        setContextEnriched(contextEnriched + 1)
+        setRemoteComplete(true)
     }
 
     function _copy_db_card(card){
@@ -407,10 +410,10 @@ export const WOQLClientProvider = ({children, params}) => {
         return refreshRemote(org, id)
     }
 
-    const addRemote = async (id, org, meta) => {
+    /*const addRemote = async (id, org, meta) => {
         let dbs = woqlClient.databases()
         console.log()
-    }
+    }*/
 
     function is_hub_remote(url, id, org){
         return (url == remoteClient.server() + org + "/" + id)
@@ -438,14 +441,15 @@ export const WOQLClientProvider = ({children, params}) => {
     }
 
 
-
+    //when you delete or clone or copy a db
     const reconnectToServer = () => {
         setContextEnriched(contextEnriched + 1)        
     }
 
-    const refreshDBListing = () => {
+    //this method is not used
+    /*const refreshDBListing = () => {
         setContextEnriched(contextEnriched + 1)
-    }
+    }*/
 
     return (
         <WOQLContext.Provider
@@ -459,14 +463,13 @@ export const WOQLClientProvider = ({children, params}) => {
                 refreshRemoteURL,
                 addShare,
                 refreshDBRecord,
-                refreshDBListing, 
-                remoteEnriched,
                 showLogin,
                 is_hub_url,
                 reconnectToServer,
                 addClone,
                 remoteClient,
                 contextEnriched,
+                remoteComplete,
             }}
         >
             {children}

@@ -35,7 +35,7 @@ export const CloneRoutes = () => {
                 <HubDBPage />    
             </Route>
             <Route key="orgclones" path={`${CLONE_DB_ROUTE}${SPECIFIC_ORG_ROUTE}`}>
-                <HubOrgPage />    
+                <HubOrgPage />   
             </Route>
             <Route key="cp">
                 <ClonePage />
