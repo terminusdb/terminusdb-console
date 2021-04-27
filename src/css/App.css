@@ -192,7 +192,7 @@
       max-width: 360px;
       position: relative;
       margin-top: -110px;
-      backgroun-color: hsl(180,100%,50%);
+      /*background-color: hsl(180,100%,50%);
       margin-left: -310px;
       /* background-color: hsla(180,100%,50%, 0.4) !important; */
       background-color: white;
