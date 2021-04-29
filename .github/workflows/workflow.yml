@@ -25,7 +25,7 @@ jobs:
             mv console/env-development console/.env
         fi
     - run: |
-        if [ $(echo "${{ github.ref }}" | grep -P "master") ]; then
+        if [ $(echo "${{ github.ref }}" | grep -P "dev|canary") ]; then
             BRANCH="${GITHUB_REF##*/}"
             bash .ci/install_node_project.sh 'https://github.com/terminusdb/terminusdb-client-js.git' "$BRANCH" "terminusdb-client"
             bash .ci/install_node_project.sh 'https://github.com/terminusdb/terminusdb-react-components.git' "$BRANCH" "terminusdb-react-components"
