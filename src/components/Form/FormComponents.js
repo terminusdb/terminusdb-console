@@ -13,8 +13,8 @@ import Select from "react-select";
 import { HelpCowDuck } from "../Reports/HelpCowDuck"
 import { isObject } from '../../utils/helperFunctions';
 import {APIUpdateReport} from '../Reports/APIUpdateReport'
-import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
+import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
 
 export const TCForm = ({onSubmit, onChange, report, fields, buttons, layout, validate, values, errors, children, noCowDucks}) => {
 
@@ -338,6 +338,8 @@ export const TCFormIcon = ({field_id, value, disabled, onChange, placeholder, cl
         renderUsing='class'
 		value={val}
     />
+
+   
 }
 
 

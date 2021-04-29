@@ -51,7 +51,7 @@ export const DocumentViewIcons = ({docView, setDocView, edit}) => {
     const onJson = () => setDocView("json")
 
     return <span style={{fontSize: "2em"}}>
-        {show_fancy && 
+        {show_fancy &&
             <span onClick={onFrame} className="d-nav-icons" title={DOCUMENT_VIEW_TITLE}>
                 <BiFile className={"db_info_icon_spacing" + (docView == "frame" ? " tdb__panel__button--selected document_view_selected" : " document_view_unselected")}/>
             </span>
@@ -96,7 +96,7 @@ export const DocumentViewTitle = ({types, docid, jsonld}) => {
         let tyname = ((meta && meta.label) ? meta.label : TerminusClient.UTILS.shorten(ty))
         let title = `${ty} Document ${docid}`
         return <h3 className="db_info d-nav-text" title={title}>
-            <span> {nm} </span> ~ <span> {tyname} </span>
+            <span> {TerminusClient.UTILS.shorten(docid)} </span> ~ <span> {nm} </span> ~ <span> {tyname} </span>
         </h3>
     }
     return <h3 className="db_info d-nav-text">Document {TerminusClient.UTILS.shorten(docid)}</h3>

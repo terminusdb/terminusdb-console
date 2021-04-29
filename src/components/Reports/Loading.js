@@ -1,7 +1,7 @@
 import React from "react";
 import { LOADING_SPINNER } from "../../constants/images"
 import { SITE_LOADING, PAGE_LOADING, COMPONENT_LOADING } from "../../constants/css"
-import { IS_LOADING } from "../../constants/text"
+import { IS_LOADING } from "../../constants/labels"
 import { TERMINUS_COMPONENT, TERMINUS_PAGE,  TERMINUS_TABLE} from "../../constants/identifiers"
 
 const Loading = ({type, loadingMessage}) => {

@@ -1,7 +1,6 @@
 /**
  * Controller application for branch creation form
  */
-import React from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 import {RecordHubAction, RecordHubFailure} from "./HubAction"
 /**
@@ -215,15 +214,16 @@ export const UpdateDatabase = async (meta, remoteClient, getTokenSilently) => {
     return remoteClient.updateDatabase(meta)
 }
 
-
+//get all the info about a specific database in hub 
+//maybe move the settings internal terminus-client
 export const RefreshDatabaseRecord = async (meta, remoteClient, getTokenSilently) => {
     const jwtoken = await getTokenSilently()
     let creds = {type: "jwt", key: jwtoken}
     remoteClient.localAuth(creds)
     remoteClient.organization(meta.organization)
     remoteClient.db(meta.id)
-    //console.log("___GET_DATABASE___", meta);
-    return remoteClient.getDatabase(meta.id, meta.organization)
+    console.log("___GET_DATABASE___", meta);
+    return remoteClient.getDatabase()
 }
 
 

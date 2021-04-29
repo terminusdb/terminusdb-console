@@ -1,64 +1,30 @@
-import React from 'react'
 import TerminusClient from '@terminusdb/terminusdb-client'
 
+export async function getDBInfo(woqlClient,meta){
+    const clientTools = new TerminusClient.WOQLClientTools(woqlClient)
 
-/**
- * Functions that are always run at init time - they get the meta-data about available databases, etc.
- */
+    const newMeta = await clientTools.enrichLocalDB(meta.organization, meta.id)
 
-export async function enrich_local_db_listing(woqlClient){
-    let dbs = woqlClient.databases()
-    let usings = []
-    for(var i = 0; i <dbs.length; i++){
-        if( dbs[i].organization &&  dbs[i].id) usings.push(dbs[i].organization + '/' + dbs[i].id) 
-    }
-    if(usings.length == 0) return
-    let sysClient = woqlClient.copy()
-    sysClient.setSystemDb()
-    //let micro = Date.now()
-    let res
-    try {
-        res = await TerminusClient.WOQL.lib().assets_overview(usings, sysClient, true)
-    }catch(e){
-        // eslint-disable-next-line no-console
-        console.log(e)
-        return 
-    }
-    let ndbs = dbs.map((item) => {
-        for(var i = 0; i < res.length; i++){
-            if(item.id == res[i].id){
-                for(var k in res[i]){
-                    item[k] = res[i][k]
-                }
-            }
-        }
-        return item
-    })
-    for(var j = 0 ; j<ndbs.length; j++){
-        if(ndbs[j].remote_url){
-            if( _is_local_clone(woqlClient, ndbs[j].remote_url)){                        
-                let dbid = ndbs[j].remote_url.substring(ndbs[j].remote_url.lastIndexOf("/")+1)
-                for(var k = 0; k<ndbs.length; k++){
-                    if(k == j) continue
-                    if(ndbs[k].id == dbid){
-                       ndbs[j] = append_remote_record(ndbs[j], ndbs[k]) 
-                       ndbs[j].type = 'local_clone'
-                    }
-                }
-            }
-            else {
-                if(!ndbs[j].type) ndbs[j].type = 'clone'
-            }
+    if(newMeta.remote_url){
+        if( _is_local_clone(woqlClient, newMeta.remote_url)){                        
+            let remoteSource = newMeta.remote_url.substring(newMeta.remote_url.lastIndexOf("/")+1)          
+            const dbSourceInfo = woqlClient.databaseInfo(remoteSource)
+            //if(newMeta.id === remoteSource){
+            append_remote_record(newMeta, dbSourceInfo) 
+            newMeta.type = 'local_clone'
         }
         else {
-            ndbs[j].type = 'local'
-        }            
-    
+            if(!newMeta.type) newMeta.type = 'clone'
+        }
     }
-    if(res) woqlClient.databases(ndbs)
+    else {
+        newMeta.type = 'local'
+    } 
+    
+    return newMeta
 }
 
-export function append_remote_record(local, remote){       
+export function append_remote_record(local, remote){     
     local.type =  'remote'
     if(!local.label && remote.label) local.label = remote.label
     if(!local.comment && remote.comment) local.comment = remote.comment
@@ -73,7 +39,7 @@ export function append_remote_record(local, remote){
     if(remote.public) actions.push('pull')
     let roles = remote.roles || []
     if(!Array.isArray(roles)) roles = Object.values(roles)
-    if(roles.indexOf('create') == -1){
+    if(roles.indexOf('create') === -1){
         actions.push('delete')                                
         if(actions.indexOf('pull') == -1) actions.push('pull')                                
         actions.push('push')                                
@@ -87,6 +53,7 @@ export function append_remote_record(local, remote){
     }
     remote.actions = actions
     local.remote_record = remote
+    //console.log("LOCAL + REMOTE",JSON.stringify(local,null,4))
     return local
 }
 
@@ -94,7 +61,7 @@ export function append_remote_record(local, remote){
 function _is_local_clone(woqlClient, rem){
     let lhs = rem.substring(0, woqlClient.server().length)
     let rhs = woqlClient.server()
-    return lhs == rhs
+    return lhs === rhs
 }
 
 

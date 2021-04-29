@@ -4,12 +4,12 @@ const server = localStorage.getItem("terminusdb-server-override") || process.env
 const TERMINUSDB=window.TERMINUSDB || {}
 const user0bj=TERMINUSDB.user || {}
 
-let key=process.env.TERMINUSDB_KEY || user0bj.password
+let key=  localStorage.getItem("terminusdb-key-override") || process.env.TERMINUSDB_KEY || user0bj.password
 
-const userName=process.env.TERMINUSDB_USER || user0bj.username || 'admin'
+const userName=  localStorage.getItem("terminusdb-user-override") || process.env.TERMINUSDB_USER || user0bj.username || 'admin'
 
-const hub_url = process.env.TERMINUS_HUB_URL //|| "https://hub-dev-server.dcm.ist/"
-const bff_url = process.env.TERMINUS_BFF_URL //|| "https://hub-dev.dcm.ist/"
+const hub_url =  localStorage.getItem("terminusdb-hub-url-override") || process.env.TERMINUS_HUB_URL //|| "https://hub-dev-server.dcm.ist/"
+const bff_url =  localStorage.getItem("terminusdb-bff-url-override") || process.env.TERMINUS_BFF_URL //|| "https://hub-dev.dcm.ist/"
 
 if(!key){
 	key=window.sessionStorage.getItem("apiKey");

@@ -155,13 +155,13 @@ export const CreateLocalForm = ({onCancel, from_local}) => {
 export const CreateRemoteForm = ({onSubmit, onCancel}) => {
     const [report, setReport] = useState()
     const [loading, setLoading] = useState(false)
-    const {woqlClient, remoteClient, bffClient, remoteEnriched, addClone } = WOQLClientObj()
+    const {woqlClient, remoteClient, bffClient, remoteComplete, addClone } = WOQLClientObj()
     const { getTokenSilently } = useAuth0();
-    if(!remoteEnriched) return null
+    if(!remoteComplete) return null
     let u = bffClient.user()
 
 
-    console.log("____USER_CreateRemoteForm",u);
+    //console.log("____USER_CreateRemoteForm",u);
     let org = u.organizations[0]
     let smeta = {
         id: "",

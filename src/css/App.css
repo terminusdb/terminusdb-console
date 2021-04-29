@@ -192,7 +192,7 @@
       max-width: 360px;
       position: relative;
       margin-top: -110px;
-      backgroun-color: hsl(180,100%,50%);
+      /*background-color: hsl(180,100%,50%);
       margin-left: -310px;
       /* background-color: hsla(180,100%,50%, 0.4) !important; */
       background-color: white;
@@ -301,6 +301,11 @@
   p.del-message{
       word-wrap: break-word;
   }
+
+  p.clipboard-success{
+     color: #00C08B ;
+     min-height: 25px;
+ }
 
   button.man-btn{
       margin-top: -40px;
@@ -1118,9 +1123,9 @@ span.delete-modal-label {
       border-top: 1px solid #00C08B !important;
   }
 
-  div.CodeMirror-hscrollbar{
+  /*div.CodeMirror-hscrollbar{
       display: none !important;
-  }
+  }*/
 
   div.cm-s-mdn-like{
       height: 200px !important;
