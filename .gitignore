@@ -1,6 +1,6 @@
 /node_modules
 .npmrc
-
+.local_file
 package-lock.json
 console/.env
 .env*

@@ -1,4 +1,4 @@
-import React, {useState, useEffect,useReducer} from "react";
+import React, {useState, useEffect} from "react";
 import { CloneDB } from '../../components/Query/CollaborateAPI'
 import {DBList} from './DBList'
 import {WOQLClientObj} from '../../init/woql-client-instance'
@@ -15,14 +15,12 @@ import { GRAPHDB, HUBDB } from "../../constants/images"
 import { MdContentCopy } from 'react-icons/md';
 
 export const DBListControl = ({list, className, user, type, sort, filter, count}) => {
-
-    //console.log("___DB___LIST", list)
     if(!list || !user ) return null
     const { woqlClient,  refreshDBRecord, bffClient } = WOQLClientObj()
     const { getTokenSilently } = useAuth0()
     const [listSort, setSort] = useState(sort || "name")
     const [listFilter, setFilter] = useState(filter || "")
-    const [sorted, setSorted] = useState([])
+    const [sorted, setSorted] = useState()
     const [loading, setLoading] = useState()
     const [showingCreate, setShowingCreate] = useState(false)
     let [report, setReport] = useState()
@@ -82,34 +80,23 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
         setShowingCreate(false)
     }
 
-    //we don't reduce the number of database we only sort it 
-    //so the sorted  lenght is the same of the list length
-
-    let initialState = generateListStats()
-
-    //to be architect better this is a test 
-    // I can add an update in the init context maybe
-    const [stats, updateDBListInfo] = useReducer(generateListStats, initialState);
-
-    function generateListStats(stats){
-        const statsNew = {
+    function generateListStats(){
+        let stats = {
             total: list.length,
             showing: sorted.length,
-            remotes: 0,
-            dbInfo:0,
-            
+            remotes: 0
         }
-        const currentList = sorted.length > 0 ? sorted : list
-        for(var i = 0; i<currentList.length; i++){
-            if(currentList[i].remote_url) statsNew.remotes++
+        for(var i = 0; i<sorted.length; i++){
+            if(sorted[i].remote_url) stats.remotes++
         }
-        return statsNew
+        return stats
     }
 
-    //if(!sorted) return null
+    if(!sorted) return null
     if(loading) return (<Loading type={TERMINUS_COMPONENT}/>)
     if(showingCreate) return (<CreateLocalForm onCancel={unshowCreate}/>)
 
+    let stats = generateListStats()
     return (<>
         <div className="dblist-filters">
             <div className="home_top_bar">
@@ -126,11 +113,10 @@ export const DBListControl = ({list, className, user, type, sort, filter, count}
                 <TerminusDBSpeaks report={report} />
             }
         </div>
-        <DBList updateRemote={initialState} update={updateDBListInfo} type={type} list={sorted} className={className} user={user} onAction={setAction}/>
+        <DBList type={type} list={sorted} className={className} user={user} onAction={setAction}/>
     </>)
 }
-//
-//to be review the element hierarchy
+
 export const DBListStats = ({type, stats, filter}) => {
     let txt
     if(stats.total == 0){

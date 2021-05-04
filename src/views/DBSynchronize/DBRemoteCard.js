@@ -13,7 +13,9 @@ import { validURL } from '../../utils/helperFunctions'
 import { MdRefresh } from 'react-icons/md';
 import { AiOutlineCloudSync } from 'react-icons/ai';
 import { DeleteControl } from './DeleteControl'
-import { DBLastCommit, CloneRoleCredits, DBPrivacy, CloneProductionCredits } from "../Pages/ClonePage"
+import {  CloneRoleCredits, DBPrivacy, CloneProductionCredits } from "../Clone/CloneListControl"
+
+import { DBLastCommit } from "../Clone/CloneController"
 
 export const DBRemoteCard = ({repo, user, local, remote, onDelete, onRefresh, onFetch, onGoHub}) => {
     let allowed_fetch = false

@@ -10,6 +10,8 @@ import { legalURLID } from "../../components/Query/CollaborateAPI"
 import { IoMdImages } from 'react-icons/io';
 import { Pexels } from '../../components/Pexels/Pexels';
 import FontIconPicker from '@fonticonpicker/react-fonticonpicker';
+//import { IconPicker } from 'react-fa-icon-picker'
+
 import { ICONS_PICKER } from '../../constants/fontawesomepicker'
 
 export const DBCreateHeader = ({local, toggle}) => {
@@ -374,7 +376,7 @@ export const DBControlPanel = ({meta, onChange}) => {
                     {!dbImage.imageUrl && !dbImage.pexelImage && !dbImage.iconImage && <IoMdImages color="#005cbf" className={"add-image-control"}/>}
                     {dbImage.imageUrl && <img src={dbImage.imageUrl} className="image-picker"/>}
                     {dbImage.pexelImage && <img src={dbImage.pexelImage} className="image-picker"/>}
-                    {dbImage.iconImage && <i class={dbImage.iconImage + " add-image-control"}/>}
+                    {dbImage.iconImage && <i className={dbImage.iconImage + " add-image-control"}/>}
                 </div>
 
                 <div className="image-picker-link image-align" onClick={imagePickerToggle}> Click here to choose a picture </div>
@@ -392,13 +394,15 @@ export const DBControlPanel = ({meta, onChange}) => {
                 <div className="image-align or-after-image-picker"> <hr/> <div className="or-text-hr">or</div></div>
 
                 <div className="image-align">
-                    <FontIconPicker icons={ICONS_PICKER}
+                  {/*  <IconPicker value={dbImage.iconImage} onChange={(v) => vchange(v)}>select an icon</IconPicker> 
+                  */}
+                 <FontIconPicker icons={ICONS_PICKER}
                         onChange={value => vchange(value)}
                         appendTo="body"
                         showSearch={true}
                         closeOnSelect={true}
                         renderUsing='class'
-                        value={dbImage.iconImage}
+                    value={dbImage.iconImage}
                     />
                 </div>
 

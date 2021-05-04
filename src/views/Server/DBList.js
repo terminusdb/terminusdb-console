@@ -9,9 +9,14 @@ import { AiOutlineCloudUpload, AiOutlineCloudSync, AiOutlineCloudDownload, AiFil
     AiFillWarning, AiFillBuild, AiOutlineInbox} from 'react-icons/ai';
 import { BsFillEnvelopeFill } from 'react-icons/bs';
 import { validURL } from '../../utils/helperFunctions'
-import {CloneProductionCredits, CloneRoleCredits, DBLastCommit, DBBranches, DBPrivacy, DBEmpty, DBTimings} from "../Pages/ClonePage"
+import { DBLastCommit,DBEmpty} from "../Clone/CloneController"
+import {CloneProductionCredits, CloneRoleCredits, DBBranches, DBPrivacy, DBTimings} from "../Clone/CloneListControl"
 import {DescribeDifferences, AreSynched} from "../DBSynchronize/DBDifferences"
-export const DBList = ({list, className, user, onAction, filter, sort}) => {
+import {WOQLClientObj} from '../../init/woql-client-instance'
+import {getDBInfo} from '../../init/repo-init-queries'
+
+//import {DBSummaryCard} from './DBSummaryCard'
+export const DBList = ({list, className, user, onAction, filter, sort, updateRemote,update}) => {
     className = className || "database-listing-table"
     if(!list.length){
         return null
@@ -19,8 +24,9 @@ export const DBList = ({list, className, user, onAction, filter, sort}) => {
     return (
         <div className="tdb__dblist">
             {list.map((value, index) => {
-                //console.log("DB_SUMMARY_CARD",value)
-                return (<DBSummaryCard key={"sum_" + index} meta={value} user={user} onAction={onAction}/>)
+                if(value.id){
+                    return (<DBSummaryCard updateRemote={updateRemote} update={update} key={"sum_" + value.id} meta={value} user={user} onAction={onAction}/>)
+                }
             })}
         </div>
     )
@@ -57,20 +63,51 @@ function _user_db_action(meta, user){
 }
 
 
-export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
+export const DBSummaryCard = ({meta, user, title_max, onAction,updateRemote,update}) => {
+    const {woqlClient,refreshRemoteURL,remoteComplete} = WOQLClientObj()
     const [loading, setLoading] = useState()
-   
-    meta.action = (onAction ? _user_db_action(meta, user) : false)
+    const dbInfo = meta
+    //const [dbInfo, setDBInfo] = useState(meta)
+    const [updateInterface, setUpdate] = useState()
+    const [localChildComplete, setLocalComplete] = useState(false)
+
+    //
+    useEffect(() => {
+        async function dbInfoCall(){
+            await getDBInfo(woqlClient,meta)
+            //setDBInfo(newMeta)
+            setLocalComplete(true)
+            setUpdate(Date.now())
+            //to be review 
+            updateRemote.dbInfo++
+            if(updateRemote.dbInfo === updateRemote.total){
+                update()
+            }            
+        }    
+        if(!dbInfo.type && meta.id && woqlClient){
+            dbInfoCall()
+        }
+    
+    },[meta])
+
+    useEffect(() =>{
+        async function updateRemote(){
+            await refreshRemoteURL(dbInfo.remote_url)
+            setUpdate(Date.now())
+        }
+        if(remoteComplete && 
+           localChildComplete && !dbInfo.remote_record && dbInfo.remote_url) updateRemote()
+    },[remoteComplete,localChildComplete])
 
     function loadHubDB(){
-        meta.action = "hub"
+        dbInfo.action = "hub"
         onGo()
     }
 
     function onGo(){
         if(onAction){
-            if(!meta.action) return
-            onAction(meta)
+            if(!dbInfo.action) return
+            onAction(dbInfo)
         }
     }
     
@@ -81,24 +118,24 @@ export const DBSummaryCard = ({meta, user, title_max, onAction}) => {
                 <Loading type={TERMINUS_COMPONENT} />
             }
             {!loading && <>
-                <DBControlPanel meta={meta} user={user} />
+                <DBControlPanel meta={dbInfo} user={user} />
                  <div className="tdb__dblist__center">
                     
-                    <DBTitle meta={meta} user={user} max={title_max} goHubDB={loadHubDB}/>
+                    <DBTitle meta={dbInfo} user={user} max={title_max} goHubDB={loadHubDB}/>
 
-                    <DBCredits meta={meta}  user={user} />
+                    <DBCredits meta={dbInfo}  user={user} />
                     
-                    <DBDescription meta={meta}  user={user} />
+                    <DBDescription meta={dbInfo}  user={user} />
                     
-                    {meta.type == "invite" &&
-                        <DBInvite meta={meta}/>
+                    {dbInfo.type == "invite" &&
+                        <DBInvite meta={dbInfo}/>
                     
                     }
                 </div>
 
                 <div className="tdb__dblist__action">
                     {user.logged_in &&
-                        <DBStatus meta={meta}  user={user}  onAction={onGo}/>
+                        <DBStatus meta={dbInfo}  user={user}  onAction={onGo}/>
                     }
                 </div>
             </>}
@@ -249,7 +286,7 @@ export const DBControlPanel = ({meta, user}) => {
     if(!icon && meta.remote_record && meta.remote_record.icon) icon = meta.remote_record.icon
     if(!icon && meta.remote_record && meta.remote_record.organization_icon) icon = meta.remote_record.organization_icon
     if(!icon) icon = GRAPHDB
-    let title = "Database ID: " + (meta.id ? meta.id : meta.remote_record.id)
+    let title = "Database ID: " + (meta.id ? meta.id : "NO NAME")//meta.remote_record.id)
 
     if(icon){
         if(validURL(icon)) disp.push(<img className='tdb__dblist__image' src={icon} title={title} key="xx1"  />)

@@ -159,3 +159,13 @@ export const getFileType=(filename)=>{
             return
     }
 }
+
+/*a plain js function to copy to clipboard*/
+export const copyToClipboard = str => {
+   const el = document.createElement('textarea');
+   el.value = str;
+   document.body.appendChild(el);
+   el.select();
+   document.execCommand('copy');
+   document.body.removeChild(el);
+ }
