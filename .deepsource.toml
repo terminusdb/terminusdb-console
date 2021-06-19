@@ -8,7 +8,12 @@ enabled = true
   environment = [
     "nodejs",
     "mocha",
-    "jest"
+    "jest",
+    "cypress"
   ]
   plugins = ["react"]
   style_guide = "standard"
+
+[[transformers]]
+name = "prettier"
+enabled = true
