@@ -10,13 +10,6 @@ way of the environment variable `TERMINUSDB_CONSOLE_BASE_URL`
 
 By default this would be `https://unpgk.com/@terminusdb/terminusdb-console`
 
-You can also use a particular dev release, which are all built to bintray by
-travis-ci. For example, the base url for console dev version would be:
-
-```
-TERMINUSDB_CONSOLE_BASE_URL=https://dl.bintray.com/terminusdb/terminusdb/dev
-```
-
 If you are working on TermminusDB Server and want to have a development version
 of the console available, just set this environment variable.
 
@@ -28,16 +21,7 @@ It you are running TerminusDB via [TerminusDB Quickstart], then you can set this
 
 ## Working with a local version of console
 
-Most likely, if you are running console locally, it's because you are
-a developer, and thus will be working with the `dev` branch of console, so you
-probably want to point npm to our dev repository by adding this line to
-your .npmrc
-
-```
-@terminusdb:registry=https://api.bintray.com/npm/terminusdb/npm-dev
-```
-
-Then clone this repo and do `npm install` and `npm run serve`
+Clone this repo and do `npm install` and `npm run serve`
 
 ```
 npm install
